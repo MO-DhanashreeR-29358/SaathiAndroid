@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvHead"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".4"
+        android:textColor="@color/text_color_personal" />
+
+    <EditText
+        android:id="@+id/etSection"
+        style="@style/CRMEdittextSelector"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_28sdp"
+        android:layout_weight=".6"
+        android:maxLength="10"
+        android:inputType="numberDecimal"
+        android:maxLines="1" />
+
+</LinearLayout>

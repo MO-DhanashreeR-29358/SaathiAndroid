@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_10sdp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_grey_menu"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/steps_acc_open_title" />
+
+    <LinearLayout
+        android:id="@+id/llStepsToCompleteAccOpening"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light_grey_menu"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/tvSteps"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:background="@drawable/ic_steps"
+                android:gravity="center"
+                android:text="Step 1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvInstruction1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:text="@string/acc_open_step_1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light_grey_menu"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/tvSteps2"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:background="@drawable/ic_steps"
+                android:gravity="center"
+                android:text="Step 2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvInstruction2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:text="@string/acc_open_step_2"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light_grey_menu"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/tvSteps3"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:background="@drawable/ic_steps"
+                android:gravity="center"
+                android:text="Step 3"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvInstruction3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:text="@string/acc_open_step_3"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light_grey_menu"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/tvSteps4"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:background="@drawable/ic_steps"
+                android:gravity="center"
+                android:text="Step 4"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvInstruction4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:text="@string/acc_open_step_4"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCourierStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:background="@color/light_grey_menu"
+            android:orientation="horizontal"
+            android:padding="@dimen/_3sdp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvSteps5"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:layout_weight="0.25"
+                android:background="@drawable/ic_steps"
+                android:gravity="center"
+                android:text="Step 5"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvInstruction5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_weight="1"
+                android:text="@string/acc_open_step_5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llPreFillAccOpen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/light_grey_menu"
+        android:gravity="right">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:src="@drawable/ic_upload_4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:text="@string/download_form" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<style name="DrawerItem" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">20dp</item>
+    </style>
+    <style name="DrawerItem.Child">
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

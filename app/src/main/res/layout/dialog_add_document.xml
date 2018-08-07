@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/llOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llCancel"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/dialog_textview"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTakePhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/yellow_header"
+            android:textSize="@dimen/_14sdp" />
+
+        <TextView
+            android:id="@+id/tvAddFromDevice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/textview_border"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/yellow_header"
+            android:textSize="@dimen/_14sdp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:background="@drawable/dialog_textview">
+
+        <TextView
+            android:id="@+id/tvCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:textColor="@color/yellow_header"
+            android:textSize="@dimen/_14sdp" />
+    </LinearLayout>
+
+</RelativeLayout>

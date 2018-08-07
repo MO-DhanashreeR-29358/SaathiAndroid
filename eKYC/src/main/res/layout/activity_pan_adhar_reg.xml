@@ -1,0 +1,642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/layout_actionbar" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rlActionBar"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="@dimen/_10sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:src="@drawable/ic_icons_pan" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/etPan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/pan"
+                                android:maxLength="10"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <EditText
+                            android:id="@+id/etPanError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_minus5sdp"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:textColor="@color/upload_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:text="ABBPS8225D"
+                            android:textColor="@color/grey_text"
+                            android:textSize="@dimen/_10sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:src="@drawable/ic_icons_dob" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/etDOB"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:hint="@string/dob"
+                                android:inputType="date"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:text="30/06/2016"
+                            android:textColor="@color/grey_text"
+                            android:textSize="@dimen/_10sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llAadhar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_14sdp"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbAadhar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Aadhaar"
+                        android:textColor="@drawable/radiobutton_background"
+                        android:visibility="gone" />
+
+                    <RadioButton
+                        android:id="@+id/rbVirtualId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Aadhaar Vitrual ID"
+                        android:textColor="@drawable/radiobutton_background"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/ivNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_inf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:src="@drawable/ic_icons_aadhar" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/input_layout_aadhar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/etAadhaar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/aadhaar"
+                                android:inputType="number"
+                                android:maxLength="12"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvAadharEg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_3sdp"
+                                android:text="988800001111"
+                                android:textColor="@color/grey_text"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <TextView
+                                android:id="@+id/tvOptional"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="@dimen/_12sdp"
+                                android:gravity="right"
+                                android:text="optional"
+                                android:textColor="@color/grey_text"
+                                android:textSize="@dimen/_10sdp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvAadharMsg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:text="@string/aadharmsg"
+                            android:textColor="@color/market_text"
+                            android:textSize="@dimen/_10sdp" />
+
+                        <TextView
+                            android:id="@+id/tvVirtualIdInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:text="@string/unable_to_genrate_virtualid"
+                            android:textColor="@color/research_advice"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone"
+                            />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <CheckBox
+                        android:id="@+id/cbAadharDeclaration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:button="@drawable/checkbox"
+                        android:checked="true"
+                        android:text="@string/i_agree_consent"
+                        android:textColor="@color/light_black"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:id="@+id/tvReadMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/read_more"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tvAadharConsent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/aadhaar_note"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="normal"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/cbAadhar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:button="@drawable/checkbox"
+                    android:text=" Click here if you don't have Aadhaar"
+                    android:textColor="@color/light_black"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <!-- <TextView
+                     android:id="@+id/tvAadharNoteMF"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/_15sdp"
+                     android:text="@string/note_aadhaar_mf"
+                     android:textColor="@color/grey_text"
+                     android:textSize="@dimen/_10sdp"
+                     android:visibility="gone" />-->
+
+                <LinearLayout
+                    android:id="@+id/llBaseOTPBioLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvAuthenticationMode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_19sdp"
+                        android:gravity="center"
+                        android:text="@string/br_ba_authenticate_msg"
+                        android:textColor="@color/grey_text"
+                        android:textSize="@dimen/_9sdp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/llParentOTPBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:id="@+id/llImgOTP"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/ivOTP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/ic_otp_xml"
+                                android:gravity="center" />
+
+                            <!--<CheckBox
+                                android:id="@+id/cbOTP"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_50sdp"
+                                android:button="@drawable/ic_otp" />-->
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llImgThumb"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:id="@+id/ivThumb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_20sdp"
+                                android:background="@drawable/ic_thumb"
+                                android:gravity="center" />
+                            <!--<CheckBox
+                                android:id="@+id/cbThumb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_50sdp"
+                                android:layout_marginLeft="@dimen/_20sdp"
+                                android:button="@drawable/ic_thumb" />-->
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llOTPThumbLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_30sdp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <RelativeLayout
+                            android:id="@+id/rlOTP"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/tvOTPHeading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/otp_heading"
+                                android:textColor="@color/grey_text"
+                                android:textSize="@dimen/_10sdp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:src="@drawable/ic_icons_otp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/_3sdp"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:id="@+id/llAadhaarOtp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:id="@+id/input_layout_otp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/tvOTPHeading">
+
+                                            <EditText
+                                                android:id="@+id/etOTP"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_below="@+id/tvOTPHeading"
+                                                android:layout_marginTop="@dimen/_10sdp"
+                                                android:hint="Enter 6-digit OTP number"
+                                                android:inputType="number"
+                                                android:maxLength="6"
+                                                android:maxLines="1"
+                                                android:singleLine="true" />
+                                        </android.support.design.widget.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/llCvlOtp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <android.support.design.widget.TextInputLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/tvOTPHeading">
+
+                                            <EditText
+                                                android:id="@+id/etCvlOTP"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_below="@+id/tvOTPHeading"
+                                                android:layout_marginTop="@dimen/_10sdp"
+                                                android:hint="Enter 4-digit OTP number"
+                                                android:inputType="number"
+                                                android:maxLength="4"
+                                                android:maxLines="1"
+                                                android:singleLine="true" />
+                                            <!--<EditText
+                                                android:id="@+id/etCvlOTP"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_below="@+id/tvOTPHeading"
+                                                android:layout_marginTop="@dimen/_10sdp"
+                                                android:hint="Enter 4-digit SMS code"
+                                                android:inputType="number"
+                                                android:maxLength="4"
+                                                android:maxLines="1"
+                                                android:visibility="gone"
+                                                android:singleLine="true" />-->
+                                        </android.support.design.widget.TextInputLayout>
+                                    </LinearLayout>
+
+                                    <TextView
+                                        android:id="@+id/tvResendOTP"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/input_layout_otp"
+                                        android:layout_marginLeft="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:gravity="right"
+                                        android:text="@string/resend_otp"
+                                        android:textColor="@drawable/text_color"
+                                        android:textSize="@dimen/_13sdp" />
+
+                                    <LinearLayout
+                                        android:id="@+id/llMobileNotMapped"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignEnd="@+id/input_layout_otp"
+                                        android:layout_alignRight="@+id/input_layout_otp"
+                                        android:layout_below="@+id/tvResendOTP"
+                                        android:gravity="right"
+                                        android:orientation="horizontal"
+                                        android:textColor="@drawable/text_color">
+
+                                        <TextView
+                                            android:id="@+id/tvMobNotMapped"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_10sdp"
+                                            android:gravity="right"
+                                            android:text="@string/click_here"
+                                            android:textColor="@drawable/text_color"
+                                            android:textSize="@dimen/_10sdp" />
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/_10sdp"
+                                            android:gravity="right"
+                                            android:text="@string/if_aadhaar_mapped_mobile_no"
+                                            android:textColor="@color/grey_text"
+                                            android:textSize="@dimen/_10sdp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <ImageView
+                            android:id="@+id/ivThumb1"
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_80sdp"
+                            android:layout_marginLeft="@dimen/_20sdp"
+                            android:background="@drawable/ic_thumb"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvDocCheckList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="Document Checklist"
+                    android:textColor="@drawable/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvAadharNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="@string/note_aadhaar"
+                    android:textColor="@color/grey_text"
+                    android:textSize="@dimen/_9sdp" />
+
+                <LinearLayout
+                    android:id="@+id/llSIPIntent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SIP Intent"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold" />
+
+                    <CheckBox
+                        android:id="@+id/cbSIP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:button="@drawable/checkbox"
+                        android:text="@string/checkbox_sip_intent_Pan_adhaar"
+                        android:textColor="@color/grey_text"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBABranchCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvBABranchCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Click Here "
+                        android:textColor="@drawable/contact_text_color"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enter_branch_code"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@color/light_grey_menu"
+            android:padding="@dimen/_5sdp"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/ic_submit_btn"
+                android:text="@string/submit"
+                android:textColor="@color/white" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include layout="@layout/layout_custom_progress" />
+
+</RelativeLayout>

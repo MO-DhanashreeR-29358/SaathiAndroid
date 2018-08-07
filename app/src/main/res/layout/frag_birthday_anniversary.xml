@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grid_background">
+
+    <LinearLayout
+        android:id="@+id/llSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
+
+        <Spinner
+            android:id="@+id/spProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:layout_weight="1" />
+
+        <Spinner
+            android:id="@+id/spEventType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llSpinner"
+        android:backgroundTint="@color/black">
+
+        <info.hoang8f.android.segmented.SegmentedGroup
+            android:id="@+id/segmentedGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            app:sc_checked_text_color="@color/white"
+            segmentedgroup:sc_border_width="@dimen/_1sdp"
+            segmentedgroup:sc_corner_radius="@dimen/_3sdp"
+            segmentedgroup:sc_tint_color="@color/secondaryBackground">
+
+            <RadioButton
+                android:id="@+id/btnBelated"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:text="Belated" />
+
+            <RadioButton
+                android:id="@+id/btnToday"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Today" />
+
+            <RadioButton
+                android:id="@+id/btnUpcomming"
+                style="@style/RadioButton"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:text="Upcoming" />
+        </info.hoang8f.android.segmented.SegmentedGroup>
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvBirthdayAnniversary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_margin="@dimen/_3sdp"
+        tools:listitem="@layout/item_recycler_birthday_anniversary" />
+
+    <TextView
+        android:id="@+id/tvNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No clients having Birthday today"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_6sdp"
+            android:layout_below="@+id/ivEmailAll"
+            android:layout_gravity="bottom"
+            android:background="@color/white" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivEmailAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/ic_email_all_clients" />
+        <!--    android:layout_marginBottom="@dimen/_minus6sdp"-->
+    </FrameLayout>
+</RelativeLayout>

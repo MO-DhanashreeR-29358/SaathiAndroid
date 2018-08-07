@@ -1,0 +1,1436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:background="@color/secondaryBackground"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:padding="@dimen/_5sdp"
+            android:text="Second (Joint) Holder Details"
+            android:textSize="@dimen/_11sdp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="Resident Status"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:id="@+id/etSJHResidentStatusError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/spSJHResidentStatus"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:entries="@array/residentStatus" />
+        <!--<android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutResidentStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etResidentStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:enabled="false"
+                android:hint="Resident Status"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:text="Name of Applicant (As Appering in supporting identification document)"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/etSJHTitleError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/spSJHTitle"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:entries="@array/title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutSJHFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etSJHFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="First Name"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etSJHFirstNameError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutSJHMiddleName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etSJHMiddleName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Middle Name"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etSJHMiddleNameError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutSJHLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etSJHLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Last Name"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etSJHLastNameError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/etSJHGenderError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <!-- <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_marginLeft="@dimen/_3sdp"
+             android:layout_marginRight="@dimen/_3sdp">
+
+             <CheckBox
+                 android:id="@+id/cbSJHMale"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_marginRight="@dimen/_2sdp"
+                 android:layout_weight="1"
+                 android:text="Male"
+                 android:textColor="@color/black"
+                 android:textSize="@dimen/_11sdp" />
+
+             <CheckBox
+                 android:id="@+id/cbSJHFemale"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:text="Female"
+                 android:textColor="@color/black"
+                 android:textSize="@dimen/_11sdp" />
+         </LinearLayout>-->
+
+        <!-- <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
+
+             <RadioButton
+                 android:id="@+id/rbSJHMale"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_marginLeft="@dimen/_5sdp"
+                 android:layout_weight="1"
+                 android:paddingLeft="@dimen/_3sdp"
+                 android:text="Male" />
+
+
+             <RadioButton
+                 android:id="@+id/rbSJHFemale"
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                 android:paddingLeft="@dimen/_3sdp"
+                 android:text="Female" />
+
+
+         </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RadioButton
+                    android:id="@+id/rbSJHMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:textColor="@drawable/radiobutton_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:src="@drawable/ic_male" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RadioButton
+                    android:id="@+id/rbSJHFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:textColor="@drawable/radiobutton_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:src="@drawable/ic_female" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="Father/Spouse Selection"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp" />
+
+        <TextView
+            android:id="@+id/etSJHFatherSpouseSelError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/spSJHFatherSpouseSel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:entries="@array/fatherSpouseSel" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHFatherSpouseFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etSJHFatherSpouseFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Father/Spouse Name- First Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHFatherSpouseFirstNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHFatherSpouseMidName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <EditText
+                android:id="@+id/etSJHFatherSpouseMidName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Father/Spouse Name- Middle Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHFatherSpouseMidNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHFatherSpouseLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etSJHFatherSpouseLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Father/Spouse Name- Last Name"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHFatherSpouseLastNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etSJHDOB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/dob"
+                android:inputType="date"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHMaritalError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <!-- <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="@dimen/_30sdp"
+             android:layout_marginLeft="@dimen/_3sdp"
+             android:layout_marginRight="@dimen/_3sdp"
+             android:layout_marginTop="@dimen/_3sdp">
+
+             <CheckBox
+                 android:id="@+id/cbSJHMarried"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_marginRight="@dimen/_2sdp"
+                 android:layout_weight="1"
+                 android:text="Married"
+                 android:textColor="@color/black"
+                 android:textSize="@dimen/_11sdp" />
+
+             <CheckBox
+                 android:id="@+id/cbSJHUnMarried"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:text="Unmarried"
+                 android:textColor="@color/black"
+                 android:textSize="@dimen/_11sdp" />
+         </LinearLayout>-->
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbSJHMarried"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/_3sdp"
+                android:text="Married" />
+
+
+            <RadioButton
+                android:id="@+id/rbSJHUnMarried"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingLeft="@dimen/_3sdp"
+                android:text="Unmarried" />
+
+
+        </LinearLayout>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RadioButton
+                    android:id="@+id/rbSJHMarried"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Married"
+                    android:textColor="@drawable/radiobutton_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:src="@drawable/ic_married" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RadioButton
+                    android:id="@+id/rbSJHUnMarried"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UnMarried"
+                    android:textColor="@drawable/radiobutton_background" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:src="@drawable/ic_unmarried" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHPAN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etSJHPAN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Permanent Account Number(PAN)"
+                android:inputType="text"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHPANError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHAadhar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etSJHAadhar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Unique Identification Number(UID) / Aadhaar"
+                android:inputType="number"
+                android:maxLength="12"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHAadharError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp">
+
+            <EditText
+                android:id="@+id/etSJHMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:hint="Mobile Number"
+                android:inputType="number"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHMobileError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputLayoutSJHEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <EditText
+                android:id="@+id/etSJHEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:hint="Email ID"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/etSJHEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHSTD"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/etSJHSTDNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="STD"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHTelNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_weight="3">
+
+                <EditText
+                    android:id="@+id/etSJHTelNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Telephone (Res.)"
+                    android:inputType="number"
+                    android:maxLength="8"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/etSJHSTDTelError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@color/secondaryBackground"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Address Details (Correspondence Address)"
+                android:textSize="@dimen/_11sdp"
+                android:textStyle="bold" />
+
+
+            <CheckBox
+                android:id="@+id/cbSJHSameAsPrimaryCorrespondence"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:button="@drawable/checkbox"
+                android:text=" Same as primary applicants correspondence address" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Address Proof"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHAddProofCorresError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHAddProofCorres"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHBldgNameCorres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <EditText
+                    android:id="@+id/etSJHBldgNameCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Bldg No/Bldg Name"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHFlatNoCorres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <EditText
+                    android:id="@+id/etSJHFlatNoCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Flat No/Road Name"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHAreaCorres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <EditText
+                    android:id="@+id/etSJHAreaCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Area /Locality"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHPincodeCorres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <EditText
+                    android:id="@+id/etSJHPincodeCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Pincode"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/etSJHPincodeCorresError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="State"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHCorresStateError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spSJHCorresState"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <EditText
+                android:id="@+id/etSJHCorresState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:enabled="false"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="City/ Town/Village"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHCorresCityError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spSJHCorresCity"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <EditText
+                android:id="@+id/etSJHCorresCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:enabled="false"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHCorresCityOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp">
+
+                <EditText
+                    android:id="@+id/etSJHCorresCityOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="City"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:visibility="gone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:text="Country"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHCorresCountryError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHCorresCountry"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:entries="@array/country" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:background="@color/secondaryBackground"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Address Details (Permanent Address)"
+                android:textSize="@dimen/_11sdp"
+                android:textStyle="bold" />
+
+
+            <CheckBox
+                android:id="@+id/cbSJHSameAsCorrespondence"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:text="Permanent address is same as correspondence address" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Address Proof"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHAddProofPermError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHAddProofPerm"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHBldgNamePerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etSJHBldgNamePerm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Bldg No/Bldg Name"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHFlatNamePerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etSJHFlatNamePerm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Flat No/Road Name"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHAreaPerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etSJHAreaPerm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Area /Locality"
+                    android:maxLength="30"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHPincodePerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etSJHPincodePerm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:hint="Pincode"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/etSJHPincodePermError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="State"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHPermStateError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spSJHPermState"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <EditText
+                android:id="@+id/etSJHPermState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_minus5sdp"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:enabled="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="City/ Town/Village"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHPermCityError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spSJHPermCity"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp" />
+
+            <EditText
+                android:id="@+id/etSJHPermCity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_minus5sdp"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:enabled="false"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputLayoutSJHPermCityOther"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp">
+
+                <EditText
+                    android:id="@+id/etSJHPermCityOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="City"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:visibility="gone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Country"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <TextView
+                android:id="@+id/etSJHPermCountryError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHPermCountry"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:entries="@array/country" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@color/secondaryBackground"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Work Details"
+                android:textSize="@dimen/_11sdp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Annual Income (Rs.in Lakhs)"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/title_11sp" />
+
+            <TextView
+                android:id="@+id/etSJHIncomeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHIncome"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:entries="@array/income" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Occupation Details"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/title_11sp" />
+
+            <TextView
+                android:id="@+id/etSJHOccupationError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spSJHOccupation"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:entries="@array/occupation" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/politically_exposed"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/title_11sp" />
+
+                <ToggleButton
+                    android:id="@+id/toggleSJHPoliticaly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:button="@drawable/toggle_selector"
+                    android:textOff=""
+                    android:textOn="" />
+                <!--<RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cbSJHPoliticalyNo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_2sdp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="No"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <CheckBox
+                        android:id="@+id/cbSJHPoliticalyYes"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1"
+                        android:checked="false"
+                        android:text="Yes"
+                        android:textSize="@dimen/_10sdp" />
+                </RadioGroup>-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_margin="@dimen/_2sdp"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/related_politically_exposed"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/title_11sp" />
+
+                <ToggleButton
+                    android:id="@+id/toggleSJHRelatedPolitical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:button="@drawable/toggle_selector"
+                    android:textOff=""
+                    android:textOn="" />
+
+                <!-- <RadioGroup
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_centerInParent="true"
+                     android:orientation="horizontal">
+
+                     <CheckBox
+                         android:id="@+id/cbSJHRelatedPoliticalNo"
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_centerHorizontal="true"
+                         android:layout_centerVertical="true"
+                         android:layout_marginRight="@dimen/_2sdp"
+                         android:layout_weight="1"
+                         android:checked="true"
+                         android:text="No"
+                         android:textSize="@dimen/_10sdp" />
+
+                     <CheckBox
+                         android:id="@+id/cbSJHRelatedPoliticalYes"
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_centerHorizontal="true"
+                         android:layout_centerVertical="true"
+                         android:layout_weight="1"
+                         android:checked="false"
+                         android:text="Yes"
+                         android:textSize="@dimen/_10sdp" />
+                 </RadioGroup>-->
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llCurrentQuaterStatusFirst"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_8sdp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+
+    <TextView
+        android:id="@+id/tvCurrentQuaterStatusFirstHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TableLayout
+                    android:id="@+id/tableCurrentQuaterStatusFirst"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:layout_marginLeft="@dimen/_5sdp">
+                </TableLayout>
+
+            </ScrollView>
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+   <!-- <TableLayout
+        android:id="@+id/tableCurrentQuaterStatusFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp" />
+-->
+</LinearLayout>

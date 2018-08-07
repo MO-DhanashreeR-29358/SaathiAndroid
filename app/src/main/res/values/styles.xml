@@ -1,0 +1,307 @@
+<resources>
+
+    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+
+    <style name="DrawerItem" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="DrawerItem.Child">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="MyAutoCompleteTextView" parent="android:Widget.Holo.Light.AutoCompleteTextView" />
+
+    <style name="CRMMOSLTheme" parent="CRMAppTheme.Base">
+        <item name="colorAccent">#FF959595</item>
+    </style>
+
+    <style name="CRMAppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:buttonStyle">@style/CRMButtonSelector</item>
+        <item name="android:spinnerStyle">@style/CRMSpinnerSelector</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="vpiLinePageIndicatorStyle">@style/CustomLinePageIndicator</item>
+        <item name="vpiTitlePageIndicatorStyle">@style/CustomTitlePageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
+        <item name="android:radioButtonStyle">@style/CRMRadioButton</item>
+        <item name="android:checkboxStyle">@style/CRMCheckBoxSelector</item>
+        <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+
+    </style>
+
+    <style name="CRMEdittextSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/lead_creation_txt_border</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:textColor">@drawable/background</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="CRMEdittextLeadSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edittext_background_select</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:textColor">@drawable/background</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="CRMButtonSelector">
+        <item name="android:background">@drawable/button_state_bg</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_height">@dimen/buttonHeight</item>
+    </style>
+
+    <style name="CRMSpinnerSelector">
+        <item name="android:background">@drawable/spinner_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">6dp</item>
+    </style>
+    <style name="CRMSpinnerSelector_leadView">
+        <item name="android:background">@drawable/spinner_background_lead_detail</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">6dp</item>
+    </style>
+
+
+    <style name="CRMCheckBoxSelector" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/crm_checkbox</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="DashbordSpinnerSelector">
+        <item name="android:background">@drawable/dropdown_image_300x48</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomLinePageIndicator">
+        <item name="strokeWidth">2dp</item>
+        <item name="lineWidth">30dp</item>
+        <item name="unselectedColor">#FF888888</item>
+        <item name="selectedColor">#FF880000</item>
+    </style>
+
+    <style name="CustomTitlePageIndicator">
+        <item name="android:background">#18FF0000</item>
+        <item name="footerColor">#FFAA2222</item>
+        <item name="footerLineHeight">1dp</item>
+        <item name="footerIndicatorHeight">2dp</item>
+        <item name="footerIndicatorStyle">underline</item>
+        <item name="android:textColor">#AA000000</item>
+        <item name="selectedColor">#FF000000</item>
+        <item name="selectedBold">true</item>
+    </style>
+
+    <style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
+        <item name="android:background">@drawable/custom_tab_indicator</item>
+        <item name="android:textColor">#7E7E7E</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:divider">@color/white</item>
+        <item name="android:state_expanded">true</item>
+        <item name="android:dividerPadding">10dp</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:fadingEdgeLength">8dp</item>
+    </style>
+
+    <style name="CustomUnderlinePageIndicator">
+        <item name="selectedColor">#FFCC0000</item>
+        <item name="android:background">#FFCCCCCC</item>
+        <item name="fadeLength">1000</item>
+        <item name="fadeDelay">1000</item>
+    </style>
+    <style name="CRMRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radiobuttonbackground</item>
+        <item name="android:paddingLeft">@dimen/_3sdp</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+    </style>
+
+    <style name="TextViewLeft" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="android:textColor">@color/tv_color</item>
+    </style>
+
+    <style name="TextViewRight" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/_10sdp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextViewHeader" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextViewAddProductLeft" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:textColor">@color/tv_color</item>
+    </style>
+
+    <style name="TextViewAddProductRight" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="DateDialogCustom" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
+
+    <style name="PocketProgressBar" parent="SmoothProgressBar">
+        <item name="spb_stroke_separator_length">0dp</item>
+        <item name="spb_sections_count">4</item>
+        <item name="spb_speed">1</item>
+        <item name="spb_colors">@array/pocket_bar_colors</item>
+        <item name="spb_generate_background_with_colors">false</item>
+        <item name="spb_gradients">true</item>
+        <item name="android:interpolator">@android:anim/decelerate_interpolator</item>
+    </style>
+
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+    </style>
+
+    <style name="MySwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/switch_on</item>
+        <item name="colorSwitchThumbNormal">@color/switch_off</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorAccent">@android:color/black</item>
+    </style>
+
+    <style name="InputLayout" parent="@android:style/TextAppearance.Medium">
+        <!--textColorHint-->
+
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+
+    </style>
+    <!-- PopUpAnimation  -->
+    <style name="Animations" />
+
+    <!-- PopDownMenu -->
+    <style name="Animations.PopDownMenu" />
+
+    <style name="Animations.PopDownMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Reflect">
+        <item name="android:windowEnterAnimation">@anim/pump_top</item>
+        <item name="android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <!-- PopUpMenu -->
+    <style name="Animations.PopUpMenu" />
+
+    <style name="Animations.PopUpMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Reflect">
+        <item name="android:windowEnterAnimation">@anim/pump_bottom</item>
+        <item name="android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <style name="TableHead" parent="android:Theme.Light">
+        <item name="android:minHeight">20dp</item>
+        <item name="android:minWidth">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+        <item name="android:maxWidth">20dp</item>
+
+    </style>
+
+    <!-- PopUpAnimation end -->
+</resources>

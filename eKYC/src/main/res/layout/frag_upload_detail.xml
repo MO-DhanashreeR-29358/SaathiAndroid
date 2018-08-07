@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/buttonBackground"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_2sdp"
+        android:background="@color/secondaryBackground"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:padding="@dimen/_5sdp"
+        android:text="Upload Documents"
+        android:textSize="@dimen/_11sdp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+
+        <!--<LinearLayout
+            android:id="@+id/videoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <fragment
+                android:id="@+id/frag_video"
+                android:name="com.mosl.mobile.ekyc.ui.VideoChildFragment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp" />
+        </LinearLayout>-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llDirectUploadInstructions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                    <include layout="@layout/layout_mf_upload_instructions" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/lvUploadList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    tools:listitem="@layout/item_list_upload_detail" />
+
+                <LinearLayout
+                    android:id="@+id/llAddNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Add More" />
+
+                    <ImageView
+                        android:id="@+id/ivAddNew"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add_more" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/proof_upload_note" />
+
+                <LinearLayout
+                    android:id="@+id/llIPVNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/light_grey_menu"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ipv_instructions" />
+
+                    <TextView
+                        android:id="@+id/tvCourierMsg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/ipv_note"
+                        android:textColor="@drawable/text_color"
+                        android:textSize="@dimen/_10sdp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/llChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/black"
+                android:stretchColumns="1">
+                <TableRow>
+                    <ImageView
+                        android:id="@+id/imgConnect"
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/ic_gray"
+                        android:layout_marginTop="@dimen/_3sdp"/>
+                    <TextView android:id="@+id/tvConnectionStatus"
+                        android:layout_width="wrap_content"
+                        android:text="Disconnected"
+                        android:textColor="@color/white"
+                        />
+                    <TextView
+                        android:id="@+id/tvExpand"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:text="Chat"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@android:color/white"
+                        android:textSize="20dp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/ic_chat"
+                        android:padding="2dp"/>
+                </TableRow>
+            </TableLayout>-->
+            <RelativeLayout
+                android:id="@+id/tvExpand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_2sdp"
+                android:background="@color/black">
+
+                <ImageView
+                    android:id="@+id/imgConnect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:background="@drawable/ic_gray" />
+
+                <TextView
+                    android:id="@+id/tvConnectionStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_toRightOf="@+id/imgConnect"
+                    android:text="Disconnected"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/tvChatHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:text="Chat"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_10sdp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/tvChatHeader"
+                    android:background="@drawable/ic_chat_icon" />
+
+                <ImageView
+                    android:id="@+id/ivChat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/_5sdp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reltiveExpand"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_120sdp"
+                android:layout_margin="@dimen/_12sdp"
+                android:background="#363636"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_chat_icon" />
+
+                    <EditText
+                        android:id="@+id/messageEdit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Type your message"
+                        android:inputType="textCapSentences|textAutoComplete"
+                        android:textColor="@android:color/white"
+                        android:textColorHint="@android:color/darker_gray" />
+
+                    <ImageView
+                        android:id="@+id/chatSendButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_chat_submit"
+                        android:textColor="@color/background_material_light" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/messagesContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/rl"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentTop="false"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:divider="@null"
+                    android:listSelector="@android:color/transparent"
+                    android:transcriptMode="alwaysScroll" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/light_grey_menu">
+
+            <!--android:layout_alignParentBottom="true"-->
+            <RelativeLayout
+                android:id="@+id/rlVerifyProof"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/btnVerifyProof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlSubmit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:background="#C3C3C3"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ic_submit_btn"
+                    android:text="Save"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical" />
+    </RelativeLayout>
+
+</LinearLayout>

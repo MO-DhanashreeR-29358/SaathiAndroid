@@ -1,0 +1,5 @@
+Package Name = com.mosl.tabapp;
+Keystore password : mosl@123
+Key alias = Sales Tab
+Key password : mosl@123
+

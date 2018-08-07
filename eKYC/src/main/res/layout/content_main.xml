@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000">
+
+        <LinearLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/light_grey_menu"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:layout_below="@+id/btnClose"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".ui.MainActivity">
+
+            <!--<EditText
+                android:id="@+id/ed_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/input_margin_bottom"
+                android:hint="User Id"
+                android:inputType="number"
+                android:textSize="@dimen/input_text_size" />-->
+
+            <!--<EditText
+                android:id="@+id/ed_aadhaar_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/input_margin_bottom"
+                android:hint="Aadhaar Number"
+                android:inputType="number"
+                android:maxLength="12"
+                android:textSize="@dimen/input_text_size" />-->
+
+            <RadioGroup
+                android:id="@+id/authTypeToggle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbFingerPrint"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="Finger Print"
+                    android:textSize="@dimen/button_text_size" />
+
+                <RadioButton
+                    android:id="@+id/rbIris"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="IRIS"
+                    android:textSize="@dimen/button_text_size" />
+            </RadioGroup>
+
+            <include layout="@layout/finger_partial" />
+
+            <include
+                layout="@layout/iris_partial"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!--<ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="visible" />-->
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/userMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:minHeight="@dimen/message_view_height"
+                android:textSize="@dimen/message_view_text_size"
+                tools:text="Sample Text Preview" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/btnClose"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/_minus15sdp"
+            android:src="@drawable/ic_closed" />
+    </RelativeLayout>
+    <include layout="@layout/layout_custom_progress"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>
+

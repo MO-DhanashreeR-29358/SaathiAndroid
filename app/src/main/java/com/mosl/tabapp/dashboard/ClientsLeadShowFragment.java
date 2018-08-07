@@ -1,0 +1,873 @@
+package com.mosl.tabapp.dashboard;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.internal.StringMap;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.TextHttpResponseHandler;
+import com.mosl.tabapp.R;
+import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.common.CRMMOSLCommon;
+import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.model.dashboard.DashboardModel;
+import com.mosl.tabapp.tablefixheader.TableFixHeaders;
+import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
+import com.mosl.tabapp.ui.LoginActivity;
+import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import cz.msebera.android.httpclient.Header;
+
+import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+
+/**
+ * Created by raju on 2/15/2017.
+ */
+
+public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.OnClickListener {
+    private String TAG = ClientsLeadShowFragment.class.getCanonicalName();
+
+    private View leadShowView;
+    private TableFixHeaders table;
+    private LeadTableAdapter leadTableAdapter;
+    private TextView tvNochart, tvShowLess;
+    static Context mContext;
+    private DashboardModel dashboardModel;
+    private HashMap<String, String> map;
+    private String widgetSystemName;
+    private Map addtionalParameterMap = new HashMap<>();
+    private LinkedHashMap lMap;
+    private SparseArray tabaleHeaderMap = new SparseArray<>();//this will be used to keep row header mapping
+    private String filterFirst = "", filterSecond = "", filterThird = "";
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        leadShowView = super.onCreateView(inflater, container, savedInstanceState);
+        attachLayout(R.layout.frag_table_lead_show);
+        setUpView(leadShowView);
+        hideAppTitle(getClass().toString());
+        return leadShowView;
+    }
+
+    public static ClientsLeadShowFragment newInstance(Context context) {
+        ClientsLeadShowFragment fragment = new ClientsLeadShowFragment();
+        Bundle args = new Bundle();
+        mContext = context;
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private void setUpView(View leadShowView) {
+        table = (TableFixHeaders) leadShowView.findViewById(R.id.table);
+        tvNochart = (TextView) leadShowView.findViewById(R.id.tvNochart);
+        tvShowLess = (TextView) leadShowView.findViewById(R.id.tvShowLess);
+        tvShowLess.setPaintFlags(tvShowLess.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
+        try {
+            map = (HashMap<String, String>) this.getArguments().getSerializable(MAP);
+            widgetSystemName = this.getArguments().getString(SYSTEM_NAME);
+            filterFirst = this.getArguments().getString(FILTERFIRST);
+            filterSecond = this.getArguments().getString(FILTERSECOND);
+            filterThird = this.getArguments().getString(FILTERTHIRD);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //  webServiceCall(widgetSystemName, map);
+        newWebServiceCall(widgetSystemName, map);
+        tvShowLess.setOnClickListener(this);
+
+    }
+
+    private void webServiceCall(String systemName, Map getAddtionalParameterMap) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            showProgress();
+            String serviceMethod = "Dashboard/LoadWidgetAsync";
+            Map inputMap = new HashMap<>();
+            inputMap.put("WidgetSystemName", systemName);
+            inputMap.put("AddtionalParameters", getAddtionalParameterMap);
+            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
+            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
+            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        //after success code goes here
+                        try {
+                            if (statusCode == 200) {
+                                String status = response.getString(MOSLConstants.STATUS);
+                                if (!isBlank(status) && status.equalsIgnoreCase("true")) {
+                                    hideProgress();
+                                    leadTableAdapter = new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+                                    table.setAdapter(leadTableAdapter);
+                                    JSONObject responseJsonObj = response.getJSONObject("Response");
+
+                                    prepareGroupMap(responseJsonObj); //prepare group map
+
+
+                                    JSONArray arrayDetail = responseJsonObj.getJSONArray("Table");
+                                    ArrayList<String> columns = new ArrayList<String>();
+                                    ArrayList<String> header = new ArrayList<String>();
+                                    ArrayList<String> headerSecond = new ArrayList<String>();
+
+                                    if (arrayDetail.length() != 0) {
+
+                                        for (int y = 2; y < arrayDetail.length(); y++) {
+
+                                            JSONObject objDetailSecond = (JSONObject) arrayDetail.get(0);
+
+                                            if (columns.size() == 0) {
+                                                Iterator iter = objDetailSecond.keys();
+                                                while (iter.hasNext()) {
+                                                    String columnName = iter.next().toString();
+                                                    columns.add(columnName);
+                                                }
+                                                for (String column : columns) {
+                                                    String columnData = objDetailSecond.getString(column).equals("") ? "" : objDetailSecond.getString(column);
+                                                    header.add(columnData);
+                                                }
+                                                String[] stockArr = new String[header.size()];
+                                                stockArr = header.toArray(stockArr);
+                                                leadTableAdapter.setHeadersSecond(stockArr);
+                                            }
+
+                                            JSONObject objDetail = (JSONObject) arrayDetail.get(y);
+
+                                            String[] stockArr = new String[columns.size()];
+                                            stockArr = columns.toArray(stockArr);
+                                            leadTableAdapter.setHeaders(stockArr);
+
+                                            LinkedHashMap<String, String> hm = new LinkedHashMap<>();
+                                            for (String column : columns) {
+                                                String columnData = (objDetail.isNull(column) || objDetail.getString(column).equals("")) ? "0" : objDetail.getString(column);
+                                                hm.put(column, columnData);
+                                            }
+                                            leadTableAdapter.add(hm);
+                                        }
+                                        leadTableAdapter.notifyDataSetChanged();
+                                        table.setVisibility(View.VISIBLE);
+                                        tvNochart.setVisibility(View.GONE);
+                                    } else {
+                                        table.setVisibility(View.GONE);
+                                        tvNochart.setVisibility(View.VISIBLE);
+                                    }
+
+                                } else {
+                                    hideProgress();
+                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                }
+
+                            } else {
+                                hideProgress();
+//                                customProgress.setVisibility(View.GONE);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            hideProgress();
+                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+//                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+//                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        try {
+                            hideProgress();
+                            if (statusCode == MOSLConstants.UNAUTHORIZE_STATUS_CODE) {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                                return;
+                            } else {
+                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                if (isBlank(error)) {
+                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                }
+                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+//                        customProgress.setVisibility(View.GONE);
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+//                        customProgress.setVisibility(View.GONE);
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        hideProgress();
+                    }
+
+                });
+            } catch (Exception e) {
+                hideProgress();
+                e.printStackTrace();
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
+            }
+        } else {
+//            customProgress.setVisibility(View.GONE);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true, null);
+
+        }
+
+    }
+
+    private void newWebServiceCall(String systemName, Map getAddtionalParameterMap) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            showProgress();
+            String serviceMethod = "Dashboard/LoadWidgetAsync";
+            Map inputMap = new HashMap<>();
+            inputMap.put("WidgetSystemName", systemName);
+            inputMap.put("AddtionalParameters", getAddtionalParameterMap);
+            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
+            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
+            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new TextHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
+                        //super.onSuccess(statusCode,headers,responseS);
+                        //after success code goes here
+                        try {
+                            Gson mGson = new Gson();
+                            Type type = new TypeToken<HashMap<String, Object>>() {
+                            }.getType();
+                            HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                            if (statusCode == 200) {
+                                String status = response.get(MOSLConstants.STATUS).toString();
+                                if (!isBlank(status) && status.equalsIgnoreCase("true")) {
+                                    hideProgress();
+                                    leadTableAdapter = new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+                                    table.setAdapter(leadTableAdapter);
+                                    //   JSONObject responseJsonObj = response.getJSONObject("Response");
+                                    StringMap responseJsonObj = (StringMap) response.get("Response");
+
+                                    newPrepareGroupMap(responseJsonObj); //prepare group map
+
+                                    List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Table");
+                                    //  JSONArray arrayDetail = responseJsonObj.getJSONArray("Table");
+                                    ArrayList<String> columns = new ArrayList<String>();
+                                    ArrayList<String> header = new ArrayList<String>();
+                                    ArrayList<String> headerSecond = new ArrayList<String>();
+
+                                    if (arrayDetail.size() != 0) {
+
+                                        for (int y = 2; y < arrayDetail.size(); y++) {
+
+                                            //  JSONObject objDetailSecond = (JSONObject) arrayDetail.get(0);
+                                            StringMap objDetailSecond = (StringMap) arrayDetail.get(0);
+                                            if (columns.size() == 0) {
+                                               /* Iterator iter = objDetailSecond.keys();
+                                                while (iter.hasNext()) {
+                                                    String columnName = iter.next().toString();
+                                                    columns.add(columnName);
+                                                }*/
+                                                for (Object keySetE : objDetailSecond.keySet()) {
+                                                    columns.add(keySetE.toString());
+                                                }
+                                                for (String column : columns) {
+                                                    String columnData = objDetailSecond.get(column).toString().equals("") ? "" : objDetailSecond.get(column).toString();
+                                                    header.add(columnData);
+                                                }
+                                                String[] stockArr = new String[header.size()];
+                                                stockArr = header.toArray(stockArr);
+                                                leadTableAdapter.setHeadersSecond(stockArr);
+                                            }
+
+                                            //JSONObject objDetail = (JSONObject) arrayDetail.get(y);
+                                            StringMap objDetail = (StringMap) arrayDetail.get(y);
+                                            String[] stockArr = new String[columns.size()];
+                                            stockArr = columns.toArray(stockArr);
+                                            leadTableAdapter.setHeaders(stockArr);
+
+                                            LinkedHashMap<String, String> hm = new LinkedHashMap<>();
+                                            for (String column : columns) {
+                                                String columnData = (objDetail.get(column).toString() == null || objDetail.get(column).toString().equals("")) ? "0" : objDetail.get(column).toString();
+                                                hm.put(column, columnData);
+                                            }
+                                            leadTableAdapter.add(hm);
+                                        }
+                                        leadTableAdapter.notifyDataSetChanged();
+                                        table.setVisibility(View.VISIBLE);
+                                        tvNochart.setVisibility(View.GONE);
+                                    } else {
+                                        table.setVisibility(View.GONE);
+                                        tvNochart.setVisibility(View.VISIBLE);
+                                    }
+
+                                } else {
+                                    hideProgress();
+                                    // String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
+                                      //MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                }
+
+                            } else {
+                                hideProgress();
+//                                customProgress.setVisibility(View.GONE);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            hideProgress();
+                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        try {
+                            JSONObject errorResponse = new JSONObject(responseString);
+                            hideProgress();
+                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                                return;
+                            } else {
+                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                if (isBlank(error)) {
+                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                }
+                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    }
+
+                });
+            } catch (Exception e) {
+                hideProgress();
+                e.printStackTrace();
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
+            }
+        } else {
+//            customProgress.setVisibility(View.GONE);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true, null);
+
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.tvShowLess) {
+            Bundle args = new Bundle();
+            ClientsLeadsFragment clientsFragment = ClientsLeadsFragment.newInstance(getContext());
+            args.putSerializable(DASHBOARD_MODEL, dashboardModel);
+            args.putString(FILTERFIRST, filterFirst);
+            args.putString(FILTERSECOND, filterSecond);
+            args.putString(FILTERTHIRD, filterThird);
+            clientsFragment.setArguments(args);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();
+
+
+           /* Bundle args = new Bundle();
+            ClientsLeadsFragment clientsFragment = ClientsLeadsFragment.newInstance(getContext());
+            args.putSerializable(DASHBOARD_MODEL, dashboardModel);
+            clientsFragment.setArguments(args);
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();*/
+        }
+
+    }
+
+
+    private class CommonHeader {
+        private final String name;
+        private final List<Item> list;
+
+        CommonHeader(String name) {
+            this.name = name;
+            list = new ArrayList<Item>();
+        }
+
+        public int size() {
+            return list.size();
+        }
+
+        public Item get(int i) {
+            return list.get(i);
+        }
+    }
+
+    private class Item {
+        private final String[] data;
+
+        private Item(String[] rowData) {
+            data = rowData;
+        }
+    }
+
+    public class LeadTableAdapter extends BaseTableAdapter {
+        private final CommonHeader commonHeaders[];
+
+        private String headers[] = {};
+
+        private String headers2[] = {};
+
+
+        private final float density;
+        HashMap hashMap;
+        ArrayList<HashMap<String, String>> hashArray;
+        private LayoutInflater inflater = null;
+
+        public LeadTableAdapter(Context context, ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
+            this.hashArray = hashArray;
+            density = context.getResources().getDisplayMetrics().density;
+
+        }
+
+
+        public String[] getHeaders() {
+            return headers;
+        }
+
+        public void setHeaders(String[] headers) {
+            this.headers = headers;
+        }
+
+        public String[] getHeadersSecond() {
+            return headers2;
+        }
+
+        public void setHeadersSecond(String[] headers) {
+            this.headers2 = headers;
+        }
+
+        @Override
+        public int getRowCount() {
+            return commonHeaders[0].list.size();
+        }
+
+        public void clear() {
+        }
+
+        public void add(HashMap<String, String> row) {
+            hashArray.add(row);
+
+            String rowData[] = new String[headers.length];
+            int ctr = 0;
+            for (String columnName : headers) {
+                String value = row.get(columnName).toString();
+                rowData[ctr] = value;
+                ctr++;
+            }
+
+            commonHeaders[0].list.add(new Item(rowData));
+        }
+
+        @Override
+        public int getColumnCount() {
+            return headers.length - 1;
+        }
+
+        @Override
+        public View getView(final int row, final int column, View convertView, ViewGroup parent) {
+            final View view;
+
+            switch (getItemViewType(row, column)) {
+                case 0:
+                    view = getFirstHeader(row, column, convertView, parent);
+                    break;
+                case 1:
+                    view = getHeader(row, column, convertView, parent);
+                    break;
+                case 2:
+                    view = getFirstBody(row, column, convertView, parent);
+
+                    break;
+                case 3:
+                    view = getBody(row, column, convertView, parent);
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int newColumn = column + 1;
+                            Set<String> stringSet = hashArray.get(row).keySet();
+                            String columnName = stringSet.toArray()[newColumn].toString();
+                            addtionalParameterMap.put(COL_FILTER, columnName);
+                            // addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).get("id").toString());
+                            addtionalParameterMap.put(ROW_FILTER, getRowKeyName(Double.parseDouble(hashArray.get(row).get("id").toString())));
+                            addtionalParameterMap.putAll(map);
+                            Bundle args = new Bundle();
+                            args.putString(SYSTEM_NAME, widgetSystemName);
+                            args.putString(LABEL, LEAD);
+                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                            lMap = (LinkedHashMap) hashArray.get(row);
+                            String columnData = lMap.get(columnName).toString();
+                            if (columnData != null) {
+                                if (!columnData.trim().equalsIgnoreCase("0")) {
+                                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                }
+                            }
+
+                        }
+                    });
+                    break;
+                case 4:
+                    view = getFamilyView(row, column, convertView, parent);
+                    break;
+                default:
+                    throw new RuntimeException("runtime exception");
+            }
+            return view;
+        }
+
+        //click on symbol header
+        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+            inflater = LayoutInflater.from(getActivity());
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_header_first_lead, parent, false);
+            }
+            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+            try {
+                head.setText(headers[1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                tvNochart.setVisibility(View.VISIBLE);
+            }
+            head.setTypeface(null, Typeface.BOLD);
+            return convertView;
+        }
+
+
+        //click on header other than symbol
+        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_header_lead, parent, false);
+            }
+            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+
+            TextView head1 = ((TextView) convertView.findViewById(android.R.id.text2));
+
+            try {
+                head1.setText(headers[column + 1]);
+                head.setText(headers2[column + 1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return convertView;
+        }
+
+        private View getFirstBody(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_first_lead, parent, false);
+            }
+            LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table_first_lead);
+            TextView tv_table_first = (TextView) convertView.findViewById(R.id.tv_table_first);
+
+            try {
+                if (hashArray.get(row).get("id") != null && isGroup(Double.parseDouble(hashArray.get(row).get("id").toString()))) {
+                    tv_table_first.setTypeface(null, Typeface.BOLD);
+                    tv_table_first.setTextColor(getResources().getColor(R.color.flush_orange));
+                    listLayout.setBackgroundResource(R.color.lead_self_back);
+                } else if (hashArray.get(row).get("stage") != null && (hashArray.get(row).get("stage").toString()).equalsIgnoreCase("total")) {
+                    tv_table_first.setTypeface(null, Typeface.BOLD);
+                    tv_table_first.setTextColor(getResources().getColor(R.color.black));
+                    listLayout.setBackgroundResource(R.color.secondaryBackground);
+                } else {
+                    tv_table_first.setTypeface(null, Typeface.BOLD);
+                    tv_table_first.setTextColor(getResources().getColor(R.color.black));
+                    listLayout.setBackgroundResource(R.color.lead_ekyc_back);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+            tv_table_first.setText(getDevice(row).data[column + 2]);
+            return convertView;
+        }
+
+        private String getItem(int row, int pos) {
+            if (pos == -1) {
+                return hashArray.get(row).get(MOSLConstants.STAGE).toString();
+            } else if (pos == 0) {
+                return hashArray.get(row).get(MOSLConstants.LEAD_ALLOCATION).toString();
+            } else if (pos == 1) {
+                return hashArray.get(row).get(MOSLConstants.LEAD_FILTER).toString();
+            } else if (pos == 2) {
+                return hashArray.get(row).get(MOSLConstants.REJECTED).toString();
+            }
+            return "N/A";
+        }
+
+        private View getBody(final int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table, parent, false);
+            }
+            LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table);
+            try {
+                ((TextView) convertView.findViewById(android.R.id.text1)).setText(getDevice(row).data[column + 1]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
+            if (hashArray.get(row).get("id") != null && isGroup(Double.parseDouble(hashArray.get(row).get("id").toString()))) {
+                text1.setTextColor(getResources().getColor(R.color.flush_orange));
+                listLayout.setBackgroundResource(R.color.lead_self_back);
+            } else if (hashArray.get(row).get("stage") != null && hashArray.get(row).get("stage").toString().equalsIgnoreCase("total")) {
+                text1.setTypeface(null, Typeface.BOLD);
+                text1.setTextColor(getResources().getColor(R.color.black));
+                listLayout.setBackgroundResource(R.color.lead_total_back);
+            } else {
+                text1.setTextColor(getResources().getColor(R.color.black));
+                listLayout.setBackgroundResource(R.color.lead_ekyc_back);
+            }
+
+            text1.setBackgroundResource(0);
+
+            return convertView;
+        }
+
+        private View getFamilyView(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_family, parent, false);
+            }
+            final String string;
+            if (column == -1) {
+                string = getFamily(row).name;
+            } else {
+                string = "";
+            }
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(string);
+            return convertView;
+        }
+
+        @Override
+        public int getWidth(int column) {
+            int widthSize = 0;
+            if (column == -1) {
+                widthSize = getResources().getDimensionPixelSize(R.dimen._90sdp);
+            }
+            for (int i = 0; i < column; i++) {
+                widthSize = getResources().getDimensionPixelSize(R.dimen._135sdp);
+            }
+            return widthSize;
+        }
+
+        @Override
+        public int getHeight(int row) {
+            final int height;
+            if (row == -1) {
+                height = getResources().getDimensionPixelSize(R.dimen._40sdp);
+            } else if (isFamily(row)) {
+                height = 0;
+            } else {
+                height = getResources().getDimensionPixelSize(R.dimen._40sdp);
+            }
+            return height;
+        }
+
+        @Override
+        public int getItemViewType(int row, int column) {
+            final int itemViewType;
+            if (row == -1 && column == -1) {
+                itemViewType = 0;
+            } else if (row == -1) {
+                itemViewType = 1;
+            } else if (isFamily(row)) {
+                itemViewType = 4;
+            } else if (column == -1) {
+                itemViewType = 2;
+            } else {
+                itemViewType = 3;
+            }
+            return itemViewType;
+        }
+
+        private boolean isFamily(int row) {
+
+            if (row == -1 || row == 0) {
+                int family = 0;
+                while (row > 0) {
+                    row -= commonHeaders[family].size();
+                    family++;
+                }
+                return row == 1;
+            }
+            return row == 0;
+        }
+
+        private CommonHeader getFamily(int row) {
+            int family = 0;
+            while (row >= 0) {
+                row -= commonHeaders[family].size();
+            }
+            return commonHeaders[family];
+        }
+
+        private Item getDevice(int row) {
+            int family = 0;
+            while (row >= 0) {
+                row -= commonHeaders[family].size();
+            }
+            return commonHeaders[family].get(row + commonHeaders[family].size());
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 5;
+        }
+    }
+
+    private String getRowKeyName(Double childId) {
+        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
+            Integer groupId = tabaleHeaderMap.keyAt(ctr);
+            List<Map> childList = (List) tabaleHeaderMap.get(groupId);
+            for (Map childMap : childList) {
+                Set<Integer> childListSet = childMap.keySet();
+                for (Integer childIdFromMap : childListSet) {
+                    if (childId == childIdFromMap.intValue()) {
+                        return childMap.get(childIdFromMap).toString();
+                    }
+                }
+            }
+        }
+        return null;
+
+    }
+
+    private boolean isGroup(double id) {
+        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
+            Integer groupId = tabaleHeaderMap.keyAt(ctr);
+            if (groupId.intValue() == id) return true;
+        }
+        return false;
+    }
+
+    private void prepareGroupMap(JSONObject responseJsonObj) {
+        try {
+            if (responseJsonObj.isNull("Table2")) return;
+
+            JSONArray jsonArray = responseJsonObj.getJSONArray("Table2");
+            if (jsonArray == null) return;
+            for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
+                JSONObject jsonRowObject = (JSONObject) jsonArray.get(ctr);
+                int groupId = jsonRowObject.getInt("GroupId");
+                int childid = jsonRowObject.getInt("childid");
+                String rowFilter = jsonRowObject.getString("RowFilter");
+
+                List<Map> childList = (List) tabaleHeaderMap.get(groupId);
+                if (childList == null) {
+                    childList = new ArrayList<>();
+                }
+                Map childMap = new HashMap();
+                childMap.put(childid, rowFilter);
+                childList.add(childMap);
+                tabaleHeaderMap.put(groupId, childList);
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        Log.d(TAG, "Done");
+    }
+
+    private void newPrepareGroupMap(StringMap responseJsonObj) {
+        try {
+            if (responseJsonObj.get("Table2") == null) return;
+
+//            JSONArray jsonArray = responseJsonObj.get("Table2");
+            List<StringMap> jsonArray = (List<StringMap>) responseJsonObj.get("Table2");
+            if (jsonArray == null) return;
+            for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
+                StringMap jsonRowObject = (StringMap) jsonArray.get(ctr);
+                int groupId = Integer.parseInt(jsonRowObject.get("GroupId").toString());
+                int childid = Integer.parseInt(jsonRowObject.get("childid").toString());
+                String rowFilter = jsonRowObject.get("RowFilter").toString();
+
+                List<Map> childList = (List) tabaleHeaderMap.get(groupId);
+                if (childList == null) {
+                    childList = new ArrayList<>();
+                }
+                Map childMap = new HashMap();
+                childMap.put(childid, rowFilter);
+                childList.add(childMap);
+                tabaleHeaderMap.put(groupId, childList);
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        Log.d(TAG, "Done");
+    }
+}
+

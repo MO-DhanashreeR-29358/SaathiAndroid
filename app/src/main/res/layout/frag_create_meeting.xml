@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dashbord_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
+
+            <include layout="@layout/lms_top_section_update" />
+
+            <RelativeLayout
+                android:id="@+id/rlDate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/list_bacground">
+
+                <TextView
+                    android:id="@+id/tvMeetingDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:text="Meeting Date"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/tvMeetingDate"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+                <ImageView
+                    android:id="@+id/ivDatePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:src="@drawable/ic_calendar" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Product*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></Spinner>
+
+            <TextView
+                android:id="@+id/tvProductError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvProductList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Meeting Duration*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spMeetingDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:id="@+id/tvMeetingDurationError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Meeting Objective*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spMeetingObjective"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp" />
+
+            <TextView
+                android:id="@+id/tvMeetingObjectiveError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Activity Type*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spActivityType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></Spinner>
+
+            <TextView
+                android:id="@+id/tvActivityTypeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Meeting Reason*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spMeetingReason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:entries="@array/Select_Meeting_Reason"></Spinner>
+
+            <TextView
+                android:id="@+id/tvMeetingReasonError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout">
+
+                <EditText
+                    android:id="@+id/etMeetingDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:hint="Enter Meeting Description*"
+                    android:inputType="textMultiLine"
+                    android:maxLength="500"
+                    android:textCursorDrawable="@null" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvMeetingDescriptionError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+
+            <LinearLayout
+                android:id="@+id/linaerLayoutNew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="BA Client Meeting*"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <Spinner
+                    android:id="@+id/spBAClient"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvBAClientError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Out Station Meeting*"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <Spinner
+                    android:id="@+id/spOutStaition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvOutStaitionError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilClientCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+                    <!--app:hintTextAppearance="@style/InputLayout"-->
+
+                    <EditText
+                        android:id="@+id/etClientCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Client Code*"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvClientCodeError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilClientName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+                    <!--app:hintTextAppearance="@style/InputLayout"-->
+
+                    <EditText
+                        android:id="@+id/etClientName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Client Name*"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvClientNameError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/list_bacground"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:id="@+id/llAttendee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvAttendee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_3sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:text="Attendee"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/tvAttendeeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tvAttendee"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <ImageButton
+                        android:id="@+id/ibAttendee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_plus" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/calendar_gray" />
+
+                <RelativeLayout
+                    android:id="@+id/llSplAttendee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tvSplAttendee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_3sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:text="Spl Attendee"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/tvSplAttendeeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tvSplAttendee"
+                        android:paddingBottom="@dimen/_10sdp"
+                        android:paddingLeft="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_10sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <ImageButton
+                        android:id="@+id/ibSplAttendee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_plus" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout">
+
+                <EditText
+                    android:id="@+id/etCustomerComment"
+                    style="@style/CRMEdittextSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:hint="Enter Customer Comment"
+                    android:inputType="textMultiLine"
+                    android:textCursorDrawable="@null" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <TextView
+                android:id="@+id/tvActionables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/white"
+                android:ellipsize="end"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:text="Actionables"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="gone" />
+
+
+            <LinearLayout
+                android:id="@+id/llActionables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Actionables*"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <Spinner
+                    android:id="@+id/spActionables"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvActionablesError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Category*"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <Spinner
+                    android:id="@+id/spCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"></Spinner>
+
+                <TextView
+                    android:id="@+id/tvCategoryError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+
+                    <EditText
+                        android:id="@+id/etCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_80sdp"
+                        android:hint="Enter Category Description*"
+                        android:inputType="textMultiLine"
+                        android:maxLength="500"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvCategoryCommentsError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/llSubcategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_2sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:text="Sub Category*"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+                    <Spinner
+                        android:id="@+id/spSubCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/tvSubCategoryError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etSubCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_80sdp"
+                            android:hint="Enter Sub Category Description*"
+                            android:inputType="textMultiLine"
+                            android:maxLength="500"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvSubCategoryCommentsError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+                </LinearLayout>
+                <!-- </LinearLayout>-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:text="Save"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btnReset"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:background="@color/calendar_gray2"
+                    android:text="Reset"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</ScrollView>

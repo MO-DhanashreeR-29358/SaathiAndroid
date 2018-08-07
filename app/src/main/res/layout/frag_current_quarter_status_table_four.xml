@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llCurrentQuaterStatusFour"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_8sdp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+
+    <TextView
+        android:id="@+id/tvCurrentQuaterStatusFourHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold" />
+
+    <TableLayout
+        android:id="@+id/tableCurrentQuaterStatusFour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp" />
+
+</LinearLayout>

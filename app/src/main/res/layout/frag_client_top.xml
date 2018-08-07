@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f0f5fb">
+
+        <LinearLayout
+            android:id="@+id/llFamiMappedCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_weight="2">
+
+            <TextView
+                android:id="@+id/tvFamiMapped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="Families Mapped"
+                android:textColor="@color/light_black"
+                android:textSize="@dimen/txt_size" />
+
+            <TextView
+                android:id="@+id/tvFamiMappedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/ic_circle"
+                android:gravity="center"
+                android:padding="@dimen/_3sdp"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMTDCOUNT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/MTD_COUNT"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/txt_size" />
+
+        <TextView
+            android:id="@+id/tvYTDCOUNT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/YTD_COUNT"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/txt_size" />
+    </LinearLayout>
+
+</LinearLayout>

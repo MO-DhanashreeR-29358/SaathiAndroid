@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "141925660343",
+    "firebase_url": "https://esales-ff971.firebaseio.com",
+    "project_id": "esales-ff971",
+    "storage_bucket": "esales-ff971.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141925660343:android:b0c21758ea32cfd0",
+        "android_client_info": {
+          "package_name": "com.mosl.tabapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141925660343-cbg1r361v9bknggc213t2gd4kveg7im5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALPfVZogwSpSGBLFt2Ufu2lExR-5kftvw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

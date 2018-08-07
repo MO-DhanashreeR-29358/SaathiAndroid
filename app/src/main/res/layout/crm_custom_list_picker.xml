@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_actionbar"
+        android:background="@color/titleBarBackground"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="@color/alternateTextColor"
+        android:textSize="@dimen/appTitleTextSize"
+        android:textStyle="bold"
+        android:visibility="visible"
+        tools:text="Title" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/secondaryBackground"
+        android:gravity="center"
+        android:padding="@dimen/_6sdp">
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ibtnClose"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:srcCompat="@drawable/ic_left_arrow"
+
+            />
+
+        <org.droidparts.widget.ClearableEditText
+            android:id="@+id/search"
+            style="@style/CRMEdittextLeadSelector"
+            android:layout_width="0dp"
+            android:layout_height="?actionBarSize"
+            android:layout_weight="0.9"
+            android:drawableLeft="@drawable/ic_msearch"
+            android:drawableRight="@drawable/ic_close_text"
+            android:hint="@string/SS_SEARCH"
+            android:imeOptions="actionDone" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textViewEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingIndicator"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:visibility="gone" />
+    </FrameLayout>
+    <!--android:layout_margin="@dimen/_6sdp"-->
+</LinearLayout>

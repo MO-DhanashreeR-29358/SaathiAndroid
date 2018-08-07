@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/item_table"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:orientation="horizontal">
+        -->
+
+        <Button
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tButton"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:maxLines="2"
+            android:padding="10dp"
+
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_size"
+            />
+
+        <!--<com.msf.ui.textview.MSFTextView
+            android:id="@+id/tvChange"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+             android:gravity="center"
+            android:text="asd" />-->
+
+        <!-- <View
+             android:layout_width="1dip"
+             android:layout_height="match_parent"
+             android:background="@drawable/separator_table" />-->
+ <!--   </LinearLayout>
+</LinearLayout>-->

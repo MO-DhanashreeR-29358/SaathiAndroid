@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/list_bacground"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llProductId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".4"
+                android:text="Product Id*"
+                android:textColor="@color/light_black" />
+
+            <Spinner
+                android:id="@+id/spProductId"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_weight=".6"
+                android:background="@drawable/spinner" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvspProductIdError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="right"
+            android:paddingRight="@dimen/_8sdp"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:text="Please Select Stage" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:padding="@dimen/_3sdp">
+
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight=".4"
+                android:text="Status*"
+                android:textColor="@color/light_black" />
+
+            <Spinner
+                android:id="@+id/spStatus"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_28sdp"
+                android:layout_weight=".6"
+                android:background="@drawable/spinner" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvspStatusError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="right"
+            android:paddingRight="@dimen/_8sdp"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            tools:text="Please Select Stage" />
+
+
+
+        <LinearLayout
+            android:id="@+id/lowMarginAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_3sdp"
+            android:padding="@dimen/_3sdp"
+            android:orientation="vertical"></LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/button_state_bg"
+                android:padding="@dimen/_10sdp"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/btnClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:background="@drawable/button_state_bg"
+                android:padding="@dimen/_10sdp"
+                android:text="Cancel" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <include layout="@layout/layout_custom_progress_crm" />
+</RelativeLayout>

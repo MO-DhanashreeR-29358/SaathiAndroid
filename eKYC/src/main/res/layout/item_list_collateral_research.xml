@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtResearchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="------------"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtResearchLocalVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginTop="2dp"
+                    android:text="Local Version: ???"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/txtResearchServerVersion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Server Version: ???"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/txtDownloadProgressMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="2dp"
+                    android:text=""
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_9sdp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/imDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/ic_download" />
+
+            <ImageView
+                android:id="@+id/imView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@id/imDownload"
+                android:src="@drawable/ic_pdf_icon"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

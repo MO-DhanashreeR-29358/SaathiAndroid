@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/light_white">
+
+ <!--   <TextView
+        android:id="@+id/imgyellowImage"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/yellow_menu"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp" />-->
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imgGroupImage"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:clickable="false" />
+
+    <TextView
+        android:id="@+id/txtMenuNames"
+        style="@style/DrawerItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/imgFocusImage"
+        android:layout_toRightOf="@+id/imgGroupImage"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textSize="@dimen/txt_size"
+        android:text="Hello" />
+
+    <ImageView
+        android:id="@+id/imgFocusImage"
+        android:layout_width="@dimen/_14sdp"
+        android:layout_height="@dimen/_14sdp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ico_lock" />
+
+</RelativeLayout>

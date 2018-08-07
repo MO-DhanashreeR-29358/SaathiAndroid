@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f0f5fb">
+
+
+        <TextView
+            android:id="@+id/tvSegment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Segment"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/txt_size" />
+
+
+        <TextView
+            android:id="@+id/tvNoOfClients"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="No Of Clients"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/txt_size" />
+
+        <TextView
+            android:id="@+id/tvRevenueGenerated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_weight="1.4"
+            android:gravity="center"
+            android:text="Revenue Generated"
+            android:textColor="@color/light_black"
+            android:textSize="@dimen/txt_size" />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

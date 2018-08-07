@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <shortcut
+        android:icon="@drawable/ic_create_lead"
+        android:shortcutId="add_lead"
+        android:shortcutLongLabel="@string/createlead"
+        android:shortcutShortLabel="@string/createlead">
+        <!-- create Lead -->
+        <intent
+            android:action="com.mosl.tabapp.CREATE_LEAD"
+            android:targetClass="com.mosl.tabapp.ui.MOSLCommonActivity"
+            android:targetPackage="com.mosl.tabapp" />
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_birthday_aniversary"
+        android:shortcutId="view_bday"
+        android:shortcutLongLabel="@string/ba_view"
+        android:shortcutShortLabel="@string/ba_view">
+        <!-- create Lead -->
+        <intent
+            android:action="com.mosl.tabapp.VIEW_BA"
+            android:targetClass="com.mosl.tabapp.ui.MOSLCommonActivity"
+            android:targetPackage="com.mosl.tabapp" />
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_new_calendar"
+        android:shortcutId="view_cal"
+        android:shortcutLongLabel="@string/cal"
+        android:shortcutShortLabel="@string/cal">
+        <!-- create Lead -->
+        <intent
+            android:action="com.mosl.tabapp.VIEW_CALE"
+            android:targetClass="com.mosl.tabapp.ui.MOSLCommonActivity"
+            android:targetPackage="com.mosl.tabapp" />
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_new_query"
+        android:shortcutId="add_query"
+        android:shortcutLongLabel="@string/query_action"
+        android:shortcutShortLabel="@string/query_action">
+        <!-- create Lead -->
+        <intent
+            android:action="com.mosl.tabapp.ADD_QUERY"
+            android:targetClass="com.mosl.tabapp.ui.MOSLCommonActivity"
+            android:targetPackage="com.mosl.tabapp" />
+    </shortcut>
+</shortcuts>

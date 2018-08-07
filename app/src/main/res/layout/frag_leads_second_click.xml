@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dashbord_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/setapptitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignParentTop="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/llName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp">
+
+            <ImageView
+                android:id="@+id/ivAscSorting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sortby_dark" />
+
+            <ImageView
+                android:id="@+id/ivDecSorting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_sortby_light" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_toRightOf="@+id/llName"
+            android:text="Name"
+            android:textStyle="bold"
+            android:textColor="@color/orange" />
+
+        <TextView
+            android:id="@+id/tvOR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/tvName"
+            android:text="OR"
+            android:textColor="@color/text_color" />
+
+        <TextView
+            android:id="@+id/tvLead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/_2sdp"
+            android:layout_toRightOf="@+id/tvOR"
+            android:text="Lead id"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+
+        <ImageView
+            android:id="@+id/imgFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:src="@drawable/ic_filter" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/expListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/setapptitle"
+        android:layout_margin="@dimen/_8sdp"
+        android:divider="@color/dashbord_background"
+        android:dividerHeight="@dimen/_8sdp" />
+
+    <RelativeLayout
+        android:id="@+id/popupView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/setapptitle"
+        android:background="#99deddde"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp">
+
+
+            <Spinner
+                android:id="@+id/spSelectPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp" />
+
+            <Spinner
+                android:id="@+id/spSelectReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+            <Spinner
+                android:id="@+id/spSelectProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+            <Spinner
+                android:id="@+id/spSelectSubProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+            <Spinner
+                android:id="@+id/spSelectHierarchy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp">
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Save"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btnReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_toRightOf="@+id/btnSave"
+                    android:background="@color/button_grey"
+                    android:text="Reset"
+                    android:textColor="@color/black" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

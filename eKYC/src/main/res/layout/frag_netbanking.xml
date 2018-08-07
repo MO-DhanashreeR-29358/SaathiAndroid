@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/llEquityNetBanking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_shadow"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        android:background="@color/secondaryBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/fundtransfer"
+                        android:textSize="@dimen/_11sdp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tvEquFundTransfered"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        android:gravity="left"
+                        android:text="@string/fundtransfered"
+                        android:textSize="@dimen/_11sdp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/llEquFundOption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:text="@string/pay_using_net_banking"
+                            android:textColor="@color/secondaryBackground"
+                            android:textSize="@dimen/_10sdp" />
+
+
+                        <EditText
+                            android:id="@+id/etEquBankName"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:hint="@string/bankname"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+
+                        <EditText
+                            android:id="@+id/etEquAccNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:hint="@string/accountno"
+                            android:inputType="number"
+                            android:maxLength="18"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <!--<TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:text="Annual Income (Rs.in Lacs)"
+                            android:textColor="@color/secondaryBackground"
+                            android:textSize="@dimen/_10sdp" />-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/funds_to_be_transferred"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight=".15"
+                                android:text="@string/rupee_symbol"
+                                android:textSize="@dimen/_20sdp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.8"
+                                android:orientation="vertical">
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/input_layout_equFundTransferred"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/etEquFundTransferred"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="number"
+                                        android:maxLength="7"
+                                        android:maxLines="1"
+                                        android:singleLine="true"
+                                        android:text=""
+                                        android:textSize="@dimen/_18sdp" />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/etEquFundTransferredError"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_minus5sdp"
+                                    android:background="@null"
+                                    android:enabled="false"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:textColor="@color/upload_red"
+                                    android:textSize="@dimen/_10sdp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="" />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llEquPaymentButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/light_grey_menu"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:visibility="visible">
+
+                                <Button
+                                    android:id="@+id/btnEquPayment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_margin="@dimen/_5sdp"
+                                    android:background="@drawable/ic_submit_btn"
+                                    android:text="@string/makepayment"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_11sdp" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlEquSkipPayment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.6"
+                                android:visibility="visible">
+
+                                <Button
+                                    android:id="@+id/btnEquSkipPayment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_margin="@dimen/_5sdp"
+                                    android:background="@drawable/list_add_background"
+                                    android:text="@string/skippayment"
+                                    android:textColor="@color/dark_blue"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:visibility="visible" />
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnEquNext"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:background="@drawable/ic_submit_btn"
+                            android:text="@string/next"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCommodityNetBanking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/border_shadow"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        android:background="@color/secondaryBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_5sdp"
+                        android:text="@string/fundtransfer"
+                        android:textSize="@dimen/_11sdp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tvCommFundTransfered"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_2sdp"
+                        android:gravity="left"
+                        android:text="@string/fundtransfered"
+                        android:textSize="@dimen/_11sdp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/llCommFundOption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_15sdp"
+                            android:text="@string/pay_using_net_banking"
+                            android:textColor="@color/secondaryBackground"
+                            android:textSize="@dimen/_10sdp" />
+
+
+                        <EditText
+                            android:id="@+id/etCommBankName"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:hint="@string/bankname"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+
+                        <EditText
+                            android:id="@+id/etCommAccNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:hint="@string/accountno"
+                            android:inputType="number"
+                            android:maxLength="18"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <!--<TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:text="Annual Income (Rs.in Lacs)"
+                            android:textColor="@color/secondaryBackground"
+                            android:textSize="@dimen/_10sdp" />-->
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_5sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:text="@string/funds_to_be_transferred"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_15sdp"
+                                android:layout_weight=".15"
+                                android:text="@string/rupee_symbol"
+                                android:textSize="@dimen/_20sdp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1.8"
+                                android:orientation="vertical">
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/input_layout_commFundTransferred"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <EditText
+                                        android:id="@+id/etCommFundTransferred"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:inputType="number"
+                                        android:maxLength="7"
+                                        android:maxLines="1"
+                                        android:singleLine="true"
+                                        android:text=""
+                                        android:textSize="@dimen/_18sdp" />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/etCommFundTransferredError"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_minus5sdp"
+                                    android:background="@null"
+                                    android:enabled="false"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:textColor="@color/upload_red"
+                                    android:textSize="@dimen/_10sdp"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llCommPaymentButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/light_grey_menu"
+                            android:orientation="horizontal">
+
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:visibility="visible">
+
+                                <Button
+                                    android:id="@+id/btnCommPayment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_margin="@dimen/_5sdp"
+                                    android:background="@drawable/ic_submit_btn"
+                                    android:text="@string/makepayment"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_11sdp" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlCommSkipPayment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight=".6"
+                                android:visibility="visible">
+
+                                <Button
+                                    android:id="@+id/btnCommSkipPayment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_35sdp"
+                                    android:layout_gravity="center_horizontal"
+                                    android:layout_margin="@dimen/_5sdp"
+                                    android:background="@drawable/list_add_background"
+                                    android:text="@string/skippayment"
+                                    android:textColor="@color/dark_blue"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:visibility="visible" />
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btnCommNext"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:background="@drawable/ic_submit_btn"
+                            android:text="@string/next"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</RelativeLayout>

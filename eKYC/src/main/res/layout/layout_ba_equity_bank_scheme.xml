@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="Brokerage Scheme"
+            android:textSize="@dimen/title_11sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/etEquBrokerageError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <Spinner
+            android:id="@+id/spEquBrokerage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="Trading"
+            android:textSize="@dimen/title_11sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/etEquTradingError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <com.mosl.mobile.ekyc.common.SearchableSpinner
+            android:id="@+id/spEquTrading"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="Delivery"
+            android:textSize="@dimen/title_11sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/etEquDeliveryError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <com.mosl.mobile.ekyc.common.SearchableSpinner
+            android:id="@+id/spEquDelivery"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp" />
+
+        <LinearLayout
+            android:id="@+id/llFuture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Future"
+                android:textSize="@dimen/title_11sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/etEquFutureError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spEquFuture"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Option"
+                android:textSize="@dimen/title_11sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/etEquOptionError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spEquOption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            android:text="DP Tariff"
+            android:textSize="@dimen/title_11sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/etEquDPAMCError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_minus5sdp"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/upload_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone" />
+
+        <com.mosl.mobile.ekyc.common.SearchableSpinner
+            android:id="@+id/spEquDPAMC"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp" />
+
+        <LinearLayout
+            android:id="@+id/llCurrencyFuture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Currency Future"
+                android:textSize="@dimen/title_11sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/etEquCurrencyFutureError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spEquCurrencyFuture"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCurrencyOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                android:text="Currency Option"
+                android:textSize="@dimen/title_11sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/etEquCurrencyOptionError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_minus5sdp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/upload_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <com.mosl.mobile.ekyc.common.SearchableSpinner
+                android:id="@+id/spEquCurrencyOption"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="Equity Scheme Summary"
+            android:textColor="@color/secondaryBackground"
+            android:textSize="@dimen/_11sdp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/list_add_background"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:background="#f3eff0"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Brokerage Scheme"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvBrokSchSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f8f6f7"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Trading"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvTradeSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f3eff0"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Delivery"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvDelSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llFutureSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f8f6f7"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Future"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvFutureSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llOptionSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:background="#f3eff0"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Options"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvOptionsSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f8f6f7"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="DP Tariff"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvDPSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCurrencyFutureSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:background="#f3eff0"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Currency Future"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvCurrencyFutureSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llCurrencyOptionSummary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f8f6f7"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp">
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text="Currency Option"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+
+                    <TextView
+                        android:id="@+id/tvCurrencyOptionSummary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

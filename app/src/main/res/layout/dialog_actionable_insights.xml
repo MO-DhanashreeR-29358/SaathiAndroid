@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/_10sdp">
+
+        <LinearLayout
+            android:id="@+id/llActionableMain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e7e8e8"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:padding="@dimen/_5sdp"
+                android:text="Actionable Insights"
+                android:textColor="@color/flush_orange"
+                android:textSize="@dimen/_14sdp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/lvActionableInsights"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/calendar_gray"
+                android:dividerHeight="@dimen/_1sdp"
+                tools:listitem="@layout/item_list_actionable_insights" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llActionableMain"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_minus10sdp"
+            app:srcCompat="@drawable/ic_new_actionable_insight_close_image" />
+
+    </RelativeLayout>
+    <!-- <android.support.v7.widget.AppCompatImageView
+         android:id="@+id/ivClose"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentRight="true"
+         android:layout_marginBottom="@dimen/_minus10sdp"
+         app:srcCompat="@drawable/ic_new_closed" />-->
+</RelativeLayout>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/branch_login"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/pulse_logo"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:src="@drawable/digital_account_opening" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pulse_logo"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:text="@string/digital_account_opening"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp" />
+
+                </RelativeLayout>
+
+
+                <!--  <TextView
+                      android:id="@+id/tvCRM"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/ivMotilalOswal"
+                      android:layout_centerHorizontal="true"
+                      android:gravity="center"
+                      android:paddingTop="10dp"
+                      android:text="Customer Relationship Management\n(CRM)"
+                      android:textAllCaps="false"
+                      android:textColor="#fbb030"
+                      android:textSize="@dimen/_15sdp"
+                      android:textStyle="bold" />
+
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_below="@+id/tvCRM"
+                      android:padding="@dimen/_16sdp">
+
+                      <RelativeLayout
+                          android:id="@+id/relativeLayout"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+
+                          <ImageView
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_centerVertical="true"
+                              android:src="@drawable/login_line" />
+
+                          <ImageView
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:layout_centerHorizontal="true"
+                              android:src="@drawable/ic_customer_login" />
+                      </RelativeLayout>
+
+                      <TextView
+                          android:id="@+id/tvLogin"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_below="@+id/relativeLayout"
+                          android:layout_centerHorizontal="true"
+                          android:paddingTop="16dp"
+                          android:text="Login"
+                          android:textSize="@dimen/_15sdp"
+                          android:textAllCaps="true"
+                          android:textColor="#fbb030"
+                          android:textStyle="bold" />-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <!-- <EditText
+                         android:id="@+id/etClientCode"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_centerHorizontal="true"
+                         android:layout_marginBottom="10dp"
+                         android:background="@drawable/login_edittext_border"
+                         android:drawableLeft="@drawable/login_user"
+                         android:drawablePadding="5dp"
+                         android:hint="User"
+                         android:padding="15dp"
+                         android:singleLine="true" />-->
+
+                    <EditText
+                        android:id="@+id/etMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/login_edittext_border"
+                        android:drawableLeft="@drawable/ic_mobile_icon"
+                        android:drawablePadding="10dp"
+                        android:hint="Email/Mobile/User ID"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:text="" />
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/login_edittext_border"
+                        android:drawableLeft="@drawable/login_paswrd"
+                        android:drawablePadding="10dp"
+                        android:ems="10"
+                        android:hint="Password"
+                        android:padding="@dimen/_10sdp"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+                    <Button
+                        android:id="@+id/ivSubmit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/login" />
+
+
+                    <TextView
+                        android:id="@+id/tvForgotPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/forgot_password"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp" />
+
+                    <Button
+                        android:id="@+id/ivTrackApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/track_application" />
+
+                    <Button
+                        android:id="@+id/ivResumeApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/new_customer" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <include layout="@layout/layout_custom_progress" />
+
+</RelativeLayout>

@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border_shadow"
+    android:orientation="vertical"
+    android:padding="@dimen/_5sdp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- <TextView
+                     android:id="@+id/txtPopup"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Popup"
+                     android:layout_gravity="center_horizontal"
+                     android:textColor="@color/black"
+                     android:textSize="@dimen/_13sdp" />-->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:background="@color/secondaryBackground"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="@string/bank_details"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="Select Bank"
+                    android:textSize="@dimen/title_11sp"
+                    android:textStyle="normal" />
+
+                <com.mosl.mobile.ekyc.common.SearchableSpinner
+                    android:id="@+id/spEquSelectBank"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_5sdp" />
+
+                <TextView
+                    android:id="@+id/etEquSelectBankError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_minus5sdp"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_equityMICR"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
+
+                    <EditText
+                        android:id="@+id/etEquityMICR"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:hint="Enter Branch Name or City or MICR or IFSC"
+                        android:maxLength="20"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <Button
+                        android:id="@+id/btnEquityBankDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/btn_search"
+                        android:text="@string/search_bank"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+                <!-- <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginTop="@dimen/_15sdp"
+                     android:padding="@dimen/_5sdp"
+                     android:visibility="visible">
+
+                     <Button
+                         android:id="@+id/btnEquityBankDetails"
+                         android:layout_width="match_parent"
+                         android:layout_height="@dimen/_30sdp"
+                         android:layout_centerHorizontal="true"
+                         android:background="@drawable/search_full"
+                         android:text="Search Bank for Equity"
+                         android:textColor="@color/white"
+                         android:textSize="@dimen/_10sdp"
+                         android:textStyle="bold" />
+                 </RelativeLayout>-->
+                <LinearLayout
+                    android:id="@+id/llEquBankDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/list_add_background"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#f3eff0"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_5sdp">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_weight="0.4"
+                                android:text="Bank Name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                            <TextView
+                                android:id="@+id/tvEquityBankName"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#f8f6f7"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_5sdp">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_weight="0.4"
+                                android:text="Branch Name"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                            <TextView
+                                android:id="@+id/tvEquityBranchName"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#f3eff0"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_5sdp">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_weight="0.4"
+                                android:text="MICR Code"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                            <TextView
+                                android:id="@+id/tvEquityMICR"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#f8f6f7"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_5sdp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_weight="0.4"
+                                android:text="IFSC Code"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                            <TextView
+                                android:id="@+id/tvEquityIFSC"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#f3eff0"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/_5sdp">
+
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_weight="0.4"
+                                android:text="Bank Address"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                            <TextView
+                                android:id="@+id/tvEquityBankAddress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_weight="0.5"
+                                android:text=""
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/_13sdp" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_equityAccNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp">
+
+                        <EditText
+                            android:id="@+id/etEquityAccNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:hint="Bank A/C No(eg.SB00000555001)"
+                            android:inputType="textPassword"
+                            android:longClickable="false"
+                            android:maxLength="18"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/etEquityAccNumberError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/upload_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/input_layout_confirm_equityAccNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp">
+
+                        <EditText
+                            android:id="@+id/etConfirmEquityAccNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:hint="@string/confirm_bank_ac_no"
+                            android:longClickable="false"
+                            android:maxLength="18"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/etConfirmEquityAccNumberError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/upload_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+                    <!--<TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="* eg.SB00000555001"
+                        android:textColor="@color/secondaryBackground"
+                        android:textSize="@dimen/_10sdp" />-->
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:text="Account Type"
+                    android:textSize="@dimen/title_11sp"
+                    android:textStyle="normal" />
+
+                <!-- <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="@dimen/_40sdp"
+                     android:layout_margin="@dimen/_2sdp"
+                     android:orientation="horizontal">
+
+
+                     <CheckBox
+                         android:id="@+id/cbEquCurrent"
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_centerHorizontal="true"
+                         android:layout_centerVertical="true"
+                         android:layout_marginRight="@dimen/_2sdp"
+                         android:layout_weight="1"
+                         android:checked="false"
+                         android:text="Current"
+                         android:textSize="@dimen/_11sdp" />
+
+                     <CheckBox
+                         android:id="@+id/cbEquSaving"
+                         android:layout_width="0dp"
+                         android:layout_height="match_parent"
+                         android:layout_centerHorizontal="true"
+                         android:layout_centerVertical="true"
+                         android:layout_weight="1"
+                         android:checked="false"
+                         android:text="Savings"
+                         android:textSize="@dimen/_11sdp" />
+                 </LinearLayout>-->
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rbEquSaving"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:text="Savings"
+                        android:textColor="@drawable/radiobutton_background" />
+
+                    <RadioButton
+                        android:id="@+id/rbEquCurrent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:text="Current"
+                        android:textColor="@drawable/radiobutton_background" />
+
+                </RadioGroup>
+
+                <!--<LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp">
+
+                    <CheckBox
+                        android:id="@+id/checkBoxConditions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Same AS Equity "
+                        android:textColor="@color/orange"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>-->
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="Bank Proof"
+                    android:textSize="@dimen/title_11sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/etEquBankProoflError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_minus5sdp"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spEquBankProof"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_5sdp" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="Photo Proof"
+                    android:textSize="@dimen/title_11sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/etEquPhotoProofError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_minus5sdp"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spEquPhotoProof"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_5sdp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--<Button
+            android:id="@+id/btnEqPayment"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:text="Make Payment"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"/>-->
+    </LinearLayout>
+</LinearLayout>

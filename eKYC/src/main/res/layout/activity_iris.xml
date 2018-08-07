@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!--<SurfaceView
+        android:id="@+id/preview"
+        android:layout_width="match_parent"
+        android:layout_height="390dp"
+        android:layout_below="@+id/AuthBtn"
+        android:visibility="visible" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <CheckBox
+            android:id="@+id/singleEye"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:text="Single Eye"
+            android:textSize="@dimen/button_text_size" />
+
+        <AutoCompleteTextView
+            android:id="@+id/uidTxtVu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:ems="10"
+            android:hint="Aadhaar Number"
+            android:inputType="number"
+            android:maxLength="12"
+            android:textSize="@dimen/button_text_size">
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+
+        <Button
+            android:id="@+id/AuthBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginBottom="@dimen/input_margin_bottom"
+            android:enabled="false"
+            android:text="Authenticate"
+            android:textSize="@dimen/button_text_size" />
+
+        <TextView
+            android:id="@+id/resultTxtVu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="@dimen/message_view_height"
+            android:text=""
+            android:textSize="@dimen/message_view_text_size"
+            tools:text="Sample Text Preview" />
+    </LinearLayout>
+
+
+</LinearLayout>

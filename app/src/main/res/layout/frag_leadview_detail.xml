@@ -1,0 +1,1774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/_6sdp">
+
+            <LinearLayout
+                android:id="@+id/llClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_bacground"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvClientDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="Client Detail"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/calendar_gray" />
+
+                <LinearLayout
+                    android:id="@+id/llClientDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Client Code"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvClientCode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Client Name"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvClientName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Client Address"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvClientAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Channel"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvChannel"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Default Bank"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvDefaultBank"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Pan Card"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvPanCard"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Account Type"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvAccountType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="UCID"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvUCID"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Family UCID"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvFamilyUCID"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Branch Code"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvBranchCode"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Advisory Type"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvAdvisoryType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Account Number"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvAccountNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Aadhar Card"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvAadharCard"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/lead_creation_txt_border_select"
+                        android:padding="@dimen/_3sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Profile"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:textColor="@color/tv_color"
+                            android:textSize="@dimen/txt_size" />
+
+                        <TextView
+                            android:id="@+id/tvProfile"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:text=""
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/txt_size" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/list_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvLeadDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="Lead Detail"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/calendar_gray" />
+
+                <LinearLayout
+                    android:id="@+id/llLeadDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right">
+
+                        <LinearLayout
+                            android:id="@+id/llEditLeadDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_3sdp"
+                                android:layout_toLeftOf="@+id/tvAddProduct"
+                                android:padding="@dimen/_2sdp"
+                                android:src="@drawable/ic_edit" />
+
+                            <TextView
+                                android:id="@+id/tvEditLeadDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_3sdp"
+                                android:text="Edit" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilLeadID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLeadID"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Lead Id"
+                            android:maxLines="1"
+
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilLeadCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLeadCategory"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Lead Category"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Profession"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <Spinner
+                        style="@style/CRMSpinnerSelector_leadView"
+                        android:id="@+id/spProfession"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:entries="@array/Select" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilLeadName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLeadName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Lead Name"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvNameError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilDob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+
+                        <org.droidparts.widget.ClearableEditText
+                            android:id="@+id/etDob"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_close_text"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:hint="Date of Birth"
+                            android:inputType="date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAnniversaryError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilAnniversary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+
+                        <org.droidparts.widget.ClearableEditText
+                            android:id="@+id/etAnniversary"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_close_text"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:hint="Anniversary"
+                            android:inputType="date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilCreationDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etCreationDate"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Creation Date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilCreatedBy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etCreatedBy"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Created By"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilLastModifiedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLastModifiedDate"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Last Modified Date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLastModifiedBy"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Modified By"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintTextAppearance="@style/InputLayout"
+                        android:layout_marginTop="@dimen/_3sdp">
+
+                        <EditText
+                            android:id="@+id/etSource"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Source"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilProspectSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintTextAppearance="@style/InputLayout"
+                        android:layout_marginTop="@dimen/_3sdp">
+
+                        <EditText
+                            android:id="@+id/etProspectSource"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Prospect Source"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilProspectSourceDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etProspectSourceDetail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Prospect Source Detail"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            android:visibility="visible" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilCreatedThrough"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etCreatedThrough"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Created Through"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Profile"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <Spinner
+                        style="@style/CRMSpinnerSelector_leadView"
+                        android:id="@+id/spProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:entries="@array/Select" />
+
+                    <TextView
+                        android:id="@+id/tvProfileError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilContactPerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etContactPerson"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Contact Person"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            android:visibility="gone" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvContactPersonError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Mobile Number"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilAlternateMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etAlternateMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Alternate Mobile Number"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAlternateMobileNumberError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etEkycMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Ekyc Mobile No"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilLandlineNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etLandlineNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Landline Number"
+                            android:inputType="number"
+                            android:maxLength="11"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvLandLineError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Email"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="100"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilAlternateEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etAlternateEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Alternate Email"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="100"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAlternateEmailIdError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etPanNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Pan Number"
+                            android:inputType="text"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvPanNumError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etAadharNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Aadhar Number"
+                            android:inputType="number"
+                            android:maxLength="12"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvAadharNumError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilRefereeCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etRefereeCode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Referee Code"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ProgressBar
+                            android:id="@+id/pbLoadingIndicatorRefreeCode"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="@dimen/_22sdp"
+                            android:paddingLeft="@dimen/_15sdp"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilRefereeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etRefereeName"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Referee Name"
+                                android:inputType="textNoSuggestions"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <ProgressBar
+                            android:id="@+id/pbLoadingIndicatorRefreeName"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginTop="@dimen/_22sdp"
+                            android:paddingLeft="@dimen/_15sdp"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilRefereeEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etRefereeEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Referee Email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/ilRefereeNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etRefereeNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="Referee Mobile"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@drawable/textview_border"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:id="@+id/tvResidenceAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:text="Residence Address"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <CheckBox
+                            android:id="@+id/cbPrimaryAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text=" Primary Address"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llResAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilAdd1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etAdd1"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvAdd1Error"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilAdd2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etAdd2"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 2"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvAdd2Error"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilAdd3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etAdd3"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 3"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Country"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <Spinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp" />
+
+                        <TextView
+                            android:id="@+id/tvCountryError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="State"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.mosl.tabapp.common.SearchableSpinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:entries="@array/Select" />
+
+                        <TextView
+                            android:id="@+id/tvStateError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="City"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.mosl.tabapp.common.SearchableSpinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp" />
+
+                        <TextView
+                            android:id="@+id/tvCityError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilPincode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etPincode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Pincode"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvPincodeError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@drawable/textview_border"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:id="@+id/tvOffAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:text="Office Address"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <CheckBox
+                            android:id="@+id/cbSameAs"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:enabled="false"
+                            android:text=" Same as Above"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone" />
+
+                        <CheckBox
+                            android:id="@+id/cbOffPrimaryAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text=" Primary Address"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llOffAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilOffAdd1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etOffAdd1"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilOffAdd2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etOffAdd2"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 2"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilOffAdd3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etOffAdd3"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Address 3"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvOffCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Country"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <Spinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spOffCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp" />
+
+                        <TextView
+                            android:id="@+id/tvOffCountryError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+
+                        <TextView
+                            android:id="@+id/tvOffState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="State"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.mosl.tabapp.common.SearchableSpinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spOffState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp" />
+
+                        <TextView
+                            android:id="@+id/tvOffStateError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/tvOffCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="City"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.mosl.tabapp.common.SearchableSpinner
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:id="@+id/spOffCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:entries="@array/Select" />
+
+                        <TextView
+                            android:id="@+id/tvOffCityError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/ilOffPincode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <EditText
+                                android:id="@+id/etOffPincode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="Pincode"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvOffPincodeError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/error_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <EditText
+                            android:id="@+id/etComments"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:enabled="false"
+                            android:hint="Enter Comments"
+                            android:inputType="textMultiLine"
+                            android:lines="4"
+                            android:maxLines="4"
+                            android:minLines="1"
+                            android:textCursorDrawable="@null" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/lead_detail_add_product_background"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".4"
+                            android:text="Interested Products"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <RelativeLayout
+                            android:id="@+id/rlAddProduct"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toLeftOf="@+id/tvAddProduct"
+                                android:padding="@dimen/_1sdp"
+                                android:src="@drawable/ic_plus" />
+
+                            <TextView
+                                android:id="@+id/tvAddProduct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerInParent="true"
+                                android:text="Add Products"
+                                android:textColor="@color/tv_color"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llAddProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/lvAddProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@null"
+                            tools:listitem="@layout/item_list_add_product" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newDataLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/list_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDocuments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="Documents"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llClientPortfolioDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@drawable/list_bacground"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvClientPortfolioDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="Client Portfolio Detail"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/calendar_gray" />
+
+                <LinearLayout
+                    android:id="@+id/llClientPortfolio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <include layout="@layout/frag_client_portfolio"></include>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="Update"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

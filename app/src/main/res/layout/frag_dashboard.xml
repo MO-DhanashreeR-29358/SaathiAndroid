@@ -1,0 +1,1298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dashbord_background">
+
+    <ScrollView
+        android:id="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_20sdp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="0dp"
+                android:visibility="visible" />
+
+
+            <!--clients and My_Clients_Snapshot-->
+            <!--<LinearLayout-->
+            <!--android:id="@+id/llClientSnapShot"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/_5sdp"-->
+            <!--android:orientation="vertical"-->
+            <!--android:visibility="gone">-->
+
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/_35sdp"-->
+            <!--android:background="@color/titleBarBackground">-->
+
+            <!--<android.support.v7.widget.AppCompatImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_toLeftOf="@+id/txtClientSnapShot"-->
+            <!--app:srcCompat="@drawable/ic_new_clients_leads" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/txtClientSnapShot"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_marginLeft="@dimen/_5sdp"-->
+            <!--android:singleLine="true"-->
+            <!--android:textColor="@color/alternateTextColor"-->
+            <!--android:textSize="@dimen/appTitleTextSize"-->
+            <!--android:textStyle="bold" />-->
+            <!--</RelativeLayout>-->
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<Button-->
+            <!--android:id="@+id/btnClientSnapshot"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/orange"-->
+            <!--android:text="@string/CLIENTS"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="@dimen/_14sdp" />-->
+
+            <!--<Button-->
+            <!--android:id="@+id/btnClientTraded"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/white"-->
+            <!--android:text="@string/CLIENTS_TRADED"-->
+            <!--android:textColor="@color/Button_text_color"-->
+            <!--android:textSize="@dimen/_14sdp" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+            <!--android:id="@+id/llDirectReactivation"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal" />-->
+            <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+
+
+            <!--Busines Snapshot and leads-->
+
+            <!--  <LinearLayout
+                  android:id="@+id/llBusinessLeadSnapshot"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:visibility="gone">
+
+                  <RelativeLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/_35sdp"
+                      android:background="@color/titleBarBackground">
+
+                      <android.support.v7.widget.AppCompatImageView
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerInParent="true"
+                          android:layout_toLeftOf="@+id/txtBusinessLeadSnapshot"
+                          app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                      <TextView
+                          android:id="@+id/txtBusinessLeadSnapshot"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:layout_centerInParent="true"
+                          android:layout_marginLeft="@dimen/_5sdp"
+                          android:singleLine="true"
+                          android:textColor="@color/alternateTextColor"
+                          android:textSize="@dimen/appTitleTextSize"
+                          android:textStyle="bold" />
+                  </RelativeLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+
+                          <Button
+                              android:id="@+id/btnBusinessSnapshot"
+                              android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"
+                              android:background="@drawable/orange"
+                              android:text="@string/SNAPSHOT"
+                              android:textColor="@color/white"
+                              android:textSize="@dimen/_14sdp" />
+
+                          <Button
+                              android:id="@+id/btnLeadsSnapshot"
+                              android:layout_width="0dp"
+                              android:layout_height="wrap_content"
+                              android:layout_weight="1"
+                              android:background="@drawable/white"
+                              android:text="@string/LEADS"
+                              android:textColor="@color/Button_text_color"
+                              android:textSize="@dimen/_14sdp" />
+                      </LinearLayout>
+
+                      <LinearLayout
+                          android:id="@+id/llReplaceBusinessLeadFragment"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal" />
+                  </LinearLayout>
+              </LinearLayout>-->
+
+            <!-- mapped ba snapshot-->
+            <LinearLayout
+                android:id="@+id/llMappedBASnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtMappedBASnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                    <TextView
+                        android:id="@+id/txtMappedBASnapshot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="Mapped BA Snapshot"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnBASnapshot"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/BA_SNAPSHOT"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnBACategory"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white"
+                            android:text="@string/BA_CATEGORY"
+                            android:textColor="@color/Button_text_color"
+                            android:textSize="@dimen/_14sdp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llReplaceBASnapshotFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Business  snapshot-->
+            <LinearLayout
+                android:id="@+id/llBusinessSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtBusinessSnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                    <TextView
+                        android:id="@+id/txtBusinessSnapshot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="My Business Snapshot"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnBusinessSnapshotAdv"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/SNAPSHOT"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnBusinessSnapshotOneUp"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white"
+                            android:text="@string/SNAPSHOT"
+                            android:textColor="@color/Button_text_color"
+                            android:textSize="@dimen/_14sdp"
+                            android:visibility="gone" />
+
+                        <Button
+                            android:id="@+id/btnBusinessLead"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white"
+                            android:text="@string/LEADS"
+                            android:textColor="@color/Button_text_color"
+                            android:textSize="@dimen/_14sdp"
+                            android:visibility="visible" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llReplaceBusinessSnapshotFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--business snapshot-->
+
+            <LinearLayout
+                android:id="@+id/llSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlBusinessSnapshotHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/tvSnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                    <TextView
+                        android:id="@+id/tvSnapshot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivBusinessSnapshotHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llBusinessSnapshotHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"></LinearLayout>
+
+
+            </LinearLayout>
+
+            <!--month on month-->
+
+            <LinearLayout
+                android:id="@+id/llMonthTrend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlMonthOnMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtMonthTrends"
+                        app:srcCompat="@drawable/ic_target_achievement" />
+
+                    <TextView
+                        android:id="@+id/txtMonthTrends"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivMonthOnMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llMonthvsTrends"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--clients and leads-->
+            <LinearLayout
+                android:id="@+id/llClient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlClientLeads"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtClients"
+                        app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                    <TextView
+                        android:id="@+id/txtClients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivClientLeads"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llClientsLeads"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnBusinessSnapshot"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/SNAPSHOT"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnClient"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/CLIENTS"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnLeads"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white"
+                            android:text="@string/LEADS"
+                            android:textColor="@color/Button_text_color"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnClientTraded"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/white"
+                            android:text="@string/CLIENTS_TRADED"
+                            android:textColor="@color/Button_text_color"
+                            android:textSize="@dimen/_14sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llReplaceClientFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--Adviosory Target vs Achievement-->
+            <LinearLayout
+                android:id="@+id/llTarget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlTargetAchievementADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtTarget"
+                        app:srcCompat="@drawable/ic_target_achievement" />
+
+                    <TextView
+                        android:id="@+id/txtTarget"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivTargetAchievementADV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llTargetAchievementADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--OneUp and Head Target vs Achievement-->
+            <LinearLayout
+                android:id="@+id/llTeamTarget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlTeamTargetAchievement"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/txtTeamTarget"
+                        app:srcCompat="@drawable/ic_target_achievement" />
+
+                    <TextView
+                        android:id="@+id/txtTeamTarget"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivTeamTargetAchievement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llTeamTargetAchievement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llPerformanceAndIncentives"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/rlPerformanceAndIncentivesHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toLeftOf="@+id/tvPerformanceAndIncentivesHeader"
+                        app:srcCompat="@drawable/ic_incentive_performance" />
+
+                    <TextView
+                        android:id="@+id/tvPerformanceAndIncentivesHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/ivPerformanceAndIncentivesHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/_3sdp" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llPerformanceAndIncentivesHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/frag_insentives" />
+
+                    <include layout="@layout/frag_performane" />
+
+                    <include
+                        layout="@layout/frag_performane_team"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/llCurrentQuarterStatusAdviosory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/tvQuarterStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#FAFAFA"
+                            android:padding="10dp"
+                            android:text="Current Quarter status"
+                            android:textAlignment="center"
+                            android:textColor="@color/flush_orange"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <include layout="@layout/frag_current_quarter_status_table_first" />
+
+                        <include layout="@layout/frag_current_quarter_status_table_second" />
+
+                        <include layout="@layout/frag_current_quarter_status_table_three" />
+
+                        <include layout="@layout/frag_current_quarter_status_table_four" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llCurrentQuarterStatusOneUp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#FAFAFA"
+                            android:padding="10dp"
+                            android:text="Current Quarter Status"
+                            android:textAlignment="center"
+                            android:textColor="@color/flush_orange"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp"
+                            android:background="@color/cape_honey"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvTeamSnapshot"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:padding="@dimen/_8sdp"
+                                android:text="Team Snapshot"
+                                android:textAlignment="center"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="bold" />
+
+                            <TableLayout
+                                android:id="@+id/tableCurrentQuaterStatus"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp"
+                            android:background="@color/neon_pink"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvRequirements"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/white"
+                                android:padding="@dimen/_8sdp"
+                                android:text="Requirements For Advancing To Next Slab"
+                                android:textAlignment="center"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="bold" />
+
+                            <TableLayout
+                                android:id="@+id/tableCurrentQuaterStatusReq"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTopBottomPerformerHead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#FAFAFA"
+                            android:padding="10dp"
+                            android:text="Top &amp; Bottom Performer"
+                            android:textAlignment="center"
+                            android:textColor="@color/flush_orange"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_5sdp"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:orientation="vertical">
+
+                                <!--  <Spinner
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginBottom="@dimen/_3sdp"
+                                      android:layout_marginTop="@dimen/_3sdp"
+                                      android:entries="@array/SelectProduct" />-->
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/dark_green"
+                                    android:padding="@dimen/_5sdp"
+                                    android:text="Top 3 Performing Advisors"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:background="@color/light_green"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Name"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <View
+                                        android:layout_width="@dimen/_1sdp"
+                                        android:layout_height="@dimen/_30sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:background="@color/white"></View>
+
+                                    <TextView
+                                        android:id="@+id/tvBranchName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Branch Name"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <View
+                                        android:layout_width="@dimen/_1sdp"
+                                        android:layout_height="@dimen/_30sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:background="@color/white"></View>
+
+                                    <TextView
+                                        android:id="@+id/tvRevenue"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Revenue Generated"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/greyscale"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvNameFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBranchNameFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvTopRevenueFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/white"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvNameSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBranchNameSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvTopRevenueSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/greyscale"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvNameThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBranchNameThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvTopRevenueThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_5sdp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/dark_red"
+                                    android:padding="@dimen/_5sdp"
+                                    android:text="Bottom 3 Performing Advisors"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_14sdp"
+                                    android:textStyle="bold" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:background="@color/light_red"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvBottomName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Name"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <View
+                                        android:layout_width="@dimen/_1sdp"
+                                        android:layout_height="@dimen/_30sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:background="@color/white"></View>
+
+                                    <TextView
+                                        android:id="@+id/tvBottomBranchName"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Branch Name"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <View
+                                        android:layout_width="@dimen/_1sdp"
+                                        android:layout_height="@dimen/_30sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:background="@color/white"></View>
+
+                                    <TextView
+                                        android:id="@+id/tvBottomRevenue"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:text="Revenue Generated"
+                                        android:textColor="@color/white"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/misty_rose"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvBottomNameFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomBranchNameFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomRevenueFirst"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/white"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvBottomNameSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomBranchNameSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomRevenueSecond"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:background="@color/misty_rose"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvBottomNameThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomBranchNameThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+
+                                    <TextView
+                                        android:id="@+id/tvBottomRevenueThird"
+                                        android:layout_width="0dp"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="1"
+                                        android:gravity="center"
+                                        android:textColor="@color/light_black"
+                                        android:textSize="@dimen/_14sdp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <include
+                        android:id="@+id/includeHeadPerformance"
+                        layout="@layout/frag_performane_hierarchy"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvDetailIncentive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_8sdp"
+                        android:text="*Details of incentive slab"
+                        android:textColor="#3172bf"
+                        android:textSize="@dimen/_13sdp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivActionableInsights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/_12sdp"
+            android:layout_toLeftOf="@+id/multiple_actions"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_actionable" />
+    </LinearLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/floatingActionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        fab:fab_addButtonColorNormal="#f54d41"
+        fab:fab_addButtonColorPressed="@color/white_pressed"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/leadcreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_create_lead"
+            fab:fab_colorNormal="#ffffff"
+            fab:fab_colorPressed="#ffffff"
+            fab:fab_size="mini"
+            fab:fab_title="Create Lead" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+</RelativeLayout>

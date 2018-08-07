@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rlActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/layout_actionbar" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/llSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlActionBar"
+        android:background="@color/light_grey_menu">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/btnBusinessSummary"
+            android:layout_toRightOf="@+id/btnMenu"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/search" />
+
+
+            <com.mosl.mobile.ekyc.ui.DelayAutoCompleteTextView
+                android:id="@+id/searchText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autoText="false"
+                android:background="@android:color/transparent"
+                android:hint="Search Name, Mobile"
+                android:inputType="textAutoComplete|textAutoCorrect"
+                android:paddingLeft="5dp"
+                android:textSize="@dimen/_10sdp" />
+
+            <ProgressBar
+                android:id="@+id/pbLoadingIndicator"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:visibility="gone" />
+            <!--<com.mosl.mobile.partnersapp.clientsearch.DelayAutoCompleteTextView
+                android:id="@+id/search_text"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@android:color/transparent"
+                android:hint="@string/SS_SEARCH_HINT_TXT"
+                android:imeOptions="flagNoExtractUi|actionSearch"
+                android:inputType="textCapSentences"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColorHint="@color/market_grey_text" />-->
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/activityFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llSearch" />
+
+    <include layout="@layout/layout_custom_progress" />
+</RelativeLayout>

@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/border_shadow"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:background="@color/secondaryBackground"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Nominee Guardian Details"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_3sdp"
+                    android:text="@string/nominee_guardian_note"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10sdp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <!--<Spinner
+                        android:id="@+id/spNomineeGuardianTitle"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:entries="@array/title" />-->
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/inputLayoutNomineeGuardianFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_6sdp">
+
+                        <EditText
+                            android:id="@+id/etNomineeGuardianFirstName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="First Name"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/etNomineeGuardianFirstNameError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_minus5sdp"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/upload_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutNomineeGuardianMiddleName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/etNomineeGuardianMiddleName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Middle Name"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/etNomineeGuardianMiddleNameError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_minus5sdp"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/upload_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/inputLayoutNomineeGuardianLastName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/etNomineeGuardianLastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Last Name"
+                                android:maxLines="1"
+                                android:singleLine="true" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/etNomineeGuardianLastNameError"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_minus5sdp"
+                            android:background="@null"
+                            android:enabled="false"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:textColor="@color/upload_red"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="Relationship of guardian to nominees"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/etNomineesGuardianRelationshipError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spNomineesGuardianRelationship"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_2sdp" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineesGuardianRelationship"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineesGuardianRelationship"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Relationship of guardian to nominees"
+                        android:inputType="text"
+                        android:maxLength="50"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/cbNomineeGuardianSameAsPrimaryCorrespondence"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:button="@drawable/checkbox"
+                    android:text=" Same as primary applicants correspondence address" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianBldgNameCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianBldgNameCorres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:hint="Bldg No/Bldg Name"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianFlatNoCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianFlatNoCorres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:hint="Flat No/Road Name"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianAreaCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianAreaCorres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:hint="Area /Locality"
+                        android:maxLength="30"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianPincodeCorres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianPincodeCorres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:hint="Pincode"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianPincodeCorresError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:text="State"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianCorresStateError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <com.mosl.mobile.ekyc.common.SearchableSpinner
+                    android:id="@+id/spNomineeGuardianCorresState"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_2sdp" />
+
+                <EditText
+                    android:id="@+id/etNomineeGuardianCorresState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:enabled="false"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="City/ Town/Village"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianCorresCityError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <com.mosl.mobile.ekyc.common.SearchableSpinner
+                    android:id="@+id/spNomineeGuardianCorresCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_2sdp" />
+
+                <EditText
+                    android:id="@+id/etNomineeGuardianCorresCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:enabled="false"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianCorresCityOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianCorresCityOther"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="City"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:visibility="gone" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="Country"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianCorresCountryError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spNomineeGuardianCorresCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:entries="@array/country" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:text="Age of guardian"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianAgeError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <Spinner
+                    android:id="@+id/spNomineeGuardianAge"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:entries="@array/ageOfGuardian" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/inputLayoutNomineeGuardianSTD"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/etNomineeGuardianSTDNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:hint="STD"
+                            android:inputType="number"
+                            android:maxLength="5"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/inputLayoutNomineeGuardianTelNo"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_weight="3">
+
+                        <EditText
+                            android:id="@+id/etNomineeGuardianTelNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_2sdp"
+                            android:hint="Telephone (Res.)"
+                            android:inputType="number"
+                            android:maxLength="8"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianSTDTelError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/inputLayoutNomineeGuardianEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp">
+
+                    <EditText
+                        android:id="@+id/etNomineeGuardianEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:hint="Email ID (abc@gmail.com)"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/etNomineeGuardianEmailError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_minus5sdp"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/upload_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <!-- Example customization of dimensions originally defined in res/values/dimens.xml
+         (such as screen margins) for screens with more than 820dp of available width. This
+         would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively). -->
+    <dimen name="chart_text_size">15sp</dimen>
+    <dimen name="appTableWithSizeHeader">@dimen/_40sdp</dimen>
+    <dimen name="detailsTableWithSizeHeader">@dimen/_25sdp</dimen>
+    <dimen name="appTableWithSize">@dimen/_40sdp</dimen>
+    <dimen name="appTableWithWidth">@dimen/_125sdp</dimen>
+    <dimen name="header1">@dimen/_17sdp</dimen>
+    <dimen name="drawerWidth">@dimen/_200sdp</dimen>
+    <dimen name="notification_icon">@dimen/_2sdp</dimen>
+    <dimen name="txt_size_profile">@dimen/_9sdp</dimen>
+</resources>

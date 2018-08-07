@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.mosl.mobile.ekyc">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA2" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-sdk tools:overrideLibrary="com.digio.in.esign2sdk" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/MOSLTheme"
+        tools:replace="android:theme">
+        <!--<provider-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:authorities="${applicationId}.provider"-->
+            <!--android:exported="false"-->
+            <!--android:grantUriPermissions="true">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+                <!--android:resource="@xml/file_paths" />-->
+        <!--</provider>-->
+
+        <activity
+            android:name=".ui.EkycMainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.BranchResumeApplicationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".ui.BranchLoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.TrackApplicationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.BranchRoleSelectionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".register.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.register.PANAdharRegistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.collateral.CollateralWebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.ui.WebActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.ui.WebActivityPDFDownload"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+	    android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.ui.AddressDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.ui.PostLoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/MOSLTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.directmodule.DirectOpenAccountActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.directmodule.DirectTrackApplicationLogin"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.directmodule.DirectIPVActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.mosl.mobile.ekyc.directmodule.DirectIntroActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name="com.mosl.mobile.biometric.ui.BioMetricMainActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/MOSLTheme">
+            <intent-filter>
+                <data
+                    android:host="motilaloswal.com"
+                    android:scheme="kycauth" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!--<activity
+            android:name="com.mosl.mobile.biometric.ui.iris.IrisActivity"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/AppTheme" />-->
+        <activity
+            android:name="com.mosl.mobile.biometric.samsung.uidaiauthentication.Activation"
+            android:label="License Activation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".service.SignalRService" />
+        <service android:name=".database.CollateralDBService" />
+
+        <activity android:name="com.digio.in.esign2sdk.DigioEsignActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"></activity>
+    </application>
+
+</manifest>

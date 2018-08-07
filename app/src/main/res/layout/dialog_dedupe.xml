@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/_10sdp"
+            android:background="@drawable/list_bacground"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvCheckMark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:padding="@dimen/_3sdp"
+                android:textColor="@color/light_black" />
+
+            <LinearLayout
+                android:id="@+id/llLeadID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="LeadID"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvLeadId"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llLeadName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Lead Name"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvLeadName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Product "
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvProduct"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/llStage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Stage"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvStage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Client Name"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvClientName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/llClientCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:visibility="gone"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Client Code"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvClientCode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llBranch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="Branch"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvBranch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llDedupeWith"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                android:padding="@dimen/_3sdp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:text="DedupeWith"
+                    android:textColor="@color/light_black" />
+
+                <TextView
+                    android:id="@+id/tvDedupeWith"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".5"
+                    android:textColor="@color/light_black" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnTransfer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_3sdp"
+                    android:background="@drawable/button_state_bg"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Transfer" />
+
+                <Button
+                    android:id="@+id/btnClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_3sdp"
+                    android:background="@drawable/button_state_bg"
+                    android:padding="@dimen/_10sdp"
+                    android:text="Cancel" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <include layout="@layout/layout_custom_progress_crm" />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

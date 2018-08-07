@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivMotilalOswal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:background="@color/secondaryBackground"
+        android:scaleType="fitCenter"
+        android:src="@drawable/mosl_logo" />
+
+    <LinearLayout
+        android:id="@+id/llCollateral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivMotilalOswal"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <com.viewpagerindicator.TabPageIndicator
+            android:id="@+id/indicatorCollateral"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/highlighted_text_material_light" />
+
+        <com.mosl.mobile.ekyc.common.CustomViewPager
+            android:id="@+id/pagerCollateral"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <include layout="@layout/layout_custom_progress" />
+</RelativeLayout>

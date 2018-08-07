@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@drawable/appointment_list_background"></android.support.v7.widget.RecyclerView>
+    <TextView
+        android:id="@+id/tvNoAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Appointment Available"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="gone" />
+</RelativeLayout>

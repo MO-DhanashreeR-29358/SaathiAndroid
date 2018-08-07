@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivClose"
+            android:layout_marginLeft="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:background="@color/black"
+            android:orientation="horizontal"
+            android:padding="@dimen/_15sdp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivRescheduleMeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_reschedule" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivCancelMeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_cancel_meeting" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivUpdateMeeting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_update_meeting"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivClose"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="@dimen/_minus15sdp"
+            app:srcCompat="@drawable/ic_new_closed" />
+    </RelativeLayout>
+</LinearLayout>
