@@ -629,14 +629,14 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
 
                             if (hierarchyMapList.size() >= 1) {
                                 if (!isBlank(getValue(row, "RM Name"))) {
-                                    addtionalParameterMap.put("flt_level",getValue(row, "Hierarchy"));
+                                    addtionalParameterMap.put("flt_level", getValue(row, "Hierarchy"));
                                     addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
                                     hierarchyMap.put("WidgetSystemName", hierarchyMapList.get(row).get("WidgetSystemName").toString());
                                     hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable(HIERARCHY_MAP, (Serializable) hierarchyMap);
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
-                                    bundle.putString(LABEL,txtLables.getText().toString());
+                                    bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
                                 }
                             }
@@ -669,13 +669,14 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
                             }
                             if (hierarchyMapList.size() >= 1) {
                                 if (!isBlank(getValue(row, "RM Name"))) {
-                                    addtionalParameterMap.put("flt_level",getValue(row, "Hierarchy"));                                    addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
+                                    addtionalParameterMap.put("flt_level", getValue(row, "Hierarchy"));
+                                    addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
                                     hierarchyMap.put("WidgetSystemName", hierarchyMapList.get(row).get("WidgetSystemName").toString());
                                     hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable(HIERARCHY_MAP, (Serializable) hierarchyMap);
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
-                                    bundle.putString(LABEL,txtLables.getText().toString());
+                                    bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
                                 }
                             }
