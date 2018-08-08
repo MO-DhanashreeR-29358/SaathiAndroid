@@ -21,6 +21,7 @@ def gitTimestamp() {
     return p.text.trim()
 }
 
+
 android {
     compileSdkVersion rootProject.ext.versions.compileSdkVersion
     buildToolsVersion rootProject.ext.versions.buildToolsVersion
@@ -37,23 +38,45 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
+
+    signingConfigs {
+        internal {
+            try {
+                storeFile file('../saleskey.jks')
+                storePassword KEYSTORE_PASSWORD
+                keyAlias 'sales tab'
+                keyPassword PROD_ALIAS_PASSWORD
+            } catch (ex) {
+                throw new InvalidUserDataException(
+                        "You should define KEYSTORE_PASSWORD & UAT_ALIAS_PASSWORD in gradle.properties")
+            }
+        }
+        prod {
+            try {
+                storeFile file('../saleskey.jks')
+                storePassword KEYSTORE_PASSWORD
+                keyAlias 'sales tab'
+                keyPassword PROD_ALIAS_PASSWORD
+            } catch (ex) {
+                throw new InvalidUserDataException(
+                        "You should define KEYSTORE_PASSWORD & PROD_ALIAS_PASSWORD in gradle.properties")
+            }
+        }
+    }
+
     flavorDimensions 'releaseType'
     productFlavors {
         uat {
             versionCode versionProps['uatCode'].toInteger()
             versionName versionProps['uatName']
-            buildConfigField 'String', 'CRM_BASE_URL', '"http://122.184.137.226:83/api/"'
-            buildConfigField 'String', 'UPPERMOST_URL', '"http://122.184.137.89/Partner/PartnerMobileWebServices.asmx/"'
-            buildConfigField 'String', 'CRM_COLLATERAL_URL', '"http://web20.motilaloswal.com:8000/Brochure/index.html"'
+            signingConfig signingConfigs.internal
             dimension 'releaseType'
 
         }
         prod {
             versionCode versionProps['prodCode'].toInteger()
             versionName versionProps['prodName']
-            buildConfigField 'String', 'CRM_BASE_URL', '"http://saathi.motilaloswal.com:81/api/"'
-            buildConfigField 'String', 'UPPERMOST_URL', '"https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/"'
-            buildConfigField 'String', 'CRM_COLLATERAL_URL', '"https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html"'
+            signingConfig signingConfigs.prod
             dimension 'releaseType'
         }
     }
@@ -84,6 +107,12 @@ android {
     }
     dexOptions {
         javaMaxHeapSize "4g"
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
+        }
     }
 
 }

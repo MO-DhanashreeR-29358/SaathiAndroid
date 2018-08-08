@@ -7,8 +7,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.mosl.tabapp.BuildConfig;
 import com.mosl.tabapp.common.CRMSecurityUtil;
+import com.mosl.tabapp.urls.ServiceUrlsImpl;
 
 import java.util.Map;
 import java.util.Set;
@@ -39,20 +39,16 @@ public class CRMWebServiceHandler {
     private static String MSG_NORMAL = "Request_Normal";
     private static String MSG_ENCRYPT = "Request_Encrypt";
 
-    //UAT
-  /*  public static String CALL_BASE_URL = UAT_BASE_URL;
-    public static final String CALL_URL_UPPERMOST = BASE_URL_UAT_UPPERMOST;
-    public static String COLLATERAL_URL = COLLATERAL_URL_UAT;*/
 
-    public static String CALL_BASE_URL = BuildConfig.CRM_BASE_URL;
+    public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
+    public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
+    public static String COLLATERAL_URL = ServiceUrlsImpl.CRM_COLLATERAL_URL();
+  /*  public static String CALL_BASE_URL = BuildConfig.CRM_BASE_URL;
     public static final String CALL_URL_UPPERMOST = BuildConfig.UPPERMOST_URL;
-    public static String COLLATERAL_URL = BuildConfig.CRM_COLLATERAL_URL;
+    public static String COLLATERAL_URL = BuildConfig.CRM_COLLATERAL_URL;*/
 
 
-    //    PROD
-//    public static String CALL_BASE_URL = LIVE_BASE_URL;
-//    public static final String CALL_URL_UPPERMOST = BASE_URL_PROD_UPPERMOST;
-//    public static String COLLATERAL_URL = COLLATERAL_URL_PROD;
+
 
     public static AsyncHttpClient getClient() {
         AsyncHttpClient client = new AsyncHttpClient();
