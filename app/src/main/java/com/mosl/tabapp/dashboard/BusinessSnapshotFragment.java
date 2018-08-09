@@ -66,6 +66,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
     private boolean dataFoundFlag;
     private Map addtionalParameterMap = new HashMap<>();
     private LinkedHashMap lMap;
+    ArrayList<HashMap<String, String>> hierarchyMapList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -229,6 +230,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
                         try {
                             if (statusCode == 200) {
+                                hierarchyMapList = new ArrayList<HashMap<String, String>>();
                                 Gson mGson = new Gson();
                                 Type type = new TypeToken<HashMap<String, Object>>() {
                                 }.getType();
@@ -248,35 +250,47 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                                                 StringMap objDetail = arrayDetail.get(y);
                                                 if (columns.size() == 0) {
                                                     for (Object columnName : objDetail.keySet()) {
-                                                        if (!columnName.toString().equalsIgnoreCase("DisplayOrder")) {
+                                                        if (!columnName.toString().equalsIgnoreCase                                                                                      ("DisplayOrder")) {
                                                             columns.add(columnName.toString());
-                                                            columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                                                            if (columnName.toString().equalsIgnoreCase                                                                                ("flg_empcode")) {
+                                                            } else {
+                                                                columnsHeader.add(getRefreshColumnName(columnName                                                                        .toString()));
+                                                                }
                                                         }
                                                     }
                                                     String[] stockArr = new String[columnsHeader.size()];
                                                     stockArr = columnsHeader.toArray(stockArr);
                                                     secondClickTableAdapter.setHeaders(stockArr);
                                                 }
+                                                HashMap map = new HashMap();
                                                 LinkedHashMap<String, String> hm = new LinkedHashMap<>();
                                                 for (String column : columns) {
-                                                    String columnData = (objDetail.get(column) == null || objDetail.get(column).toString() == null) ? "" : objDetail.get(column).toString();
+                                                    if (column.toString().equalsIgnoreCase("flg_empcode")) {
+                                                        map.put("flg_empcode", objDetail.get("flg_empcode").toString());
 
-                                                    if (objDetail.get(column) instanceof Number) {
-                                                        String strValue = objDetail.get(column).toString().trim();
-                                                        if (strValue.indexOf(".") > -1 && !strValue.endsWith(".0") && !strValue.endsWith(".00")) {
-                                                            columnData = String.format("%.2f", Double.parseDouble(objDetail.get(column).toString()));
-                                                        } else {
-                                                            columnData = String.format("%.0f", Double.parseDouble(objDetail.get(column).toString()));
+                                                    } else {
+                                                        String columnData = (objDetail.get(column) == null || objDetail.get(column).toString() == null) ? "" : objDetail.get(column).toString();
+
+                                                        if (objDetail.get(column) instanceof Number) {
+                                                            String strValue = objDetail.get(column).toString().trim();
+                                                            if (strValue.indexOf(".") > -1 && !strValue.endsWith(".0") && !strValue.endsWith(".00")) {
+                                                                columnData = String.format("%.2f", Double.parseDouble(objDetail.get(column).toString()));
+                                                            } else {
+                                                                columnData = String.format("%.0f", Double.parseDouble(objDetail.get(column).toString()));
+                                                            }
                                                         }
-                                                    }
 
-                                                    if (column.equalsIgnoreCase("lead_id")) {
-                                                        column = column.toUpperCase();
-                                                    }
+                                                        if (column.equalsIgnoreCase("lead_id")) {
+                                                            column = column.toUpperCase();
+                                                        }
 
-                                                    hm.put(CRMAppUtil.getRefreshColumnName(column), columnData.trim());
+                                                        hm.put(CRMAppUtil.getRefreshColumnName(column), columnData.trim());
+                                                    }
                                                 }
                                                 secondClickTableAdapter.add(hm);
+                                                if (map.size() != 0) {
+                                                    hierarchyMapList.add(map);
+                                                }
                                             }
                                             secondClickTableAdapter.notifyDataSetChanged();
                                             dataFoundFlag = true;
@@ -472,6 +486,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             addtionalParameterMap.put(COL_FILTER, columnName);
                             addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).values().toArray()[0].toString());
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
+                            addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
                             args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
