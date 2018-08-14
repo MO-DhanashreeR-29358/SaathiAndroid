@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsCallback;
@@ -51,13 +50,13 @@ import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.AddressDetailsActivity;
-import com.mosl.mobile.ekyc.ui.BranchLoginActivity;
 import com.mosl.mobile.ekyc.ui.CustomDatePickerDialog;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.DatePickerListener;
 import com.mosl.mobile.ekyc.ui.EkycMainActivity;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.mobile.ekyc.ui.WebActivity;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -82,7 +81,47 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isThisSecondProductFlow;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAddressMode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCvlVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDob;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPANName;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
+import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
+import static com.mosl.mobile.ekyc.model.CommonModel.getSipIntent;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isFundTransferDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadhaarVerifiedByBio;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAddressMode;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.setBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDob;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANStatus;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANno;
+import static com.mosl.mobile.ekyc.model.CommonModel.setSipIntent;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 
 /**
  * Created by shefali on 27-06-2016.
@@ -558,8 +597,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     getPrefs(PANAdharRegistActivity.this).edit().putString(BUSINESSUNITID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(TEAMID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(ROLEID, "").apply();
-                    Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
-                    startActivity(intent);
+                /*    Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
+                    startActivity(intent);*/
                     finish();
                 }
             });
@@ -3606,7 +3645,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         }
                     }
                 } else if (getAppType().equalsIgnoreCase(CRM)) {
-                    if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
+                    //region oldCode
+                    /*if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
                         llImgOTP.setVisibility(View.VISIBLE);
                     } else if (getOtpVisibleForBranch().equalsIgnoreCase("0")) {
                         llImgOTP.setVisibility(View.GONE);
@@ -3615,7 +3655,22 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         llImgThumb.setVisibility(View.VISIBLE);
                     } else if (getBioMetricVisibleForBranch().equalsIgnoreCase("0")) {
                         llImgThumb.setVisibility(View.GONE);
+                    }*/
+                    if (rbVirtualId.isChecked() && showVirtualOTP) {
+                        llImgOTP.setVisibility(View.VISIBLE);
+                    } else if (rbAadhar.isChecked() && showOTP) {
+                        llImgOTP.setVisibility(View.VISIBLE);
+                    } else {
+                        llImgOTP.setVisibility(View.GONE);
                     }
+                    if (rbVirtualId.isChecked() && showVirtualFinger) {
+                        llImgThumb.setVisibility(View.VISIBLE);
+                    } else if (rbAadhar.isChecked() && showFinger) {
+                        llImgThumb.setVisibility(View.VISIBLE);
+                    } else {
+                        llImgThumb.setVisibility(View.GONE);
+                    }
+                    //endregion
 //                    llImgThumb.setVisibility(View.VISIBLE);
 //                    llImgOTP.setVisibility(View.VISIBLE);
                 }
