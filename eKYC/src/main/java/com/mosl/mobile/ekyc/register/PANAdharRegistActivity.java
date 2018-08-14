@@ -50,6 +50,7 @@ import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.AddressDetailsActivity;
+import com.mosl.mobile.ekyc.ui.BranchLoginActivity;
 import com.mosl.mobile.ekyc.ui.CustomDatePickerDialog;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.DatePickerListener;
@@ -87,11 +88,13 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getAddressMode;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
 import static com.mosl.mobile.ekyc.model.CommonModel.getBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBioMetricVisibleForBranch;
 import static com.mosl.mobile.ekyc.model.CommonModel.getCvlVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getDob;
 import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getOtpVisibleForBranch;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
@@ -597,8 +600,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     getPrefs(PANAdharRegistActivity.this).edit().putString(BUSINESSUNITID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(TEAMID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(ROLEID, "").apply();
-                /*    Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
-                    startActivity(intent);*/
+                    Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
+                    startActivity(intent);
                     finish();
                 }
             });
@@ -3645,8 +3648,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         }
                     }
                 } else if (getAppType().equalsIgnoreCase(CRM)) {
-                    //region oldCode
-                    /*if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
+                    if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
                         llImgOTP.setVisibility(View.VISIBLE);
                     } else if (getOtpVisibleForBranch().equalsIgnoreCase("0")) {
                         llImgOTP.setVisibility(View.GONE);
@@ -3655,22 +3657,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         llImgThumb.setVisibility(View.VISIBLE);
                     } else if (getBioMetricVisibleForBranch().equalsIgnoreCase("0")) {
                         llImgThumb.setVisibility(View.GONE);
-                    }*/
-                    if (rbVirtualId.isChecked() && showVirtualOTP) {
-                        llImgOTP.setVisibility(View.VISIBLE);
-                    } else if (rbAadhar.isChecked() && showOTP) {
-                        llImgOTP.setVisibility(View.VISIBLE);
-                    } else {
-                        llImgOTP.setVisibility(View.GONE);
                     }
-                    if (rbVirtualId.isChecked() && showVirtualFinger) {
-                        llImgThumb.setVisibility(View.VISIBLE);
-                    } else if (rbAadhar.isChecked() && showFinger) {
-                        llImgThumb.setVisibility(View.VISIBLE);
-                    } else {
-                        llImgThumb.setVisibility(View.GONE);
-                    }
-                    //endregion
 //                    llImgThumb.setVisibility(View.VISIBLE);
 //                    llImgOTP.setVisibility(View.VISIBLE);
                 }
