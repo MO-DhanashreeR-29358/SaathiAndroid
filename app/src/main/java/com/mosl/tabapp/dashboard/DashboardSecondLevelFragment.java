@@ -72,7 +72,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
     private ArrayList<TypeActionableFilterModel> typeFilterList = new ArrayList<>();
     private String filterString, typeFilterString;
     private LinearLayout linearLayout;
-    private Map addtionalParameterMap;
+    private Map addtionalParameterMap = new HashMap<>();
     private Map hierarchyMap = new HashMap<>();
     private String leadId = "0", ucid = "0", leadName;
     private String mobileNo;
@@ -638,7 +638,6 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
-
                                 }
                             }
                             Bundle bundle = new Bundle();
@@ -679,7 +678,6 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
-
                                 }
                             }
                             Bundle bundle = new Bundle();

@@ -47,7 +47,7 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
     private SecondClickTableAdapter secondClickTableAdapter;
     private TextView tvNochart, txtLables;
     static Context mContext;
-    private Map addtionalParameterMap;
+    private Map addtionalParameterMap = new HashMap<>();
     private Map hierarchyMap = new HashMap<>();
     private String leadId = "0", ucid = "0";
     private String mobileNo;
@@ -376,7 +376,6 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
-
                                 }
                             }
                             Bundle bundle = new Bundle();
@@ -416,7 +415,6 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
                                     bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
                                     navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(), true);
-
                                 }
                             }
                             Bundle bundle = new Bundle();
