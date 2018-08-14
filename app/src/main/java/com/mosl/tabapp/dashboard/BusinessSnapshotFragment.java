@@ -498,6 +498,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             if (columnData != null) {
                                 if (!columnData.trim().equalsIgnoreCase("0")) {
                                     navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+
                                 }
                             }
 
