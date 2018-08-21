@@ -1,19 +1,25 @@
 package com.mosl.tabapp.leadViewDetail;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,6 +47,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
@@ -64,17 +76,21 @@ import com.mosl.tabapp.ws.WebServiceDirectCall;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -86,11 +102,12 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 public class CreateMeetingFragment extends MOSLCommonFragment implements View.OnClickListener, TextView.OnEditorActionListener {
     View createMeetingView;
     private ImageView ivLead, ivDatePicker;
+    EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory, etClientCode, etClientName,
+            etAmount, etLocation, etPinCode;
+    Location mCurrentLocation; // location
     private TextView tvCurrentStageSince, tvCurrentStage, tvBranchCode, tvLeadId, tvClientCode, tvName,
-            tvSplAttendeeCount, tvSplAttendee, tvAttendeeCount, tvAttendee, tvStartDate;
-    private Spinner spProduct, spMeetingDuration, spActivityType, spMeetingReason, spActionables,
-            spSubCategory, spCategory, spBAClient, spOutStaition, spMeetingObjective;
-    EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory, etClientCode, etClientName;
+            tvSplAttendeeCount, tvSplAttendee, tvAttendeeCount, tvAttendee, tvStartDate, tvLocationError,
+            tvPinCodeError;
     View llSubcategory;
     private Button btnSave, btnReset;
     private ImageButton ibSplAttendee, ibAttendee;
@@ -113,12 +130,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     private DatePicker dpFromDate;
     private ImageView close;
     private Button btnSubmit;
+    private Spinner spProduct, spMeetingDuration, spActivityType, spMeetingReason, spActionables,
+            spSubCategory, spCategory, spBAClient, spOutStaition, spMeetingObjective, spMeetingLocation,
+            spTravellingMode;
     private ArrayList<RowData> arrSelectProduct, arrMeetingDuration, arrActivityType, arrMeetingReason,
-            arrActionables, arrCategory, arrSubCategory, arrBAClient, arrOutStation;
-    private ArrayList<RowData> arrMeetingObjective;
-    private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
-            arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory, arrAdapBAClient, arrAdapOutStation;
-    private ArrayAdapter<RowData> arrAdapMeetingsObjective;
+            arrActionables, arrCategory, arrSubCategory, arrBAClient, arrOutStation, arrMeetingObjective,
+            arrMeetingLocation, arrTravellingMode;
     private String leadId;
     private int currentYear, month, day, hour, minute;
     private Calendar calendar = Calendar.getInstance();
@@ -134,6 +151,33 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     private CreateMeetingProductAdapter productAdapter;
     private RecyclerView rvProductList;
     private ArrayList<CreateMeetingProductModel> productList;
+    private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
+            arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory, arrAdapBAClient, arrAdapOutStation, arrAdapMeetingsObjective, arrAdapMeetingLocation,
+            arrAdapTravellingMode;
+    private LocationRequest mLocationRequest;
+
+    private long UPDATE_INTERVAL = 5 * 60 * 100;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private AdapterView.OnItemSelectedListener selectMeetingLocation = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                if (!((RowData) spMeetingLocation.getSelectedItem()).getKey().equalsIgnoreCase("-1") &&
+                        !((RowData) spMeetingLocation.getSelectedItem()).getValue().equalsIgnoreCase("other")) {
+                    etLocation.setText("");
+                    GetAddressByLeadId(((RowData) spMeetingLocation.getSelectedItem()).getKey());
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
@@ -154,9 +198,70 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
         selectProduct();
         meetingObjective();
+        meetingLocation();
         setAppTitle(getClass().toString(), "Create Meeting");
+        startLocationUpdates();
         return createMeetingView;
     }
+
+    private AdapterView.OnItemSelectedListener selectCategoryListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
+                categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
+                tvCategoryError.setVisibility(View.GONE);
+                subCategory();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener selectSubCategoryListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                subCategoryCodestr = ((RowData) spSubCategory.getSelectedItem()).getKey();
+                subCategoryNameStr = ((RowData) spSubCategory.getSelectedItem()).getValue();
+                tvSubCategoryError.setVisibility(View.GONE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener selectProductListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                productCodeStr = ((RowData) spProduct.getSelectedItem()).getKey();
+                productNameStr = ((RowData) spProduct.getSelectedItem()).getValue();
+                if (!productCodeStr.equalsIgnoreCase("-1")) {
+                    productAdapter.addDocument(new CreateMeetingProductModel(productCodeStr, productNameStr));
+                }
+                tvProductError.setVisibility(View.GONE);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
 
     private void setUpView(View createMeetingView) {
         scrollView = (ScrollView) createMeetingView.findViewById(R.id.scrollView);
@@ -201,6 +306,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         tvMeetingDescriptionError = (TextView) createMeetingView.findViewById(R.id.tvMeetingDescriptionError);
         tvSubCategoryCommentsError = (TextView) createMeetingView.findViewById(R.id.tvSubCategoryCommentsError);
         tvCategoryCommentsError = (TextView) createMeetingView.findViewById(R.id.tvCategoryCommentsError);
+        tvLocationError = (TextView) createMeetingView.findViewById(R.id.tvLocationError);
+        tvPinCodeError = (TextView) createMeetingView.findViewById(R.id.tvPinCodeError);
 
         tvBAClientError = (TextView) createMeetingView.findViewById(R.id.tvBAClientError);
         tvOutStaitionError = (TextView) createMeetingView.findViewById(R.id.tvOutStaitionError);
@@ -227,6 +334,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         etSubCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etClientCode = (EditText) createMeetingView.findViewById(R.id.etClientCode);
         etClientName = (EditText) createMeetingView.findViewById(R.id.etClientName);
+        etAmount = (EditText) createMeetingView.findViewById(R.id.etAmount);
+        etLocation = (EditText) createMeetingView.findViewById(R.id.etLocation);
+        etPinCode = (EditText) createMeetingView.findViewById(R.id.etPinCode);
+        etLocation.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         llSubcategory = createMeetingView.findViewById(R.id.llSubcategory);
 
         spCategory = (Spinner) createMeetingView.findViewById(R.id.spCategory);
@@ -239,6 +350,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         spActionables = (Spinner) createMeetingView.findViewById(R.id.spActionables);
         spBAClient = (Spinner) createMeetingView.findViewById(R.id.spBAClient);
         spOutStaition = (Spinner) createMeetingView.findViewById(R.id.spOutStaition);
+        spMeetingLocation = (Spinner) createMeetingView.findViewById(R.id.spMeetingLocation);
+        spTravellingMode = (Spinner) createMeetingView.findViewById(R.id.spTravellingMode);
         rvProductList = (RecyclerView) createMeetingView.findViewById(R.id.rvProductList);
         productList = new ArrayList<>();
         productAdapter = new CreateMeetingProductAdapter(productList, getContext());
@@ -323,6 +436,47 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                 }
             }
         });
+
+        etLocation.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!isBlank(etLocation.getText().toString().trim()) && etLocation.getText().length() >= 50) {
+                    tvLocationError.setVisibility(View.GONE);
+                } else {
+                    tvLocationError.setVisibility(View.VISIBLE);
+                    tvLocationError.setText(ATLEAST_FIFTY_CHARACTERS);
+                }
+            }
+        });
+
+        etPinCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!isBlank(etPinCode.getText().toString().trim()) && etPinCode.getText().length() >= 6) {
+                    tvPinCodeError.setVisibility(View.GONE);
+                } else {
+                    tvPinCodeError.setVisibility(View.VISIBLE);
+                    tvPinCodeError.setText(INVALID_PINCODE_NUMBER);
+                }
+            }
+        });
+
         etMeetingDescription.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -338,7 +492,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     tvMeetingDescriptionError.setVisibility(View.GONE);
                 } else {
                     tvMeetingDescriptionError.setVisibility(View.VISIBLE);
-                    tvMeetingDescriptionError.setText(ATLEAST_TEN_CHARACTERS);
+                    tvMeetingDescriptionError.setText(ATLEAST_FIFTY_CHARACTERS);
                 }
             }
         });
@@ -363,65 +517,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             }
         });
     }
-
-    private AdapterView.OnItemSelectedListener selectCategoryListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
-                categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
-                tvCategoryError.setVisibility(View.GONE);
-                subCategory();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener selectSubCategoryListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                subCategoryCodestr = ((RowData) spSubCategory.getSelectedItem()).getKey();
-                subCategoryNameStr = ((RowData) spSubCategory.getSelectedItem()).getValue();
-                tvSubCategoryError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener selectProductListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                productCodeStr = ((RowData) spProduct.getSelectedItem()).getKey();
-                productNameStr = ((RowData) spProduct.getSelectedItem()).getValue();
-                if (!productCodeStr.equalsIgnoreCase("-1")) {
-                    productAdapter.addDocument(new CreateMeetingProductModel(productCodeStr, productNameStr));
-                }
-                tvProductError.setVisibility(View.GONE);
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
 
     private AdapterView.OnItemSelectedListener selectMeetingDurationListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -547,6 +642,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     };
 
+
     private AdapterView.OnItemSelectedListener selectMeetingObjective = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -587,6 +683,24 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     MeetingApptModel meetingApptModel = new MeetingApptModel();
                     meetingApptModel.setMeetingType("M");
                     meetingApptModel.setDisplayType("A");
+                    if (mCurrentLocation != null) {
+                        Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(
+                                    mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+                        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                    }
+                    meetingApptModel.setPincode(etPinCode.getText().toString());
+                    meetingApptModel.setAmount(etAmount.getText().toString());
+                    meetingApptModel.setMeetingAddress(etLocation.getText().toString());
+                    meetingApptModel.setMeetingAddressTypeId(((RowData) spMeetingLocation.getSelectedItem()).getKey());
+                    meetingApptModel.setTravellingModeIds(((RowData) spTravellingMode.getSelectedItem()).getKey());
                     meetingApptModel.setLeadId(leadId);
                     meetingApptModel.setUcid(mUCID);
                     meetingApptModel.setMeetingDate(CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
@@ -609,7 +723,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     meetingApptModel.setOutStation(outStaitionCodeStr);
                     meetingApptModel.setClientCode(etClientCode.getText().toString().trim());
                     meetingApptModel.setClientName(etClientName.getText().toString().trim());
-                    createMeetingSave(meetingApptModel);
+                    if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        setPermisson(getMainActivity(), getMainActivity());
+                    } else {
+                        createMeetingSave(meetingApptModel);
+                    }
+
                 }
 
             }
@@ -680,10 +806,25 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvMeetingDescriptionError.setText(MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK);
             tvMeetingDescriptionError.requestFocus();
             return false;
-        } else if (etMeetingDescription.getText().length() <= 50) {
+        } else if (etMeetingDescription.getText().length() < 50) {
             tvMeetingDescriptionError.setVisibility(View.VISIBLE);
-            tvMeetingDescriptionError.setText(ATLEAST_TEN_CHARACTERS);
+            tvMeetingDescriptionError.setText(ATLEAST_FIFTY_CHARACTERS);
             tvMeetingDescriptionError.requestFocus();
+            return false;
+        } else if (etLocation.getText().toString().trim().isEmpty()) {
+            tvLocationError.setVisibility(View.VISIBLE);
+            tvLocationError.setText(LOCATION_CANNOT_BE_LEFT_BLANK);
+            tvLocationError.requestFocus();
+            return false;
+        } else if (etLocation.getText().length() < 50) {
+            tvLocationError.setVisibility(View.VISIBLE);
+            tvLocationError.setText(ATLEAST_FIFTY_CHARACTERS);
+            tvLocationError.requestFocus();
+            return false;
+        } else if (!etPinCode.getText().toString().trim().isEmpty() && etPinCode.getText().length() < 6) {
+            tvPinCodeError.setVisibility(View.VISIBLE);
+            tvPinCodeError.setText(INVALID_PINCODE_NUMBER);
+            tvPinCodeError.requestFocus();
             return false;
         } else if (profileType && spBAClient.getSelectedItem().toString().equalsIgnoreCase(SELECT_BA_CLIENT_MEETING)) {
             tvBAClientError.setVisibility(View.VISIBLE);
@@ -2348,6 +2489,353 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     }
 
+
+    private void meetingLocation() {
+        showProgress();
+        travellingMode();
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            Map inputMap = new HashMap<>();
+            inputMap.put("LookupTypeId", MEETINGADDRESSID);
+            // as per mail 0 add default
+            inputMap.put("BusinessUnitId", 0);
+            inputMap.put("IgnoreBusinessUnit", true);
+
+            String serviceMethod = "Master/GetAllLookup";
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        arrMeetingLocation = new ArrayList<>();
+                        try {
+                            if (statusCode == 200) {
+                                String status = response.getString(STATUS);
+                                if (status.equalsIgnoreCase("true")) {
+                                    hideProgress();
+                                    arrMeetingLocation.add(new RowData(0, "-1", SELECT_MEETING_LOCATION));
+                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject objDetail = jsonArray.getJSONObject(i);
+                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
+                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
+                                        arrMeetingLocation.add(new RowData(i + 1, lookUpId, lookUpName));
+                                    }
+                                    arrAdapMeetingLocation = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrMeetingLocation);
+                                    arrAdapMeetingLocation.setDropDownViewResource(R.layout.mdropdown);
+                                    spMeetingLocation.setAdapter(arrAdapMeetingLocation);
+                                    spMeetingLocation.setOnItemSelectedListener(selectMeetingLocation);
+                                    arrAdapMeetingLocation.notifyDataSetChanged();
+                                } else {
+                                    hideProgress();
+                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                }
+
+                            } else {
+                                hideProgress();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            hideProgress();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        try {
+                            hideProgress();
+                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                                return;
+                            } else {
+                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                if (CRMAppUtil.isBlank(error)) {
+                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                }
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                hideProgress();
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        } else {
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+
+        }
+    }
+
+    private void GetAddressByLeadId(String meetingId) {
+        showProgress();
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            Map inputMap = new HashMap<>();
+            inputMap.put("LeadId", tvLeadId.getText().toString());
+            inputMap.put("MeetingAddressTypeId", meetingId);
+
+            String serviceMethod = "Lead/GetAddressByLeadId";
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (statusCode == 200) {
+                                String status = response.getString(STATUS);
+                                if (status.equalsIgnoreCase("true")) {
+                                    hideProgress();
+                                    JSONObject jsonObject = response.getJSONObject("Response");
+                                    String meetingAddress = jsonObject.getString("MeetingAddress");
+                                    etLocation.setText(meetingAddress);
+                                } else {
+                                    hideProgress();
+                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                }
+
+                            } else {
+                                hideProgress();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            hideProgress();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        try {
+                            hideProgress();
+                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                                return;
+                            } else {
+                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                if (CRMAppUtil.isBlank(error)) {
+                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                }
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                hideProgress();
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        } else {
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+
+        }
+    }
+
+    private void travellingMode() {
+        showProgress();
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            Map inputMap = new HashMap<>();
+            inputMap.put("LookupTypeId", TRAVELLINGMODEID);
+            // as per mail 0 add default
+            inputMap.put("BusinessUnitId", 0);
+            inputMap.put("IgnoreBusinessUnit", true);
+
+            String serviceMethod = "Master/GetAllLookup";
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        arrTravellingMode = new ArrayList<>();
+                        try {
+                            if (statusCode == 200) {
+                                String status = response.getString(STATUS);
+                                if (status.equalsIgnoreCase("true")) {
+                                    hideProgress();
+                                    arrTravellingMode.add(new RowData(0, "-1", SELECT_TRAVELLING_MODE));
+                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject objDetail = jsonArray.getJSONObject(i);
+                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
+                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
+                                        arrTravellingMode.add(new RowData(i + 1, lookUpId, lookUpName));
+                                    }
+                                    arrAdapTravellingMode = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrTravellingMode);
+                                    arrAdapTravellingMode.setDropDownViewResource(R.layout.mdropdown);
+                                    spTravellingMode.setAdapter(arrAdapTravellingMode);
+                                    arrAdapTravellingMode.notifyDataSetChanged();
+                                } else {
+                                    hideProgress();
+                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                }
+
+                            } else {
+                                hideProgress();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            hideProgress();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        try {
+                            hideProgress();
+                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                            startActivity(i);
+                                            getActivity().finish();
+                                        }
+                                    }
+                                });
+                                return;
+                            } else {
+                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                if (CRMAppUtil.isBlank(error)) {
+                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                }
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        hideProgress();
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
+
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                hideProgress();
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        } else {
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+
+        }
+    }
+
     public void selectDate() {
         today = Calendar.getInstance();
 
@@ -3114,5 +3602,42 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     }
 
+    protected void startLocationUpdates() {
 
+        // Create the location request to start receiving updates
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+
+        // Create LocationSettingsRequest object using location request
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest locationSettingsRequest = builder.build();
+
+        // Check whether location settings are satisfied
+        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
+        SettingsClient settingsClient = LocationServices.getSettingsClient(getMainActivity());
+        settingsClient.checkLocationSettings(locationSettingsRequest);
+
+        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        mCurrentLocation = locationResult.getLastLocation();
+
+                    }
+                },
+                Looper.myLooper());
+    }
 }

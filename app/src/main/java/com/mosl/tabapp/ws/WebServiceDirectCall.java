@@ -6,6 +6,7 @@ import android.util.Log;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+
 import static com.mosl.tabapp.ws.CRMWebServiceHandler.getJsonString;
 
 
@@ -38,7 +40,6 @@ public class WebServiceDirectCall {
             String headerJsonEncrypted = getJsonString(headerMap,true);
 
             String requestJsonEncrypted = CRMSecurityUtil.encrypt(requestJsonNormal);
-
 
             url = url+serviceMethod;
 

@@ -8,12 +8,14 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.support.customtabs.CustomTabsCallback;
 import android.support.customtabs.CustomTabsClient;
@@ -92,6 +94,8 @@ import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.notification.NotificationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
+import com.mosl.tabapp.service.ForegroundService;
+import com.mosl.tabapp.service.Worker;
 import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
@@ -106,8 +110,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
@@ -157,6 +167,26 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
     private ArrayAdapter<RowData> arrAdapRoleSel;
     private Spinner spRoleSel;
     private RoleSelectionModel roleSelectionModel;
+
+    UUID compressionWorkId;
+    private boolean mBound = false;
+    private ForegroundService mService = null;
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ForegroundService.LocalBinder binder = (ForegroundService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+            mBound = false;
+        }
+    };
+    private WorkManager mWorkManager;
 
     public void hideKeyboard(View view) {
         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -221,6 +251,9 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
         }
         setContentView(R.layout.crm_activity_main);
+        mWorkManager = WorkManager.getInstance();
+        startWorkManager();
+        startService(new Intent(this, ForegroundService.class));
         //region Get intent
         Intent intent = getIntent();
 
@@ -781,6 +814,12 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
         getPrefs(this).edit().putString("PASSWORD", null).apply();
+        getPrefs(this).edit().putString("EmployeeCode", null).apply();
+        getPrefs(this).edit().putString("token", null).apply();
+        getPrefs(this).edit().putString("userid", null).apply();
+        getPrefs(this).edit().putString("ipaddress", null).apply();
+        getPrefs(this).edit().putString("BusinessUnitId", null).apply();
+        getPrefs(this).edit().putString("macaddress", null).apply();
         closeActivity(code);
     }
 
@@ -810,6 +849,8 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                                 String status = response.getString(STATUS);
                                 hideProgress();
                                 if (status.equalsIgnoreCase("true")) {
+                                    stopService(new Intent(MOSLCommonActivity.this, ForegroundService.class));
+                                    mWorkManager.cancelWorkById(compressionWorkId);
                                     Intent i = new Intent(MOSLCommonActivity.this, ImageSliderActivity.class);
                                     startActivity(i);
                                     finish();
@@ -1591,6 +1632,9 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             case ID_CLEINT: {
                 searchType = SEARCH_TYPE_CLIENT;
                 actionBar.setSearchHint(SEARCH_TYPE_CLIENT_HINT);
+               /* OneTimeWorkRequest periodicWork = new OneTimeWorkRequest.Builder(Worker.class)
+                        .setConstraints(networkConstraints()).build();
+                mWorkManager.enqueue(periodicWork);*/
             }
             break;
             case ID_EMP: {
@@ -1977,12 +2021,16 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
                 new IntentFilter("NotificationCountIntent")
         );
+        bindService(new Intent(this, ForegroundService.class), mServiceConnection,
+                Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        unbindService(mServiceConnection);
+        mBound = false;
     }
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -2264,4 +2312,22 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         }
         return result;
     }
+
+    private Constraints networkConstraints() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        return constraints;
+    }
+
+    private void startWorkManager() {
+        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(Worker.class, 15, TimeUnit.MINUTES)
+                .setConstraints(networkConstraints()).build();
+        mWorkManager.enqueue(periodicWork);
+
+        compressionWorkId = periodicWork.getId();
+
+    }
+
+
 }

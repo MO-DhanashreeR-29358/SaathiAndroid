@@ -151,6 +151,15 @@ dependencies {
     compile deps.segmented
     compile deps.circleIndicator
     compile deps.htmlTextview
+    // stetho
+    debugCompile deps.stetho.stetho
+    debugCompile deps.stetho.okhttp
+    // Room
+    compile deps.room.roomRuntime
+    annotationProcessor deps.room.roomCompiler
+    compile deps.location
+    //workmanager
+    compile deps.work
     compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
 }
 

@@ -37,3 +37,9 @@
 -keep public class com.mosl.mobile.ekyc.common.MOSLCommon
 -keep class org.json.**{ *; }
 -dontwarn org.json.**
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**

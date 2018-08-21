@@ -2,6 +2,7 @@ package com.mosl.tabapp.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -32,6 +33,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getAppVersionCode;
+import static com.mosl.tabapp.common.CRMMOSLCommon.getDeviceID;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 
@@ -127,6 +129,15 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         loginData.setBusinessUnitId(businessUnitId);
                                         loginData.setBranchCode(branchCode);
                                         loginData.setUserType(userType);
+                                        SharedPreferences.Editor editor = getPrefs(SplashActivity.this).edit();
+                                        editor.putString("EmployeeCode", loginData.getEmployeeCode().trim());
+                                        editor.putString("token", loginData.getToken());
+                                        editor.putString("userid", loginData.getUserId());
+                                        editor.putString("ipaddress", CRMAppUtil.getLocalIpAddress());
+                                        editor.putString("BusinessUnitId", loginData.getBusinessUnitId());
+                                        editor.putString("macaddress", getDeviceID(getApplicationContext(), getContentResolver()));
+
+                                        editor.commit();
                                         new RoleSelectionModel("", "", "", "", employeeCode.trim(), rmId.trim(), businessUnitId.trim(), "",/*roleId*/"");
                                         new AccountDetails(loginData.getUserId(), loginData.getFirstName(), loginData.getLastName(), loginData.getImageUrl(), loginData.getMobileNo(), loginData.getEmail(), loginData.getBusinessProfileId(), loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(), loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType());
                                         MOSLCommonActivity.sendRegistrationToServer(SplashActivity.this, getContentResolver(), false);

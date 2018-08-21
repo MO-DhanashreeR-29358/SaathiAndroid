@@ -1591,7 +1591,7 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
     @Override
     public void onResume() {
         super.onResume();
-        try {
+  /*      try {
             if (AccountDetails.getToken() == null) {
                 Intent intent = new Intent(getMainActivity(), SplashActivity.class);
                 startActivity(intent);
@@ -1605,18 +1605,23 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        /*try {
+        try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && dashAdvisoryView != null) {
                 if (AccountDetails.getToken() == null) {
                     Intent intent = new Intent(getMainActivity(), SplashActivity.class);
                     startActivity(intent);
                 } else {
+                    for (FloatingActionButton sFab : dashboardBtnList) {
+                        floatingActionsMenu.removeButton(sFab);
+                    }
+                    dashboardBtnList.clear();
+                    dashboardList.clear();
                     loadDahboardMetaData();
                 }
 
@@ -1624,7 +1629,7 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void loadDahboardMetaData() {

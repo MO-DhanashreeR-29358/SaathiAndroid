@@ -67,6 +67,15 @@ public class CRMMOSLCommon {
 
         }
 
+        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionArrayList.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+        }
+        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionArrayList.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        }
+
         String[] permissionString = new String[permissionArrayList.size()];
         permissionString = permissionArrayList.toArray(permissionString);
         if (permissionString.length != 0) {
@@ -77,28 +86,29 @@ public class CRMMOSLCommon {
 
     }
 
-  /*  public static String getDeviceID(Context context, ContentResolver contentResolver) {
-        String deviceId;
-        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    /*  public static String getDeviceID(Context context, ContentResolver contentResolver) {
+          String deviceId;
+          final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(contentResolver, android.provider.Settings.Secure.ANDROID_ID);
+          final String tmDevice, tmSerial, androidId;
+          tmDevice = "" + tm.getDeviceId();
+          tmSerial = "" + tm.getSimSerialNumber();
+          androidId = "" + android.provider.Settings.Secure.getString(contentResolver, android.provider.Settings.Secure.ANDROID_ID);
 
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        deviceId = deviceUuid.toString();
-        return deviceId;
-    }*/
-  public static int getAppVersionCode(Context mContext) {
-      try {
-          PackageInfo pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-          return pi.versionCode;
-      } catch (PackageManager.NameNotFoundException e) {
-          e.printStackTrace();
-      }
-      return 0;
-  }
+          UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
+          deviceId = deviceUuid.toString();
+          return deviceId;
+      }*/
+    public static int getAppVersionCode(Context mContext) {
+        try {
+            PackageInfo pi = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+            return pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public static String getDeviceID(Context context, ContentResolver contentResolver) {
         String deviceId;
         deviceId = "" + android.provider.Settings.Secure.getString(contentResolver, android.provider.Settings.Secure.ANDROID_ID);

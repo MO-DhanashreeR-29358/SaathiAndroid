@@ -12,13 +12,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
     <application
-        android:name="com.mosl.tabapp.ui.CrmApp"
+        android:name="com.mosl.tabapp.CrmApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
@@ -109,6 +111,8 @@
             </intent-filter>
         </service>
 
-
+        <service
+            android:name=".service.ForegroundService"
+            android:enabled="true"></service>
     </application>
 </manifest>

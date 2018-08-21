@@ -2,7 +2,6 @@ package com.mosl.tabapp.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -46,7 +45,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 /**
  * Created by raju on 2/1/2017.
  */
-public class LoginActivity extends FragmentActivity implements MOSLConstants , TextView.OnEditorActionListener,View.OnClickListener{
+public class LoginActivity extends FragmentActivity implements MOSLConstants, TextView.OnEditorActionListener, View.OnClickListener {
     Button btnLogin;
     EditText etEmpCode, etPassword;
     LinearLayout customProgress;
@@ -219,9 +218,14 @@ public class LoginActivity extends FragmentActivity implements MOSLConstants , T
 
     private void storeLoginPrefData(LoginResponseData loginData) throws JSONException {
         SharedPreferences.Editor editor = getPrefs(this).edit();
-
         editor.putString("PASSWORD", etPassword.getText().toString().trim());
         editor.putString("EmployeeCode", loginData.getEmployeeCode().trim());
+        editor.putString("token", loginData.getToken());
+        editor.putString("userid", loginData.getUserId());
+        editor.putString("ipaddress", CRMAppUtil.getLocalIpAddress());
+        editor.putString("BusinessUnitId", loginData.getBusinessUnitId());
+        editor.putString("macaddress", getDeviceID(getApplicationContext(), getContentResolver()));
+
         editor.commit();
         new AccountDetails(loginData.getUserId(), loginData.getFirstName(), loginData.getLastName(), loginData.getImageUrl().replaceAll(" ", "%20"), loginData.getMobileNo(), loginData.getEmail(), loginData.getBusinessProfileId(), loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(), loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType());
         try {
@@ -396,14 +400,18 @@ public class LoginActivity extends FragmentActivity implements MOSLConstants , T
         loginAction();
         return false;
     }
+
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.btnLogin:{loginAction();}
+        switch (view.getId()) {
+            case R.id.btnLogin: {
+                loginAction();
+            }
             break;
         }
     }
-    private void loginAction(){
+
+    private void loginAction() {
         if (validateForm()) {
             performLogin(etEmpCode.getText().toString().trim(), etPassword.getText().toString().trim());
         }
