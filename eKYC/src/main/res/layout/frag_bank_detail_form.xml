@@ -127,18 +127,25 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:background="@color/light_grey_menu"
                         android:padding="@dimen/_5sdp"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        >
+
+                        <include
+                            layout="@layout/layout_merge_of_mosl_note"
+                            android:id="@+id/layout_merge_note"
+                            />
 
                         <Button
                             android:id="@+id/btnBankAndSchemeUpdate"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_35sdp"
+                            android:layout_below="@+id/layout_merge_note"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_marginRight="@dimen/_10sdp"
+                            android:layout_margin="@dimen/_10sdp"
                             android:background="@drawable/ic_submit_btn"
                             android:text="@string/next"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            />
                     </RelativeLayout>
                 </LinearLayout>
             </ScrollView>

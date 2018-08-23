@@ -57,7 +57,6 @@ import com.mosl.mobile.ekyc.ui.DatePickerListener;
 import com.mosl.mobile.ekyc.ui.EkycMainActivity;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.mobile.ekyc.ui.WebActivity;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -3648,7 +3647,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         }
                     }
                 } else if (getAppType().equalsIgnoreCase(CRM)) {
-                    if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
+                    //region old code before virtual id concept
+                    /*if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
                         llImgOTP.setVisibility(View.VISIBLE);
                     } else if (getOtpVisibleForBranch().equalsIgnoreCase("0")) {
                         llImgOTP.setVisibility(View.GONE);
@@ -3656,6 +3656,21 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     if (getBioMetricVisibleForBranch().equalsIgnoreCase("1") || getBioMetricVisibleForBranch().equalsIgnoreCase("")) {//Showhide Bio layout 1 for visible and 0 for hide
                         llImgThumb.setVisibility(View.VISIBLE);
                     } else if (getBioMetricVisibleForBranch().equalsIgnoreCase("0")) {
+                        llImgThumb.setVisibility(View.GONE);
+                    }*/
+                    //endregion
+                    if (rbVirtualId.isChecked() && showVirtualOTP) {
+                        llImgOTP.setVisibility(View.VISIBLE);
+                    } else if (rbAadhar.isChecked() && showOTP) {
+                        llImgOTP.setVisibility(View.VISIBLE);
+                    } else {
+                        llImgOTP.setVisibility(View.GONE);
+                    }
+                    if (rbVirtualId.isChecked() && showVirtualFinger) {
+                        llImgThumb.setVisibility(View.VISIBLE);
+                    } else if (rbAadhar.isChecked() && showFinger) {
+                        llImgThumb.setVisibility(View.VISIBLE);
+                    } else {
                         llImgThumb.setVisibility(View.GONE);
                     }
 //                    llImgThumb.setVisibility(View.VISIBLE);

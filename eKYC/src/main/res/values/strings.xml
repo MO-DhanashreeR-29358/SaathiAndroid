@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Saathi</string>
     <string name="segment_note">Through this A/c, you can also trade in FNO and invest in MF / IPO\'s / Bonds.</string>
-    <string name="fatca_declaration">I/We  hereby declare and confirm that the details given above are true and correct. Further I /We would like to state that in  future if there is any change in my/our tax status (i.e  if I / we become tax resident of any other County other than India)  then the same will be informed to Motilal Oswal Securities Limited (MOSL) and below FATCA Declaration will be submitted to you  immediately.</string>
+    <string name="fatca_declaration">I/We  hereby declare and confirm that the details given above are true and correct. Further I /We would like to state that in  future if there is any change in my/our tax status (i.e  if I / we become tax resident of any other County other than India)  then the same will be informed to Motilal Oswal Securities Limited* (MOSL*) and below FATCA Declaration will be submitted to you  immediately.</string>
 
     <string name="note_pay">Note : After clicking on the \"MAKE PAYMENT\" button, you will be redirected to a secured payment gateway for transferring funds to trade / invest.</string>
     <string name="politically_exposed">Are you politically Exposed person ?</string>
@@ -53,7 +53,7 @@
 
     <string name="ipv_note">Please Note - Kindly courier/post us the physical copy of signed Account opening form, self-attested sddress proof along with your original cancelled cheque at the below address within three working days.\n\n
         Address: Mutual funds operations Team.\n
-        Motilal Oswal securities Ltd.\n
+        Motilal Oswal securities Ltd*.\n
         Palm Spring Centre: 2nd floor. Palm court complex,\n
         New link road. Malad (West),\n
         Mumbai - 400 064.\n
@@ -64,20 +64,20 @@
     <string name="reg_with_other_broker">Are you registered with any other broker ?</string>
     <string name="sebi_stock_exch_auth">Do you have any action/proceedings initiated/pending/taken by SEBI/Stock exchange/any other authority?</string>
     <string name="fmc_sebi_stock_exch_auth">Do you have any action/proceeding initiated/pending/taken by FMC/SEBI/Stock exchange/Commodity exchange/any other authority?</string>
-    <string name="herby">I hereby authorise MOSL to use my Aadhaar information for account opening process</string>
+    <string name="herby">I hereby authorise MOSL* to use my Aadhaar information for account opening process</string>
     <string name="i_agree">I AGREE</string>
-    <string name="i_agree_consent">I AGREE I, the holder of Aadhaar Number, hereby voluntarily give my consent to MOSL</string>
+    <string name="i_agree_consent">I AGREE I, the holder of Aadhaar Number, hereby voluntarily give my consent to MOSL*</string>
     <string name="read_more">Read more</string>
     <string name="show_less">Show less</string>
     <string name="your_aadhaar_no_is">Your Aadhaar/VID no is</string>
     <string name="aadhaar_declaration">Aadhaar Declaration</string>
-    <string name="aadhaar_note">I, the holder of Aadhaar Number, hereby voluntarily give my consent to Motilal Oswal Securities Limited (MOSL) to obtain my Aadhaar Number, Name, Fingerprints, Iris and my Aadhaar  details for authentication with UIDAI as per Aadhaar Act, 2016 and all other applicable laws. MOSL has informed me that my Aadhaar details and identity information would only be used for demographic authentication, validation, KYC Verification purpose and the same may be shared with other group / associate companies of MOSL (List shared below) and also informed that my biometrics will not be stored / shared and will be submitted to CIDR only for the purpose of authentication. I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form / RDD. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.</string>
-    <!--<string name="aadhaar_note">I, the holder of Aadhaar Number as provided above, hereby give my consent to Motilal Oswal Securities Limited to obtain my Aadhaar Number, Name, Fingerprints, Iris for authentication with UIDAI. Motilal Oswal Securities Limited has informed me that my identity information would only be used to KYC Verification for (a.) Broking and Demat, (b.) Commodity, (c.) Mutual Funds and also informed that my biometrics will not be stored/ shared and will be submitted to CIDR only for the purpose of authentication.\n\n
+    <string name="aadhaar_note">I, the holder of Aadhaar Number, hereby voluntarily give my consent to Motilal Oswal Securities Limited* (MOSL*) to obtain my Aadhaar Number, Name, Fingerprints, Iris and my Aadhaar  details for authentication with UIDAI as per Aadhaar Act, 2016 and all other applicable laws. MOSL* has informed me that my Aadhaar details and identity information would only be used for demographic authentication, validation, KYC Verification purpose and the same may be shared with other group / associate companies of MOSL* (List shared below) and also informed that my biometrics will not be stored / shared and will be submitted to CIDR only for the purpose of authentication. I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form / RDD. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.</string>
+    <!--<string name="aadhaar_note">I, the holder of Aadhaar Number as provided above, hereby give my consent to Motilal Oswal Securities Limited* to obtain my Aadhaar Number, Name, Fingerprints, Iris for authentication with UIDAI. Motilal Oswal Securities Limited* has informed me that my identity information would only be used to KYC Verification for (a.) Broking and Demat, (b.) Commodity, (c.) Mutual Funds and also informed that my biometrics will not be stored/ shared and will be submitted to CIDR only for the purpose of authentication.\n\n
     I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form/Rdd. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.</string>-->
     <string name="list_of_intermediaries"><u>List of Intermediaries</u></string>
     <string name="name_of_intermediaries">Name of Intermediaries</string>
-    <!--<string name="aadhaar_note_intermediaries">1. Motilal Oswal Investment Advisors Limited\n2. Motilal Oswal Wealth Management Limited\n3. Motilal Oswal Asset Management Company Limited\n4. MOPE Investment Advisors Private Limited\n6. Motilal Oswal Real Estate Investment Advisors II Pvt. Limited\n7. Passionate Investment Management Private Limited\n8. Motilal Oswal Securities Limited\n9. Realty Excellence Trust\n10. India Realty Excellence Fund II LLP\n11. India Realty Excellence Trust III\n12. Business Excellence Trust\n13. Business Excellence Trust II\n14. Business Excellence Trust III\n15. Motilal Oswal Mutual Fund\n16. Motilal Oswal Alternative Investment Trust\n17. Motilal Oswal Commodity Broker Pvt. Ltd.</string>-->
-    <string name="aadhaar_note_intermediaries">1. Motilal Oswal Investment Advisors Limited\n2. Motilal Oswal Wealth Management Limited\n3. Motilal Oswal Asset Management Company Limited\n4. MOPE Investment Advisors Private Limited\n6. Motilal Oswal Real Estate Investment Advisors II Pvt. Limited\n7. Passionate Investment Management Private Limited\n8. Motilal Oswal Securities Limited\n9. Realty Excellence Trust\n10. India Realty Excellence Fund II LLP\n11. India Realty Excellence Trust III\n12. Business Excellence Trust\n13. Business Excellence Trust II\n14. Business Excellence Trust III\n15. Motilal Oswal Mutual Fund\n16. Motilal Oswal Alternative Investment Trust</string>
+    <!--<string name="aadhaar_note_intermediaries">1. Motilal Oswal Investment Advisors Limited\n2. Motilal Oswal Wealth Management Limited\n3. Motilal Oswal Asset Management Company Limited\n4. MOPE Investment Advisors Private Limited\n6. Motilal Oswal Real Estate Investment Advisors II Pvt. Limited\n7. Passionate Investment Management Private Limited\n8. Motilal Oswal Securities Limited*\n9. Realty Excellence Trust\n10. India Realty Excellence Fund II LLP\n11. India Realty Excellence Trust III\n12. Business Excellence Trust\n13. Business Excellence Trust II\n14. Business Excellence Trust III\n15. Motilal Oswal Mutual Fund\n16. Motilal Oswal Alternative Investment Trust\n17. Motilal Oswal Commodity Broker Pvt. Ltd.</string>-->
+    <string name="aadhaar_note_intermediaries">1. Motilal Oswal Investment Advisors Limited\n2. Motilal Oswal Wealth Management Limited\n3. Motilal Oswal Asset Management Company Limited\n4. MOPE Investment Advisors Private Limited\n6. Motilal Oswal Real Estate Investment Advisors II Pvt. Limited\n7. Passionate Investment Management Private Limited\n8. Motilal Oswal Securities Limited*\n9. Realty Excellence Trust\n10. India Realty Excellence Fund II LLP\n11. India Realty Excellence Trust III\n12. Business Excellence Trust\n13. Business Excellence Trust II\n14. Business Excellence Trust III\n15. Motilal Oswal Mutual Fund\n16. Motilal Oswal Alternative Investment Trust</string>
     <string name="track_app_note">Note: Please quote your transaction reference number for any queries relating to this transaction in future</string>
     <string name="clientName">Client Name</string>
     <string name="ipv_note1">You have successfully uploaded the proofs.\n You are just 1 step away form instant account opening.</string>
@@ -180,32 +180,32 @@
 
     <!--Term Condition-->
     <string name="bullet">\u25CF</string>
-    <string name="term">Please note that by submitting the contact details, you are authorizing Motilal Oswal Securities Limited to
+    <string name="term">Please note that by submitting the contact details, you are authorizing Motilal Oswal Securities Limited* to
         contact you and send promotional communication even though you may be registered under National Do Not Call Registry
         established under the Telecom Unsolicited Commercial Communications Regulations, 2007 or registered or may register under the
         National Customer Preference Register established under new regulation viz the Telecom Commercial Communications Customer
         Preference Regulations, 2010.</string>
 
     <!--Terms & condition for Review Edit-->
-    <string name="term_eq_review_edit">MotilalOswal Securities Limited (hereinafter referred to as \"MOSL\") has prescribed certain eligibility criteria and terms and conditions which
-        are to be followed by the client, before opening trading and demat account through the website of MOSL. The Client is required to go through each and every condition as
-        mentioned below and verify if he/she is eligible to open account with MOSL. If all terms and conditions are acceptable to the client, he/she should mark in \"I agree and
+    <string name="term_eq_review_edit">MotilalOswal Securities Limited* (hereinafter referred to as \"MOSL*\") has prescribed certain eligibility criteria and terms and conditions which
+        are to be followed by the client, before opening trading and demat account through the website of MOSL*. The Client is required to go through each and every condition as
+        mentioned below and verify if he/she is eligible to open account with MOSL*. If all terms and conditions are acceptable to the client, he/she should mark in \"I agree and
         authorize\" box in order to open trading and demat account. \n\n
 	\u25CF Individuals Citizen of India and resident Indians are permitted to open accounts and avail the services through this process.At present, NRIs can not open account through
         E-KYC process. If Client is US person/Resident of Canada /Non-Resident Indian residing in Financial Action Task  Force, non compliant countries and Territories (NCCTs) /
         overseas Corporate Bodies  (OCBs)then client shall be required to opt for Physical KYC process and submit duly signed FATCA Declaration. \n\n
 	\u25CF The client is required to upload all documents, records etc which shall be verified with the originals as stipulated in Know Your Client documents in order to open account. \n\n
-	\u25CF Client shall be required to affix his own digital signature / e-sign at the relevant pages of account opening form so as to enable MOSL to open the said account \n\n
+	\u25CF Client shall be required to affix his own digital signature / e-sign at the relevant pages of account opening form so as to enable MOSL* to open the said account \n\n
 	\u25CF The Client is required to fill necessary details and make payment via online through his registered Bank Account - Net banking facility. \n\n
-	\u25CF MOSL after receipt of the payment towards account opening charges for Trading Account etc shall send the account opening document at the registered E-mail ID furnished
+	\u25CF MOSL* after receipt of the payment towards account opening charges for Trading Account etc shall send the account opening document at the registered E-mail ID furnished
         by the client. \n\n
-	\u25CF MOSL shall reject the application if it is found that the client is barred from trading or any investigation from SEBI or any other regulatory authorities is pending
-        against the said client, decision taken by MOSL shall be final and binding upon the client. \n\n
-	\u25CF MOSL does not guarantee the account opening form submitted by the client shall be duly accepted as the company reserves its right to reject account opening application
+	\u25CF MOSL* shall reject the application if it is found that the client is barred from trading or any investigation from SEBI or any other regulatory authorities is pending
+        against the said client, decision taken by MOSL* shall be final and binding upon the client. \n\n
+	\u25CF MOSL* does not guarantee the account opening form submitted by the client shall be duly accepted as the company reserves its right to reject account opening application
         of the client without assigning any reason. \n\n
 	\u25CF DIS booklet - Through E-KYC process, at present, only those client can open the account who do not wish  to obtain  DIS for time being   In case client wish to obtain
         DIS booklet immediately on opening of demat account then  client shall be required to opt for Physical KYC process. \n\n
-	\u25CF Nomination - Through E-KYC process, client cannot appoint nominee. If client wish to appoint nominee then client shall be required to opt for Physical KYC process. \n\n
+	\u25CF Nomination - Through E-KYC process, client cannot appoint nominee. If client wish to appoint nominee then client shall be required to opt for Physical KYC process. \n\n \u25CF MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers \n\n
     </string>
 
     <string name="eq_consent_form">\u25CF	I authorizesMotilalOswal Sec. Ltd. to access my data / information / photograph etc. from UIDAI, for the purpose of opening Trading and
@@ -214,9 +214,9 @@
 	\u25CF I wish to avail TRUST facility. This facility will allow us to meet the securities settlement obligations by confirming to an SMS received by CDSL to debit mydemat account. \n\n
 	\u25CF DIS booklet - I do not wish to obtain DIS for time being. \n\n
 	\u25CF Authority to retain funds/securities as Running account -  I wish to settle my account with you once in a calendar quarter and not in once in a calendar month. Further
-        I can request for the release of pay-out any time after adjusting all dues towards MOSL. I am entitled to revoke this Running Account Authorization at any time. \n\n
-	\u25CF I am not having Depository Account out side  MOSL. \n\n
-	\u25CF My relatives are not having account with MOSL. \n\n
+        I can request for the release of pay-out any time after adjusting all dues towards MOSL*. I am entitled to revoke this Running Account Authorization at any time. \n\n
+	\u25CF I am not having Depository Account out side  MOSL*. \n\n
+	\u25CF My relatives are not having account with MOSL*. \n\n
 	\u25CF I am not affiliated with any Corporate/Partnership Firm/Trust. \n\n
 	\u25CF I am not dealing with any other Stock Broker/Sub-broker/ Authorised Person. \n\n
 	\u25CF I have not been introduced  by any Introducer \n\n
@@ -268,13 +268,13 @@
     <string name="terms_value_pack_equity_margin_scheme">1) The client has been charged special brokerage rates in the above schedule as per the scheme chosen by him. Other levies STT, service tax, stamp duty etc would be charged over &amp; above brokerage rate decided. \n\n
     2) Minimum charges in cash segment on per executed order would be applicable as under : Min Rs 12 Brokerage per executed order for intra-day trades Min Rs 25 Brokerage per executed order for delivery trades \n\n
     3) The upfront fees have to be paid by the client at the time of account opening .The scheme once opted cannot be changed till expiry. \n\n
-    4) Subsequent upfront fees will be debited to the clients ledger account with MOSL as per rollover provision detailed below or scheme change request submitted by the client and shall be paid by the client immediately. \n\n
+    4) Subsequent upfront fees will be debited to the clients ledger account with MOSL* as per rollover provision detailed below or scheme change request submitted by the client and shall be paid by the client immediately. \n\n
     5) Rollover provision: The client will be automatically enrolled in the same scheme for same duration after the lapse of the initial period if he/she generates brokerage equal to or more than scheme amount. \n\n
     6) The Client can choose to change the Scheme after the lapse of the initial period by signing and submitting a fresh Scheme Sheet seven days prior to the expiry of the scheme. \n\n
     7) The client can choose to discontinue the scheme after the lapse of the initial period by giving a written signed confirmation in the required format for discontinuing the scheme seven days prior to the expiry of the Scheme. \n\n
     8) The brokerage charged till the expiry of scheme period shall be reversed subject to maximum of Upfront Fees charged to the Client. Any brokerage generated over and above the upfront fees charged to the client will not be reversed. \n\n
     9) In case clients fail to generate brokerage equal to the scheme selected within the validity period he shall be automatically shifted to default brokerage plan and will not be eligible for special brokerage of the scheme. The client shall be refunded the brokerage generated during validity period from upfront fees. \n\n
-    10) Motilal Oswal Securities Ltd.(MOSL) reserves the right to discontinue/modify /extend the schemes by giving a prior intimation to the client and the same shall be binding on the client. \n\n
+    10) Motilal Oswal Securities Ltd*.(MOSL*) reserves the right to discontinue/modify /extend the schemes by giving a prior intimation to the client and the same shall be binding on the client. \n\n
     11) Delivery brokerage in Commodities will be charged where future of commodities result into delivery. \n\n
     12) In case commodity trade results in physical delivery where client VAT details are required, it is the responsibility of client to arrange CnF or bear additional CnF billing charges which does not form part of the Advance Brokerage proposal, these charges will be debited on actual basis. \n\n</string>
 
@@ -526,4 +526,5 @@
     <string name="open_paperless_account">&lt;u>Open instant paperless account&lt;/u> by authenticating your Aadhaar Virtual Id</string>
     <string name="paperless_mess_virtualId">For paperless account opening facility Aadhaar Virtual Id authentication is mandatory. If not available, you can just enter your Aadhaar number and proceed with manual from filling process?</string>
     <string name="physical_account_message">You are being redirected to our Online Account opening process which requires submission of physical documents</string>
+    <string name="mosl_merge_note">MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
 </resources>

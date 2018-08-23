@@ -119,6 +119,12 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
+
+                <include
+                    layout="@layout/layout_merge_of_mosl_note"
+                    android:id="@+id/layout_merge_note"
+                    />
+
             </LinearLayout>
         </ScrollView>
 
