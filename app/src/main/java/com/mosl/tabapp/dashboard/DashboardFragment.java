@@ -3353,35 +3353,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
     }
 
-   /* private void incentiveData(List<StringMap> arrayDetail) {
-        arrayListIncentive.clear();
-        for (int i = 0; i < arrayDetail.size(); i++) {
-            HashMap<String, String> fieldData = new HashMap<String, String>();
-            StringMap objDetail = arrayDetail.get(i);
-            // JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String Parameters = (objDetail.get("Parameters") == null || objDetail.get("Parameters").toString().equals("")) ? "" : objDetail.get("Parameters").toString();
-            String q1 = (objDetail.get("Q1") == null || objDetail.get("Q1").toString().equals("")) ? "" : objDetail.get("Q1").toString();
-            String q2 = (objDetail.get("Q2") == null || objDetail.get("Q2").toString().equals("")) ? "" : objDetail.get("Q2").toString();
-            String q3 = (objDetail.get("Q3") == null || objDetail.get("Q3").toString().equals("")) ? "" : objDetail.get("Q3").toString();
-            String q4 = (objDetail.get("Q4") == null || objDetail.get("Q4").toString().equals("")) ? "" : objDetail.get("Q4").toString();
-            String yTD = (objDetail.get("YTD") == null || objDetail.get("YTD").toString().equals("")) ? "" : objDetail.get("YTD").toString();
-          *//*  String q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0" : jsonObject.getString("Q1");
-            String q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0" : jsonObject.getString("Q2");
-            String q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0" : jsonObject.getString("Q3");
-            String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0" : jsonObject.getString("Q4");
-            String yTD = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0" : jsonObject.getString("YTD");*//*
-            fieldData.put(PARAMETERS, Parameters);
-            fieldData.put(Q1, q1);
-            fieldData.put(Q2, q2);
-            fieldData.put(Q3, q3);
-            fieldData.put(Q4, q4);
-            fieldData.put(YTD, yTD);
-            arrayListIncentive.add(fieldData);
-        }
-        incentiveView("Q1");
-
-
-    }*/
 
     private void incentiveData(JSONArray jsonArray) {
         arrayListIncentive.clear();
@@ -3444,18 +3415,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 tvMTDCOUNTData.setText(filterData);
                 tvYTDCOUNTData.setText(ytd);
                 linearLayout.setBackgroundResource(i % 2 == 0 ? R.color.white : R.color.white);
-                //Are normal row dat do alternate back ground
-           /* if (i % 2 == 0) {
-                tdParm.setBackgroundResource(R.drawable.list_alice_blue_background);
-                tdVata.setBackgroundResource(R.drawable.list_white_background);
-
-            } else {
-                tdParm.setBackgroundResource(R.drawable.list_white_background);
-                tdVata.setBackgroundResource(R.drawable.list_alice_blue_background);
-
-            }*/
-
-
                 tableMData.addView(tableRow);
             }
         }
@@ -3464,66 +3423,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
     }
     //incentiveData end
 
-    //start region hi
-  /*  public void openWebUrl(Uri url) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            String packag = CustomTabsHelper.getPackageNameToUse(getContext());
-            if (packag == null) {
-                //   openWebview(null, url);
-               *//* Intent intent = new Intent(mContext, WebActivity.class);
-                intent.putExtra(URL_PATH, url.toString());
-                startActivity(intent);*//*
-            } else {
-                openCustomTabsIntent(url.toString());
-            }
-        } else {
-            openInBrowser(url);
-        }
-    }
-
-
-    private void openCustomTabsIntent(String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
-        builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
-        builder.setCloseButtonIcon(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_calendar));
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(url));
-    }
-
-    private CustomTabsSession getSession() {
-        return mClient.newSession(new CustomTabsCallback() {
-            @Override
-            public void onNavigationEvent(int navigationEvent, Bundle extras) {
-                super.onNavigationEvent(navigationEvent, extras);
-            }
-        });
-    }
-
-    public void openInBrowser(Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }*/
-    //end region
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //   super.onSaveInstanceState(outState);
     }
 
     private void createFloatingButtons() {
-        /**
-         <com.getbase.floatingactionbutton.FloatingActionButton
-         android:id="@+id/leadcreation"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         app:fab_icon="@drawable/ic_create_lead"
-         fab:fab_colorNormal="#ffffff"
-         fab:fab_colorPressed="#ffffff"
-         fab:fab_size="mini"
-         fab:fab_title="Create Lead" />
-         */
 
         if (dashboardList != null && dashboardList.size() > 1) {
             for (final DashboardModel dashboardModel : dashboardList) {

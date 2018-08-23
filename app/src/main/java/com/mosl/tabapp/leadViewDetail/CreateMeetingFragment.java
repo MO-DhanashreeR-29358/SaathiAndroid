@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -90,6 +91,8 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
+import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -107,7 +110,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     Location mCurrentLocation; // location
     private TextView tvCurrentStageSince, tvCurrentStage, tvBranchCode, tvLeadId, tvClientCode, tvName,
             tvSplAttendeeCount, tvSplAttendee, tvAttendeeCount, tvAttendee, tvStartDate, tvLocationError,
-            tvPinCodeError;
+            tvPinCodeError, tvMeetingLocationError;
     View llSubcategory;
     private Button btnSave, btnReset;
     private ImageButton ibSplAttendee, ibAttendee;
@@ -156,7 +159,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             arrAdapTravellingMode;
     private LocationRequest mLocationRequest;
 
-    private long UPDATE_INTERVAL = 5 * 60 * 100;  /* 10 secs */
+    private long UPDATE_INTERVAL = 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     private AdapterView.OnItemSelectedListener selectMeetingLocation = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -164,10 +167,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             try {
                 if (!((RowData) spMeetingLocation.getSelectedItem()).getKey().equalsIgnoreCase("-1") &&
                         !((RowData) spMeetingLocation.getSelectedItem()).getValue().equalsIgnoreCase("other")) {
-                    etLocation.setText("");
                     GetAddressByLeadId(((RowData) spMeetingLocation.getSelectedItem()).getKey());
                 }
-
+                etLocation.setText("");
+                tvMeetingLocationError.setVisibility(View.GONE);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -183,6 +186,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_create_meeting);
         setUpView(createMeetingView);
+        startLocationUpdates();
         try {
             leadId = this.getArguments().getString(LEAD_ID, "0");
             mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0" : this.getArguments().getString(UCID, "0");
@@ -200,10 +204,9 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         meetingObjective();
         meetingLocation();
         setAppTitle(getClass().toString(), "Create Meeting");
-        startLocationUpdates();
+
         return createMeetingView;
     }
-
     private AdapterView.OnItemSelectedListener selectCategoryListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -264,6 +267,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     };
 
     private void setUpView(View createMeetingView) {
+
         scrollView = (ScrollView) createMeetingView.findViewById(R.id.scrollView);
         scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         scrollView.setFocusable(true);
@@ -308,6 +312,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         tvCategoryCommentsError = (TextView) createMeetingView.findViewById(R.id.tvCategoryCommentsError);
         tvLocationError = (TextView) createMeetingView.findViewById(R.id.tvLocationError);
         tvPinCodeError = (TextView) createMeetingView.findViewById(R.id.tvPinCodeError);
+        tvMeetingLocationError = (TextView) createMeetingView.findViewById(R.id.tvMeetingLocationError);
 
         tvBAClientError = (TextView) createMeetingView.findViewById(R.id.tvBAClientError);
         tvOutStaitionError = (TextView) createMeetingView.findViewById(R.id.tvOutStaitionError);
@@ -448,11 +453,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!isBlank(etLocation.getText().toString().trim()) && etLocation.getText().length() >= 50) {
+                if (!isBlank(etLocation.getText().toString().trim()) && etLocation.getText().length() >= 20) {
                     tvLocationError.setVisibility(View.GONE);
                 } else {
                     tvLocationError.setVisibility(View.VISIBLE);
-                    tvLocationError.setText(ATLEAST_FIFTY_CHARACTERS);
+                    tvLocationError.setText(ATLEAST_TWENTY_CHARACTERS);
                 }
             }
         });
@@ -693,6 +698,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
                         meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
                         meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
                     }
@@ -733,7 +739,15 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                         // for ActivityCompat#requestPermissions for more details.
                         setPermisson(getMainActivity(), getMainActivity());
                     } else {
-                        createMeetingSave(meetingApptModel);
+                        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
+
+                            enableLoc(getMainActivity());
+                            startLocationUpdates();
+                        } else {
+                            createMeetingSave(meetingApptModel);
+                        }
+//                        createMeetingSave(meetingApptModel);
                     }
 
                 }
@@ -755,12 +769,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         spActivityType.setSelection(0);
         spMeetingReason.setSelection(0);
         etMeetingDescription.setText("");
+        etLocation.setText("");
+        etAmount.setText("");
+        etPinCode.setText("");
         etCustomerComment.setText("");
         spActionables.setSelection(0);
         spCategory.setSelection(0);
         spMeetingObjective.setSelection(0);
+        spMeetingLocation.setSelection(0);
+        spTravellingMode.setSelection(0);
         etCategory.setText("");
         tvMeetingDescriptionError.setVisibility(View.GONE);
+        tvMeetingLocationError.setVisibility(View.GONE);
+        tvPinCodeError.setVisibility(View.GONE);
+        tvLocationError.setVisibility(View.GONE);
         spSubCategory.setSelection(0);
         etSubCategory.setText("");
         if (profileType) {
@@ -776,7 +798,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
      */
 
     private boolean validateForm() {
-        if (spProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT)) {
+        if (spProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT) && productAdapter.getListProduct().size() == 0) {
+            tvProductError.setVisibility(View.VISIBLE);
+            tvProductError.setText(SELECT_PRODUCT);
+            tvProductError.requestFocus();
+            return false;
+        } else if (productAdapter.getListProduct().size() == 0) {
             tvProductError.setVisibility(View.VISIBLE);
             tvProductError.setText(SELECT_PRODUCT);
             tvProductError.requestFocus();
@@ -811,14 +838,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvMeetingDescriptionError.setText(ATLEAST_FIFTY_CHARACTERS);
             tvMeetingDescriptionError.requestFocus();
             return false;
+        } else if (spMeetingLocation.getSelectedItem().toString().equalsIgnoreCase(SELECT_MEETING_LOCATION)) {
+            tvMeetingLocationError.setVisibility(View.VISIBLE);
+            tvMeetingLocationError.setText(SELECT_MEETING_LOCATION);
+            tvMeetingLocationError.requestFocus();
+            return false;
         } else if (etLocation.getText().toString().trim().isEmpty()) {
             tvLocationError.setVisibility(View.VISIBLE);
             tvLocationError.setText(LOCATION_CANNOT_BE_LEFT_BLANK);
             tvLocationError.requestFocus();
             return false;
-        } else if (etLocation.getText().length() < 50) {
+        } else if (etLocation.getText().length() < 20) {
             tvLocationError.setVisibility(View.VISIBLE);
-            tvLocationError.setText(ATLEAST_FIFTY_CHARACTERS);
+            tvLocationError.setText(ATLEAST_TWENTY_CHARACTERS);
             tvLocationError.requestFocus();
             return false;
         } else if (!etPinCode.getText().toString().trim().isEmpty() && etPinCode.getText().length() < 6) {
@@ -3640,4 +3672,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                 },
                 Looper.myLooper());
     }
+
+
 }

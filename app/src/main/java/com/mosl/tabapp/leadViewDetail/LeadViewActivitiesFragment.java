@@ -13,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -218,10 +216,17 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                                             String Stage = (objDetail.isNull("Stage") || objDetail.getString("Stage").equals("")) ? "" : objDetail.getString("Stage");
                                             String CSR = (objDetail.isNull("CustomerServiceRemark") || objDetail.getString("CustomerServiceRemark").equals("")) ? "" : objDetail.getString("CustomerServiceRemark");
                                             String QueryDesc = (objDetail.isNull("QueryDesc") || objDetail.getString("QueryDesc").equals("")) ? "" : objDetail.getString("QueryDesc");
+                                            String MeetingAddress = (objDetail.isNull("MeetingAddress") || objDetail.getString("MeetingAddress").equals("")) ? "" : objDetail.getString("MeetingAddress");
+                                            String Pincode = (objDetail.isNull("Pincode") || objDetail.getString("Pincode").equals("")) ? "" : objDetail.getString("Pincode");
+                                            String TravellingMode = (objDetail.isNull("TravellingMode") || objDetail.getString("TravellingMode").equals("")) ? "" : objDetail.getString("TravellingMode");
 
+                                            String Amount = (objDetail.isNull("Amount") || objDetail.getString("Amount").equals("")) ? "" : objDetail.getString("Amount");
+                                            String GeoTag = (objDetail.isNull("GeoTag") || objDetail.getString("GeoTag").equals("")) ? "" : objDetail.getString("GeoTag");
 
+                                            String location = (objDetail.isNull("MeetingAddressType") || objDetail.getString("MeetingAddressType").equals("")) ? "" : objDetail.getString("MeetingAddressType");
+                                            String geoMeetingLocation = (objDetail.isNull("Location") || objDetail.getString("Location").equals("")) ? "" : objDetail.getString("Location");
                                             meetingList.add(new LeadActivitiesMeetingModel(Status, MeetingID, LeadID, Name, EMAIL, mobNo, CRMMOSLCommon.formatMonth(date), time, AttendeeEmp
-                                                    , Product, StatusName, ActivityType, MeetingReason, MeetingDuration, Category, Actionable, Comments, Stage, CSR, QueryDesc));
+                                                    , Product, StatusName, ActivityType, MeetingReason, MeetingDuration, Category, Actionable, Comments, Stage, CSR, QueryDesc, MeetingAddress, Pincode, TravellingMode, Amount, GeoTag, location, geoMeetingLocation));
                                         }
                                         meetingAdapter = new MeetingAdapter(meetingList);
                                         RecyclerView.LayoutManager meetingLayoutManager = new LinearLayoutManager(getActivity());
@@ -326,10 +331,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
     private void appointments() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
-//            customProgress.setVisibility(View.VISIBLE);
-            /*{"LeadID":6028,"PageSize":10,"Page":1,"CalculatedPage":0,"TotalCount":0}*/
             Map inputMap = new HashMap<>();
-            // inputMap.put("LeadID", leadId);
             inputMap.put("LeadID", leadId);
             inputMap.put("PageSize", REPORT_PAGE_SIZE);
             inputMap.put("Page", "1");
@@ -355,23 +357,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
 
                                     JSONObject jsonObject = response.getJSONObject(RESPONSE);
                                     JSONArray dataArray = jsonObject.getJSONArray(DATA);
-                                   /* "Status": 1,
-
-                                            "MeetingID" : 34,
-                                            "LeadID" : 1,
-                                            "Name" : ,
-                                            "EMAIL" : ,
-                                            "MOBNO" : ,
-                                            "DATE" : 05/09/2017,
-                                            "TIME" : 15:05,
-                                            "AttendeeEmp" : ramu ,
-                                            "Product" : Commodity,
-                                            "Stage" : ,
-                                            "StatusName" : ,
-                                            "ActivityType" : ,
-                                            "IsAdminMode" : true,
-                                            "InApproval" : false,
-                                            "ApprovalFieldList" : */
                                     String repeatOnCode = "";
                                     if (dataArray.length() > 0) {
                                         for (int i = 0; i < dataArray.length(); i++) {
@@ -393,15 +378,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                                             if (objDetail.has("repeatOnCode")) {
                                                 repeatOnCode = (objDetail.isNull("repeatOnCode") || objDetail.getString("repeatOnCode").equals("")) ? "" : objDetail.getString("repeatOnCode");
                                             }
-                                            /* String MeetingReason = (objDetail.isNull("MeetingReason") || objDetail.getString("MeetingReason").equals("")) ? "" : objDetail.getString("MeetingReason");
-                                        String MeetingDuration = (objDetail.isNull("MeetingDuration") || objDetail.getString("MeetingDuration").equals("")) ? "" : objDetail.getString("MeetingDuration");
-                                        String Category = (objDetail.isNull("Category") || objDetail.getString("Category").equals("")) ? "" : objDetail.getString("Category");
-                                        String Actionable = (objDetail.isNull("Actionable") || objDetail.getString("Actionable").equals("")) ? "" : objDetail.getString("Actionable");
-                                        String Comments = (objDetail.isNull("Comments") || objDetail.getString("Comments").equals("")) ? "" : objDetail.getString("Comments");
-                                        String Stage = (objDetail.isNull("Stage") || objDetail.getString("Stage").equals("")) ? "" : objDetail.getString("Stage");
-                                        String CSR = (objDetail.isNull("CustomerServiceRemark") || objDetail.getString("CustomerServiceRemark").equals("")) ? "" : objDetail.getString("CustomerServiceRemark");
-                                        String QueryDesc = (objDetail.isNull("QueryDesc") || objDetail.getString("QueryDesc").equals("")) ? "" : objDetail.getString("QueryDesc");*/
-
 
                                             appointmentList.add(new LeadActivitiesAppointModel(CreatedBy, Status, MeetingID, LeadID, Name, EMAIL, mobNo, CRMMOSLCommon.formatMonth(date), time, AttendeeEmp
                                                     , Product, StatusName, ActivityType, ucid, repeatOnCode));
@@ -581,7 +557,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         @Override
         public AppointmentAdapter.MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_appointment, parent, false);
+                    .inflate(R.layout.list_meetings, parent, false);
 
             return new MyViewHolder1(itemView);
         }
@@ -596,16 +572,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             holder.tvTimeRange.setText(appointmentModel.getTime());
             holder.tvAttFirstName.setText(appointmentModel.getAttendeeEmp());
             holder.tvAppointmentType.setText("Appointment for " + appointmentModel.getProduct());
-           /* if (appointmentModel.getAttendeeSecondName().isEmpty()) {
-                holder.tvAttSecondName.setText(appointmentModel.getAttendeeSecondName());
-            } else {
-                holder.tvAttSecondName.setText(", " + appointmentModel.getAttendeeSecondName());
-            }
-            if (appointmentModel.getAttendeeThirdName().isEmpty()) {
-                holder.tvAttThirdName.setText(appointmentModel.getAttendeeThirdName());
-            } else {
-                holder.tvAttThirdName.setText(", " + appointmentModel.getAttendeeThirdName());
-            }*/
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -907,7 +873,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         @Override
         public MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_appointment, parent, false);
+                    .inflate(R.layout.list_meetings, parent, false);
 
             return new MyViewHolder1(itemView);
         }
@@ -922,16 +888,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             holder.tvAppointmentType.setText(meetingModel.getMeetingReason());
             holder.tvTimeRange.setText(meetingModel.getTime());
             holder.tvAttFirstName.setText(meetingModel.getAttendeeEmp());
-           /* if (meetingModel.getAttendeeSecondName().isEmpty()) {
-                holder.tvAttSecondName.setText(meetingModel.getAttendeeSecondName());
-            } else {
-                holder.tvAttSecondName.setText(", " + meetingModel.getAttendeeSecondName());
-            }
-            if (meetingModel.getAttendeeThirdName().isEmpty()) {
-                holder.tvAttThirdName.setText(meetingModel.getAttendeeThirdName());
-            } else {
-                holder.tvAttThirdName.setText(", " + meetingModel.getAttendeeThirdName());
-            }*/
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -956,6 +912,13 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                     args.putString("Stage", meetingModel.getStage());
                     args.putString("CSR", meetingModel.getCallback());
                     args.putString("QueryDesc", meetingModel.getQueryDesc());
+                    args.putString("Location", meetingModel.getLocation());
+                    args.putString("MeetingAddress", meetingModel.getMeetingAddress());
+                    args.putString("Pincode", meetingModel.getPincode());
+                    args.putString("TravellingMode", meetingModel.getTravellingMode());
+                    args.putString("Amount", meetingModel.getAmount());
+                    args.putString("GeoTagStatus", meetingModel.getGeoTagStatus());
+                    args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
                     navigateTo(NAV_TO_LEAD_ACTIVITIES_DETAIL, args, getFragmentManager(), true);
                 }
             });
@@ -967,7 +930,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             return meetingList.size();
         }
     }
-
 
 
 }

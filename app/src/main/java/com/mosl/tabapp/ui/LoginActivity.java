@@ -82,6 +82,7 @@ public class LoginActivity extends FragmentActivity implements MOSLConstants, Te
         }
     }
 
+
     public void performLogin(final String empCode, final String password) {
         //login parameters
 

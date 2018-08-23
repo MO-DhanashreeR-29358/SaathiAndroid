@@ -481,6 +481,18 @@
                 android:entries="@array/Select" />
 
             <TextView
+                android:id="@+id/tvMeetingLocationError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/tvTravellingMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

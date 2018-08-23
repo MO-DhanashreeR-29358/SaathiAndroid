@@ -371,6 +371,7 @@ public interface MOSLConstants extends LabelConfig {
     String GIFT_SEND = "Send Gift request is submitted successfully";
     String ATLEAST_TEN_CHARACTERS = "Atleast 10 characters";
     String ATLEAST_FIFTY_CHARACTERS = "Atleast 50 characters";
+    String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
     String INVALID_PINCODE_NUMBER = "Invalid pincode number";
     String ATTENDEE_ALREADY_ADDED = "Attendee already added";
     String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";

@@ -5,12 +5,16 @@ package com.mosl.tabapp.service;
  */
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -27,6 +31,7 @@ import java.util.Random;
 public class MessageReceiverIntentService extends FirebaseMessagingService {
     String TAG = MessageReceiverIntentService.class.getCanonicalName();
     private LocalBroadcastManager broadcaster;
+    private static final String CHANNEL_ID = "saathi";
 
     @Override
     public void onCreate() {
@@ -48,7 +53,6 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
     private void sendNotification(Map data) {
         if (data != null) {
             notifyApp();
-            //actionBar.setMsgCount(MessageReceiverIntentService.MSG_COUNT);
             String category = "";
             Random random = new Random();
             int m = random.nextInt(9999 - 1000) + 1000;
@@ -63,15 +67,12 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
             Intent notificationIntent = new Intent(this, MOSLCommonActivity.class);
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             notificationIntent.setAction("Mosl_" + m);
-//            notificationIntent.setC("Mosl_"+m);
             notificationIntent.putExtra(MOSLConstants.SOURCE, MOSLConstants.FCM_NOTIFICATION_SOURCE);
-            //notificationIntent.putExtra(MOSLConstants.FCM_NOTIFICATION_CATEGORY, category);
-            //   NotificationData notidata=new NotificationData(category);
             notificationIntent.putExtra(MOSLConstants.FCM_NOTIFICATION_CATEGORY, category);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
                     PendingIntent.FLAG_ONE_SHOT);
             Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_icon)
                     .setTicker(title)
                     .setContentTitle(title)
@@ -81,16 +82,41 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
                     .setSound(defaultSoundUri)
                     .setContentIntent(pendingIntent);
 
-           /* if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                notificationBuilder.setSmallIcon(R.drawable.i;
-            } else {
-                notificationBuilder.setSmallIcon(R.drawable.icon);
-            }*/
-
             notificationBuilder.getNotification().flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+            //region OREO
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                String name = "MOSL";
+                String description = "Description";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+                AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build();
+
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                channel.enableLights(true);
+                channel.setLightColor(Color.RED);
+                channel.enableVibration(true);
+                channel.setSound(
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                        audioAttributes
+                );
+
+                long[] longArray = {100, 200, 300, 400, 500, 400, 500, 200, 500};
+                channel.setVibrationPattern(longArray);
+                channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+                channel.setDescription(description);
+
+                notificationManager.createNotificationChannel(channel);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationBuilder.setChannelId(CHANNEL_ID); // Channel ID
+            }
+            //endregion
             notificationManager.notify(m /* ID of notification */, notificationBuilder.build());
         }
     }

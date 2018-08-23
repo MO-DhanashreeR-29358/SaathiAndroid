@@ -78,7 +78,6 @@ import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.NetworkStateReceiver;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.dashboard.DashboardFragment;
-import com.mosl.tabapp.franchiesleadviewdetail.FranchiesLeadMainFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
@@ -168,9 +167,11 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
     private Spinner spRoleSel;
     private RoleSelectionModel roleSelectionModel;
 
-    UUID compressionWorkId;
     private boolean mBound = false;
     private ForegroundService mService = null;
+    UUID compressionWorkId;
+    private WorkManager mWorkManager;
+
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -186,7 +187,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             mBound = false;
         }
     };
-    private WorkManager mWorkManager;
 
     public void hideKeyboard(View view) {
         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -219,7 +219,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
     private SetAppointmentFragment setAppointmentFragment;
     private CreateMeetingFragment createMeetingFragment;
     private LeadViewMainFragment leadViewMainFragment;
-    private FranchiesLeadMainFragment franchiesLeadMainFragment;
     //static boolean filterLoadDone = true;
     static ImageView ivPartnerImage, ivCloseImage;
     private boolean searchFoundFlag;
@@ -1032,7 +1031,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
                 setAppointmentFragment = new SetAppointmentFragment();
                 leadViewMainFragment = new LeadViewMainFragment();
-                franchiesLeadMainFragment = new FranchiesLeadMainFragment();
                 createMeetingFragment = new CreateMeetingFragment();
                 holderView.tvClientName.setText(name);
                 if (!resultList.get(position).getClientCode().equalsIgnoreCase("0")) {
@@ -1103,7 +1101,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                         bundle.putString(MOBILE, searchResultModel.getMobileNo());
                         bundle.putString(UCID, searchResultModel.getUCID());
                         leadViewMainFragment.setArguments(bundle);
-                        franchiesLeadMainFragment.setArguments(bundle);
                         addFragment(R.id.activityFrameLayout, leadViewMainFragment, true, false);
                         hideKeyboard(view);
                         autoCompleteAdapter.clearAll();

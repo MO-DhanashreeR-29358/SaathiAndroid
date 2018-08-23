@@ -19,7 +19,6 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
-import com.mosl.tabapp.franchiesleadviewdetail.FranchiesLeadDocumentFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.DocumentFragment;
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
@@ -30,7 +29,6 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -145,10 +143,6 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 break;
             case NAV_TO_LEAD_DOCUMENT:
                 fragment = new DocumentFragment();
-                fragment.setArguments(bundle);
-                break;
-            case NAV_TO_FRANCHIES_LEAD_DOCUMENT:
-                fragment = new FranchiesLeadDocumentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_APPROVAL:

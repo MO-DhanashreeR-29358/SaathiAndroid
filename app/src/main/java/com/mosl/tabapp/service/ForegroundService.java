@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
@@ -42,27 +43,30 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
 public class ForegroundService extends Service {
 
-    private static final String CHANNEL_ID = "channel_01";
+    private static final String CHANNEL_ID = "saathi";
     private static final String TAG = ForegroundService.class.getSimpleName();
     private final IBinder mBinder = new LocalBinder();
     Handler refreshHandler = new Handler();
     int NOTIFICATION_ID = 12345;
-    Location mCurrentLocation; // location
+    static Location mCurrentLocation; // location
     private NotificationManager mNotificationManager;
     private LocationRequest mLocationRequest;
 
-    private long UPDATE_INTERVAL = 5 * 60 * 100;  /* 10 secs */
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+
     private Runnable runnableCode = new Runnable() {
         @Override
         public void run() {
             try {
                 if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null || !getPrefs(getApplicationContext()).getString("EmployeeCode", null).isEmpty()) {
+                    if (mCurrentLocation == null) {
+                        Toast.makeText(getApplicationContext(), "Please enable your GPS", Toast.LENGTH_LONG).show();
+                    }
                     LocationUpdate();
                 }
                 refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);
@@ -117,7 +121,7 @@ public class ForegroundService extends Service {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentText("We are tracking your location")
                 .setContentTitle(getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_icon)
@@ -140,7 +144,6 @@ public class ForegroundService extends Service {
             public void run() {
                 LocationData locationData = new LocationData();
                 if (mCurrentLocation != null) {
-
                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     try {
                         List<Address> addressList = geocoder.getFromLocation(
@@ -159,6 +162,14 @@ public class ForegroundService extends Service {
 
                     CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
                     Log.d("Location Data entered", locationData.toString());
+                } else {
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);
+
                 }
             }
         }).start();
@@ -168,7 +179,6 @@ public class ForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "Service Detroyed!", Toast.LENGTH_SHORT).show();
     }
 
     public boolean serviceIsRunningInForeground(Context context) {
@@ -229,35 +239,21 @@ public class ForegroundService extends Service {
     }
 
     protected void startLocationUpdates() {
-
-        // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
         LocationSettingsRequest locationSettingsRequest = builder.build();
 
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
         SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
-
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+
+        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mCurrentLocation = locationResult.getLastLocation();
@@ -265,6 +261,8 @@ public class ForegroundService extends Service {
                     }
                 },
                 Looper.myLooper());
+
+
     }
 
     /**

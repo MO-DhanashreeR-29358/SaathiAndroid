@@ -15,7 +15,8 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 
 public class LeadActivitiesDetailFragment extends MOSLCommonFragment {
     private View detailView;
-    private TextView tvMonthDate, tvTime, tvMobile, tvEmail, tvAttendeeFirst, tvAttendeeSecond, tvAttendeeThird, tvStatus, tvActivityType, tvMeetingReason, tvMeetingDuration, tvProduct, tvActionable, tvCategory, tvQueryDesc, tvCSR, tvComments;
+    private TextView tvMonthDate, tvTime, tvMobile, tvEmail, tvAttendeeFirst, tvAttendeeSecond, tvAttendeeThird, tvStatus, tvActivityType, tvMeetingReason, tvMeetingDuration, tvProduct, tvActionable, tvCategory, tvQueryDesc, tvCSR, tvComments, tvLocation, tvMeetingAddress, tvPincode, tvTravellingMode,
+            tvAmount, tvGeoTagStatus, tvGeoMeetingLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +46,14 @@ public class LeadActivitiesDetailFragment extends MOSLCommonFragment {
         tvQueryDesc = (TextView) detailView.findViewById(R.id.tvQueryDesc);
         tvCSR = (TextView) detailView.findViewById(R.id.tvCSR);
         tvComments = (TextView) detailView.findViewById(R.id.tvComments);
+        tvLocation = detailView.findViewById(R.id.tvLocation);
+        tvMeetingAddress = detailView.findViewById(R.id.tvMeetingAddress);
+        tvPincode = detailView.findViewById(R.id.tvPincode);
+        tvTravellingMode = detailView.findViewById(R.id.tvTravellingMode);
+        tvAmount = detailView.findViewById(R.id.tvAmount);
+        tvGeoTagStatus = detailView.findViewById(R.id.tvGeoTagStatus);
+        tvGeoMeetingLocation = detailView.findViewById(R.id.tvGeoMeetingLocation);
+
 
         try {
             setAppTitle(getClass().toString(), this.getArguments().getString("MeetingReason"));
@@ -66,6 +75,13 @@ public class LeadActivitiesDetailFragment extends MOSLCommonFragment {
             tvQueryDesc.setText(this.getArguments().getString("QueryDesc"));
             tvCSR.setText(this.getArguments().getString("CSR"));
             tvComments.setText(this.getArguments().getString("Comments"));
+            tvLocation.setText(this.getArguments().getString("Location"));
+            tvMeetingAddress.setText(this.getArguments().getString("MeetingAddress"));
+            tvPincode.setText(this.getArguments().getString("Pincode"));
+            tvTravellingMode.setText(this.getArguments().getString("TravellingMode"));
+            tvAmount.setText(this.getArguments().getString("Amount"));
+            tvGeoTagStatus.setText(this.getArguments().getString("GeoTagStatus"));
+            tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
             if (!this.getArguments().getString("AttendeeEmp").isEmpty()) {
                 try {
                     String attendingArray[] = this.getArguments().getString("AttendeeEmp").split(",");
