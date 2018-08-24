@@ -91,6 +91,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
@@ -146,7 +147,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvActionablesError, tvMeetingDescriptionError, tvCategoryError, tvCategoryCommentsError, tvSubCategoryError, tvSubCategoryCommentsError, tvActionables, tvBAClientError, tvOutStaitionError, tvClientCodeError, tvClientNameError;
     private RelativeLayout rlDate;
     private ScrollView scrollView;
-    private LinearLayout llActionables, linaerLayoutNew;
+    private LinearLayout llActionables, linaerLayoutNew, llLocationGroup;
     private boolean profileType;
     private String mUCID = "0";
     private String meetingObjectiveIdStr = "0";
@@ -161,6 +162,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
 
     private long UPDATE_INTERVAL = 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private boolean enableLocationGroup;
     private AdapterView.OnItemSelectedListener selectMeetingLocation = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -207,6 +209,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
 
         return createMeetingView;
     }
+
     private AdapterView.OnItemSelectedListener selectCategoryListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -255,6 +258,62 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                 }
                 tvProductError.setVisibility(View.GONE);
 
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+    private AdapterView.OnItemSelectedListener selectActivityTypeListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
+                activityTypeNameStr = ((RowData) spActivityType.getSelectedItem()).getValue();
+                tvActivityTypeError.setVisibility(View.GONE);
+                if (!spActivityType.getSelectedItem().toString().equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
+                    arrMeetingReason = new ArrayList<>();
+                    arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
+                    meetingReason();
+                    if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email") || spActivityType.getSelectedItem().toString().equalsIgnoreCase("Phone")) {
+                        enableLocationGroup = false;
+                        disableField(llLocationGroup);
+                    } else {
+                        enableLocationGroup = true;
+                        enableField(llLocationGroup);
+                    }
+
+                } else {
+                    arrMeetingReason = new ArrayList<>();
+                    arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
+                    arrAdapMeetingReason = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrMeetingReason);
+                    arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
+                    spMeetingReason.setAdapter(arrAdapMeetingReason);
+                    spMeetingReason.setOnItemSelectedListener(selectMeetingReasonListener);
+                    arrAdapMeetingReason.notifyDataSetChanged();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener selectMeetingDurationListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+                meetingDurationCodeStr = ((RowData) spMeetingDuration.getSelectedItem()).getKey();
+                meetingDurationNameStr = ((RowData) spMeetingDuration.getSelectedItem()).getValue();
+                tvMeetingDurationError.setVisibility(View.GONE);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -322,6 +381,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         tvActionables = (TextView) createMeetingView.findViewById(R.id.tvActionables);
         llActionables = (LinearLayout) createMeetingView.findViewById(R.id.llActionables);
         linaerLayoutNew = (LinearLayout) createMeetingView.findViewById(R.id.linaerLayoutNew);
+        llLocationGroup = (LinearLayout) createMeetingView.findViewById(R.id.llLocationGroup);
         setIcon(llActionables, tvActionables);
         tvActionables.setOnClickListener(this);
         btnSave = (Button) createMeetingView.findViewById(R.id.btnSave);
@@ -522,54 +582,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             }
         });
     }
-
-    private AdapterView.OnItemSelectedListener selectMeetingDurationListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                meetingDurationCodeStr = ((RowData) spMeetingDuration.getSelectedItem()).getKey();
-                meetingDurationNameStr = ((RowData) spMeetingDuration.getSelectedItem()).getValue();
-                tvMeetingDurationError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private AdapterView.OnItemSelectedListener selectActivityTypeListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                activityTypeNameStr = ((RowData) spActivityType.getSelectedItem()).getValue();
-                tvActivityTypeError.setVisibility(View.GONE);
-                if (!spActivityType.getSelectedItem().toString().equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-                    arrMeetingReason = new ArrayList<>();
-                    arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                    meetingReason();
-                } else {
-                    arrMeetingReason = new ArrayList<>();
-                    arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                    arrAdapMeetingReason = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrMeetingReason);
-                    arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
-                    spMeetingReason.setAdapter(arrAdapMeetingReason);
-                    spMeetingReason.setOnItemSelectedListener(selectMeetingReasonListener);
-                    arrAdapMeetingReason.notifyDataSetChanged();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
     private AdapterView.OnItemSelectedListener selectMeetingReasonListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -729,7 +741,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     meetingApptModel.setOutStation(outStaitionCodeStr);
                     meetingApptModel.setClientCode(etClientCode.getText().toString().trim());
                     meetingApptModel.setClientName(etClientName.getText().toString().trim());
-                    if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (enableLocationGroup && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -740,11 +752,27 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                         setPermisson(getMainActivity(), getMainActivity());
                     } else {
                         final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
+                        if (enableLocationGroup && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
 
                             enableLoc(getMainActivity());
-                            startLocationUpdates();
+
                         } else {
+                            if (enableLocationGroup && mCurrentLocation == null) {
+                                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                                mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                                Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
+                                try {
+                                    List<Address> addressList = geocoder.getFromLocation(
+                                            mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                                    meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+                                meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                            }
                             createMeetingSave(meetingApptModel);
                         }
 //                        createMeetingSave(meetingApptModel);
@@ -838,22 +866,22 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvMeetingDescriptionError.setText(ATLEAST_FIFTY_CHARACTERS);
             tvMeetingDescriptionError.requestFocus();
             return false;
-        } else if (spMeetingLocation.getSelectedItem().toString().equalsIgnoreCase(SELECT_MEETING_LOCATION)) {
+        } else if (enableLocationGroup && spMeetingLocation.getSelectedItem().toString().equalsIgnoreCase(SELECT_MEETING_LOCATION)) {
             tvMeetingLocationError.setVisibility(View.VISIBLE);
             tvMeetingLocationError.setText(SELECT_MEETING_LOCATION);
             tvMeetingLocationError.requestFocus();
             return false;
-        } else if (etLocation.getText().toString().trim().isEmpty()) {
+        } else if (enableLocationGroup && etLocation.getText().toString().trim().isEmpty()) {
             tvLocationError.setVisibility(View.VISIBLE);
             tvLocationError.setText(LOCATION_CANNOT_BE_LEFT_BLANK);
             tvLocationError.requestFocus();
             return false;
-        } else if (etLocation.getText().length() < 20) {
+        } else if (enableLocationGroup && etLocation.getText().length() < 20) {
             tvLocationError.setVisibility(View.VISIBLE);
             tvLocationError.setText(ATLEAST_TWENTY_CHARACTERS);
             tvLocationError.requestFocus();
             return false;
-        } else if (!etPinCode.getText().toString().trim().isEmpty() && etPinCode.getText().length() < 6) {
+        } else if (enableLocationGroup && !etPinCode.getText().toString().trim().isEmpty() && etPinCode.getText().length() < 6) {
             tvPinCodeError.setVisibility(View.VISIBLE);
             tvPinCodeError.setText(INVALID_PINCODE_NUMBER);
             tvPinCodeError.requestFocus();

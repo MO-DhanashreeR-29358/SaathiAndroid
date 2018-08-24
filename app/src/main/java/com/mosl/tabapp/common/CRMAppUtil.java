@@ -184,7 +184,7 @@ public class CRMAppUtil {
         }
 
         private boolean isCharAllowed(char c) {
-            Pattern ps = Pattern.compile("^[a-zA-Z0-9 @!#&()_\\n]");
+            Pattern ps = Pattern.compile("^[a-zA-Z0-9 ,@!#&()_\\n]");
             Matcher ms = ps.matcher(String.valueOf(c));
             return ms.matches();
         }

@@ -64,7 +64,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
     private ArrayList<Fragment> pageListLeadView = new ArrayList<>();
     private ImageView ivLead, ivLeadViewArrow;
     private TextView tvClientCode, tvLeadId, tvBranchCode, tvCurrentStage, tvCurrentStageSince, tvName, textView;
-    //   private TextView tvLeadNameHead;
     private String leadId;
     private String mobileNo, sourceName, prospectSourceName, prospectSourceDetail, intrestedIn;
     private String email;
@@ -83,8 +82,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
 
         try {
             leadId = this.getArguments().getString(LEAD_ID);
-            // mobileNo = this.getArguments().getString(MOBILE);
-            // hideAppTitle();
             if (this.getArguments().containsKey(UCID)) {
                 mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0" : this.getArguments().getString(UCID, "0");
             }

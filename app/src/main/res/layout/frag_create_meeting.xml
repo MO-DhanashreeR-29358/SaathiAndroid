@@ -464,142 +464,149 @@
                     android:textCursorDrawable="@null" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/tvMeetingLocation"
+            <LinearLayout
+                android:id="@+id/llLocationGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meeting Location*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
+                android:orientation="vertical">
 
-
-            <Spinner
-                android:id="@+id/spMeetingLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:entries="@array/Select" />
-
-            <TextView
-                android:id="@+id/tvMeetingLocationError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tvTravellingMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Travelling Mode"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
-
-
-            <Spinner
-                android:id="@+id/spTravellingMode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:entries="@array/Select" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/ilAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout">
-
-                <EditText
-                    android:id="@+id/etAmount"
-                    style="@style/CRMEdittextSelector"
+                <TextView
+                    android:id="@+id/tvMeetingLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter Amount"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
+                    android:text="Meeting Location*"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
 
-            <TextView
-                android:id="@+id/tvAmountError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout">
-
-                <EditText
-                    android:id="@+id/etLocation"
-                    style="@style/CRMEdittextSelector"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
-                    android:hint="Meeting Address*"
-                    android:inputType="textMultiLine"
-                    android:maxLength="500"
-                    android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:id="@+id/tvLocationError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/ilPinCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout">
-
-                <EditText
-                    android:id="@+id/etPinCode"
-                    style="@style/CRMEdittextSelector"
+                <Spinner
+                    android:id="@+id/spMeetingLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter PinCode"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:entries="@array/Select" />
 
-            <TextView
-                android:id="@+id/tvPinCodeError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
+                <TextView
+                    android:id="@+id/tvMeetingLocationError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvTravellingMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Travelling Mode"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
+
+
+                <Spinner
+                    android:id="@+id/spTravellingMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:entries="@array/Select" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ilAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+
+                    <EditText
+                        android:id="@+id/etAmount"
+                        style="@style/CRMEdittextSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Amount"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvAmountError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+
+                    <EditText
+                        android:id="@+id/etLocation"
+                        style="@style/CRMEdittextSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_80sdp"
+                        android:hint="Meeting Address*"
+                        android:inputType="textMultiLine"
+                        android:maxLength="500"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvLocationError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ilPinCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    app:hintTextAppearance="@style/InputLayout">
+
+                    <EditText
+                        android:id="@+id/etPinCode"
+                        style="@style/CRMEdittextSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter PinCode"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@null" />
+                </android.support.design.widget.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/tvPinCodeError"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/error_red"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvActionables"
