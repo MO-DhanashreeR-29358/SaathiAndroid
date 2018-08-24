@@ -71,7 +71,7 @@
     <string name="show_less">Show less</string>
     <string name="your_aadhaar_no_is">Your Aadhaar/VID no is</string>
     <string name="aadhaar_declaration">Aadhaar Declaration</string>
-    <string name="aadhaar_note">I, the holder of Aadhaar Number, hereby voluntarily give my consent to Motilal Oswal Securities Limited* (MOSL*) to obtain my Aadhaar Number, Name, Fingerprints, Iris and my Aadhaar  details for authentication with UIDAI as per Aadhaar Act, 2016 and all other applicable laws. MOSL* has informed me that my Aadhaar details and identity information would only be used for demographic authentication, validation, KYC Verification purpose and the same may be shared with other group / associate companies of MOSL* (List shared below) and also informed that my biometrics will not be stored / shared and will be submitted to CIDR only for the purpose of authentication. I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form / RDD. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.</string>
+    <string name="aadhaar_note">I, the holder of Aadhaar Number, hereby voluntarily give my consent to Motilal Oswal Securities Limited* (MOSL*) to obtain my Aadhaar Number, Name, Fingerprints, Iris and my Aadhaar  details for authentication with UIDAI as per Aadhaar Act, 2016 and all other applicable laws. MOSL* has informed me that my Aadhaar details and identity information would only be used for demographic authentication, validation, KYC Verification purpose and the same may be shared with other group / associate companies of MOSL* (List shared below) and also informed that my biometrics will not be stored / shared and will be submitted to CIDR only for the purpose of authentication. I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form / RDD. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.\n\n * MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers \n\n</string>
     <!--<string name="aadhaar_note">I, the holder of Aadhaar Number as provided above, hereby give my consent to Motilal Oswal Securities Limited* to obtain my Aadhaar Number, Name, Fingerprints, Iris for authentication with UIDAI. Motilal Oswal Securities Limited* has informed me that my identity information would only be used to KYC Verification for (a.) Broking and Demat, (b.) Commodity, (c.) Mutual Funds and also informed that my biometrics will not be stored/ shared and will be submitted to CIDR only for the purpose of authentication.\n\n
     I request that e-sign facility shall be extended to me once I/We have read and understood the complete Client Registration Form/Rdd. I understand that this will enable me to complete authentication process to affix my signature on the application form using Aadhaar through eMudhra eSign Service.</string>-->
     <string name="list_of_intermediaries"><u>List of Intermediaries</u></string>
@@ -184,7 +184,7 @@
         contact you and send promotional communication even though you may be registered under National Do Not Call Registry
         established under the Telecom Unsolicited Commercial Communications Regulations, 2007 or registered or may register under the
         National Customer Preference Register established under new regulation viz the Telecom Commercial Communications Customer
-        Preference Regulations, 2010.</string>
+        Preference Regulations, 2010. \n\n * MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
 
     <!--Terms & condition for Review Edit-->
     <string name="term_eq_review_edit">MotilalOswal Securities Limited* (hereinafter referred to as \"MOSL*\") has prescribed certain eligibility criteria and terms and conditions which
@@ -205,7 +205,7 @@
         of the client without assigning any reason. \n\n
 	\u25CF DIS booklet - Through E-KYC process, at present, only those client can open the account who do not wish  to obtain  DIS for time being   In case client wish to obtain
         DIS booklet immediately on opening of demat account then  client shall be required to opt for Physical KYC process. \n\n
-	\u25CF Nomination - Through E-KYC process, client cannot appoint nominee. If client wish to appoint nominee then client shall be required to opt for Physical KYC process. \n\n \u25CF MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers \n\n
+	\u25CF Nomination - Through E-KYC process, client cannot appoint nominee. If client wish to appoint nominee then client shall be required to opt for Physical KYC process. \n\n
     </string>
 
     <string name="eq_consent_form">\u25CF	I authorizesMotilalOswal Sec. Ltd. to access my data / information / photograph etc. from UIDAI, for the purpose of opening Trading and
@@ -223,7 +223,7 @@
 	\u25CF I hereby  request you to consider the data like Proof Of Identity (POI) and Proof of Address (POA)  downloaded from Aadhar and not to consider data available from
         other sources like KRA. \n\n
 	\u25CF I hereby confirm that data available in Aadhar is true , correct and updated. If there will be any modification in Aadhardata , the same will be intimated to you
-        separately. \n\n
+        separately. \n\n * MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers \n\n
 
     </string>
     <string name="term_comm_review_edit">Motilal Oswal Commodity Broker Private Limited (hereinafter referred to as \"MOCBPL\") has prescribed certain eligibility criteria and terms
@@ -251,7 +251,7 @@
 	\u25CF I hereby  request you to consider the data like Proof Of Identity (POI) and Proof of Address (POA)  downloaded from Aadhar and not to consider data available from
         other sources like KRA. \n\n
 	\u25CF I hereby confirm that data available in Aadhar is true , correct and updated. If there will be any modification in Aadhar data , the same will be intimated to
-        you separately. \n\n
+        you separately. \n\n * MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers \n\n
     </string>
 
     <!--Terms & condition for margin Scheme -->
@@ -526,5 +526,5 @@
     <string name="open_paperless_account">&lt;u>Open instant paperless account&lt;/u> by authenticating your Aadhaar Virtual Id</string>
     <string name="paperless_mess_virtualId">For paperless account opening facility Aadhaar Virtual Id authentication is mandatory. If not available, you can just enter your Aadhaar number and proceed with manual from filling process?</string>
     <string name="physical_account_message">You are being redirected to our Online Account opening process which requires submission of physical documents</string>
-    <string name="mosl_merge_note">MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
+    <string name="mosl_merge_note">* MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
 </resources>
