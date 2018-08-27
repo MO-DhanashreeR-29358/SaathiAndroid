@@ -52,7 +52,10 @@ public class Worker extends androidx.work.Worker {
 
         if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null || !getPrefs(getApplicationContext()).getString("EmployeeCode", null).isEmpty()) {
             if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
-                SaveGeoLocation();
+                if (CrmApp.get().getDB().daoAccess().getLocationList().size() != 0) {
+                    SaveGeoLocation();
+                }
+
 
             }
         }

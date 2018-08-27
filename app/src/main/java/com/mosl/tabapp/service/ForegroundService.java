@@ -26,7 +26,6 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -44,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 
 public class ForegroundService extends Service {
 
@@ -64,10 +64,11 @@ public class ForegroundService extends Service {
         public void run() {
             try {
                 if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null || !getPrefs(getApplicationContext()).getString("EmployeeCode", null).isEmpty()) {
-                    if (mCurrentLocation == null) {
-                        Toast.makeText(getApplicationContext(), "Please enable your GPS", Toast.LENGTH_LONG).show();
+                    LocationManager manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getApplicationContext())) {
+                        LocationUpdate();
                     }
-                    LocationUpdate();
+
                 }
                 refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);
 
@@ -168,7 +169,6 @@ public class ForegroundService extends Service {
                     }
                     LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                     mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);
 
                 }
             }
