@@ -10,6 +10,7 @@
       android:layout_height="wrap_content"
       android:padding="@dimen/_2sdp"
       android:text="@string/mosl_merge_note"
+      android:textSize="@dimen/_8sdp"
       />
 
 </android.support.constraint.ConstraintLayout>
