@@ -72,7 +72,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
     private ArrayList<TypeActionableFilterModel> typeFilterList = new ArrayList<>();
     private String filterString, typeFilterString;
     private LinearLayout linearLayout;
-    private Map addtionalParameterMap = new HashMap<>();
+    private Map addtionalParameterMap;
     private Map hierarchyMap = new HashMap<>();
     private String leadId = "0", ucid = "0", leadName;
     private String mobileNo;

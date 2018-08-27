@@ -47,7 +47,7 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
     private SecondClickTableAdapter secondClickTableAdapter;
     private TextView tvNochart, txtLables;
     static Context mContext;
-    private Map addtionalParameterMap = new HashMap<>();
+    private Map addtionalParameterMap;
     private Map hierarchyMap = new HashMap<>();
     private String leadId = "0", ucid = "0";
     private String mobileNo;

@@ -282,6 +282,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email") || spActivityType.getSelectedItem().toString().equalsIgnoreCase("Phone")) {
                         enableLocationGroup = false;
                         disableField(llLocationGroup);
+                        disableReset();
                     } else {
                         enableLocationGroup = true;
                         enableField(llLocationGroup);
@@ -306,6 +307,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
 
         }
     };
+
 
     private AdapterView.OnItemSelectedListener selectMeetingDurationListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -786,6 +788,17 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     }
 
+    private void disableReset() {
+        spMeetingLocation.setSelection(0);
+        spTravellingMode.setSelection(0);
+        etLocation.setText("");
+        etAmount.setText("");
+        etPinCode.setText("");
+        tvMeetingLocationError.setVisibility(View.GONE);
+        tvPinCodeError.setVisibility(View.GONE);
+        tvLocationError.setVisibility(View.GONE);
+
+    }
     private void resetData() {
         addedAttendeeModelList.clear();
         addedSplAttendeeModelList.clear();
@@ -797,17 +810,17 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         spActivityType.setSelection(0);
         spMeetingReason.setSelection(0);
         etMeetingDescription.setText("");
-        etLocation.setText("");
-        etAmount.setText("");
-        etPinCode.setText("");
         etCustomerComment.setText("");
         spActionables.setSelection(0);
         spCategory.setSelection(0);
         spMeetingObjective.setSelection(0);
-        spMeetingLocation.setSelection(0);
-        spTravellingMode.setSelection(0);
         etCategory.setText("");
         tvMeetingDescriptionError.setVisibility(View.GONE);
+        spMeetingLocation.setSelection(0);
+        spTravellingMode.setSelection(0);
+        etLocation.setText("");
+        etAmount.setText("");
+        etPinCode.setText("");
         tvMeetingLocationError.setVisibility(View.GONE);
         tvPinCodeError.setVisibility(View.GONE);
         tvLocationError.setVisibility(View.GONE);
