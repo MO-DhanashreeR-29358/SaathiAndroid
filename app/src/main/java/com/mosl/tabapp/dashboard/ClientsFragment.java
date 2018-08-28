@@ -328,6 +328,7 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
             llFamiMappedCount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    addtionalParameterMap.clear();
                     addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
                     Bundle args = new Bundle();
                     args.putString(SYSTEM_NAME, widgetSystemName);
@@ -359,6 +360,7 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
                     tvMetMTD.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             addtionalParameterMap.put(COL_FILTER, value.toUpperCase() + "_CNT");
                             addtionalParameterMap.put(ROW_FILTER, tvFamilyStatus.getText().toString());
@@ -374,6 +376,7 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
                     tvMetYTD.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             addtionalParameterMap.put(COL_FILTER, YTD_CNT);
                             addtionalParameterMap.put(ROW_FILTER, tvFamilyStatus.getText().toString());

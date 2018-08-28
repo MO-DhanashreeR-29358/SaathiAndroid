@@ -483,6 +483,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                         public void onClick(View view) {
                             Set<String> stringSet = hashArray.get(row).keySet();
                             String columnName = stringSet.toArray()[column].toString();
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.put(COL_FILTER, columnName);
                             addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).values().toArray()[0].toString());
                             addtionalParameterMap.putAll(getAddtionalParameterMap());

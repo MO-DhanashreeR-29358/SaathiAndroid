@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -38,7 +37,6 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,178 +100,12 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
             e.printStackTrace();
         }
 
-        //  webServiceCall(widgetSystemName, map);
+
         newWebServiceCall(widgetSystemName, map);
         tvShowLess.setOnClickListener(this);
 
     }
 
-    private void webServiceCall(String systemName, Map getAddtionalParameterMap) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-            inputMap.put("WidgetSystemName", systemName);
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap);
-            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(MOSLConstants.STATUS);
-                                if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    hideProgress();
-                                    leadTableAdapter = new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
-                                    table.setAdapter(leadTableAdapter);
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
-
-                                    prepareGroupMap(responseJsonObj); //prepare group map
-
-
-                                    JSONArray arrayDetail = responseJsonObj.getJSONArray("Table");
-                                    ArrayList<String> columns = new ArrayList<String>();
-                                    ArrayList<String> header = new ArrayList<String>();
-                                    ArrayList<String> headerSecond = new ArrayList<String>();
-
-                                    if (arrayDetail.length() != 0) {
-
-                                        for (int y = 2; y < arrayDetail.length(); y++) {
-
-                                            JSONObject objDetailSecond = (JSONObject) arrayDetail.get(0);
-
-                                            if (columns.size() == 0) {
-                                                Iterator iter = objDetailSecond.keys();
-                                                while (iter.hasNext()) {
-                                                    String columnName = iter.next().toString();
-                                                    columns.add(columnName);
-                                                }
-                                                for (String column : columns) {
-                                                    String columnData = objDetailSecond.getString(column).equals("") ? "" : objDetailSecond.getString(column);
-                                                    header.add(columnData);
-                                                }
-                                                String[] stockArr = new String[header.size()];
-                                                stockArr = header.toArray(stockArr);
-                                                leadTableAdapter.setHeadersSecond(stockArr);
-                                            }
-
-                                            JSONObject objDetail = (JSONObject) arrayDetail.get(y);
-
-                                            String[] stockArr = new String[columns.size()];
-                                            stockArr = columns.toArray(stockArr);
-                                            leadTableAdapter.setHeaders(stockArr);
-
-                                            LinkedHashMap<String, String> hm = new LinkedHashMap<>();
-                                            for (String column : columns) {
-                                                String columnData = (objDetail.isNull(column) || objDetail.getString(column).equals("")) ? "0" : objDetail.getString(column);
-                                                hm.put(column, columnData);
-                                            }
-                                            leadTableAdapter.add(hm);
-                                        }
-                                        leadTableAdapter.notifyDataSetChanged();
-                                        table.setVisibility(View.VISIBLE);
-                                        tvNochart.setVisibility(View.GONE);
-                                    } else {
-                                        table.setVisibility(View.GONE);
-                                        tvNochart.setVisibility(View.VISIBLE);
-                                    }
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == MOSLConstants.UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true, null);
-
-        }
-
-    }
 
     private void newWebServiceCall(String systemName, Map getAddtionalParameterMap) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
@@ -559,6 +391,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                             int newColumn = column + 1;
                             Set<String> stringSet = hashArray.get(row).keySet();
                             String columnName = stringSet.toArray()[newColumn].toString();
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.put(COL_FILTER, columnName);
                             // addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).get("id").toString());
                             addtionalParameterMap.put(ROW_FILTER, getRowKeyName(Double.parseDouble(hashArray.get(row).get("id").toString())));

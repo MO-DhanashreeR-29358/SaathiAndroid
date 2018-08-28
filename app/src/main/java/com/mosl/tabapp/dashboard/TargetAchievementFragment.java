@@ -288,6 +288,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 if (e == null) {
                     return;
                 }
+                addtionalParameterMap.clear();
                 pieChartDetail(e.getX());
                 Log.d("Highlited", String.valueOf(h.getX()));
                 Log.d("xValue", String.valueOf((int) (e.getX())));

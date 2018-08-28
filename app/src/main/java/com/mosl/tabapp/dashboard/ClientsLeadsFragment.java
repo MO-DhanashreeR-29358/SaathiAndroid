@@ -582,6 +582,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                 }
                 if (e.getY() == 0.0f) return;
                 mChart.highlightValues(null);
+                addtionalParameterMap.clear();
                 pieChartDetail(e.getX());
                 Log.d("Highlited", String.valueOf(h.getStackIndex()));
                 Log.d("xValue", xAxisValue.get((int) (e.getX())));

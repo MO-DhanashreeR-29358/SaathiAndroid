@@ -289,6 +289,7 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     tvNoOfClients.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             // addtionalParameterMap.put(COL_FILTER, value.toUpperCase() + "_CNT");
                             addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
@@ -304,6 +305,7 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     tvRevenueGenerated.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             // addtionalParameterMap.put(COL_FILTER, YTD_CNT);
                             addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
