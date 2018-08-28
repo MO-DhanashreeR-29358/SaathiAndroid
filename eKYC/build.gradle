@@ -27,23 +27,24 @@ dependencies {
     compile files('libs/simple-xml-2.7.1.jar')
     compile files('libs/protobuf_2_4_1.jar')
     compile project(':TabLibrary')
-    testCompile 'junit:junit:4.12'
-    compile 'com.intuit.sdp:sdp-android:1.0.3'
-    compile "com.android.support:appcompat-v7:$rootProject.ext.versions.supportLibrary"
-    compile "com.android.support:customtabs:$rootProject.ext.versions.supportLibrary"
-    compile "com.android.support:design:$rootProject.ext.versions.supportLibrary"
-    compile 'com.sothree.slidinguppanel:library:3.1.1'
-    compile 'com.squareup.okhttp:okhttp:2.7.5'
-    compile 'com.jakewharton.timber:timber:4.5.1'
-    provided 'javax.annotation:jsr250-api:1.0'
-    compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-    compile 'com.android.support:multidex:1.0.1'
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
+    testCompile deps.testing.junit
+    androidTestCompile(deps.testing.espresso.core)
+    compile deps.sdpAndroid
+    compile deps.support.design
+    compile deps.support.customtabs
+    compile deps.support.appcompat
+    compile deps.slidinguppanel
+    compile deps.okhttp
+    compile deps.timber
+    provided deps.javax
+    compile deps.asyncHttp
+    compile deps.imageLoader
+    compile deps.multidex
+    compile(deps.crashlytics) {
         transitive = true;
     }
-    compile 'com.android.support.constraint:constraint-layout:1.1.2'
-    compile 'id.zelory:compressor:2.1.0'
+    compile deps.constraintLayout
+    compile deps.compressor
     compile project(':emendate')
     compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
 }
