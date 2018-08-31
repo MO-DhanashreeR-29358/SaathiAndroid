@@ -584,6 +584,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             }
         });
     }
+
     private AdapterView.OnItemSelectedListener selectMeetingReasonListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -760,24 +761,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
 
                         } else {
                             if (enableLocationGroup && mCurrentLocation == null) {
-                                LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                                mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                                Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
-                                try {
-                                    List<Address> addressList = geocoder.getFromLocation(
-                                            mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                                    meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                                meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
-                                meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                                getLatLong(meetingApptModel);
+                            } else {
+                                createMeetingSave(meetingApptModel);
                             }
-                            createMeetingSave(meetingApptModel);
+
                         }
-//                        createMeetingSave(meetingApptModel);
                     }
 
                 }
@@ -786,6 +775,33 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void getLatLong(MeetingApptModel meetingApptModel) {
+        if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        }
+        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                    @Override
+                    public void onLocationResult(LocationResult locationResult) {
+                        mCurrentLocation = locationResult.getLastLocation();
+
+                    }
+                },
+                Looper.myLooper());
+        Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocation(
+                    mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+        createMeetingSave(meetingApptModel);
+
     }
 
     private void disableReset() {
@@ -799,6 +815,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         tvLocationError.setVisibility(View.GONE);
 
     }
+
     private void resetData() {
         addedAttendeeModelList.clear();
         addedSplAttendeeModelList.clear();
@@ -3676,33 +3693,16 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     }
 
     protected void startLocationUpdates() {
-
-        // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-
-        // Create LocationSettingsRequest object using location request
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
         LocationSettingsRequest locationSettingsRequest = builder.build();
-
-        // Check whether location settings are satisfied
-        // https://developers.google.com/android/reference/com/google/android/gms/location/SettingsClient
         SettingsClient settingsClient = LocationServices.getSettingsClient(getMainActivity());
         settingsClient.checkLocationSettings(locationSettingsRequest);
-
-        // new Google API SDK v11 uses getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
         }
         getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
