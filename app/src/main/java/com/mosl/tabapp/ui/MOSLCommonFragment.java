@@ -82,7 +82,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         if (context != null) {
             return context;
         } else {
-            return super.getActivity();
+            return super.requireActivity();
         }
     }
 
