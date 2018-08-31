@@ -27,6 +27,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -55,7 +56,7 @@ public class ForegroundService extends Service {
     static Location mCurrentLocation; // location
     private NotificationManager mNotificationManager;
     private LocationRequest mLocationRequest;
-
+    private FusedLocationProviderClient mFusedLocation;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
@@ -164,12 +165,8 @@ public class ForegroundService extends Service {
                     CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
                     Log.d("Location Data entered", locationData.toString());
                 } else {
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    mCurrentLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+                    getCurrentLocation();
+                    refreshHandler.postDelayed(runnableCode, 10000);
                 }
             }
         }).start();
@@ -249,10 +246,15 @@ public class ForegroundService extends Service {
 
         SettingsClient settingsClient = LocationServices.getSettingsClient(this);
         settingsClient.checkLocationSettings(locationSettingsRequest);
+        mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        getCurrentLocation();
+
+    }
+
+    private void getCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
         LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
@@ -261,7 +263,6 @@ public class ForegroundService extends Service {
                     }
                 },
                 Looper.myLooper());
-
 
     }
 

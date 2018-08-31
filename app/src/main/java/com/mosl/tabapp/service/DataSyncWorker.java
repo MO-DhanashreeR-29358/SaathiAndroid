@@ -21,32 +21,36 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.work.Worker;
 import okio.Buffer;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 
-public class Worker extends androidx.work.Worker {
+public class DataSyncWorker extends Worker {
     private static final String TAG = "MyWorker";
 
-    /* @NonNull
-     @Override
-     public Result doWork() {
-         try {
-             Log.d(TAG, "doWork called first");
-             LocationData locationData = new LocationData();
-             locationData.setLat("5");
-             locationData.setLong("5");
-             App.get().getDB().daoAccess().insertLocationList(locationData);
-             Log.d("Location Data entered", locationData.toString());
-             return Result.SUCCESS;
-         } catch (Exception e) {
-             e.printStackTrace();
-             Log.d(TAG, e.toString());
-             return Result.FAILURE;
-         }
-     }*/
     @NonNull
+    @Override
+    public Result doWork() {
+        try {
+            if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null || !getPrefs(getApplicationContext()).getString("EmployeeCode", null).isEmpty()) {
+                if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
+                    if (CrmApp.get().getDB().daoAccess().getLocationList().size() != 0) {
+                        SaveGeoLocation();
+                    }
+
+
+                }
+            }
+            return Result.SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, e.toString());
+            return Result.RETRY;
+        }
+    }
+  /*  @NonNull
     @Override
     public androidx.work.Worker.WorkerResult doWork() {
 
@@ -61,7 +65,7 @@ public class Worker extends androidx.work.Worker {
         }
 
         return androidx.work.Worker.WorkerResult.SUCCESS;
-    }
+    }*/
 
     public void SaveGeoLocation() {
 
