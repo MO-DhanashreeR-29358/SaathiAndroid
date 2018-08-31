@@ -251,7 +251,9 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment implements 
         if (!isBlank(typeFilterString)) {
             addtionalParameterMap.put(ROW_FILTER, typeFilterString);
         }
-
+        if (isActionable.trim().equalsIgnoreCase(ACTIONABLE)) {
+            addtionalParameterMap.put(WIDGETTYPE, typeFilterString);
+        }
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             String serviceMethod = "Dashboard/LoaddetailsWidgeAsync";
