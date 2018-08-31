@@ -32,7 +32,7 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
                 'circleIndicator'     : '1.2.2',
-                'okhttp'              : '2.7.5',
+                'okhttp'              : '3.11.0',
                 'stetho'              : '1.5.0',
                 'room'                : '1.1.0'
 ]
@@ -73,7 +73,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'circleIndicator'     : "me.relex:circleindicator:${versions.circleIndicator}",
             'htmlTextview'        : "org.sufficientlysecure:html-textview:3.4",
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
-            'okhttp'              : "com.squareup.okhttp:okhttp:${versions.okhttp}",
+            'okhttp'              : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
             'compressor'          : "id.zelory:compressor:2.1.0",
             'location'            : "com.google.android.gms:play-services-location:11.0.4",
             'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",

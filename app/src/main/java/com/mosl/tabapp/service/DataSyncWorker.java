@@ -9,11 +9,6 @@ import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +17,11 @@ import java.io.IOException;
 import java.util.List;
 
 import androidx.work.Worker;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import okio.Buffer;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
@@ -29,7 +29,6 @@ import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 
 public class DataSyncWorker extends Worker {
     private static final String TAG = "MyWorker";
-
     @NonNull
     @Override
     public Result doWork() {
@@ -50,7 +49,7 @@ public class DataSyncWorker extends Worker {
             return Result.RETRY;
         }
     }
-  /*  @NonNull
+   /* @NonNull
     @Override
     public androidx.work.Worker.WorkerResult doWork() {
 
