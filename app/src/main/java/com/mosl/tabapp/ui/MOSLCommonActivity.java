@@ -93,8 +93,8 @@ import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.notification.NotificationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
+import com.mosl.tabapp.service.DataSyncWorker;
 import com.mosl.tabapp.service.ForegroundService;
-import com.mosl.tabapp.service.Worker;
 import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
@@ -2318,7 +2318,7 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
     }
 
     private void startWorkManager() {
-        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(Worker.class, 15, TimeUnit.MINUTES)
+        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 15, TimeUnit.MINUTES)
                 .setConstraints(networkConstraints()).build();
         mWorkManager.enqueue(periodicWork);
 

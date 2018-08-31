@@ -714,11 +714,17 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment implements
                                     JSONObject responseJsonObj = response.getJSONObject("Response");
                                     if (!responseJsonObj.isNull("Table3")) {
                                         JSONArray tableArray = responseJsonObj.getJSONArray("Table3");
+                                        int arrayLength = 0;
+                                        if (tableArray.length() == 5) {
+                                            arrayLength = 3;
+                                        } else {
+                                            arrayLength = tableArray.length();
+                                        }
                                         if (tableArray.length() != 0 && tableArray != null) {
                                             ivView.setVisibility(View.VISIBLE);
                                             llTopFirst.setVisibility(View.VISIBLE);
-                                            for (int i = 0; i < tableArray.length(); i++) {
-                                                if (tableArray.length() == 3) {
+                                            for (int i = 0; i < arrayLength; i++) {
+                                                if (arrayLength == 3) {
                                                     linearLayoutLeft.setVisibility(View.VISIBLE);
                                                     linearLayoutRight.setVisibility(View.VISIBLE);
                                                     linearLayoutCenter.setVisibility(View.VISIBLE);
