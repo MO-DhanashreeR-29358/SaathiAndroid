@@ -74,7 +74,7 @@ public class CreateMeetingProductAdapter extends RecyclerView.Adapter<CreateMeet
         notifyDataSetChanged();
     }
 
-    public void addDocument(CreateMeetingProductModel createMeetingProductModel) {
+    public void addProduct(CreateMeetingProductModel createMeetingProductModel) {
         if (this.productList == null) {
             this.productList = new ArrayList<>();
         }

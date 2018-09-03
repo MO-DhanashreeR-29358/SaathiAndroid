@@ -1,6 +1,7 @@
 package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel;
+import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -80,7 +81,6 @@ public class MeetingApptModel implements Serializable {
     private String clientCode;
     private String meetingAddressTypeId;
     private String meetingAddress;
-    private String travellingModeIds;
     private String amount;
     private String geoArea;
     private String geoLongitude;
@@ -93,7 +93,15 @@ public class MeetingApptModel implements Serializable {
     }
 
     private List<CreateMeetingProductModel> productList;
+    private List<CreateMeetingTravellingModel> travellingList;
 
+    public List<CreateMeetingTravellingModel> getTravellingList() {
+        return travellingList;
+    }
+
+    public void setTravellingList(List<CreateMeetingTravellingModel> travellingList) {
+        this.travellingList = travellingList;
+    }
 
     public String getUcid() {
         return ucid;
@@ -342,13 +350,7 @@ public class MeetingApptModel implements Serializable {
         this.meetingAddress = meetingAddress;
     }
 
-    public String getTravellingModeIds() {
-        return travellingModeIds;
-    }
 
-    public void setTravellingModeIds(String travellingModeIds) {
-        this.travellingModeIds = travellingModeIds;
-    }
 
     public String getAmount() {
         return amount;
@@ -447,7 +449,7 @@ public class MeetingApptModel implements Serializable {
         if (displayType.equalsIgnoreCase("A") && meetingType.equalsIgnoreCase(MEETING_TYPE_MEETING)) {
             json += ",\"MeetingAddressTypeId\":\"" + getMeetingAddressTypeId() + "\"";
             json += ",\"MeetingAddress\":\"" + getMeetingAddress() + "\"";
-            json += ",\"TravellingModeIds\":\"" + getTravellingModeIds() + "\"";
+            json += ",\"TravellingModeIds\":\"" + getTravellingJson() + "\"";
             json += ",\"Amount\":\"" + getAmount() + "\"";
             json += ",\"GeoArea\":\"" + getGeoArea() + "\"";
             json += ",\"GeoLongitude\":\"" + getGeoLatitude() + "\"";
@@ -470,6 +472,18 @@ public class MeetingApptModel implements Serializable {
         String json = "[";
         for (CreateMeetingProductModel model : productList) {
             String meetingJson = model.getId();
+            json += meetingJson + ",";
+        }
+
+        json = json.substring(0, json.length() - 1); //remove lash comma
+        json += "]";
+        return json;
+    }
+
+    private String getTravellingJson() {
+        String json = "[";
+        for (CreateMeetingTravellingModel model : travellingList) {
+            String meetingJson = model.getTravellingId();
             json += meetingJson + ",";
         }
 

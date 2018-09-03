@@ -94,7 +94,6 @@ import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
-import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -153,8 +152,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     private String meetingObjectiveIdStr = "0";
     private boolean mandatory = true;
     private CreateMeetingProductAdapter productAdapter;
-    private RecyclerView rvProductList;
+    private CreateMeetingTravellingModeAdapter travellingAdapter;
+    private RecyclerView rvProductList, rvTravellingList;
     private ArrayList<CreateMeetingProductModel> productList;
+    private ArrayList<CreateMeetingTravellingModel> travellingList;
     private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
             arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory, arrAdapBAClient, arrAdapOutStation, arrAdapMeetingsObjective, arrAdapMeetingLocation,
             arrAdapTravellingMode;
@@ -254,9 +255,29 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                 productCodeStr = ((RowData) spProduct.getSelectedItem()).getKey();
                 productNameStr = ((RowData) spProduct.getSelectedItem()).getValue();
                 if (!productCodeStr.equalsIgnoreCase("-1")) {
-                    productAdapter.addDocument(new CreateMeetingProductModel(productCodeStr, productNameStr));
+                    productAdapter.addProduct(new CreateMeetingProductModel(productCodeStr, productNameStr));
                 }
                 tvProductError.setVisibility(View.GONE);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
+        }
+    };
+    private AdapterView.OnItemSelectedListener selectTravellingMode = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            try {
+
+                if (!((RowData) spTravellingMode.getSelectedItem()).getKey().equalsIgnoreCase("-1")) {
+                    travellingAdapter.addTravellingMode(new CreateMeetingTravellingModel(((RowData) spTravellingMode.getSelectedItem()).getKey(), ((RowData) spTravellingMode.getSelectedItem()).getValue()));
+                }
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -420,10 +441,15 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         spMeetingLocation = (Spinner) createMeetingView.findViewById(R.id.spMeetingLocation);
         spTravellingMode = (Spinner) createMeetingView.findViewById(R.id.spTravellingMode);
         rvProductList = (RecyclerView) createMeetingView.findViewById(R.id.rvProductList);
+        rvTravellingList = (RecyclerView) createMeetingView.findViewById(R.id.rvTravellingList);
         productList = new ArrayList<>();
         productAdapter = new CreateMeetingProductAdapter(productList, getContext());
         rvProductList.setLayoutManager(new GridLayoutManager(getMainActivity(), 1));
         rvProductList.setAdapter(productAdapter);
+        travellingList = new ArrayList<>();
+        travellingAdapter = new CreateMeetingTravellingModeAdapter(travellingList, getContext());
+        rvTravellingList.setLayoutManager(new GridLayoutManager(getMainActivity(), 1));
+        rvTravellingList.setAdapter(travellingAdapter);
         btnSave.setOnClickListener(this);
         btnReset.setOnClickListener(this);
 
@@ -703,25 +729,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     MeetingApptModel meetingApptModel = new MeetingApptModel();
                     meetingApptModel.setMeetingType("M");
                     meetingApptModel.setDisplayType("A");
-                    if (mCurrentLocation != null) {
-                        Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
-                        try {
-                            List<Address> addressList = geocoder.getFromLocation(
-                                    mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
-                            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
-                        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
-                    }
                     meetingApptModel.setPincode(etPinCode.getText().toString());
                     meetingApptModel.setAmount(etAmount.getText().toString());
                     meetingApptModel.setMeetingAddress(etLocation.getText().toString());
                     meetingApptModel.setMeetingAddressTypeId(((RowData) spMeetingLocation.getSelectedItem()).getKey());
-                    meetingApptModel.setTravellingModeIds(((RowData) spTravellingMode.getSelectedItem()).getKey());
+                    meetingApptModel.setTravellingList(travellingAdapter.getTravellingList());
                     meetingApptModel.setLeadId(leadId);
                     meetingApptModel.setUcid(mUCID);
                     meetingApptModel.setMeetingDate(CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
@@ -744,29 +756,24 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     meetingApptModel.setOutStation(outStaitionCodeStr);
                     meetingApptModel.setClientCode(etClientCode.getText().toString().trim());
                     meetingApptModel.setClientName(etClientName.getText().toString().trim());
-                    if (enableLocationGroup && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        setPermisson(getMainActivity(), getMainActivity());
-                    } else {
-                        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                        if (enableLocationGroup && !manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
+                    if (mCurrentLocation != null) {
+                        Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
+                        try {
+                            List<Address> addressList = geocoder.getFromLocation(
+                                    mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
 
-                            enableLoc(getMainActivity());
-
-                        } else {
-                            if (enableLocationGroup && mCurrentLocation == null) {
-                                getLatLong(meetingApptModel);
-                            } else {
-                                createMeetingSave(meetingApptModel);
-                            }
-
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
+
+                        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+                        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                    }
+                    if (enableLocationGroup && mCurrentLocation == null) {
+                        getLatLong(meetingApptModel);
+                    } else {
+                        createMeetingSave(meetingApptModel);
                     }
 
                 }
@@ -965,7 +972,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvSubCategoryCommentsError.setText(ATLEAST_TEN_CHARACTERS);
             tvSubCategoryCommentsError.requestFocus();
             return false;
+        } else if (enableLocationGroup && !((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
+
+            enableLoc(getMainActivity());
+
+
+            return false;
         }
+
         return true;
     }
 
@@ -2842,6 +2856,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                                     arrAdapTravellingMode = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrTravellingMode);
                                     arrAdapTravellingMode.setDropDownViewResource(R.layout.mdropdown);
                                     spTravellingMode.setAdapter(arrAdapTravellingMode);
+                                    spTravellingMode.setOnItemSelectedListener(selectTravellingMode);
                                     arrAdapTravellingMode.notifyDataSetChanged();
                                 } else {
                                     hideProgress();

@@ -514,6 +514,12 @@
                     android:layout_marginTop="@dimen/_3sdp"
                     android:entries="@array/Select" />
 
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rvTravellingList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/ilAmount"
                     android:layout_width="match_parent"
