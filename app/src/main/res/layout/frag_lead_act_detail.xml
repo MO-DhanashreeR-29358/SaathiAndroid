@@ -400,6 +400,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_5sdp">
 
                     <TextView
@@ -469,6 +470,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_5sdp">
 
                     <TextView
@@ -498,7 +500,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Query Description"
+                        android:text="Meeting Description"
                         android:textColor="@color/tv_color"
                         android:textSize="@dimen/txt_size" />
 

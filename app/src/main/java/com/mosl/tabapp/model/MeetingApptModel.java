@@ -481,14 +481,16 @@ public class MeetingApptModel implements Serializable {
     }
 
     private String getTravellingJson() {
-        String json = "[";
+//        String json = "[";
+        String json = "";
         for (CreateMeetingTravellingModel model : travellingList) {
             String meetingJson = model.getTravellingId();
             json += meetingJson + ",";
         }
 
         json = json.substring(0, json.length() - 1); //remove lash comma
-        json += "]";
+//        json += "]";
+        json += "";
         return json;
     }
 

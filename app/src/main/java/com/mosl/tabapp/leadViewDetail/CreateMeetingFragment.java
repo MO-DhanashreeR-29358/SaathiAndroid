@@ -918,7 +918,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvLocationError.setText(ATLEAST_TWENTY_CHARACTERS);
             tvLocationError.requestFocus();
             return false;
-        } else if (enableLocationGroup && !etPinCode.getText().toString().trim().isEmpty() && etPinCode.getText().length() < 6) {
+        } else if (enableLocationGroup && etPinCode.getText().length() < 6) {
             tvPinCodeError.setVisibility(View.VISIBLE);
             tvPinCodeError.setText(INVALID_PINCODE_NUMBER);
             tvPinCodeError.requestFocus();

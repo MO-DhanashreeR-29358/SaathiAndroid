@@ -80,8 +80,8 @@ public class LeadActivitiesDetailFragment extends MOSLCommonFragment {
             tvPincode.setText(this.getArguments().getString("Pincode"));
             tvTravellingMode.setText(this.getArguments().getString("TravellingMode"));
             tvAmount.setText(this.getArguments().getString("Amount"));
-            tvGeoTagStatus.setText(this.getArguments().getString("GeoTagStatus"));
-            tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
+//            tvGeoTagStatus.setText(this.getArguments().getString("GeoTagStatus"));
+//            tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
             if (!this.getArguments().getString("AttendeeEmp").isEmpty()) {
                 try {
                     String attendingArray[] = this.getArguments().getString("AttendeeEmp").split(",");
