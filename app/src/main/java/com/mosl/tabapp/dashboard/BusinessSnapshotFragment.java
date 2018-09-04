@@ -487,7 +487,9 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             addtionalParameterMap.put(COL_FILTER, columnName);
                             addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).values().toArray()[0].toString());
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
+                            if (hierarchyMapList.size() >= 1) {
+                                addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
+                            }
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
                             args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
