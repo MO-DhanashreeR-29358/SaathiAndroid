@@ -110,7 +110,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     Location mCurrentLocation; // location
     private TextView tvCurrentStageSince, tvCurrentStage, tvBranchCode, tvLeadId, tvClientCode, tvName,
             tvSplAttendeeCount, tvSplAttendee, tvAttendeeCount, tvAttendee, tvStartDate, tvLocationError,
-            tvPinCodeError, tvMeetingLocationError;
+            tvPinCodeError, tvMeetingLocationError, tvTravellingModeError;
     View llSubcategory;
     private Button btnSave, btnReset;
     private ImageButton ibSplAttendee, ibAttendee;
@@ -278,7 +278,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
                     travellingAdapter.addTravellingMode(new CreateMeetingTravellingModel(((RowData) spTravellingMode.getSelectedItem()).getKey(), ((RowData) spTravellingMode.getSelectedItem()).getValue()));
                 }
 
-
+                tvTravellingModeError.setVisibility(View.GONE);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -395,6 +395,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         tvLocationError = (TextView) createMeetingView.findViewById(R.id.tvLocationError);
         tvPinCodeError = (TextView) createMeetingView.findViewById(R.id.tvPinCodeError);
         tvMeetingLocationError = (TextView) createMeetingView.findViewById(R.id.tvMeetingLocationError);
+        tvTravellingModeError = (TextView) createMeetingView.findViewById(R.id.tvTravellingModeError);
 
         tvBAClientError = (TextView) createMeetingView.findViewById(R.id.tvBAClientError);
         tvOutStaitionError = (TextView) createMeetingView.findViewById(R.id.tvOutStaitionError);
@@ -907,6 +908,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvMeetingLocationError.setVisibility(View.VISIBLE);
             tvMeetingLocationError.setText(SELECT_MEETING_LOCATION);
             tvMeetingLocationError.requestFocus();
+            return false;
+        }
+        if (enableLocationGroup && spTravellingMode.getSelectedItem().toString().equalsIgnoreCase(SELECT_TRAVELLING_MODE) && travellingAdapter.getTravellingList().size() == 0) {
+            tvTravellingModeError.setVisibility(View.VISIBLE);
+            tvTravellingModeError.setText(SELECT_TRAVELLING_MODE);
+            tvTravellingModeError.requestFocus();
             return false;
         } else if (enableLocationGroup && etLocation.getText().toString().trim().isEmpty()) {
             tvLocationError.setVisibility(View.VISIBLE);
