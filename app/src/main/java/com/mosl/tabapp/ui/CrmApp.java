@@ -1,12 +1,11 @@
 package com.mosl.tabapp.ui;
 
 import android.content.Context;
-import android.support.multidex.MultiDexApplication;
 import android.support.multidex.MultiDex;
-import android.support.v4.BuildConfig;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
+import com.mosl.mobile.ekyc.BuildConfig;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -18,7 +17,6 @@ import timber.log.Timber;
  * Created by raju on 2/1/2017.
  */
 
-
 public class CrmApp extends MultiDexApplication {
     private static Context context;
 
@@ -29,8 +27,7 @@ public class CrmApp extends MultiDexApplication {
         initImageLoader(context);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree() {
-                @Override
-                protected String createStackElementTag(StackTraceElement element) {
+                @Override protected String createStackElementTag(StackTraceElement element) {
                     return element.getLineNumber() + ":" + super.createStackElementTag(element);
                 }
             });
@@ -38,21 +35,20 @@ public class CrmApp extends MultiDexApplication {
             Timber.plant(new CrashReportingTree());
         }
     }
+
     private static class CrashReportingTree extends Timber.Tree {
         @Override protected void log(int priority, String tag, String message, Throwable t) {
             if (priority == Log.VERBOSE || priority == Log.DEBUG) {
                 return;
             }
-
-
         }
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
+    @Override protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
     public static void initImageLoader(Context context) {
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by

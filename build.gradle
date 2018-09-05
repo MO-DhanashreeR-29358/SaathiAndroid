@@ -1,23 +1,22 @@
 buildscript {
-    ext.android_plugin_version = '3.1.4'
-    ext.google_services_version = '3.0.0'
-    repositories {
-        google()
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-    dependencies {
-        classpath "com.android.tools.build:gradle:$android_plugin_version"
-        classpath "com.google.gms:google-services:$google_services_version"
-        classpath 'io.fabric.tools:gradle:1+'
-
-    }
+  ext.android_plugin_version = '3.2.0-rc02'
+  ext.google_services_version = '3.0.0'
+  repositories {
+    google()
+    jcenter()
+    maven { url 'https://maven.fabric.io/public' }
+  }
+  dependencies {
+    classpath "com.android.tools.build:gradle:$android_plugin_version"
+    classpath "com.google.gms:google-services:$google_services_version"
+    classpath 'io.fabric.tools:gradle:1+'
+  }
 }
 
-ext.versions = ["compileSdkVersion"   : 25,
-                "targetSdkVersion"    : 25,
-                "buildToolsVersion"   : "27.0.3",
-                'supportLibrary'      : '25.4.0',
+ext.versions = ["compileSdkVersion"   : 27,
+                "targetSdkVersion"    : 27,
+                "buildToolsVersion"   : "28.0.2",
+                'supportLibrary'      : '27.1.0',
                 'multidex'            : '1.0.3',
                 'pagerslidingtabstrip': '1.0.1',
                 'sdp'                 : '1.0.3',
@@ -32,8 +31,7 @@ ext.versions = ["compileSdkVersion"   : 25,
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
                 'circleIndicator'     : '1.2.2',
-                'okhttp'              : '2.7.5'
-]
+                'okhttp'              : '2.7.5']
 
 ext.deps = ['support'             : ['design'      : "com.android.support:design:${versions.supportLibrary}",
                                      'cardview'    : "com.android.support:cardview-v7:${versions.supportLibrary}",
@@ -69,24 +67,21 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
             'okhttp'              : "com.squareup.okhttp:okhttp:${versions.okhttp}",
             'compressor'          : "id.zelory:compressor:2.1.0",
-            'javax'          : "javax.annotation:jsr250-api:1.0",
-
-
-]
+            'javax'               : "javax.annotation:jsr250-api:1.0",]
 
 allprojects {
-    repositories {
-        google()
-        jcenter()
-        mavenLocal()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://maven.fabric.io/public' }
-        flatDir {
-            dirs '../eKYC/libs'
-        }
+  repositories {
+    google()
+    jcenter()
+    mavenLocal()
+    maven { url "https://jitpack.io" }
+    maven { url 'https://maven.fabric.io/public' }
+    flatDir {
+      dirs '../eKYC/libs'
     }
+  }
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+  delete rootProject.buildDir
 }
