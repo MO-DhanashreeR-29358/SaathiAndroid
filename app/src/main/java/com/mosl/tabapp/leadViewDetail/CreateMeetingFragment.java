@@ -51,9 +51,6 @@ import android.widget.Toast;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.SettingsClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
@@ -94,6 +91,7 @@ import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
+import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -159,7 +157,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
     private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
             arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory, arrAdapBAClient, arrAdapOutStation, arrAdapMeetingsObjective, arrAdapMeetingLocation,
             arrAdapTravellingMode;
-    private LocationRequest mLocationRequest;
+
 
     private long UPDATE_INTERVAL = 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
@@ -785,10 +783,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     }
 
+    private LocationRequest getmLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        return mLocationRequest;
+    }
+
     private void getLatLong(MeetingApptModel meetingApptModel) {
         if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
         }
-        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
+        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(getmLocationRequest(), new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         mCurrentLocation = locationResult.getLastLocation();
@@ -801,15 +808,13 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             List<Address> addressList = geocoder.getFromLocation(
                     mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
             meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+            meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+            meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
-        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
         createMeetingSave(meetingApptModel);
-
     }
 
     private void disableReset() {
@@ -978,6 +983,13 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
             tvSubCategoryCommentsError.setVisibility(View.VISIBLE);
             tvSubCategoryCommentsError.setText(ATLEAST_TEN_CHARACTERS);
             tvSubCategoryCommentsError.requestFocus();
+            return false;
+        } else if (enableLocationGroup && ActivityCompat.checkSelfPermission(getMainActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ) {
+
+            setPermisson(getMainActivity(), getMainActivity());
             return false;
         } else if (enableLocationGroup && !((LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(getMainActivity())) {
 
@@ -3714,26 +3726,25 @@ public class CreateMeetingFragment extends MOSLCommonFragment implements View.On
         }
     }
 
-    protected void startLocationUpdates() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        LocationSettingsRequest locationSettingsRequest = builder.build();
-        SettingsClient settingsClient = LocationServices.getSettingsClient(getMainActivity());
-        settingsClient.checkLocationSettings(locationSettingsRequest);
+    private void startLocationUpdates() {
+//        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+//        builder.addLocationRequest(getmLocationRequest());
+//        LocationSettingsRequest locationSettingsRequest = builder.build();
+//        SettingsClient settingsClient = LocationServices.getSettingsClient(getMainActivity());
+//        settingsClient.checkLocationSettings(locationSettingsRequest);
         if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        }
-        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        mCurrentLocation = locationResult.getLastLocation();
 
-                    }
-                },
-                Looper.myLooper());
+        } else {
+            getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(getmLocationRequest(), new LocationCallback() {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
+                            mCurrentLocation = locationResult.getLastLocation();
+
+                        }
+                    },
+                    Looper.myLooper());
+        }
+
     }
 
 

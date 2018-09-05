@@ -81,7 +81,7 @@ public class LeadActivitiesDetailFragment extends MOSLCommonFragment {
             tvTravellingMode.setText(this.getArguments().getString("TravellingMode"));
             tvAmount.setText(this.getArguments().getString("Amount"));
 //            tvGeoTagStatus.setText(this.getArguments().getString("GeoTagStatus"));
-//            tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
+            tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
             if (!this.getArguments().getString("AttendeeEmp").isEmpty()) {
                 try {
                     String attendingArray[] = this.getArguments().getString("AttendeeEmp").split(",");

@@ -224,9 +224,9 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
 //                                            String GeoTag = (objDetail.isNull("GeoTag") || objDetail.getString("GeoTag").equals("")) ? "" : objDetail.getString("GeoTag");
 
                                             String location = (objDetail.isNull("MeetingAddressType") || objDetail.getString("MeetingAddressType").equals("")) ? "" : objDetail.getString("MeetingAddressType");
-//                                            String geoMeetingLocation = (objDetail.isNull("Location") || objDetail.getString("Location").equals("")) ? "" : objDetail.getString("Location");
+                                            String geoMeetingLocation = (objDetail.isNull("Location") || objDetail.getString("Location").equals("")) ? "" : objDetail.getString("Location");
                                             meetingList.add(new LeadActivitiesMeetingModel(Status, MeetingID, LeadID, Name, EMAIL, mobNo, CRMMOSLCommon.formatMonth(date), time, AttendeeEmp
-                                                    , Product, StatusName, ActivityType, MeetingReason, MeetingDuration, Category, Actionable, Comments, Stage, CSR, QueryDesc, MeetingAddress, Pincode, TravellingMode, Amount, "", location, ""));
+                                                    , Product, StatusName, ActivityType, MeetingReason, MeetingDuration, Category, Actionable, Comments, Stage, CSR, QueryDesc, MeetingAddress, Pincode, TravellingMode, Amount, "", location, geoMeetingLocation));
                                         }
                                         meetingAdapter = new MeetingAdapter(meetingList);
                                         RecyclerView.LayoutManager meetingLayoutManager = new LinearLayoutManager(getActivity());
@@ -918,7 +918,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                     args.putString("TravellingMode", meetingModel.getTravellingMode());
                     args.putString("Amount", meetingModel.getAmount());
 //                    args.putString("GeoTagStatus", meetingModel.getGeoTagStatus());
-//                    args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
+                    args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
                     navigateTo(NAV_TO_LEAD_ACTIVITIES_DETAIL, args, getFragmentManager(), true);
                 }
             });

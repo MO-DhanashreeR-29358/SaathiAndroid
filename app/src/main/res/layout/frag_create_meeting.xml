@@ -502,7 +502,7 @@
                     android:id="@+id/tvTravellingMode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Travelling Mode"
+                    android:text="Travelling Mode*"
                     android:textColor="@color/text_color_personal"
                     android:textSize="@dimen/_11sdp" />
 
