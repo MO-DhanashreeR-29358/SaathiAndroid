@@ -1,5 +1,5 @@
 buildscript {
-    ext.google_services_version = '4.0.1'
+    ext.google_services_version = '3.2.0'
     ext.android_plugin_version = '3.2.0-rc02'
     repositories {
         google()
