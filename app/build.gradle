@@ -2,165 +2,162 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 def gitSha() {
-    def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
-    p.waitFor()
-    if (p.exitValue() != 0) {
-        throw new RuntimeException(p.errorStream.text)
-    }
+  def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
+  p.waitFor()
+  if (p.exitValue() != 0) {
+    throw new RuntimeException(p.errorStream.text)
+  }
 
-    return p.text.trim()
+  return p.text.trim()
 }
 
 def gitTimestamp() {
-    def p = 'git log -n 1 --format=%at'.execute([], rootDir)
-    p.waitFor()
-    if (p.exitValue() != 0) {
-        throw new RuntimeException(p.errorStream.text)
-    }
+  def p = 'git log -n 1 --format=%at'.execute([], rootDir)
+  p.waitFor()
+  if (p.exitValue() != 0) {
+    throw new RuntimeException(p.errorStream.text)
+  }
 
-    return p.text.trim()
+  return p.text.trim()
 }
 
-
 android {
-    compileSdkVersion rootProject.ext.versions.compileSdkVersion
-    buildToolsVersion rootProject.ext.versions.buildToolsVersion
+  compileSdkVersion rootProject.ext.versions.compileSdkVersion
+  buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
-    Properties versionProps = new Properties()
-    versionProps.load(new FileInputStream(file('../version.properties')))
-    defaultConfig {
-        applicationId 'com.mosl.tabapp'
-        minSdkVersion 15
-        targetSdkVersion rootProject.ext.versions.targetSdkVersion
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
-        buildConfigField 'long', 'GIT_TIMESTAMP', "${gitTimestamp()}L"
-        vectorDrawables.useSupportLibrary = true
+  Properties versionProps = new Properties()
+  versionProps.load(new FileInputStream(file('../version.properties')))
+  defaultConfig {
+    applicationId 'com.mosl.tabapp'
+    minSdkVersion 15
+    targetSdkVersion rootProject.ext.versions.targetSdkVersion
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
+    buildConfigField 'long', 'GIT_TIMESTAMP', "${gitTimestamp()}L"
+    vectorDrawables.useSupportLibrary = true
+  }
+
+
+  signingConfigs {
+    internal {
+      try {
+        storeFile file('../saleskey.jks')
+        storePassword KEYSTORE_PASSWORD
+        keyAlias 'sales tab'
+        keyPassword PROD_ALIAS_PASSWORD
+      } catch (ex) {
+        throw new InvalidUserDataException(
+            "You should define KEYSTORE_PASSWORD & UAT_ALIAS_PASSWORD in gradle.properties")
+      }
     }
-
-
-    signingConfigs {
-        internal {
-            try {
-                storeFile file('../saleskey.jks')
-                storePassword KEYSTORE_PASSWORD
-                keyAlias 'sales tab'
-                keyPassword PROD_ALIAS_PASSWORD
-            } catch (ex) {
-                throw new InvalidUserDataException(
-                        "You should define KEYSTORE_PASSWORD & UAT_ALIAS_PASSWORD in gradle.properties")
-            }
-        }
-        prod {
-            try {
-                storeFile file('../saleskey.jks')
-                storePassword KEYSTORE_PASSWORD
-                keyAlias 'sales tab'
-                keyPassword PROD_ALIAS_PASSWORD
-            } catch (ex) {
-                throw new InvalidUserDataException(
-                        "You should define KEYSTORE_PASSWORD & PROD_ALIAS_PASSWORD in gradle.properties")
-            }
-        }
+    prod {
+      try {
+        storeFile file('../saleskey.jks')
+        storePassword KEYSTORE_PASSWORD
+        keyAlias 'sales tab'
+        keyPassword PROD_ALIAS_PASSWORD
+      } catch (ex) {
+        throw new InvalidUserDataException(
+            "You should define KEYSTORE_PASSWORD & PROD_ALIAS_PASSWORD in gradle.properties")
+      }
     }
+  }
 
-    flavorDimensions 'releaseType'
-    productFlavors {
-        uat {
-            versionCode versionProps['uatCode'].toInteger()
-            versionName versionProps['uatName']
-            signingConfig signingConfigs.internal
-            dimension 'releaseType'
-
-        }
-        prod {
-            versionCode versionProps['prodCode'].toInteger()
-            versionName versionProps['prodName']
-            signingConfig signingConfigs.prod
-            dimension 'releaseType'
-        }
+  flavorDimensions 'releaseType'
+  productFlavors {
+    uat {
+      versionCode versionProps['uatCode'].toInteger()
+      versionName versionProps['uatName']
+      signingConfig signingConfigs.internal
+      dimension 'releaseType'
     }
-
-    buildTypes {
-        release {
-            debuggable false
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
-            multiDexKeepFile file('multidex-config.txt')
-            proguardFile 'proguard-library.pro'
-            proguardFile 'proguard-crashlytics.pro'
-            proguardFile 'proguard-gson.pro'
-            proguardFile 'proguard-saxparser.pro'
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            multiDexEnabled true
-            multiDexKeepFile file('multidex-config.txt')
-            debuggable true
-        }
+    prod {
+      versionCode versionProps['prodCode'].toInteger()
+      versionName versionProps['prodName']
+      signingConfig signingConfigs.prod
+      dimension 'releaseType'
     }
+  }
 
-
-    packagingOptions {
-        exclude 'META-INF/rxjava.properties'
+  buildTypes {
+    release {
+      debuggable false
+      minifyEnabled true
+      shrinkResources true
+      multiDexEnabled true
+      multiDexKeepFile file('multidex-config.txt')
+      proguardFile 'proguard-library.pro'
+      proguardFile 'proguard-crashlytics.pro'
+      proguardFile 'proguard-gson.pro'
+      proguardFile 'proguard-saxparser.pro'
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    dexOptions {
-        javaMaxHeapSize "4g"
+    debug {
+      multiDexEnabled true
+      multiDexKeepFile file('multidex-config.txt')
+      debuggable true
     }
+  }
 
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
-        }
+
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
+  }
+  dexOptions {
+    javaMaxHeapSize "4g"
+  }
+
+  android.applicationVariants.all { variant ->
+    variant.outputs.all {
+      outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
     }
-
+  }
 }
 
 dependencies {
-    compile project(':TabLibrary')
-    compile project(':eKYC')
-    compile(deps.crashlytics) {
-        transitive = true;
-    }
-    compile deps.support.design
-    compile deps.support.cardview
-    compile deps.support.customtabs
-    compile deps.support.support
-    compile deps.support.appcompat
-    compile deps.support.recyclerview
-    compile deps.support.drawable
-    compile deps.multidex
-    compile deps.pagerslidingtabstrip
-    compile deps.sdpAndroid
-    compile deps.circleImageView
-    compile deps.mpChart
-    compile deps.glide
-    compile deps.calendarView
-    compile deps.asyncHttp
-    compile deps.smoothProgressbar
-    compile deps.dialogPlus
-    compile deps.floatingButton
-    compile deps.firebase
-    testCompile deps.testing.junit
-    androidTestCompile(deps.testing.espresso.core)
+  compile project(':TabLibrary')
+  compile project(':eKYC')
+  compile(deps.crashlytics) {
+    transitive = true;
+  }
+  compile deps.support.design
+  compile deps.support.cardview
+  compile deps.support.customtabs
+  compile deps.support.support
+  compile deps.support.appcompat
+  compile deps.support.recyclerview
+  compile deps.support.drawable
+  compile deps.multidex
+  compile deps.pagerslidingtabstrip
+  compile deps.sdpAndroid
+  compile deps.circleImageView
+  compile deps.mpChart
+  compile deps.glide
+  compile deps.calendarView
+  compile deps.asyncHttp
+  compile deps.smoothProgressbar
+  compile deps.dialogPlus
+  compile deps.floatingButton
+  compile deps.firebase
+  testCompile deps.testing.junit
+  androidTestCompile(deps.testing.espresso.core)
 
-    compile deps.timber
-    compile deps.imageLoader
-    compile deps.commonsLang
-    compile deps.segmented
-    compile deps.circleIndicator
-    compile deps.htmlTextview
-    // stetho
-    debugCompile deps.stetho.stetho
-    debugCompile deps.stetho.okhttp
-    // Room
-    compile deps.room.roomRuntime
-    annotationProcessor deps.room.roomCompiler
-    compile deps.location
-    //workmanager
-    compile deps.work
-    compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
+  compile deps.timber
+  compile deps.imageLoader
+  compile deps.commonsLang
+  compile deps.segmented
+  compile deps.circleIndicator
+  compile deps.htmlTextview
+  // stetho
+  debugCompile deps.stetho.stetho
+  debugCompile deps.stetho.okhttp
+  // Room
+  compile deps.room.roomRuntime
+  annotationProcessor deps.room.roomCompiler
+  compile deps.location
+  //workmanager
+  compile deps.work
+  compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
 }
 
 apply plugin: 'com.google.gms.google-services'
