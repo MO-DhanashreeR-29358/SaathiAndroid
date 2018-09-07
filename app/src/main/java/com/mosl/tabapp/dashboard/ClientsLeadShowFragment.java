@@ -30,7 +30,6 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -624,34 +623,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
         return false;
     }
 
-    private void prepareGroupMap(JSONObject responseJsonObj) {
-        try {
-            if (responseJsonObj.isNull("Table2")) return;
 
-            JSONArray jsonArray = responseJsonObj.getJSONArray("Table2");
-            if (jsonArray == null) return;
-            for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
-                JSONObject jsonRowObject = (JSONObject) jsonArray.get(ctr);
-                int groupId = jsonRowObject.getInt("GroupId");
-                int childid = jsonRowObject.getInt("childid");
-                String rowFilter = jsonRowObject.getString("RowFilter");
-
-                List<Map> childList = (List) tabaleHeaderMap.get(groupId);
-                if (childList == null) {
-                    childList = new ArrayList<>();
-                }
-                Map childMap = new HashMap();
-                childMap.put(childid, rowFilter);
-                childList.add(childMap);
-                tabaleHeaderMap.put(groupId, childList);
-
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        Log.d(TAG, "Done");
-    }
 
     private void newPrepareGroupMap(StringMap responseJsonObj) {
         try {

@@ -244,6 +244,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
                         SPINNER_LIST) && !getArguments().containsKey(FILTER_LIST)) {
                     webServiceCall();
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -259,7 +260,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
         if (!isBlank(typeFilterString)) {
             addtionalParameterMap.put(ROW_FILTER, typeFilterString);
         }
-        if (isActionable.trim().equalsIgnoreCase(ACTIONABLE)) {
+        if (this.getArguments().getString(LABEL).trim().equalsIgnoreCase(ACTIONABLE)) {
             addtionalParameterMap.put(WIDGETTYPE, typeFilterString);
         }
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {

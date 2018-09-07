@@ -36,6 +36,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
+
     public MOSLCommonFragment() {
         super();
     }
@@ -63,11 +64,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
 
-
     public void setAppTitle(String fragment, String title) {
         ((MOSLCommonActivity) getMainActivity()).setAppTitle(fragment, title);
     }
-
 
 
     public void hideAppTitle() {
@@ -221,7 +220,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
 
     public void onFragmentResume() {
-          }
+    }
 
     public void onFragmentPause() {
 
@@ -269,6 +268,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     public Map getHeader() {
         return MOSLCommonActivity.getHeader(context);
     }
