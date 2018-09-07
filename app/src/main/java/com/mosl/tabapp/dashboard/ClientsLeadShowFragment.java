@@ -63,7 +63,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
     private String widgetSystemName;
     private Map addtionalParameterMap = new HashMap<>();
     private LinkedHashMap lMap;
-    private SparseArray tabaleHeaderMap = new SparseArray<>();//this will be used to keep row header mapping
+    private SparseArray tabaleHeaderMap = new SparseArray<>();
     private String filterFirst = "", filterSecond = "", filterThird = "";
 
     @Override
@@ -123,8 +123,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
 
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                        //super.onSuccess(statusCode,headers,responseS);
-                        //after success code goes here
                         try {
                             Gson mGson = new Gson();
                             Type type = new TypeToken<HashMap<String, Object>>() {
@@ -136,13 +134,11 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                     hideProgress();
                                     leadTableAdapter = new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
                                     table.setAdapter(leadTableAdapter);
-                                    //   JSONObject responseJsonObj = response.getJSONObject("Response");
                                     StringMap responseJsonObj = (StringMap) response.get("Response");
 
                                     newPrepareGroupMap(responseJsonObj); //prepare group map
 
                                     List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Table");
-                                    //  JSONArray arrayDetail = responseJsonObj.getJSONArray("Table");
                                     ArrayList<String> columns = new ArrayList<String>();
                                     ArrayList<String> header = new ArrayList<String>();
                                     ArrayList<String> headerSecond = new ArrayList<String>();
@@ -150,15 +146,8 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                     if (arrayDetail.size() != 0) {
 
                                         for (int y = 2; y < arrayDetail.size(); y++) {
-
-                                            //  JSONObject objDetailSecond = (JSONObject) arrayDetail.get(0);
                                             StringMap objDetailSecond = (StringMap) arrayDetail.get(0);
                                             if (columns.size() == 0) {
-                                               /* Iterator iter = objDetailSecond.keys();
-                                                while (iter.hasNext()) {
-                                                    String columnName = iter.next().toString();
-                                                    columns.add(columnName);
-                                                }*/
                                                 for (Object keySetE : objDetailSecond.keySet()) {
                                                     columns.add(keySetE.toString());
                                                 }
@@ -170,8 +159,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                                 stockArr = header.toArray(stockArr);
                                                 leadTableAdapter.setHeadersSecond(stockArr);
                                             }
-
-                                            //JSONObject objDetail = (JSONObject) arrayDetail.get(y);
                                             StringMap objDetail = (StringMap) arrayDetail.get(y);
                                             String[] stockArr = new String[columns.size()];
                                             stockArr = columns.toArray(stockArr);
@@ -195,7 +182,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                 } else {
                                     hideProgress();
                                     // String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                      //MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    //MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                 }
 
                             } else {
@@ -267,12 +254,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
             clientsFragment.setArguments(args);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();
 
-
-           /* Bundle args = new Bundle();
-            ClientsLeadsFragment clientsFragment = ClientsLeadsFragment.newInstance(getContext());
-            args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            clientsFragment.setArguments(args);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();*/
         }
 
     }
@@ -393,7 +374,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                             String columnName = stringSet.toArray()[newColumn].toString();
                             addtionalParameterMap.clear();
                             addtionalParameterMap.put(COL_FILTER, columnName);
-                            // addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).get("id").toString());
                             addtionalParameterMap.put(ROW_FILTER, getRowKeyName(Double.parseDouble(hashArray.get(row).get("id").toString())));
                             addtionalParameterMap.putAll(map);
                             Bundle args = new Bundle();
@@ -676,8 +656,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
     private void newPrepareGroupMap(StringMap responseJsonObj) {
         try {
             if (responseJsonObj.get("Table2") == null) return;
-
-//            JSONArray jsonArray = responseJsonObj.get("Table2");
             List<StringMap> jsonArray = (List<StringMap>) responseJsonObj.get("Table2");
             if (jsonArray == null) return;
             for (int ctr = 0; ctr < jsonArray.size(); ctr++) {

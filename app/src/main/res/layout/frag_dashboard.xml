@@ -30,152 +30,6 @@
                 android:visibility="visible" />
 
 
-            <!--clients and My_Clients_Snapshot-->
-            <!--<LinearLayout-->
-            <!--android:id="@+id/llClientSnapShot"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="@dimen/_5sdp"-->
-            <!--android:orientation="vertical"-->
-            <!--android:visibility="gone">-->
-
-            <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/_35sdp"-->
-            <!--android:background="@color/titleBarBackground">-->
-
-            <!--<android.support.v7.widget.AppCompatImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:layout_toLeftOf="@+id/txtClientSnapShot"-->
-            <!--app:srcCompat="@drawable/ic_new_clients_leads" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/txtClientSnapShot"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true"-->
-            <!--android:layout_marginLeft="@dimen/_5sdp"-->
-            <!--android:singleLine="true"-->
-            <!--android:textColor="@color/alternateTextColor"-->
-            <!--android:textSize="@dimen/appTitleTextSize"-->
-            <!--android:textStyle="bold" />-->
-            <!--</RelativeLayout>-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:orientation="vertical">-->
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--<Button-->
-            <!--android:id="@+id/btnClientSnapshot"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/orange"-->
-            <!--android:text="@string/CLIENTS"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="@dimen/_14sdp" />-->
-
-            <!--<Button-->
-            <!--android:id="@+id/btnClientTraded"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/white"-->
-            <!--android:text="@string/CLIENTS_TRADED"-->
-            <!--android:textColor="@color/Button_text_color"-->
-            <!--android:textSize="@dimen/_14sdp" />-->
-            <!--</LinearLayout>-->
-
-            <!--<LinearLayout-->
-            <!--android:id="@+id/llDirectReactivation"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal" />-->
-            <!--</LinearLayout>-->
-            <!--</LinearLayout>-->
-
-
-            <!--Busines Snapshot and leads-->
-
-            <!--  <LinearLayout
-                  android:id="@+id/llBusinessLeadSnapshot"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical"
-                  android:visibility="gone">
-
-                  <RelativeLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="@dimen/_35sdp"
-                      android:background="@color/titleBarBackground">
-
-                      <android.support.v7.widget.AppCompatImageView
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_centerInParent="true"
-                          android:layout_toLeftOf="@+id/txtBusinessLeadSnapshot"
-                          app:srcCompat="@drawable/ic_new_clients_leads" />
-
-                      <TextView
-                          android:id="@+id/txtBusinessLeadSnapshot"
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:layout_centerInParent="true"
-                          android:layout_marginLeft="@dimen/_5sdp"
-                          android:singleLine="true"
-                          android:textColor="@color/alternateTextColor"
-                          android:textSize="@dimen/appTitleTextSize"
-                          android:textStyle="bold" />
-                  </RelativeLayout>
-
-                  <LinearLayout
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:orientation="vertical">
-
-                      <LinearLayout
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:orientation="horizontal">
-
-                          <Button
-                              android:id="@+id/btnBusinessSnapshot"
-                              android:layout_width="0dp"
-                              android:layout_height="wrap_content"
-                              android:layout_weight="1"
-                              android:background="@drawable/orange"
-                              android:text="@string/SNAPSHOT"
-                              android:textColor="@color/white"
-                              android:textSize="@dimen/_14sdp" />
-
-                          <Button
-                              android:id="@+id/btnLeadsSnapshot"
-                              android:layout_width="0dp"
-                              android:layout_height="wrap_content"
-                              android:layout_weight="1"
-                              android:background="@drawable/white"
-                              android:text="@string/LEADS"
-                              android:textColor="@color/Button_text_color"
-                              android:textSize="@dimen/_14sdp" />
-                      </LinearLayout>
-
-                      <LinearLayout
-                          android:id="@+id/llReplaceBusinessLeadFragment"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:orientation="horizontal" />
-                  </LinearLayout>
-              </LinearLayout>-->
-
-            <!-- mapped ba snapshot-->
             <LinearLayout
                 android:id="@+id/llMappedBASnapshot"
                 android:layout_width="match_parent"
@@ -209,45 +63,6 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnBASnapshot"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/orange"
-                            android:text="@string/BA_SNAPSHOT"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <Button
-                            android:id="@+id/btnBACategory"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/white"
-                            android:text="@string/BA_CATEGORY"
-                            android:textColor="@color/Button_text_color"
-                            android:textSize="@dimen/_14sdp" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llReplaceBASnapshotFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal" />
-                </LinearLayout>
             </LinearLayout>
 
             <!-- Business  snapshot-->
@@ -284,57 +99,6 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnBusinessSnapshotAdv"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/orange"
-                            android:text="@string/SNAPSHOT"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <Button
-                            android:id="@+id/btnBusinessSnapshotOneUp"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/white"
-                            android:text="@string/SNAPSHOT"
-                            android:textColor="@color/Button_text_color"
-                            android:textSize="@dimen/_14sdp"
-                            android:visibility="gone" />
-
-                        <Button
-                            android:id="@+id/btnBusinessLead"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/white"
-                            android:text="@string/LEADS"
-                            android:textColor="@color/Button_text_color"
-                            android:textSize="@dimen/_14sdp"
-                            android:visibility="visible" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llReplaceBusinessSnapshotFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal" />
-                </LinearLayout>
             </LinearLayout>
 
             <!--business snapshot-->
@@ -887,8 +651,8 @@
                                     <View
                                         android:layout_width="@dimen/_1sdp"
                                         android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:background="@color/white"></View>
 
                                     <TextView
@@ -905,8 +669,8 @@
                                     <View
                                         android:layout_width="@dimen/_1sdp"
                                         android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:background="@color/white"></View>
 
                                     <TextView
@@ -1071,8 +835,8 @@
                                     <View
                                         android:layout_width="@dimen/_1sdp"
                                         android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:background="@color/white"></View>
 
                                     <TextView
@@ -1089,8 +853,8 @@
                                     <View
                                         android:layout_width="@dimen/_1sdp"
                                         android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginBottom="@dimen/_5sdp"
                                         android:background="@color/white"></View>
 
                                     <TextView
@@ -1233,8 +997,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_8sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         android:text="*Details of incentive slab"
                         android:textColor="#3172bf"
                         android:textSize="@dimen/_13sdp" />
@@ -1275,9 +1039,9 @@
         android:id="@+id/floatingActionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         fab:fab_addButtonColorNormal="#f54d41"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/white"
