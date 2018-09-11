@@ -3,8 +3,11 @@ package com.mosl.tabapp.common;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.text.InputFilter;
@@ -19,11 +22,9 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.mosl.tabapp.R;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
@@ -694,4 +695,25 @@ public class CRMAppUtil {
         a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
+
+    public static boolean isMockSettingsON(Context context) {
+        // returns true if mock location enabled, false if not enabled.
+        if (Settings.Secure.getString(context.getContentResolver(),
+            Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static boolean isLocationFromMockProvider(Context context, Location location) {
+        boolean isMock;
+        if (Build.VERSION.SDK_INT >= 18) {
+            isMock = location.isFromMockProvider();
+        } else {
+            isMock = isMockSettingsON(context);
+        }
+        return isMock;
+    }
+
 }

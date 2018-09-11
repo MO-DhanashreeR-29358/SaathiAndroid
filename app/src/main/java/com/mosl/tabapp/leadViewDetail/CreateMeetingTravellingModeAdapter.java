@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.ui.MSFDialog;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -55,6 +53,11 @@ public class CreateMeetingTravellingModeAdapter extends RecyclerView.Adapter<Cre
     public void deleteDocument(String id) {
         CreateMeetingTravellingModel model = getDocumentById(id);
         travellingList.remove(model);
+        notifyDataSetChanged();
+    }
+
+    public void deleteAllProduct() {
+        this.travellingList.clear();
         notifyDataSetChanged();
     }
 
