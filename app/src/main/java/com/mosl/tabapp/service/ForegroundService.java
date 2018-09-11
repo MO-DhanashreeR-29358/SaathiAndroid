@@ -26,7 +26,6 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -38,7 +37,6 @@ import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -61,15 +59,16 @@ public class ForegroundService extends Service {
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
     private Runnable runnableCode = new Runnable() {
-        @Override
-        public void run() {
+        @Override public void run() {
             try {
-                if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null || !getPrefs(
-                        getApplicationContext()).getString("EmployeeCode", null).isEmpty()) {
+                if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null
+                    || !getPrefs(getApplicationContext()).getString("EmployeeCode", null)
+                    .isEmpty()) {
                     LocationManager manager =
-                            (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                        (LocationManager) getApplicationContext().getSystemService(
+                            Context.LOCATION_SERVICE);
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(
-                            getApplicationContext())) {
+                        getApplicationContext())) {
                         LocationUpdate();
                     }
                 }
@@ -80,13 +79,11 @@ public class ForegroundService extends Service {
         }
     };
 
-    @Override
-    public void onCreate() {
+    @Override public void onCreate() {
         super.onCreate();
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    @Override public int onStartCommand(Intent intent, int flags, int startId) {
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // Android O requires a Notification Channel.
@@ -94,7 +91,7 @@ public class ForegroundService extends Service {
             CharSequence name = getString(R.string.app_name);
             // Create the channel for the notification
             NotificationChannel mChannel =
-                    new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+                new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
 
             // Set the Notification Channel for the Notification Manager.
             mNotificationManager.createNotificationChannel(mChannel);
@@ -111,18 +108,18 @@ public class ForegroundService extends Service {
 
     private Notification getNotification() {
 
-        Bitmap icon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_icon);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_icon);
         Intent notificationIntent = new Intent(this, ForegroundService.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent =
-                PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
-                        PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
+                PendingIntent.FLAG_ONE_SHOT);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentText("We are tracking your location")
+        NotificationCompat.Builder notification =
+            new NotificationCompat.Builder(this, CHANNEL_ID).setContentText(
+                "We are tracking your location")
                 .setContentTitle(getString(R.string.app_name))
                 .setSmallIcon(R.drawable.ic_icon)
                 .setContentIntent(pendingIntent)
@@ -137,14 +134,14 @@ public class ForegroundService extends Service {
 
     private void LocationUpdate() {
         new Thread(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 LocationData locationData = new LocationData();
                 if (mCurrentLocation != null) {
                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                     try {
-                        List<Address> addressList = geocoder.getFromLocation(
-                                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                        List<Address> addressList =
+                            geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+                                mCurrentLocation.getLongitude(), 1);
                         locationData.setGeoArea(addressList.get(0).getAddressLine(0));
                         locationData.setGeoPincode(addressList.get(0).getPostalCode());
                     } catch (IOException e) {
@@ -154,9 +151,10 @@ public class ForegroundService extends Service {
                     locationData.setLongitude(mCurrentLocation.getLongitude() + "");
                     locationData.setAccuracy(mCurrentLocation.getAccuracy() + "");
                     locationData.setEmpCode(
-                            getPrefs(getApplicationContext()).getString("EmployeeCode", null));
+                        getPrefs(getApplicationContext()).getString("EmployeeCode", null));
                     locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
-                    locationData.setDeviceId(getPrefs(getApplicationContext()).getString("macaddress", null));
+                    locationData.setDeviceId(
+                        getPrefs(getApplicationContext()).getString("macaddress", null));
 
                     CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
                     Log.d("Location Data entered", locationData.toString());
@@ -168,16 +166,15 @@ public class ForegroundService extends Service {
         }).start();
     }
 
-    @Override
-    public void onDestroy() {
+    @Override public void onDestroy() {
         super.onDestroy();
     }
 
     public boolean serviceIsRunningInForeground(Context context) {
-        ActivityManager manager = (ActivityManager) context.getSystemService(
-                Context.ACTIVITY_SERVICE);
+        ActivityManager manager =
+            (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(
-                Integer.MAX_VALUE)) {
+            Integer.MAX_VALUE)) {
             if (getClass().getName().equals(service.service.getClassName())) {
                 if (service.foreground) {
                     return true;
@@ -187,24 +184,21 @@ public class ForegroundService extends Service {
         return false;
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
+    @Override public IBinder onBind(Intent intent) {
         Log.i(TAG, "in onBind()");
         stopForeground(true);
 
         return mBinder;
     }
 
-    @Override
-    public void onRebind(Intent intent) {
+    @Override public void onRebind(Intent intent) {
         Log.i(TAG, "in onRebind()");
         stopForeground(true);
 
         super.onRebind(intent);
     }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
+    @Override public boolean onUnbind(Intent intent) {
         Log.i(TAG, "Last client unbound from service");
         startForeground(NOTIFICATION_ID, getNotification());
         return true;
@@ -226,20 +220,27 @@ public class ForegroundService extends Service {
     }
 
     private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        LocationServices.getFusedLocationProviderClient(this)
-                .requestLocationUpdates(mLocationRequest, new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                mCurrentLocation = locationResult.getLastLocation();
-                            }
-                        },
-                        Looper.myLooper());
+
+        Handler mainHandler = new Handler(getApplication().getMainLooper());
+
+        Runnable myRunnable = new Runnable() {
+            @Override public void run() {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getApplicationContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                LocationServices.getFusedLocationProviderClient(getApplicationContext())
+                    .requestLocationUpdates(mLocationRequest, new LocationCallback() {
+                        @Override public void onLocationResult(LocationResult locationResult) {
+                            mCurrentLocation = locationResult.getLastLocation();
+                        }
+                    }, Looper.myLooper());
+            } // This is your code
+        };
+        mainHandler.post(myRunnable);
     }
 
     public class LocalBinder extends Binder {

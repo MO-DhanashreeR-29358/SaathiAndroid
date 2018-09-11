@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
@@ -818,18 +819,25 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     }
 
     private void getLatLong(MeetingApptModel meetingApptModel) {
-        if (ActivityCompat.checkSelfPermission(getMainActivity(),
-            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(getMainActivity(),
-            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        Handler mainHandler = new Handler(getMainActivity().getMainLooper());
+        Runnable myRunnable = new Runnable() {
+            @Override public void run() {
+                if (ActivityCompat.checkSelfPermission(getMainActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getMainActivity(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
 
-        }
-        getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
-            getmLocationRequest(), new LocationCallback() {
-                @Override public void onLocationResult(LocationResult locationResult) {
-                    mCurrentLocation = locationResult.getLastLocation();
                 }
-            }, Looper.myLooper());
+                getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
+                    getmLocationRequest(), new LocationCallback() {
+                        @Override public void onLocationResult(LocationResult locationResult) {
+                            mCurrentLocation = locationResult.getLastLocation();
+                        }
+                    }, Looper.myLooper());
+            } // This is your code
+        };
+        mainHandler.post(myRunnable);
         Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
         try {
             List<Address> addressList = geocoder.getFromLocation(mCurrentLocation.getLatitude(),
@@ -4092,24 +4100,27 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     }
 
     private void startLocationUpdates() {
-        //        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        //        builder.addLocationRequest(getmLocationRequest());
-        //        LocationSettingsRequest locationSettingsRequest = builder.build();
-        //        SettingsClient settingsClient = LocationServices.getSettingsClient(getMainActivity());
-        //        settingsClient.checkLocationSettings(locationSettingsRequest);
-        if (ActivityCompat.checkSelfPermission(getMainActivity(),
-            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(getMainActivity(),
-            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        Handler mainHandler = new Handler(getMainActivity().getMainLooper());
 
-        } else {
-            getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
-                getmLocationRequest(), new LocationCallback() {
-                    @Override public void onLocationResult(LocationResult locationResult) {
-                        mCurrentLocation = locationResult.getLastLocation();
-                    }
-                }, Looper.myLooper());
-        }
+        Runnable myRunnable = new Runnable() {
+            @Override public void run() {
+                if (ActivityCompat.checkSelfPermission(getMainActivity(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getMainActivity(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
+                        getmLocationRequest(), new LocationCallback() {
+                            @Override public void onLocationResult(LocationResult locationResult) {
+                                mCurrentLocation = locationResult.getLastLocation();
+                            }
+                        }, Looper.myLooper());
+                }
+            } // This is your code
+        };
+        mainHandler.post(myRunnable);
     }
 
     public class AttendeeAdapter extends BaseAdapter implements Filterable {
