@@ -112,95 +112,100 @@ import java.util.Set;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-
 /**
  * Created by raju on 2/7/2017.
  */
 
-public class DashboardFragment extends MOSLCommonFragment implements View.OnClickListener, MOSLConstants {
-    private String TAG = DashboardFragment.class.getCanonicalName();
-
-    private String businessProfileIdForDashboard, productId, employeeCode, dashboardId = ""; //will be used to get dashboard
-
-    private View dashAdvisoryView;
-    private TextView txtClients, txtTarget, tvtomove, tvcurrently, tvaccAcq, tvacqValue, tvrevGen, tvrevVal,
-            tvsipAcq, tvsipVal, tvpmsAcq, tvpmsVal, tvAccReqVal, tvReqVal, tvaccReq, tvpmsReq, tvPmsReqVal, tvsipAcq1, tvsipReqVal, tvrevReq, tvRevReqVal, tvMain;
-    private LinearLayout llClient, llTarget, llPerformanceAndIncentives, llBusinessSnapshotHead, llClientsLeads, llTargetAchievementADV, llTeamTargetAchievement, llPerformanceAndIncentivesHeader;
-    private ImageView ivActionableInsights, ivClientLeads, ivTargetAchievementADV, ivTeamTargetAchievement, ivMonthOnMonth, ivBusinessSnapshotHead, ivPerformanceAndIncentivesHeader;
+public class DashboardFragment extends MOSLCommonFragment
+        implements View.OnClickListener, MOSLConstants {
     static Context mContext;
+    private final int itemcount = 4;
+    //will be used to get dashboard
+    //Hierarchy Performance
+    protected HorizontalBarChart mChart;
+    Bundle args = new Bundle();
+    private String TAG = DashboardFragment.class.getCanonicalName();
+    private String businessProfileIdForDashboard, productId, employeeCode, dashboardId = "";
+    private View dashAdvisoryView;
+    private TextView txtClients, txtTarget, tvMain;
+    private LinearLayout llClient, llTarget, llPerformanceAndIncentives, llBusinessSnapshotHead,
+            llClientsLeads, llTargetAchievementADV, llTeamTargetAchievement,
+            llPerformanceAndIncentivesHeader;
+    private ImageView ivActionableInsights, ivClientLeads, ivTargetAchievementADV,
+            ivTeamTargetAchievement, ivMonthOnMonth, ivBusinessSnapshotHead,
+            ivPerformanceAndIncentivesHeader;
     //
     //Subb button
     private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded;
-
     private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
     private ArrayList<AdvisoryActionableInsightModel> advisoryActionableInsightModelArrayList;
-    Bundle args = new Bundle();
     private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton leadcreation;
-    private RelativeLayout llMain, rlClientLeads, rlTargetAchievementADV, rlTeamTargetAchievement, rlMonthOnMonth, rlBusinessSnapshotHead, rlPerformanceAndIncentivesHeader;
-
+    private RelativeLayout llMain, rlClientLeads, rlTargetAchievementADV, rlTeamTargetAchievement,
+            rlMonthOnMonth, rlBusinessSnapshotHead, rlPerformanceAndIncentivesHeader;
     private Dialog dialog;
     //Team
     private LinearLayout llTeamTarget;
-    private TextView txtTeamTarget;
-    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour,
-            tableTeamPerformance, tableAdvPerformance, tableCurrentQuaterStatusFirst, tableCurrentQuaterStatusSecond;
 
     //Hierarchy
-
+    private TextView txtTeamTarget;
+    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour,
+            tableTeamPerformance, tableAdvPerformance, tableCurrentQuaterStatusFirst,
+            tableCurrentQuaterStatusSecond;
     private LinearLayout llSnapshot, mTabsLinearLayoutSnapshot;
     private TextView tvSnapshot, txtMonthTrends;
     private ArrayList<Fragment> pageListSnapshot = new ArrayList<>();
-    private TextView tvNameFirst, tvBranchNameFirst, tvTopRevenueFirst, tvNameSecond, tvBranchNameSecond, tvTopRevenueSecond, tvNameThird, tvBranchNameThird, tvTopRevenueThird, tvBottomNameFirst, tvBottomBranchNameFirst, tvBottomRevenueFirst, tvBottomNameSecond,
-            tvBottomBranchNameSecond, tvBottomRevenueSecond, tvBottomNameThird, tvBottomBranchNameThird, tvBottomRevenueThird;
-
+    private TextView tvNameFirst, tvBranchNameFirst, tvTopRevenueFirst, tvNameSecond,
+            tvBranchNameSecond, tvTopRevenueSecond, tvNameThird, tvBranchNameThird, tvTopRevenueThird,
+            tvBottomNameFirst, tvBottomBranchNameFirst, tvBottomRevenueFirst, tvBottomNameSecond,
+            tvBottomBranchNameSecond, tvBottomRevenueSecond, tvBottomNameThird, tvBottomBranchNameThird,
+            tvBottomRevenueThird;
     private LinearLayout llMonthTrend, llMonthvsTrends;
     private List<AvailableWidgetModel> widgetList;
     private List<DashboardModel> dashboardList = new ArrayList<>();
+    //incentive
     private List<FloatingActionButton> dashboardBtnList = new ArrayList<>();
     private DashboardModel currentDashboard;
-    //incentive
-
-    private TextView tvIncentives, tvPerformance, tvPerformanceAndIncentivesHeader, tvCurrentQuaterStatusThreeHeading, tvCurrentQuaterStatusFourHeading,
+    private TextView tvIncentives, tvPerformance, tvPerformanceAndIncentivesHeader,
+            tvCurrentQuaterStatusThreeHeading, tvCurrentQuaterStatusFourHeading,
             tvCurrentQuaterStatusFirstHeading, tvCurrentQuaterStatusSecondHeading;
     private Spinner spQuarter;
-
-
     //Adviosory Performance
     private BarChart mChartAdv;
     private ArrayList<String> yDataGraphArrAdv = new ArrayList<>();
     private ArrayList<String> xdataYearArrAdv = new ArrayList<>();
-
     //Team Performance
     private BarChart mChartTeam;
     private ArrayList<String> yDataGraphArrTeam = new ArrayList<>();
     private ArrayList<String> yDataGraphBlankArrTeam = new ArrayList<>();
     private ArrayList<String> xdataYearArrTeam = new ArrayList<>();
 
-    //Hierarchy Performance
-    protected HorizontalBarChart mChart;
-    private final int itemcount = 4;
 
-    //Mapped BA Snapshot
-
-    private Button btnBASnapshot, btnBACategory, btnBusinessSnapshotOneUp, btnBusinessSnapshotAdv, btnBusinessLead;
     //  private CustomTabsClient mClient;
     private TextView tvDetailIncentive, tvQuarterStatus;
     private String widgetSystemName;
-    private ArrayList<HashMap<String, String>> arrayListIncentive = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> arrayListIncentive =
+            new ArrayList<HashMap<String, String>>();
     private ArrayList<TeamQuarterStatusModel> arrayListCurrentStatus;
-    private LinearLayout llIncentive, llCurrentQuaterStatusThree, llCurrentQuaterStatusFour, llCurrentQuaterStatusFirst, llCurrentQuaterStatusSecond, llCurrentQuarterStatusAdviosory, llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp;
+    private LinearLayout llIncentive, llCurrentQuaterStatusThree, llCurrentQuaterStatusFour,
+            llCurrentQuaterStatusFirst, llCurrentQuaterStatusSecond, llCurrentQuarterStatusAdviosory,
+            llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp;
     private ScrollView scrollView;
     private List<WidgetModel> widgetModelList;
     private LinearLayout llReplaceClientFragment;
+    private XAxis xAxis;
+    private String[] mMonths;
+    ////////////////////
+    // Progress Dialog
+    private ProgressDialog pDialog;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         dashAdvisoryView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_dashboard);
         setUpView(dashAdvisoryView);
         hideAppTitle(getClass().toString());
-
 
         try {
             //CHECK IF CALLED FROM SEARCH RESULT
@@ -220,8 +225,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
         return dashAdvisoryView;
     }
-
-    private XAxis xAxis;
 
     private void setUpView(View dashAdvisoryView) {
         scrollView = (ScrollView) dashAdvisoryView.findViewById(R.id.scrollView);
@@ -255,78 +258,82 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             e.printStackTrace();
         }*/
 
-
         tvDetailIncentive = (TextView) dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
         tvQuarterStatus = (TextView) dashAdvisoryView.findViewById(R.id.tvQuarterStatus);
         tvDetailIncentive.setOnClickListener(this);
         llMain = (RelativeLayout) dashAdvisoryView.findViewById(R.id.llMain);
-        floatingActionsMenu = (FloatingActionsMenu) dashAdvisoryView.findViewById(R.id.floatingActionsMenu);
+        floatingActionsMenu =
+                (FloatingActionsMenu) dashAdvisoryView.findViewById(R.id.floatingActionsMenu);
         leadcreation = (FloatingActionButton) dashAdvisoryView.findViewById(R.id.leadcreation);
-
 
         ivActionableInsights = (ImageView) dashAdvisoryView.findViewById(R.id.ivActionableInsights);
         ivClientLeads = (ImageView) dashAdvisoryView.findViewById(R.id.ivClientLeads);
         ivTargetAchievementADV = (ImageView) dashAdvisoryView.findViewById(R.id.ivTargetAchievementADV);
-        ivTeamTargetAchievement = (ImageView) dashAdvisoryView.findViewById(R.id.ivTeamTargetAchievement);
+        ivTeamTargetAchievement =
+                (ImageView) dashAdvisoryView.findViewById(R.id.ivTeamTargetAchievement);
         ivMonthOnMonth = (ImageView) dashAdvisoryView.findViewById(R.id.ivMonthOnMonth);
         ivBusinessSnapshotHead = (ImageView) dashAdvisoryView.findViewById(R.id.ivBusinessSnapshotHead);
-        ivPerformanceAndIncentivesHeader = (ImageView) dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
+        ivPerformanceAndIncentivesHeader =
+                (ImageView) dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
         txtClients = (TextView) dashAdvisoryView.findViewById(R.id.txtClients);
         txtTarget = (TextView) dashAdvisoryView.findViewById(R.id.txtTarget);
         txtTeamTarget = (TextView) dashAdvisoryView.findViewById(R.id.txtTeamTarget);
-        tvPerformanceAndIncentivesHeader = (TextView) dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
+        tvPerformanceAndIncentivesHeader =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
         tvMain = (TextView) dashAdvisoryView.findViewById(R.id.tvMain);
         txtTeamTarget.setText(ADVISORY_TARGET_TITLE);
         // tvTeamPerformance.setText(ADVISORY_TEAM_PERFORMANCE_TITLE);
         btnLeads = (Button) dashAdvisoryView.findViewById(R.id.btnLeads);
         btnClient = (Button) dashAdvisoryView.findViewById(R.id.btnClient);
 
-
         llClient = (LinearLayout) dashAdvisoryView.findViewById(R.id.llClient);
         llClientsLeads = (LinearLayout) dashAdvisoryView.findViewById(R.id.llClientsLeads);
-        llTargetAchievementADV = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTargetAchievementADV);
-        llTeamTargetAchievement = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamTargetAchievement);
-        llPerformanceAndIncentivesHeader = (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
+        llTargetAchievementADV =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llTargetAchievementADV);
+        llTeamTargetAchievement =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamTargetAchievement);
+        llPerformanceAndIncentivesHeader =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
         rlClientLeads = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlClientLeads);
-        rlTargetAchievementADV = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
-        rlTeamTargetAchievement = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
+        rlTargetAchievementADV =
+                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
+        rlTeamTargetAchievement =
+                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
         rlMonthOnMonth = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlMonthOnMonth);
-        rlBusinessSnapshotHead = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
-        rlPerformanceAndIncentivesHeader = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
+        rlBusinessSnapshotHead =
+                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
+        rlPerformanceAndIncentivesHeader =
+                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
 
         btnClientTraded = (Button) dashAdvisoryView.findViewById(R.id.btnClientTraded);
         btnBusinessSnapshot = (Button) dashAdvisoryView.findViewById(R.id.btnBusinessSnapshot);
 
-
         llTarget = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTarget);
         llTeamTarget = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamTarget);
-        llPerformanceAndIncentives = (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentives);
+        llPerformanceAndIncentives =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentives);
         llMonthTrend = (LinearLayout) dashAdvisoryView.findViewById(R.id.llMonthTrend);
         llMonthvsTrends = (LinearLayout) dashAdvisoryView.findViewById(R.id.llMonthvsTrends);
-        llBusinessSnapshotHead = (LinearLayout) dashAdvisoryView.findViewById(R.id.llBusinessSnapshotHead);
-
+        llBusinessSnapshotHead =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llBusinessSnapshotHead);
 
         llIncentive = (LinearLayout) dashAdvisoryView.findViewById(R.id.llIncentive);
-        llCurrentQuaterStatusThree = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusThree);
-        llCurrentQuaterStatusFour = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFour);
-        llCurrentQuaterStatusFirst = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFirst);
-        llCurrentQuaterStatusSecond = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusSecond);
-        llCurrentQuarterStatusAdviosory = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusAdviosory);
-        llCurrentQuarterStatusOneUp = (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
+        llCurrentQuaterStatusThree =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusThree);
+        llCurrentQuaterStatusFour =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFour);
+        llCurrentQuaterStatusFirst =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFirst);
+        llCurrentQuaterStatusSecond =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusSecond);
+        llCurrentQuarterStatusAdviosory =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusAdviosory);
+        llCurrentQuarterStatusOneUp =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
         llAdvPerformance = (LinearLayout) dashAdvisoryView.findViewById(R.id.llAdvPerformance);
         llTeamPerformance = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamPerformance);
 
 
-        btnBASnapshot = (Button) dashAdvisoryView.findViewById(R.id.btnBASnapshot);
-        btnBACategory = (Button) dashAdvisoryView.findViewById(R.id.btnBACategory);
-        btnBusinessSnapshotOneUp = (Button) dashAdvisoryView.findViewById(R.id.btnBusinessSnapshotOneUp);
-        btnBusinessSnapshotAdv = (Button) dashAdvisoryView.findViewById(R.id.btnBusinessSnapshotAdv);
-        btnBusinessLead = (Button) dashAdvisoryView.findViewById(R.id.btnBusinessLead);
-        btnBASnapshot.setOnClickListener(this);
-        btnBACategory.setOnClickListener(this);
-        btnBusinessSnapshotOneUp.setOnClickListener(this);
-        btnBusinessSnapshotAdv.setOnClickListener(this);
-        btnBusinessLead.setOnClickListener(this);
         rlClientLeads.setOnClickListener(this);
         rlTargetAchievementADV.setOnClickListener(this);
         rlTeamTargetAchievement.setOnClickListener(this);
@@ -334,7 +341,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         rlBusinessSnapshotHead.setOnClickListener(this);
         rlPerformanceAndIncentivesHeader.setOnClickListener(this);
         //Hierarchy
-
 
         llSnapshot = (LinearLayout) dashAdvisoryView.findViewById(R.id.llSnapshot);
         tvSnapshot = (TextView) dashAdvisoryView.findViewById(R.id.tvSnapshot);
@@ -353,13 +359,16 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         tvTopRevenueThird = (TextView) dashAdvisoryView.findViewById(R.id.tvTopRevenueThird);
 
         tvBottomNameFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameFirst);
-        tvBottomBranchNameFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameFirst);
+        tvBottomBranchNameFirst =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameFirst);
         tvBottomRevenueFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueFirst);
         tvBottomNameSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameSecond);
-        tvBottomBranchNameSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameSecond);
+        tvBottomBranchNameSecond =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameSecond);
         tvBottomRevenueSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueSecond);
         tvBottomNameThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameThird);
-        tvBottomBranchNameThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameThird);
+        tvBottomBranchNameThird =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameThird);
         tvBottomRevenueThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueThird);
 
         tvTopRevenueFirst.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
@@ -386,30 +395,28 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         btnBusinessSnapshot.setOnClickListener(this);
         btnLeads.setOnClickListener(this);
 
-
         ivActionableInsights.setOnClickListener(this);
         leadcreation.setOnClickListener(this);
 
         btnClientTraded.setOnClickListener(this);
 
+        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(
+                new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+                    @Override
+                    public void onMenuExpanded() {
+                        llMain.setBackgroundColor(getResources().getColor(R.color.black));
+                        llMain.getBackground().setAlpha(180);
+                        llMain.setVisibility(View.VISIBLE);
+                    }
 
-        floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
-            @Override
-            public void onMenuExpanded() {
-                llMain.setBackgroundColor(getResources().getColor(R.color.black));
-                llMain.getBackground().setAlpha(180);
-                llMain.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onMenuCollapsed() {
-                llMain.setBackgroundColor(getResources().getColor(R.color.light_black));
-                llMain.getBackground().setAlpha(0);
-                llMain.setVisibility(View.GONE);
-            }
-        });
+                    @Override
+                    public void onMenuCollapsed() {
+                        llMain.setBackgroundColor(getResources().getColor(R.color.light_black));
+                        llMain.getBackground().setAlpha(0);
+                        llMain.setVisibility(View.GONE);
+                    }
+                });
         llMain.setOnClickListener(this);
-
 
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
         drawable.getPaint().setColor(getResources().getColor(R.color.black));
@@ -418,38 +425,45 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
         spQuarter = (Spinner) dashAdvisoryView.findViewById(R.id.spQuarter);
         tableMData = (TableLayout) dashAdvisoryView.findViewById(R.id.tableMData);
-        tableCurrentQuaterStatusFirst = (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFirst);
-        tableCurrentQuaterStatusSecond = (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusSecond);
-        tableCurrentQuaterStatusThree = (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusThree);
-        tableCurrentQuaterStatusFour = (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFour);
+        tableCurrentQuaterStatusFirst =
+                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFirst);
+        tableCurrentQuaterStatusSecond =
+                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusSecond);
+        tableCurrentQuaterStatusThree =
+                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusThree);
+        tableCurrentQuaterStatusFour =
+                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFour);
         tableTeamPerformance = (TableLayout) dashAdvisoryView.findViewById(R.id.tableTeamPerformance);
         tableAdvPerformance = (TableLayout) dashAdvisoryView.findViewById(R.id.tableAdvPerformance);
         spQuarter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+                                       long id) {
 
                 incentiveView(spQuarter.getSelectedItem().toString());
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-
         });
         String[] quarterArray = getActivity().getResources().getStringArray(R.array.SelectQuarter);
         ArrayList<String> arrEventType = new ArrayList<String>(Arrays.asList(quarterArray));
-        ArrayAdapter<String> arrAdapEventType = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrEventType);
+        ArrayAdapter<String> arrAdapEventType =
+                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
         spQuarter.setAdapter(arrAdapEventType);
         tvIncentives = (TextView) dashAdvisoryView.findViewById(R.id.tvIncentives);
         tvPerformance = (TextView) dashAdvisoryView.findViewById(R.id.tvPerformance);
-        tvCurrentQuaterStatusFirstHeading = (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFirstHeading);
-        tvCurrentQuaterStatusSecondHeading = (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusSecondHeading);
-        tvCurrentQuaterStatusThreeHeading = (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusThreeHeading);
-        tvCurrentQuaterStatusFourHeading = (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFourHeading);
-
+        tvCurrentQuaterStatusFirstHeading =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFirstHeading);
+        tvCurrentQuaterStatusSecondHeading =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusSecondHeading);
+        tvCurrentQuaterStatusThreeHeading =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusThreeHeading);
+        tvCurrentQuaterStatusFourHeading =
+                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFourHeading);
 
         mChartAdv = (BarChart) dashAdvisoryView.findViewById(R.id.chart);
         mChartAdv.getDescription().setEnabled(false);
@@ -501,7 +515,7 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
         mChartTeam.getDescription().setEnabled(false);
 
-//        mChartPer.setDrawBorders(true);
+        //        mChartPer.setDrawBorders(true);
 
         // scaling can now only be done on x- and y-axis separately
         mChartTeam.setPinchZoom(false);
@@ -596,14 +610,14 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         yl.setDrawAxisLine(true);
         yl.setDrawGridLines(false);
         yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-//        yl.setInverted(true);
+        //        yl.setInverted(true);
 
         YAxis yr = mChart.getAxisRight();
         yr.setEnabled(false);
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
         yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-//        yr.setInverted(true);
+        //        yr.setInverted(true);
 
         setData();
         mChart.setFitBars(true);
@@ -617,12 +631,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         l.setFormSize(8f);
         l.setXEntrySpace(4f);
         l.setEnabled(false);
-        llReplaceClientFragment = (LinearLayout) dashAdvisoryView.findViewById(R.id.llReplaceClientFragment);
-
-
+        llReplaceClientFragment =
+                (LinearLayout) dashAdvisoryView.findViewById(R.id.llReplaceClientFragment);
     }
-
-    private String[] mMonths;
 
     private void generateAxisLabel(ChartDataModel data) {
         if (data != null) {
@@ -635,7 +646,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
     }
 
-
     private int getColor(int index) {
         switch (index) {
             case 0:
@@ -644,19 +654,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 return Color.rgb(61, 165, 255);
             default:
                 return Color.rgb(38, 127, 183);
-        }
-    }
-
-    private class ChartDataModel {
-
-        private LinkedHashMap<String, Float> monthData = new LinkedHashMap<>();
-
-        public LinkedHashMap<String, Float> getMonthData() {
-            return monthData;
-        }
-
-        public void setMonthData(LinkedHashMap<String, Float> monthData) {
-            this.monthData = monthData;
         }
     }
 
@@ -701,7 +698,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             d.addDataSet(set1);
         }
 
-
         float groupSpace = 0.06f;
         float barSpace = 0.02f; // x2 dataset
         float barWidth = 0.37f; // x2 dataset
@@ -711,14 +707,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         d.setBarWidth(barWidth);
         if (barDataList.size() > 1) {
             d.groupBars(0, groupSpace, barSpace); // start at x = 0
-
         } else {
 
         }
 
         return d;
     }
-
 
     public void advLoadChart(JSONArray jsonArray) {
         String ytd = "";
@@ -730,14 +724,22 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             for (int i = 0; i < jsonArray.length(); i++) {
                 ChartDataModel model = new ChartDataModel();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? "" : jsonObject.getString("Name");
-                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0" : jsonObject.getString("Q1");
-                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0" : jsonObject.getString("Q2");
-                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0" : jsonObject.getString("Q3");
-                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0" : jsonObject.getString("Q4");
-                String WidgetType = (jsonObject.isNull("WidgetType") || jsonObject.getString("WidgetType").equals("")) ? "" : jsonObject.getString("WidgetType");
+                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
+                        : jsonObject.getString("Name");
+                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
+                        : jsonObject.getString("Q1");
+                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
+                        : jsonObject.getString("Q2");
+                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
+                        : jsonObject.getString("Q3");
+                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
+                        : jsonObject.getString("Q4");
+                String WidgetType =
+                        (jsonObject.isNull("WidgetType") || jsonObject.getString("WidgetType").equals("")) ? ""
+                                : jsonObject.getString("WidgetType");
                 if (jsonObject.has("YTD")) {
-                    ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0" : jsonObject.getString("YTD");
+                    ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
+                            : jsonObject.getString("YTD");
                     yDataGraphArrAdv.add(ytd);
                 }
                 yDataGraphArrAdv.add(Name);
@@ -753,13 +755,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 if (jsonObject.has("YTD")) {
                     model.getMonthData().put("YTD", Float.parseFloat(ytd));
-
                 }
                 dataList.add(model);
-
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -836,7 +834,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         float barSpace = 0.03f; // x4 DataSet
         float barWidth = 0.25f; // x4 DataSet*/
 
-
         int groupCount = mMonths.length;
         int startYear = 2010;
         int endYear = 2015;
@@ -863,7 +860,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         tableAdvPerformance.addView(tableRowHeader);
         //adding head end
 
-
         for (int i = 1; i < mMonths.length + 1; i++) {
             View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
             TextView tvTeamAvg = (TextView) tableRow.findViewById(R.id.tvTeamAvg);
@@ -878,7 +874,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 groupSpace = 0.18f;
                 barSpace = 0.03f;
                 barWidth = 0.25f;
-
             }
             tableAdvPerformance.addView(tableRow);
         }
@@ -890,7 +885,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         mChartAdv.getXAxis().setAxisMinimum(startYear);
 
         // barData.getGroupWith(...) is a helper that calculates the width each group needs based on the provided parameters
-        mChartAdv.getXAxis().setAxisMaximum(startYear + mChartAdv.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
+        mChartAdv.getXAxis()
+                .setAxisMaximum(
+                        startYear + mChartAdv.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
         mChartAdv.groupBars(startYear, groupSpace, barSpace);
         mChartAdv.invalidate();
 
@@ -909,38 +906,39 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
             private void pieChartDetail(float sliceIndex) {
 
-
             }
 
             @Override
             public void onNothingSelected() {
 
             }
-
         });
         llAdvPerformance.setVisibility(View.VISIBLE);
         tvPerformance.setText("Performance");
     }
 
-
     public void teamLoadChart(JSONArray jsonArray) {
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? "" : jsonObject.getString("Name");
-                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0" : jsonObject.getString("Q1");
-                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0" : jsonObject.getString("Q2");
-                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0" : jsonObject.getString("Q3");
-                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0" : jsonObject.getString("Q4");
-                String ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0" : jsonObject.getString("YTD");
+                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
+                        : jsonObject.getString("Name");
+                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
+                        : jsonObject.getString("Q1");
+                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
+                        : jsonObject.getString("Q2");
+                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
+                        : jsonObject.getString("Q3");
+                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
+                        : jsonObject.getString("Q4");
+                String ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
+                        : jsonObject.getString("YTD");
                 yDataGraphArrTeam.add(Name);
                 yDataGraphArrTeam.add(Q1);
                 yDataGraphArrTeam.add(Q2);
                 yDataGraphArrTeam.add(Q3);
                 yDataGraphArrTeam.add(Q4);
                 yDataGraphArrTeam.add(ytd);
-
-
             }
             yDataGraphBlankArrTeam.add("0");
             yDataGraphBlankArrTeam.add("0");
@@ -959,14 +957,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             tvTeamAvgHeader.setText(yDataGraphArrTeam.get(0));
             tvNationalAvgHeader.setText(yDataGraphArrTeam.get(6));
 
-
             //Boald type face
             tvTeamAvgHeader.setTypeface(null, Typeface.BOLD);
             tvNationalAvgHeader.setTypeface(null, Typeface.BOLD);
 
             tableTeamPerformance.addView(tableRowHeader);
             //adding head end
-
 
             for (int i = 1; i < 6; i++) {
                 View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
@@ -986,16 +982,13 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         float barSpace = 0.03f; // x4 DataSet
         float barWidth = 0.25f; // x4 DataSet
 
-
         int groupCount = 5;
         int startYear = 2010;
         int endYear = 2015;
 
-
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
-
 
         yVals1.add(new BarEntry(0, Float.valueOf(yDataGraphArrTeam.get(1))));
         yVals1.add(new BarEntry(1, Float.valueOf(yDataGraphArrTeam.get(2))));
@@ -1032,7 +1025,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             set3.setValues(yVals3);
             mChartTeam.getData().notifyDataChanged();
             mChartTeam.notifyDataSetChanged();
-
         } else {
             // create 4 DataSets
             set1 = new BarDataSet(yVals1, "");
@@ -1049,7 +1041,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             mChartTeam.setData(data);
         }
 
-
         // specify the width each bar should have
         mChartTeam.getBarData().setBarWidth(barWidth);
 
@@ -1057,7 +1048,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         mChartTeam.getXAxis().setAxisMinimum(startYear);
 
         // barData.getGroupWith(...) is a helper that calculates the width each group needs based on the provided parameters
-        mChartTeam.getXAxis().setAxisMaximum(startYear + mChartTeam.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
+        mChartTeam.getXAxis()
+                .setAxisMaximum(
+                        startYear + mChartTeam.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
         mChartTeam.groupBars(startYear, groupSpace, barSpace);
         mChartTeam.invalidate();
 
@@ -1074,14 +1067,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 Bundle args = new Bundle();
                 Log.d("index", Float.toString(sliceIndex + 0.5f));
                 navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-
             }
 
             @Override
             public void onNothingSelected() {
 
             }
-
         });
     }
 
@@ -1092,7 +1083,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             float val1 = (float) (Math.random() * 150) / 2;
 
             float val2 = (float) (Math.random() * 150) / 2;
-
 
             yVals1.add(new BarEntry(i + 0.5f, val1));
         }
@@ -1135,14 +1125,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 Bundle args = new Bundle();
                 Log.d("index", Float.toString(sliceIndex + 0.5f));
                 navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-
             }
 
             @Override
             public void onNothingSelected() {
 
             }
-
         });
     }
 
@@ -1160,7 +1148,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                     }
                 }
 
-
             case "Snapshot":
                 for (int i = 0; i < mTabsLinearLayoutSnapshot.getChildCount(); i++) {
                     TextView tv = (TextView) mTabsLinearLayoutSnapshot.getChildAt(i);
@@ -1172,9 +1159,7 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 }
                 break;
         }
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -1199,37 +1184,11 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             } else if (id == R.id.btnLeads) {
                 hideKeyboard(view);
                 loadLead();
-            } else if (id == R.id.btnBASnapshot) {
-                hideKeyboard(view);
-                loadBASnapshot();
-            } else if (id == R.id.btnBACategory) {
-                hideKeyboard(view);
-                loadBACategory();
-            } else if (id == R.id.btnBusinessSnapshotAdv) {
-                hideKeyboard(view);
-                loadBusinessSnapshotAdv();
-            } else if (id == R.id.btnBusinessSnapshotOneUp) {
-                hideKeyboard(view);
-                loadBusinessSnapshotOneUp();
-            } else if (id == R.id.btnBusinessLead) {
-                hideKeyboard(view);
-                loadBusinessLead();
             } else if (id == R.id.btnClientTraded) {
                 hideKeyboard(view);
                 loadClientTraded();
             } else if (id == R.id.leadcreation) {
                 hideKeyboard(view);
-               /* if (AccountDetails.isFranchiseUser()) {
-                    floatingActionsMenu.collapse();
-                    args.putString("", "");
-                    args.putString("NAT_TO", ADVISORY);
-                    navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
-                } else {
-                    floatingActionsMenu.collapse();
-                    args.putString("", "");
-                    args.putString("NAT_TO", ADVISORY);
-                    navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
-                }*/
                 floatingActionsMenu.collapse();
                 navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
             } else if (id == R.id.llMain) {
@@ -1248,35 +1207,12 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             } else if (id == R.id.rlPerformanceAndIncentivesHeader) {
                 toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             }
-
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
     }
 
 
-    /* private void loadSnapshot() {
-         btnTeamSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-         btnTeamSnapshot.setTextColor(getResources().getColor(R.color.white));
-         btnTeamLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-         btnTeamLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-         SnapshotFragment snapshotFragment = SnapshotFragment.newInstance(getContext());
-         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceTeamFragment, snapshotFragment).commit();
-
-     }
-
-     private void loadTeamLead() {
-         Bundle args = new Bundle();
-         btnTeamSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-         btnTeamSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-         btnTeamLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-         btnTeamLeads.setTextColor(getResources().getColor(R.color.white));
-         args.putSerializable(TEAM_LEAD, currentDashboard);
-         TeamLeadsFragment leadsFragment = TeamLeadsFragment.newInstance(getContext());
-         leadsFragment.setArguments(args);
-         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceTeamFragment, leadsFragment).commit();
-     }
- */
     private void loadLead() {
         Bundle args = new Bundle();
         btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
@@ -1290,7 +1226,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, leadsFragment)
+                .commit();
     }
 
     private void loadClientTraded() {
@@ -1303,11 +1242,15 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
         btnClientTraded.setTextColor(getResources().getColor(R.color.white));
-        ClientsTradedYesterdayFragment clientsFragment = ClientsTradedYesterdayFragment.newInstance(getContext());
+        ClientsTradedYesterdayFragment clientsFragment =
+                ClientsTradedYesterdayFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
 
         clientsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, clientsFragment)
+                .commit();
     }
 
     private void loadLeadBusinessSnapShot() {
@@ -1323,7 +1266,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, leadsFragment)
+                .commit();
     }
 
     private void loadTargetAchievement() {
@@ -1331,15 +1277,22 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         TargetAchievementFragment leadsFragment = TargetAchievementFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llTargetAchievementADV, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llTargetAchievementADV, leadsFragment)
+                .commit();
     }
 
     private void loadTeamTargetAchievement() {
         Bundle args = new Bundle();
-        TargetAchievementTeamFragment leadsFragment = TargetAchievementTeamFragment.newInstance(getContext());
+        TargetAchievementTeamFragment leadsFragment =
+                TargetAchievementTeamFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llTeamTargetAchievement, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llTeamTargetAchievement, leadsFragment)
+                .commit();
     }
 
     private void loadMonthTrends() {
@@ -1347,7 +1300,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         TrendsTabFragment leadsFragment = TrendsTabFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llMonthvsTrends, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llMonthvsTrends, leadsFragment)
+                .commit();
     }
 
     private void loadBusinessSnapShot() {
@@ -1355,7 +1311,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llBusinessSnapshotHead, leadsFragment).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llBusinessSnapshotHead, leadsFragment)
+                .commit();
     }
 
     private void loadClients() {
@@ -1370,58 +1329,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceClientFragment, clientsFragment).commit();
-    }
-
-    private void loadBASnapshot() {
-        btnBASnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBASnapshot.setTextColor(getResources().getColor(R.color.white));
-        btnBACategory.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBACategory.setTextColor(getResources().getColor(R.color.Button_text_color));
-        BASnapshotFragment BASnapshot = BASnapshotFragment.newInstance(getContext());
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceBASnapshotFragment, BASnapshot).commit();
-    }
-
-    private void loadBACategory() {
-        btnBASnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBASnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBACategory.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBACategory.setTextColor(getResources().getColor(R.color.white));
-        BACategoryFragment BACategory = BACategoryFragment.newInstance(getContext());
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceBASnapshotFragment, BACategory).commit();
-    }
-
-    private void loadBusinessSnapshotAdv() {
-        btnBusinessSnapshotAdv.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBusinessSnapshotAdv.setTextColor(getResources().getColor(R.color.white));
-        btnBusinessSnapshotOneUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotOneUp.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessLead.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessLead.setTextColor(getResources().getColor(R.color.Button_text_color));
-        BusinessSnapshotAdvFragment businessSnapshotAdv = BusinessSnapshotAdvFragment.newInstance(getContext());
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceBusinessSnapshotFragment, businessSnapshotAdv).commit();
-    }
-
-    private void loadBusinessSnapshotOneUp() {
-        btnBusinessSnapshotAdv.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdv.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotOneUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBusinessSnapshotOneUp.setTextColor(getResources().getColor(R.color.white));
-        btnBusinessLead.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessLead.setTextColor(getResources().getColor(R.color.Button_text_color));
-        BSDirectOneUpFragment businessSnapshotOneUp = BSDirectOneUpFragment.newInstance(getContext());
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceBusinessSnapshotFragment, businessSnapshotOneUp).commit();
-    }
-
-    private void loadBusinessLead() {
-        btnBusinessSnapshotAdv.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdv.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotOneUp.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotOneUp.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessLead.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBusinessLead.setTextColor(getResources().getColor(R.color.white));
-        BusinessLeadFragment businessLead = BusinessLeadFragment.newInstance(getContext());
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceBusinessSnapshotFragment, businessLead).commit();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, clientsFragment)
+                .commit();
     }
 
 
@@ -1433,7 +1344,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_actionable_insights);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
 
         ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
@@ -1455,143 +1367,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         dialog.show();
     }
 
-    public class AdvisoryActionableInsightAdapter extends BaseAdapter {
-
-        private final LayoutInflater inflater;
-        Context mContext;
-        List<WidgetModel> advisoryActionableInsightModelList;
-        //private ArrayList<AdvisoryActionableInsightModel> arraylist;
-
-        public AdvisoryActionableInsightAdapter(Context c, List<WidgetModel> advisoryActionableInsightModelList) {
-            inflater = LayoutInflater.from(c);
-            this.mContext = c;
-            this.advisoryActionableInsightModelList = advisoryActionableInsightModelList;
-        }
-
-        public void showCount(boolean show, String systemName) {
-            for (WidgetModel model : advisoryActionableInsightModelList) {
-                if (model.getSystemName().equals(systemName)) {
-                    if (show) {
-                        model.setShowActionableCount(show);
-                        break;
-                    }
-                }
-            }
-            notifyDataSetChanged();
-        }
-
-        public void clear() {
-            advisoryActionableInsightModelList.clear();
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return advisoryActionableInsightModelList.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return advisoryActionableInsightModelList.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            final Holder holder = new Holder();
-            view = inflater.inflate(R.layout.item_list_actionable_insights, viewGroup, false);
-
-            final WidgetModel advisoryActionableInsightModel = advisoryActionableInsightModelList.get(i);
-            holder.ivActionableInsights = (ImageView) view.findViewById(R.id.ivActionableInsights);
-            holder.pbLoadingIndicator = (ProgressBar) view.findViewById(R.id.pbLoadingIndicator);
-            holder.tvActionableInsights = (TextView) view.findViewById(R.id.tvActionableInsights);
-            holder.tvActionableCount = (TextView) view.findViewById(R.id.tvActionableCount);
-            holder.rlActionable = (RelativeLayout) view.findViewById(R.id.rlActionable);
-
-            final Map<String, String> addtionalParameterMap = new HashMap<>();
-            addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-            Glide.with(getContext()).load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
-                    //remove Chache
-                    .asBitmap().placeholder(R.drawable.ic_create_meeting).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(holder.ivActionableInsights) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    //circularBitmapDrawable.setCircular(true);
-                    holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
-                }
-            });
-            holder.tvActionableInsights.setText(advisoryActionableInsightModel.getName());
-            holder.tvActionableCount.setText(advisoryActionableInsightModel.getActionableCount());
-            final DashboardGroupModel groupModel = currentDashboard.getGroupModel(ACTIONABLE);
-
-            holder.rlActionable.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // addtionalParameterMap.put(ROW_FILTER, advisoryActionableInsightModel.getType());
-                    //  holder.rlActionable.setBackgroundColor(getResources().getColor(R.color.white));
-                    Bundle args = new Bundle();
-                    args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
-                    args.putString(LABEL, ACTIONABLE);
-                    args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
-                    args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                    List<WidgetModel> widgetList = groupModel.getWidgetList();
-                    if (widgetList != null && widgetList.size() > 0) {
-                        for (WidgetModel model1 : widgetList) {
-                            if (advisoryActionableInsightModel.getSystemName().equalsIgnoreCase(model1.getSystemName())) {
-                                //    model1.getWidgetTypeList();
-                                ArrayList<WidgetFilterModel> filterList = (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
-                                ArrayList<TypeActionableFilterModel> spinnerFilter = (ArrayList<TypeActionableFilterModel>) model1.getSpinnerFilterList();
-                                if (!filterList.isEmpty()) {
-                                    args.putParcelableArrayList(FILTER_LIST, filterList);
-                                }
-                                if (!spinnerFilter.isEmpty()) {
-                                    args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
-                                }
-                            }
-                        }
-                    }
-                    // args.putStringArrayList(FILTER_LIST, advisoryActionableInsightModel.getSpinnerFilterList());
-                    if (!advisoryActionableInsightModel.getActionableCount().equalsIgnoreCase("0")) {
-                        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                        dialog.dismiss();
-                    }
-                }
-            });
-
-            if (advisoryActionableInsightModel.isShowActionableCount()) {
-                holder.tvActionableCount.setVisibility(View.VISIBLE);
-                holder.pbLoadingIndicator.setVisibility(View.GONE);
-            } else {
-                holder.rlActionable.setOnClickListener(null);
-                holder.tvActionableCount.setVisibility(View.GONE);
-                holder.pbLoadingIndicator.setVisibility(View.VISIBLE);
-            }
-
-            return view;
-        }
-
-        public void addItems(List<WidgetModel> widgetModelList) {
-            advisoryActionableInsightModelList = widgetModelList;
-            notifyDataSetChanged();
-        }
-
-        class Holder {
-            ImageView ivActionableInsights;
-            TextView tvActionableInsights, tvActionableCount;
-            RelativeLayout rlActionable;
-            ProgressBar pbLoadingIndicator;
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        try {
+  /*      try {
             if (AccountDetails.getToken() == null) {
                 Intent intent = new Intent(getMainActivity(), SplashActivity.class);
                 startActivity(intent);
@@ -1605,26 +1384,29 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
+        }*/
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        /*try {
+        try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && dashAdvisoryView != null) {
                 if (AccountDetails.getToken() == null) {
                     Intent intent = new Intent(getMainActivity(), SplashActivity.class);
                     startActivity(intent);
                 } else {
+                    for (FloatingActionButton sFab : dashboardBtnList) {
+                        floatingActionsMenu.removeButton(sFab);
+                    }
+                    dashboardBtnList.clear();
+                    dashboardList.clear();
                     loadDahboardMetaData();
                 }
-
-
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void loadDahboardMetaData() {
@@ -1639,125 +1421,137 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             inputMap.put(EMPLOYEE_CODE, employeeCode);
 
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                        new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                try {
+                                    if (statusCode == 200) {
+                                        String status = response.getString(STATUS);
+                                        hideProgress();
 
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    JSONArray responseJSONArray = response.getJSONArray("Response");
-                                    for (int i = 0; i < responseJSONArray.length(); i++) {
-                                        JSONObject responseJsonObj = responseJSONArray.getJSONObject(i);
-                                        fillAvailableWidgetModel(responseJsonObj);
+                                        if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                                            JSONArray responseJSONArray = response.getJSONArray("Response");
+                                            for (int i = 0; i < responseJSONArray.length(); i++) {
+                                                JSONObject responseJsonObj = responseJSONArray.getJSONObject(i);
+                                                fillAvailableWidgetModel(responseJsonObj);
+                                            }
+                                            if (dashboardList.size() > 0) {
+                                                currentDashboard = dashboardList.get(0);
+                                                currentDashboard.setBusinessProfileIdForDashboard(
+                                                        businessProfileIdForDashboard);
+                                                currentDashboard.setProductId(productId);
+                                                currentDashboard.setEmployeeCode(employeeCode);
+                                                createFloatingButtons();
+                                                renderDashboard();
+                                            }
+                                        } else {
+                                            hideProgress();
+                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                            hideProgress();
+                                            return;
+                                        }
+                                    } else {
+                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "Ok", true, null);
+                                        hideProgress();
+                                        return;
                                     }
-                                    if (dashboardList.size() > 0) {
-                                        currentDashboard = dashboardList.get(0);
-                                        currentDashboard.setBusinessProfileIdForDashboard(businessProfileIdForDashboard);
-                                        currentDashboard.setProductId(productId);
-                                        currentDashboard.setEmployeeCode(employeeCode);
-                                        createFloatingButtons();
-                                        renderDashboard();
-                                    }
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "Ok", true, null);
                                     hideProgress();
                                     return;
                                 }
+                            }
 
-                            } else {
-                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "Ok", true, null);
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                                hideProgress();
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                hideProgress();
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                try {
+                                    hideProgress();
+                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                                                false, new MSFDialog.DialogListener() {
+                                                    @Override
+                                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                                        if (action == MSFDialog.Action.OK) {
+                                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                                            startActivity(i);
+                                                            getActivity().finish();
+                                                        }
+                                                    }
+                                                });
+                                        return;
+                                    } else {
+                                        String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                        if (CRMAppUtil.isBlank(error)) {
+                                            error = SOME_SERVER_ERROR_OCCURRED;
+                                        }
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                hideProgress();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
                                 hideProgress();
                                 return;
                             }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "Ok", true, null);
-                            hideProgress();
-                            return;
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
 
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
                                 return;
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                        return;
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                        return;
-                    }
-
-                });
+                        });
             } catch (Exception e) {
                 e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
+                        true, null);
                 hideProgress();
                 return;
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", true, null);
             return;
         }
     }
@@ -1784,139 +1578,152 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             inputMap.put("WidgetSystemName", systemName);
             inputMap.put("AddtionalParameters", getAddtionalParameterMapActionable());
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                        new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
-                                    ArrayList<String> arrayList = new ArrayList<String>();
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //after success code goes here
+                                try {
+                                    if (statusCode == 200) {
+                                        String status = response.getString(STATUS);
+                                        hideProgress();
+                                        if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                                            JSONObject responseJsonObj = response.getJSONObject("Response");
+                                            ArrayList<String> arrayList = new ArrayList<String>();
                                   /*  "Table1" : -[
                                     -{
                                             "Count" : 0
                                        }
                                        ]*/
-                                    String type = "";
-                                    ArrayList<TypeActionableFilterModel> typeList = new ArrayList<TypeActionableFilterModel>();
+                                            String type = "";
+                                            ArrayList<TypeActionableFilterModel> typeList =
+                                                    new ArrayList<TypeActionableFilterModel>();
 
-
-                                    if (responseJsonObj.has("Table")) {
-                                        JSONArray tableArray = responseJsonObj.getJSONArray("Table");
-                                        for (int i = 0; i < tableArray.length(); i++) {
-                                            JSONObject getJsonObject = tableArray.getJSONObject(i);
-                                            if (getJsonObject.has("Type")) {
-                                                type = (getJsonObject.isNull("Type") || getJsonObject.getString("Type").equals("")) ? "" : getJsonObject.getString("Type");
-                                                TypeActionableFilterModel tmpType = new TypeActionableFilterModel(type);
-                                                typeList.add(tmpType);
+                                            if (responseJsonObj.has("Table")) {
+                                                JSONArray tableArray = responseJsonObj.getJSONArray("Table");
+                                                for (int i = 0; i < tableArray.length(); i++) {
+                                                    JSONObject getJsonObject = tableArray.getJSONObject(i);
+                                                    if (getJsonObject.has("Type")) {
+                                                        type = (getJsonObject.isNull("Type") || getJsonObject.getString("Type")
+                                                                .equals("")) ? "" : getJsonObject.getString("Type");
+                                                        TypeActionableFilterModel tmpType = new TypeActionableFilterModel(type);
+                                                        typeList.add(tmpType);
+                                                    }
+                                                }
                                             }
+
+                                            try {
+                                                String count = "";
+                                                if (responseJsonObj.has("Table1")) {
+                                                    JSONArray tableArray = responseJsonObj.getJSONArray("Table1");
+                                                    JSONObject getJsonObject = tableArray.getJSONObject(0);
+                                                    count = (getJsonObject.isNull("Count") || getJsonObject.getString("Count")
+                                                            .equals("")) ? "0" : getJsonObject.getString("Count");
+                                                }
+                                                currentDashboard.setActionableCount(systemName, count, typeList);
+
+                                                advisoryActionableInsightAdapter.showCount(true, systemName);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                currentDashboard.setActionableCount(systemName, "",
+                                                        new ArrayList<TypeActionableFilterModel>());
+                                            }
+                                            hideProgress();
+                                        } else {
+                                            hideProgress();
+                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
-
-
+                                    } else {
+                                        hideProgress();
+                                        //                                customProgress.setVisibility(View.GONE);
                                     }
-
-                                    try {
-                                        String count = "";
-                                        if (responseJsonObj.has("Table1")) {
-                                            JSONArray tableArray = responseJsonObj.getJSONArray("Table1");
-                                            JSONObject getJsonObject = tableArray.getJSONObject(0);
-                                            count = (getJsonObject.isNull("Count") || getJsonObject.getString("Count").equals("")) ? "0" : getJsonObject.getString("Count");
-                                        }
-                                        currentDashboard.setActionableCount(systemName, count, typeList);
-
-                                        advisoryActionableInsightAdapter.showCount(true, systemName);
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                        currentDashboard.setActionableCount(systemName, "", new ArrayList<TypeActionableFilterModel>());
-                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                     hideProgress();
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
-
-                            } else {
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                try {
+                                    hideProgress();
+                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                                                false, new MSFDialog.DialogListener() {
+                                                    @Override
+                                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                                        if (action == MSFDialog.Action.OK) {
+                                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                                            startActivity(i);
+                                                            getActivity().finish();
+                                                        }
+                                                    }
+                                                });
+                                        return;
+                                    } else {
+                                        //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                        return;
                                     }
-                                });
-                                return;
-                            } else {
-                                //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                return;
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                });
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
+                        });
             } catch (Exception e) {
                 hideProgress();
                 e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
+                        true, null);
             }
         } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            //            customProgress.setVisibility(View.GONE);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
@@ -1938,11 +1745,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             dashboardModel.getGroupList().clear();
             dashboardModel.getGroupList().addAll(mainGroupList);
         }
-
     }
 
-
-    private List<DashboardGroupModel> getGroupModelFromJsonArray(JSONArray groupArray) throws Exception {
+    private List<DashboardGroupModel> getGroupModelFromJsonArray(JSONArray groupArray)
+            throws Exception {
         List<DashboardGroupModel> groupList = new ArrayList();
 
         for (int liX = 0; liX < groupArray.length(); liX++) {
@@ -1958,7 +1764,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 String imageUrl1 = groupObj.getString("ImageUrl");
                 //  String imageUrl2 = groupObj.getString("ImageUrl2");
 
-
                 groupModel.setId(dashBordGroupId);
                 groupModel.setDisplayName(groupName);
                 groupModel.setSystemName(groupSystemName);
@@ -1966,7 +1771,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 //  groupModel.setIconUrl2(imageUrl2);
                 boolean selected = (liX == 0) ? true : false;
                 groupModel.setSelected(selected);
-
 
                 JSONArray childrenGroupArray = groupObj.getJSONArray("Children");
                 if (childrenGroupArray != null && childrenGroupArray.length() > 0) {
@@ -1979,7 +1783,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 groupModel.getWidgetList().addAll(widgetModelList);
 
-
                 //filter list
                 groupModel.setGroupFilterList(getFilterList(groupObj));
             }
@@ -1989,9 +1792,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
     /**
      * this method will collect the filter data (dropdown)
-     *
-     * @param jsonObject
-     * @return
      */
     public List<WidgetFilterModel> getFilterList(JSONObject jsonObject) {
         //Timber.v("All " + jsonObject.toString());
@@ -2000,7 +1800,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
             if (jsonObject.has("AvailableFilter")) {
                 JSONArray filterArray = jsonObject.getJSONArray("AvailableFilter");
-
 
                 for (int filterCount = 0; filterCount < filterArray.length(); filterCount++) {
 
@@ -2014,7 +1813,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                     if (filterData.has("Table")) {
                         JSONArray filterRowArray = filterData.getJSONArray("Table");
-                        for (int filterRowCount = 0; filterRowCount < filterRowArray.length(); filterRowCount++) {
+                        for (int filterRowCount = 0; filterRowCount < filterRowArray.length();
+                             filterRowCount++) {
                             JSONObject rowObj = filterRowArray.getJSONObject(filterRowCount);
 
                             String text = rowObj.getString("text");
@@ -2024,7 +1824,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                         }
                     }
 
-                    WidgetFilterModel filterModel = new WidgetFilterModel(filterSysName, keyValue, filterRowList);
+                    WidgetFilterModel filterModel =
+                            new WidgetFilterModel(filterSysName, keyValue, filterRowList);
                     filterList.add(filterModel);
                 }
             }
@@ -2038,11 +1839,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
     /**
      * This will return list of widget model from AvailableWidgets json array
      *
-     * @param jsonArray
-     * @return
      * @throws Exception
      */
-    private List<WidgetModel> getWidgetModelFromAvailableWidgets(JSONArray jsonArray) throws Exception {
+    private List<WidgetModel> getWidgetModelFromAvailableWidgets(JSONArray jsonArray)
+            throws Exception {
         List<WidgetModel> widgetModelList = new ArrayList<>();
 
         for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
@@ -2055,7 +1855,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 String id = jsonObject.isNull("Id") ? "" : jsonObject.getString("Id");
                 String displayName = jsonObject.isNull("Name") ? "" : jsonObject.getString("Name");
-                String systemName = jsonObject.isNull("SystemName") ? "" : jsonObject.getString("SystemName");
+                String systemName =
+                        jsonObject.isNull("SystemName") ? "" : jsonObject.getString("SystemName");
                 String iconUrl1 = jsonObject.isNull("ImageUrl") ? "" : jsonObject.getString("ImageUrl");
                 String iconUr2 = jsonObject.isNull("ImageUrl2") ? "" : jsonObject.getString("ImageUrl2");
 
@@ -2066,7 +1867,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                     widgetModel.setWidgetTypeList(childrenGroup);
                 }
 
-
                 boolean selected = (ctr == 0) ? true : false;
                 widgetModel.setSelected(selected);
                 widgetModel.setId(id);
@@ -2076,12 +1876,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 widgetModel.setIconUrl2(iconUr2);
                 widgetModel.setWidgetFilterList(getFilterList(jsonObject));
                 widgetModel.setPreviousSelectedPosition(ctr);
-
             }
         }
         return widgetModelList;
     }
-
 
     private List<WidgetType> getWidgetTypeFromAvailableWidgets(JSONArray jsonArray) throws Exception {
         List<WidgetType> widgetModelList = new ArrayList<>();
@@ -2090,10 +1888,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             JSONObject jsonObject = (JSONObject) jsonArray.get(ctr);
 
             if (jsonObject != null) {
-                String widgetTypes = jsonObject.isNull("WidgetTypes") ? "" : jsonObject.getString("WidgetTypes");
+                String widgetTypes =
+                        jsonObject.isNull("WidgetTypes") ? "" : jsonObject.getString("WidgetTypes");
                 String title = jsonObject.isNull("Title") ? "" : jsonObject.getString("Title");
                 widgetModelList.add(new WidgetType(widgetTypes, title));
-
             }
         }
         return widgetModelList;
@@ -2120,8 +1918,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         if (currentDashboard.isGroupExists(ACTIONABLE)) {
             ivActionableInsights.setVisibility(View.VISIBLE);
 
-            List<WidgetModel> widgetModelList = currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
-            advisoryActionableInsightAdapter = new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
+            List<WidgetModel> widgetModelList =
+                    currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+            advisoryActionableInsightAdapter =
+                    new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
         }
         if (currentDashboard.isGroupExists(MyClient_MyLead)) {
             llClient.setVisibility(View.VISIBLE);
@@ -2220,7 +2020,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
         if (currentDashboard.isGroupExists(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)) {
             llClient.setVisibility(View.VISIBLE);
-            txtClients.setText(currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT).getDisplayName());
+            txtClients.setText(
+                    currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)
+                            .getDisplayName());
             btnClient.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
             btnBusinessSnapshot.setVisibility(View.VISIBLE);
@@ -2231,8 +2033,11 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             }
             loadLeadBusinessSnapShot();
             //  loadLead();
-            widgetModelList = currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT).getWidgetList();
-            DashboardSystemModel.setBusinessSnapshotSystemName(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
+            widgetModelList =
+                    currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)
+                            .getWidgetList();
+            DashboardSystemModel.setBusinessSnapshotSystemName(
+                    SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
             DashboardSystemModel.setLeadSystemName(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
         }
         if (currentDashboard.isGroupExists(SYS_BUSINESS_SNAPSHOT)) {
@@ -2265,7 +2070,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
 
         if (currentDashboard.isGroupExists(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT)) {
-            txtTeamTarget.setText(currentDashboard.getGroupModel(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT).getDisplayName());
+            txtTeamTarget.setText(
+                    currentDashboard.getGroupModel(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT).getDisplayName());
             setIcon(llTeamTargetAchievement, ivTeamTargetAchievement);
             if (llTeamTargetAchievement.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llTeamTargetAchievement, ivTeamTargetAchievement);
@@ -2292,11 +2098,11 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             DashboardSystemModel.setMonthTrends(MONTH_ON_MONTH_ACCOUNT_REVENUE);
         }
 
-
         //region PerformanceIncentive
 
         if (currentDashboard.isGroupExists(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
-            tvPerformanceAndIncentivesHeader.setText(currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
+            tvPerformanceAndIncentivesHeader.setText(
+                    currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
             // setDropdownData(PERFORMANCE_INCENTIVE_ACHIEVEMNET);
             setIncentiveVisibility(PERFORMANCE_INCENTIVE_ACHIEVEMNET);
@@ -2305,7 +2111,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             }
         } else if (currentDashboard.isGroupExists(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)) {
-            tvPerformanceAndIncentivesHeader.setText(currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
+            tvPerformanceAndIncentivesHeader.setText(
+                    currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
             // setDropdownData(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES);
             setIncentiveVisibility(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES);
@@ -2314,7 +2121,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             }
         } else if (currentDashboard.isGroupExists(MY_PERFORMANCE_INCENTIVE)) {
-            tvPerformanceAndIncentivesHeader.setText(currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
+            tvPerformanceAndIncentivesHeader.setText(
+                    currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
             //  setDropdownData(MY_PERFORMANCE_INCENTIVE);
             setIncentiveVisibility(MY_PERFORMANCE_INCENTIVE);
@@ -2341,7 +2149,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                     currentQuarterStatusWebServiceCall(widgetList.get(i).getSystemName());
                     llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE);
                 }
-
             }
             /*if (widgetList != null && widgetList.size() > 0) {
                 WidgetModel model = widgetList.get(0);
@@ -2374,6 +2181,19 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
     }
 
+    private Map getAddtionalParameterMap() {
+        Map addtionalParameterMap = new HashMap<>();
+        try {
+            //  FilterRowData filter1 = (FilterRowData) spQuarter.getSelectedItem();
+            //   addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
+
+            addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return addtionalParameterMap;
+    }
+
    /* private void setDropdownData(String widgetSystemName) {
         if (currentDashboard != null) {
             DashboardGroupModel groupModel = currentDashboard.getGroupModel(widgetSystemName);
@@ -2394,21 +2214,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
     }*/
 
-
-    private Map getAddtionalParameterMap() {
-        Map addtionalParameterMap = new HashMap<>();
-        try {
-            //  FilterRowData filter1 = (FilterRowData) spQuarter.getSelectedItem();
-            //   addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
-
-
-            addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return addtionalParameterMap;
-    }
-
     private void updateActionableCount() {
         /*if (advisoryActionableInsightAdapter != null) {
             advisoryActionableInsightAdapter.clear();
@@ -2418,7 +2223,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
         if (currentDashboard.isGroupExists(ACTIONABLE)) {
             //draw menu list
-            List<WidgetModel> actionableWidgetList = currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+            List<WidgetModel> actionableWidgetList =
+                    currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
             if (actionableWidgetList != null && actionableWidgetList.size() > 0) {
                 for (WidgetModel model : actionableWidgetList) {
                     loadActionableCount(model.getSystemName());
@@ -2426,12 +2232,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             } else {
                 hideProgress();
             }
-
         } else {
             hideProgress();
         }
     }
-
 
     private void incentiveWebServiceCall(final String widgetSystemName) {
         // Timber.v(text);
@@ -2448,26 +2252,26 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             inputMap.put(PRODUCT_ID, productId);
             inputMap.put(EMPLOYEE_CODE, employeeCode);
 
-
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                        new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                hideProgress();
-                                String status = response.getString(STATUS);
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //after success code goes here
+                                try {
+                                    if (statusCode == 200) {
+                                        hideProgress();
+                                        String status = response.getString(STATUS);
 
                              /*   "Table1":[{"Name":" My Incentive","Q1":"20000","Q2":"40000","Q3":"15000","Q4":"25000"},
                                 {"Name":" Branch Average","Q1":"23000","Q2":"12000","Q3":"30000","Q4":"25000"},
                                 {"Name":" National Average","Q1":"20000","Q2":"40000","Q3":"25000","Q4":"30000"}]*/
 
-
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
+                                        if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                                            JSONObject responseJsonObj = response.getJSONObject("Response");
 
                                  /*   yDataGraphArrAdv.clear();
                                     xdataYearArrAdv.clear();
@@ -2486,15 +2290,15 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                                     xdataYearArrTeam.add("Q4");
                                     xdataYearArrTeam.add("YTD");*/
 
-                                    if (responseJsonObj.has("Table")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
-                                        incentiveData(jsonArray);
-                                    }
-                                    if (responseJsonObj.has("Table1")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
-                                        // perfotmanceData(jsonArray);
-                                        advLoadChart(jsonArray);
-                                    }
+                                            if (responseJsonObj.has("Table")) {
+                                                JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
+                                                incentiveData(jsonArray);
+                                            }
+                                            if (responseJsonObj.has("Table1")) {
+                                                JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
+                                                // perfotmanceData(jsonArray);
+                                                advLoadChart(jsonArray);
+                                            }
                                   /*  if (responseJsonObj.has("Table2")) {
                                         JSONArray jsonArray = responseJsonObj.getJSONArray("Table2");
                                         if (widgetSystemName.equalsIgnoreCase("PerformanceAndIncentives")) {
@@ -2513,88 +2317,98 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                                         }
 
                                     }*/
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-
-                            } else {
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
+                                        } else {
+                                            hideProgress();
+                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
+                                    } else {
+                                        hideProgress();
+                                        //                                customProgress.setVisibility(View.GONE);
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    hideProgress();
+                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
 
-                });
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                try {
+                                    hideProgress();
+                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                                                false, new MSFDialog.DialogListener() {
+                                                    @Override
+                                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                                        if (action == MSFDialog.Action.OK) {
+                                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                                            startActivity(i);
+                                                            getActivity().finish();
+                                                        }
+                                                    }
+                                                });
+                                        return;
+                                    } else {
+                                        String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                        if (CRMAppUtil.isBlank(error)) {
+                                            error = SOME_SERVER_ERROR_OCCURRED;
+                                        }
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
+                        });
             } catch (Exception e) {
                 hideProgress();
                 e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
+                        true, null);
             }
 
 
@@ -2690,13 +2504,229 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 e.printStackTrace();
             }*/
 
-
         } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            //            customProgress.setVisibility(View.GONE);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", true, null);
         }
+    }
 
+    private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
+        // Timber.v(text);
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            showProgress();
+            String serviceMethod = "Dashboard/LoadWidgetAsync";
+            Map inputMap = new HashMap<>();
+
+            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
+            inputMap.put("WidgetSystemName", widgetSystemName);
+
+            //dashboard for
+            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
+            inputMap.put(PRODUCT_ID, productId);
+            inputMap.put(EMPLOYEE_CODE, employeeCode);
+
+            try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                        new JsonHttpResponseHandler() {
+
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //after success code goes here
+                                try {
+                                    if (statusCode == 200) {
+                                        hideProgress();
+                                        String status = response.getString(STATUS);
+
+                             /*   "Table1":[{"Name":" My Incentive","Q1":"20000","Q2":"40000","Q3":"15000","Q4":"25000"},
+                                {"Name":" Branch Average","Q1":"23000","Q2":"12000","Q3":"30000","Q4":"25000"},
+                                {"Name":" National Average","Q1":"20000","Q2":"40000","Q3":"25000","Q4":"30000"}]*/
+
+                                        if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                                            JSONObject responseJsonObj = response.getJSONObject("Response");
+
+                                            if (responseJsonObj.has("Table")) {
+                                                JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
+                                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                                String Table =
+                                                        (jsonObject.isNull("Table") || jsonObject.getString("Table").equals(""))
+                                                                ? "" : jsonObject.getString("Table");
+                                                if (Table.equalsIgnoreCase("3")) {
+                                                    ArrayList<String> keyList = new ArrayList<String>();
+                                                    String headingName =
+                                                            (jsonObject.isNull("Heading") || jsonObject.getString("Heading")
+                                                                    .equals("")) ? "" : jsonObject.getString("Heading");
+                                                    Iterator iter = jsonObject.keys();
+                                                    while (iter.hasNext()) {
+                                                        String columnName = iter.next().toString();
+                                                        keyList.add(columnName);
+                                                    }
+
+                                                    final ArrayList<HashMap<String, String>> yAxisList =
+                                                            new ArrayList<HashMap<String, String>>();
+
+                                                    for (String keySetE : keyList) {
+                                                        HashMap<String, String> keyValue = new HashMap<>();
+                                                        if (keySetE.toString().equalsIgnoreCase("Heading") || keySetE.toString()
+                                                                .equalsIgnoreCase("Table")) {
+                                                        } else {
+                                                            String columnData =
+                                                                    jsonObject.getString(keySetE).toString().equals("") ? ""
+                                                                            : jsonObject.getString(keySetE).toString();
+                                                            keyValue.put(keySetE.toString(), columnData);
+                                                            yAxisList.add(keyValue);
+                                                        }
+                                                    }
+                                                    currentQuarterStatusTableThird(headingName, yAxisList);
+                                                } else if (Table.equalsIgnoreCase("1")) {
+                                                    String headingName =
+                                                            (jsonObject.isNull("Heading") || jsonObject.getString("Heading")
+                                                                    .equals("")) ? "" : jsonObject.getString("Heading");
+                                                    currentQuarterStatusTableFirst(headingName, jsonArray);
+                                                }
+                                                // incentiveData(jsonArray);
+                                            }
+                                            if (responseJsonObj.has("Table1")) {
+                                                JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
+                                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                                String Table =
+                                                        (jsonObject.isNull("Table") || jsonObject.getString("Table").equals(""))
+                                                                ? "" : jsonObject.getString("Table");
+                                                if (Table.equalsIgnoreCase("4")) {
+                                                    ArrayList<String> keyList = new ArrayList<String>();
+                                                    String headingName =
+                                                            (jsonObject.isNull("Heading") || jsonObject.getString("Heading")
+                                                                    .equals("")) ? "" : jsonObject.getString("Heading");
+                                                    Iterator iter = jsonObject.keys();
+                                                    while (iter.hasNext()) {
+                                                        String columnName = iter.next().toString();
+                                                        keyList.add(columnName);
+                                                    }
+
+                                                    final ArrayList<HashMap<String, String>> yAxisList =
+                                                            new ArrayList<HashMap<String, String>>();
+
+                                                    for (String keySetE : keyList) {
+                                                        HashMap<String, String> keyValue = new HashMap<>();
+                                                        if (keySetE.toString().equalsIgnoreCase("Heading") || keySetE.toString()
+                                                                .equalsIgnoreCase("Table")) {
+                                                        } else {
+                                                            String columnData =
+                                                                    jsonObject.getString(keySetE).toString().equals("") ? ""
+                                                                            : jsonObject.getString(keySetE).toString();
+                                                            keyValue.put(keySetE.toString(), columnData);
+                                                            yAxisList.add(keyValue);
+                                                        }
+                                                    }
+                                                    currentQuarterStatusTableFourth(headingName, yAxisList);
+                                                } else if (Table.equalsIgnoreCase("2")) {
+                                                    String headingName =
+                                                            (jsonObject.isNull("Heading") || jsonObject.getString("Heading")
+                                                                    .equals("")) ? "" : jsonObject.getString("Heading");
+                                                    currentQuarterStatusTableSecond(headingName, jsonArray);
+                                                }
+                                                // incentiveData(jsonArray);
+                                            }
+                                        } else {
+                                            hideProgress();
+                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                        }
+                                    } else {
+                                        hideProgress();
+                                        //                                customProgress.setVisibility(View.GONE);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    hideProgress();
+                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                                }
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                                //                        customProgress.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                try {
+                                    hideProgress();
+                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                                                false, new MSFDialog.DialogListener() {
+                                                    @Override
+                                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                                        if (action == MSFDialog.Action.OK) {
+                                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                                            startActivity(i);
+                                                            getActivity().finish();
+                                                        }
+                                                    }
+                                                });
+                                        return;
+                                    } else {
+                                        String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                        if (CRMAppUtil.isBlank(error)) {
+                                            error = SOME_SERVER_ERROR_OCCURRED;
+                                        }
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                //                        customProgress.setVisibility(View.GONE);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
+                                        "OK", true, null);
+                                hideProgress();
+                            }
+                        });
+            } catch (Exception e) {
+                hideProgress();
+                e.printStackTrace();
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
+                        true, null);
+            }
+        } else {
+            //            customProgress.setVisibility(View.GONE);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", true, null);
+        }
     }
 
   /*  private void WebServiceCall(final String widgetSystemName) {
@@ -2892,199 +2922,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
     }*/
 
-    private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
-        // Timber.v(text);
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("WidgetSystemName", widgetSystemName);
-
-            //dashboard for
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put(PRODUCT_ID, productId);
-            inputMap.put(EMPLOYEE_CODE, employeeCode);
-
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                hideProgress();
-                                String status = response.getString(STATUS);
-
-                             /*   "Table1":[{"Name":" My Incentive","Q1":"20000","Q2":"40000","Q3":"15000","Q4":"25000"},
-                                {"Name":" Branch Average","Q1":"23000","Q2":"12000","Q3":"30000","Q4":"25000"},
-                                {"Name":" National Average","Q1":"20000","Q2":"40000","Q3":"25000","Q4":"30000"}]*/
-
-
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
-
-
-                                    if (responseJsonObj.has("Table")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
-                                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                        String Table = (jsonObject.isNull("Table") || jsonObject.getString("Table").equals("")) ? "" : jsonObject.getString("Table");
-                                        if (Table.equalsIgnoreCase("3")) {
-                                            ArrayList<String> keyList = new ArrayList<String>();
-                                            String headingName = (jsonObject.isNull("Heading") || jsonObject.getString("Heading").equals("")) ? "" : jsonObject.getString("Heading");
-                                            Iterator iter = jsonObject.keys();
-                                            while (iter.hasNext()) {
-                                                String columnName = iter.next().toString();
-                                                keyList.add(columnName);
-                                            }
-
-                                            final ArrayList<HashMap<String, String>> yAxisList = new ArrayList<HashMap<String, String>>();
-
-                                            for (String keySetE : keyList) {
-                                                HashMap<String, String> keyValue = new HashMap<>();
-                                                if (keySetE.toString().equalsIgnoreCase("Heading") || keySetE.toString().equalsIgnoreCase("Table")) {
-                                                } else {
-                                                    String columnData = jsonObject.getString(keySetE).toString().equals("") ? "" : jsonObject.getString(keySetE).toString();
-                                                    keyValue.put(keySetE.toString(), columnData);
-                                                    yAxisList.add(keyValue);
-                                                }
-
-                                            }
-                                            currentQuarterStatusTableThird(headingName, yAxisList);
-                                        } else if (Table.equalsIgnoreCase("1")) {
-                                            String headingName = (jsonObject.isNull("Heading") || jsonObject.getString("Heading").equals("")) ? "" : jsonObject.getString("Heading");
-                                            currentQuarterStatusTableFirst(headingName, jsonArray);
-                                        }
-                                        // incentiveData(jsonArray);
-                                    }
-                                    if (responseJsonObj.has("Table1")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
-                                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                        String Table = (jsonObject.isNull("Table") || jsonObject.getString("Table").equals("")) ? "" : jsonObject.getString("Table");
-                                        if (Table.equalsIgnoreCase("4")) {
-                                            ArrayList<String> keyList = new ArrayList<String>();
-                                            String headingName = (jsonObject.isNull("Heading") || jsonObject.getString("Heading").equals("")) ? "" : jsonObject.getString("Heading");
-                                            Iterator iter = jsonObject.keys();
-                                            while (iter.hasNext()) {
-                                                String columnName = iter.next().toString();
-                                                keyList.add(columnName);
-                                            }
-
-                                            final ArrayList<HashMap<String, String>> yAxisList = new ArrayList<HashMap<String, String>>();
-
-                                            for (String keySetE : keyList) {
-                                                HashMap<String, String> keyValue = new HashMap<>();
-                                                if (keySetE.toString().equalsIgnoreCase("Heading") || keySetE.toString().equalsIgnoreCase("Table")) {
-                                                } else {
-                                                    String columnData = jsonObject.getString(keySetE).toString().equals("") ? "" : jsonObject.getString(keySetE).toString();
-                                                    keyValue.put(keySetE.toString(), columnData);
-                                                    yAxisList.add(keyValue);
-                                                }
-
-                                            }
-                                            currentQuarterStatusTableFourth(headingName, yAxisList);
-                                        } else if (Table.equalsIgnoreCase("2")) {
-                                            String headingName = (jsonObject.isNull("Heading") || jsonObject.getString("Heading").equals("")) ? "" : jsonObject.getString("Heading");
-                                            currentQuarterStatusTableSecond(headingName, jsonArray);
-                                        }
-                                        // incentiveData(jsonArray);
-                                    }
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-
-                            } else {
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
-        }
-
-    }
-
     private String keyName(Set<String> keySet) {
         String key = "";
         if (keySet != null) {
@@ -3096,7 +2933,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
         return key;
     }
-
 
     private void currentQuarterStatusTableFirst(String headingName, JSONArray jsonArray) {
         tableCurrentQuaterStatusFirst.removeAllViews();
@@ -3117,7 +2953,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 for (int y = 0; y < paramNameJsonArray.length(); y++) {
                     String paramName = paramNameJsonArray.getString(y);
-                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? "" : jsonRowObject.getString(paramName);
+                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
+                            : jsonRowObject.getString(paramName);
                     if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase("Table")) {
                         Map map = new HashMap();
                         map.put(paramName, paramValue);
@@ -3135,7 +2972,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             //header
             TableRow headingRow = new TableRow(getActivity());
             tableCurrentQuaterStatusFirst.addView(headingRow);
-            headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
             headingRow.setBackgroundColor(getResources().getColor(R.color.mosl_web_color));
 
             Iterator headingIterator = tableMap.keySet().iterator();
@@ -3150,7 +2988,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                     TextView headingCell = new TextView(getActivity());
                     headingRow.addView(headingCell);
-                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     headingCell.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     headingCell.setPadding(padding, padding, padding, padding);
@@ -3163,8 +3002,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             for (String column1Heading : rowHeadingSet) {
                 TableRow tableRow = new TableRow(getActivity());
                 tableCurrentQuaterStatusFirst.addView(tableRow);
-                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-
+                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
                 for (Map map : rowList) {
@@ -3173,14 +3012,14 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                     TextView textView = new TextView(getActivity());
                     tableRow.addView(textView);
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     textView.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     textView.setPadding(padding, padding, padding, padding);
                     //column.setTextAppearance(context, android.R.attr.textAppearanceMedium);
                     textView.setText(value);
                 }
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -3188,7 +3027,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         tvCurrentQuaterStatusFirstHeading.setText(headingName);
         llCurrentQuaterStatusFirst.setVisibility(View.VISIBLE);
     }
-
 
     private void currentQuarterStatusTableSecond(String headingName, JSONArray jsonArray) {
         tableCurrentQuaterStatusSecond.removeAllViews();
@@ -3209,7 +3047,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 for (int y = 0; y < paramNameJsonArray.length(); y++) {
                     String paramName = paramNameJsonArray.getString(y);
-                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? "" : jsonRowObject.getString(paramName);
+                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
+                            : jsonRowObject.getString(paramName);
                     if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase("Table")) {
                         Map map = new HashMap();
                         map.put(paramName, paramValue);
@@ -3227,7 +3066,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             //header
             TableRow headingRow = new TableRow(getActivity());
             tableCurrentQuaterStatusSecond.addView(headingRow);
-            headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT));
             headingRow.setBackgroundColor(getResources().getColor(R.color.mosl_web_color));
 
             Iterator headingIterator = tableMap.keySet().iterator();
@@ -3242,7 +3082,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                     TextView headingCell = new TextView(getActivity());
                     headingRow.addView(headingCell);
-                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     headingCell.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     headingCell.setPadding(padding, padding, padding, padding);
@@ -3255,8 +3096,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             for (String column1Heading : rowHeadingSet) {
                 TableRow tableRow = new TableRow(getActivity());
                 tableCurrentQuaterStatusSecond.addView(tableRow);
-                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-
+                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
                 for (Map map : rowList) {
@@ -3265,14 +3106,14 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                     TextView textView = new TextView(getActivity());
                     tableRow.addView(textView);
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     textView.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     textView.setPadding(padding, padding, padding, padding);
                     //column.setTextAppearance(context, android.R.attr.textAppearanceMedium);
                     textView.setText(value);
                 }
-
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -3281,7 +3122,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         llCurrentQuaterStatusSecond.setVisibility(View.VISIBLE);
     }
 
-    private void currentQuarterStatusTableThird(String headingName, ArrayList<HashMap<String, String>> arrayList) {
+    private void currentQuarterStatusTableThird(String headingName,
+                                                ArrayList<HashMap<String, String>> arrayList) {
         tableCurrentQuaterStatusThree.removeAllViews();
         LayoutInflater inFla = getActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
@@ -3305,10 +3147,10 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
         tvCurrentQuaterStatusThreeHeading.setText(headingName);
         llCurrentQuaterStatusThree.setVisibility(View.VISIBLE);
-
     }
 
-    private void currentQuarterStatusTableFourth(String headingName, ArrayList<HashMap<String, String>> arrayList) {
+    private void currentQuarterStatusTableFourth(String headingName,
+                                                 ArrayList<HashMap<String, String>> arrayList) {
         tableCurrentQuaterStatusFour.removeAllViews();
         LayoutInflater inFla = getActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
@@ -3332,9 +3174,7 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
         tvCurrentQuaterStatusFourHeading.setText(headingName);
         llCurrentQuaterStatusFour.setVisibility(View.VISIBLE);
-
     }
-
 
     private CharSequence getTableHead(CharSequence text) {
         try {
@@ -3348,48 +3188,25 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         }
     }
 
-   /* private void incentiveData(List<StringMap> arrayDetail) {
-        arrayListIncentive.clear();
-        for (int i = 0; i < arrayDetail.size(); i++) {
-            HashMap<String, String> fieldData = new HashMap<String, String>();
-            StringMap objDetail = arrayDetail.get(i);
-            // JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String Parameters = (objDetail.get("Parameters") == null || objDetail.get("Parameters").toString().equals("")) ? "" : objDetail.get("Parameters").toString();
-            String q1 = (objDetail.get("Q1") == null || objDetail.get("Q1").toString().equals("")) ? "" : objDetail.get("Q1").toString();
-            String q2 = (objDetail.get("Q2") == null || objDetail.get("Q2").toString().equals("")) ? "" : objDetail.get("Q2").toString();
-            String q3 = (objDetail.get("Q3") == null || objDetail.get("Q3").toString().equals("")) ? "" : objDetail.get("Q3").toString();
-            String q4 = (objDetail.get("Q4") == null || objDetail.get("Q4").toString().equals("")) ? "" : objDetail.get("Q4").toString();
-            String yTD = (objDetail.get("YTD") == null || objDetail.get("YTD").toString().equals("")) ? "" : objDetail.get("YTD").toString();
-          *//*  String q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0" : jsonObject.getString("Q1");
-            String q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0" : jsonObject.getString("Q2");
-            String q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0" : jsonObject.getString("Q3");
-            String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0" : jsonObject.getString("Q4");
-            String yTD = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0" : jsonObject.getString("YTD");*//*
-            fieldData.put(PARAMETERS, Parameters);
-            fieldData.put(Q1, q1);
-            fieldData.put(Q2, q2);
-            fieldData.put(Q3, q3);
-            fieldData.put(Q4, q4);
-            fieldData.put(YTD, yTD);
-            arrayListIncentive.add(fieldData);
-        }
-        incentiveView("Q1");
-
-
-    }*/
-
     private void incentiveData(JSONArray jsonArray) {
         arrayListIncentive.clear();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 HashMap<String, String> fieldData = new HashMap<String, String>();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Parameters = (jsonObject.isNull("Parameters") || jsonObject.getString("Parameters").equals("")) ? "" : jsonObject.getString("Parameters");
-                String q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0" : jsonObject.getString("Q1");
-                String q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0" : jsonObject.getString("Q2");
-                String q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0" : jsonObject.getString("Q3");
-                String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0" : jsonObject.getString("Q4");
-                String yTD = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0" : jsonObject.getString("YTD");
+                String Parameters =
+                        (jsonObject.isNull("Parameters") || jsonObject.getString("Parameters").equals("")) ? ""
+                                : jsonObject.getString("Parameters");
+                String q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
+                        : jsonObject.getString("Q1");
+                String q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
+                        : jsonObject.getString("Q2");
+                String q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
+                        : jsonObject.getString("Q3");
+                String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
+                        : jsonObject.getString("Q4");
+                String yTD = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
+                        : jsonObject.getString("YTD");
                 fieldData.put(PARAMETERS, Parameters);
                 fieldData.put(Q1, q1.equalsIgnoreCase("0.0") ? "0" : q1);
                 fieldData.put(Q2, q2.equalsIgnoreCase("0.0") ? "0" : q2);
@@ -3402,8 +3219,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         } catch (JSONException je) {
             je.printStackTrace();
         }
-
-
     }
 
     private void incentiveView(String value) {
@@ -3434,91 +3249,24 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 TextView tvYTDCOUNTData = (TextView) tableRow.findViewById(R.id.tvYTDCOUNT);
                 TextView tvParametersData = (TextView) tableRow.findViewById(R.id.tvParameters);
 
-
                 tvParametersData.setText(parameter);
                 tvMTDCOUNTData.setText(filterData);
                 tvYTDCOUNTData.setText(ytd);
                 linearLayout.setBackgroundResource(i % 2 == 0 ? R.color.white : R.color.white);
-                //Are normal row dat do alternate back ground
-           /* if (i % 2 == 0) {
-                tdParm.setBackgroundResource(R.drawable.list_alice_blue_background);
-                tdVata.setBackgroundResource(R.drawable.list_white_background);
-
-            } else {
-                tdParm.setBackgroundResource(R.drawable.list_white_background);
-                tdVata.setBackgroundResource(R.drawable.list_alice_blue_background);
-
-            }*/
-
-
                 tableMData.addView(tableRow);
             }
         }
         llIncentive.setVisibility(View.VISIBLE);
         tvIncentives.setText("Incentive");
     }
-    //incentiveData end
 
-    //start region hi
-  /*  public void openWebUrl(Uri url) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            String packag = CustomTabsHelper.getPackageNameToUse(getContext());
-            if (packag == null) {
-                //   openWebview(null, url);
-               *//* Intent intent = new Intent(mContext, WebActivity.class);
-                intent.putExtra(URL_PATH, url.toString());
-                startActivity(intent);*//*
-            } else {
-                openCustomTabsIntent(url.toString());
-            }
-        } else {
-            openInBrowser(url);
-        }
-    }
-
-
-    private void openCustomTabsIntent(String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
-        builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
-        builder.setCloseButtonIcon(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_calendar));
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(getActivity(), Uri.parse(url));
-    }
-
-    private CustomTabsSession getSession() {
-        return mClient.newSession(new CustomTabsCallback() {
-            @Override
-            public void onNavigationEvent(int navigationEvent, Bundle extras) {
-                super.onNavigationEvent(navigationEvent, extras);
-            }
-        });
-    }
-
-    public void openInBrowser(Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }*/
-    //end region
     @Override
     public void onSaveInstanceState(Bundle outState) {
         //   super.onSaveInstanceState(outState);
     }
+    //incentiveData end
 
     private void createFloatingButtons() {
-        /**
-         <com.getbase.floatingactionbutton.FloatingActionButton
-         android:id="@+id/leadcreation"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         app:fab_icon="@drawable/ic_create_lead"
-         fab:fab_colorNormal="#ffffff"
-         fab:fab_colorPressed="#ffffff"
-         fab:fab_size="mini"
-         fab:fab_title="Create Lead" />
-         */
 
         if (dashboardList != null && dashboardList.size() > 1) {
             for (final DashboardModel dashboardModel : dashboardList) {
@@ -3537,9 +3285,11 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                         floatingActionsMenu.collapse();
                         currentDashboard = dashboardModel;
 
-                        List<WidgetModel> widgetModelList = currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+                        List<WidgetModel> widgetModelList =
+                                currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
                         if (advisoryActionableInsightAdapter == null) {
-                            advisoryActionableInsightAdapter = new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
+                            advisoryActionableInsightAdapter =
+                                    new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
                         } else {
                             advisoryActionableInsightAdapter.addItems(widgetModelList);
                         }
@@ -3550,7 +3300,6 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 });
             }
         }
-
     }
 
     private void renderDashboard() {
@@ -3587,30 +3336,34 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
             inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
             inputMap.put("DashboardId", dashboardId);
 
-
             String serviceMethod = "Dashboard/GetIncentivePolicy";
 
-
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                        new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
 
-                        if (statusCode == 200) {
-                            try {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (!isBlank(status) && status.equalsIgnoreCase("true")) {
+                                if (statusCode == 200) {
+                                    try {
+                                        String status = response.getString(STATUS);
+                                        hideProgress();
+                                        if (!isBlank(status) && status.equalsIgnoreCase("true")) {
 
-                                    JSONObject obj = response.getJSONObject(RESPONSE);
-                                    String filePath = obj.isNull("FilePath") || obj.get("FilePath").equals("") ? "" : obj.getString("FilePath");
-                                    if (filePath.isEmpty()) {
-                                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MISSING_FILE, "OK", true, null);
-                                    } else {
-                                        new DownloadFileFromURL().execute(filePath.replaceAll(" ", "%20"));
-                                    }
+                                            JSONObject obj = response.getJSONObject(RESPONSE);
+                                            String filePath =
+                                                    obj.isNull("FilePath") || obj.get("FilePath").equals("") ? ""
+                                                            : obj.getString("FilePath");
+                                            if (filePath.isEmpty()) {
+                                                alertDialog(getMainActivity(), 0,
+                                                        getResources().getString(R.string.motilal_oswal), MISSING_FILE, "OK",
+                                                        true, null);
+                                            } else {
+                                                new DownloadFileFromURL().execute(filePath.replaceAll(" ", "%20"));
+                                            }
 
                                    /* alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), DOCUMENT_DELETED, "OK", true, new MSFDialog.DialogListener() {
                                         @Override
@@ -3621,91 +3374,93 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                                         }
                                     });*/
 
-                                } else {
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //   alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-                            } catch (Exception ex) {
-                                hideProgress();
-                                ex.printStackTrace();
-                                //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        } else {
-                            hideProgress();
-                            //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
+                                        } else {
+                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            //   alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
+                                    } catch (Exception ex) {
+                                        hideProgress();
+                                        ex.printStackTrace();
+                                        //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                } else {
+                                    hideProgress();
+                                    //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
-                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                            }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        // alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                            @Override
+                            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                            }
 
-                });
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                try {
+                                    hideProgress();
+                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                                                false, new MSFDialog.DialogListener() {
+                                                    @Override
+                                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                                        if (action == MSFDialog.Action.OK) {
+                                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                                                            startActivity(i);
+                                                            getActivity().finish();
+                                                        }
+                                                    }
+                                                });
+                                        return;
+                                    } else {
+                                        String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                        if (CRMAppUtil.isBlank(error)) {
+                                            error = SOME_SERVER_ERROR_OCCURRED;
+                                        }
+                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                        return;
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  Throwable throwable, JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                                                  String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                                // alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                            }
+                        });
             } catch (Exception e) {
                 e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
             }
-
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
-
-    ////////////////////
-    // Progress Dialog
-    private ProgressDialog pDialog;
 
     public void showDownloadFile(File localFilePath) {
         try {
@@ -3724,12 +3479,13 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), "OK", true, null);
         } catch (Exception ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
         }
     }
-
 
     /**
      * Showing Dialog
@@ -3742,7 +3498,157 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
         pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         pDialog.setCancelable(true);
         pDialog.show();
+    }
 
+    private class ChartDataModel {
+
+        private LinkedHashMap<String, Float> monthData = new LinkedHashMap<>();
+
+        public LinkedHashMap<String, Float> getMonthData() {
+            return monthData;
+        }
+
+        public void setMonthData(LinkedHashMap<String, Float> monthData) {
+            this.monthData = monthData;
+        }
+    }
+
+    public class AdvisoryActionableInsightAdapter extends BaseAdapter {
+
+        private final LayoutInflater inflater;
+        Context mContext;
+        List<WidgetModel> advisoryActionableInsightModelList;
+        //private ArrayList<AdvisoryActionableInsightModel> arraylist;
+
+        public AdvisoryActionableInsightAdapter(Context c,
+                                                List<WidgetModel> advisoryActionableInsightModelList) {
+            inflater = LayoutInflater.from(c);
+            this.mContext = c;
+            this.advisoryActionableInsightModelList = advisoryActionableInsightModelList;
+        }
+
+        public void showCount(boolean show, String systemName) {
+            for (WidgetModel model : advisoryActionableInsightModelList) {
+                if (model.getSystemName().equals(systemName)) {
+                    if (show) {
+                        model.setShowActionableCount(show);
+                        break;
+                    }
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+        public void clear() {
+            advisoryActionableInsightModelList.clear();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return advisoryActionableInsightModelList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return advisoryActionableInsightModelList.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            final Holder holder = new Holder();
+            view = inflater.inflate(R.layout.item_list_actionable_insights, viewGroup, false);
+
+            final WidgetModel advisoryActionableInsightModel = advisoryActionableInsightModelList.get(i);
+            holder.ivActionableInsights = (ImageView) view.findViewById(R.id.ivActionableInsights);
+            holder.pbLoadingIndicator = (ProgressBar) view.findViewById(R.id.pbLoadingIndicator);
+            holder.tvActionableInsights = (TextView) view.findViewById(R.id.tvActionableInsights);
+            holder.tvActionableCount = (TextView) view.findViewById(R.id.tvActionableCount);
+            holder.rlActionable = (RelativeLayout) view.findViewById(R.id.rlActionable);
+
+            final Map<String, String> addtionalParameterMap = new HashMap<>();
+            addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
+            Glide.with(getContext())
+                    .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
+                    //remove Chache
+                    .asBitmap()
+                    .placeholder(R.drawable.ic_create_meeting)
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .into(new BitmapImageViewTarget(holder.ivActionableInsights) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+            holder.tvActionableInsights.setText(advisoryActionableInsightModel.getName());
+            holder.tvActionableCount.setText(advisoryActionableInsightModel.getActionableCount());
+            final DashboardGroupModel groupModel = currentDashboard.getGroupModel(ACTIONABLE);
+
+            holder.rlActionable.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle args = new Bundle();
+                    args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
+                    args.putString(LABEL, ACTIONABLE);
+                    args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
+                    args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                    List<WidgetModel> widgetList = groupModel.getWidgetList();
+                    if (widgetList != null && widgetList.size() > 0) {
+                        for (WidgetModel model1 : widgetList) {
+                            if (advisoryActionableInsightModel.getSystemName()
+                                    .equalsIgnoreCase(model1.getSystemName())) {
+                                ArrayList<WidgetFilterModel> filterList =
+                                        (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
+                                ArrayList<TypeActionableFilterModel> spinnerFilter =
+                                        (ArrayList<TypeActionableFilterModel>) model1.getSpinnerFilterList();
+                                if (!filterList.isEmpty()) {
+                                    args.putParcelableArrayList(FILTER_LIST, filterList);
+                                }
+                                if (!spinnerFilter.isEmpty()) {
+                                    args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
+                                }
+                            }
+                        }
+                    }
+                    if (!advisoryActionableInsightModel.getActionableCount().equalsIgnoreCase("0")) {
+                        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            if (advisoryActionableInsightModel.isShowActionableCount()) {
+                holder.tvActionableCount.setVisibility(View.VISIBLE);
+                holder.pbLoadingIndicator.setVisibility(View.GONE);
+            } else {
+                holder.rlActionable.setOnClickListener(null);
+                holder.tvActionableCount.setVisibility(View.GONE);
+                holder.pbLoadingIndicator.setVisibility(View.VISIBLE);
+            }
+
+            return view;
+        }
+
+        public void addItems(List<WidgetModel> widgetModelList) {
+            advisoryActionableInsightModelList = widgetModelList;
+            notifyDataSetChanged();
+        }
+
+        class Holder {
+            ImageView ivActionableInsights;
+            TextView tvActionableInsights, tvActionableCount;
+            RelativeLayout rlActionable;
+            ProgressBar pbLoadingIndicator;
+        }
     }
 
     /**
@@ -3791,7 +3697,8 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
 
                 File localFile = new File(baseFolder, fileName);
 
-                OutputStream output = new FileOutputStream(localFile.getAbsolutePath()); //Environment.getExternalStorageDirectory().toString()+"/"+fileName);
+                OutputStream output = new FileOutputStream(
+                        localFile.getAbsolutePath()); //Environment.getExternalStorageDirectory().toString()+"/"+fileName);
 
                 byte data[] = new byte[1024];
 
@@ -3850,13 +3757,9 @@ public class DashboardFragment extends MOSLCommonFragment implements View.OnClic
                 });*/
                 showDownloadFile(localFile);
             } else {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
             }
-
         }
-
     }
-
-
-
 }

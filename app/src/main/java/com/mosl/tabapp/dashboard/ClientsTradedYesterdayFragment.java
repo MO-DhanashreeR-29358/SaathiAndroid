@@ -131,15 +131,11 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
                         try {
                             if (statusCode == 200) {
                                 clientHideProgress();
                                 String status = response.getString(STATUS);
                                 arrayListClient.clear();
-                             /*   "Table":[{"FAMILYSTATUS":"ACTIVE","DAY_CNT":0,"DAY_PER":0,"MTD_CNT":0,"MTD_PER":0,"YTD_CNT":31786,"YTD_PER":0}*/
-
-
                                 if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                     JSONObject responseJsonObj = response.getJSONObject("Response");
 
@@ -289,8 +285,8 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     tvNoOfClients.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            // addtionalParameterMap.put(COL_FILTER, value.toUpperCase() + "_CNT");
                             addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
@@ -304,8 +300,8 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     tvRevenueGenerated.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            addtionalParameterMap.clear();
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            // addtionalParameterMap.put(COL_FILTER, YTD_CNT);
                             addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
@@ -337,8 +333,6 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
             }
         } catch (Exception e) {
             e.printStackTrace();
-        /*    Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-            Crashlytics.logException(e);*/
         }
     }
 

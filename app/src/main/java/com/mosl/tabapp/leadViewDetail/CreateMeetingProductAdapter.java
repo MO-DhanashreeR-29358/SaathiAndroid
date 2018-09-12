@@ -7,17 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.ui.MSFDialog;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeSet;
 
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
-import static org.a.a.f.a.al;
 
 /**
  * Created by Raju on 20-07-2018.
@@ -75,15 +72,25 @@ public class CreateMeetingProductAdapter extends RecyclerView.Adapter<CreateMeet
         notifyDataSetChanged();
     }
 
-    public void addDocument(CreateMeetingProductModel createMeetingProductModel) {
+    public void addProduct(CreateMeetingProductModel createMeetingProductModel) {
         if (this.productList == null) {
             this.productList = new ArrayList<>();
         }
-        this.productList.add(createMeetingProductModel);
-        Set<CreateMeetingProductModel> hs = new HashSet<>();
+        TreeSet<CreateMeetingProductModel> hs = new TreeSet<>(new Comparator<CreateMeetingProductModel>() {
+            @Override
+            public int compare(CreateMeetingProductModel a, CreateMeetingProductModel b) {
+                return a.getDocumentName().compareTo(b.getDocumentName());
+            }
+        });
         hs.addAll(this.productList);
+        hs.add(createMeetingProductModel);
         this.productList.clear();
         this.productList.addAll(hs);
+        notifyDataSetChanged();
+    }
+
+    public void deleteAllProduct() {
+        this.productList.clear();
         notifyDataSetChanged();
     }
 

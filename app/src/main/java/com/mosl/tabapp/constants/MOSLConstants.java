@@ -88,6 +88,8 @@ public interface MOSLConstants extends LabelConfig {
     int BROKERNAMES = 64;
     int BACKGROUND = 65;
     int PROFESSIONID = 116;
+    int MEETINGADDRESSID = 117;
+    int TRAVELLINGMODEID = 118;
     //Contact Type Id
     int EMAILID = 1;
     int ALTERNATEEMAILID = 2;
@@ -357,6 +359,8 @@ public interface MOSLConstants extends LabelConfig {
     String SELECT_OUT_STATION_MEETING = "Select Out Station Meeting";
     String SELECT_CATEGORY = "Select Category";
     String SELECT_MEETING_OBJECTIVE = "Select Meeting Objective";
+    String SELECT_MEETING_LOCATION = "Select Meeting Location";
+    String SELECT_TRAVELLING_MODE = "Select Travelling Mode";
     String SELECT_SUB_CATEGORY = "Select Sub Category";
     String SELECT_WEEK = "Select Week";
     String SELECT_WEEK_DAYS = "Select Week Day";
@@ -365,10 +369,14 @@ public interface MOSLConstants extends LabelConfig {
     String END_TIME_EQUAL_ERROR = "End Date/Time should not be Equal to Start Date/Time";
     String EMAIL_SEND = "Email Send request is submitted successfully";
     String GIFT_SEND = "Send Gift request is submitted successfully";
-    String ATLEAST_TEN_CHARACTERS = "Atleast 50 characters";
+    String ATLEAST_TEN_CHARACTERS = "Atleast 10 characters";
+    String ATLEAST_FIFTY_CHARACTERS = "Atleast 50 characters";
+    String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
+    String INVALID_PINCODE_NUMBER = "Invalid pincode number";
     String ATTENDEE_ALREADY_ADDED = "Attendee already added";
     String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";
     String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
+    String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";
 
 
     //Birthday Message
@@ -561,12 +569,12 @@ public interface MOSLConstants extends LabelConfig {
     //region notification keys
 
     //    target_achievemnet
-     String TARGET_ACHIEVEMENT = "target_achievemnet";
-     String Actionable_1stMeetingNotDone = "Actionable_1stMeetingNotDone";
+    String TARGET_ACHIEVEMENT = "target_achievemnet";
+    String Actionable_1stMeetingNotDone = "Actionable_1stMeetingNotDone";
     //endregion
 
-     String MESSAGE_DOB_ANNI_COMPARE = "Anniversary Should be less than Date of birth";
-     String MESSAGE_DOB_ANNI_EQUAL = "Anniversary Should not be same as Date of birth";
+    String MESSAGE_DOB_ANNI_COMPARE = "Anniversary Should be less than Date of birth";
+    String MESSAGE_DOB_ANNI_EQUAL = "Anniversary Should not be same as Date of birth";
 
     String CAUGHT_IN_C2 = "CaughtInC2";
     String CAUGHT_IN_C2_MESSAGE = "Do you want to assign the lead to yourself";

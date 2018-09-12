@@ -288,6 +288,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 if (e == null) {
                     return;
                 }
+                addtionalParameterMap.clear();
                 pieChartDetail(e.getX());
                 Log.d("Highlited", String.valueOf(h.getX()));
                 Log.d("xValue", String.valueOf((int) (e.getX())));
@@ -557,10 +558,16 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                                     }
                                     if (!responseJsonObj.isNull("Table")) {
                                         JSONArray tableArray = responseJsonObj.getJSONArray("Table");
+                                        int arrayLength = 0;
+                                        if (tableArray.length() == 5) {
+                                            arrayLength = 3;
+                                        } else {
+                                            arrayLength = tableArray.length();
+                                        }
                                         if (tableArray.length() != 0 && tableArray != null) {
                                             llTop.setVisibility(View.VISIBLE);
-                                            for (int i = 0; i < tableArray.length(); i++) {
-                                                if (tableArray.length() == 3) {
+                                            for (int i = 0; i < arrayLength; i++) {
+                                                if (arrayLength == 3) {
                                                     linearLayoutLeft.setVisibility(View.VISIBLE);
                                                     linearLayoutRight.setVisibility(View.VISIBLE);
                                                     linearLayoutCenter.setVisibility(View.VISIBLE);

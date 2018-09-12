@@ -1,22 +1,23 @@
 buildscript {
-  ext.android_plugin_version = '3.2.0-rc02'
-  ext.google_services_version = '3.0.0'
-  repositories {
-    google()
-    jcenter()
-    maven { url 'https://maven.fabric.io/public' }
-  }
-  dependencies {
-    classpath "com.android.tools.build:gradle:$android_plugin_version"
-    classpath "com.google.gms:google-services:$google_services_version"
-    classpath 'io.fabric.tools:gradle:1+'
-  }
+    ext.google_services_version = '3.2.0'
+    ext.android_plugin_version = '3.2.0-rc02'
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$android_plugin_version"
+        classpath "com.google.gms:google-services:$google_services_version"
+        classpath 'io.fabric.tools:gradle:1+'
+
+    }
 }
 
 ext.versions = ["compileSdkVersion"   : 27,
                 "targetSdkVersion"    : 27,
                 "buildToolsVersion"   : "28.0.2",
-                'supportLibrary'      : '27.1.0',
+                'supportLibrary'      : '27.1.1',
                 'multidex'            : '1.0.3',
                 'pagerslidingtabstrip': '1.0.1',
                 'sdp'                 : '1.0.3',
@@ -24,14 +25,17 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'glide'               : '3.7.0',
                 'calendarview'        : '1.4.3',
                 'asyncHttp'           : '1.4.9',
-                'smoothprogressbar'   : '1.0.0',
+                'smoothprogressbar'   : '1.1.0',
                 'floatingbutton'      : '1.10.1',
-                'firebase'            : '10.0.1',
+                'firebase'            : '11.0.4',
                 'espresso'            : '3.0.2',
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
                 'circleIndicator'     : '1.2.2',
-                'okhttp'              : '2.7.5']
+                'okhttp'              : '3.11.0',
+                'stetho'              : '1.5.0',
+                'room'                : '1.1.0'
+]
 
 ext.deps = ['support'             : ['design'      : "com.android.support:design:${versions.supportLibrary}",
                                      'cardview'    : "com.android.support:cardview-v7:${versions.supportLibrary}",
@@ -45,6 +49,10 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'testing'             : ['espresso': ['core': "com.android.support.test.espresso:espresso-core:${versions.espresso}"],
                                      'junit'   : 'junit:junit:4.12',
                                      'runner'  : 'com.android.support.test:runner:1.0.2'],
+            'stetho'              : ['stetho': "com.facebook.stetho:stetho:${versions.stetho}",
+                                     'okhttp': "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"],
+            'room'              : ['roomRuntime' : "android.arch.persistence.room:runtime:${versions.room}",
+                                     'roomCompiler': "android.arch.persistence.room:compiler:${versions.room}"],
             'crashlytics'         : 'com.crashlytics.sdk.android:crashlytics:2.9.4@aar',
             'multidex'            : "com.android.support:multidex:${versions.multidex}",
             'pagerslidingtabstrip': "com.astuetz:pagerslidingtabstrip:${versions.pagerslidingtabstrip}",
@@ -55,7 +63,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'calendarView'        : "com.prolificinteractive:material-calendarview:${versions.calendarview}",
             'asyncHttp'           : "com.loopj.android:android-async-http:${versions.asyncHttp}",
             'dialogPlus'          : "com.orhanobut:dialogplus:1.11@aar",
-            'smoothProgressbar'   : "com.hannesdorfmann.smoothprogressbar:library:${versions.smoothprogressbar}",
+            'smoothProgressbar'   : "com.github.castorflex.smoothprogressbar:library:${versions.smoothprogressbar}",
             'floatingButton'      : "com.getbase:floatingactionbutton:${versions.floatingbutton}",
             'firebase'            : "com.google.firebase:firebase-messaging:${versions.firebase}",
             'timber'              : "com.jakewharton.timber:timber:${versions.timber}",
@@ -65,23 +73,28 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'circleIndicator'     : "me.relex:circleindicator:${versions.circleIndicator}",
             'htmlTextview'        : "org.sufficientlysecure:html-textview:3.4",
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
-            'okhttp'              : "com.squareup.okhttp:okhttp:${versions.okhttp}",
+            'okhttp'              : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
             'compressor'          : "id.zelory:compressor:2.1.0",
-            'javax'               : "javax.annotation:jsr250-api:1.0",]
+            'location'            : "com.google.android.gms:play-services-location:11.0.4",
+            'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",
+            'javax'               : "javax.annotation:jsr250-api:1.0",
+
+
+]
 
 allprojects {
-  repositories {
-    google()
-    jcenter()
-    mavenLocal()
-    maven { url "https://jitpack.io" }
-    maven { url 'https://maven.fabric.io/public' }
-    flatDir {
-      dirs '../eKYC/libs'
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+        flatDir {
+            dirs '../eKYC/libs'
+        }
     }
-  }
 }
 
 task clean(type: Delete) {
-  delete rootProject.buildDir
+    delete rootProject.buildDir
 }

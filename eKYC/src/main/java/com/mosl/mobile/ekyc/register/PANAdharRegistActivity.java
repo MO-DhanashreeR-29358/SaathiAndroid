@@ -57,6 +57,7 @@ import com.mosl.mobile.ekyc.ui.DatePickerListener;
 import com.mosl.mobile.ekyc.ui.EkycMainActivity;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.mobile.ekyc.ui.WebActivity;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -87,13 +88,11 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getAddressMode;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
 import static com.mosl.mobile.ekyc.model.CommonModel.getBaFranchiseeCode;
-import static com.mosl.mobile.ekyc.model.CommonModel.getBioMetricVisibleForBranch;
 import static com.mosl.mobile.ekyc.model.CommonModel.getCvlVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getDob;
 import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
-import static com.mosl.mobile.ekyc.model.CommonModel.getOtpVisibleForBranch;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;

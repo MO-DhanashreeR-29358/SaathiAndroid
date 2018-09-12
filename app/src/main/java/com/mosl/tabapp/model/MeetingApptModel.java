@@ -1,6 +1,7 @@
 package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel;
+import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -78,6 +79,13 @@ public class MeetingApptModel implements Serializable {
     private String baClient;
     private String outStation;
     private String clientCode;
+    private String meetingAddressTypeId;
+    private String meetingAddress;
+    private String amount;
+    private String geoArea;
+    private String geoLongitude;
+    private String geoLatitude;
+    private String pincode;
 
     public MeetingApptModel setProductList(List<CreateMeetingProductModel> productList) {
         this.productList = productList;
@@ -85,7 +93,15 @@ public class MeetingApptModel implements Serializable {
     }
 
     private List<CreateMeetingProductModel> productList;
+    private List<CreateMeetingTravellingModel> travellingList;
 
+    public List<CreateMeetingTravellingModel> getTravellingList() {
+        return travellingList;
+    }
+
+    public void setTravellingList(List<CreateMeetingTravellingModel> travellingList) {
+        this.travellingList = travellingList;
+    }
 
     public String getUcid() {
         return ucid;
@@ -318,6 +334,64 @@ public class MeetingApptModel implements Serializable {
         this.clientName = clientName;
     }
 
+    public String getMeetingAddressTypeId() {
+        return meetingAddressTypeId;
+    }
+
+    public void setMeetingAddressTypeId(String meetingAddressTypeId) {
+        this.meetingAddressTypeId = meetingAddressTypeId;
+    }
+
+    public String getMeetingAddress() {
+        return meetingAddress;
+    }
+
+    public void setMeetingAddress(String meetingAddress) {
+        this.meetingAddress = meetingAddress;
+    }
+
+
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getGeoArea() {
+        return geoArea;
+    }
+
+    public void setGeoArea(String geoArea) {
+        this.geoArea = geoArea;
+    }
+
+    public String getGeoLongitude() {
+        return geoLongitude;
+    }
+
+    public void setGeoLongitude(String geoLongitude) {
+        this.geoLongitude = geoLongitude;
+    }
+
+    public String getGeoLatitude() {
+        return geoLatitude;
+    }
+
+    public void setGeoLatitude(String geoLatitude) {
+        this.geoLatitude = geoLatitude;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
     /**
      * @return
      */
@@ -372,6 +446,16 @@ public class MeetingApptModel implements Serializable {
         if (displayType.equalsIgnoreCase(DISPLAY_TYPE_MEETING)) {
             json += ",\"MeetingID\":" + getMeetingID();
         }
+        if (displayType.equalsIgnoreCase("A") && meetingType.equalsIgnoreCase(MEETING_TYPE_MEETING)) {
+            json += ",\"MeetingAddressTypeId\":\"" + getMeetingAddressTypeId() + "\"";
+            json += ",\"MeetingAddress\":\"" + getMeetingAddress() + "\"";
+            json += ",\"TravellingModeIds\":\"" + getTravellingJson() + "\"";
+            json += ",\"Amount\":\"" + getAmount() + "\"";
+            json += ",\"GeoArea\":\"" + getGeoArea() + "\"";
+            json += ",\"GeoLongitude\":\"" + getGeoLatitude() + "\"";
+            json += ",\"GeoLatitude\":\"" + getGeoLatitude() + "\"";
+            json += ",\"Pincode\":\"" + getPincode() + "\"";
+        }
         //common part
         json += ",\"LeadId\":\"" + getLeadId() + "\"";
         json += ",\"MeetingType\":\"" + meetingType + "\"";
@@ -393,6 +477,20 @@ public class MeetingApptModel implements Serializable {
 
         json = json.substring(0, json.length() - 1); //remove lash comma
         json += "]";
+        return json;
+    }
+
+    private String getTravellingJson() {
+//        String json = "[";
+        String json = "";
+        for (CreateMeetingTravellingModel model : travellingList) {
+            String meetingJson = model.getTravellingId();
+            json += meetingJson + ",";
+        }
+
+        json = json.substring(0, json.length() - 1); //remove lash comma
+//        json += "]";
+        json += "";
         return json;
     }
 

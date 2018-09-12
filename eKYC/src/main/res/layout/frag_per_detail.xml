@@ -1426,13 +1426,11 @@
                     android:layout_height="wrap_content"
                     android:background="@color/light_grey_menu"
                     android:padding="@dimen/_5sdp"
-                    android:visibility="visible"
-                    >
+                    android:visibility="visible">
 
                     <include
-                        layout="@layout/layout_merge_of_mosl_note"
                         android:id="@+id/layout_merge_note"
-                        />
+                        layout="@layout/layout_merge_of_mosl_note" />
 
                     <Button
                         android:id="@+id/btnNext"
@@ -1443,8 +1441,7 @@
                         android:layout_margin="@dimen/_10sdp"
                         android:background="@drawable/ic_submit_btn"
                         android:text="Next"
-                        android:textColor="@color/white"
-                        />
+                        android:textColor="@color/white" />
 
                 </RelativeLayout>
             </LinearLayout>

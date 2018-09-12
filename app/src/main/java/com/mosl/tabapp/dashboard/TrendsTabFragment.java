@@ -63,9 +63,6 @@ import java.util.Set;
  */
 
 public class TrendsTabFragment extends MOSLCommonFragment {
-    //  private CombinedChart mChart;
-
-    //XAxis xAxis;
     private String CHART_TYPE_LINE = "SpLine";
     private String CHART_TYPE_COLUMN = "Coloumn";
     private String[] mMonths;
@@ -73,7 +70,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
     View trendsView;
     private List<WidgetType> widgetTypeList = new ArrayList<>();
     private DashboardModel dashboardModel;
-    //private String widgetSystemName;
     private List<DashboardGroupModel> subWidgetModelList;
     static Context mContext;
     private RecyclerView horizontalRecyclerView;
@@ -120,8 +116,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
             } else if (subWidgetModelList.size() < 4) {
                 subWidgetModelList.add(new DashboardGroupModel());
             }
-            //widgetModelListNew = subWidgetModelList.get(0).getWidgetList();
-            //widgetSystemName = widgetModelListNew.get(0).getSystemName();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -151,14 +146,9 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 mChart.setDrawGridBackground(false);
                 mChart.setDrawBarShadow(false);
                 mChart.setHighlightFullBarEnabled(false);
-                // mChart.setViewPortOffsets(10f,0f,10f,0f);
-                // mChart.offsetLeftAndRight(25);
-                // draw bars behind lines
                 mChart.setDrawOrder(new DrawOrder[]{
                         DrawOrder.BAR, DrawOrder.BUBBLE, DrawOrder.CANDLE, DrawOrder.LINE, DrawOrder.SCATTER
                 });
-                // mChart.animateXY(2000, 2000);
-
                 Legend l = mChart.getLegend();
                 l.setWordWrapEnabled(true);
                 l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
@@ -170,9 +160,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 rightAxis.setValueFormatter(new LargeValueFormatter());
                 rightAxis.setDrawGridLines(false);
                 rightAxis.setAxisMinimum(0f);
-// this replaces setStartAtZero(true)
-
-
                 YAxis leftAxis = mChart.getAxisLeft();
                 leftAxis.setDrawGridLines(false);
                 leftAxis.setValueFormatter(new LargeValueFormatter());
@@ -182,12 +169,8 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
                 xAxis.setDrawGridLines(false);
                 xAxis.setAxisMinimum(0f);
-                // xAxis.setCenterAxisLabels(true);
                 xAxis.setGranularity(1f);
                 xAxis.setDrawAxisLine(true);
-
-                // xAxis.setDrawAxisLine(false);
-
                 CombinedData data = new CombinedData();
 
                 LineData lineData = generateLineData(xAxis, arrayLists.get(i));
@@ -240,7 +223,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
                 try {
-                    //sometime value is coming as negative
                     if (value < 0) {
                         return "";
                     } else {
@@ -270,15 +252,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
 
         if (lineData == null) return null;
         generateAxisLabel(lineData, xAxis);
-
-      /*  xAxis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return mMonths[(int) value % mMonths.length];
-            }
-        }); */
-
-
         int itemcount = lineData.getMonthData().size();
 
         LineData d = new LineData();
@@ -311,11 +284,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                     rightAxis.setValueFormatter(new LargeValueFormatter());
                 }
             }
-//            if (lineData.getMonthData().get(mMonths[index]) % 1 == 0) {
-//                set.setValueFormatter(new CRMValueFormatter());
-//            } else {
-//                set.setValueFormatter(new CRMDecimalValueFormater());
-//            }
             set.setValueFormatter(new CRMDecimalValueFormater());
             set.setAxisDependency(YAxis.AxisDependency.RIGHT);
         }
@@ -386,8 +354,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
         float groupSpace = 0.1f;
         float barSpace = 0.025f; // x2 dataset
         float barWidth = 0.35f; // x2 dataset
-        // (0.45 + 0.02) * 2 + 0.06 = 1.00 -> interval per "group"
-
         // make this BarData object grouped
         d.setBarWidth(barWidth);
         if (barDataList.size() > 1) {
@@ -643,7 +609,6 @@ public class TrendsTabFragment extends MOSLCommonFragment {
             if (widgetModel.isSelected()) {
 
                 holder.tvWidgetName.setTextColor(getResources().getColor(R.color.white));
-                // setImage(widgetModel.getIconUrl2(), holder.imageView);
                 holder.imageView.setImageResource(R.drawable.mhovertrend);
                 holder.tvWidgetName.setText(widgetModel.getDisplayName());
                 holder.card_view.setCardBackgroundColor(getResources().getColor(R.color.secondaryBackground));
@@ -655,13 +620,8 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                     String widgetSystemName = model.getSystemName();
                     webServiceCall(widgetSystemName);
                 }
-                // webServiceCallFirst();
-                // widgetTypeList = widgetModel.getWidgetTypeList();
-
-
             } else {
                 holder.tvWidgetName.setTextColor(getResources().getColor(R.color.txt_dselect));
-                // setImage(widgetModel.getIconUrl1(), holder.imageView);
                 if (!widgetModel.getDisplayName().isEmpty()) {
                     holder.imageView.setImageResource(R.drawable.mtrends);
                 }
@@ -673,29 +633,12 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 public void onClick(View v) {
                     if (!widgetModel.getDisplayName().isEmpty()) {
                         selectCategory(widgetModel.getSystemName());
-                        //     setImage(widgetModel.getIconUrl2(), holder.imageView);
-
                         holder.imageView.setImageResource(R.drawable.mhovertrend);
                     }
                 }
             });
 
         }
-
-       /* public void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(context).load(imageUrl).asBitmap().placeholder(R.drawable.ic_personal_select).centerCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    circularBitmapDrawable.setCircular(true);
-                    imageView.setImageDrawable(circularBitmapDrawable);
-                }
-            });
-        }*/
-
         @Override
         public int getItemCount() {
             return widgetModelList.size();

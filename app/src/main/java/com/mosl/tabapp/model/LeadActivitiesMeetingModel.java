@@ -29,11 +29,20 @@ public class LeadActivitiesMeetingModel implements Serializable {
     private String callback;
     private String queryDesc;
 
+    private String meetingAddress;
+    private String pincode;
+    private String travellingMode;
+    private String amount;
+    private String geoTagStatus;
+    private String location;
+    private String geoMeetingLocation;
+
     public String getStatus() {
         return status;
     }
 
-    public LeadActivitiesMeetingModel(String status, String meetingid, String leadid, String name, String email, String mobNo, String date, String time, String attendeeEmp, String product, String statusName, String activityType, String meetingReason, String meetingDuration, String category, String actionable, String comments, String stage, String callback, String queryDesc) {
+    public LeadActivitiesMeetingModel(String status, String meetingid, String leadid, String name, String email, String mobNo, String date, String time, String attendeeEmp, String product, String statusName, String activityType, String meetingReason, String meetingDuration, String category, String actionable, String comments, String stage, String callback, String queryDesc, String meetingAddress, String pincode,
+                                      String travellingMode, String amount, String geoTagStatus, String location, String geoMeetingLocation) {
         this.status = status;
         this.meetingid = meetingid;
         this.leadid = leadid;
@@ -54,6 +63,70 @@ public class LeadActivitiesMeetingModel implements Serializable {
         this.stage = stage;
         this.callback = callback;
         this.queryDesc = queryDesc;
+        this.meetingAddress = meetingAddress;
+        this.pincode = pincode;
+        this.travellingMode = travellingMode;
+        this.amount = amount;
+        this.geoTagStatus = geoTagStatus;
+        this.location = location;
+        this.geoMeetingLocation = geoMeetingLocation;
+
+    }
+
+    public String getMeetingAddress() {
+        return meetingAddress;
+    }
+
+    public void setMeetingAddress(String meetingAddress) {
+        this.meetingAddress = meetingAddress;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getTravellingMode() {
+        return travellingMode;
+    }
+
+    public void setTravellingMode(String travellingMode) {
+        this.travellingMode = travellingMode;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getGeoTagStatus() {
+        return geoTagStatus;
+    }
+
+    public void setGeoTagStatus(String geoTagStatus) {
+        this.geoTagStatus = geoTagStatus;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getGeoMeetingLocation() {
+        return geoMeetingLocation;
+    }
+
+    public void setGeoMeetingLocation(String geoMeetingLocation) {
+        this.geoMeetingLocation = geoMeetingLocation;
     }
 
     public void setStatus(String status) {

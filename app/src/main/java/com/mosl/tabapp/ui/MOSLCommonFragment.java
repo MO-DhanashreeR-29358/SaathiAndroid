@@ -19,7 +19,6 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
-import com.mosl.tabapp.franchiesleadviewdetail.FranchiesLeadDocumentFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.DocumentFragment;
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
@@ -30,7 +29,6 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -38,6 +36,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
+
     public MOSLCommonFragment() {
         super();
     }
@@ -65,11 +64,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
 
-
     public void setAppTitle(String fragment, String title) {
         ((MOSLCommonActivity) getMainActivity()).setAppTitle(fragment, title);
     }
-
 
 
     public void hideAppTitle() {
@@ -84,7 +81,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         if (context != null) {
             return context;
         } else {
-            return super.getActivity();
+            return super.requireActivity();
         }
     }
 
@@ -145,10 +142,6 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 break;
             case NAV_TO_LEAD_DOCUMENT:
                 fragment = new DocumentFragment();
-                fragment.setArguments(bundle);
-                break;
-            case NAV_TO_FRANCHIES_LEAD_DOCUMENT:
-                fragment = new FranchiesLeadDocumentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_APPROVAL:
@@ -227,7 +220,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
 
     public void onFragmentResume() {
-          }
+    }
 
     public void onFragmentPause() {
 
@@ -275,6 +268,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
     public Map getHeader() {
         return MOSLCommonActivity.getHeader(context);
     }
