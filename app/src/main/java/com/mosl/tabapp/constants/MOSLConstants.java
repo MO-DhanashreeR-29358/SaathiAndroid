@@ -117,11 +117,13 @@ public interface MOSLConstants extends LabelConfig {
     String SOME_ERROR_OCCURED_PLEASE_RETRY = "Some error occurred, please retry";
     String ERROR_LOADING_DATA_FOR = "Error loading data for: ";
     String MISSING_FILE = "File not found";
-    String SOME_SERVER_ERROR_OCCURRED = "Something went wrong while getting response from server. Please try again.";
+    String SOME_SERVER_ERROR_OCCURRED =
+        "Something went wrong while getting response from server. Please try again.";
     String SOME_SEELECTION_METHOD = "Please select at least one answer.";
     String FILE_DOWNLOADED = "File downloaded at: ";
     String MISSING_FILE_VIEWER = "Need supported app to view file: ";
-    String INTERNET_CONNECTION = "Operation could not be completed. Please check your network connections.";
+    String INTERNET_CONNECTION =
+        "Operation could not be completed. Please check your network connections.";
     String UNAUTHORIZE_USER = "Session is expired, relogin is required";
     String CONFIRM_LEAD = "Are you sure want to create lead ?";
     String CONFIRM_LEAD_UPDATE = "Are you sure want to update lead ?";
@@ -146,7 +148,8 @@ public interface MOSLConstants extends LabelConfig {
     String MY_PERFORMANCE_INCENTIVE = "My_Performance_Incentive";
     String PERFORMANCE_INCENTIVE_ACHIEVEMNET = "Performance_Incentive_Achievemnet";
     String SALESSELF_PERFORMANCE_INCENTIVE = "SalesSelf-PerformanceandIncentive";
-    String OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES = "OaoSalesOneup_TeamPerformanceAndIncentives";
+    String OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES =
+        "OaoSalesOneup_TeamPerformanceAndIncentives";
     String SYS_MY_CLIENTS_SNAPSHOOT = "My_Clients_Snapshot";
     String MY_LEAD = "My_Lead";
     String MyClient_MyLead = "MyClient_MyLead";
@@ -160,7 +163,8 @@ public interface MOSLConstants extends LabelConfig {
     String SYS_LEAD_SNAPSHOT = "LeadSnapshot";
     String SYS_BUSINESS_SNAPSHOT = "BusinessSnapshot";
     String SYS_RH_BUSINESS_SNAPSHOT = "RH_BusinessSnapshot";
-    String SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT = "ProductSalesDirect1UP_BusinessSnapshot";
+    String SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT =
+        "ProductSalesDirect1UP_BusinessSnapshot";
     String SYS_TEAM_SNAPSHOT = "Team_Snapshot";
 
     //Incentive performance
@@ -219,10 +223,8 @@ public interface MOSLConstants extends LabelConfig {
     String ATTENDEE_SECOND_NAME = "Attendee Second Name";
     String ATTENDEE_THIRD_NAME = "Attendee Third Name";
 
-
     String EMAIL_MESSAGE_CLIENT = "Do you want to send email to your client ?";
     String EMAIL_ALL_MESSAGE = "Do you want to send email to all clients ?";
-
 
     String ADDRESS = "Address";
     String CLIENT_NAME = "ClientName";
@@ -378,10 +380,11 @@ public interface MOSLConstants extends LabelConfig {
     String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
     String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";
 
-
     //Birthday Message
-    String BIRTHDAY_MESSAGE = "On your special day we wish you Strong Health, Great Success, and True Happiness in your life.";
-    String ANNIVERSARY_MESSAGE = "May your marriage be blessed with love, joy and companionship for all the years of your lives! A very happy Wedding Anniversary to both of you!";
+    String BIRTHDAY_MESSAGE =
+        "On your special day we wish you Strong Health, Great Success, and True Happiness in your life.";
+    String ANNIVERSARY_MESSAGE =
+        "May your marriage be blessed with love, joy and companionship for all the years of your lives! A very happy Wedding Anniversary to both of you!";
 
     //profiling constants
     String GROUPNAME = "GroupName";
@@ -427,7 +430,6 @@ public interface MOSLConstants extends LabelConfig {
     //Size if lru chache
     int CHACHE_SIZE = 10;
 
-
     //franchise constants
     String FieldName = "FieldName";
     String ControlType = "ControlType";
@@ -448,7 +450,6 @@ public interface MOSLConstants extends LabelConfig {
     String FILTER_LIST = "filter_list";
     String SPINNER_LIST = "spinner_list";
 
-
     String PARAMETERS = "Parameters";
     String Q1 = "Q1";
     String Q2 = "Q2";
@@ -462,7 +463,6 @@ public interface MOSLConstants extends LabelConfig {
     String MTD_CNT = "MTD_CNT";
     String MTD = "MTD";
     String YTD_CNT = "YTD_CNT";
-
 
     String CHANNEL = "Channel";
     String PANNUMBER = "PANNumber";
@@ -534,7 +534,6 @@ public interface MOSLConstants extends LabelConfig {
     String MEETING_ATTENDEE = "meetingAttendee";
     String ATTENDEETYPE = "AttendeeType";
 
-
     String ATTENDEE_EMPCODE = "AttendeeEmpcode";
 
     String ATTENDEE_EMPNAME = "AttendeeEmpName";
@@ -559,7 +558,8 @@ public interface MOSLConstants extends LabelConfig {
 
     int FILE_UPLOAD_SIZE_LIMT = 5;
     int FILE_UPLOAD_COUNT_LIMT = 4;
-    String FILE_LARGE_MESSAGE = "User not allow to upload More then " + FILE_UPLOAD_SIZE_LIMT + " MB File.";
+    String FILE_LARGE_MESSAGE =
+        "User not allow to upload More then " + FILE_UPLOAD_SIZE_LIMT + " MB File.";
     String FILE_NOT_ALLOWED_MESSAGE = "File not valid";
     String SYS_NAME = "SysName";
     String SAME_MOBILEMESSAGE = "Alternate mobile No. cannot be same";
@@ -582,7 +582,6 @@ public interface MOSLConstants extends LabelConfig {
     String INVALID_DATE_RANGE = "Select correct from and to date";
     String ID_OBJECT = "{\"id\":%s}";
 
-
     String EKYC_SERVER_DOWN = "Ekyc services are down";
     String USERID = "Userid";
 
@@ -602,8 +601,6 @@ public interface MOSLConstants extends LabelConfig {
     String TOKENKEY = "TOKENKEY";
     String EKYC_APP_NOT_AVAILABLE = "Ekyc app not available";
     String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.ekyc";
-
     String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
-
 }
 

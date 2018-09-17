@@ -1141,9 +1141,21 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                 etRefreeName.setText("");
                                 etRefreeEmail.setText("");
                                 etRefreeMobile.setText("");
-                            } else {
-                                tvRefereeCodeError.setVisibility(View.VISIBLE);
                             }
+                            /*else if (!CRMValidationRule.validateRefreeCode(
+                                etRefreeCode.getText().toString())) {
+                                tvRefereeCodeError.setText("Invalid referee code ");
+                                tvRefereeCodeError.setVisibility(View.VISIBLE);
+                                if (etRefreeCode.getText().toString().length() == 3) {
+                                    RefereeCode = "";
+                                    RefereeName = "";
+                                    etRefreeName.setText("");
+                                    etRefreeEmail.setText("");
+                                    etRefreeMobile.setText("");
+                                }
+                            }else {
+                                tvRefereeCodeError.setVisibility(View.GONE);
+                            }*/
                         }
                     }
                 }
@@ -3797,7 +3809,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
             tvAadharNumError.setVisibility(View.VISIBLE);
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (prospectSourceNameStr.equalsIgnoreCase(WEBSITE_CLIENT_REFERRAL)) {
+        } else if (prospectSourceNameStr.equalsIgnoreCase(WEBSITE_CLIENT_REFERRAL)
+            && etRefreeCode.length() < 4) {
             tvRefereeCodeError.setText("Enter referee code ");
             tvRefereeCodeError.setVisibility(View.VISIBLE);
             etRefreeCode.requestFocus();
