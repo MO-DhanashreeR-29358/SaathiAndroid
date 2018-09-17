@@ -84,7 +84,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
     private Spinner spSource, spProspectSource, spStage, spStirInfo, spStatus, spCategory,
         spInterestIn, spProductType, spCountry, spOffCountry, spProfession;
     private SearchableSpinner spState, spCity, spOffState, spOffCity;
-    private TextInputLayout ilName;
+    private TextInputLayout ilName, ilRefereeCode;
     private org.droidparts.widget.ClearableEditText actAssignTo;
     private CheckBox cbPrimaryAddress, cbSameAs, cbOffPrimaryAddress;
     private Button btnCreate, btnCancel;
@@ -115,7 +115,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         tvNameError, tvEmailIdError, tvAlternateEmailIdError, tvMobileError, tvEkycMobileError,
         tvPanNumError, tvLandLineError, tvAadharNumError, tvRefreeEmailError, tvAdd1Error,
         tvAdd2Error, tvPincodeError, tvOffPincodeError, tvRefereeMobileError, tvAlternateMobError,
-        tvContactPersonError;
+        tvContactPersonError, tvRefereeCodeError;
     private boolean isIndividualsFlag;
     private String RefereeCode, RefereeName;
     private boolean isRefreeCode;
@@ -211,6 +211,13 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     prospectSourceCodeStr = ((RowData) spProspectSource.getSelectedItem()).getKey();
                     prospectSourceNameStr =
                         ((RowData) spProspectSource.getSelectedItem()).getValue();
+                    if (prospectSourceNameStr.equalsIgnoreCase(WEBSITE_CLIENT_REFERRAL)) {
+                        ilRefereeCode.setHint("Referee Code*");
+                        openSectionExpansion(llAdditionInfo, tvAdditionalInfo);
+                    } else {
+                        ilRefereeCode.setHint("Referee Code");
+                        closedSectionExpansion(llAdditionInfo, tvAdditionalInfo);
+                    }
                     tvProspectSourceError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -474,6 +481,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             R.id.actAssignTo);
 
         ilName = (TextInputLayout) leadCreationView.findViewById(R.id.ilName);
+        ilRefereeCode = leadCreationView.findViewById(R.id.ilRefereeCode);
         etName = (EditText) leadCreationView.findViewById(R.id.etName);
         etProspectSourceDetails =
             (EditText) leadCreationView.findViewById(R.id.etProspectSourceDetails);
@@ -589,6 +597,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         tvOffCityError = (TextView) leadCreationView.findViewById(R.id.tvOffCityError);
         tvLandLineError = (TextView) leadCreationView.findViewById(R.id.tvLandLineError);
         tvAadharNumError = (TextView) leadCreationView.findViewById(R.id.tvAadharNumError);
+        tvRefereeCodeError = leadCreationView.findViewById(R.id.tvRefereeCodeError);
         tvRefreeEmailError = (TextView) leadCreationView.findViewById(R.id.tvRefreeEmailError);
         tvRefereeMobileError = (TextView) leadCreationView.findViewById(R.id.tvRefereeMobileError);
         tvAdd1Error = (TextView) leadCreationView.findViewById(R.id.tvAdd1Error);
@@ -1125,12 +1134,15 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                 etRefreeCode.getText().toString())) {
                                 RefreeApi(etRefreeCode.getText().toString(), "ByCode", etRefreeCode,
                                     pbLoadingIndicatorRefreeCode);
+                                tvRefereeCodeError.setVisibility(View.GONE);
                             } else if (etRefreeCode.getText().toString().length() == 3) {
                                 RefereeCode = "";
                                 RefereeName = "";
                                 etRefreeName.setText("");
                                 etRefreeEmail.setText("");
                                 etRefreeMobile.setText("");
+                            } else {
+                                tvRefereeCodeError.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -1271,7 +1283,15 @@ public class LeadCreationFragment extends MOSLCommonFragment
             }
 
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isValidEmail(etEmailId.getText())) {
+                if (!isBlank(etEmailId.getText().toString().trim())) {
+                    if (!isValidEmail(etEmailId.getText())) {
+                        tvEmailIdError.setVisibility(View.VISIBLE);
+                        tvEmailIdError.setText("Invalid email id");
+                        etEmailId.requestFocus();
+                    } else {
+                        tvEmailIdError.setVisibility(View.GONE);
+                    }
+                } else {
                     tvEmailIdError.setVisibility(View.GONE);
                 }
             }
@@ -3110,10 +3130,21 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                             });
                                     } else {
                                         hideProgress();
-                                        JSONObject jsonObject = response.getJSONObject("Response");
-                                        String dedupeModel = jsonObject.getString("DedupeModel");
-                                        JSONObject jsonObjectDedup = new JSONObject(dedupeModel);
-                                        dedupeDialog(jsonObjectDedup);
+                                        if (response.has("DedupeModel") && response.has("Erros")) {
+                                            JSONObject jsonObject =
+                                                response.getJSONObject("Response");
+                                            String dedupeModel =
+                                                jsonObject.getString("DedupeModel");
+                                            JSONObject jsonObjectDedup =
+                                                new JSONObject(dedupeModel);
+                                            dedupeDialog(jsonObjectDedup);
+                                        } else if (response.has("Erros")) {
+                                            String errorMsg =
+                                                CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                            alertDialog(getMainActivity(), 0,
+                                                getResources().getString(R.string.motilal_oswal),
+                                                errorMsg, "OK", true, null);
+                                        }
                                     }
                                 } else {
                                     hideProgress();
@@ -3674,13 +3705,14 @@ public class LeadCreationFragment extends MOSLCommonFragment
             tvProductTypeError.requestFocus();
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (isBlank(etEmailId.getText().toString().trim())) {
+        }/* else if (isBlank(etEmailId.getText().toString().trim())) {
             tvEmailIdError.setVisibility(View.VISIBLE);
             tvEmailIdError.setText("Enter email id");
             etEmailId.requestFocus();
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (!isValidEmail(etEmailId.getText().toString().trim())) {
+        }*/ else if (!isBlank(etEmailId.getText().toString().trim()) && !isValidEmail(
+            etEmailId.getText().toString().trim())) {
             tvEmailIdError.setText("Invalid email id");
             tvEmailIdError.setVisibility(View.VISIBLE);
             etEmailId.requestFocus();
@@ -3764,6 +3796,11 @@ public class LeadCreationFragment extends MOSLCommonFragment
             etAadharNum.requestFocus();
             tvAadharNumError.setVisibility(View.VISIBLE);
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
+            return false;
+        } else if (prospectSourceNameStr.equalsIgnoreCase(WEBSITE_CLIENT_REFERRAL)) {
+            tvRefereeCodeError.setText("Enter referee code ");
+            tvRefereeCodeError.setVisibility(View.VISIBLE);
+            etRefreeCode.requestFocus();
             return false;
         } else if (!isBlank(etPincode.getText().toString())
             && etPincode.length() < 6
@@ -4039,7 +4076,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             showProgress();
             final Map inputMap = new HashMap<>();
             inputMap.put(MOBILE, etMobile.getText().toString().trim());
-            inputMap.put(EMAIL, etEmailId.getText().toString());
+            //inputMap.put(EMAIL, etEmailId.getText().toString());
             inputMap.put("CurrentUser", AccountDetails.getEmployeeCode());
             String serviceMethod = "/Lead/TransferLeadCaughtInC2";
             try {

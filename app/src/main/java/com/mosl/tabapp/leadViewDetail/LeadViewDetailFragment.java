@@ -153,9 +153,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private String specialistEdit = "";
     private String primaryRMAdd = "";
     private String primaryRMEdit = "", advisorCode = "";
-    private TextView tvLandLineError, tvAlternateMobileNumberError, tvAlternateEmailIdError,
-        tvPincodeError, tvOffPincodeError, tvNameError, tvContactPersonError, tvPanNumError,
-        tvAadharNumError;
+    private TextView tvLandLineError, tvAlternateMobileNumberError, tvEmailIdError,
+        tvAlternateEmailIdError, tvPincodeError, tvOffPincodeError, tvNameError,
+        tvContactPersonError, tvPanNumError, tvAadharNumError;
     private NestedScrollView nestedScrollView;
     private List<LeadFieldSectionModel> mLeadFieldSectionModelList;
     private Map<String, View> newSectionMap;
@@ -454,6 +454,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etAnniversary.setEnabled(flag);
         etAlternateMobileNumber.setEnabled(flag);
         etAlternateEmail.setEnabled(flag);
+        etEmail.setEnabled(flag);
         etContactPerson.setEnabled(flag);
         etComments.setEnabled(flag);
         btnSubmit.setEnabled(flag);
@@ -684,6 +685,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             (TextView) leadViewDetailView.findViewById(R.id.tvAlternateMobileNumberError);
         tvAlternateEmailIdError =
             (TextView) leadViewDetailView.findViewById(R.id.tvAlternateEmailIdError);
+        tvEmailIdError = (TextView) leadViewDetailView.findViewById(R.id.tvEmailIdError);
         tvPincodeError = (TextView) leadViewDetailView.findViewById(R.id.tvPincodeError);
         tvOffPincodeError = (TextView) leadViewDetailView.findViewById(R.id.tvOffPincodeError);
 
@@ -813,8 +815,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         });
 
         etAlternateEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
@@ -830,6 +831,32 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         }
                     } else {
                         tvAlternateEmailIdError.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+
+            }
+        });
+        etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (llEditLeadDetail.isEnabled() == true) {
+                    if (!isBlank(etEmail.getText().toString().trim())) {
+                        if (!isValidEmail(etEmail.getText())) {
+                            tvEmailIdError.setVisibility(View.VISIBLE);
+                            tvEmailIdError.setText("Invalid email id");
+                            etEmail.requestFocus();
+                        } else {
+                            tvEmailIdError.setVisibility(View.GONE);
+                        }
+                    } else {
+                        tvEmailIdError.setVisibility(View.GONE);
                     }
                 }
             }
@@ -4423,6 +4450,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 etLandlineNumber.requestFocus();
                 tvLandLineError.setVisibility(View.VISIBLE);
                 return false;
+            } else if (!isBlank(etEmail.getText().toString()) && !isValidEmail(
+                etEmail.getText().toString().trim())) {
+                tvEmailIdError.setText("Invalid email id");
+                tvEmailIdError.setVisibility(View.VISIBLE);
+                etEmail.requestFocus();
+                return false;
             } else if (!isBlank(etAlternateEmail.getText().toString()) && !isValidEmail(
                 etAlternateEmail.getText().toString().trim())) {
                 tvAlternateEmailIdError.setText("Invalid email id");
@@ -4436,8 +4469,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 tvAlternateEmailIdError.setVisibility(View.VISIBLE);
                 etAlternateEmail.requestFocus();
                 return false;
-            } else if (!isBlank(etPanNumber.getText().toString())
-                && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
+            } else if (!isBlank(etPanNumber.getText().toString()) && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
                 tvPanNumError.setText("Invalid PAN number");
                 etPanNumber.requestFocus();
                 tvPanNumError.setVisibility(View.VISIBLE);

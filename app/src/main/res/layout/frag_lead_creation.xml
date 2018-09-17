@@ -227,7 +227,7 @@
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Email Id*"
+                            android:hint="Email Id"
                             android:inputType="textEmailAddress"
                             android:maxLength="100"
                             android:maxLines="1"
@@ -717,6 +717,19 @@
                             android:paddingLeft="@dimen/_15sdp"
                             android:visibility="gone" />
                     </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tvRefereeCodeError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

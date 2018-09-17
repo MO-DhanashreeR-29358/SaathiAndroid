@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
@@ -28,9 +27,7 @@ import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-
 import java.util.Map;
-
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
@@ -41,14 +38,12 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         super();
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         View mCommonview = inflater.inflate(R.layout.common_base_layout, container, false);
         setupViews(mCommonview);
 
         //remove cache if login done
-
 
         return mCommonview;
     }
@@ -57,17 +52,14 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         mLinearContainerView = (FrameLayout) mCommonview.findViewById(R.id.commonContainerView);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
+    @Override public void onAttach(Activity activity) {
         super.onAttach(activity);
         context = (FragmentActivity) activity;
     }
 
-
     public void setAppTitle(String fragment, String title) {
         ((MOSLCommonActivity) getMainActivity()).setAppTitle(fragment, title);
     }
-
 
     public void hideAppTitle() {
         ((MOSLCommonActivity) getMainActivity()).hideAppTitle();
@@ -89,7 +81,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         View view = null;
         try {
             view = LayoutInflater.from(getMainActivity()).inflate(layoutId, null, false);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
             mLinearContainerView.addView(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,11 +90,15 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         return view;
     }
 
-
-    public void navigateTo(int id, Bundle bundle, FragmentManager fragmentManager, final boolean addStack) {
-        InputMethodManager inputManager = (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputManager.isAcceptingText() && getMainActivity().getCurrentFocus() != null)
-            inputManager.hideSoftInputFromWindow(getMainActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    public void navigateTo(int id, Bundle bundle, FragmentManager fragmentManager,
+        final boolean addStack) {
+        InputMethodManager inputManager =
+            (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputManager.isAcceptingText() && getMainActivity().getCurrentFocus() != null) {
+            inputManager.hideSoftInputFromWindow(
+                getMainActivity().getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+        }
         MOSLCommonFragment fragment = null;
         switch (id) {
             case SECOND_CLICK_DASHBORD:
@@ -160,19 +157,17 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment = new SecondLevelReportFragment();
                 fragment.setArguments(bundle);
                 break;
-
         }
         if (fragment != null) {
             fragment.previousFragment = this;
             fragment.setArguments(bundle);
             addFragment(R.id.activityFrameLayout, fragment, addStack);
         }
-
-
     }
 
     private void addFragment(int containerViewId, Fragment fragment, boolean addStack) {
-        ((MOSLCommonActivity) getMainActivity()).addFragment(containerViewId, fragment, addStack, false);
+        ((MOSLCommonActivity) getMainActivity()).addFragment(containerViewId, fragment, addStack,
+            false);
     }
 
     public void showProgress() {
@@ -184,7 +179,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void dashbordFragment() {
-        ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(getMainActivity().getIntent());
+        ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
+            getMainActivity().getIntent());
     }
 
     public void gotoEkycVersionCheck(int gotoEkyc, Map hashMap) {
@@ -207,9 +203,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         return "";
     }
 
-
-    @Override
-    public void onDetach() {
+    @Override public void onDetach() {
         if (previousFragment != null) previousFragment.onFragmentResult(null);
         super.onDetach();
     }
@@ -218,14 +212,12 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         // configureActionBar(actionBar);
     }
 
-
     public void onFragmentResume() {
     }
 
     public void onFragmentPause() {
 
     }
-
 
     protected void toggleSectionExpansion(View parent, TextView icon) {
         if (parent.getVisibility() == View.VISIBLE) {
@@ -241,6 +233,12 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     protected void openSectionExpansion(View parent, TextView icon) {
         parent.setVisibility(View.VISIBLE);
         icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_minus, 0);
+    }
+
+    //closedSectionExpansion
+    protected void closedSectionExpansion(View parent, TextView icon) {
+        parent.setVisibility(View.GONE);
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_plus, 0);
     }
 
     protected void setIcon(View parent, TextView icon) {
@@ -265,7 +263,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager in =
+            (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 

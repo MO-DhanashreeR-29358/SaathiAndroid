@@ -603,5 +603,7 @@ public interface MOSLConstants extends LabelConfig {
     String EKYC_APP_NOT_AVAILABLE = "Ekyc app not available";
     String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.ekyc";
 
+    String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
+
 }
 
