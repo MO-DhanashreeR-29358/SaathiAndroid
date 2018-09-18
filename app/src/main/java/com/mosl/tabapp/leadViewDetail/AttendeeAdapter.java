@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.model.EmployeeModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,20 +17,17 @@ import java.util.List;
  */
 
 public class AttendeeAdapter extends BaseAdapter {
-    //  FragmentActivity activity;
     Context context;
     private LayoutInflater inflater;
     private List<EmployeeModel> resultList = new ArrayList<>();
 
     public AttendeeAdapter(Context context) {
         this.inflater = LayoutInflater.from(context);
-        //  this.activity = (FragmentActivity) context;
         this.context = context;
     }
 
     public AttendeeAdapter(Context context, List<EmployeeModel> resultList) {
         this.inflater = LayoutInflater.from(context);
-        //  this.activity = (FragmentActivity) context;
         this.context = context;
         this.resultList = resultList;
     }
@@ -69,19 +64,12 @@ public class AttendeeAdapter extends BaseAdapter {
         } else {
             holderView = (AttendeeAdapter.HolderView) convertView.getTag();
         }
-        // viewColor(position, convertView);
-
         viewColor(position, convertView);
         if (clientModel.isNoData()) {
             holderView.tvAttendeeName.setText(clientModel.getAttendeeName());
         } else {
             holderView.tvAttendeeName.setText(clientModel.getAttendeeCode() + "-" + clientModel.getAttendeeName() + "-" + clientModel.getBranchcode());
-           /* holderView.tvAttendeeName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
-                }
-            });*/
         }
         return convertView;
     }

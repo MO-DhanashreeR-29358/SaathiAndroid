@@ -1,33 +1,10 @@
 package com.mosl.tabapp.model;
 
 import android.util.Log;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Sanket Gurav on 4/24/2017.
- */
-
-/*
-*  {
-                "FieldSectionId": 2,
-                "SectionCode": "S0000001",
-                "SectionName": "Franchisee",
-                "SectionHeader": "Additional Details",
-                "IsPage": true,
-                "CreatePageName": null,
-                "EditPageName": "_FranchiseeLead-Edit",
-                "ViewPageName": "_FranchiseeLead-View",
-                "IncludeInCommanSection": true,
-                "leadFields": null,
-                "IsAdminMode": true,
-                "Status": 1,
-                "InApproval": false,
-                "ApprovalFieldList": null
-            }
-* */
 
 public class LeadFieldSectionModel implements Serializable {
  final static    String TAG=LeadFieldSectionModel.class.getSimpleName();

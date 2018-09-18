@@ -3,46 +3,7 @@ package com.mosl.tabapp.model;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import java.io.Serializable;
-
-/**
- * Created by Sanket Gurav on 4/24/2017.
- */
-/*
-*
-*  {
-                "LeadFieldVal_Id": 0,
-                "BusinessUnitId": null,
-                "ProductId": null,
-                "LF_SysName": "F0000002",
-                "LeadField_Value": "",//999
-                "LeadID": null,
-                "LeadFieldId": 26,
-                "FieldSectionId": 2,///333
-                "FieldName": "Existing Broker",///7777
-                "ControlType": "DROP_DOWN",//666
-                "ApiPath": null,
-                "DependencyField": null,
-                "Product": null,
-                "ParentId": null,
-                "LookUpid": null,
-                "LookUpName": null,
-                "PlaceHolder": null,
-                "Sequence_no": 2,
-                "Size": null,
-                "Data_Type": "STRING",
-                "FieldType": null,
-                "Mandatory": null,///5555
-                "Enabled": null,
-                "DropdownValue": "Yes|No",///555
-                "IsAdminMode": true,
-                "Status": 1,
-                "InApproval": false,
-                "ApprovalFieldList": null
-            }
-*
-* */
 
 public class LeadFieldValueModel implements Serializable {
     private String LeadField_Value = "";
