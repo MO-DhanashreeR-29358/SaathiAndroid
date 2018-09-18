@@ -1,6 +1,5 @@
 package com.mosl.tabapp.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,9 +51,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         mLinearContainerView = (FrameLayout) mCommonview.findViewById(R.id.commonContainerView);
     }
 
-    @Override public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        context = (FragmentActivity) activity;
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = (FragmentActivity) context;
     }
 
     public void setAppTitle(String fragment, String title) {
