@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/title_black"
     android:orientation="vertical">
-    <!--android:background="@color/titleBarBackground"-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,15 +54,6 @@
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_weight="1.1"
             android:orientation="vertical">
-
-         <!--   <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section" />
-                -->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -114,17 +104,6 @@
             android:layout_weight="1"
             android:gravity="end"
             android:orientation="vertical">
-
-        <!--    <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:gravity="end"
-                android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section"
-                tools:text="Data" />-->
-
 
             <TextView
                 android:id="@+id/tvClientCode"

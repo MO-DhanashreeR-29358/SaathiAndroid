@@ -4,25 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dashbord_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dashbord_background">
+        android:background="@color/dashbord_background"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/_6sdp">
+            android:padding="@dimen/_6sdp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_bacground"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/tvPersonalInfo"
@@ -36,12 +40,14 @@
                     android:singleLine="true"
                     android:text="Personal Information"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/header1" />
+                    android:textSize="@dimen/header1"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/calendar_gray" />
+                    android:background="@color/calendar_gray"
+                    />
 
                 <LinearLayout
                     android:id="@+id/llPersonalInformation"
@@ -50,7 +56,8 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    >
 
                     <TextView
                         android:id="@+id/tvCategory"
@@ -58,7 +65,8 @@
                         android:layout_height="wrap_content"
                         android:text="Category*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
@@ -66,7 +74,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:entries="@array/Select"
+                        />
 
                     <TextView
                         android:id="@+id/tvCategoryError"
@@ -78,7 +87,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
 
                     <android.support.design.widget.TextInputLayout
@@ -86,8 +96,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
-                        <!--app:hintTextAppearance="@style/InputLayout"-->
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etName"
@@ -97,7 +107,8 @@
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -110,15 +121,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilContactPerson"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
-                        <!--app:hintTextAppearance="@style/InputLayout"-->
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etContactPerson"
@@ -129,7 +141,8 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -142,7 +155,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/tvProfession"
@@ -150,7 +164,8 @@
                         android:layout_height="wrap_content"
                         android:text="Profession"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
@@ -158,7 +173,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:entries="@array/Select"
+                        />
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -166,7 +182,8 @@
                         android:layout_height="wrap_content"
                         android:text="Interested In*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
@@ -174,7 +191,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:entries="@array/Select"
+                        />
 
                     <TextView
                         android:id="@+id/tvInterestInError"
@@ -186,7 +204,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/tvProductType"
@@ -194,7 +213,8 @@
                         android:layout_height="wrap_content"
                         android:text="Product Type"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
@@ -202,7 +222,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:entries="@array/Select"
+                        />
 
                     <TextView
                         android:id="@+id/tvProductTypeError"
@@ -214,14 +235,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etEmailId"
@@ -232,7 +255,8 @@
                             android:maxLength="100"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -245,14 +269,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilAlternateEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etAlternateEmailId"
@@ -263,7 +289,8 @@
                             android:maxLength="100"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -276,14 +303,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etMobile"
@@ -294,7 +323,8 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -307,14 +337,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
                     <!-- Alternate mobileno-->
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilAlternateMobno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etAlternateMobno"
@@ -325,7 +357,8 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -338,14 +371,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
                     <!-- Alternate mobileno end -->
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilLandLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etLandLine"
@@ -356,7 +391,8 @@
                             android:maxLength="11"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -369,14 +405,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilEkycMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etEkycMobile"
@@ -387,7 +425,8 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -400,14 +439,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilPanNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etPanNum"
@@ -418,7 +459,8 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -431,14 +473,16 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilAadharNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etAadharNum"
@@ -449,7 +493,8 @@
                             android:maxLength="12"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -462,7 +507,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
 
                     <TextView
@@ -471,14 +517,16 @@
                         android:layout_height="wrap_content"
                         android:text="Source*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
                         android:id="@+id/spSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        />
 
                     <TextView
                         android:id="@+id/tvSourceError"
@@ -490,7 +538,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/tvProspectSource"
@@ -498,14 +547,16 @@
                         android:layout_height="wrap_content"
                         android:text="Prospect Source*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
                         android:id="@+id/spProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        />
 
                     <TextView
                         android:id="@+id/tvProspectSourceError"
@@ -517,14 +568,15 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
-                        <!--app:hintTextAppearance="@style/InputLayout"-->
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etProspectSourceDetails"
@@ -534,7 +586,8 @@
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -543,14 +596,16 @@
                         android:layout_height="wrap_content"
                         android:text="Stage*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
                         android:id="@+id/spStage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        />
 
                     <TextView
                         android:id="@+id/tvStageError"
@@ -562,7 +617,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/tvStatus"
@@ -570,14 +626,16 @@
                         android:layout_height="wrap_content"
                         android:text="Status*"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        />
 
 
                     <Spinner
                         android:id="@+id/spStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        />
 
                     <TextView
                         android:id="@+id/tvStatusError"
@@ -589,7 +647,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
 
                     <RelativeLayout
@@ -598,14 +657,16 @@
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@drawable/textview_border">
+                        android:background="@drawable/textview_border"
+                        >
 
                         <LinearLayout
                             android:id="@+id/llSearch"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            >
 
                             <ImageButton
                                 android:id="@+id/srchImg"
@@ -614,36 +675,34 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
                                 android:background="@android:color/transparent"
-                                android:src="@drawable/search" />
+                                android:src="@drawable/search"
+                                />
 
                             <org.droidparts.widget.ClearableEditText
                                 android:id="@+id/actAssignTo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:autoText="false"
                                 android:background="@android:color/transparent"
                                 android:clickable="false"
                                 android:drawableRight="@drawable/ic_close_text"
-                                android:editable="false"
-
                                 android:focusable="false"
                                 android:hint="Assign to"
                                 android:inputType="none"
-
-
                                 android:paddingLeft="5dp"
-                                android:textSize="@dimen/_13sdp" />
+                                android:textSize="@dimen/_13sdp"
+                                />
 
 
                             <ProgressBar
                                 android:id="@+id/pbLoadingIndicator"
-                                style="?android:attr/progressBarStyleSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginRight="5dp"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                style="?android:attr/progressBarStyleSmall"
+                                />
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
@@ -654,7 +713,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@color/list_background"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <TextView
                     android:id="@+id/tvAdditionInfo"
@@ -668,12 +728,14 @@
                     android:singleLine="true"
                     android:text="Additional Information"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/header1" />
+                    android:textSize="@dimen/header1"
+                    />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/calendar_gray" />
+                    android:background="@color/calendar_gray"
+                    />
 
                 <LinearLayout
                     android:id="@+id/llAdditionInfo"
@@ -682,18 +744,21 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    >
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        >
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/ilRefereeCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etRefereeCode"
@@ -702,12 +767,13 @@
                                 android:hint="Referee Code"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeCode"
-                            style="?android:attr/progressBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -715,7 +781,9 @@
                             android:layout_marginRight="5dp"
                             android:layout_marginTop="@dimen/_22sdp"
                             android:paddingLeft="@dimen/_15sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            style="?android:attr/progressBarStyleSmall"
+                            />
                     </RelativeLayout>
 
                     <TextView
@@ -733,14 +801,16 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        >
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/ilRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etRefereeName"
@@ -750,12 +820,14 @@
                                 android:inputType="textNoSuggestions"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeName"
-                            style="?android:attr/progressBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
@@ -763,7 +835,9 @@
                             android:layout_marginRight="5dp"
                             android:layout_marginTop="@dimen/_22sdp"
                             android:paddingLeft="@dimen/_15sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            style="?android:attr/progressBarStyleSmall"
+                            />
                     </RelativeLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -771,11 +845,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etRefereeEmail"
-                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -783,7 +857,10 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+
+
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -796,18 +873,19 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/ilRefereeMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etRefereeMobile"
-                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -816,7 +894,9 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+
+                            />
                     </android.support.design.widget.TextInputLayout>
 
                     <TextView
@@ -829,7 +909,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
 
                     <LinearLayout
@@ -837,7 +918,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@drawable/textview_border"
-                        android:padding="@dimen/_5sdp">
+                        android:padding="@dimen/_5sdp"
+                        >
 
                         <TextView
                             android:id="@+id/tvResidenceAddress"
@@ -848,7 +930,8 @@
                             android:paddingLeft="@dimen/_5sdp"
                             android:text="Residence Address"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            />
 
                         <CheckBox
                             android:id="@+id/cbPrimaryAddress"
@@ -857,25 +940,25 @@
                             android:layout_weight="1"
                             android:text=" Primary Address"
                             android:textColor="@color/secondaryTextColor"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            />
                     </LinearLayout>
 
-                    <!--   <CheckedTextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="hi" />-->
+
                     <LinearLayout
                         android:id="@+id/llResAdd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        >
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/ilAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etAdd1"
@@ -884,7 +967,9 @@
                                 android:hint="Address 1"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -897,14 +982,16 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etAdd2"
@@ -913,7 +1000,9 @@
                                 android:hint="Address 2"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -926,7 +1015,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
 
                         <android.support.design.widget.TextInputLayout
@@ -934,7 +1024,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etAdd3"
@@ -943,7 +1034,9 @@
                                 android:hint="Address 3"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -952,7 +1045,8 @@
                             android:layout_height="wrap_content"
                             android:text="Country"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
 
                         <Spinner
@@ -960,7 +1054,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:entries="@array/Select"
+                            />
 
                         <TextView
                             android:id="@+id/tvCountryError"
@@ -972,7 +1067,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
                         <TextView
                             android:id="@+id/tvState"
@@ -980,14 +1076,16 @@
                             android:layout_height="wrap_content"
                             android:text="State"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp" />
+                            android:layout_marginTop="@dimen/_3sdp"
+                            />
 
                         <TextView
                             android:id="@+id/tvStateError"
@@ -999,7 +1097,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
                         <TextView
                             android:id="@+id/tvCity"
@@ -1007,7 +1106,8 @@
                             android:layout_height="wrap_content"
                             android:text="City"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
@@ -1015,7 +1115,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:entries="@array/Select"
+                            />
 
                         <TextView
                             android:id="@+id/tvCityError"
@@ -1027,7 +1128,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
 
                         <android.support.design.widget.TextInputLayout
@@ -1035,7 +1137,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etPincode"
@@ -1044,9 +1147,12 @@
                                 android:hint="Pincode"
                                 android:inputType="number"
                                 android:maxLength="6"
+
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -1059,7 +1165,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
                     </LinearLayout>
 
 
@@ -1068,7 +1175,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@drawable/textview_border"
-                        android:padding="@dimen/_5sdp">
+                        android:padding="@dimen/_5sdp"
+                        >
 
                         <TextView
                             android:id="@+id/tvOffAddress"
@@ -1079,7 +1187,8 @@
                             android:paddingLeft="@dimen/_5sdp"
                             android:text="Office Address"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            />
 
                         <CheckBox
                             android:id="@+id/cbSameAs"
@@ -1089,7 +1198,8 @@
                             android:text=" Same as Above"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
                         <CheckBox
                             android:id="@+id/cbOffPrimaryAddress"
@@ -1098,21 +1208,24 @@
                             android:layout_weight="1"
                             android:text=" Primary Address"
                             android:textColor="@color/secondaryTextColor"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llOffAdd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        >
 
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etOffAdd1"
@@ -1121,7 +1234,10 @@
                                 android:hint="Address 1"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -1129,7 +1245,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etOffAdd2"
@@ -1138,7 +1255,9 @@
                                 android:hint="Address 2"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -1146,7 +1265,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etOffAdd3"
@@ -1155,7 +1275,10 @@
                                 android:hint="Address 3"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -1164,14 +1287,16 @@
                             android:layout_height="wrap_content"
                             android:text="Country"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
 
                         <Spinner
                             android:id="@+id/spOffCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp" />
+                            android:layout_marginTop="@dimen/_3sdp"
+                            />
 
                         <TextView
                             android:id="@+id/tvOffCountryError"
@@ -1183,7 +1308,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
 
                         <TextView
@@ -1192,7 +1318,8 @@
                             android:layout_height="wrap_content"
                             android:text="State"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
                         <TextView
                             android:id="@+id/tvOffStateError"
@@ -1204,14 +1331,16 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spOffState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:entries="@array/Select"
+                            />
 
                         <TextView
                             android:id="@+id/tvOffCity"
@@ -1219,7 +1348,8 @@
                             android:layout_height="wrap_content"
                             android:text="City"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
@@ -1227,7 +1357,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:entries="@array/Select"
+                            />
 
                         <TextView
                             android:id="@+id/tvOffCityError"
@@ -1239,7 +1370,8 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
 
 
                         <android.support.design.widget.TextInputLayout
@@ -1247,7 +1379,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout">
+                            app:hintTextAppearance="@style/InputLayout"
+                            >
 
                             <EditText
                                 android:id="@+id/etOffPincode"
@@ -1258,7 +1391,9 @@
                                 android:maxLength="6"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null" />
+                                android:textCursorDrawable="@null"
+
+                                />
                         </android.support.design.widget.TextInputLayout>
 
                         <TextView
@@ -1271,22 +1406,16 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            />
                     </LinearLayout>
 
-
-                    <!--  <TextView
-                          android:id="@+id/tvComments"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:layout_marginTop="@dimen/_3sdp"
-                          android:gravity="bottom"
-                          android:text="Comments" />-->
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
 
                         <EditText
                             android:id="@+id/etComments"
@@ -1297,43 +1426,19 @@
                             android:lines="4"
                             android:maxLines="4"
                             android:minLines="1"
-                            android:textCursorDrawable="@null" />
+                            android:textCursorDrawable="@null"
+
+                            />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
-
-            <!-- <TextView
-                 android:id="@+id/tvStirInfo"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:text="STIR Information"
-                 android:textColor="@color/text_color_personal"
-                 android:textSize="@dimen/_11sdp" />
-
-             <TextView
-                 android:id="@+id/tvStirInfoError"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:background="@null"
-                 android:enabled="false"
-                 android:focusable="true"
-                 android:focusableInTouchMode="true"
-                 android:textColor="@color/error_red"
-                 android:textSize="@dimen/_10sdp"
-                 android:visibility="gone" />
-
-             <Spinner
-                 android:id="@+id/spStirInfo"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="@dimen/_6sdp"
-                 android:entries="@array/Select" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <Button
                     android:id="@+id/btnCreate"
@@ -1341,7 +1446,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_highlight"
-                    android:text="Create" />
+                    android:text="Create"
+                    />
 
                 <Button
                     android:id="@+id/btnCancel"
@@ -1350,7 +1456,8 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_weight="1"
                     android:background="@drawable/button_highlight"
-                    android:text="Cancel" />
+                    android:text="Cancel"
+                    />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

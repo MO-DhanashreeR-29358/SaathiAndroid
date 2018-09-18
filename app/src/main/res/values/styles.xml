@@ -11,9 +11,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
-
-    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
     <style name="DrawerItem" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/black</item>
@@ -45,7 +42,8 @@
         <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
         <item name="android:radioButtonStyle">@style/CRMRadioButton</item>
         <item name="android:checkboxStyle">@style/CRMCheckBoxSelector</item>
-        <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
+        <item name="editTextStyle">@style/CRMEdittextSelector</item>
+        <!--<item name="android:editTextStyle">@style/CRMEdittextSelector</item>-->
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
 
     </style>

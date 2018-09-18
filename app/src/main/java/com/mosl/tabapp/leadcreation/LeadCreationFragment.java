@@ -217,6 +217,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     } else {
                         ilRefereeCode.setHint("Referee Code");
                         closedSectionExpansion(llAdditionInfo, tvAdditionalInfo);
+                        tvRefereeCodeError.setVisibility(View.GONE);
                     }
                     tvProspectSourceError.setVisibility(View.GONE);
                 } catch (Exception ex) {
