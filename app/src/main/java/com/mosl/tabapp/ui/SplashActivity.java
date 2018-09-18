@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.tabapp.R;
@@ -19,13 +18,11 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LoginResponseData;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
@@ -45,7 +42,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //final ArrayList<String> array = MOSLCommon.countryAPI(SplashActivity.this); //TODO: Invalid call
         setContentView(R.layout.splash_screen);
         Thread.setDefaultUncaughtExceptionHandler(new MyExceptionHandler(this, SplashActivity.class));
         new Handler().postDelayed(new Runnable() {
@@ -53,7 +49,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
             public void run() {
                 setAppType(CRM);
                 setUserType("");
-                // handleStartupPage();
                 versionCheck();
 
             }
@@ -142,9 +137,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         new AccountDetails(loginData.getUserId(), loginData.getFirstName(), loginData.getLastName(), loginData.getImageUrl(), loginData.getMobileNo(), loginData.getEmail(), loginData.getBusinessProfileId(), loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(), loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType());
                                         MOSLCommonActivity.sendRegistrationToServer(SplashActivity.this, getContentResolver(), false);
                                         FetchReportTypes();
-
-                                   /* Intent intent = new Intent(LoginActivity.this, MOSLCommonActivity.class);
-                                    startActivity(intent);*/
                                     } else {
 
                                         handleLoginError();
@@ -236,8 +228,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                             try {
                                 String status = json.getString(STATUS);
                                 if (status.equalsIgnoreCase("true")) {
-
-                                    // JSONObject jsonObject = response.getJSONObject(RESPONSE);
                                     JSONArray dataArray = json.getJSONArray(RESPONSE);
                                     String childSystemName = null;
                                     JSONObject ChildMenuListObj = null;
@@ -269,7 +259,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         Intent intent = new Intent(SplashActivity.this, MOSLCommonActivity.class);
                                         startActivity(intent);
                                         finish();
-                                        // versionCheck();
                                     }
 
                                 } else {
@@ -370,15 +359,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 
 
     private void handleLoginError() {
-        /*MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal), "Invalid loign or password", "Yes", "No", true, new MSFDialog.DialogListener() {
-
-            @Override
-            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                if (action == MSFDialog.Action.OK) {
-                    finish();
-                }
-            }
-        });*/
         clearLoginPrefData();
         Intent i = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(i);
@@ -479,11 +459,8 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                             }
                                         }
                                     }
-                                    //TODO flag condition
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), remarks, "Ok", true, null);
                                 } else {
                                     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(SplashActivity.this, 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                     MSFDialog.alertDialog(SplashActivity.this, 0, getResources().getString(R.string.motilal_oswal), errorMsg, "Ok", false, new MSFDialog.DialogListener() {
                                         @Override
                                         public void alertDialogAction(MSFDialog.Action action, Object... data) {

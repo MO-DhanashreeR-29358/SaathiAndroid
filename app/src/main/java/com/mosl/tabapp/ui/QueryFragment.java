@@ -15,19 +15,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
@@ -162,23 +159,16 @@ public class QueryFragment extends MOSLCommonFragment implements View.OnClickLis
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-
                         try {
                             if (statusCode == 200) {
                                 String status = response.getString(STATUS);
                                 if (status.equalsIgnoreCase("true")) {
-//                                    customProgress.setVisibility(View.GONE);
-                                    //Log.v(TAG, "Got it");
                                     edQueryText.setText("");
                                     String message = "Thanks for submitting your query.";
                                     alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), message, "OK", true, new MSFDialog.DialogListener() {
                                         @Override
                                         public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                             if (action == MSFDialog.Action.OK) {
-                                              /*  Bundle args = new Bundle();
-                                                args.putString("", "");
-                                                navigateTo(NAV_TO_ADVISORY_DASHBOARD, args, getFragmentManager(), true);*/
                                                 dashbordFragment();
 
                                             }
@@ -186,7 +176,6 @@ public class QueryFragment extends MOSLCommonFragment implements View.OnClickLis
                                     });
 
                                 } else {
-//                                    customProgress.setVisibility(View.GONE);
                                     hideProgress();
                                     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
                                     alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
