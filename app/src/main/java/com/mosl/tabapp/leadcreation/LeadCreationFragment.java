@@ -3143,9 +3143,9 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                             });
                                     } else {
                                         hideProgress();
-                                        if (response.has("DedupeModel") && response.has("Erros")) {
-                                            JSONObject jsonObject =
-                                                response.getJSONObject("Response");
+                                        JSONObject jsonObject = response.getJSONObject("Response");
+                                        if (jsonObject.has("DedupeModel") && response.has(
+                                            "Erros")) {
                                             String dedupeModel =
                                                 jsonObject.getString("DedupeModel");
                                             JSONObject jsonObjectDedup =
