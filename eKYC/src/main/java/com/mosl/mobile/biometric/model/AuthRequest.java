@@ -1,9 +1,5 @@
 package com.mosl.mobile.biometric.model;
 
-import android.util.Base64;
-
-import com.google.gson.annotations.SerializedName;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;

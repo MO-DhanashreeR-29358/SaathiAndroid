@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
 def gitSha() {
   def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
@@ -112,52 +112,68 @@ android {
       outputFileName = "${project.name}-${variant.name}-${variant.versionName}.apk"
     }
   }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
-  compile project(':TabLibrary')
-  compile project(':eKYC')
-  compile(deps.crashlytics) {
+  implementation project(':TabLibrary')
+  implementation project(':eKYC')
+  implementation(deps.crashlytics) {
     transitive = true;
   }
-  compile deps.support.design
-  compile deps.support.cardview
-  compile deps.support.customtabs
-  compile deps.support.support
-  compile deps.support.appcompat
-  compile deps.support.recyclerview
-  compile deps.support.drawable
-  compile deps.multidex
-  compile deps.pagerslidingtabstrip
-  compile deps.sdpAndroid
-  compile deps.circleImageView
-  compile deps.mpChart
-  compile deps.glide
-  compile deps.calendarView
-  compile deps.asyncHttp
-  compile deps.smoothProgressbar
-  compile deps.dialogPlus
-  compile deps.floatingButton
-  compile deps.firebase
-  testCompile deps.testing.junit
-  androidTestCompile(deps.testing.espresso.core)
+  implementation deps.support.design
+  implementation deps.support.cardview
+  implementation deps.support.customtabs
+  implementation deps.support.support
+  implementation deps.support.appcompat
+  implementation deps.support.recyclerview
+  implementation deps.support.drawable
+  implementation deps.multidex
+  implementation deps.pagerslidingtabstrip
+  implementation deps.sdpAndroid
+  implementation deps.circleImageView
+  implementation deps.mpChart
+  implementation deps.glide
+  implementation deps.calendarView
+  implementation deps.asyncHttp
+  implementation deps.smoothProgressbar
+  implementation deps.dialogPlus
+  implementation deps.floatingButton
+  implementation deps.firebase
+  testImplementation deps.testing.junit
+  androidTestImplementation(deps.testing.espresso.core)
 
-  compile deps.timber
-  compile deps.imageLoader
-  compile deps.commonsLang
-  compile deps.segmented
-  compile deps.circleIndicator
-  compile deps.htmlTextview
+  implementation deps.timber
+  implementation deps.imageLoader
+  implementation deps.commonsLang
+  implementation deps.segmented
+  implementation deps.circleIndicator
+  implementation deps.htmlTextview
   // stetho
-  debugCompile deps.stetho.stetho
-  debugCompile deps.stetho.okhttp
+  debugImplementation deps.stetho.stetho
+  debugImplementation deps.stetho.okhttp
   // Room
-  compile deps.room.roomRuntime
+  implementation deps.room.roomRuntime
   annotationProcessor deps.room.roomCompiler
-  compile deps.location
+  implementation deps.location
   //workmanager
-  compile deps.work
-  compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
+  implementation deps.work
+  implementation(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
+
+  implementation deps.retrofit.core
+  implementation deps.okHttp.core
+  implementation deps.okHttp.logger
+  implementation deps.retrofit.gson
+  implementation deps.retrofit.rxJava
+  implementation deps.rx.java
+  implementation deps.rxBinding.core
+  implementation deps.rxBinding.V4
+  implementation deps.rx.android
+  implementation deps.gson
+
 }
 
 apply plugin: 'com.google.gms.google-services'

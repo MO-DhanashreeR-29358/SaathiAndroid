@@ -16,7 +16,6 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -29,12 +28,6 @@ import java.util.Random;
 public class MessageReceiverIntentService extends FirebaseMessagingService {
   private static final String CHANNEL_ID = "saathi";
   String TAG = MessageReceiverIntentService.class.getCanonicalName();
-  private LocalBroadcastManager broadcaster;
-
-  @Override
-  public void onCreate() {
-    broadcaster = LocalBroadcastManager.getInstance(this);
-  }
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -43,14 +36,8 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
     sendNotification(remoteMessage.getData());
   }
 
-  private void notifyApp() {
-    Intent intent = new Intent("NotificationCountIntent");
-    broadcaster.sendBroadcast(intent);
-  }
-
   private void sendNotification(Map data) {
     if (data != null) {
-      notifyApp();
       String category = "";
       Random random = new Random();
       int m = random.nextInt(9999 - 1000) + 1000;

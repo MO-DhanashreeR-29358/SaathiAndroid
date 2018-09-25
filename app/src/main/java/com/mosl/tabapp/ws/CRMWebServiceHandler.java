@@ -2,19 +2,26 @@ package com.mosl.tabapp.ws;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mosl.tabapp.common.CRMSecurityUtil;
+import com.mosl.tabapp.leadcreation.RefreeApi;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
-
-import java.util.Map;
-import java.util.Set;
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+import io.reactivex.Observable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static io.reactivex.schedulers.Schedulers.io;
 
 /**
  * Created by pramod on 23/03/17.
@@ -26,19 +33,23 @@ public class CRMWebServiceHandler {
     private static String STAGING_BASE_URL = "http://122.184.137.226:85/api/";
     private static String LIVE_BASE_URL = "http://saathi.motilaloswal.com:81/api/";
 
-    public static final String COLLATERAL_URL_UAT = "http://web20.motilaloswal.com:8000/Brochure/index.html";
-    public static final String COLLATERAL_URL_PROD = "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
-    public static final String INCENTIVE_PDF_URL = "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
+    public static final String COLLATERAL_URL_UAT =
+        "http://web20.motilaloswal.com:8000/Brochure/index.html";
+    public static final String COLLATERAL_URL_PROD =
+        "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
+    public static final String INCENTIVE_PDF_URL =
+        "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
 
     private static final String BASE_IP_UAT_UPPERMOST = "http://122.184.137.89/";
     private static final String BASE_IP_PROD_UPPERMOST = "https://login.motilaloswal.com/";
 
-    private static final String BASE_URL_UAT_UPPERMOST = BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
-    private static final String BASE_URL_PROD_UPPERMOST = BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+    private static final String BASE_URL_UAT_UPPERMOST =
+        BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+    private static final String BASE_URL_PROD_UPPERMOST =
+        BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
 
     private static String MSG_NORMAL = "Request_Normal";
     private static String MSG_ENCRYPT = "Request_Encrypt";
-
 
     public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
     public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
@@ -47,14 +58,30 @@ public class CRMWebServiceHandler {
     public static final String CALL_URL_UPPERMOST = BuildConfig.UPPERMOST_URL;
     public static String COLLATERAL_URL = BuildConfig.CRM_COLLATERAL_URL;*/
 
-
-
-
     public static AsyncHttpClient getClient() {
         AsyncHttpClient client = new AsyncHttpClient();
         client.setTimeout(60000);
         client.setMaxRetriesAndTimeout(1, 10000);
         return client;
+    }
+
+    public static Observable<String> encryptRequest(RefreeApi api, Map<String, String> headers,
+        Map inputParam) {
+        return Observable.defer(() -> {
+            Map headerMap = new HashMap();
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                headerMap.put(entry.getKey(), CRMSecurityUtil.encrypt(entry.getValue()));
+            }
+            //headerMap.put("Content-Type", "application/json; charset=UTF-8");
+            String requestJson = getJsonString(inputParam);
+            String dataToSend = requestJson.replace("\"null\"", "null");
+            String requestJsonEncrypted = CRMSecurityUtil.encrypt(dataToSend);
+            String headerJsonNormal = getJsonString(headerMap);
+            final int requestId = (int) (Math.random() * 5000);
+            printLog(MSG_NORMAL, requestId, "", headerJsonNormal, requestJsonEncrypted);
+            //return api.getRefreeByCode(headerMap, requestJsonEncrypted);
+            return api.getRefreeWithoutHeader(requestJsonEncrypted);
+        });
     }
 
     public static String getJsonString(Map param) {
@@ -76,21 +103,17 @@ public class CRMWebServiceHandler {
                         value = CRMSecurityUtil.encrypt(value);
                     }
                     result += "\"" + key + "\"" + ":\"" + value + "\",";
-
                 } else if (obj instanceof Map) {
                     Map map = (Map) obj;
                     value = getJsonString(map, encrypt);
                     //Tdo remove this after testing
 
                     result += "\"" + key + "\"" + ":" + value + ",";
-
                 } else if (obj != null) {//default case in case not string or map consider int
                     result += "\"" + key + "\"" + ":" + String.valueOf(obj) + ",";
                     //result += "\"" + key + "\"" + ":" + CRMSecurityUtil.encrypt(String.valueOf(obj)) + ",";
                     //   return String.valueOf(obj);
                 }
-
-
             }
 
             //remove last comma symbol
@@ -100,30 +123,37 @@ public class CRMWebServiceHandler {
         return result;
     }
 
-
-    public static void post(Context context, String serviceMethod, Map<String, String> headerMap, Map inputParam, final AsyncHttpResponseHandler responseHandler) throws Exception {
+    public static void post(Context context, String serviceMethod, Map<String, String> headerMap,
+        Map inputParam, final AsyncHttpResponseHandler responseHandler) throws Exception {
         String requestJson = getJsonString(inputParam);
         post(context, serviceMethod, headerMap, requestJson, responseHandler);
     }
 
-    public static void postWithRequestAndFilterObject(Context context, String serviceMethod, Map<String, String> headerMap, Map inputParam, final JsonHttpResponseHandler responseHandler) throws Exception {
+    public static void postWithRequestAndFilterObject(Context context, String serviceMethod,
+        Map<String, String> headerMap, Map inputParam,
+        final JsonHttpResponseHandler responseHandler) throws Exception {
         String requestJson = getJsonString(inputParam);
-        String filter = "{\"Export\":null,\"ExportFilter\":null,\"Field\":null,\"Operator\":null,\"Value\":null,\"Logic\":null,\"Filters\":null},\"IsAdminMode\":true";
+        String filter =
+            "{\"Export\":null,\"ExportFilter\":null,\"Field\":null,\"Operator\":null,\"Value\":null,\"Logic\":null,\"Filters\":null},\"IsAdminMode\":true";
         String mainJson = "{\"Request\":" + requestJson + ",\"Filter\":" + filter + "}";
         post(context, serviceMethod, headerMap, mainJson, responseHandler);
     }
 
-
-    public static void postWithRequestAndFilterObjectBirthdayAndAniversary(Context context, String serviceMethod, Map<String, String> headerMap, Map inputParam, String clientPotential, final JsonHttpResponseHandler responseHandler) throws Exception {
+    public static void postWithRequestAndFilterObjectBirthdayAndAniversary(Context context,
+        String serviceMethod, Map<String, String> headerMap, Map inputParam, String clientPotential,
+        final JsonHttpResponseHandler responseHandler) throws Exception {
         String requestJson = getJsonString(inputParam);
-        String filter = "{\"Logic\":\"and\",\"Filters\":[{\"Field\":\"ClientPotential\",\"Operator\":\"startswith\",\"Value\":[\"" +
-                clientPotential +
-                "\"]}]},\"IsAdminMode\":true";
+        String filter =
+            "{\"Logic\":\"and\",\"Filters\":[{\"Field\":\"ClientPotential\",\"Operator\":\"startswith\",\"Value\":[\""
+                + clientPotential
+                + "\"]}]},\"IsAdminMode\":true";
         String mainJson = "{\"Request\":" + requestJson + ",\"Filter\":" + filter + "}";
         post(context, serviceMethod, headerMap, mainJson, responseHandler);
     }
 
-    public static void post(final Context context, String serviceMethod, Map<String, String> headerMap, String requestJson, final AsyncHttpResponseHandler responseHandler) throws Exception {
+    public static void post(final Context context, String serviceMethod,
+        Map<String, String> headerMap, String requestJson,
+        final AsyncHttpResponseHandler responseHandler) throws Exception {
         String contentType = "application/json";
         String headerJsonNormal = getJsonString(headerMap);
         String headerJsonEncrypted = getJsonString(headerMap, true);
@@ -146,35 +176,46 @@ public class CRMWebServiceHandler {
         }
 
         client.post(context, URL, entity, contentType, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+            @Override public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Log.d(TAG, "Response Encrypt: [" + requestId + "] : " + new String(responseBody));
-                Log.d(TAG, "Response Normal: [" + requestId + "] : " + new String(CRMSecurityUtil.decrypt(new String(responseBody))));
-                responseHandler.onSuccess(statusCode, headers, CRMSecurityUtil.decrypt(new String(responseBody)));
+                Log.d(TAG, "Response Normal: [" + requestId + "] : " + new String(
+                    CRMSecurityUtil.decrypt(new String(responseBody))));
+                responseHandler.onSuccess(statusCode, headers,
+                    CRMSecurityUtil.decrypt(new String(responseBody)));
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            @Override public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                Throwable error) {
                 Log.d(TAG, "Response: [" + requestId + "] : " + error);
                 if (responseBody != null) {
-                    responseHandler.onFailure(statusCode, headers, CRMSecurityUtil.decrypt(new String(responseBody)), error);
+                    responseHandler.onFailure(statusCode, headers,
+                        CRMSecurityUtil.decrypt(new String(responseBody)), error);
                 } else {
                     // response body comes null
                     responseBody = "{}".getBytes();
-                    responseHandler.onFailure(statusCode, headers, CRMSecurityUtil.decrypt(new String(responseBody)), error);
+                    responseHandler.onFailure(statusCode, headers,
+                        CRMSecurityUtil.decrypt(new String(responseBody)), error);
                 }
             }
         });
-
     }
 
-
-    private static void printLog(String headerMsg, int requestId, String url, String header, String body) {
-        Log.d(TAG, headerMsg + ": [" + requestId + "] URL=" + url + ", HEADER=" + header + ", REQUEST=" + body);
+    private static void printLog(String headerMsg, int requestId, String url, String header,
+        String body) {
+        Log.d(TAG, headerMsg
+            + ": ["
+            + requestId
+            + "] URL="
+            + url
+            + ", HEADER="
+            + header
+            + ", REQUEST="
+            + body);
     }
 
     //get
-    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+    public static void get(String url, RequestParams params,
+        AsyncHttpResponseHandler responseHandler) {
         getClient().get(getAbsoluteUrl(url), params, responseHandler);
     }
 
@@ -183,4 +224,20 @@ public class CRMWebServiceHandler {
         return CALL_URL_UPPERMOST + relativeUrl;
     }
 
+    public static RefreeApi build(Context context) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client =
+            new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor(context))
+                .addInterceptor(interceptor)
+                //.addNetworkInterceptor(new DecryptionFactory())
+                .build();
+
+        return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(io()))
+            .client(client)
+            .build()
+            .create(RefreeApi.class);
+    }
 }

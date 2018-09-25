@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -112,12 +111,14 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
                         secondClickTableAdapter = new SecondClickTableAdapter(getActivity(),
                             new ArrayList<HashMap<String, String>>());
                         table.setAdapter(secondClickTableAdapter);
-                        StringMap responseJsonObj = (StringMap) response.get("Response");
-                        List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Data");
+                          Map<String, Object> responseJsonObj =
+                              (Map<String, Object>) response.get("Response");
+                          List<Map<String, Object>> arrayDetail =
+                              (List<Map<String, Object>>) responseJsonObj.get("Data");
                         ArrayList<String> columns = new ArrayList<String>();
                         ArrayList<String> columnsHeader = new ArrayList<String>();
                         if (arrayDetail.size() != 0) {
-                          for (StringMap objDetail : arrayDetail) {
+                            for (Map<String, Object> objDetail : arrayDetail) {
                             if (columns.size() == 0) {
                               for (Object columnName : objDetail.keySet()) {
                                 columns.add(columnName.toString());

@@ -5,16 +5,12 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.mosl.tabapp.database.AppDatabase;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class CrmApp extends MultiDexApplication {
@@ -30,7 +26,7 @@ public class CrmApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         Stetho.initializeWithDefaults(this);
         initImageLoader(context);
         if (BuildConfig.DEBUG) {

@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -29,9 +27,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,8 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 
@@ -133,11 +128,13 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                     hideProgress();
                                     leadTableAdapter = new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
                                     table.setAdapter(leadTableAdapter);
-                                    StringMap responseJsonObj = (StringMap) response.get("Response");
+                                    Map<String, Object> responseJsonObj =
+                                        (Map<String, Object>) response.get("Response");
 
                                     newPrepareGroupMap(responseJsonObj); //prepare group map
 
-                                    List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Table");
+                                    List<Map<String, Object>> arrayDetail =
+                                        (List<Map<String, Object>>) responseJsonObj.get("Table");
                                     ArrayList<String> columns = new ArrayList<String>();
                                     ArrayList<String> header = new ArrayList<String>();
                                     ArrayList<String> headerSecond = new ArrayList<String>();
@@ -145,7 +142,8 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                     if (arrayDetail.size() != 0) {
 
                                         for (int y = 2; y < arrayDetail.size(); y++) {
-                                            StringMap objDetailSecond = (StringMap) arrayDetail.get(0);
+                                            Map<String, Object> objDetailSecond =
+                                                (Map<String, Object>) arrayDetail.get(0);
                                             if (columns.size() == 0) {
                                                 for (Object keySetE : objDetailSecond.keySet()) {
                                                     columns.add(keySetE.toString());
@@ -158,7 +156,8 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                                                 stockArr = header.toArray(stockArr);
                                                 leadTableAdapter.setHeadersSecond(stockArr);
                                             }
-                                            StringMap objDetail = (StringMap) arrayDetail.get(y);
+                                            Map<String, Object> objDetail =
+                                                (Map<String, Object>) arrayDetail.get(y);
                                             String[] stockArr = new String[columns.size()];
                                             stockArr = columns.toArray(stockArr);
                                             leadTableAdapter.setHeaders(stockArr);
@@ -623,15 +622,14 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
         return false;
     }
 
-
-
-    private void newPrepareGroupMap(StringMap responseJsonObj) {
+    private void newPrepareGroupMap(Map<String, Object> responseJsonObj) {
         try {
             if (responseJsonObj.get("Table2") == null) return;
-            List<StringMap> jsonArray = (List<StringMap>) responseJsonObj.get("Table2");
+            List<Map<String, Object>> jsonArray =
+                (List<Map<String, Object>>) responseJsonObj.get("Table2");
             if (jsonArray == null) return;
             for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
-                StringMap jsonRowObject = (StringMap) jsonArray.get(ctr);
+                Map<String, Object> jsonRowObject = (Map<String, Object>) jsonArray.get(ctr);
                 int groupId = Integer.parseInt(jsonRowObject.get("GroupId").toString());
                 int childid = Integer.parseInt(jsonRowObject.get("childid").toString());
                 String rowFilter = jsonRowObject.get("RowFilter").toString();

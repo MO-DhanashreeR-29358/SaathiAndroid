@@ -20,9 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -37,9 +35,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -49,8 +45,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 
@@ -294,12 +289,15 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
                                                 secondClickTableAdapter = new SecondClickTableAdapter(getActivity(),
                                                         new ArrayList<HashMap<String, String>>());
                                                 table.setAdapter(secondClickTableAdapter);
-                                                StringMap responseJsonObj = (StringMap) response.get("Response");
-                                                List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Data");
+                                                Map<String, Object> responseJsonObj =
+                                                    (Map<String, Object>) response.get("Response");
+                                                List<Map<String, Object>> arrayDetail =
+                                                    (List<Map<String, Object>>) responseJsonObj.get(
+                                                        "Data");
                                                 ArrayList<String> columns = new ArrayList<String>();
                                                 ArrayList<String> columnsHeader = new ArrayList<String>();
                                                 if (arrayDetail.size() != 0) {
-                                                    for (StringMap objDetail : arrayDetail) {
+                                                    for (Map<String, Object> objDetail : arrayDetail) {
                                                         if (columns.size() == 0) {
                                                             for (Object columnName : objDetail.keySet()) {
                                                                 columns.add(columnName.toString());
