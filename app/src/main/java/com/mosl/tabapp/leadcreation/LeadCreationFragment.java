@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.common.ValidationRule;
 import com.mosl.tabapp.R;
@@ -37,6 +38,7 @@ import com.mosl.tabapp.common.CRMValidationRule;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.common.SearchableSpinner;
+import com.mosl.tabapp.common.UiModel;
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddressDetailModel;
@@ -47,10 +49,15 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
+import cz.msebera.android.httpclient.Header;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.droidparts.widget.ClearableEditText;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +71,7 @@ import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
 import static com.mosl.tabapp.common.CRMValidationRule.validateTel;
+import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -88,6 +96,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
     private org.droidparts.widget.ClearableEditText actAssignTo;
     private CheckBox cbPrimaryAddress, cbSameAs, cbOffPrimaryAddress;
     private Button btnCreate, btnCancel;
+
+    //RefreeApi refreeApi = CRMWebServiceHandler.build(getContext());
 
     private LinearLayout llResAdd, llOffAdd;
     private ArrayList<ContactDetailModel> contactDetailList = new ArrayList<>();
@@ -478,8 +488,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         tvAdditionalInfo = (TextView) leadCreationView.findViewById(R.id.tvAdditionInfo);
         tvResidenceAddress = (TextView) leadCreationView.findViewById(R.id.tvResidenceAddress);
 
-        actAssignTo = (org.droidparts.widget.ClearableEditText) leadCreationView.findViewById(
-            R.id.actAssignTo);
+        actAssignTo = (ClearableEditText) leadCreationView.findViewById(R.id.actAssignTo);
 
         ilName = (TextInputLayout) leadCreationView.findViewById(R.id.ilName);
         ilRefereeCode = leadCreationView.findViewById(R.id.ilRefereeCode);
@@ -670,8 +679,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                                 new JsonHttpResponseHandler() {
 
                                                     @Override public void onSuccess(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        JSONObject response) {
+                                                        Header[] headers, JSONObject response) {
                                                         super.onSuccess(statusCode, headers,
                                                             response);
                                                         searchList.showProgress(View.GONE);
@@ -761,24 +769,21 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                                     }
 
                                                     @Override public void onSuccess(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        JSONArray response) {
+                                                        Header[] headers, JSONArray response) {
                                                         super.onSuccess(statusCode, headers,
                                                             response);
                                                         searchList.showProgress(View.GONE);
                                                     }
 
                                                     @Override public void onSuccess(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        String responseString) {
+                                                        Header[] headers, String responseString) {
                                                         super.onSuccess(statusCode, headers,
                                                             responseString);
                                                         searchList.showProgress(View.GONE);
                                                     }
 
                                                     @Override public void onFailure(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        Throwable throwable,
+                                                        Header[] headers, Throwable throwable,
                                                         JSONObject errorResponse) {
                                                         super.onFailure(statusCode, headers,
                                                             throwable, errorResponse);
@@ -833,8 +838,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                                     }
 
                                                     @Override public void onFailure(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        Throwable throwable,
+                                                        Header[] headers, Throwable throwable,
                                                         JSONArray errorResponse) {
                                                         super.onFailure(statusCode, headers,
                                                             throwable, errorResponse);
@@ -847,8 +851,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                                     }
 
                                                     @Override public void onFailure(int statusCode,
-                                                        cz.msebera.android.httpclient.Header[] headers,
-                                                        String responseString,
+                                                        Header[] headers, String responseString,
                                                         Throwable throwable) {
                                                         super.onFailure(statusCode, headers,
                                                             responseString, throwable);
@@ -1117,7 +1120,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             }
         });
 
-        etRefreeCode.addTextChangedListener(new TextWatcher() {
+     /*   etRefreeCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -1142,8 +1145,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                 etRefreeName.setText("");
                                 etRefreeEmail.setText("");
                                 etRefreeMobile.setText("");
-                            }
-                            /*else if (!CRMValidationRule.validateRefreeCode(
+                            } else if (!CRMValidationRule.validateRefreeCode(
                                 etRefreeCode.getText().toString())) {
                                 tvRefereeCodeError.setText("Invalid referee code ");
                                 tvRefereeCodeError.setVisibility(View.VISIBLE);
@@ -1154,15 +1156,75 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                     etRefreeEmail.setText("");
                                     etRefreeMobile.setText("");
                                 }
-                            }else {
+                            } else {
                                 tvRefereeCodeError.setVisibility(View.GONE);
-                            }*/
+                            }
                         }
                     }
                 }
             }
+        });*/
+        Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefreeName)
+            .filter(event -> event.view().isFocused())
+            .map(query -> query.editable().toString().trim())
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .share();
+        refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
+            etRefreeEmail.setText("");
+            etRefreeMobile.setText("");
+            etRefreeCode.setText("");
         });
-        etRefreeName.addTextChangedListener(new TextWatcher() {
+        refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
+            pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
+            etRefreeEmail.setText("");
+            etRefreeMobile.setText("");
+            etRefreeCode.setText("");
+            final Map inputMap = new HashMap<>();
+            inputMap.put("SearchType", "ByName");
+            inputMap.put("SearchHint", query);
+            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
+                .compose(applyUiModel());
+        }).subscribe(data -> {
+            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+            JSONObject data1 = uiModel.data;
+            if (data1 != null) {
+                RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
+            }
+        });
+
+        Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefreeCode)
+            .filter(event -> event.view().isFocused())
+            .map(query -> query.editable().toString().trim())
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .share();
+
+        refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
+            etRefreeName.setText("");
+            etRefreeMobile.setText("");
+            etRefreeEmail.setText("");
+        });
+
+        refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
+            pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
+            etRefreeName.setText("");
+            etRefreeMobile.setText("");
+            etRefreeEmail.setText("");
+            final Map inputMap = new HashMap<>();
+            inputMap.put("SearchType", "ByCode");
+            inputMap.put("SearchHint", query);
+            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
+                .compose(applyUiModel());
+        }).subscribe(data -> {
+            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+            JSONObject data1 = uiModel.data;
+            if (data1 != null) {
+                RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
+            }
+        });
+
+    /*    etRefreeName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -1191,7 +1253,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             @Override public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
         etAlternateMobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1388,6 +1450,51 @@ public class LeadCreationFragment extends MOSLCommonFragment
 
             }
         });
+    }
+
+    private void RefreeData(JSONObject response, String type,
+        final ProgressBar pbLoadingIndicatorRefreeCode) {
+        try {
+            String status = response.getString(STATUS);
+            if (status.equalsIgnoreCase("true")) {
+                isRefreeCode = true;
+                pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
+                JSONObject jsonObject = response.getJSONObject("Response");
+                RefereeCode =
+                    (jsonObject.isNull("RefereeCode") || jsonObject.getString("RefereeCode")
+                        .equals("")) ? "" : jsonObject.getString("RefereeCode");
+                RefereeName =
+                    (jsonObject.isNull("RefereeName") || jsonObject.getString("RefereeName")
+                        .equals("")) ? "" : jsonObject.getString("RefereeName");
+                String RefereeEmail =
+                    (jsonObject.isNull("RefereeEmail") || jsonObject.getString("RefereeEmail")
+                        .equals("")) ? "" : jsonObject.getString("RefereeEmail");
+                String RefereeMobile =
+                    (jsonObject.isNull("RefereeMobile") || jsonObject.getString("RefereeMobile")
+                        .equals("")) ? "" : jsonObject.getString("RefereeMobile");
+                if (type.equalsIgnoreCase("BYCODE")) {
+                    etRefreeName.setText(RefereeName);
+                } else {
+                    etRefreeCode.setText(RefereeCode);
+                }
+                etRefreeEmail.setText(RefereeEmail);
+                etRefreeMobile.setText(RefereeMobile);
+            } else {
+                isRefreeCode = false;
+                pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
+                RefereeCode = "";
+                RefereeName = "";
+                etRefreeEmail.setText("");
+                etRefreeMobile.setText("");
+                if (type.equalsIgnoreCase("BYCODE")) {
+                    etRefreeName.setText("");
+                } else {
+                    etRefreeCode.setText("");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getCategory() {
@@ -3488,6 +3595,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             String serviceMethod = "Common/GetRefereeCode";
 
             try {
+                //region AsynCode
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
@@ -3646,6 +3754,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
                     });
+                //endregion
+
             } catch (Exception e) {
                 e.printStackTrace();
                 pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
@@ -3658,7 +3768,9 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
-        } else {
+        } else
+
+        {
             pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
             isRefreeCode = false;
             RefereeCode = "";
@@ -3918,7 +4030,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         leadCreationModel.setLeadSourceDetailsID("0");
         leadCreationModel.setName(etName.getText().toString().trim());
         leadCreationModel.setLeadSourceDetails(etProspectSourceDetails.getText().toString().trim());
-        if (etRefreeCode.getText().toString().trim().length() >= 3 && isRefreeCode) {
+        if (etRefreeCode.getText().toString().trim().length() >= 4 && isRefreeCode) {
             leadCreationModel.setRefereeCode(etRefreeCode.getText().toString().trim());
         }
         if (etRefreeName.getText().toString().trim().length() >= 3 && isRefreeCode) {

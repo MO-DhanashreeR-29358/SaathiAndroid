@@ -23,28 +23,28 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile files('libs/simple-xml-2.7.1.jar')
-    compile files('libs/protobuf_2_4_1.jar')
-    compile project(':TabLibrary')
-    testCompile deps.testing.junit
-    androidTestCompile(deps.testing.espresso.core)
-    compile deps.sdpAndroid
-    compile deps.support.design
-    compile deps.support.customtabs
-    compile deps.support.appcompat
-    compile deps.slidinguppanel
-    compile deps.okhttp
-    compile deps.timber
-    provided deps.javax
-    compile deps.asyncHttp
-    compile deps.imageLoader
-    compile deps.multidex
-    compile(deps.crashlytics) {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/simple-xml-2.7.1.jar')
+    implementation files('libs/protobuf_2_4_1.jar')
+    implementation project(':TabLibrary')
+    testImplementation deps.testing.junit
+    androidTestImplementation(deps.testing.espresso.core)
+    implementation deps.sdpAndroid
+    implementation deps.support.design
+    implementation deps.support.customtabs
+    implementation deps.support.appcompat
+    implementation deps.slidinguppanel
+    implementation deps.okHttp.core
+    implementation deps.timber
+    compileOnly deps.javax
+    implementation deps.asyncHttp
+    implementation deps.imageLoader
+    implementation deps.multidex
+    implementation(deps.crashlytics) {
         transitive = true;
     }
-    compile deps.constraintLayout
-    compile deps.compressor
-    compile project(':emendate')
-    compile(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
+    implementation deps.constraintLayout
+    implementation deps.compressor
+    implementation project(':emendate')
+    implementation(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
 }

@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.common.ValidationRule;
 import com.mosl.tabapp.R;
@@ -50,6 +51,7 @@ import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.common.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
+import com.mosl.tabapp.common.UiModel;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddressDetailModel;
@@ -64,15 +66,20 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
 import cz.msebera.android.httpclient.Header;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import org.droidparts.widget.ClearableEditText;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.ErrorMsgName;
@@ -87,6 +94,7 @@ import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
 import static com.mosl.tabapp.common.CRMValidationRule.validateTel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -1010,7 +1018,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
         });
 
-        etRefereeCode.addTextChangedListener(new TextWatcher() {
+       /* etRefereeCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -1069,7 +1077,68 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             @Override public void afterTextChanged(Editable s) {
 
             }
+        });*/
+
+        Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefereeName)
+            .filter(event -> event.view().isFocused())
+            .map(query -> query.editable().toString().trim())
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .share();
+        refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
+            etRefereeEmail.setText("");
+            etRefereeMobile.setText("");
+            etRefereeCode.setText("");
         });
+        refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
+            pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
+            etRefereeEmail.setText("");
+            etRefereeMobile.setText("");
+            etRefereeCode.setText("");
+            final Map inputMap = new HashMap<>();
+            inputMap.put("SearchType", "ByName");
+            inputMap.put("SearchHint", query);
+            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
+                .compose(applyUiModel());
+        }).subscribe(data -> {
+            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+            JSONObject data1 = uiModel.data;
+            if (data1 != null) {
+                RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
+            }
+        });
+
+        Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefereeCode)
+            .filter(event -> event.view().isFocused())
+            .map(query -> query.editable().toString().trim())
+            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .share();
+
+        refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
+            etRefereeName.setText("");
+            etRefereeMobile.setText("");
+            etRefereeEmail.setText("");
+        });
+
+        refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
+            pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
+            etRefereeName.setText("");
+            etRefereeMobile.setText("");
+            etRefereeEmail.setText("");
+            final Map inputMap = new HashMap<>();
+            inputMap.put("SearchType", "ByCode");
+            inputMap.put("SearchHint", query);
+            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
+                .compose(applyUiModel());
+        }).subscribe(data -> {
+            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+            JSONObject data1 = uiModel.data;
+            if (data1 != null) {
+                RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
+            }
+        });
+        
         lvBrok = (ListView) leadViewDetailView.findViewById(R.id.listBrokingPortfolio);
         lvAsset = (ListView) leadViewDetailView.findViewById(R.id.listAssestPortfolio);
         lvCash = (ListView) leadViewDetailView.findViewById(R.id.listCashPortfolio);
@@ -5757,6 +5826,51 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
+    private void RefreeData(JSONObject response, String type,
+        final ProgressBar pbLoadingIndicatorRefreeCode) {
+        try {
+            String status = response.getString(STATUS);
+            if (status.equalsIgnoreCase("true")) {
+                isRefreeCode = true;
+                pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
+                JSONObject jsonObject = response.getJSONObject("Response");
+                refereeCode =
+                    (jsonObject.isNull("RefereeCode") || jsonObject.getString("RefereeCode")
+                        .equals("")) ? "" : jsonObject.getString("RefereeCode");
+                refereeName =
+                    (jsonObject.isNull("RefereeName") || jsonObject.getString("RefereeName")
+                        .equals("")) ? "" : jsonObject.getString("RefereeName");
+                String RefereeEmail =
+                    (jsonObject.isNull("RefereeEmail") || jsonObject.getString("RefereeEmail")
+                        .equals("")) ? "" : jsonObject.getString("RefereeEmail");
+                String RefereeMobile =
+                    (jsonObject.isNull("RefereeMobile") || jsonObject.getString("RefereeMobile")
+                        .equals("")) ? "" : jsonObject.getString("RefereeMobile");
+                if (type.equalsIgnoreCase("BYCODE")) {
+                    etRefereeName.setText(refereeName);
+                } else {
+                    etRefereeCode.setText(refereeCode);
+                }
+                etRefereeEmail.setText(RefereeEmail);
+                etRefereeMobile.setText(RefereeMobile);
+            } else {
+                isRefreeCode = false;
+                pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
+                refereeCode = "";
+                refereeName = "";
+                etRefereeEmail.setText("");
+                etRefereeMobile.setText("");
+                if (type.equalsIgnoreCase("BYCODE")) {
+                    etRefereeName.setText("");
+                } else {
+                    etRefereeCode.setText("");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void RefreeApi(final String value, final String type, View view,
         final ProgressBar pbLoadingIndicatorRefreeCode) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
@@ -5790,12 +5904,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                         pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
                                         // JSONArray jsonArray = response.getJSONObject("Response");
                                         JSONObject jsonObject = response.getJSONObject("Response");
-                                        refereeCode = (jsonObject.isNull("RefereeCode")
-                                            || jsonObject.getString("RefereeCode").equals("")) ? ""
-                                            : jsonObject.getString("RefereeCode");
-                                        refereeName = (jsonObject.isNull("RefereeName")
-                                            || jsonObject.getString("RefereeName").equals("")) ? ""
-                                            : jsonObject.getString("RefereeName");
+                                        refereeCode = (jsonObject.isNull("refereeCode")
+                                            || jsonObject.getString("refereeCode").equals("")) ? ""
+                                            : jsonObject.getString("refereeCode");
+                                        refereeName = (jsonObject.isNull("refereeName")
+                                            || jsonObject.getString("refereeName").equals("")) ? ""
+                                            : jsonObject.getString("refereeName");
                                         String RefereeEmail = (jsonObject.isNull("RefereeEmail")
                                             || jsonObject.getString("RefereeEmail").equals("")) ? ""
                                             : jsonObject.getString("RefereeEmail");

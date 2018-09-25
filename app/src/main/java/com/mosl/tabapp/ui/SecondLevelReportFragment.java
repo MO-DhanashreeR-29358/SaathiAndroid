@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -104,17 +103,19 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
                                                     getActivity(),
                                                     new ArrayList<HashMap<String, String>>());
                                             table.setAdapter(secondClickTableAdapter);
-                                            StringMap responseJSONObject =
-                                                (StringMap) response.get("Response");
-                                            List<StringMap> arrayDetail =
-                                                (List<StringMap>) responseJSONObject.get("Data");
+                                            Map<String, Object> responseJSONObject =
+                                                (Map<String, Object>) response.get("Response");
+                                            List<Map<String, Object>> arrayDetail =
+                                                (List<Map<String, Object>>) responseJSONObject.get(
+                                                    "Data");
                                             ArrayList<String> columns = new ArrayList<String>();
                                             ArrayList<String> columnsHeader =
                                                 new ArrayList<String>();
 
                                             if (arrayDetail.size() != 0) {
                                                 for (int y = 0; y < arrayDetail.size(); y++) {
-                                                    StringMap objDetail = arrayDetail.get(y);
+                                                    Map<String, Object> objDetail =
+                                                        arrayDetail.get(y);
 
                                                     if (columns.size() == 0) {
                                                         for (Object columnName : objDetail.keySet()) {

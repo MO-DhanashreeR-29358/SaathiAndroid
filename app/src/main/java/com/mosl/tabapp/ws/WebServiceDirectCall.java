@@ -1,12 +1,6 @@
 package com.mosl.tabapp.ws;
 
-
-import android.util.Log;
-
 import com.mosl.tabapp.common.CRMSecurityUtil;
-
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import org.json.JSONObject;
+import timber.log.Timber;
 
 import static com.mosl.tabapp.ws.CRMWebServiceHandler.getJsonString;
 
@@ -88,8 +84,10 @@ public class WebServiceDirectCall {
                 //print result
                 //Log.d(TAG, "Response: [" + requestId + "] : " + response.toString());
 
-                Log.d(TAG, "Response Encrypt: [" + requestId + "] : " + new String (response.toString()));
-                Log.d(TAG, "Response Normal: [" + requestId + "] : " + new String (CRMSecurityUtil.decrypt(new String(response.toString()))));
+                Timber.d(TAG,
+                    "Response Encrypt: [" + requestId + "] : " + new String(response.toString()));
+                Timber.d(TAG, "Response Normal: [" + requestId + "] : " + new String(
+                    CRMSecurityUtil.decrypt(new String(response.toString()))));
 
             }
 
@@ -106,7 +104,15 @@ public class WebServiceDirectCall {
     }
 
     private static void printLog(String headerMsg, int requestId, String url, String header, String body) {
-        Log.d(TAG, headerMsg+": [" + requestId + "] URL=" + url + ", HEADER=" + header + ", REQUEST=" + body);
+        Timber.d(TAG, headerMsg
+            + ": ["
+            + requestId
+            + "] URL="
+            + url
+            + ", HEADER="
+            + header
+            + ", REQUEST="
+            + body);
     }
 
 }

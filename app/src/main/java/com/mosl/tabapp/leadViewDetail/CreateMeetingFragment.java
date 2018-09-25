@@ -835,20 +835,21 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             mCurrentLocation = locationResult.getLastLocation();
                         }
                     }, Looper.myLooper());
+                Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
+                try {
+                    List<Address> addressList =
+                        geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+                            mCurrentLocation.getLongitude(), 1);
+                    meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+                    meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+                    meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                isMockLocation(meetingApptModel);
             } // This is your code
         };
         mainHandler.post(myRunnable);
-        Geocoder geocoder = new Geocoder(getMainActivity(), Locale.getDefault());
-        try {
-            List<Address> addressList = geocoder.getFromLocation(mCurrentLocation.getLatitude(),
-                mCurrentLocation.getLongitude(), 1);
-            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
-            meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
-            meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        isMockLocation(meetingApptModel);
     }
 
     private void disableReset() {

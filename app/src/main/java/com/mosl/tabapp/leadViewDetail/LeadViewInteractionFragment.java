@@ -17,9 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -33,9 +31,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,8 +40,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
+import java.util.Map;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -177,15 +173,18 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
                                         secondClickTableAdapter = new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
                                         table.setAdapter(secondClickTableAdapter);
                                         // JSONObject responseJSONObject = response.getJSONObject("Response");
-                                        StringMap responseJSONObject = (StringMap) response.get("Response");
+                                        Map<String, Object> responseJSONObject =
+                                            (Map<String, Object>) response.get("Response");
                                         // JSONArray arrayDetail = responseJSONObject.getJSONArray("Data");
-                                        List<StringMap> arrayDetail = (List<StringMap>) responseJSONObject.get("Data");
+                                        List<Map<String, Object>> arrayDetail =
+                                            (List<Map<String, Object>>) responseJSONObject.get(
+                                                "Data");
                                         ArrayList<String> columns = new ArrayList<String>();
                                         ArrayList<String> columnsHeader = new ArrayList<String>();
 
                                         if (arrayDetail.size() != 0) {
                                             for (int y = 0; y < arrayDetail.size(); y++) {
-                                                StringMap objDetail = arrayDetail.get(y);
+                                                Map<String, Object> objDetail = arrayDetail.get(y);
 
                                                 if (columns.size() == 0) {
                                                     for (Object columnName : objDetail.keySet()) {

@@ -1,11 +1,7 @@
 package com.mosl.tabapp.common;
 
 import android.util.Base64;
-import android.util.Log;
-
-import com.mosl.tabapp.BuildConfig;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;

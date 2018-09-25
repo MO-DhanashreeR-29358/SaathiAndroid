@@ -28,7 +28,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.gson.Gson;
-import com.google.gson.internal.StringMap;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
@@ -371,11 +370,14 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                       String[] lableString = new String[] {};
 
                       final ArrayList<ArrayList<String>> yAxisListFirst = new ArrayList<>();
-                      StringMap responseJsonObj = (StringMap) response.get("Response");
-                      List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Table");
+                        Map<String, Object> responseJsonObj =
+                            (Map<String, Object>) response.get("Response");
+                        List<Map<String, Object>> arrayDetail =
+                            (List<Map<String, Object>>) responseJsonObj.get("Table");
                       if (arrayDetail.size() != 0) {
                         for (int y = 2; y < arrayDetail.size(); y++) {
-                          StringMap objDetail = (StringMap) arrayDetail.get(y);
+                            Map<String, Object> objDetail =
+                                (Map<String, Object>) arrayDetail.get(y);
                           String stages = objDetail.get("stage").toString().equals("") ? "0"
                               : objDetail.get("stage").toString();
                           if (stages.equalsIgnoreCase("Total")) {
@@ -386,9 +388,9 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                         }
                         try {
                           if (responseJsonObj.get("Table1") != null) {
-                            List<StringMap> arrayDetailTotal =
-                                (List<StringMap>) responseJsonObj.get("Table1");
-                            StringMap jobjFKey = arrayDetailTotal.get(0);
+                              List<Map<String, Object>> arrayDetailTotal =
+                                  (List<Map<String, Object>>) responseJsonObj.get("Table1");
+                              Map<String, Object> jobjFKey = arrayDetailTotal.get(0);
                             for (Object keySetE : jobjFKey.keySet()) {
                               if (keySetE.toString().equalsIgnoreCase("id") | keySetE.toString()
                                   .trim()
@@ -397,7 +399,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                                 columnsYAxis.add(keySetE.toString());
                               }
                             }
-                            for (StringMap jobj : arrayDetailTotal) {
+                              for (Map<String, Object> jobj : arrayDetailTotal) {
 
                               final ArrayList<String> yAxisList = new ArrayList<String>();
 

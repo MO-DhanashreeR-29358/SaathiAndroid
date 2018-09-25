@@ -26,7 +26,7 @@ public class CRMAppInstanceIDListenerService extends FirebaseInstanceIdService {
       editor.apply();
 
       Looper.prepare();
-      MOSLCommonActivity.sendRegistrationToServer(this, getContentResolver(), false);
+      MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
       Log.d(TAG, "New firebase token: " + refreshedToken);
     } catch (Exception ex) {
       ex.printStackTrace();
