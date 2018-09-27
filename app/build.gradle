@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'io.fabric'
+apply plugin: 'io.fabric'
 
 def gitSha() {
   def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
