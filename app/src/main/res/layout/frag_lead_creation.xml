@@ -250,7 +250,7 @@
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Email Id"
+                            android:hint="Email Id*"
                             android:inputType="textEmailAddress"
                             android:maxLength="100"
                             android:maxLines="1"
