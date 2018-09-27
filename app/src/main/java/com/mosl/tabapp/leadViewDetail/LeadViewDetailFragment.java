@@ -823,7 +823,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         });
 
         etAlternateEmail.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
@@ -1084,29 +1085,33 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             .map(query -> query.editable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
-        refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
-            etRefereeEmail.setText("");
-            etRefereeMobile.setText("");
-            etRefereeCode.setText("");
-        });
-        refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
-            pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
-            etRefereeEmail.setText("");
-            etRefereeMobile.setText("");
-            etRefereeCode.setText("");
-            final Map inputMap = new HashMap<>();
-            inputMap.put("SearchType", "ByName");
-            inputMap.put("SearchHint", query);
-            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
-                .compose(applyUiModel());
-        }).subscribe(data -> {
-            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
-            JSONObject data1 = uiModel.data;
-            if (data1 != null) {
-                RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
-            }
-        });
+
+        compositeDisposable.add(
+            refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
+                etRefereeEmail.setText("");
+                etRefereeMobile.setText("");
+                etRefereeCode.setText("");
+            }));
+
+        compositeDisposable.add(
+            refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
+                pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
+                etRefereeEmail.setText("");
+                etRefereeMobile.setText("");
+                etRefereeCode.setText("");
+                final Map inputMap = new HashMap<>();
+                inputMap.put("SearchType", "ByName");
+                inputMap.put("SearchHint", query);
+                return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
+                    .compose(applyUiModel());
+            }).subscribe(data -> {
+                UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+                JSONObject data1 = uiModel.data;
+                if (data1 != null) {
+                    RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
+                }
+            }));
 
         Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefereeCode)
             .filter(event -> event.view().isFocused())
@@ -1114,31 +1119,33 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
 
-        refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
-            etRefereeName.setText("");
-            etRefereeMobile.setText("");
-            etRefereeEmail.setText("");
-        });
+        compositeDisposable.add(
+            refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
+                etRefereeName.setText("");
+                etRefereeMobile.setText("");
+                etRefereeEmail.setText("");
+            }));
 
-        refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
-            pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
-            etRefereeName.setText("");
-            etRefereeMobile.setText("");
-            etRefereeEmail.setText("");
-            final Map inputMap = new HashMap<>();
-            inputMap.put("SearchType", "ByCode");
-            inputMap.put("SearchHint", query);
-            return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
-                .compose(applyUiModel());
-        }).subscribe(data -> {
-            UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
-            JSONObject data1 = uiModel.data;
-            if (data1 != null) {
-                RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
-            }
-        });
-        
+        compositeDisposable.add(
+            refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
+                pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
+                etRefereeName.setText("");
+                etRefereeMobile.setText("");
+                etRefereeEmail.setText("");
+                final Map inputMap = new HashMap<>();
+                inputMap.put("SearchType", "ByCode");
+                inputMap.put("SearchHint", query);
+                return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
+                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
+                    .compose(applyUiModel());
+            }).subscribe(data -> {
+                UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
+                JSONObject data1 = uiModel.data;
+                if (data1 != null) {
+                    RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
+                }
+            }));
+
         lvBrok = (ListView) leadViewDetailView.findViewById(R.id.listBrokingPortfolio);
         lvAsset = (ListView) leadViewDetailView.findViewById(R.id.listAssestPortfolio);
         lvCash = (ListView) leadViewDetailView.findViewById(R.id.listCashPortfolio);
@@ -4538,7 +4545,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 tvAlternateEmailIdError.setVisibility(View.VISIBLE);
                 etAlternateEmail.requestFocus();
                 return false;
-            } else if (!isBlank(etPanNumber.getText().toString()) && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
+            } else if (!isBlank(etPanNumber.getText().toString())
+                && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
                 tvPanNumError.setText("Invalid PAN number");
                 etPanNumber.requestFocus();
                 tvPanNumError.setVisibility(View.VISIBLE);
@@ -5870,7 +5878,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             e.printStackTrace();
         }
     }
-    
+
     private void RefreeApi(final String value, final String type, View view,
         final ProgressBar pbLoadingIndicatorRefreeCode) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {

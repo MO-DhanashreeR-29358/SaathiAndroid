@@ -1169,12 +1169,14 @@ public class LeadCreationFragment extends MOSLCommonFragment
             .map(query -> query.editable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
-        refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
+        compositeDisposable.add(
+            refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
             etRefreeEmail.setText("");
             etRefreeMobile.setText("");
             etRefreeCode.setText("");
-        });
-        refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
+            }));
+        compositeDisposable.add(
+            refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
             pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
             etRefreeEmail.setText("");
             etRefreeMobile.setText("");
@@ -1191,7 +1193,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             if (data1 != null) {
                 RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
             }
-        });
+            }));
 
         Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefreeCode)
             .filter(event -> event.view().isFocused())
@@ -1199,13 +1201,15 @@ public class LeadCreationFragment extends MOSLCommonFragment
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
 
-        refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
+        compositeDisposable.add(
+            refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
             etRefreeName.setText("");
             etRefreeMobile.setText("");
             etRefreeEmail.setText("");
-        });
+            }));
 
-        refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
+        compositeDisposable.add(
+            refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
             pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
             etRefreeName.setText("");
             etRefreeMobile.setText("");
@@ -1222,7 +1226,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             if (data1 != null) {
                 RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
             }
-        });
+            }));
 
     /*    etRefreeName.addTextChangedListener(new TextWatcher() {
             @Override

@@ -45,13 +45,13 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
     private String leadId = "0", ucid = "0";
     public static final String STRING_MAP = "map";
     public static final String STRING_TITLE = "title";
-    private HashMap<String, String> mMap;
+    private Map<String, String> mMap;
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         reportView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_second_level_report);
-        mMap = (HashMap<String, String>) getArguments().getSerializable(STRING_MAP);
+        mMap = (Map<String, String>) getArguments().getSerializable(STRING_MAP);
         widgetSystemName = getArguments().getString(STRING_TITLE);
         setUpView(reportView);
         if (mMap != null) {

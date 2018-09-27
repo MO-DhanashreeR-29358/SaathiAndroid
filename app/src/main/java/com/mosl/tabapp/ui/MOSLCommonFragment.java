@@ -2,6 +2,7 @@ package com.mosl.tabapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.CallSuper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -26,13 +27,14 @@ import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
+import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
-
+    public CompositeDisposable compositeDisposable;
     public MOSLCommonFragment() {
         super();
     }
@@ -41,7 +43,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         Bundle savedInstanceState) {
         View mCommonview = inflater.inflate(R.layout.common_base_layout, container, false);
         setupViews(mCommonview);
-
+        compositeDisposable = new CompositeDisposable();
         //remove cache if login done
 
         return mCommonview;
@@ -269,6 +271,11 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public Map getHeader() {
         return MOSLCommonActivity.getHeader(context);
+    }
+
+    @Override @CallSuper public void onDestroyView() {
+        compositeDisposable.dispose();
+        super.onDestroyView();
     }
 }
 
