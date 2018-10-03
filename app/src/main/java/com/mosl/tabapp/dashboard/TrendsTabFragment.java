@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
 import com.github.mikephil.charting.components.AxisBase;
@@ -45,11 +44,6 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +51,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by raju on 2/27/2017.
@@ -155,6 +152,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
                 l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
                 l.setDrawInside(false);
+                l.setTextSize(13f);
 
                 rightAxis = mChart.getAxisRight();
                 rightAxis.setValueFormatter(new LargeValueFormatter());
