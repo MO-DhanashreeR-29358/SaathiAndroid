@@ -3834,13 +3834,13 @@ public class LeadCreationFragment extends MOSLCommonFragment
             tvProductTypeError.requestFocus();
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (isBlank(etEmailId.getText().toString().trim())) {
+        }/* else if (isBlank(etEmailId.getText().toString().trim())) {
             tvEmailIdError.setVisibility(View.VISIBLE);
             tvEmailIdError.setText("Enter email id");
             etEmailId.requestFocus();
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (!isValidEmail(
+        }*/ else if (!isBlank(etEmailId.getText().toString().trim()) && !isValidEmail(
             etEmailId.getText().toString().trim())) {
             tvEmailIdError.setText("Invalid email id");
             tvEmailIdError.setVisibility(View.VISIBLE);
@@ -4206,7 +4206,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             showProgress();
             final Map inputMap = new HashMap<>();
             inputMap.put(MOBILE, etMobile.getText().toString().trim());
-            inputMap.put(EMAIL, etEmailId.getText().toString());
+            //inputMap.put(EMAIL, etEmailId.getText().toString());
             inputMap.put("CurrentUser", AccountDetails.getEmployeeCode());
             String serviceMethod = "/Lead/TransferLeadCaughtInC2";
             try {

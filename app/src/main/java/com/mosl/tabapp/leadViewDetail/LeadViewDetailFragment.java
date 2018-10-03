@@ -462,7 +462,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etAnniversary.setEnabled(flag);
         etAlternateMobileNumber.setEnabled(flag);
         etAlternateEmail.setEnabled(flag);
-        //etEmail.setEnabled(flag);
+        etEmail.setEnabled(flag);
         etContactPerson.setEnabled(flag);
         etComments.setEnabled(flag);
         btnSubmit.setEnabled(flag);
@@ -848,7 +848,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             }
         });
-  /*      etEmail.addTextChangedListener(new TextWatcher() {
+        etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -873,7 +873,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             @Override public void afterTextChanged(Editable s) {
 
             }
-        });*/
+        });
 
         etPanNumber.setFilters(
             new InputFilter[] { new InputFilter.LengthFilter(10), new InputFilter.AllCaps() });
@@ -4526,13 +4526,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 etLandlineNumber.requestFocus();
                 tvLandLineError.setVisibility(View.VISIBLE);
                 return false;
-            } /*else if (!isBlank(etEmail.getText().toString()) && !isValidEmail(
+            } else if (!isBlank(etEmail.getText().toString()) && !isValidEmail(
                 etEmail.getText().toString().trim())) {
                 tvEmailIdError.setText("Invalid email id");
                 tvEmailIdError.setVisibility(View.VISIBLE);
                 etEmail.requestFocus();
                 return false;
-            }*/ else if (!isBlank(etAlternateEmail.getText().toString()) && !isValidEmail(
+            } else if (!isBlank(etAlternateEmail.getText().toString()) && !isValidEmail(
                 etAlternateEmail.getText().toString().trim())) {
                 tvAlternateEmailIdError.setText("Invalid email id");
                 tvAlternateEmailIdError.setVisibility(View.VISIBLE);
