@@ -5,15 +5,11 @@ buildscript {
     google()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
   }
   dependencies {
     classpath "com.android.tools.build:gradle:$android_plugin_version"
     classpath "com.google.gms:google-services:$google_services_version"
     classpath 'io.fabric.tools:gradle:1.25.4'
-    classpath 'net.ltgt.gradle:gradle-errorprone-plugin:0.0.12'
   }
 }
 
@@ -41,7 +37,6 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'retrofit'            : '2.4.0',
                 'rxJava'              : '2.1.16',
                 'rxBinding'           : '2.1.1',
-                'errorProne'          : '2.1.1',
                 'room'                : '1.1.0'
 
 ]
@@ -114,9 +109,6 @@ allprojects {
     maven { url 'https://maven.fabric.io/public' }
     flatDir {
       dirs '../eKYC/libs'
-    }
-    maven {
-      url "https://plugins.gradle.org/m2/"
     }
   }
 }
