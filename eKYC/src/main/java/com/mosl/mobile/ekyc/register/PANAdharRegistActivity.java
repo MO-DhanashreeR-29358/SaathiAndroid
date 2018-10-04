@@ -2697,7 +2697,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     btnSubmit.setVisibility(View.GONE);
                                     ivNote.setVisibility(View.VISIBLE);
                                     if (getAppType().equalsIgnoreCase(DIRECT)) {
-                                        rbAadhar.setVisibility(View.GONE);
+                                        //rbAadhar.setVisibility(View.GONE);
                                         if (openPaperlessAccount) {
                                             tvVirtualIdInfo.setText(Html.fromHtml(
                                                     getResources().getString(R.string.open_paperless_account)));
