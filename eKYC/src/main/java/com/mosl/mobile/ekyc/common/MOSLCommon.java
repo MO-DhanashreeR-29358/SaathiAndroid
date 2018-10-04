@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
@@ -37,23 +36,15 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.mosl.mobile.biometric.samsung.Utility;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.register.PANAdharRegistActivity;
 import com.mosl.mobile.ekyc.register.RegisterActivity;
-import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.EkycMainActivity;
 import com.mosl.mobile.ekyc.ui.PostLoginFragment;
 import com.mosl.mobile.ekyc.ui.TrackApplicationActivity;
 import com.sec.biometric.iris.SecIrisManager;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -63,16 +54,36 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.mobile.ekyc.common.EkycAppUtil.getStartDtFinancialYear;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCommoditySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAadhaarVerifiedByBio;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isIPVDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isVerificationDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.setCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDematTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEsignTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setMfSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPersonalTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUploadTab;
 
 
 /**
@@ -753,7 +764,8 @@ public class MOSLCommon implements MOSLConstants {
     * for branch 50000
     * */
     public static int minMarginValueForOtherAmount() {
-        return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
+        //return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
+        return getAppType().equalsIgnoreCase(DIRECT) ? 0 : 50000;
     }
 
     public static boolean isBrokingFundTransferDone(String segment) {

@@ -46,5 +46,5 @@ dependencies {
     implementation deps.constraintLayout
     implementation deps.compressor
     implementation project(':emendate')
-    implementation(name: 'nsdl-esign-2.1-v-1.1', ext: 'aar')
+    implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
 }

@@ -36,8 +36,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomTabsHelper;
@@ -50,21 +48,31 @@ import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.WebActivity;
 import com.viewpagerindicator.TabPageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.disableField;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCommoditySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsDerivativeSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityFundTransfered;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
 
@@ -737,11 +745,15 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etEquFundTransferred.getText().toString())) {
                     input_layout_equFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
+                    if (!getAppType().equalsIgnoreCase(PP)
+                        && !getAppType().equalsIgnoreCase(DIRECT)
+                        && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etEquFundTransferred.requestFocus();
-                    } else if (getAppType().equalsIgnoreCase(PP) && !(Integer.parseInt(etEquFundTransferred.getText().toString()) > 0)) {
+                    } else if (getAppType().equalsIgnoreCase(PP) && !getAppType().equalsIgnoreCase(
+                        DIRECT) && !(Integer.parseInt(etEquFundTransferred.getText().toString())
+                        > 0)) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg_PP));
                         etEquFundTransferred.requestFocus();
@@ -771,11 +783,15 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etCommFundTransferred.getText().toString())) {
                     input_layout_commFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
+                    if (!getAppType().equalsIgnoreCase(PP)
+                        && !getAppType().equalsIgnoreCase(DIRECT)
+                        && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etCommFundTransferred.requestFocus();
-                    } else if (getAppType().equalsIgnoreCase(PP) && !(Integer.parseInt(etCommFundTransferred.getText().toString()) > 0)) {
+                    } else if (getAppType().equalsIgnoreCase(PP) && !getAppType().equalsIgnoreCase(
+                        DIRECT) && !(Integer.parseInt(etCommFundTransferred.getText().toString())
+                        > 0)) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg_PP));
                         etCommFundTransferred.requestFocus();
@@ -1172,7 +1188,9 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             } else if (!(Integer.parseInt(strCommFundAmount) > 0)) {
                 etCommFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
+            } else if (!getAppType().equalsIgnoreCase(PP)
+                && !getAppType().equalsIgnoreCase(DIRECT)
+                && etCommFundTransferred.length() < 5) {
                 etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
                 etCommFundTransferred.requestFocus();
@@ -1308,7 +1326,9 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             } else if (!(Integer.parseInt(strEquFundAmount) > 0)) {
                 etEquFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
+            } else if (!getAppType().equalsIgnoreCase(PP)
+                && !getAppType().equalsIgnoreCase(DIRECT)
+                && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
                 etEquFundTransferred.requestFocus();
