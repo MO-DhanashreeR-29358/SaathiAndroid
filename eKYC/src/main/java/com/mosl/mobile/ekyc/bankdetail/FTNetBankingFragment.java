@@ -695,7 +695,8 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
             String strEquFundAmount = etEquFundTransferred.getText().toString();
             if (!validateEditText(etEquFundTransferred, input_layout_equFundTransferred, "Enter Amount")) {
                 return;
-            } else if (!(Integer.parseInt(strEquFundAmount) > 0)) {
+            } else if (!(Integer.parseInt(strEquFundAmount) > 0) && !getAppType().equalsIgnoreCase(
+                DIRECT)) {
                 etEquFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)

@@ -3185,13 +3185,13 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                                         llBaseOTPBioLayout.setVisibility(View.GONE);
                                                         llParentOTPBio.setVisibility(View.GONE);
                                                         showAuthenticationModeMsg(false, noMode);
-                                                    } else if (getAadharNo().length() == 12) {
+                                                    }/* else if (getAadharNo().length() == 12) {
                                                         btnSubmit.setVisibility(View.VISIBLE);
                                                         btnSubmit.setText(SUBMIT);
                                                         llBaseOTPBioLayout.setVisibility(View.GONE);
                                                         llParentOTPBio.setVisibility(View.GONE);
                                                         showAuthenticationModeMsg(false, noMode);
-                                                    } else {
+                                                    }*/ else {
                                                         llMobileNotMapped.setVisibility(View.VISIBLE);
                                                         tvDocCheckList.setVisibility(View.VISIBLE);
                                                         llBaseOTPBioLayout.setVisibility(View.VISIBLE);
