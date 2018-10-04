@@ -306,7 +306,8 @@
     <string name="demat_account_detail">Do you wish to add joint holder ?</string>
     <string name="nominee_form_detail">Do you wish to add nominee ?</string>
     <string name="nominee_guardian_note">Note : As the Nominee is minor as on date, the following appointed person will act as Guardian.</string>
-    <string name="margin_25000">Margin Deposit cannot be less than 25,000</string>
+    <!--<string name="margin_25000">Margin Deposit cannot be less than 25,000</string>-->
+    <string name="margin_25000">Margin Deposit cannot be less than 0</string>
     <string name="margin_50000">Margin Deposit cannot be less than 50,000</string>
     <string name="update_tab_for_iris">"Dear Customer, To use the Biometric \"IRIS Scan\" authentication mode, you need to upgrade the TAB to have (minimum):\n
         Build number:\n LMY47X.T116IRDDU1BQF2\n
@@ -519,7 +520,8 @@
         To submit your eMandate details online, Please click here.</string>
 
     <string name="virtualId">Virtual Id</string>
-    <string name="aadharmsg">Aadhaar will be only authenticated through IRIS or Finger scan mode.</string>
+    <!--<string name="aadharmsg">Aadhaar will be only authenticated through IRIS or Finger scan mode.</string>-->
+    <string name="aadharmsg"> </string>
     <string name="vitrualIdmsg">Enter 16 Digit Virtual ID Number. If not available, please &lt;u>Generate/Retrieve&lt;/u> Virtual ID</string>
     <string name="vitrualIdDefn">Aadhaar Virtual ID is a 16-digit temporary ID, generated through the UIDAI portal - uidai.gov.in - that can be quoted as an alternative to providing the Aadhaar number or Unique Identity Number (UID). An Aadhaar holder using an Aadhaar VID will not be required to share his or her Aadhaar number at the time of authentication. Currently, Aadhaar holders can generate the virtual ID through the UIDAI website.</string>
     <string name="unable_to_genrate_virtualid">Incase you\'re unable to generate Virtual ID. &lt;u>&lt;b>Click here&lt;/b>&lt;/u> for manual account opening </string>

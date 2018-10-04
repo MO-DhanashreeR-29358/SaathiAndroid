@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.ApplyNowAdapter;
@@ -34,15 +33,12 @@ import com.mosl.mobile.ekyc.personaldetail.PersonalDetailFragment;
 import com.mosl.mobile.ekyc.register.PANAdharRegistActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.viewpagerindicator.TabPageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.getPrefs;
@@ -51,13 +47,19 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setTabConstant;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDematTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEsignTab;
 import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPersonalTab;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
 import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 
 /**
  * Created by Shefali on 6/13/2016.
@@ -495,10 +497,12 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         super.onDestroy();
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return super.onKeyDown(keyCode, event);
-
+    @Override public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT
+            || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     /*

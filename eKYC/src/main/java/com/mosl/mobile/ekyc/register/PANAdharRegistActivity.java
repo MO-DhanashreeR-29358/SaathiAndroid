@@ -38,7 +38,6 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.biometric.ui.BioMetricMainActivity;
 import com.mosl.mobile.ekyc.R;
@@ -57,10 +56,7 @@ import com.mosl.mobile.ekyc.ui.DatePickerListener;
 import com.mosl.mobile.ekyc.ui.EkycMainActivity;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.mobile.ekyc.ui.WebActivity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,8 +66,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.callApplyNowActivity;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
@@ -3251,16 +3247,16 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                                 if (getAppType().equalsIgnoreCase(DIRECT)) {//call showHideOTPBioLayout method
 //                                                    llImgThumb.setVisibility(View.GONE);
 //                                                    llImgOTP.setVisibility(View.VISIBLE);
-                                                    if (getAadharNo().length() == 12) {
+                                                    /*if (getAadharNo().length() == 12) {
                                                         btnSubmit.setVisibility(View.VISIBLE);
                                                         btnSubmit.setText(SUBMIT);
                                                         llBaseOTPBioLayout.setVisibility(View.GONE);
                                                         llParentOTPBio.setVisibility(View.GONE);
                                                         showAuthenticationModeMsg(false, noMode);
-                                                    } else {
+                                                    } else {*/
                                                         showHideOTPBioLayout();
                                                         showAuthenticationModeMsg(true, dcMode);
-                                                    }
+                                                    //}
                                                 } else {//call showHideOTPBioLayout method
                                                     showAuthenticationModeMsg(true, brbaMode);
                                                     showHideOTPBioLayout();
@@ -3831,7 +3827,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         setPANno(etPan.getText().toString());
                         setDob(etDOB.getText().toString());
                         setAadharNo(etAadhaar.getText().toString());
-                        setIsAadharVerified(false);
+                        //setIsAadharVerified(false);
                         submitPANAadhar(true);
                     } else {
                         allCondSatisfied();
