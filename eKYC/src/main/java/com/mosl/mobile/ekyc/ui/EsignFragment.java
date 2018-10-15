@@ -1,5 +1,6 @@
 package com.mosl.mobile.ekyc.ui;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -40,11 +41,14 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.digio.in.esign2sdk.Digio;
 import com.digio.in.esign2sdk.DigioConfig;
 import com.digio.in.esign2sdk.DigioEnvironment;
 import com.digio.in.esign2sdk.DigioServiceMode;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.security.ProviderInstaller;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.biometric.ui.BioMetricMainActivity;
 import com.mosl.mobile.ekyc.R;
@@ -58,18 +62,15 @@ import com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity;
 import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.nsdl.egov.esignaar.NsdlEsignActivity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
@@ -81,7 +82,32 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.isThisSecondProductFlow;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBioMetricVisible;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBioMetricVisibleForBranch;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCity;
+import static com.mosl.mobile.ekyc.model.CommonModel.getClientName;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDownloadPdfUrl;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEsignService;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEsignTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getOtpVisible;
+import static com.mosl.mobile.ekyc.model.CommonModel.getOtpVisibleForBranch;
+import static com.mosl.mobile.ekyc.model.CommonModel.getTokenKey;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserType;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineCliencodeGenrated;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.setCity;
+import static com.mosl.mobile.ekyc.model.CommonModel.setClientName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEsignService;
 import static com.mosl.mobile.ekyc.service.WebServiceHandler.UID_ENV;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
@@ -104,13 +130,15 @@ public class EsignFragment extends Fragment implements MOSLConstants {
     private TextView tvAuthenticationMode;
     private LinearLayout llEsignConsent;
     private CheckBox cbEsignConsent;
-    private TextView tvEsignTitle, tvClientCodeNote, tvEmendate, tvEmendateTitle, tvEmendateDiscription;
+    private TextView tvEsignTitle, tvClientCodeNote, tvEmendate, tvEmendateTitle,
+        tvEmendateDiscription;
     private LinearLayout llEmendate;
     private CustomTabsClient mClient;
     private Map<String, Map<String, String>> pdfListMap;
 
     // String userID, aadharNo, eSignPDFURL = "", esignErrorMsg = "", aadharValidationSuccess = "", strType = "", prePdfPath = "", postBioEsignPdf = "", errorMsg = "", strPostEsignPdfPATH = "";
-    private String transactionId, userID, aadharNo, esignErrorMsg = "", aadharValidationSuccess = "", strType = "", postBioEsignPdf = "", errorMsg = "", strPostEsignPdfPATH = "";
+    private String transactionId, userID, aadharNo, esignErrorMsg = "", aadharValidationSuccess =
+        "", strType = "", postBioEsignPdf = "", errorMsg = "", strPostEsignPdfPATH = "";
 
     private ListView pdfListView;
     private PdfAdapter pdfAdapter;
@@ -125,12 +153,14 @@ public class EsignFragment extends Fragment implements MOSLConstants {
     private String requestId, nsdlMode;
     private boolean otpCalled = false;
     private Uri emendateURL;
-    private String bankName, bankIfscCode, bankAccNo, bankAcType, corresMobileNo, corresEmailId, uid, fullName, mandateCreationDateTime, firstCollectionDate,
-            finalCollectionDate, digioDocId, txnId, digiomessage, errorCode, lastStateScreen, lastStateCode, lastStateMessage, emendateMode;
+    private String bankName, bankIfscCode, bankAccNo, bankAcType, corresMobileNo, corresEmailId,
+        uid, fullName, mandateCreationDateTime, firstCollectionDate, finalCollectionDate,
+        digioDocId, txnId, digiomessage, errorCode, lastStateScreen, lastStateCode,
+        lastStateMessage, emendateMode;
     private String nsdlEsignWebview;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
 
         try {
             esignView = inflater.inflate(R.layout.activity_esign, container, false);
@@ -140,14 +170,13 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             setUserVisibleHint(true);
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
+            //            Crashlytics.logException(e);
         }
         return esignView;
     }
 
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
     }
@@ -155,13 +184,12 @@ public class EsignFragment extends Fragment implements MOSLConstants {
     private void setUpView(View esignView) {
         try {
             CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
-                @Override
-                public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                @Override public void onCustomTabsServiceConnected(ComponentName componentName,
+                    CustomTabsClient customTabsClient) {
                     mClient = customTabsClient;
                 }
 
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
+                @Override public void onServiceDisconnected(ComponentName componentName) {
                     mClient = null;
                 }
             };
@@ -177,8 +205,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         scrollView.setFocusable(true);
         scrollView.setFocusableInTouchMode(true);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            @Override public boolean onTouch(View v, MotionEvent event) {
                 v.requestFocusFromTouch();
                 return false;
             }
@@ -192,7 +219,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
         btnSubmit = (Button) esignView.findViewById(R.id.btnSubmit);
         btnRetry = (Button) esignView.findViewById(R.id.btnRetry);
-//        btnSignEkyc = (Button) esignView.findViewById(R.id.btnSignEkyc);
+        //        btnSignEkyc = (Button) esignView.findViewById(R.id.btnSignEkyc);
 
         btnSubmit.setVisibility(View.GONE);
         btnRetry.setVisibility(View.GONE);
@@ -221,14 +248,13 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         tvEmendateTitle = (TextView) esignView.findViewById(R.id.tvEmendateTitle);
         tvEmendateDiscription = (TextView) esignView.findViewById(R.id.tvEmendateDiscription);
         tvEmendate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (getAppType().equals(DIRECT)) {
                     getBankDetails(OTP);
                 } else {
                     fingerIrisDialog("Emendate");
                 }
-//                openEmendate(emendateURL);
+                //                openEmendate(emendateURL);
             }
         });
 
@@ -238,8 +264,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String strOTP = etOTP.getText().toString();
                 if (strOTP.length() == 6) {
                     performEsign();
@@ -250,8 +275,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                 }*/
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            @Override public void afterTextChanged(Editable s) {
 
             }
         });
@@ -262,8 +286,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(editClienCode.getText().toString())) {
                     if (!ValidationRule.validateClientCode(editClienCode.getText().toString())) {
                         editClienCodeError.setText("Invalid client code");
@@ -276,8 +299,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                 }
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            @Override public void afterTextChanged(Editable s) {
 
             }
         });
@@ -289,12 +311,12 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         rlOTP.setVisibility(View.GONE);
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 String strClientCode = editClienCode.getText().toString();
                 if (cbEsignConsent.isChecked()) {
                     if (getAppType().equals(CRM) || getAppType().equals(PP)) {
-                        if (!ValidationRule.validateClientCode(editClienCode.getText().toString())) {
+                        if (!ValidationRule.validateClientCode(
+                            editClienCode.getText().toString())) {
                             editClienCodeError.setText("Invalid client code");
                             editClienCodeError.setVisibility(View.VISIBLE);
                             editClienCode.requestFocus();
@@ -302,24 +324,24 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                             editClienCodeError.setVisibility(View.GONE);
                             generateClientCodeBRPP(strClientCode);
                         }
-//                    MOSLCommon.showToastMsg(mContext, "Client code validation failed");
+                        //                    MOSLCommon.showToastMsg(mContext, "Client code validation failed");
                     } else {
                         generateClientCodeForDirect();
                     }
                 } else {
-                    commonMsgDialog(mContext, "Kindly accept the E-sign consent in order to continue with authentication and application submission.", false, "");
+                    commonMsgDialog(mContext,
+                        "Kindly accept the E-sign consent in order to continue with authentication and application submission.",
+                        false, "");
                 }
             }
         });
         btnRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 getEsignDetails();
             }
         });
         tvResendOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 /*MOSLCommon.alertDialog(mContext, 0, MOSLConstants.MOTILAL_OSWAL,
                         "Resend OTP ?", "YES", "NO", false, new MOSLCommon.DialogListener() {
@@ -331,18 +353,18 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                             }
                         });*/
 
-                CustomDialog resendCd = new CustomDialog(mContext, RESEND_OTP_MSG, true, true, false, "", YES, NO, new CustomDialog.CustomDialogListener() {
-                    @Override
-                    public void dialogAction(MOSLCommon.Action action, Object... data) {
-                        if (action == MOSLCommon.Action.OK) {
-                            generateOTP();
-                        }
-                    }
-                });
+                CustomDialog resendCd =
+                    new CustomDialog(mContext, RESEND_OTP_MSG, true, true, false, "", YES, NO,
+                        new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void dialogAction(MOSLCommon.Action action, Object... data) {
+                                if (action == MOSLCommon.Action.OK) {
+                                    generateOTP();
+                                }
+                            }
+                        });
                 resendCd.show();
-
             }
-
         });
 
         /*btnSignEkyc.setOnClickListener(new View.OnClickListener() {
@@ -357,28 +379,33 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             }
         });*/
         ivOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 otpCalled = true;
                 ivOTP.setImageResource(R.drawable.ic_otp_select);
                 ivThumb.setImageResource(R.drawable.ic_thumb_unselect);
                 strType = "OTP";
                 if (getEsignService().equalsIgnoreCase(NSDL)) {//Conition for nsdl
-                    if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase("1"))//Show Web view
-                        openWebUrl(Uri.parse(nsdlEsignUrl + EkycUtil.encrypt(getUserID() + "|" + "1|" + "Mobile")), "", "CustomTabs");
-                    else if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase("0"))//Call Nsdl APK
+                    if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase(
+                        "1"))//Show Web view
+                    {
+                        openWebUrl(Uri.parse(
+                            nsdlEsignUrl + EkycUtil.encrypt(getUserID() + "|" + "1|" + "Mobile")),
+                            "", "CustomTabs");
+                    } else if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase(
+                        "0"))//Call Nsdl APK
+                    {
                         genrateEsignXML(NSDL_OTP);
+                    }
                 } else {
                     llOTPThumbLayout.setVisibility(View.VISIBLE);
                     rlOTP.setVisibility(View.VISIBLE);
-//                    sendOTPDialog(SEND_OTP);
+                    //                    sendOTPDialog(SEND_OTP);
                     generateOTP();
                 }
             }
         });
         ivThumb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 otpCalled = false;
                 ivOTP.setImageResource(R.drawable.ic_otp_unselect);
                 ivThumb.setImageResource(R.drawable.ic_thumb_select);
@@ -390,16 +417,23 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                     return;
                 }*/
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    commonMsgDialog(mContext, getResources().getString(R.string.nsdl_support_msg), false, "");
+                    commonMsgDialog(mContext, getResources().getString(R.string.nsdl_support_msg),
+                        false, "");
                 } else {
                     if (getEsignService().equalsIgnoreCase(NSDL)) {//Condition for nsdl
                         if (!isIrisSupported(mContext)) {
                             genrateEsignXML(NSDL_FINGER);
                         } else {
-                            if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase("1"))//Call Nsdl APK for Finger
+                            if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase(
+                                "1"))//Call Nsdl APK for Finger
+                            {
                                 genrateEsignXML(NSDL_FINGER);
-                            else if (!isBlank(nsdlEsignWebview) && nsdlEsignWebview.equalsIgnoreCase("0"))//Call Dialog to Ask Iris Or Finger
+                            } else if (!isBlank(nsdlEsignWebview)
+                                && nsdlEsignWebview.equalsIgnoreCase(
+                                "0"))//Call Dialog to Ask Iris Or Finger
+                            {
                                 fingerIrisDialog(ESIGN);
+                            }
                         }
                     } else {
                         llOTPThumbLayout.setVisibility(View.GONE);
@@ -478,28 +512,27 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    @Override public void setUserVisibleHint(boolean isVisibleToUser) {
         try {
             super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser && esignView != null && viewPager.getCurrentItem() == getEsignTab()) {
+            if (isVisibleToUser
+                && esignView != null
+                && viewPager.getCurrentItem() == getEsignTab()) {
                 uploadDetail();
                 setPermisson(getActivity(), mContext);
                 disableEnableField();
             }
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
+            //            Crashlytics.logException(e);
         }
     }
 
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
-        if (viewPager.getCurrentItem() == getEsignTab()) {
-            if (otpCalled)
-                uploadDetail();
+        if (viewPager != null && viewPager.getCurrentItem() == getEsignTab()) {
+            if (otpCalled) uploadDetail();
         }
     }
 
@@ -570,17 +603,18 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             }
             String category = ESIGN;
 
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
 
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    customProgress.setVisibility(View.GONE);
-                }
+                    @Override public void onSuccess(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
+                    @Override public void onSuccess(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
                  /*[
                 {
                     "ClientName":"Karuna Vasant Kamble",
@@ -592,59 +626,108 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                         "PDFPATH":"http:\/\/web20.motilaloswal.com:8000\/PDFUpload\/upload\/proof\/613785271500\/613785271500_EQFinal.pdf"
                 }
                 ]*/
-                    if (statusCode == 200) {
-                        if (response.length() != 0) {
-                            customProgress.setVisibility(View.VISIBLE);
-                            List<PdfModel> pdfList = new ArrayList<PdfModel>();
-                            pdfListMap = new HashMap<String, Map<String, String>>();
-                            String enableClientCode = "";
-                            for (int i = 0; i < response.length(); i++) {
-                                try {
-                                    JSONObject object = response.getJSONObject(i);
-                                    String clientName = (object.isNull("ClientName") || object.getString("ClientName").equals("")) ? "" : object.getString("ClientName");
-                                    String product = (object.isNull("PRODUCT") || object.getString("PRODUCT").equals("")) ? "" : object.getString("PRODUCT");
-                                    String aadharNo = (object.isNull("AadharNo") || object.getString("AadharNo").equals("")) ? "" : object.getString("AadharNo");
-                                    String pdfPATH = (object.isNull("PDFPATH") || object.getString("PDFPATH").equals("")) ? "" : object.getString("PDFPATH");
-                                    String postEsignPdfPATH = (object.isNull("POSTESIGNPDFPATH") || object.getString("POSTESIGNPDFPATH").equals("")) ? "" : object.getString("POSTESIGNPDFPATH");
-                                    String esignCompleted = (object.isNull("ESignCompleted") || object.getString("ESignCompleted").equals("")) ? "" : object.getString("ESignCompleted");
-                                    String city = (object.isNull("CITY") || object.getString("CITY").equals("")) ? "" : object.getString("CITY");
-                                    enableClientCode = (object.isNull("ENABLECLIENTCODE") || object.getString("ENABLECLIENTCODE").equals("")) ? "" : object.getString("ENABLECLIENTCODE");
-                                    nsdlEsignUrl = (object.isNull("NSDLESIGNURL") || object.getString("NSDLESIGNURL").equals("")) ? "" : object.getString("NSDLESIGNURL");
-                                    String esignService = (object.isNull("ESIGNSERVICE") || object.getString("ESIGNSERVICE").equals("")) ? "" : object.getString("ESIGNSERVICE");
-                                    String emendateUrl = (object.isNull("EMENDATEURL") || object.getString("EMENDATEURL").equals("")) ? "" : object.getString("EMENDATEURL");
-                                    String emendateVisible = (object.isNull("EMENDATEVISIBLE") || object.getString("EMENDATEVISIBLE").equals("")) ? "" : object.getString("EMENDATEVISIBLE");
-                                    String emendateTitle = (object.isNull("EMENDATETITLE") || object.getString("EMENDATETITLE").equals("")) ? "" : object.getString("EMENDATETITLE");
-                                    String emendateDiscription = (object.isNull("EMENDATEDISCRIPTION") || object.getString("EMENDATEDISCRIPTION").equals("")) ? "" : object.getString("EMENDATEDISCRIPTION");
-                                    nsdlEsignWebview = (object.isNull("NSDLESIGNWEBVIEW") || object.getString("NSDLESIGNWEBVIEW").equals("")) ? "" : object.getString("NSDLESIGNWEBVIEW");
-                                    String emandateDisable = (object.isNull("EMANDATE") || object.getString("EMANDATE").equals("")) ? "" : object.getString("EMANDATE");
-                                    product = product.toUpperCase();
-                                    setClientName(clientName);
-                                    setAadharNo(aadharNo);
-                                    setCity(city);
-                                    setEsignService(esignService);
-                                    pdfPATH = pdfPATH.replaceAll(" ", "%20");
-                                    postEsignPdfPATH = postEsignPdfPATH.replaceAll(" ", "%20");
-                                    llPreEsign.setVisibility(View.VISIBLE);
-                                    pdfList.add(new PdfModel(product, pdfPATH, postEsignPdfPATH));
+                        if (statusCode == 200) {
+                            if (response.length() != 0) {
+                                customProgress.setVisibility(View.VISIBLE);
+                                List<PdfModel> pdfList = new ArrayList<PdfModel>();
+                                pdfListMap = new HashMap<String, Map<String, String>>();
+                                String enableClientCode = "";
+                                for (int i = 0; i < response.length(); i++) {
+                                    try {
+                                        JSONObject object = response.getJSONObject(i);
+                                        String clientName =
+                                            (object.isNull("ClientName") || object.getString(
+                                                "ClientName").equals("")) ? ""
+                                                : object.getString("ClientName");
+                                        String product =
+                                            (object.isNull("PRODUCT") || object.getString("PRODUCT")
+                                                .equals("")) ? "" : object.getString("PRODUCT");
+                                        String aadharNo =
+                                            (object.isNull("AadharNo") || object.getString(
+                                                "AadharNo").equals("")) ? ""
+                                                : object.getString("AadharNo");
+                                        String pdfPATH =
+                                            (object.isNull("PDFPATH") || object.getString("PDFPATH")
+                                                .equals("")) ? "" : object.getString("PDFPATH");
+                                        String postEsignPdfPATH =
+                                            (object.isNull("POSTESIGNPDFPATH") || object.getString(
+                                                "POSTESIGNPDFPATH").equals("")) ? ""
+                                                : object.getString("POSTESIGNPDFPATH");
+                                        String esignCompleted =
+                                            (object.isNull("ESignCompleted") || object.getString(
+                                                "ESignCompleted").equals("")) ? ""
+                                                : object.getString("ESignCompleted");
+                                        String city =
+                                            (object.isNull("CITY") || object.getString("CITY")
+                                                .equals("")) ? "" : object.getString("CITY");
+                                        enableClientCode =
+                                            (object.isNull("ENABLECLIENTCODE") || object.getString(
+                                                "ENABLECLIENTCODE").equals("")) ? ""
+                                                : object.getString("ENABLECLIENTCODE");
+                                        nsdlEsignUrl =
+                                            (object.isNull("NSDLESIGNURL") || object.getString(
+                                                "NSDLESIGNURL").equals("")) ? ""
+                                                : object.getString("NSDLESIGNURL");
+                                        String esignService =
+                                            (object.isNull("ESIGNSERVICE") || object.getString(
+                                                "ESIGNSERVICE").equals("")) ? ""
+                                                : object.getString("ESIGNSERVICE");
+                                        String emendateUrl =
+                                            (object.isNull("EMENDATEURL") || object.getString(
+                                                "EMENDATEURL").equals("")) ? ""
+                                                : object.getString("EMENDATEURL");
+                                        String emendateVisible =
+                                            (object.isNull("EMENDATEVISIBLE") || object.getString(
+                                                "EMENDATEVISIBLE").equals("")) ? ""
+                                                : object.getString("EMENDATEVISIBLE");
+                                        String emendateTitle =
+                                            (object.isNull("EMENDATETITLE") || object.getString(
+                                                "EMENDATETITLE").equals("")) ? ""
+                                                : object.getString("EMENDATETITLE");
+                                        String emendateDiscription =
+                                            (object.isNull("EMENDATEDISCRIPTION")
+                                                || object.getString("EMENDATEDISCRIPTION")
+                                                .equals("")) ? ""
+                                                : object.getString("EMENDATEDISCRIPTION");
+                                        nsdlEsignWebview =
+                                            (object.isNull("NSDLESIGNWEBVIEW") || object.getString(
+                                                "NSDLESIGNWEBVIEW").equals("")) ? ""
+                                                : object.getString("NSDLESIGNWEBVIEW");
+                                        String emandateDisable =
+                                            (object.isNull("EMANDATE") || object.getString(
+                                                "EMANDATE").equals("")) ? ""
+                                                : object.getString("EMANDATE");
+                                        product = product.toUpperCase();
+                                        setClientName(clientName);
+                                        setAadharNo(aadharNo);
+                                        setCity(city);
+                                        setEsignService(esignService);
+                                        pdfPATH = pdfPATH.replaceAll(" ", "%20");
+                                        postEsignPdfPATH = postEsignPdfPATH.replaceAll(" ", "%20");
+                                        llPreEsign.setVisibility(View.VISIBLE);
+                                        pdfList.add(
+                                            new PdfModel(product, pdfPATH, postEsignPdfPATH));
 
-                                    Map pdfMap = new HashMap();
-                                    pdfMap.put(PRE_PDF_PATH, pdfPATH);
-                                    pdfMap.put(POST_PDF_PATH, postEsignPdfPATH);
-                                    pdfListMap.put(product, pdfMap);
+                                        Map pdfMap = new HashMap();
+                                        pdfMap.put(PRE_PDF_PATH, pdfPATH);
+                                        pdfMap.put(POST_PDF_PATH, postEsignPdfPATH);
+                                        pdfListMap.put(product, pdfMap);
 
-                                    if (emendateVisible.equalsIgnoreCase("1")) {
-                                        emendateURL = Uri.parse(emendateUrl);
-                                        tvEmendateTitle.setText(emendateTitle);
-//                                        tvEmendateDiscription.setText(emendateDiscription);
-                                        llEmendate.setVisibility(View.VISIBLE);
-                                        tvEmendate.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-                                        if (emandateDisable.equalsIgnoreCase("1"))
-                                            tvEmendate.setEnabled(false);
-                                        else if (emandateDisable.equalsIgnoreCase("0"))
-                                            tvEmendate.setEnabled(true);
-                                    } else if (emendateVisible.equalsIgnoreCase("0"))
-                                        llEmendate.setVisibility(View.GONE);
-//                                    if (completedProductMap.get(product) == null || !completedProductMap.get(product)) {
+                                        if (emendateVisible.equalsIgnoreCase("1")) {
+                                            emendateURL = Uri.parse(emendateUrl);
+                                            tvEmendateTitle.setText(emendateTitle);
+                                            //                                        tvEmendateDiscription.setText(emendateDiscription);
+                                            llEmendate.setVisibility(View.VISIBLE);
+                                            tvEmendate.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+                                            if (emandateDisable.equalsIgnoreCase("1")) {
+                                                tvEmendate.setEnabled(false);
+                                            } else if (emandateDisable.equalsIgnoreCase("0")) {
+                                                tvEmendate.setEnabled(true);
+                                            }
+                                        } else if (emendateVisible.equalsIgnoreCase("0")) {
+                                            llEmendate.setVisibility(View.GONE);
+                                        }
+                                        //                                    if (completedProductMap.get(product) == null || !completedProductMap.get(product)) {
                                     /*if (!pdfPATH.equals("") && !postEsignPdfPATH.equals("")) {
                                         llPreEsign.setVisibility(View.VISIBLE);
                                         llEsignConsent.setVisibility(View.VISIBLE);
@@ -709,76 +792,78 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                         informationDialog("Pre-esign pdf is not generated, plesae retry", 2, false);
                                     }*/
 
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    customProgress.setVisibility(View.GONE);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        customProgress.setVisibility(View.GONE);
+                                    }
                                 }
-                            }
-                            customProgress.setVisibility(View.GONE);
-                            pdfAdapter = new PdfAdapter(mContext, pdfList);
-                            pdfListView.setAdapter(pdfAdapter);
-                            pdfAdapter.notifyDataSetChanged();
-                            setListViewHeightBasedOnChildren(pdfListView);
+                                customProgress.setVisibility(View.GONE);
+                                pdfAdapter = new PdfAdapter(mContext, pdfList);
+                                pdfListView.setAdapter(pdfAdapter);
+                                pdfAdapter.notifyDataSetChanged();
+                                setListViewHeightBasedOnChildren(pdfListView);
 
-                            if (enableClientCode.equalsIgnoreCase("1")) {
-                                tvClientCodeNote.setVisibility(View.GONE);
-                                editClienCode.setEnabled(false);
-                            }
-                            if (isPrePdfPending()) {
-                                noPrePdfGenerated();
-                                btnRetry.setVisibility(View.VISIBLE);
-                                informationDialog("Pre-esign pdf is not generated, please retry", 2, false);
-                            } else if (!isPrePdfPending() && isPostPdfPending()) {
-                                prePdfGenerate();
-                            } else if (!isPostPdfPending()) {
-                                if (getAppType().equals(CRM) || getAppType().equals(PP)) {
-                                    llPreEsign.setVisibility(View.VISIBLE);
-                                    llEsignConsent.setVisibility(View.VISIBLE);
-                                    getAvailableClientCode();
-                                } else {
-                                    customProgress.setVisibility(View.GONE);
-                                    showAuthenticationModeMsg(false, noMode);
-                                    llParentOTPBio.setVisibility(View.GONE);
-                                    btnSubmit.setVisibility(View.VISIBLE);
+                                if (enableClientCode.equalsIgnoreCase("1")) {
+                                    tvClientCodeNote.setVisibility(View.GONE);
+                                    editClienCode.setEnabled(false);
                                 }
+                                if (isPrePdfPending()) {
+                                    noPrePdfGenerated();
+                                    btnRetry.setVisibility(View.VISIBLE);
+                                    informationDialog(
+                                        "Pre-esign pdf is not generated, please retry", 2, false);
+                                } else if (!isPrePdfPending() && isPostPdfPending()) {
+                                    prePdfGenerate();
+                                } else if (!isPostPdfPending()) {
+                                    if (getAppType().equals(CRM) || getAppType().equals(PP)) {
+                                        llPreEsign.setVisibility(View.VISIBLE);
+                                        llEsignConsent.setVisibility(View.VISIBLE);
+                                        getAvailableClientCode();
+                                    } else {
+                                        customProgress.setVisibility(View.GONE);
+                                        showAuthenticationModeMsg(false, noMode);
+                                        llParentOTPBio.setVisibility(View.GONE);
+                                        btnSubmit.setVisibility(View.VISIBLE);
+                                    }
+                                }
+                            } else {
+                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                                customProgress.setVisibility(View.GONE);
                             }
-                        } else {
-                            commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                            customProgress.setVisibility(View.GONE);
                         }
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                    customProgress.setVisibility(View.GONE);
-                }
+                    @Override public void onSuccess(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    @Override public void onFailure(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                }
+                    @Override public void onFailure(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.showToastMsg(mContext, responseString);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-            });
+                    @Override public void onFailure(int statusCode,
+                        cz.msebera.android.httpclient.Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.showToastMsg(mContext, responseString);
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -802,7 +887,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             Map<String, String> currentStageMap1 = pdfListMap.get(segment1);
             Map<String, String> currentStageMap2 = pdfListMap.get(segment2);
 
-            return !(!isBlank(currentStageMap1.get(PRE_PDF_PATH)) && !isBlank(currentStageMap2.get(PRE_PDF_PATH)));
+            return !(!isBlank(currentStageMap1.get(PRE_PDF_PATH)) && !isBlank(
+                currentStageMap2.get(PRE_PDF_PATH)));
         }
         return true;
     }
@@ -825,7 +911,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             Map<String, String> currentStageMap1 = pdfListMap.get(segment1);
             Map<String, String> currentStageMap2 = pdfListMap.get(segment2);
 
-            return !(!isBlank(currentStageMap1.get(POST_PDF_PATH)) && !isBlank(currentStageMap2.get(POST_PDF_PATH)));
+            return !(!isBlank(currentStageMap1.get(POST_PDF_PATH)) && !isBlank(
+                currentStageMap2.get(POST_PDF_PATH)));
         }
         return true;
     }
@@ -835,7 +922,6 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         llPreEsign.setVisibility(View.GONE);
         llParentOTPBio.setVisibility(View.GONE);
         llOTPThumbLayout.setVisibility(View.GONE);
-
     }
 
     public void prePdfGenerate() {
@@ -843,17 +929,16 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         llPreEsign.setVisibility(View.VISIBLE);
         llParentOTPBio.setVisibility(View.VISIBLE);
         llEsignConsent.setVisibility(View.VISIBLE);
-//        llOTPThumbLayout.setVisibility(View.VISIBLE);
+        //        llOTPThumbLayout.setVisibility(View.VISIBLE);
         if (getAppType().equalsIgnoreCase(DIRECT)) {
-//            ivThumb.setVisibility(View.GONE);//call showHideOTPBioLayout method
+            //            ivThumb.setVisibility(View.GONE);//call showHideOTPBioLayout method
             showHideOTPBioLayout();
             showAuthenticationModeMsg(true, dcMode);
         } else {
             showAuthenticationModeMsg(true, brbaMode);
             showHideOTPBioLayout();
-//            ivThumb.setVisibility(View.VISIBLE);//call showHideOTPBioLayout method
+            //            ivThumb.setVisibility(View.VISIBLE);//call showHideOTPBioLayout method
         }
-
     }
 
     public void postPdfGenerate() {
@@ -864,8 +949,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         // llPostEKYC.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (getEsignService().equalsIgnoreCase(NSDL)) {//Conition for nsdl
             // Check which request we're responding to
@@ -876,7 +960,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                     esignXMLResponse(eSignResponse);
                 }
             } else {
-//                signedResponseDone = false;
+                //                signedResponseDone = false;
             }
         } else {
             if (resultCode == ESIGN_BIOMETRIC_RESULT_OK) {
@@ -910,90 +994,98 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         inputMap.put("Userid", CommonModel.getUserID());
         inputMap.put("ClientCode", "");
 
-
         String flag = AVAILABLECLIENTCODE;
         String category = ESIGN;
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        customProgress.setVisibility(View.VISIBLE);
-                        if (response != null) {
-                            String clientCode = (response.isNull("ClientCode") || response.getString("ClientCode").equals("")) ? "" : response.getString("ClientCode");
-                            String message = (response.isNull("Message") || response.getString("Message").equals("")) ? "" : response.getString("Message");
-                            String isSuccess = (response.isNull("isSuccess") || response.getString("isSuccess").equals("")) ? "" : response.getString("isSuccess");
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            customProgress.setVisibility(View.VISIBLE);
+                            if (response != null) {
+                                String clientCode =
+                                    (response.isNull("ClientCode") || response.getString(
+                                        "ClientCode").equals("")) ? ""
+                                        : response.getString("ClientCode");
+                                String message =
+                                    (response.isNull("Message") || response.getString("Message")
+                                        .equals("")) ? "" : response.getString("Message");
+                                String isSuccess =
+                                    (response.isNull("isSuccess") || response.getString("isSuccess")
+                                        .equals("")) ? "" : response.getString("isSuccess");
 
-                            if (isSuccess.equalsIgnoreCase("n")) {
+                                if (isSuccess.equalsIgnoreCase("n")) {
 
-                                informationDialog(message, 1, false);
-//                                etOTP.setEnabled(true);
-                            } else {
-                                if (getAppType().equals(CRM) || getAppType().equals(PP)) {
-                                    rlClientCode.setVisibility(View.VISIBLE);
-                                    if (!isThisSecondProductFlow()) {
-                                        tvClientCodeNote.setVisibility(View.VISIBLE);
-                                    }
+                                    informationDialog(message, 1, false);
+                                    //                                etOTP.setEnabled(true);
+                                } else {
+                                    if (getAppType().equals(CRM) || getAppType().equals(PP)) {
+                                        rlClientCode.setVisibility(View.VISIBLE);
+                                        if (!isThisSecondProductFlow()) {
+                                            tvClientCodeNote.setVisibility(View.VISIBLE);
+                                        }
                                    /* if (getInterestedInMF()) {
                                         tvClientCodeNote.setVisibility(View.VISIBLE);
                                     } else {
                                         tvClientCodeNote.setVisibility(View.GONE);
                                     }*/
-                                } else {
-                                    rlClientCode.setVisibility(View.GONE);
-                                    tvClientCodeNote.setVisibility(View.GONE);
+                                    } else {
+                                        rlClientCode.setVisibility(View.GONE);
+                                        tvClientCodeNote.setVisibility(View.GONE);
+                                    }
+                                    editClienCode.setText(clientCode);
+                                    showAuthenticationModeMsg(false, noMode);
+                                    llParentOTPBio.setVisibility(View.GONE);
+                                    btnSubmit.setVisibility(View.VISIBLE);
                                 }
-                                editClienCode.setText(clientCode);
-                                showAuthenticationModeMsg(false, noMode);
-                                llParentOTPBio.setVisibility(View.GONE);
-                                btnSubmit.setVisibility(View.VISIBLE);
                             }
+                            customProgress.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-                        customProgress.setVisibility(View.GONE);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        customProgress.setVisibility(View.GONE);
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.showToastMsg(mContext, responseString);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.showToastMsg(mContext, responseString);
 
-                }
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             customProgress.setVisibility(View.GONE);
             MOSLCommon.alertDInternet(mContext);
@@ -1014,30 +1106,36 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                         ivThumb.setVisibility(View.GONE);
                         ivOTP.setVisibility(View.VISIBLE);
                     } else {
-                        if (getOtpVisible().equalsIgnoreCase("1")) {//Showhide OTP layout 1 for visible and 0 for hide
+                        if (getOtpVisible().equalsIgnoreCase(
+                            "1")) {//Showhide OTP layout 1 for visible and 0 for hide
                             ivOTP.setVisibility(View.VISIBLE);
                         } else if (getOtpVisible().equalsIgnoreCase("0")) {
                             ivOTP.setVisibility(View.GONE);
                         }
-                        if (getBioMetricVisible().equalsIgnoreCase("1")) {//Showhide Bio layout 1 for visible and 0 for hide
+                        if (getBioMetricVisible().equalsIgnoreCase(
+                            "1")) {//Showhide Bio layout 1 for visible and 0 for hide
                             ivThumb.setVisibility(View.VISIBLE);
                         } else if (getBioMetricVisible().equalsIgnoreCase("0")) {
                             ivThumb.setVisibility(View.GONE);
                         }
                     }
                 } else if (getAppType().equalsIgnoreCase(CRM)) {
-                    if (getOtpVisibleForBranch().equalsIgnoreCase("1") || getOtpVisibleForBranch().equalsIgnoreCase("")) {//Showhide OTP layout 1 for visible and 0 for hide
+                    if (getOtpVisibleForBranch().equalsIgnoreCase("1")
+                        || getOtpVisibleForBranch().equalsIgnoreCase(
+                        "")) {//Showhide OTP layout 1 for visible and 0 for hide
                         ivOTP.setVisibility(View.VISIBLE);
                     } else if (getOtpVisibleForBranch().equalsIgnoreCase("0")) {
                         ivOTP.setVisibility(View.GONE);
                     }
-                    if (getBioMetricVisibleForBranch().equalsIgnoreCase("1") || getBioMetricVisibleForBranch().equalsIgnoreCase("")) {//Showhide Bio layout 1 for visible and 0 for hide
+                    if (getBioMetricVisibleForBranch().equalsIgnoreCase("1")
+                        || getBioMetricVisibleForBranch().equalsIgnoreCase(
+                        "")) {//Showhide Bio layout 1 for visible and 0 for hide
                         ivThumb.setVisibility(View.VISIBLE);
                     } else if (getBioMetricVisibleForBranch().equalsIgnoreCase("0")) {
                         ivThumb.setVisibility(View.GONE);
                     }
-//                    ivThumb.setVisibility(View.VISIBLE);
-//                    ivOTP.setVisibility(View.VISIBLE);
+                    //                    ivThumb.setVisibility(View.VISIBLE);
+                    //                    ivOTP.setVisibility(View.VISIBLE);
                 }
             }
         } catch (Exception e) {
@@ -1083,9 +1181,10 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
     private void downloadPDF(String resumeLink) {
         try {
-//            openWebUrl(Uri.parse(resumeLink));
-            openWebUrl(Uri.parse(getDownloadPdfUrl() + EkycUtil.encrypt(resumeLink + "|" + getUserID() + "|" + getTokenKey() + "|" + "")),
-                    resumeLink.substring(resumeLink.lastIndexOf("\\") + 1), "PDFDownload");
+            //            openWebUrl(Uri.parse(resumeLink));
+            openWebUrl(Uri.parse(getDownloadPdfUrl() + EkycUtil.encrypt(
+                resumeLink + "|" + getUserID() + "|" + getTokenKey() + "|" + "")),
+                resumeLink.substring(resumeLink.lastIndexOf("\\") + 1), "PDFDownload");
             /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(resumeLink));
             startActivity(browserIntent);*/
           /*  String nameOfFile = URLUtil.guessFileName(String.valueOf(resumeLink), null,
@@ -1099,13 +1198,11 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             DownloadManager manager = (DownloadManager) mContext.getSystemService(Context.DOWNLOAD_SERVICE);
             manager.enqueue(request);*/
 
-
         } catch (Exception ex) {
             ex.printStackTrace();
             commonMsgDialog(mContext, "Some error occurred during download", false, "");
-//            MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", "Some error occurred during download", "OK", true, null);
+            //            MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", "Some error occurred during download", "OK", true, null);
         }
-
     }
 
     public void openWebUrl(Uri url, String fileName, String type) {
@@ -1118,7 +1215,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 String packag = CustomTabsHelper.getPackageNameToUse(getContext());
                 if (packag == null) {
-//                    openWebview(null, url);
+                    //                    openWebview(null, url);
                     Intent intent = new Intent(mContext, WebActivity.class);
                     intent.putExtra(URL_PATH, url.toString());
                     startActivity(intent);
@@ -1135,15 +1232,14 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
         builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
         builder.setCloseButtonIcon(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
+            BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(getActivity(), Uri.parse(url));
     }
 
     private CustomTabsSession getSession() {
         return mClient.newSession(new CustomTabsCallback() {
-            @Override
-            public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            @Override public void onNavigationEvent(int navigationEvent, Bundle extras) {
                 super.onNavigationEvent(navigationEvent, extras);
                 //   getPaymentStatus();
             }
@@ -1162,7 +1258,6 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         inputMap.put("Userid", CommonModel.getUserID());
         inputMap.put("ClientCode", clientCode);
 
-
         String flag = "";
         if (getInterestedInMF()) {
             flag = BRBAOPENACCOUNTMF;
@@ -1171,77 +1266,84 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         }
         String category = ESIGN;
 
-
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            String clientCode = (response.isNull("ClientCode") || response.getString("ClientCode").equals("")) ? "" : response.getString("ClientCode");
-                            String message = (response.isNull("Message") || response.getString("Message").equals("")) ? "" : response.getString("Message");
-                            String isSuccess = (response.isNull("isSuccess") || response.getString("isSuccess").equals("")) ? "" : response.getString("isSuccess");
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String clientCode =
+                                    (response.isNull("ClientCode") || response.getString(
+                                        "ClientCode").equals("")) ? ""
+                                        : response.getString("ClientCode");
+                                String message =
+                                    (response.isNull("Message") || response.getString("Message")
+                                        .equals("")) ? "" : response.getString("Message");
+                                String isSuccess =
+                                    (response.isNull("isSuccess") || response.getString("isSuccess")
+                                        .equals("")) ? "" : response.getString("isSuccess");
 
-                            if (isSuccess.equalsIgnoreCase("n")) {
-                                // failure
-                                informationDialog(message, 1, false);
-                                if (!isBlank(clientCode))
-                                    editClienCode.setText(clientCode);
+                                if (isSuccess.equalsIgnoreCase("n")) {
+                                    // failure
+                                    informationDialog(message, 1, false);
+                                    if (!isBlank(clientCode)) editClienCode.setText(clientCode);
 
-//                                etOTP.setEnabled(true);
-                            } else if (isSuccess.equalsIgnoreCase("y")) {
-                                //success
-                                // editClienCode.setText(clientCode);
-                                informationDialog(message, 2, true);
-                            } else {
-                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                                    //                                etOTP.setEnabled(true);
+                                } else if (isSuccess.equalsIgnoreCase("y")) {
+                                    //success
+                                    // editClienCode.setText(clientCode);
+                                    informationDialog(message, 2, true);
+                                } else {
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
+                                }
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                         customProgress.setVisibility(View.GONE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.showToastMsg(mContext, responseString);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.showToastMsg(mContext, responseString);
 
-                }
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -1262,76 +1364,90 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            String clientCode = (response.isNull("ClientCode") || response.getString("ClientCode").equals("")) ? "" : response.getString("ClientCode");
-                            String message = (response.isNull("Message") || response.getString("Message").equals("")) ? "" : response.getString("Message");
-                            String isSuccess = (response.isNull("isSuccess") || response.getString("isSuccess").equals("")) ? "" : response.getString("isSuccess");
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String clientCode =
+                                    (response.isNull("ClientCode") || response.getString(
+                                        "ClientCode").equals("")) ? ""
+                                        : response.getString("ClientCode");
+                                String message =
+                                    (response.isNull("Message") || response.getString("Message")
+                                        .equals("")) ? "" : response.getString("Message");
+                                String isSuccess =
+                                    (response.isNull("isSuccess") || response.getString("isSuccess")
+                                        .equals("")) ? "" : response.getString("isSuccess");
 
-                            if (isSuccess.equalsIgnoreCase("n")) {
-                                informationDialog(message, 1, false);
-                            } else if (isSuccess.equalsIgnoreCase("y")) {
-                                if (getInterestedInMF() && !getIsCVLVerified() && !getIsAadharVerified()) {
-                                    informationDialog(MF_NOCVL_NOAADHAR_CONGRATULATION_MSG, 2, true);
+                                if (isSuccess.equalsIgnoreCase("n")) {
+                                    informationDialog(message, 1, false);
+                                } else if (isSuccess.equalsIgnoreCase("y")) {
+                                    if (getInterestedInMF()
+                                        && !getIsCVLVerified()
+                                        && !getIsAadharVerified()) {
+                                        informationDialog(MF_NOCVL_NOAADHAR_CONGRATULATION_MSG, 2,
+                                            true);
+                                    } else {
+                                        Intent intent1 = new Intent(mContext,
+                                            DirectResumeApplicationActivity.class);
+                                        startActivity(intent1);
+                                        getActivity().finish();
+                                        openEmendate(Uri.parse(
+                                            "https://www.motilaloswal.com/open-an-account/congratulations.html"));
+                                        //informationDialog(message, 2, true);
+                                    }
                                 } else {
-                                    Intent intent1 = new Intent(mContext, DirectResumeApplicationActivity.class);
-                                    startActivity(intent1);
-                                    getActivity().finish();
-                                    openEmendate(Uri.parse("https://www.motilaloswal.com/open-an-account/congratulations.html"));
-                                    //informationDialog(message, 2, true);
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
                                 }
-
-                            } else {
-                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
                             }
-                        }
 
-                        customProgress.setVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        customProgress.setVisibility(View.GONE);
+                            customProgress.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
+                        }
                     }
 
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.showToastMsg(mContext, responseString);
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.showToastMsg(mContext, responseString);
+                    }
 
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             customProgress.setVisibility(View.GONE);
             MOSLCommon.alertDInternet(mContext);
@@ -1344,7 +1460,6 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
         mode = OTP;
         deviceOROTPValue = etOTP.getText().toString();
-
 
         inputMap.put("Userid", CommonModel.getUserID());
         inputMap.put("Mode", mode);
@@ -1376,93 +1491,104 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         } else {
 
             flag = PERFORMESIGN;
-
         }
         String category = ESIGN;
 
-
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            esignErrorMsg = (response.isNull("ErrorMessage") || response.getString("ErrorMessage").equals("")) ? "" : response.getString("ErrorMessage");
-                            String errorCode = (response.isNull("ErrorCode") || response.getString("ErrorCode").equals("")) ? "" : response.getString("ErrorCode");
-                            String returnStatus = (response.isNull("ReturnStatus") || response.getString("ReturnStatus").equals("")) ? "" : response.getString("ReturnStatus");
-                            String eSignPDFURL = (response.isNull("eSignPDFURL") || response.getString("eSignPDFURL").equals("")) ? "" : response.getString("eSignPDFURL");
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                esignErrorMsg =
+                                    (response.isNull("ErrorMessage") || response.getString(
+                                        "ErrorMessage").equals("")) ? ""
+                                        : response.getString("ErrorMessage");
+                                String errorCode =
+                                    (response.isNull("ErrorCode") || response.getString("ErrorCode")
+                                        .equals("")) ? "" : response.getString("ErrorCode");
+                                String returnStatus =
+                                    (response.isNull("ReturnStatus") || response.getString(
+                                        "ReturnStatus").equals("")) ? ""
+                                        : response.getString("ReturnStatus");
+                                String eSignPDFURL =
+                                    (response.isNull("eSignPDFURL") || response.getString(
+                                        "eSignPDFURL").equals("")) ? ""
+                                        : response.getString("eSignPDFURL");
 
-                            pdfAdapter.setPostPdf(eSignPDFURL);
-                            setListViewHeightBasedOnChildren(pdfListView);
+                                pdfAdapter.setPostPdf(eSignPDFURL);
+                                setListViewHeightBasedOnChildren(pdfListView);
 
-                            if (returnStatus.equalsIgnoreCase("success")) {
+                                if (returnStatus.equalsIgnoreCase("success")) {
 
-                                commonMsgDialog(mContext, ESIGN_SUCCESSFUL, false, "");
+                                    commonMsgDialog(mContext, ESIGN_SUCCESSFUL, false, "");
 
-                                //llPostEKYC.setVisibility(View.VISIBLE);
-                                llOTPThumbLayout.setVisibility(View.GONE);
-                                //eSignPDFURL = eSignPDFURL.replaceAll(" ", "%20");
-                                if (getAppType().equals(CRM) || getAppType().equals(PP)) {
-                                    getAvailableClientCode();
+                                    //llPostEKYC.setVisibility(View.VISIBLE);
+                                    llOTPThumbLayout.setVisibility(View.GONE);
+                                    //eSignPDFURL = eSignPDFURL.replaceAll(" ", "%20");
+                                    if (getAppType().equals(CRM) || getAppType().equals(PP)) {
+                                        getAvailableClientCode();
+                                    } else {
+                                        showAuthenticationModeMsg(false, noMode);
+                                        llParentOTPBio.setVisibility(View.GONE);
+                                        btnSubmit.setVisibility(View.VISIBLE);
+                                    }
+                                } else if (returnStatus.equalsIgnoreCase("")) {
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
                                 } else {
-                                    showAuthenticationModeMsg(false, noMode);
-                                    llParentOTPBio.setVisibility(View.GONE);
-                                    btnSubmit.setVisibility(View.VISIBLE);
+                                    informationDialog(esignErrorMsg, 1, false);
+                                    //llPostEKYC.setVisibility(View.GONE);
                                 }
-                            } else if (returnStatus.equalsIgnoreCase("")) {
-                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                            } else {
-                                informationDialog(esignErrorMsg, 1, false);
-                                //llPostEKYC.setVisibility(View.GONE);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
                         customProgress.setVisibility(View.GONE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
 
-                    customProgress.setVisibility(View.GONE);
-                    //MOSLCommon.showToastMsg(mContext, responseString);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.alertDialog(mContext, 0, "Oops", SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                }
+                        customProgress.setVisibility(View.GONE);
+                        //MOSLCommon.showToastMsg(mContext, responseString);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.alertDialog(mContext, 0, "Oops", SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    //MOSLCommon.showToastMsg(mContext, responseString);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        //MOSLCommon.showToastMsg(mContext, responseString);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -1479,94 +1605,126 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            String errorCode = (response.isNull("ErrorCode") || response.getString("ErrorCode").equals("")) ? "" : response.getString("ErrorCode");
-                            String errorMessage = (response.isNull("ErrorMessage") || response.getString("ErrorMessage").equals("")) ? "" : response.getString("ErrorMessage");
-                            String returnStatus = (response.isNull("ReturnStatus") || response.getString("ReturnStatus").equals("")) ? "" : response.getString("ReturnStatus");
-                            String eSignPDFURL = (response.isNull("eSignPDFURL") || response.getString("eSignPDFURL").equals("")) ? "" : response.getString("eSignPDFURL");
-                            String xmlResponse = (response.isNull("Response") || response.getString("Response").equals("")) ? "" : response.getString("Response");
-                            requestId = (response.isNull("RequestId") || response.getString("RequestId").equals("")) ? "" : response.getString("RequestId");
-//                            xmlResponse = xmlResponse.replace("//", "");
-                            if (isBlank(returnStatus) || returnStatus.equalsIgnoreCase("")) {
-                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                            } else if (returnStatus.equalsIgnoreCase("1")) {
-                                if (isBlank(xmlResponse)) {
-                                    commonMsgDialog(mContext, DATA_IS_MISSING, false, "");
-                                } else {
-                                    try {
-                                        Intent appStartIntent = new Intent(getContext(), NsdlEsignActivity.class);
-                                        appStartIntent.setAction(ACTION_ESIGNRESPONSE);
-                                        appStartIntent.putExtra("msg", xmlResponse); // msg contains esign request xml from ASP.
-                                        appStartIntent.putExtra("env", WebServiceHandler.UID_ENV_NSDL); //Possible values PREPROD or PROD (case sensitive).
-                                        appStartIntent.putExtra("returnUrl", "com.mosl.mobile.ekyc.ui"); // your package name where esign response failure/success will be sent.
-                                        if (mode == 3) {
-                                            appStartIntent.putExtra("licenseKey", MOSLConstants.KEY);
-                                        } // your package name where esign response failure/success will be sent.
-                                        startActivityForResult(appStartIntent, REQUEST_CODE);
-                                    } catch (ActivityNotFoundException e) {
-                                        e.printStackTrace();
-                                        CustomDialog dialogMsg = new CustomDialog(mContext, getResources().getString(R.string.download_nsdl_apk), true, false, false, "", "Download", "Cancel", new CustomDialog.CustomDialogListener() {
-                                            @Override
-                                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                                if (action == MOSLCommon.Action.OK) {
-                                                    Intent intent = new Intent(mContext, WebActivityPDFDownload.class);
-                                                    intent.putExtra(URL_PATH, " https://www.motilaloswal.com/open-an-account/NSDL_eGov_ESP.apk");
-                                                    intent.putExtra(FILE_NAME, "NSDL_eGov_ESP");
-                                                    startActivity(intent);
-                                                }
-                                            }
-                                        });
-                                        dialogMsg.show();
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String errorCode =
+                                    (response.isNull("ErrorCode") || response.getString("ErrorCode")
+                                        .equals("")) ? "" : response.getString("ErrorCode");
+                                String errorMessage =
+                                    (response.isNull("ErrorMessage") || response.getString(
+                                        "ErrorMessage").equals("")) ? ""
+                                        : response.getString("ErrorMessage");
+                                String returnStatus =
+                                    (response.isNull("ReturnStatus") || response.getString(
+                                        "ReturnStatus").equals("")) ? ""
+                                        : response.getString("ReturnStatus");
+                                String eSignPDFURL =
+                                    (response.isNull("eSignPDFURL") || response.getString(
+                                        "eSignPDFURL").equals("")) ? ""
+                                        : response.getString("eSignPDFURL");
+                                String xmlResponse =
+                                    (response.isNull("Response") || response.getString("Response")
+                                        .equals("")) ? "" : response.getString("Response");
+                                requestId =
+                                    (response.isNull("RequestId") || response.getString("RequestId")
+                                        .equals("")) ? "" : response.getString("RequestId");
+                                //                            xmlResponse = xmlResponse.replace("//", "");
+                                if (isBlank(returnStatus) || returnStatus.equalsIgnoreCase("")) {
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
+                                } else if (returnStatus.equalsIgnoreCase("1")) {
+                                    if (isBlank(xmlResponse)) {
+                                        commonMsgDialog(mContext, DATA_IS_MISSING, false, "");
+                                    } else {
+                                        try {
+                                            updateAndroidSecurityProvider();
+                                            Intent appStartIntent =
+                                                new Intent(getContext(), NsdlEsignActivity.class);
+                                            appStartIntent.setAction(ACTION_ESIGNRESPONSE);
+                                            appStartIntent.putExtra("msg",
+                                                xmlResponse); // msg contains esign request xml from ASP.
+                                            appStartIntent.putExtra("env",
+                                                WebServiceHandler.UID_ENV_NSDL); //Possible values PREPROD or PROD (case sensitive).
+                                            appStartIntent.putExtra("returnUrl",
+                                                "com.mosl.mobile.ekyc.ui"); // your package name where esign response failure/success will be sent.
+                                            if (mode == 3) {
+                                                appStartIntent.putExtra("licenseKey",
+                                                    MOSLConstants.KEY);
+                                            } // your package name where esign response failure/success will be sent.
+                                            startActivityForResult(appStartIntent, REQUEST_CODE);
+                                        } catch (ActivityNotFoundException e) {
+                                            e.printStackTrace();
+                                            CustomDialog dialogMsg = new CustomDialog(mContext,
+                                                getResources().getString(
+                                                    R.string.download_nsdl_apk), true, false, false,
+                                                "", "Download", "Cancel",
+                                                new CustomDialog.CustomDialogListener() {
+                                                    @Override public void dialogAction(
+                                                        MOSLCommon.Action action, Object... data) {
+                                                        if (action == MOSLCommon.Action.OK) {
+                                                            Intent intent = new Intent(mContext,
+                                                                WebActivityPDFDownload.class);
+                                                            intent.putExtra(URL_PATH,
+                                                                " https://www.motilaloswal.com/open-an-account/NSDL_eGov_ESP.apk");
+                                                            intent.putExtra(FILE_NAME,
+                                                                "NSDL_eGov_ESP");
+                                                            startActivity(intent);
+                                                        }
+                                                    }
+                                                });
+                                            dialogMsg.show();
+                                        }
                                     }
+                                } else {
+                                    commonMsgDialog(mContext, errorMessage, false, "");
                                 }
-                            } else {
-                                commonMsgDialog(mContext, errorMessage, false, "");
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                         customProgress.setVisibility(View.GONE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -1584,75 +1742,87 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         String category = ESIGN;
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            String returnStatus = (response.isNull("ReturnStatus") || response.getString("ReturnStatus").equals("")) ? "" : response.getString("ReturnStatus");
-                            String eSignPDFURL = (response.isNull("eSignPDFURL") || response.getString("eSignPDFURL").equals("")) ? "" : response.getString("eSignPDFURL");
-                            esignErrorMsg = (response.isNull("Message") || response.getString("Message").equals("")) ? "" : response.getString("Message");
-                            pdfAdapter.setPostPdf(eSignPDFURL);
-                            setListViewHeightBasedOnChildren(pdfListView);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String returnStatus =
+                                    (response.isNull("ReturnStatus") || response.getString(
+                                        "ReturnStatus").equals("")) ? ""
+                                        : response.getString("ReturnStatus");
+                                String eSignPDFURL =
+                                    (response.isNull("eSignPDFURL") || response.getString(
+                                        "eSignPDFURL").equals("")) ? ""
+                                        : response.getString("eSignPDFURL");
+                                esignErrorMsg =
+                                    (response.isNull("Message") || response.getString("Message")
+                                        .equals("")) ? "" : response.getString("Message");
+                                pdfAdapter.setPostPdf(eSignPDFURL);
+                                setListViewHeightBasedOnChildren(pdfListView);
 
-                            if (returnStatus.equalsIgnoreCase("1")) {
-                                commonMsgDialog(mContext, ESIGN_SUCCESSFUL, false, "");
-                                llOTPThumbLayout.setVisibility(View.GONE);
+                                if (returnStatus.equalsIgnoreCase("1")) {
+                                    commonMsgDialog(mContext, ESIGN_SUCCESSFUL, false, "");
+                                    llOTPThumbLayout.setVisibility(View.GONE);
 
-                                if (getAppType().equals(CRM) || getAppType().equals(PP)) {
-                                    getAvailableClientCode();
+                                    if (getAppType().equals(CRM) || getAppType().equals(PP)) {
+                                        getAvailableClientCode();
+                                    } else {
+                                        showAuthenticationModeMsg(false, noMode);
+                                        llParentOTPBio.setVisibility(View.GONE);
+                                        btnSubmit.setVisibility(View.VISIBLE);
+                                    }
+                                } else if (returnStatus.equalsIgnoreCase("")) {
+                                    customProgress.setVisibility(View.GONE);
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
                                 } else {
-                                    showAuthenticationModeMsg(false, noMode);
-                                    llParentOTPBio.setVisibility(View.GONE);
-                                    btnSubmit.setVisibility(View.VISIBLE);
+                                    informationDialog(esignErrorMsg, 1, false);
                                 }
-                            } else if (returnStatus.equalsIgnoreCase("")) {
-                                customProgress.setVisibility(View.GONE);
-                                commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                            } else {
-                                informationDialog(esignErrorMsg, 1, false);
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        customProgress.setVisibility(View.GONE);
+                        //                    customProgress.setVisibility(View.GONE);
                     }
-//                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -1665,7 +1835,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
 
         dialog.getWindow().setWindowAnimations(R.style.animationName);
         dialog.setContentView(R.layout.layout_dialog_yes_no_option);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         TextView tvMsg = (TextView) dialog.findViewById(R.id.tvMsg);
         Button btnYes = (Button) dialog.findViewById(R.id.btnYes);
@@ -1675,8 +1846,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         tvMsg.setText(msg);
 
         ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 customProgress.setVisibility(View.GONE);
                 llOTPThumbLayout.setVisibility(View.GONE);
                 ivOTP.setImageResource(R.drawable.ic_otp_unselect);
@@ -1686,8 +1856,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         });
 
         btnNO.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 dialog.dismiss();
                 customProgress.setVisibility(View.GONE);
                 llOTPThumbLayout.setVisibility(View.GONE);
@@ -1696,11 +1865,10 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             }
         });
         btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 dialog.dismiss();
                 customProgress.setVisibility(View.GONE);
-//                generateOTP();
+                //                generateOTP();
 
             }
         });
@@ -1713,36 +1881,47 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         inputMap.put("Userid", CommonModel.getUserID());
         inputMap.put("AadhaarNumber", CommonModel.getAadharNo());
         inputMap.put("OTPValue", "");
-//        inputMap.put("UniqueID", getDeviceID(mContext, mContext.getContentResolver()));
-//
-//        String flag = ESIGNOTP;
-//        String category = ESIGN;
+        //        inputMap.put("UniqueID", getDeviceID(mContext, mContext.getContentResolver()));
+        //
+        //        String flag = ESIGNOTP;
+        //        String category = ESIGN;
         String flag = GENRATEAADHAROTP;
         String category = PANADDHARDETAILS;
 
-
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    try {
-                        if (response != null) {
-                            String kuaResponseStatus = (response.isNull("KuaResponseStatus") || response.getString("KuaResponseStatus").equals("")) ? "" : response.getString("KuaResponseStatus");
-                            String errorMsg = (response.isNull("ErrorMessage") || response.getString("ErrorMessage").equals("")) ? "" : response.getString("ErrorMessage");
-                            String errorCode = (response.isNull("ErrorCode") || response.getString("ErrorCode").equals("")) ? "" : response.getString("ErrorCode");
-                            String transactionIdAPI = (response.isNull("TransactionID") || response.getString("TransactionID").equals("")) ? "" : response.getString("TransactionID");
-//                            String errorMsg = response.getString("ErrorMessage");
-//                            String errorCode = response.getString("ErrorCode");
-//                            String returnStatus = response.getString("ReturnStatus");
-                            if (kuaResponseStatus.equalsIgnoreCase("true")) {
-                                transactionId = transactionIdAPI;
-                                informationDialog(OTP_SEND_TO_REGISTERED_NO_MSG, 1, false);
-                            } else {
-                                informationDialog(errorMsg, 2, false);
-//                                llPostEKYC.setVisibility(View.VISIBLE);
-                            }
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String kuaResponseStatus =
+                                    (response.isNull("KuaResponseStatus") || response.getString(
+                                        "KuaResponseStatus").equals("")) ? ""
+                                        : response.getString("KuaResponseStatus");
+                                String errorMsg =
+                                    (response.isNull("ErrorMessage") || response.getString(
+                                        "ErrorMessage").equals("")) ? ""
+                                        : response.getString("ErrorMessage");
+                                String errorCode =
+                                    (response.isNull("ErrorCode") || response.getString("ErrorCode")
+                                        .equals("")) ? "" : response.getString("ErrorCode");
+                                String transactionIdAPI =
+                                    (response.isNull("TransactionID") || response.getString(
+                                        "TransactionID").equals("")) ? ""
+                                        : response.getString("TransactionID");
+                                //                            String errorMsg = response.getString("ErrorMessage");
+                                //                            String errorCode = response.getString("ErrorCode");
+                                //                            String returnStatus = response.getString("ReturnStatus");
+                                if (kuaResponseStatus.equalsIgnoreCase("true")) {
+                                    transactionId = transactionIdAPI;
+                                    informationDialog(OTP_SEND_TO_REGISTERED_NO_MSG, 1, false);
+                                } else {
+                                    informationDialog(errorMsg, 2, false);
+                                    //                                llPostEKYC.setVisibility(View.VISIBLE);
+                                }
                             /*if (returnStatus.equalsIgnoreCase("success")) {
                                 informationDialog(OTP_SEND_TO_REGISTERED_NO_MSG, 1, false);
 //                                etOTP.setEnabled(true);
@@ -1750,48 +1929,50 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                 informationDialog(errorMsg, 2, false);
 //                                llPostEKYC.setVisibility(View.VISIBLE);
                             }*/
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                         customProgress.setVisibility(View.GONE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                    MOSLCommon.showToastMsg(mContext, responseString);
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                        //                    MOSLCommon.showToastMsg(mContext, responseString);
 
-                }
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
         }
@@ -1804,7 +1985,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setWindowAnimations(R.style.animationName);
         dialog.setContentView(R.layout.layout_dialog_info);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         TextView tvMsg = (TextView) dialog.findViewById(R.id.tvMsg);
         Button btnOK = (Button) dialog.findViewById(R.id.btnOK);
@@ -1816,16 +1998,14 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             ivClose.setVisibility(View.GONE);
         }
         ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 customProgress.setVisibility(View.GONE);
                 dialog.dismiss();
             }
         });
 
         btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
 
                 if (status == 1) {
                     dialog.dismiss();
@@ -1841,16 +2021,19 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                 }
                 if (exitApp) {
                     dialog.dismiss();
-                    if (getAppType().equals(CRM) || (getAppType().equals(PP) && !isDirectProspect())) {
+                    if (getAppType().equals(CRM) || (getAppType().equals(PP)
+                        && !isDirectProspect())) {
                         Intent intent = new Intent(mContext, PostLoginActivity.class);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
-                        Intent intent1 = new Intent(mContext, DirectResumeApplicationActivity.class);
+                        Intent intent1 =
+                            new Intent(mContext, DirectResumeApplicationActivity.class);
                         startActivity(intent1);
                         getActivity().finish();
                         if (!isOffline() && !isDirectProspect()) {
-                            Intent intent = mContext.getPackageManager().getLaunchIntentForPackage("com.mosl.mobile");
+                            Intent intent = mContext.getPackageManager()
+                                .getLaunchIntentForPackage("com.mosl.mobile");
                             if (intent != null) {
                                 // We found the activity now start the activity
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1858,13 +2041,13 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                             } else {
                                 // Bring user to the market or let them choose an app?
                                 Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-                                i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.mosl.mobile"));
+                                i.setData(Uri.parse(
+                                    "https://play.google.com/store/apps/details?id=com.mosl.mobile"));
                                 startActivity(i);
                             }
                         }
                     }
                 }
-
             }
         });
 
@@ -1908,6 +2091,441 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         }
     }
 
+    public void disableEnableField() {
+        if (isThisSecondProductFlow()
+            || isOfflineCliencodeGenrated()
+            || getUserType().equalsIgnoreCase(IFAUSER)) {
+            tvClientCodeNote.setVisibility(View.GONE);
+            editClienCode.setEnabled(false);
+        } else {
+            editClienCode.setEnabled(true);
+        }
+    }
+
+    private void fingerIrisDialog(final String type) {
+        final Dialog dialog = new Dialog(mContext);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_emendate);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCanceledOnTouchOutside(false);
+
+        Button btnOk = (Button) dialog.findViewById(R.id.btnOk);
+        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
+        final RadioButton rbFingerPrint = (RadioButton) dialog.findViewById(R.id.rbFingerPrint);
+        final RadioButton rbIris = (RadioButton) dialog.findViewById(R.id.rbIris);
+
+        if (type.equalsIgnoreCase(ESIGN)) {
+            rbIris.setText("Iris");
+        } else if (type.equalsIgnoreCase("Emendate")) rbIris.setText("OTP");
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (type.equalsIgnoreCase(ESIGN)) {
+                    if (rbFingerPrint.isChecked()) {
+                        genrateEsignXML(NSDL_FINGER);
+                    } else if (rbIris.isChecked()) genrateEsignXML(NSDL_IRIS);
+                } else if (type.equalsIgnoreCase("Emendate")) {
+                    if (rbFingerPrint.isChecked()) {
+                        getBankDetails(FINGER);
+                    } else if (rbIris.isChecked()) getBankDetails(OTP);
+                }
+                //                    openEmendate(emendateURL);
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    private void getBankDetails(final String mode) {
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map inputMap = new HashMap();
+            inputMap.put("UserID", getUserID());
+            inputMap.put("SchemeType", "");
+
+            String flag = FILLBANKDETAILS;
+            String category = BANKDETAILS;
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+                            try {
+                                if (response.has("BANKUSERDATA")) {
+                                    JSONArray jsonArray = response.getJSONArray("BANKUSERDATA");
+                                    if (jsonArray.length() != 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            bankName =
+                                                (object.isNull("BANK_NAME") || object.getString(
+                                                    "BANK_NAME").equals("")) ? ""
+                                                    : object.getString("BANK_NAME");
+                                            bankIfscCode = (object.isNull("BANK_IFSC_CODE")
+                                                || object.getString("BANK_IFSC_CODE").equals(""))
+                                                ? "" : object.getString("BANK_IFSC_CODE");
+                                            bankAccNo =
+                                                (object.isNull("BANK_ACC_NO") || object.getString(
+                                                    "BANK_ACC_NO").equals("")) ? ""
+                                                    : object.getString("BANK_ACC_NO");
+                                            bankAcType =
+                                                (object.isNull("BANK_AC_TYPE") || object.getString(
+                                                    "BANK_AC_TYPE").equals("")) ? ""
+                                                    : object.getString("BANK_AC_TYPE");
+                                        }
+                                    }
+                                }
+                                if (response.has("BANKUSERDATA1")) {
+                                    JSONArray jsonArray = response.getJSONArray("BANKUSERDATA1");
+                                    if (jsonArray.length() != 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            corresMobileNo = (object.isNull("CORRES_MOBILE_NO")
+                                                || object.getString("CORRES_MOBILE_NO").equals(""))
+                                                ? "" : object.getString("CORRES_MOBILE_NO");
+                                            corresEmailId = (object.isNull("CORRES_EMAIL_ID")
+                                                || object.getString("CORRES_EMAIL_ID").equals(""))
+                                                ? "" : object.getString("CORRES_EMAIL_ID");
+                                            uid = (object.isNull("UID") || object.getString("UID")
+                                                .equals("")) ? "" : object.getString("UID");
+                                            fullName =
+                                                (object.isNull("FULLNAME") || object.getString(
+                                                    "FULLNAME").equals("")) ? ""
+                                                    : object.getString("FULLNAME");
+                                        }
+                                    }
+                                }
+                                getEmendateRequest(mode);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void getEmendateRequest(final String mode) {
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map inputMap = new HashMap();
+            inputMap.put("CustEmailMobile", corresMobileNo);
+            inputMap.put("mandate_creation_date_time", "");
+            inputMap.put("BankIfscCode", bankIfscCode);
+            inputMap.put("BankName", bankName);
+            inputMap.put("aadhaar", uid);
+            inputMap.put("BankAccType", bankAcType);
+            inputMap.put("BankAccNo", bankAccNo);
+            inputMap.put("instrument_type", "debit");
+            inputMap.put("customer_name", fullName);
+            inputMap.put("maximum_amount", "100000");
+            inputMap.put("first_collection_date", "");
+            inputMap.put("final_collection_date", "");
+            inputMap.put("_USERID", getUserID());
+            inputMap.put("customer_mobile", corresMobileNo);
+            inputMap.put("customer_email", corresEmailId);
+            inputMap.put("application", "Mobile");
+
+            String flag = BANK_EMANDATE;
+            String category = BANKDETAILS;
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+                            try {
+                                String id =
+                                    (response.isNull("id") || response.getString("id").equals(""))
+                                        ? "" : response.getString("id");
+                                String enachType =
+                                    (response.isNull("enach_type") || response.getString(
+                                        "enach_type").equals("")) ? ""
+                                        : response.getString("enach_type");
+                                String status =
+                                    (response.isNull("status") || response.getString("status")
+                                        .equals("")) ? "" : response.getString("status");
+                                mandateCreationDateTime =
+                                    (response.isNull("mandate_creation_date_time")
+                                        || response.getString("mandate_creation_date_time")
+                                        .equals("")) ? ""
+                                        : response.getString("mandate_creation_date_time");
+                                String CustEmailMobile =
+                                    (response.isNull("CustEmailMobile") || response.getString(
+                                        "CustEmailMobile").equals("")) ? ""
+                                        : response.getString("CustEmailMobile");
+                                String customerEmail =
+                                    (response.isNull("customer_email") || response.getString(
+                                        "customer_email").equals("")) ? ""
+                                        : response.getString("customer_email");
+                                String aadhaar =
+                                    (response.isNull("aadhaar") || response.getString("aadhaar")
+                                        .equals("")) ? "" : response.getString("aadhaar");
+                                String instrumentType =
+                                    (response.isNull("instrument_type") || response.getString(
+                                        "instrument_type").equals("")) ? ""
+                                        : response.getString("instrument_type");
+                                String customerName =
+                                    (response.isNull("customer_name") || response.getString(
+                                        "customer_name").equals("")) ? ""
+                                        : response.getString("customer_name");
+                                firstCollectionDate =
+                                    (response.isNull("first_collection_date") || response.getString(
+                                        "first_collection_date").equals("")) ? ""
+                                        : response.getString("first_collection_date");
+                                finalCollectionDate =
+                                    (response.isNull("final_collection_date") || response.getString(
+                                        "final_collection_date").equals("")) ? ""
+                                        : response.getString("final_collection_date");
+                                String logo = (response.isNull("logo") || response.getString("logo")
+                                    .equals("")) ? "" : response.getString("logo");
+
+                                digioDocId = id;
+                                emendateMode = mode;
+                                if (!isBlank(logo)) {
+                                    callEmendate(mode, logo, id, customerEmail, corresMobileNo);
+                                }
+                                customProgress.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void emendateResponse() {
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map inputMap = new HashMap();
+            inputMap.put("_USERID", getUserID());
+            inputMap.put("CustEmailMobile", corresMobileNo);
+            inputMap.put("mandate_creation_date_time", mandateCreationDateTime);
+            inputMap.put("BankIfscCode", bankIfscCode);
+            inputMap.put("BankName", bankName);
+            inputMap.put("aadhaar", uid);
+            inputMap.put("BankAccType", bankAcType);
+            inputMap.put("BankAccNo", bankAccNo);
+            inputMap.put("instrument_type", "debit");
+            inputMap.put("customer_name", fullName);
+            inputMap.put("maximum_amount", "100000");
+            inputMap.put("first_collection_date", firstCollectionDate);
+            inputMap.put("final_collection_date", finalCollectionDate);
+            inputMap.put("txn_id", txnId);
+            inputMap.put("customer_mobile", corresMobileNo);
+            inputMap.put("customer_email", corresEmailId);
+            inputMap.put("digio_doc_id", digioDocId);
+            inputMap.put("message", digiomessage);
+            inputMap.put("error_code", errorCode);
+            inputMap.put("last_state_screen", lastStateScreen);
+            inputMap.put("last_state_code", lastStateCode);
+            inputMap.put("last_state_message", lastStateMessage);
+            inputMap.put("eMandateAuthMode", emendateMode);
+            inputMap.put("application", "Mobile");
+
+            String flag = BANK_EMANDATE_RESPONSE;
+            String category = BANKDETAILS;
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+                            try {
+                                if (response.has("EMANDATERES")) {
+                                    JSONArray jsonArray = response.getJSONArray("EMANDATERES");
+                                    if (jsonArray.length() != 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            String emandate =
+                                                (object.isNull("eMANDATE") || object.getString(
+                                                    "eMANDATE").equals("")) ? ""
+                                                    : object.getString("eMANDATE");
+                                            String eMandateMessage =
+                                                (object.isNull("eMandateMessage")
+                                                    || object.getString("eMandateMessage")
+                                                    .equals("")) ? ""
+                                                    : object.getString("eMandateMessage");
+
+                                            if (!isBlank(eMandateMessage)) {
+                                                commonMsgDialog(mContext, eMandateMessage, false,
+                                                    "");
+                                            }
+                                            if (!isBlank(emandate) && emandate.equals("1")) {
+                                                tvEmendate.setEnabled(false);
+                                            } else {
+                                                tvEmendate.setEnabled(true);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                customProgress.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void callEmendate(String mode, String logo, String id, String emailId, String mobile) {
+        Digio digio = new Digio();
+        DigioConfig digioConfig = new DigioConfig();
+        //        digioConfig.setLogo(" www.your-website/logo-image "); //Your company logo
+        digioConfig.setLogo(logo); //Your company logo
+        digioConfig.setEnvironment(UID_ENV.equals("P") ? DigioEnvironment.PRODUCTION
+            : DigioEnvironment.PRODUCTION); //Stage is sandbox
+        digioConfig.setServiceMode(mode.equalsIgnoreCase(FINGER) ? DigioServiceMode.FP
+            : DigioServiceMode.OTP); //FP is fingerprint
+        try {
+            digio.init((EkycMainActivity) mContext, digioConfig);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            digio.esign(id, mobile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDigioData(String txnId, String digiomessage, String errorCode,
+        String lastStateScreen, String lastStateCode, String lastStateMessage) {
+        this.txnId = txnId;
+        this.digiomessage = digiomessage;
+        this.errorCode = errorCode;
+        this.lastStateScreen = lastStateScreen;
+        this.lastStateCode = lastStateCode;
+        this.lastStateMessage = lastStateMessage;
+        emendateResponse();
+    }
+
+    private void updateAndroidSecurityProvider() {
+        try {
+            ProviderInstaller.installIfNeeded(mContext);
+        } catch (GooglePlayServicesRepairableException e) {
+            GooglePlayServicesUtil.getErrorDialog(e.getConnectionStatusCode(), getActivity(), 0);
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Log.e("SecurityException", "Google Play Services not available.");
+        }
+    }
+
     private class PdfAdapter extends BaseAdapter {
         private final List<PdfModel> data;
         private Context context;
@@ -1930,26 +2548,23 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             notifyDataSetChanged();
         }
 
-        @Override
-        public int getCount() {
+        @Override public int getCount() {
             return data.size();
         }
 
-        @Override
-        public PdfModel getItem(int position) {
+        @Override public PdfModel getItem(int position) {
             return data.get(position);
         }
 
-        @Override
-        public long getItemId(int position) {
+        @Override public long getItemId(int position) {
             return 0;
         }
 
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
+        @Override public View getView(int position, View view, ViewGroup parent) {
             ViewHolder holder = new ViewHolder();
             final PdfModel model = getItem(position);
-            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater vi =
+                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             if (view == null) {
                 view = vi.inflate(R.layout.list_item_esing_pdf, null);
@@ -1971,12 +2586,14 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             if (isBlank(model.getPrePdfPath())) {
                 holder.prePdfLayout.setVisibility(View.GONE);
             } else {
-                if (model.getProduct().equalsIgnoreCase(EQUITY) && isEquitySegmentExist())
+                if (model.getProduct().equalsIgnoreCase(EQUITY) && isEquitySegmentExist()) {
                     holder.prePdfLayout.setVisibility(View.GONE);
-                else if (model.getProduct().equalsIgnoreCase(COMMODITY) && isCommoditySegmentExist())
+                } else if (model.getProduct().equalsIgnoreCase(COMMODITY)
+                    && isCommoditySegmentExist()) {
                     holder.prePdfLayout.setVisibility(View.GONE);
-                else
+                } else {
                     holder.prePdfLayout.setVisibility(View.VISIBLE);
+                }
             }
             if (isBlank(model.getPostPdfPath())) {
                 holder.postPdfLayout.setVisibility(View.GONE);
@@ -1985,8 +2602,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             }
 
             holder.txtClickHerePre.setOnClickListener(new View.OnClickListener() {
-                                                          @Override
-                                                          public void onClick(View v) {
+                                                          @Override public void onClick(View v) {
                                                               /*MOSLCommon.alertDialog(mContext, 0, MOSLConstants.MOTILAL_OSWAL,
                                                                       "Do you want to download pre-esign kyc form", "YES", "NO", false, new MOSLCommon.DialogListener() {
                                                                           @Override
@@ -2026,22 +2642,25 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                                                   }
                                                               });
                                                               prePdfCd.show();*/
-                                                              if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                                                              if (ActivityCompat.checkSelfPermission(mContext,
+                                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                                                  == PackageManager.PERMISSION_GRANTED) {
                                                                   String prePdfUrl = model.getPrePdfPath().replaceAll(" ", "%20");
 
                                                                   downloadPDF(prePdfUrl);
                                                               } else {
-                                                                  ((EkycMainActivity) mContext).requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                                                                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                                      ((EkycMainActivity) mContext).requestPermissions(
+                                                                          new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, 100);
+                                                                  }
                                                               }
-
                                                           }
                                                       }
 
             );
 
             holder.txtClickHerePost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                @Override public void onClick(View v) {
                     /*MOSLCommon.alertDialog(mContext, 0, MOSLConstants.MOTILAL_OSWAL,
                             "Do you want to download post-esign kyc form", "YES", "NO", false, new MOSLCommon.DialogListener() {
                                 @Override
@@ -2086,11 +2705,17 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                     postDownloadCd.show();*/
 
                     if (!model.getPostPdfPath().equals("")) {
-                        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        if (ActivityCompat.checkSelfPermission(mContext,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) {
                             String postPdfUrl = model.getPostPdfPath().replaceAll(" ", "%20");
                             downloadPDF(postPdfUrl);
                         } else {
-                            ((EkycMainActivity) mContext).requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                ((EkycMainActivity) mContext).requestPermissions(
+                                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                    100);
+                            }
                         }
                     } else {
                         informationDialog("PDF not available", 2, false);
@@ -2105,357 +2730,5 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             public TextView tvProductPre, tvProductPost;
             public TextView txtClickHerePre, txtClickHerePost;
         }
-    }
-
-    public void disableEnableField() {
-        if (isThisSecondProductFlow() || isOfflineCliencodeGenrated() || getUserType().equalsIgnoreCase(IFAUSER)) {
-            tvClientCodeNote.setVisibility(View.GONE);
-            editClienCode.setEnabled(false);
-        } else {
-            editClienCode.setEnabled(true);
-        }
-    }
-
-    private void fingerIrisDialog(final String type) {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(R.layout.dialog_emendate);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCanceledOnTouchOutside(false);
-
-        Button btnOk = (Button) dialog.findViewById(R.id.btnOk);
-        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
-        final RadioButton rbFingerPrint = (RadioButton) dialog.findViewById(R.id.rbFingerPrint);
-        final RadioButton rbIris = (RadioButton) dialog.findViewById(R.id.rbIris);
-
-        if (type.equalsIgnoreCase(ESIGN))
-            rbIris.setText("Iris");
-        else if (type.equalsIgnoreCase("Emendate"))
-            rbIris.setText("OTP");
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (type.equalsIgnoreCase(ESIGN)) {
-                    if (rbFingerPrint.isChecked())
-                        genrateEsignXML(NSDL_FINGER);
-                    else if (rbIris.isChecked())
-                        genrateEsignXML(NSDL_IRIS);
-                } else if (type.equalsIgnoreCase("Emendate"))
-                    if (rbFingerPrint.isChecked())
-                        getBankDetails(FINGER);
-                    else if (rbIris.isChecked())
-                        getBankDetails(OTP);
-//                    openEmendate(emendateURL);
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    private void getBankDetails(final String mode) {
-        if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
-            inputMap.put("UserID", getUserID());
-            inputMap.put("SchemeType", "");
-
-            String flag = FILLBANKDETAILS;
-            String category = BANKDETAILS;
-            customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
-                        try {
-                            if (response.has("BANKUSERDATA")) {
-                                JSONArray jsonArray = response.getJSONArray("BANKUSERDATA");
-                                if (jsonArray.length() != 0) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-                                        bankName = (object.isNull("BANK_NAME") || object.getString("BANK_NAME").equals("")) ? "" : object.getString("BANK_NAME");
-                                        bankIfscCode = (object.isNull("BANK_IFSC_CODE") || object.getString("BANK_IFSC_CODE").equals("")) ? "" : object.getString("BANK_IFSC_CODE");
-                                        bankAccNo = (object.isNull("BANK_ACC_NO") || object.getString("BANK_ACC_NO").equals("")) ? "" : object.getString("BANK_ACC_NO");
-                                        bankAcType = (object.isNull("BANK_AC_TYPE") || object.getString("BANK_AC_TYPE").equals("")) ? "" : object.getString("BANK_AC_TYPE");
-                                    }
-                                }
-                            }
-                            if (response.has("BANKUSERDATA1")) {
-                                JSONArray jsonArray = response.getJSONArray("BANKUSERDATA1");
-                                if (jsonArray.length() != 0) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-                                        corresMobileNo = (object.isNull("CORRES_MOBILE_NO") || object.getString("CORRES_MOBILE_NO").equals("")) ? "" : object.getString("CORRES_MOBILE_NO");
-                                        corresEmailId = (object.isNull("CORRES_EMAIL_ID") || object.getString("CORRES_EMAIL_ID").equals("")) ? "" : object.getString("CORRES_EMAIL_ID");
-                                        uid = (object.isNull("UID") || object.getString("UID").equals("")) ? "" : object.getString("UID");
-                                        fullName = (object.isNull("FULLNAME") || object.getString("FULLNAME").equals("")) ? "" : object.getString("FULLNAME");
-                                    }
-                                }
-                            }
-                            getEmendateRequest(mode);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-        } else {
-            MOSLCommon.alertDInternet(mContext);
-            customProgress.setVisibility(View.GONE);
-        }
-    }
-
-    private void getEmendateRequest(final String mode) {
-        if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
-            inputMap.put("CustEmailMobile", corresMobileNo);
-            inputMap.put("mandate_creation_date_time", "");
-            inputMap.put("BankIfscCode", bankIfscCode);
-            inputMap.put("BankName", bankName);
-            inputMap.put("aadhaar", uid);
-            inputMap.put("BankAccType", bankAcType);
-            inputMap.put("BankAccNo", bankAccNo);
-            inputMap.put("instrument_type", "debit");
-            inputMap.put("customer_name", fullName);
-            inputMap.put("maximum_amount", "100000");
-            inputMap.put("first_collection_date", "");
-            inputMap.put("final_collection_date", "");
-            inputMap.put("_USERID", getUserID());
-            inputMap.put("customer_mobile", corresMobileNo);
-            inputMap.put("customer_email", corresEmailId);
-            inputMap.put("application", "Mobile");
-
-            String flag = BANK_EMANDATE;
-            String category = BANKDETAILS;
-            customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
-                        try {
-                            String id = (response.isNull("id") || response.getString("id").equals("")) ? "" : response.getString("id");
-                            String enachType = (response.isNull("enach_type") || response.getString("enach_type").equals("")) ? "" : response.getString("enach_type");
-                            String status = (response.isNull("status") || response.getString("status").equals("")) ? "" : response.getString("status");
-                            mandateCreationDateTime = (response.isNull("mandate_creation_date_time") || response.getString("mandate_creation_date_time").equals("")) ? "" : response.getString("mandate_creation_date_time");
-                            String CustEmailMobile = (response.isNull("CustEmailMobile") || response.getString("CustEmailMobile").equals("")) ? "" : response.getString("CustEmailMobile");
-                            String customerEmail = (response.isNull("customer_email") || response.getString("customer_email").equals("")) ? "" : response.getString("customer_email");
-                            String aadhaar = (response.isNull("aadhaar") || response.getString("aadhaar").equals("")) ? "" : response.getString("aadhaar");
-                            String instrumentType = (response.isNull("instrument_type") || response.getString("instrument_type").equals("")) ? "" : response.getString("instrument_type");
-                            String customerName = (response.isNull("customer_name") || response.getString("customer_name").equals("")) ? "" : response.getString("customer_name");
-                            firstCollectionDate = (response.isNull("first_collection_date") || response.getString("first_collection_date").equals("")) ? "" : response.getString("first_collection_date");
-                            finalCollectionDate = (response.isNull("final_collection_date") || response.getString("final_collection_date").equals("")) ? "" : response.getString("final_collection_date");
-                            String logo = (response.isNull("logo") || response.getString("logo").equals("")) ? "" : response.getString("logo");
-
-                            digioDocId = id;
-                            emendateMode = mode;
-                            if (!isBlank(logo))
-                                callEmendate(mode, logo, id, customerEmail, corresMobileNo);
-                            customProgress.setVisibility(View.GONE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-        } else {
-            MOSLCommon.alertDInternet(mContext);
-            customProgress.setVisibility(View.GONE);
-        }
-    }
-
-    private void emendateResponse() {
-        if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
-            inputMap.put("_USERID", getUserID());
-            inputMap.put("CustEmailMobile", corresMobileNo);
-            inputMap.put("mandate_creation_date_time", mandateCreationDateTime);
-            inputMap.put("BankIfscCode", bankIfscCode);
-            inputMap.put("BankName", bankName);
-            inputMap.put("aadhaar", uid);
-            inputMap.put("BankAccType", bankAcType);
-            inputMap.put("BankAccNo", bankAccNo);
-            inputMap.put("instrument_type", "debit");
-            inputMap.put("customer_name", fullName);
-            inputMap.put("maximum_amount", "100000");
-            inputMap.put("first_collection_date", firstCollectionDate);
-            inputMap.put("final_collection_date", finalCollectionDate);
-            inputMap.put("txn_id", txnId);
-            inputMap.put("customer_mobile", corresMobileNo);
-            inputMap.put("customer_email", corresEmailId);
-            inputMap.put("digio_doc_id", digioDocId);
-            inputMap.put("message", digiomessage);
-            inputMap.put("error_code", errorCode);
-            inputMap.put("last_state_screen", lastStateScreen);
-            inputMap.put("last_state_code", lastStateCode);
-            inputMap.put("last_state_message", lastStateMessage);
-            inputMap.put("eMandateAuthMode", emendateMode);
-            inputMap.put("application", "Mobile");
-
-            String flag = BANK_EMANDATE_RESPONSE;
-            String category = BANKDETAILS;
-            customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
-                        try {
-                            if (response.has("EMANDATERES")) {
-                                JSONArray jsonArray = response.getJSONArray("EMANDATERES");
-                                if (jsonArray.length() != 0) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-                                        String emandate = (object.isNull("eMANDATE") || object.getString("eMANDATE").equals("")) ? "" : object.getString("eMANDATE");
-                                        String eMandateMessage = (object.isNull("eMandateMessage") || object.getString("eMandateMessage").equals("")) ? "" : object.getString("eMandateMessage");
-
-                                        if (!isBlank(eMandateMessage))
-                                            commonMsgDialog(mContext, eMandateMessage, false, "");
-                                        if (!isBlank(emandate) && emandate.equals("1"))
-                                            tvEmendate.setEnabled(false);
-                                        else
-                                            tvEmendate.setEnabled(true);
-                                    }
-                                }
-                            }
-
-                            customProgress.setVisibility(View.GONE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-        } else {
-            MOSLCommon.alertDInternet(mContext);
-            customProgress.setVisibility(View.GONE);
-        }
-    }
-
-    private void callEmendate(String mode, String logo, String id, String emailId, String mobile) {
-        Digio digio = new Digio();
-        DigioConfig digioConfig = new DigioConfig();
-//        digioConfig.setLogo(" www.your-website/logo-image "); //Your company logo
-        digioConfig.setLogo(logo); //Your company logo
-        digioConfig.setEnvironment(UID_ENV.equals("P") ? DigioEnvironment.PRODUCTION : DigioEnvironment.PRODUCTION); //Stage is sandbox
-        digioConfig.setServiceMode(mode.equalsIgnoreCase(FINGER) ? DigioServiceMode.FP : DigioServiceMode.OTP); //FP is fingerprint
-        try {
-            digio.init((EkycMainActivity) mContext, digioConfig);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            digio.esign(id, mobile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void setDigioData(String txnId, String digiomessage, String errorCode, String lastStateScreen, String lastStateCode, String lastStateMessage) {
-        this.txnId = txnId;
-        this.digiomessage = digiomessage;
-        this.errorCode = errorCode;
-        this.lastStateScreen = lastStateScreen;
-        this.lastStateCode = lastStateCode;
-        this.lastStateMessage = lastStateMessage;
-        emendateResponse();
     }
 }

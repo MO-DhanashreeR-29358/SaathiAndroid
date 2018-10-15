@@ -406,12 +406,13 @@
                 </LinearLayout>
 
                 <include
-                    android:id="@+id/layout_merge_note"
                     layout="@layout/layout_merge_of_mosl_note"
+                    android:id="@+id/layout_merge_note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/llEmendate"
-                    android:layout_marginBottom="@dimen/_10sdp" />
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    />
             </RelativeLayout>
         </ScrollView>
 

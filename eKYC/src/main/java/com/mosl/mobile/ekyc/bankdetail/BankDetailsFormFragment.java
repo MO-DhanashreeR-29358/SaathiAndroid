@@ -39,7 +39,6 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.ReviewEditCommoditySchemeAdapter;
@@ -60,11 +59,7 @@ import com.mosl.mobile.ekyc.model.SchemeDetailsModel;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.viewpagerindicator.TabPageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,8 +71,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.mobile.ekyc.R.id.rbBankSelect;
@@ -92,7 +88,56 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.minMarginValueForOtherAmoun
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getComMarginDeposit;
+import static com.mosl.mobile.ekyc.model.CommonModel.getComSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getComSchemeName;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommDelNCXSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommDelSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommFutNCXSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommFutSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommOptNCXSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getCommOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDematTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEqSchemeId;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquCurrFutSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquCurrOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquDPSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquDelSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquFutSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquMarginDeposit;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquTradeSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPersonalTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserType;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAllOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCurrencyOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDerivativeOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isFundTransferDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isGotoFundTransfer;
+import static com.mosl.mobile.ekyc.model.CommonModel.isGotoReviewEdit;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrFutSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquDPSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquDelSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquFutSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEquTradeSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setGotoReviewEdit;
 import static com.mosl.mobile.ekyc.model.RowData.getSpinnerRowDataById;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
@@ -1442,6 +1487,210 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
         }
     }
 
+    private final AdapterView.OnItemSelectedListener equSchemeListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strEquSchMarDep = ((RowData) arrEquScheme.get(position)).getMarDep();
+                strEquSchID = ((RowData) arrEquScheme.get(position)).getSchmeID();
+                strEquSchSelID = ((RowData) arrEquScheme.get(position)).getSchemeSelID();
+                strEquSchKey = ((RowData) arrEquScheme.get(position)).getKey();
+                customProgress.setVisibility(View.GONE);
+                etEquSchemeError.setVisibility(View.GONE);
+
+                if (isCommodityOriginal()) {
+                    for (RowData i : arrCommScheme) {
+                        if (strEquSchSelID.equalsIgnoreCase(MF_CUM_EQUITY) && i.getSchemeSelID()
+                            .equals(i.getSchmeID())) {
+                            commSchMarDep = i.getMarDep();
+                            strComSchID = i.getSchmeID();
+                            strCommSchSelID = i.getSchemeSelID();
+                            strCommSchKey = i.getKey();
+                            etCommSchemeError.setVisibility(View.GONE);
+                        } else if (i.getMarDep()
+                            .equals(((RowData) arrEquScheme.get(position)).getMarDep())) {
+                            commSchMarDep = i.getMarDep();
+                            strComSchID = i.getSchmeID();
+                            strCommSchSelID = i.getSchemeSelID();
+                            strCommSchKey = i.getKey();
+                            etCommSchemeError.setVisibility(View.GONE);
+                        }
+                    }
+                    setCommodityScheme();
+                }
+
+                if (getAppType().equals("DIRECT") && !getIsAadharVerified()) {
+                    if (rbValuePacAcc.isChecked()) {
+                        if (strEquSchKey.equalsIgnoreCase("-1")) {
+                            btnSelectedScheme.setVisibility(View.GONE);
+                            bindEquDetailsOnSchemeSelection(strEquSchID);
+                        } else {
+                            btnSelectedScheme.setVisibility(View.VISIBLE);
+                            bindEquDetailsOnSchemeSelection(strEquSchID);
+                        }
+                    } else {
+                        if (strEquSchKey.equalsIgnoreCase("-1")) {
+                            btnMarginSelectedScheme.setVisibility(View.GONE);
+                            bindEquDetailsOnSchemeSelection(strEquSchID);
+                        } else {
+                            //btnMarginSelectedScheme.setVisibility(View.VISIBLE);
+                            btnSelectedSchemeDetailVisibilty();
+                            bindEquDetailsOnSchemeSelection(strEquSchID);
+                        }
+                    }
+
+                    if (strEquSchID.equals("9999")) {
+                        if (!isEquOtherSchSelected) {
+                            etEquMarginDeposit.setText("");
+                        } else {
+                            etEquMarginDeposit.setText(getEquMarginDeposit());
+                            getOtherEquSchDetail();
+                            isEquOtherSchSelected = false;
+                        }
+                        btnGetEquScheme.setVisibility(View.VISIBLE);
+                        etEquMarginDeposit.setEnabled(true);
+                    } else {
+                        etEquMarginDeposit.setEnabled(false);
+                        etEquMarginDeposit.setText(strEquSchMarDep);
+                        btnGetEquScheme.setVisibility(View.GONE);
+                    }
+                    // btnMarginSelectedScheme.setVisibility(View.GONE);
+
+                } else if (getAppType().equals("DIRECT") && getIsAadharVerified()) {
+                    if (strEquSchKey.equalsIgnoreCase("-1")) {
+                        btnMarginSelectedScheme.setVisibility(View.GONE);
+                        bindEquDetailsOnSchemeSelection(strEquSchID);
+                    } else {
+                        //btnMarginSelectedScheme.setVisibility(View.VISIBLE);
+                        btnSelectedSchemeDetailVisibilty();
+                        bindEquDetailsOnSchemeSelection(strEquSchID);
+                    }
+                    if (strEquSchID.equals("9999")) {
+                        if (!isEquOtherSchSelected) {
+                            etEquMarginDeposit.setText("");
+                        } else {
+                            etEquMarginDeposit.setText(getEquMarginDeposit());
+                            getOtherEquSchDetail();
+                            isEquOtherSchSelected = false;
+                        }
+                        btnGetEquScheme.setVisibility(View.VISIBLE);
+                        etEquMarginDeposit.setEnabled(true);
+                    } else {
+                        etEquMarginDeposit.setEnabled(false);
+                        etEquMarginDeposit.setText(strEquSchMarDep);
+                        btnGetEquScheme.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (strEquSchID.equals("9999")) {
+                        if (!isEquOtherSchSelected) {
+                            etEquMarginDeposit.setText("");
+                        } else {
+                            etEquMarginDeposit.setText(getEquMarginDeposit());
+                            getOtherEquSchDetail();
+                            isEquOtherSchSelected = false;
+                        }
+                        btnGetEquScheme.setVisibility(View.VISIBLE);
+                        etEquMarginDeposit.setEnabled(true);
+                        bindEquDetailsOnSchemeSelection(strEquSchSelID);
+                    } else {
+                        etEquMarginDeposit.setEnabled(false);
+                        etEquMarginDeposit.setText(strEquSchMarDep);
+                        btnGetEquScheme.setVisibility(View.GONE);
+                        bindEquDetailsOnSchemeSelection(strEquSchID);
+                    }
+                }
+
+           /* if (strEquSchSelID.equals("9999")) {
+                btnGetEquScheme.setVisibility(View.VISIBLE);
+                etEquMarginDeposit.setEnabled(true);
+                getOtherEquSchDetail();
+            }*/
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+    private final AdapterView.OnItemSelectedListener equSelectBankItemListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strEquSelectBankStr = spEquSelectBank.getSelectedItem().toString();
+                etEquSelectBankError.setVisibility(View.GONE);
+                //  etEquityMICR.setText("");
+                //updateBankDetail = false;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private final AdapterView.OnItemSelectedListener mfSelectBankItemListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                etMFSelectBankError.setVisibility(View.GONE);
+                llMfBankDetails.setVisibility(View.GONE);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private final AdapterView.OnItemSelectedListener equBankProofListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strequBankProof = spEquBankProof.getSelectedItem().toString();
+                etEquBankProoflError.setVisibility(View.GONE);
+                //updateBankDetail = false;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private final AdapterView.OnItemSelectedListener commBankProofListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strCommBankProof = spCommBankProof.getSelectedItem().toString();
+                etCommBankProoflError.setVisibility(View.GONE);
+                //updateBankDetail = false;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private final AdapterView.OnItemSelectedListener equPhotoProofListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strEquPhotoProof = spEquPhotoProof.getSelectedItem().toString();
+                etEquPhotoProofError.setVisibility(View.GONE);
+                //updateBankDetail = false;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private final AdapterView.OnItemSelectedListener commPhotoProofListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strCommPhotoProof = spCommPhotoProof.getSelectedItem().toString();
+                etCommPhotoProofError.setVisibility(View.GONE);
+                //updateBankDetail = false;
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
     public void getOtherEquSchDetail() {
         if (MOSLCommon.isNetworkEnabled(mContext) && !isBlank(etEquMarginDeposit.getText().toString())) {
 //            if (isOtherAmountSubmitted)
@@ -1501,6 +1750,9 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                     BigDecimal bdCurrencyFut1st2ndLegINR = new BigDecimal(currencyFut1st2ndLegINR);
                                     String currencyOptions = (object.isNull("CurrencyOptions") || object.getString("CurrencyOptions").equals("")) ? "" : object.getString("CurrencyOptions");
                                     BigDecimal bdCurrencyOptions = new BigDecimal(currencyOptions);
+                                    String dpAmc =
+                                        (object.isNull("DPAMC") || object.getString("DPAMC")
+                                            .equals("")) ? "" : object.getString("DPAMC");
 
 //                                    tvequSchInfoAccOpenCharge.setText(String.valueOf(bdAccountOpeningFee));
 //                                    tvequSchInfoSoftCharge.setText(String.valueOf(bdSoftwareCharges));
@@ -1514,6 +1766,7 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                     tvequSchInfoOptions.setText(String.valueOf(bdOptions1stLegAnd2ndLegINR));
                                     tvequSchInfoCurrFuture.setText(String.valueOf(bdCurrencyFut1st2ndLegINR));
                                     tvequSchInfoCurrOption.setText(String.valueOf(bdCurrencyOptions));
+                                    tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
 
                                 }
                                 disableEnableField();
@@ -1632,211 +1885,6 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
             customProgress.setVisibility(View.GONE);
         }
     }
-
-    private final AdapterView.OnItemSelectedListener equSelectBankItemListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strEquSelectBankStr = spEquSelectBank.getSelectedItem().toString();
-            etEquSelectBankError.setVisibility(View.GONE);
-            //  etEquityMICR.setText("");
-            //updateBankDetail = false;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener mfSelectBankItemListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            etMFSelectBankError.setVisibility(View.GONE);
-            llMfBankDetails.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener equBankProofListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strequBankProof = spEquBankProof.getSelectedItem().toString();
-            etEquBankProoflError.setVisibility(View.GONE);
-            //updateBankDetail = false;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener commBankProofListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strCommBankProof = spCommBankProof.getSelectedItem().toString();
-            etCommBankProoflError.setVisibility(View.GONE);
-            //updateBankDetail = false;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener equPhotoProofListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strEquPhotoProof = spEquPhotoProof.getSelectedItem().toString();
-            etEquPhotoProofError.setVisibility(View.GONE);
-            //updateBankDetail = false;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener commPhotoProofListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strCommPhotoProof = spCommPhotoProof.getSelectedItem().toString();
-            etCommPhotoProofError.setVisibility(View.GONE);
-            //updateBankDetail = false;
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private final AdapterView.OnItemSelectedListener equSchemeListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strEquSchMarDep = ((RowData) arrEquScheme.get(position)).getMarDep();
-            strEquSchID = ((RowData) arrEquScheme.get(position)).getSchmeID();
-            strEquSchSelID = ((RowData) arrEquScheme.get(position)).getSchemeSelID();
-            strEquSchKey = ((RowData) arrEquScheme.get(position)).getKey();
-            customProgress.setVisibility(View.GONE);
-            etEquSchemeError.setVisibility(View.GONE);
-
-            if (isCommodityOriginal()) {
-                for (RowData i : arrCommScheme) {
-                    if (strEquSchSelID.equalsIgnoreCase(MF_CUM_EQUITY) && i.getSchemeSelID().equals(i.getSchmeID())) {
-                        commSchMarDep = i.getMarDep();
-                        strComSchID = i.getSchmeID();
-                        strCommSchSelID = i.getSchemeSelID();
-                        strCommSchKey = i.getKey();
-                        etCommSchemeError.setVisibility(View.GONE);
-                    } else if (i.getMarDep().equals(((RowData) arrEquScheme.get(position)).getMarDep())) {
-                        commSchMarDep = i.getMarDep();
-                        strComSchID = i.getSchmeID();
-                        strCommSchSelID = i.getSchemeSelID();
-                        strCommSchKey = i.getKey();
-                        etCommSchemeError.setVisibility(View.GONE);
-                    }
-                }
-                setCommodityScheme();
-            }
-
-            if (getAppType().equals("DIRECT") && !getIsAadharVerified()) {
-                if (rbValuePacAcc.isChecked()) {
-                    if (strEquSchKey.equalsIgnoreCase("-1")) {
-                        btnSelectedScheme.setVisibility(View.GONE);
-                        bindEquDetailsOnSchemeSelection(strEquSchID);
-                    } else {
-                        btnSelectedScheme.setVisibility(View.VISIBLE);
-                        bindEquDetailsOnSchemeSelection(strEquSchID);
-                    }
-                } else {
-                    if (strEquSchKey.equalsIgnoreCase("-1")) {
-                        btnMarginSelectedScheme.setVisibility(View.GONE);
-                        bindEquDetailsOnSchemeSelection(strEquSchID);
-                    } else {
-                        btnMarginSelectedScheme.setVisibility(View.VISIBLE);
-                        bindEquDetailsOnSchemeSelection(strEquSchID);
-                    }
-                }
-
-                if (strEquSchID.equals("9999")) {
-                    if (!isEquOtherSchSelected) {
-                        etEquMarginDeposit.setText("");
-                    } else {
-                        etEquMarginDeposit.setText(getEquMarginDeposit());
-                        getOtherEquSchDetail();
-                        isEquOtherSchSelected = false;
-                    }
-                    btnGetEquScheme.setVisibility(View.VISIBLE);
-                    etEquMarginDeposit.setEnabled(true);
-
-                } else {
-                    etEquMarginDeposit.setText(strEquSchMarDep);
-                    btnGetEquScheme.setVisibility(View.GONE);
-                    etEquMarginDeposit.setEnabled(false);
-                }
-                // btnMarginSelectedScheme.setVisibility(View.GONE);
-
-            } else if (getAppType().equals("DIRECT") && getIsAadharVerified()) {
-                if (strEquSchKey.equalsIgnoreCase("-1")) {
-                    btnMarginSelectedScheme.setVisibility(View.GONE);
-                    bindEquDetailsOnSchemeSelection(strEquSchID);
-
-                } else {
-                    btnMarginSelectedScheme.setVisibility(View.VISIBLE);
-                    bindEquDetailsOnSchemeSelection(strEquSchID);
-
-                }
-                if (strEquSchID.equals("9999")) {
-                    if (!isEquOtherSchSelected) {
-                        etEquMarginDeposit.setText("");
-                    } else {
-                        etEquMarginDeposit.setText(getEquMarginDeposit());
-                        getOtherEquSchDetail();
-                        isEquOtherSchSelected = false;
-                    }
-                    btnGetEquScheme.setVisibility(View.VISIBLE);
-                    etEquMarginDeposit.setEnabled(true);
-
-                } else {
-                    etEquMarginDeposit.setText(strEquSchMarDep);
-                    btnGetEquScheme.setVisibility(View.GONE);
-                    etEquMarginDeposit.setEnabled(false);
-                }
-            } else {
-                if (strEquSchID.equals("9999")) {
-                    if (!isEquOtherSchSelected) {
-                        etEquMarginDeposit.setText("");
-                    } else {
-                        etEquMarginDeposit.setText(getEquMarginDeposit());
-                        getOtherEquSchDetail();
-                        isEquOtherSchSelected = false;
-                    }
-                    btnGetEquScheme.setVisibility(View.VISIBLE);
-                    etEquMarginDeposit.setEnabled(true);
-                    bindEquDetailsOnSchemeSelection(strEquSchSelID);
-
-                } else {
-                    etEquMarginDeposit.setText(strEquSchMarDep);
-                    btnGetEquScheme.setVisibility(View.GONE);
-                    etEquMarginDeposit.setEnabled(false);
-                    bindEquDetailsOnSchemeSelection(strEquSchID);
-                }
-            }
-
-           /* if (strEquSchSelID.equals("9999")) {
-                btnGetEquScheme.setVisibility(View.VISIBLE);
-                etEquMarginDeposit.setEnabled(true);
-                getOtherEquSchDetail();
-            }*/
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
 
     private final AdapterView.OnItemSelectedListener commSchemeListener = new AdapterView.OnItemSelectedListener() {
         @Override
@@ -2490,9 +2538,12 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                         String AdvisoryServices = (object.isNull("AdvisoryServices") || object.getString("AdvisoryServices").equals("")) ? "" : object.getString("AdvisoryServices");
                                         String OnlineResearchReports = (object.isNull("OnlineResearchReports") || object.getString("OnlineResearchReports").equals("")) ? "" : object.getString("OnlineResearchReports");
                                         String ChartingTool = (object.isNull("ChartingTool") || object.getString("ChartingTool").equals("")) ? "" : object.getString("ChartingTool");
+                                        String dpAmc =
+                                            (object.isNull("DPAMC") || object.getString("DPAMC")
+                                                .equals("")) ? "" : object.getString("DPAMC");
                                         tvSchemeName.setText(SchemeName);
                                         tvUpfrontFees.setText(valuePackFee);
-                                        tvDPAMC.setText(accountOpeningFee);
+                                        tvDPAMC.setText(dpAmc);
                                         tvEXECharges.setText(EXECharges);
                                         tvValidity.setText(Validitydays);
                                         tvMaxBrokerage.setText(MaxBrokerageReversedOnExpiryOfTheScheme);
@@ -2507,6 +2558,7 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                         tvFutMinFirstLeg.setText(FuturesBrokerageFutMinPaise);
                                         tvFutureCarried.setText(FuturesBrokerageIfCarriedForward);
                                         tvFirstSecondLeg.setText(OptionsBrokerage1stLegAnd2ndLegEachINR);
+                                        tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
 
                                     }
                                     customProgress.setVisibility(View.GONE);
@@ -2709,9 +2761,12 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                         String options1stLegAnd2ndLegINR = (object.isNull("Options1stLegAnd2ndLegINR") || object.getString("Options1stLegAnd2ndLegINR").equals("")) ? "" : object.getString("Options1stLegAnd2ndLegINR");
                                         String CURRENCYFUT1ST2NDLEGINR = (object.isNull("CURRENCYFUT1ST2NDLEGINR") || object.getString("CURRENCYFUT1ST2NDLEGINR").equals("")) ? "" : object.getString("CURRENCYFUT1ST2NDLEGINR");
                                         String CURRENCYOPTIONS = (object.isNull("CURRENCYOPTIONS") || object.getString("CURRENCYOPTIONS").equals("")) ? "" : object.getString("CURRENCYOPTIONS");
+                                        String dpAmc =
+                                            (object.isNull("DPAMC") || object.getString("DPAMC")
+                                                .equals("")) ? "" : object.getString("DPAMC");
                                         tvSchemeName.setText(SchemeName);
                                         tvMarginDeposit.setText(marginDepositINR);
-                                        tvDPAMC.setText(accountOpeningFee);
+                                        tvDPAMC.setText(dpAmc);
                                         tvStandard.setText(deliveryBrokerageStandard);
                                         tvMinPaise.setText(deliveryBrokerageMinPaise);
                                         tvMinPerDay.setText(deliveryBrokerageMinINR);
@@ -2727,6 +2782,7 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                         tvFirstSecondLeg.setText(options1stLegAnd2ndLegINR);
                                         tvFutureLeg.setText(CURRENCYFUT1ST2NDLEGINR);
                                         tvOptions.setText(CURRENCYOPTIONS);
+                                        tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
 
                                     }
                                     customProgress.setVisibility(View.GONE);
@@ -3030,6 +3086,10 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                                 String currencyOptions = (object.isNull("CURRENCYOPTIONS") || object.getString("CURRENCYOPTIONS").equals("")) ? "" : object.getString("CURRENCYOPTIONS");
                                                 String accountOpeningFee = (object.isNull("AccountOpeningFee") || object.getString("AccountOpeningFee").equals("")) ? "" : object.getString("AccountOpeningFee");
                                                 String softwareCharges = (object.isNull("SoftwareCharges") || object.getString("SoftwareCharges").equals("")) ? "" : object.getString("SoftwareCharges");
+                                                String dpAmc =
+                                                    (object.isNull("DPAMC") || object.getString(
+                                                        "DPAMC").equals("")) ? ""
+                                                        : object.getString("DPAMC");
 
                                                 tvequSchInfoIntraday1stLeg.setText(intradayCashSegment1stLegMAX);
                                                 tvequSchInfoIntraday2ndLeg.setText(intradayCashSegment2ndLegMAX);
@@ -3041,6 +3101,7 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                                 tvequSchInfoCurrOption.setText(currencyOptions);
                                                 tvequSchInfoAccOpenCharge.setText(accountOpeningFee);
                                                 tvequSchInfoSoftCharge.setText(softwareCharges);
+                                                tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
                                             } else if (rbValuePacAcc.isChecked()) {
                                                 String Validitydays = (object.isNull("ValidityDays") || object.getString("ValidityDays").equals("")) ? "" : object.getString("ValidityDays");
                                                 String valuePackFee = (object.isNull("ValuePackFee") || object.getString("ValuePackFee").equals("")) ? "" : object.getString("ValuePackFee");
@@ -7262,7 +7323,6 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                                 String segment = (object.isNull("Segment") || object.getString("Segment").equals("")) ? "" : object.getString("Segment");
                                                 String userId = (object.isNull("UserId") || object.getString("UserId").equals("")) ? "" : object.getString("UserId");
                                                 schemeSelectedID = (object.isNull("SchemeSelectedID") || object.getString("SchemeSelectedID").equals("")) ? "" : object.getString("SchemeSelectedID");
-                                                tvEquAccOpenNote.setText("DP-AMC " + accountOpeningFee);
                                                 getDpSchemeDetails(accountOpeningFee);
 
                                                 if (id.equalsIgnoreCase(MF_CUM_EQUITY)) {
@@ -8177,6 +8237,8 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                 btnGetEquScheme.setBackgroundColor(getResources().getColor(R.color.secondaryBackground));
                 etCommMarginDeposit.setError(null);
             }
+        } else {
+            etEquMarginDepositError.setVisibility(View.GONE);
         }
         if (etCommMarginDeposit.isEnabled() && !strCommMarginDeposit.equals("")) {
 
@@ -8193,6 +8255,8 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                 etCommMarginDeposit.setError(null);
                 // etCommMarginDeposit.setText(strCommMarginDeposit);
             }
+        } else {
+            etCommMarginDepositError.setVisibility(View.GONE);
         }
     }
 
@@ -10787,8 +10851,8 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
 
     private void setCommodityScheme() {
         if (strComSchID.equals("0")) {
-            etCommMarginDeposit.setText("");
             etCommMarginDeposit.setEnabled(false);
+            etCommMarginDeposit.setText("");
             tvCommDelBrok.setText("");
             tvCommIntradayBrok.setText("");
         } else if (strComSchID.equals("9999")) {
@@ -10805,9 +10869,9 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
             }
             bindCommDetailsOnSchemeSelection(strComSchID);
         } else {
+            etCommMarginDeposit.setEnabled(false);
             etCommMarginDeposit.setText(commSchMarDep);
             btnGetCommScheme.setVisibility(View.GONE);
-            etCommMarginDeposit.setEnabled(false);
             bindCommDetailsOnSchemeSelection(strComSchID);
         }
             /*if (strCommSchSelID.equals("9999")) {
@@ -10820,7 +10884,8 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                 etCommMarginDepositError.setVisibility(View.GONE);
                 btnCommMarginSelectedScheme.setVisibility(View.GONE);
             } else {
-                btnCommMarginSelectedScheme.setVisibility(View.VISIBLE);
+                //btnCommMarginSelectedScheme.setVisibility(View.VISIBLE);
+                btnSelectedSchemeDetailVisibilty();
             }
         }
     }
@@ -10898,6 +10963,16 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void btnSelectedSchemeDetailVisibilty() {
+        if (spEquScheme.getSelectedItem().toString().equalsIgnoreCase("Other amount")) {
+            btnMarginSelectedScheme.setVisibility(View.GONE);
+            btnCommMarginSelectedScheme.setVisibility(View.GONE);
+        } else {
+            btnMarginSelectedScheme.setVisibility(View.VISIBLE);
+            btnCommMarginSelectedScheme.setVisibility(View.VISIBLE);
         }
     }
 }
