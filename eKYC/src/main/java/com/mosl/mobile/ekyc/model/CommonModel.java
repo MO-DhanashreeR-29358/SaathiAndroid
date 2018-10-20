@@ -119,6 +119,7 @@ public class CommonModel implements Serializable {
     private static boolean aadhaarVerifiedByBio;//flag for Aadhaar verified by Bio finger or iris
     private static String esignService;
     private static boolean isNomineeMandatory = false;
+    private static boolean aadhaarByPass;
 
     public static boolean isNomineeMandatory() {
         return isNomineeMandatory;
@@ -885,6 +886,14 @@ public class CommonModel implements Serializable {
         CommonModel.aadhaarVerifiedByBio = aadhaarVerifiedByBio;
     }
 
+    public static boolean isAadhaarByPass() {
+        return aadhaarByPass;
+    }
+
+    public static void setAadhaarByPass(boolean aadhaarByPass) {
+        CommonModel.aadhaarByPass = aadhaarByPass;
+    }
+
     public static void clearAllCommonModelFields() {
         //setAppLoginID("");
         //setUserID("");
@@ -986,6 +995,7 @@ public class CommonModel implements Serializable {
         setOtpVisibleForBranch("");
         setBioMetricVisibleForBranch("");
         setEsignService("");
+        setAadhaarByPass(false);
 //        setUserType("");
 //        setOtpVisible("");
 //        setBioMetricVisible("");

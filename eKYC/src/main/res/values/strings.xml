@@ -307,7 +307,7 @@
     <string name="nominee_form_detail">Do you wish to add nominee ?</string>
     <string name="nominee_guardian_note">Note : As the Nominee is minor as on date, the following appointed person will act as Guardian.</string>
     <!--<string name="margin_25000">Margin Deposit cannot be less than 25,000</string>-->
-  <string name="margin_25000">Margin Deposit cannot be less than 1000</string>
+    <string name="margin_25000">Margin Deposit cannot be less than 1000</string>
     <string name="margin_50000">Margin Deposit cannot be less than 50,000</string>
     <string name="update_tab_for_iris">"Dear Customer, To use the Biometric \"IRIS Scan\" authentication mode, you need to upgrade the TAB to have (minimum):\n
         Build number:\n LMY47X.T116IRDDU1BQF2\n
@@ -504,7 +504,7 @@
     <string name="forgot_password">Forgot Password ?</string>
 
     <string name="fund_transfer_error_msg">Please enter minimum 5 digit value</string>
-  <string name="fund_transfer_error_msg_3digits">Please enter minimum 3 digit value</string>
+    <string name="fund_transfer_error_msg_3digits">Please enter minimum 3 digit value</string>
     <string name="fund_transfer_error_msg_PP">Amount should be greater than zero</string>
     <string name="confirm_bank_ac_no">Re-Enter Bank A/C No</string>
     <string name="save">SAVE</string>
@@ -530,4 +530,6 @@
     <string name="paperless_mess_virtualId">For paperless account opening facility Aadhaar Virtual Id authentication is mandatory. If not available, you can just enter your Aadhaar number and proceed with manual from filling process?</string>
     <string name="physical_account_message">You are being redirected to our Online Account opening process which requires submission of physical documents</string>
     <string name="mosl_merge_note">* MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
+    <string name="online_msg">Required: Aadhaar registered Mobile No. to get One time password for eSign. &lt;u>(Verify Your Mobile no.)&lt;/u></string>
+    <string name="offline_msg">On filling the account form, we will verify and send the filled physical form to your address. You need to sign the form and attach the proof required and resend the documents</string>
 </resources>

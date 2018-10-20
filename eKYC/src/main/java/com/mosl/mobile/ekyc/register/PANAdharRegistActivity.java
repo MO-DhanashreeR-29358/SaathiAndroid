@@ -94,6 +94,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getSipIntent;
 import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAadhaarByPass;
 import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
 import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
 import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
@@ -127,7 +128,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     public static int PAN_AADHAAR_BIOMETRIC_RESULT_OK = 1011;
 
     private Button btnSubmit;
-    private LinearLayout linearLayout, llOTPThumbLayout, llBaseOTPBioLayout;
+    private LinearLayout linearLayout, llOTPThumbLayout, llBaseOTPBioLayout, llPaperLessRadioGroup,
+        llAadhaarEditText, llAadhaarCheckBox;
     private RelativeLayout rlOTP;
     private CheckBox cbAadhar, cbSIP;
     private EditText etPan, etPanError, etDOB, etAadhaar, etOTP, etCvlOTP, etEnterBaBranchCode;
@@ -141,7 +143,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     private boolean isPANChanged = false;
     private boolean isAdharChanged = false;
     private Bundle bundle;
-    private String userID;
+    private String userID, onlineOffline = "Offline";
     private String aadharValidationSuccess;
     private ImageView ivExit, ivBack;
     private TextView tvExitForm, tvAppLoginId, tvUserName, tvAuthenticationMode, tvBABranchCode;
@@ -171,9 +173,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     private boolean isFinalSubmitPANAdhar;
     private String date = "";
     private CheckBox cbAadharDeclaration;
-    private TextView tvReadMore, tvAadharConsent, tvAadharEg, tvAadharMsg, tvVirtualIdInfo;
+    private TextView tvReadMore, tvAadharConsent, tvAadharEg, tvAadharMsg, tvVirtualIdInfo,
+        tvPaperLessMessage;
     private boolean openPaperlessAccount = false;
-    private RadioButton rbVirtualId, rbAadhar;
+    private RadioButton rbVirtualId, rbAadhar, rbOnline, rbOffline;
     private TextInputLayout input_layout_aadhar;
     private boolean showOTP, showFinger, showIris, showVirtualOTP, showVirtualFinger, showVirtualIris;
     private String authType = AADHAAR;
@@ -280,6 +283,58 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
             rbVirtualId = (RadioButton) findViewById(R.id.rbVirtualId);
             llAadhar = (LinearLayout) findViewById(R.id.llAadhar);
             input_layout_aadhar = (TextInputLayout) findViewById(R.id.input_layout_aadhar);
+            llPaperLessRadioGroup = findViewById(R.id.llPaperLessRadioGroup);
+            llAadhaarEditText = findViewById(R.id.llAadhaarEditText);
+            llAadhaarCheckBox = findViewById(R.id.llAadhaarCheckBox);
+            rbOnline = findViewById(R.id.rbOnline);
+            rbOffline = findViewById(R.id.rbOffline);
+            tvPaperLessMessage = findViewById(R.id.tvPaperLessMessage);
+
+            rbOnline.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (rbOnline.isChecked()) {
+                        rbOffline.setChecked(false);
+                        setIsAadharVerified(true);
+                        onlineOffline = "Online";
+                        tvPaperLessMessage.setText(
+                            Html.fromHtml(getResources().getString(R.string.online_msg)));
+                    }
+                }
+            });
+
+            rbOffline.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (rbOffline.isChecked()) {
+                        rbOnline.setChecked(false);
+                        setIsAadharVerified(false);
+                        onlineOffline = "Offline";
+                        tvPaperLessMessage.setText(
+                            Html.fromHtml(getResources().getString(R.string.offline_msg)));
+                    }
+                }
+            });
+
+            tvPaperLessMessage.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    if (rbOnline.isChecked()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                            String packag =
+                                CustomTabsHelper.getPackageNameToUse(PANAdharRegistActivity.this);
+                            if (packag == null) {
+                                Intent intent =
+                                    new Intent(PANAdharRegistActivity.this, WebActivity.class);
+                                intent.putExtra(URL_PATH, MOSLConstants.VERIFY_MOBILE_URL);
+                                startActivity(intent);
+                            } else {
+                                openCustomTabsIntent(MOSLConstants.VERIFY_MOBILE_URL);
+                            }
+                        } else {
+                            openInBrowser(Uri.parse(MOSLConstants.VERIFY_MOBILE_URL));
+                        }
+                    }
+                }
+            });
+
             rbAadhar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1269,6 +1324,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                             }
                         } else {
                             validateAadharAvailability();
+                            if (isAadhaarByPass()) {
+                                showSubmitButton();
+                            }
                         }
                     }
                     etAadhaar.setEnabled(false);
@@ -1334,6 +1392,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     isAdharChanged = true;
                                     if (!isBlank(getAadharNo()))
                                         validateAadharAvailability();
+                                    if (isAadhaarByPass()) {
+                                        showSubmitButton();
+                                    }
                                 }
                             }
                         } else {
@@ -1350,6 +1411,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                             etAadhaar.setEnabled(true);
                             if (!isBlank(getAadharNo()))
                                 validateAadharAvailability();
+                            if (isAadhaarByPass()) {
+                                showSubmitButton();
+                            }
                         }
                     } else {
                         /*Direct Broking*/
@@ -1371,7 +1435,6 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                 showNextBtn();
                                 llAadhar.setVisibility(View.GONE);
                                 tvVirtualIdInfo.setVisibility(View.GONE);
-
                             } else {
                                 etAadhaar.setText(getAadharNo());
                                 if (isFundTransferDone()) {
@@ -1392,8 +1455,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     }
                                     cbAadharDeclaration.setEnabled(true);
                                     isAdharChanged = true;
-                                    if (!isBlank(getAadharNo()))
-                                        validateAadharAvailability();
+                                    if (!isBlank(getAadharNo())) validateAadharAvailability();
+                                    if (isAadhaarByPass()) {
+                                        showSubmitButton();
+                                    }
                                 }
                             }
 //                            showNextBtn();
@@ -1416,7 +1481,22 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     validateAadharAvailability();
                                 }
                             }
+
+                            if (isAadhaarByPass()) {
+                                showSubmitButton();
+                            }
                         }
+                    }
+                    if (getIsAadharVerified()) {
+                        rbOnline.setChecked(true);
+                        rbOffline.setChecked(false);
+                        tvPaperLessMessage.setText(
+                            Html.fromHtml(getResources().getString(R.string.online_msg)));
+                    } else {
+                        rbOnline.setChecked(true);
+                        rbOffline.setChecked(false);
+                        tvPaperLessMessage.setText(
+                            Html.fromHtml(getResources().getString(R.string.offline_msg)));
                     }
                 } else {
                     /*MF BR BA*/
@@ -1521,6 +1601,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     }
                                 }
 
+                                if (isAadhaarByPass()) {
+                                    showSubmitButton();
+                                }
                             }
 //                            showNextBtn();
                         } else {
@@ -1628,6 +1711,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                     }
                                 }
 
+                                if (isAadhaarByPass()) {
+                                    showSubmitButton();
+                                }
+
                             }
 //                            showNextBtn();
                         } else {
@@ -1689,6 +1776,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
             } else {
                 etPan.requestFocus();
             }
+            aadhaarVisibility();
         } catch (Exception e) {
             e.printStackTrace();
 //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
@@ -2346,6 +2434,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
         inputMap.put("_IP", getDeviceID(PANAdharRegistActivity.this, getContentResolver()));
         inputMap.put("_Segment", seg);
         inputMap.put("_chkSIPIntent", getSipIntent());
+        if (!getAppType().equalsIgnoreCase(DIRECT)) onlineOffline = "Online";
+        inputMap.put("ONLINEOFFLINE", onlineOffline);
 
         String flag = UPDATEPANAADHARDETAILS;
         String category = PANADDHARDETAILS;
@@ -2389,6 +2479,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                                         } else {
                                                             if (getIsCVLVerified()) {
                                                                 updateAddressDetails(userID, CVL);
+                                                            } else if (isAadhaarByPass()
+                                                                && !getIsCVLVerified()) {
+                                                                updateAddressDetails(userID,
+                                                                    MANUAL);
                                                             } else {
 //                                                            getAddress(false, true, true);
                                                                 Intent intent = new Intent(PANAdharRegistActivity.this, AddressDetailsActivity.class);
@@ -2402,11 +2496,13 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                                                         } else if (getAppType().equals(DIRECT)) {
                                                             updateAddressDetails(userID, MANUAL);
                                                         }
+                                                    } else if (isAadhaarByPass()
+                                                        && !getIsCVLVerified()) {
+                                                        updateAddressDetails(userID, MANUAL);
                                                     } else {
                                                         Intent intent = new Intent(PANAdharRegistActivity.this, AddressDetailsActivity.class);
                                                         startActivity(intent);
                                                         finish();
-
                                                     }
                                                 } else {
                                                     if (isSegmentMForEquity.equals(MFSegment)) {
@@ -2660,100 +2756,155 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
 
 
                             if (!status.equals("")) {
-                                setIsCVLVerified(isCVLverified != null && isCVLverified.equals("1") ? true : false);
-                                btnSubmit.setVisibility(View.GONE);
-                                if (getInterestedInMF() && getIsCVLVerified()) {
-                                    rbAadhar.setChecked(true);
-                                    rbVirtualId.setChecked(false);
-                                    rbAadhar.setVisibility(View.VISIBLE);
-                                    rbVirtualId.setVisibility(View.GONE);
-                                    input_layout_aadhar.setHint("Aadhaar No");
-                                    etAadhaar.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
-                                    tvAadharEg.setText("988800001111");
-                                    tvAadharMsg.setText(getResources().getString(R.string.aadharmsg));
-                                    tvAadharMsg.setTextColor(getResources().getColor(R.color.market_text));
-                                    authType = AADHAAR;
-                                    etAadhaar.setText("");
+                                setIsCVLVerified(
+                                    isCVLverified != null && isCVLverified.equals("1"));
+                                if (!isAadhaarByPass()) {
                                     btnSubmit.setVisibility(View.GONE);
-                                    ivNote.setVisibility(View.GONE);
-                                    tvVirtualIdInfo.setVisibility(View.GONE);
-                                    if (getAppType().equalsIgnoreCase(DIRECT))
-                                        tvAadharMsg.setVisibility(View.GONE);
-                                    else
-                                        tvAadharMsg.setVisibility(View.VISIBLE);
-                                } else if (getInterestedInMF()) {
-                                    authType = VIRTUALID;
-                                    rbVirtualId.setChecked(true);
-                                    rbAadhar.setChecked(false);
-                                    rbVirtualId.setVisibility(View.VISIBLE);
-                                    input_layout_aadhar.setHint("Aadhaar Virtual Id");
-                                    etAadhaar.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
-                                    tvAadharEg.setText("9888000011115555");
-                                    tvAadharMsg.setText(Html.fromHtml(getResources().getString(R.string.vitrualIdmsg)));
-                                    tvAadharMsg.setTextColor(getResources().getColor(R.color.market_text));
-                                    tvAadharMsg.setVisibility(View.VISIBLE);
-                                    authType = VIRTUALID;
-                                    etAadhaar.setText("");
-                                    btnSubmit.setVisibility(View.GONE);
-                                    ivNote.setVisibility(View.VISIBLE);
-                                    if (getAppType().equalsIgnoreCase(DIRECT)) {
-                                        //rbAadhar.setVisibility(View.GONE);
-                                        if (openPaperlessAccount) {
-                                            tvVirtualIdInfo.setText(Html.fromHtml(
-                                                    getResources().getString(R.string.open_paperless_account)));
-                                        } else {
-                                            tvVirtualIdInfo.setText(Html.fromHtml(
-                                                    getResources().getString(R.string.unable_to_genrate_virtualid)));
-                                        }
-                                        tvVirtualIdInfo.setVisibility(View.VISIBLE);
-                                    } else {
+                                    if (getInterestedInMF() && getIsCVLVerified()) {
+                                        rbAadhar.setChecked(true);
+                                        rbVirtualId.setChecked(false);
+                                        rbAadhar.setVisibility(View.VISIBLE);
+                                        rbVirtualId.setVisibility(View.GONE);
+                                        input_layout_aadhar.setHint("Aadhaar No");
+                                        etAadhaar.setFilters(
+                                            new InputFilter[] { new InputFilter.LengthFilter(12) });
+                                        tvAadharEg.setText("988800001111");
+                                        tvAadharMsg.setText(
+                                            getResources().getString(R.string.aadharmsg));
+                                        tvAadharMsg.setTextColor(
+                                            getResources().getColor(R.color.market_text));
+                                        authType = AADHAAR;
+                                        etAadhaar.setText("");
+                                        btnSubmit.setVisibility(View.GONE);
+                                        ivNote.setVisibility(View.GONE);
                                         tvVirtualIdInfo.setVisibility(View.GONE);
-                                    }
-                                }
-                                if (Integer.valueOf(status) == 0) {
-                                    panDOBStatus = false;
-//                                    dialogPANCVLVerified(msg);
-                                    CustomDialog dialog = new CustomDialog(PANAdharRegistActivity.this, msg, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-
-                                        @Override
-                                        public void dialogAction(Action action, Object... data) {
-                                            /*if (action == Action.OK) {
-                                                fetchAddFromPAN();
-                                            }*/
+                                        if (getAppType().equalsIgnoreCase(DIRECT)) {
+                                            tvAadharMsg.setVisibility(View.GONE);
+                                        } else {
+                                            tvAadharMsg.setVisibility(View.VISIBLE);
                                         }
-                                    });
-                                    dialog.show();
-                                    etAadhaar.setText("");
-                                    etAadhaar.setEnabled(false);
-                                    cbAadhar.setEnabled(true);
-                                    tvDocCheckList.setVisibility(View.GONE);
-                                } else if (Integer.valueOf(status) == 1) {
-                                    panDOBStatus = true;
-                                    // etDOB.setEnabled(false);
-                                    etAadhaar.setText("");
-//                                    if (getInterestedInMF()) {
-                                    etAadhaar.setEnabled(true);
-                                    cbAadhar.setEnabled(true);
-//                                    }
-                                    tvDocCheckList.setVisibility(View.VISIBLE);
-                                    etAadhaar.requestFocus();
+                                    } else if (getInterestedInMF()) {
+                                        authType = VIRTUALID;
+                                        rbVirtualId.setChecked(true);
+                                        rbAadhar.setChecked(false);
+                                        rbVirtualId.setVisibility(View.VISIBLE);
+                                        input_layout_aadhar.setHint("Aadhaar Virtual Id");
+                                        etAadhaar.setFilters(
+                                            new InputFilter[] { new InputFilter.LengthFilter(16) });
+                                        tvAadharEg.setText("9888000011115555");
+                                        tvAadharMsg.setText(Html.fromHtml(
+                                            getResources().getString(R.string.vitrualIdmsg)));
+                                        tvAadharMsg.setTextColor(
+                                            getResources().getColor(R.color.market_text));
+                                        tvAadharMsg.setVisibility(View.VISIBLE);
+                                        authType = VIRTUALID;
+                                        etAadhaar.setText("");
+                                        btnSubmit.setVisibility(View.GONE);
+                                        ivNote.setVisibility(View.VISIBLE);
+                                        if (getAppType().equalsIgnoreCase(DIRECT)) {
+                                            //rbAadhar.setVisibility(View.GONE);
+                                            if (openPaperlessAccount) {
+                                                tvVirtualIdInfo.setText(Html.fromHtml(
+                                                    getResources().getString(
+                                                        R.string.open_paperless_account)));
+                                            } else {
+                                                tvVirtualIdInfo.setText(Html.fromHtml(
+                                                    getResources().getString(
+                                                        R.string.unable_to_genrate_virtualid)));
+                                            }
+                                            tvVirtualIdInfo.setVisibility(View.VISIBLE);
+                                        } else {
+                                            tvVirtualIdInfo.setVisibility(View.GONE);
+                                        }
+                                    }
+                                    if (Integer.valueOf(status) == 0) {
+                                        panDOBStatus = false;
+                                        //                                    dialogPANCVLVerified(msg);
+                                        CustomDialog dialog =
+                                            new CustomDialog(PANAdharRegistActivity.this, msg, true,
+                                                false, false, "", OK, "",
+                                                new CustomDialog.CustomDialogListener() {
 
-                                    //Aadhar mandatory for all case 03-Oct
-                                    /*if (getInterestedInMF()) {
-                                        btnSubmit.setVisibility(View.VISIBLE);
-                                        btnSubmit.setText(SUBMIT);
-                                    }*/
-                                } else if (Integer.valueOf(status) == 2) {
-                                    commonMsgDialog(PANAdharRegistActivity.this, msg, false, "");
-                                    panDOBStatus = true;
-                                    // etDOB.setEnabled(false);
-                                    etAadhaar.setText("");
-//                                    if (getInterestedInMF()) {
-                                    etAadhaar.setEnabled(true);
-                                    cbAadhar.setEnabled(true);
-//                                    }
-                                    tvDocCheckList.setVisibility(View.VISIBLE);
-                                    etAadhaar.requestFocus();
+                                                    @Override
+                                                    public void dialogAction(Action action,
+                                                        Object... data) {
+                                                /*if (action == Action.OK) {
+                                                    fetchAddFromPAN();
+                                                }*/
+                                                    }
+                                                });
+                                        dialog.show();
+                                        etAadhaar.setText("");
+                                        etAadhaar.setEnabled(false);
+                                        cbAadhar.setEnabled(true);
+                                        tvDocCheckList.setVisibility(View.GONE);
+                                    } else if (Integer.valueOf(status) == 1) {
+                                        panDOBStatus = true;
+                                        // etDOB.setEnabled(false);
+                                        etAadhaar.setText("");
+                                        //                                    if (getInterestedInMF()) {
+                                        etAadhaar.setEnabled(true);
+                                        cbAadhar.setEnabled(true);
+                                        //                                    }
+                                        tvDocCheckList.setVisibility(View.VISIBLE);
+                                        etAadhaar.requestFocus();
+
+                                        //Aadhar mandatory for all case 03-Oct
+                                        /*if (getInterestedInMF()) {
+                                            btnSubmit.setVisibility(View.VISIBLE);
+                                            btnSubmit.setText(SUBMIT);
+                                        }*/
+                                    } else if (Integer.valueOf(status) == 2) {
+                                        commonMsgDialog(PANAdharRegistActivity.this, msg, false,
+                                            "");
+                                        panDOBStatus = true;
+                                        // etDOB.setEnabled(false);
+                                        etAadhaar.setText("");
+                                        //                                    if (getInterestedInMF()) {
+                                        etAadhaar.setEnabled(true);
+                                        cbAadhar.setEnabled(true);
+                                        //                                    }
+                                        tvDocCheckList.setVisibility(View.VISIBLE);
+                                        etAadhaar.requestFocus();
+                                    }
+                                } else {
+                                    if (Integer.valueOf(status) == 0) {
+                                        panDOBStatus = false;
+                                        CustomDialog dialog =
+                                            new CustomDialog(PANAdharRegistActivity.this, msg, true,
+                                                false, false, "", OK, "",
+                                                new CustomDialog.CustomDialogListener() {
+
+                                                    @Override
+                                                    public void dialogAction(Action action,
+                                                        Object... data) {
+
+                                                    }
+                                                });
+                                        dialog.show();
+                                    } else if (Integer.valueOf(status) == 1) {
+                                        panDOBStatus = true;
+                                    } else if (Integer.valueOf(status) == 2) {
+                                        commonMsgDialog(PANAdharRegistActivity.this, msg, false,
+                                            "");
+                                        panDOBStatus = true;
+                                    }
+                                    llOTPThumbLayout.setVisibility(View.GONE);
+                                    if (getInterestedInMF() && getIsCVLVerified()) {
+                                        setIsAadharVerified(false);
+                                        llAadhar.setVisibility(View.GONE);
+                                    } else {
+                                        if (getAppType().equalsIgnoreCase(DIRECT)
+                                            && rbOnline.isChecked()) {
+                                            setIsAadharVerified(true);
+                                        } else if (getAppType().equalsIgnoreCase(DIRECT)
+                                            && rbOffline.isChecked()) {
+                                            setIsAadharVerified(false);
+                                        } else {
+                                            setIsAadharVerified(true);
+                                        }
+                                    }
+                                    showSubmitButton();
                                 }
                             } else {
                                 commonMsgDialog(PANAdharRegistActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
@@ -3695,6 +3846,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         if (getIsCVLVerified()) {
 //                                                                 updateAddressDetails(userID, CVL);
                             callApplyNowActivity(PANAdharRegistActivity.this);
+                        } else if (isAadhaarByPass() && !getIsCVLVerified()) {
+                            callApplyNowActivity(PANAdharRegistActivity.this);
                         } else {
 //                                                            getAddress(false, true, true);
                             Intent intent = new Intent(PANAdharRegistActivity.this, AddressDetailsActivity.class);
@@ -3708,11 +3861,12 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     } else if (getAppType().equals(DIRECT)) {
                         callApplyNowActivity(PANAdharRegistActivity.this);
                     }
+                } else if (isAadhaarByPass() && !getIsCVLVerified()) {
+                    callApplyNowActivity(PANAdharRegistActivity.this);
                 } else {
                     Intent intent = new Intent(PANAdharRegistActivity.this, AddressDetailsActivity.class);
                     startActivity(intent);
                     finish();
-
                 }
             }
         } else if (getInterestedInMF()) {
@@ -3722,7 +3876,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 etPan.setError("PAN no. is invalid");
             } else if (etDOB.getText().toString().equals("")) {
                 etDOB.setError("DOB is required");
-            } else if (etAadhaar.getText().toString().trim().equals("")) {
+            } else if (llAadhaarEditText.getVisibility() == View.VISIBLE && etAadhaar.getText()
+                .toString()
+                .trim()
+                .equals("")) {
                 setIsAadharVerified(false);
                 setPANno(etPan.getText().toString());
                 setDob(etDOB.getText().toString());
@@ -3748,7 +3905,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 else if (getIsCVLVerified() && (getAppType().equals(PP) || getAppType().equals(CRM))) {
                     cvlOTPApi();
                 }
-            } else if (etAadhaar.length() < 12) {
+            } else if (llAadhaarEditText.getVisibility() == View.VISIBLE
+                && etAadhaar.length() < 12) {
                 etAadhaar.setError("Aadhar no. is invalid");
             } else {
                 if (getAppType().equals(DIRECT)) {
@@ -3780,7 +3938,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     if (getInterestedInMF() && getIsCVLVerified() && (getAppType().equals(PP) || getAppType().equals(CRM))) {
                         showEquityMFOptionDialog(true, false);
                     } else if (getInterestedInMF() && !getIsCVLVerified() && (getAppType().equals(PP) || getAppType().equals(CRM))) {
-                        showEquityMFOptionDialog(true, false);
+                        showEquityMFOptionDialog(false, false);
                     }
                 } else if (OTPVerified == cvlOTPVerified) {
                     submitPANAadhar(true);
@@ -3797,7 +3955,12 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 etPan.setError("PAN no. is invalid");
             } else if (etDOB.getText().toString().equals("")) {
                 etDOB.setError("DOB is required");
-            } else if (etAadhaar.getText().toString().trim().equals("")) {
+            } else if (isAadhaarByPass()) {
+                submitPANAadhar(true);
+            } else if (llAadhaarEditText.getVisibility() == View.VISIBLE && etAadhaar.getText()
+                .toString()
+                .trim()
+                .equals("")) {
                 if (getAppType().equals(DIRECT)) {
                     if (cbAadhar.isChecked()) {
                         etAadhaar.setError(null);
@@ -3814,14 +3977,18 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 } else {
                     etAadhaar.setError("Aadhar no. required");
                 }
-            } else if (rbAadhar.isChecked() ? etAadhaar.length() < 12 : etAadhaar.length() < 16) {
+            } else if (llAadhaarEditText.getVisibility() == View.VISIBLE && rbAadhar.isChecked() ?
+                etAadhaar.length()
+                    < 12 : etAadhaar.length() < 16) {
                 if (rbAadhar.isChecked()) {
                     etAadhaar.setError("Aadhar no. is invalid");
                 } else {
                     etAadhaar.setError("Virtual id is invalid");
                 }
-
-            } else if (isValidPannumber(etPan.getText().toString()) && (rbAadhar.isChecked() ? etAadhaar.length() == 12 : etAadhaar.length() == 16) && !etDOB.getText().toString().equals("")) {
+            } else if (isValidPannumber(etPan.getText().toString())
+                && llAadhaarEditText.getVisibility() == View.VISIBLE
+                && (rbAadhar.isChecked() ? etAadhaar.length() == 12 : etAadhaar.length() == 16)
+                && !etDOB.getText().toString().equals("")) {
                 if (panDOBStatus) {
                     if (getAppType().equalsIgnoreCase(DIRECT) && etAadhaar.getText().toString().length() == 12) {
                         setPANno(etPan.getText().toString());
@@ -4401,5 +4568,43 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
         } else {
             MOSLCommon.alertDInternet(this);
         }
+    }
+
+    private void aadhaarVisibility() {
+        if (isAadhaarByPass()) {
+            if (getAppType().equalsIgnoreCase(DIRECT)) {
+                if (getInterestedInMF() && getIsCVLVerified()) {
+                    llPaperLessRadioGroup.setVisibility(View.GONE);
+                } else {
+                    llPaperLessRadioGroup.setVisibility(View.VISIBLE);
+                }
+            } else {
+                llPaperLessRadioGroup.setVisibility(View.GONE);
+            }
+            llAadhar.setVisibility(View.GONE);
+            llAadhaarCheckBox.setVisibility(View.GONE);
+            llAadhaarEditText.setVisibility(View.GONE);
+            cbAadhar.setVisibility(View.GONE);
+            tvAadharNote.setVisibility(View.GONE);
+            if (isMfIpvDone() || isFundTransferDone()) {
+                rbOnline.setEnabled(false);
+                rbOffline.setEnabled(false);
+            } else {
+                rbOnline.setEnabled(true);
+                rbOffline.setEnabled(true);
+            }
+        } else {
+            llPaperLessRadioGroup.setVisibility(View.GONE);
+            llAadhar.setVisibility(View.VISIBLE);
+            llAadhaarCheckBox.setVisibility(View.VISIBLE);
+            llAadhaarEditText.setVisibility(View.VISIBLE);
+            cbAadhar.setVisibility(View.VISIBLE);
+            tvAadharNote.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showSubmitButton() {
+        btnSubmit.setVisibility(View.VISIBLE);
+        btnSubmit.setText(SUBMIT);
     }
 }

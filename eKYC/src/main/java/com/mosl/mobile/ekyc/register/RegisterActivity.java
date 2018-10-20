@@ -1,8 +1,8 @@
 package com.mosl.mobile.ekyc.register;
 
 import android.app.Activity;
-import android.content.Context;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -26,7 +26,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
@@ -37,16 +36,13 @@ import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.mobile.ekyc.model.RowData;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.getDeviceID;
@@ -54,7 +50,20 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isValidEmail;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.clearAllCommonModelFields;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getRegisterEmail;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadhaarByPass;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.setBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setRegisterEmail;
+import static com.mosl.mobile.ekyc.model.CommonModel.setRegisteredName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
 
 /**
  * Created by Owner on 6/24/2016.
@@ -609,6 +618,9 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                                         String otp = (response.isNull("_OTP") || response.getString("_OTP").equals("")) ? "" : response.getString("_OTP");
                                         String uniqueId = (response.isNull("_uniqueId") || response.getString("_uniqueId").equals("")) ? "" : response.getString("_uniqueId");
                                         String showChangePassword = (response.isNull("_ShowChangePassword") || response.getString("_ShowChangePassword").equals("")) ? "" : response.getString("_ShowChangePassword");
+                                        String isAadhaarByPass = (response.isNull("ISAADHAARBYPASS")
+                                            || response.getString("ISAADHAARBYPASS").equals(""))
+                                            ? "" : response.getString("ISAADHAARBYPASS").trim();
                                         int intStatus = Integer.parseInt(status);
 
                                         if (intStatus == 4 && isBlank(userID)) {
@@ -618,6 +630,7 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                                         } else {
                                             setUserID(userID);
                                         }
+                                        setAadhaarByPass(isAadhaarByPass.equals("1"));
                                         if (intStatus == 0 || intStatus == 4 || intStatus == 1) {
                                             if (intStatus == 1) {
                                                 sendOTP(name, emailId, mob, otp, SIGNUP, uniqueId);

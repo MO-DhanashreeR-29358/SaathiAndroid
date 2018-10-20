@@ -35,8 +35,6 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomViewPager;
@@ -53,10 +51,7 @@ import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.CustomDialogFamilyRelationship;
 import com.mosl.mobile.ekyc.ui.DatePickerListener;
 import com.viewpagerindicator.TabPageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -68,8 +63,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.EkycAppUtil.getAdultDate;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
@@ -82,10 +77,64 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.isNomineeTabApplicable;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isThisSecondProductFlow;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isValidEmail;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.loadCountryArray;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.removeExponential;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAddressMode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDematTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEsignTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAllSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCommoditySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCurrencySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsDerivativeSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPersonalTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAllOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCurrencyOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDerivativeOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDerivativeSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.setClientName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setCurrencySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDerivativeSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEqSchemeId;
+import static com.mosl.mobile.ekyc.model.CommonModel.setGotoFundTransfer;
+import static com.mosl.mobile.ekyc.model.CommonModel.setGotoReviewEdit;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAllOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAllSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommoditySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCurrencyOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCurrencySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsDerivativeOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsDerivativeSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsPersonalDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsPersonalDetailUpdated;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsSegmentSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsWorkDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANno;
 import static com.mosl.mobile.ekyc.model.RowData.getSpinnerRowDataById;
 import static com.mosl.mobile.ekyc.model.RowData.getSpinnerRowDataByValue;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
@@ -172,7 +221,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
     private Dialog dialogDocList;
     private boolean isFatcaCountryCitizenBlank, isFatcaCountryBirthBlank, isFatcaTAXBlank, isFatcaPOABlank, isFatcaAddOutsideIndiaBlank;
     private Dialog dialog;
-    private boolean visibilityFlagFD = false;
+    private boolean visibilityFlagFD = false, aadhaarByPass = false;
     /**
      * FATCA Detail
      */
@@ -2213,7 +2262,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                 if (!isBlank(etAadhar.getText().toString())) {
                     input_layout_aadhar.setErrorEnabled(false);
                     if (etAadhar.length() < 12) {
-                        input_layout_aadhar.setError("Invalid aadhar number");
+                        input_layout_aadhar.setError("Enter valid aadhaar number");
                         etAadhar.requestFocus();
                     } else {
                         input_layout_aadhar.setErrorEnabled(false);
@@ -3325,7 +3374,16 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                                 ? "" : object.getString("NONCommercial_AgriCommodities");
                                         String gstLocation = (object.isNull("GSTLocation") || object.getString("GSTLocation").equals("")) ? "" : object.getString("GSTLocation");
                                         String gstNumber = (object.isNull("GSTNumber") || object.getString("GSTNumber").equals("")) ? "" : object.getString("GSTNumber");
+                                        String isAadhaarByPass =
+                                            (object.isNull("ISAADHAARBYPASS") || object.getString(
+                                                "ISAADHAARBYPASS").equals("")) ? ""
+                                                : object.getString("ISAADHAARBYPASS").trim();
+                                        String onlineOffline =
+                                            (object.isNull("ONLINEOFFLINE") || object.getString(
+                                                "ONLINEOFFLINE").equals("")) ? ""
+                                                : object.getString("ONLINEOFFLINE").trim();
 
+                                        aadhaarByPass = isAadhaarByPass.equals("1");
                                         setEqSchemeId(eqSchemeId);
                                         etGST.setText(gstNumber);
                                         if (!isBlank(familyDeclaration) && Integer.parseInt(familyDeclaration) == 1) { //if 1 then Family declaration selected
@@ -3551,6 +3609,8 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                             } else {
                                                 etAadhar.setEnabled(true);
                                             }
+                                        } else if (aadhaarByPass) {
+                                            etAadhar.setEnabled(true);
                                         }
                                         etNameOnPAN.setText(namePan);
                                         etBldgNameCorres.setText(corresAdd1);
@@ -7024,6 +7084,9 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             etMaidenLastNameError.setText(ErrorMsgName);
             etMaidenLastName.requestFocus();
             return;
+        } else if (aadhaarByPass && etAadhar.getText().toString().length() < 12) {
+            input_layout_aadhar.setError("Invalid aadhaar number");
+            etAadhar.requestFocus();
         } else if (!isBlank(etGST.getText().toString()) && !ValidationRule.validateGST(etGST.getText().toString().trim())) {
             input_layout_GST.setError(ErrorMsgGST);
             etGST.requestFocus();
@@ -7327,7 +7390,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             return;
         } else {
 
-//                EkycMainActivity.vpApply.setCurrentItem(1);
+            //                EkycMainActivity.vpApply.setCurrentItem(1);
             //if (isPersonalDetailDone() && isSegmentSelected() && isWorkDetailDone()) {
             //    EkycMainActivity.vpApply.setCurrentItem(1);
             //    setIsPersonalDetailUpdated(true);
@@ -7549,9 +7612,12 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     etMaidenLastName.requestFocus();
                     return;
                 } else if (!isBlank(etAadhar.getText().toString()) && !getIsAadharVerified() && !getIsCVLVerified() && etAadhar.getText().toString().length() < 12) {
-                    input_layout_aadhar.setError("Invalid aadhar number");
+                    input_layout_aadhar.setError("Enter valid aadhaar number");
                     etAadhar.requestFocus();
                     return;
+                } else if (aadhaarByPass && etAadhar.getText().toString().length() < 12) {
+                    input_layout_aadhar.setError("Enter valid aadhaar number");
+                    etAadhar.requestFocus();
                 } else if (!isBlank(etGST.getText().toString()) && !ValidationRule.validateGST(etGST.getText().toString().trim())) {
                     input_layout_GST.setError(ErrorMsgGST);
                     etGST.requestFocus();
@@ -7818,8 +7884,11 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     etCategorySelectionError.requestFocus();
                     return;
                 } else if (getIsCommoditySelected() && ((cbCommercial.isChecked() && !cbCommercialBullion.isChecked() && !cbCommercialBaseMetals.isChecked() && !cbCommercialEnergy.isChecked()
-                        && !cbCommercialAgriCommodities.isChecked()) || (cbNonCommercial.isChecked() && !cbNonCommercialBullion.isChecked() && !cbNonCommercialBaseMetals.isChecked() &&
-                        !cbNonCommercialEnergy.isChecked() && !cbNonCommercialAgriCommodities.isChecked()))) {
+                    && !cbCommercialAgriCommodities.isChecked()) || (cbNonCommercial.isChecked()
+                    && !cbNonCommercialBullion.isChecked()
+                    && !cbNonCommercialBaseMetals.isChecked()
+                    && !cbNonCommercialEnergy.isChecked()
+                    && !cbNonCommercialAgriCommodities.isChecked()))) {
                     etCategorySelectionError.setVisibility(View.VISIBLE);
                     etCategorySelectionError.setText(getResources().getString(R.string.category_selection_sub_error));
                     etCategorySelectionError.requestFocus();
@@ -7928,7 +7997,6 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     removeKeyboard(mContext, btnNext);
                     updateFatcaAnswers();
                     setClientName(etFirstName.getText().toString() + " " + etMiddleName.getText().toString() + " " + etLastName.getText().toString());
-
                 }
             }
         } catch (Exception ex) {
