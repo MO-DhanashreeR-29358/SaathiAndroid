@@ -232,8 +232,9 @@
                         android:orientation="vertical">
 
                         <include
+                            layout="@layout/layout_merge_of_mosl_note"
                             android:id="@+id/layout_merge_note"
-                            layout="@layout/layout_merge_of_mosl_note" />
+                            />
 
                         <LinearLayout
                             android:id="@+id/llEquPaymentButton"
@@ -509,8 +510,9 @@
                         android:orientation="vertical">
 
                         <include
+                            layout="@layout/layout_merge_of_mosl_note"
                             android:id="@+id/layout_merge_note"
-                            layout="@layout/layout_merge_of_mosl_note" />
+                            />
 
                         <LinearLayout
                             android:id="@+id/llCommPaymentButton"

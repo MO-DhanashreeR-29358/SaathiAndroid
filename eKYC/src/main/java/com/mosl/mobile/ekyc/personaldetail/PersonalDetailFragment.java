@@ -221,7 +221,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
     private Dialog dialogDocList;
     private boolean isFatcaCountryCitizenBlank, isFatcaCountryBirthBlank, isFatcaTAXBlank, isFatcaPOABlank, isFatcaAddOutsideIndiaBlank;
     private Dialog dialog;
-    private boolean visibilityFlagFD = false;
+    private boolean visibilityFlagFD = false, aadhaarByPass = false;
     /**
      * FATCA Detail
      */
@@ -2262,7 +2262,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                 if (!isBlank(etAadhar.getText().toString())) {
                     input_layout_aadhar.setErrorEnabled(false);
                     if (etAadhar.length() < 12) {
-                        input_layout_aadhar.setError("Invalid aadhar number");
+                        input_layout_aadhar.setError("Enter valid aadhaar number");
                         etAadhar.requestFocus();
                     } else {
                         input_layout_aadhar.setErrorEnabled(false);
@@ -3374,7 +3374,16 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                                 ? "" : object.getString("NONCommercial_AgriCommodities");
                                         String gstLocation = (object.isNull("GSTLocation") || object.getString("GSTLocation").equals("")) ? "" : object.getString("GSTLocation");
                                         String gstNumber = (object.isNull("GSTNumber") || object.getString("GSTNumber").equals("")) ? "" : object.getString("GSTNumber");
+                                        String isAadhaarByPass =
+                                            (object.isNull("ISAADHAARBYPASS") || object.getString(
+                                                "ISAADHAARBYPASS").equals("")) ? ""
+                                                : object.getString("ISAADHAARBYPASS").trim();
+                                        String onlineOffline =
+                                            (object.isNull("ONLINEOFFLINE") || object.getString(
+                                                "ONLINEOFFLINE").equals("")) ? ""
+                                                : object.getString("ONLINEOFFLINE").trim();
 
+                                        aadhaarByPass = isAadhaarByPass.equals("1");
                                         setEqSchemeId(eqSchemeId);
                                         etGST.setText(gstNumber);
                                         if (!isBlank(familyDeclaration) && Integer.parseInt(familyDeclaration) == 1) { //if 1 then Family declaration selected
@@ -3600,6 +3609,8 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                             } else {
                                                 etAadhar.setEnabled(true);
                                             }
+                                        } else if (aadhaarByPass) {
+                                            etAadhar.setEnabled(true);
                                         }
                                         etNameOnPAN.setText(namePan);
                                         etBldgNameCorres.setText(corresAdd1);
@@ -7072,6 +7083,9 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             etMaidenLastNameError.setText(ErrorMsgName);
             etMaidenLastName.requestFocus();
             return;
+        } else if (aadhaarByPass && etAadhar.getText().toString().length() < 12) {
+            input_layout_aadhar.setError("Invalid aadhaar number");
+            etAadhar.requestFocus();
         } else if (!isBlank(etGST.getText().toString()) && !ValidationRule.validateGST(etGST.getText().toString().trim())) {
             input_layout_GST.setError(ErrorMsgGST);
             etGST.requestFocus();
@@ -7375,7 +7389,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             return;
         } else {
 
-//                EkycMainActivity.vpApply.setCurrentItem(1);
+            //                EkycMainActivity.vpApply.setCurrentItem(1);
             //if (isPersonalDetailDone() && isSegmentSelected() && isWorkDetailDone()) {
             //    EkycMainActivity.vpApply.setCurrentItem(1);
             //    setIsPersonalDetailUpdated(true);
@@ -7597,9 +7611,12 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     etMaidenLastName.requestFocus();
                     return;
                 } else if (!isBlank(etAadhar.getText().toString()) && !getIsAadharVerified() && !getIsCVLVerified() && etAadhar.getText().toString().length() < 12) {
-                    input_layout_aadhar.setError("Invalid aadhar number");
+                    input_layout_aadhar.setError("Enter valid aadhaar number");
                     etAadhar.requestFocus();
                     return;
+                } else if (aadhaarByPass && etAadhar.getText().toString().length() < 12) {
+                    input_layout_aadhar.setError("Enter valid aadhaar number");
+                    etAadhar.requestFocus();
                 } else if (!isBlank(etGST.getText().toString()) && !ValidationRule.validateGST(etGST.getText().toString().trim())) {
                     input_layout_GST.setError(ErrorMsgGST);
                     etGST.requestFocus();
@@ -7866,8 +7883,11 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     etCategorySelectionError.requestFocus();
                     return;
                 } else if (getIsCommoditySelected() && ((cbCommercial.isChecked() && !cbCommercialBullion.isChecked() && !cbCommercialBaseMetals.isChecked() && !cbCommercialEnergy.isChecked()
-                        && !cbCommercialAgriCommodities.isChecked()) || (cbNonCommercial.isChecked() && !cbNonCommercialBullion.isChecked() && !cbNonCommercialBaseMetals.isChecked() &&
-                        !cbNonCommercialEnergy.isChecked() && !cbNonCommercialAgriCommodities.isChecked()))) {
+                    && !cbCommercialAgriCommodities.isChecked()) || (cbNonCommercial.isChecked()
+                    && !cbNonCommercialBullion.isChecked()
+                    && !cbNonCommercialBaseMetals.isChecked()
+                    && !cbNonCommercialEnergy.isChecked()
+                    && !cbNonCommercialAgriCommodities.isChecked()))) {
                     etCategorySelectionError.setVisibility(View.VISIBLE);
                     etCategorySelectionError.setText(getResources().getString(R.string.category_selection_sub_error));
                     etCategorySelectionError.requestFocus();
@@ -7976,7 +7996,6 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                     removeKeyboard(mContext, btnNext);
                     updateFatcaAnswers();
                     setClientName(etFirstName.getText().toString() + " " + etMiddleName.getText().toString() + " " + etLastName.getText().toString());
-
                 }
             }
         } catch (Exception ex) {

@@ -75,7 +75,6 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityFundTransfere
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityFundTransfered;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
-
 /**
  * Created by Owner on 7/8/2016.
  */
@@ -83,27 +82,40 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
     static Context mContext;
     View debitCardView;
-    Button btnEquPayment, btnEquSkipPayment, btnCommPayment, btnCommSkipPayment, btnEquNext, btnCommNext;
+    private final AdapterView.OnItemSelectedListener equCommListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strCommBankShortName = ((RowData) arrCommodityBankName.get(position)).getKey();
+                strCommBankName = ((RowData) arrCommodityBankName.get(position)).getValue();
+                etCommDebitBankNameError.setVisibility(View.GONE);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
     RadioButton rbEquityATM, rbEquityVisa, rbCommodityATM, rbCommodityVisa;
-    LinearLayout llEquityFundTransfer, llCommodityFundTransfer, /*customProgress,*/
-            llEquDebitBankName,
-            llCommDebitBankName, llCommFundOption, llEquFundOption, llEquityVisa, llCommodityVisa, llEquPaymentButton, llCommPaymentButton;
+    Button btnEquPayment, btnEquSkipPayment, btnCommPayment, btnCommSkipPayment, btnEquNext,
+        btnCommNext;
     Dialog dialog;
     Spinner spEquDebitBankName, spCommDebitBankName;
-    TextView etEquDebitBankNameError, etCommDebitBankNameError, etEquFundTransferredError, etCommFundTransferredError;
+    LinearLayout llEquityFundTransfer, llCommodityFundTransfer, /*customProgress,*/
+        llEquDebitBankName, llCommDebitBankName, llCommFundOption, llEquFundOption, llEquityVisa,
+        llCommodityVisa, llEquPaymentButton, llCommPaymentButton;
     String userID;
     ArrayAdapter<RowData> arrAdapEquityBankName, arrAdapCommodityBankName;
     ArrayList<RowData> arrEquityBankName, arrCommodityBankName;
-    String strEquBankShortName, strEquBankName, strCommBankShortName, strCommBankName, equMargin = "", equTotalAmount = "", strEquAccNo = "", strCommAccNo = "",
-            commMargin = "", commTotalAmount = "";
+    TextView etEquDebitBankNameError, etCommDebitBankNameError, etEquFundTransferredError,
+        etCommFundTransferredError;
     static int mEquStatus, mCommStatus;
     TextView tvEquFundTransfered, tvCommFundTransfered;
     RelativeLayout rlEquSkipPayment, rlCommSkipPayment;
     TextInputLayout input_layout_equFundTransferred, input_layout_commFundTransferred;
     private CustomTabsClient mClient;
-    /* ,equMargin="10000",equTotalAmount="10000",
-     commMargin="10000",commTotalAmount="10000";*/
-    EditText etEquFundTransferred, etCommFundTransferred;
+    String strEquBankShortName, strEquBankName, strCommBankShortName, strCommBankName, equMargin =
+        "", equTotalAmount = "", strEquAccNo = "", strCommAccNo = "", commMargin = "",
+        commTotalAmount = "";
     Boolean equPayed, commPayed, equPaySkipped, commPaySkipped;
     CustomViewPager viewPager;
     TabPageIndicator tabPageIndicator;
@@ -115,8 +127,25 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     int hideProgressCounter = 0;
     String eqPaymentMode, commPaymentMode;
     int eqPaymentId, commPaymentId;
+    private final AdapterView.OnItemSelectedListener equBankListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strEquBankShortName = ((RowData) arrEquityBankName.get(position)).getKey();
+                strEquBankName = ((RowData) arrEquityBankName.get(position)).getValue();
+                etEquDebitBankNameError.setVisibility(View.GONE);
+            }
 
-    public static FTDebitCardFragment newInstance(Context context, int equityStatus, int commodityStatus) {
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    /* ,equMargin="10000",equTotalAmount="10000",
+     commMargin="10000",commTotalAmount="10000";*/ EditText etEquFundTransferred,
+        etCommFundTransferred;
+
+    public static FTDebitCardFragment newInstance(Context context, int equityStatus,
+        int commodityStatus) {
 
         FTDebitCardFragment fragment = new FTDebitCardFragment();
         Bundle args = new Bundle();
@@ -131,26 +160,25 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         this.tabPageIndicator = tabPageIndicator;
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         try {
             debitCardView = inflater.inflate(R.layout.frag_debitcard, container, false);
             setUpView(debitCardView);
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
+            //            Crashlytics.logException(e);
         }
         return debitCardView;
-
     }
 
-
-    @Override
-    public void onResume() {
+    @Override public void onResume() {
         super.onResume();
-        if (!getInterestedInMF() && viewPager.getCurrentItem() == getBankTab()) {
+        if (!getInterestedInMF()
+            && viewPager != null
+            && viewPager.getCurrentItem() == getBankTab()) {
             getPaymentStatus();
         }
     }
@@ -163,104 +191,130 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             String flag = GETPAYMENTSTATUS;
             String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
 
-                        try {
-//                             {"FUNDTRANSFER":[{"EQPAYMENTSTATUS":3.0,"COMMPAYMENTSTATUS":3.0}]}
-                            if (response.has("FUNDTRANSFER")) {
-                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                BigDecimal bdEqPaymentStatus = null, bdCommPaymentStatus = null;
-                                String eqPaymentStatus = "", commPaymentStatus = "";
-                                if (jsonArray.length() != 0) {
+                            try {
+                                //                             {"FUNDTRANSFER":[{"EQPAYMENTSTATUS":3.0,"COMMPAYMENTSTATUS":3.0}]}
+                                if (response.has("FUNDTRANSFER")) {
+                                    JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                    BigDecimal bdEqPaymentStatus = null, bdCommPaymentStatus = null;
+                                    String eqPaymentStatus = "", commPaymentStatus = "";
+                                    if (jsonArray.length() != 0) {
 
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
 
-                                        if (object.has("EQPAYMENTSTATUS") && object.has("COMMPAYMENTSTATUS")) {
-                                            eqPaymentStatus = (object.isNull("EQPAYMENTSTATUS") || object.getString("EQPAYMENTSTATUS").equals("")) ? "" : object.getString("EQPAYMENTSTATUS");
-                                            commPaymentStatus = (object.isNull("COMMPAYMENTSTATUS") || object.getString("COMMPAYMENTSTATUS").equals("")) ? "" : object.getString("COMMPAYMENTSTATUS");
-                                            if (!eqPaymentStatus.equals("") && !commPaymentStatus.equals("")) {
-                                                bdEqPaymentStatus = new BigDecimal(eqPaymentStatus);
-                                                bdCommPaymentStatus = new BigDecimal(commPaymentStatus);
-                                                // 4 set for no segment selected
+                                            if (object.has("EQPAYMENTSTATUS") && object.has(
+                                                "COMMPAYMENTSTATUS")) {
+                                                eqPaymentStatus = (object.isNull("EQPAYMENTSTATUS")
+                                                    || object.getString("EQPAYMENTSTATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("EQPAYMENTSTATUS");
+                                                commPaymentStatus =
+                                                    (object.isNull("COMMPAYMENTSTATUS")
+                                                        || object.getString("COMMPAYMENTSTATUS")
+                                                        .equals("")) ? ""
+                                                        : object.getString("COMMPAYMENTSTATUS");
+                                                if (!eqPaymentStatus.equals("")
+                                                    && !commPaymentStatus.equals("")) {
+                                                    bdEqPaymentStatus =
+                                                        new BigDecimal(eqPaymentStatus);
+                                                    bdCommPaymentStatus =
+                                                        new BigDecimal(commPaymentStatus);
+                                                    // 4 set for no segment selected
                                                /* setIsEquityFundTransfered(true);
                                                 setIsCommodityFundTransfered(true);*/
-//                                                showView((int) bdEqPaymentStatus.longValue(), (int) bdCommPaymentStatus.longValue());
-                                                getUserpaymentDetail((int) bdEqPaymentStatus.longValue(), (int) bdCommPaymentStatus.longValue());
-                                            } else {
-                                                MOSLCommon.showToastMsg(mContext, "Status is null");
+                                                    //                                                showView((int) bdEqPaymentStatus.longValue(), (int) bdCommPaymentStatus.longValue());
+                                                    getUserpaymentDetail(
+                                                        (int) bdEqPaymentStatus.longValue(),
+                                                        (int) bdCommPaymentStatus.longValue());
+                                                } else {
+                                                    MOSLCommon.showToastMsg(mContext,
+                                                        "Status is null");
+                                                }
+                                            } else if (object.has("EQPAYMENTSTATUS")) {
+                                                eqPaymentStatus = (object.isNull("EQPAYMENTSTATUS")
+                                                    || object.getString("EQPAYMENTSTATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("EQPAYMENTSTATUS");
+                                                if (!eqPaymentStatus.equals("")) {
+                                                    bdEqPaymentStatus =
+                                                        new BigDecimal(eqPaymentStatus);
+                                                    // 4 set for no segment selected
+                                                    //                                                setIsEquityFundTransfered(true);
+                                                    //                                                showView((int) bdEqPaymentStatus.longValue(), 4);
+                                                    getUserpaymentDetail(
+                                                        (int) bdEqPaymentStatus.longValue(), 4);
+                                                }
+                                            } else if (object.has("COMMPAYMENTSTATUS")) {
+                                                commPaymentStatus =
+                                                    (object.isNull("COMMPAYMENTSTATUS")
+                                                        || object.getString("COMMPAYMENTSTATUS")
+                                                        .equals("")) ? ""
+                                                        : object.getString("COMMPAYMENTSTATUS");
+                                                if (!commPaymentStatus.equals("")) {
+                                                    bdCommPaymentStatus =
+                                                        new BigDecimal(commPaymentStatus);
+                                                    // 4 set for no segment selected
+                                                    //                                                setIsCommodityFundTransfered(true);
+                                                    //                                                showView(4, (int) bdCommPaymentStatus.longValue());
+                                                    getUserpaymentDetail(4,
+                                                        (int) bdCommPaymentStatus.longValue());
+                                                }
                                             }
-
-                                        } else if (object.has("EQPAYMENTSTATUS")) {
-                                            eqPaymentStatus = (object.isNull("EQPAYMENTSTATUS") || object.getString("EQPAYMENTSTATUS").equals("")) ? "" : object.getString("EQPAYMENTSTATUS");
-                                            if (!eqPaymentStatus.equals("")) {
-                                                bdEqPaymentStatus = new BigDecimal(eqPaymentStatus);
-                                                // 4 set for no segment selected
-//                                                setIsEquityFundTransfered(true);
-//                                                showView((int) bdEqPaymentStatus.longValue(), 4);
-                                                getUserpaymentDetail((int) bdEqPaymentStatus.longValue(), 4);
-                                            }
-                                        } else if (object.has("COMMPAYMENTSTATUS")) {
-                                            commPaymentStatus = (object.isNull("COMMPAYMENTSTATUS") || object.getString("COMMPAYMENTSTATUS").equals("")) ? "" : object.getString("COMMPAYMENTSTATUS");
-                                            if (!commPaymentStatus.equals("")) {
-                                                bdCommPaymentStatus = new BigDecimal(commPaymentStatus);
-                                                // 4 set for no segment selected
-//                                                setIsCommodityFundTransfered(true);
-//                                                showView(4, (int) bdCommPaymentStatus.longValue());
-                                                getUserpaymentDetail(4, (int) bdCommPaymentStatus.longValue());
-                                            }
+                                            //                                        getUserpaymentDetail();
+                                            hideProgress();
                                         }
-//                                        getUserpaymentDetail();
-                                        hideProgress();
                                     }
                                 }
-
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-
-                    } else {
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
@@ -278,12 +332,13 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             String flag = GETUSERPAYMENTDETAILS;
             String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
 
-                        try {
+                            try {
 
 
                              /*{
@@ -310,142 +365,183 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                 }
                                 ]
                             }*/
-                            if (response.has("FUNDTRANSFER")) {
-                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                if (jsonArray.length() != 0) {
+                                if (response.has("FUNDTRANSFER")) {
+                                    JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                    if (jsonArray.length() != 0) {
 
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
 
-                                        String bankName = (object.isNull("BANK_NAME") || object.getString("BANK_NAME").equals("")) ? "" : object.getString("BANK_NAME");
-                                        if (bankName != null) {
-                                            bankName = bankName.replace("\t", "");
-                                        }
-
-                                        String bankAccNo = (object.isNull("BANK_ACC_NO") || object.getString("BANK_ACC_NO").equals("")) ? "" : object.getString("BANK_ACC_NO");
-                                        String chequeNo = (object.isNull("CHEQUENO") || object.getString("CHEQUENO").equals("")) ? "" : object.getString("CHEQUENO");
-                                        String chequeDate = (object.isNull("CHEQUEDATE") || object.getString("CHEQUEDATE").equals("")) ? "" : object.getString("CHEQUEDATE");
-                                        String marginDeposit = (object.isNull("MARGIN_DEPOSIT") || object.getString("MARGIN_DEPOSIT").equals("")) ? "" : object.getString("MARGIN_DEPOSIT");
-                                        String product = (object.isNull("PRODUCT") || object.getString("PRODUCT").equals("")) ? "" : object.getString("PRODUCT");
-                                        String bankflag = (object.isNull("BANKFLAG") || object.getString("BANKFLAG").equals("")) ? "" : object.getString("BANKFLAG");
-                                        String amtRequested = (object.isNull("AMOUNTREQUESTED") || object.getString("AMOUNTREQUESTED").equals("")) ? "" : object.getString("AMOUNTREQUESTED");
-                                        String fundTransferThrough = (object.isNull("FUNDTRANSFERTHROUGH") || object.getString("FUNDTRANSFERTHROUGH").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGH");
-                                        String fundTransferThroughId = (object.isNull("FUNDTRANSFERTHROUGHID") || object.getString("FUNDTRANSFERTHROUGHID").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGHID");
-                                        /*
-                                        *  fundTransferThroughId 1 fundTransferThrough Net Banking
-                                        *  fundTransferThroughId 2 fundTransferThrough Debit Card
-                                        *  fundTransferThroughId 3 fundTransferThrough Cheque
-                                        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-                                        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-                                        */
-                                        if (product.equalsIgnoreCase(EQUITY)) {
-                                            eqPaymentMode = fundTransferThrough;
-                                            eqPaymentId = Integer.parseInt(fundTransferThroughId);
-                                            RowData equBankNameRowData = RowData.getSpinnerRowDataByValue(bankName, arrAdapEquityBankName);
-                                            if (equBankNameRowData != null) {
-                                                spEquDebitBankName.setSelection(equBankNameRowData.getPosition());
+                                            String bankName =
+                                                (object.isNull("BANK_NAME") || object.getString(
+                                                    "BANK_NAME").equals("")) ? ""
+                                                    : object.getString("BANK_NAME");
+                                            if (bankName != null) {
+                                                bankName = bankName.replace("\t", "");
                                             }
-                                            equMargin = marginDeposit;
-                                            if (getAppType().equals(PP)) {
-                                                if (amtRequested.equalsIgnoreCase("0")) {
-                                                    etEquFundTransferred.setText("");
-                                                } else {
-                                                    etEquFundTransferred.setText(amtRequested);
+
+                                            String bankAccNo =
+                                                (object.isNull("BANK_ACC_NO") || object.getString(
+                                                    "BANK_ACC_NO").equals("")) ? ""
+                                                    : object.getString("BANK_ACC_NO");
+                                            String chequeNo =
+                                                (object.isNull("CHEQUENO") || object.getString(
+                                                    "CHEQUENO").equals("")) ? ""
+                                                    : object.getString("CHEQUENO");
+                                            String chequeDate =
+                                                (object.isNull("CHEQUEDATE") || object.getString(
+                                                    "CHEQUEDATE").equals("")) ? ""
+                                                    : object.getString("CHEQUEDATE");
+                                            String marginDeposit = (object.isNull("MARGIN_DEPOSIT")
+                                                || object.getString("MARGIN_DEPOSIT").equals(""))
+                                                ? "" : object.getString("MARGIN_DEPOSIT");
+                                            String product =
+                                                (object.isNull("PRODUCT") || object.getString(
+                                                    "PRODUCT").equals("")) ? ""
+                                                    : object.getString("PRODUCT");
+                                            String bankflag =
+                                                (object.isNull("BANKFLAG") || object.getString(
+                                                    "BANKFLAG").equals("")) ? ""
+                                                    : object.getString("BANKFLAG");
+                                            String amtRequested = (object.isNull("AMOUNTREQUESTED")
+                                                || object.getString("AMOUNTREQUESTED").equals(""))
+                                                ? "" : object.getString("AMOUNTREQUESTED");
+                                            String fundTransferThrough =
+                                                (object.isNull("FUNDTRANSFERTHROUGH")
+                                                    || object.getString("FUNDTRANSFERTHROUGH")
+                                                    .equals("")) ? ""
+                                                    : object.getString("FUNDTRANSFERTHROUGH");
+                                            String fundTransferThroughId =
+                                                (object.isNull("FUNDTRANSFERTHROUGHID")
+                                                    || object.getString("FUNDTRANSFERTHROUGHID")
+                                                    .equals("")) ? ""
+                                                    : object.getString("FUNDTRANSFERTHROUGHID");
+                                            /*
+                                             *  fundTransferThroughId 1 fundTransferThrough Net Banking
+                                             *  fundTransferThroughId 2 fundTransferThrough Debit Card
+                                             *  fundTransferThroughId 3 fundTransferThrough Cheque
+                                             *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+                                             *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+                                             */
+                                            if (product.equalsIgnoreCase(EQUITY)) {
+                                                eqPaymentMode = fundTransferThrough;
+                                                eqPaymentId =
+                                                    Integer.parseInt(fundTransferThroughId);
+                                                RowData equBankNameRowData =
+                                                    RowData.getSpinnerRowDataByValue(bankName,
+                                                        arrAdapEquityBankName);
+                                                if (equBankNameRowData != null) {
+                                                    spEquDebitBankName.setSelection(
+                                                        equBankNameRowData.getPosition());
                                                 }
-                                            } else {
-                                                etEquFundTransferred.setText(marginDeposit);
-                                            }
-                                            if (bankflag.equalsIgnoreCase("1")) {
-                                                onlineEquFlag = true;
-                                            } else if (bankflag.equalsIgnoreCase("0")) {
-                                                onlineEquFlag = false;
-//                                                btnEquPayment.setEnabled(false);
-                                                btnEquPayment.setBackgroundResource(R.drawable.ic_disable_submit_btn);
-                                                etEquFundTransferred.setEnabled(false);
-                                                rbEquityATM.setEnabled(false);
-                                                rbEquityVisa.setEnabled(false);
-                                                llEquityVisa.setEnabled(false);
-                                                spEquDebitBankName.setEnabled(false);
-                                            }
-                                        } else if (product.equalsIgnoreCase(COMMODITY)) {
-                                            commPaymentMode = fundTransferThrough;
-                                            commPaymentId = Integer.parseInt(fundTransferThroughId);
-                                            RowData commBankNameRowData = RowData.getSpinnerRowDataByValue(bankName, arrAdapCommodityBankName);
-                                            if (commBankNameRowData != null) {
-                                                spCommDebitBankName.setSelection(commBankNameRowData.getPosition());
-                                            }
-                                            commMargin = marginDeposit;
-                                            if (getAppType().equals(PP)) {
-                                                if (amtRequested.equalsIgnoreCase("0")) {
-                                                    etCommFundTransferred.setText("");
+                                                equMargin = marginDeposit;
+                                                if (getAppType().equals(PP)) {
+                                                    if (amtRequested.equalsIgnoreCase("0")) {
+                                                        etEquFundTransferred.setText("");
+                                                    } else {
+                                                        etEquFundTransferred.setText(amtRequested);
+                                                    }
                                                 } else {
-                                                    etCommFundTransferred.setText(amtRequested);
+                                                    etEquFundTransferred.setText(marginDeposit);
                                                 }
-                                            } else {
-                                                etCommFundTransferred.setText(marginDeposit);
-                                            }
-                                            if (bankflag.equalsIgnoreCase("1")) {
-                                                onlineCommFlag = true;
-                                            } else if (bankflag.equalsIgnoreCase("0")) {
-                                                onlineCommFlag = false;
-//                                                btnCommPayment.setEnabled(false);
-                                                btnCommPayment.setBackgroundResource(R.drawable.ic_disable_submit_btn);
-                                                etCommFundTransferred.setEnabled(false);
-                                                rbCommodityATM.setEnabled(false);
-                                                rbCommodityVisa.setEnabled(false);
-                                                llCommodityVisa.setEnabled(false);
-                                                spCommDebitBankName.setEnabled(false);
+                                                if (bankflag.equalsIgnoreCase("1")) {
+                                                    onlineEquFlag = true;
+                                                } else if (bankflag.equalsIgnoreCase("0")) {
+                                                    onlineEquFlag = false;
+                                                    //                                                btnEquPayment.setEnabled(false);
+                                                    btnEquPayment.setBackgroundResource(
+                                                        R.drawable.ic_disable_submit_btn);
+                                                    etEquFundTransferred.setEnabled(false);
+                                                    rbEquityATM.setEnabled(false);
+                                                    rbEquityVisa.setEnabled(false);
+                                                    llEquityVisa.setEnabled(false);
+                                                    spEquDebitBankName.setEnabled(false);
+                                                }
+                                            } else if (product.equalsIgnoreCase(COMMODITY)) {
+                                                commPaymentMode = fundTransferThrough;
+                                                commPaymentId =
+                                                    Integer.parseInt(fundTransferThroughId);
+                                                RowData commBankNameRowData =
+                                                    RowData.getSpinnerRowDataByValue(bankName,
+                                                        arrAdapCommodityBankName);
+                                                if (commBankNameRowData != null) {
+                                                    spCommDebitBankName.setSelection(
+                                                        commBankNameRowData.getPosition());
+                                                }
+                                                commMargin = marginDeposit;
+                                                if (getAppType().equals(PP)) {
+                                                    if (amtRequested.equalsIgnoreCase("0")) {
+                                                        etCommFundTransferred.setText("");
+                                                    } else {
+                                                        etCommFundTransferred.setText(amtRequested);
+                                                    }
+                                                } else {
+                                                    etCommFundTransferred.setText(marginDeposit);
+                                                }
+                                                if (bankflag.equalsIgnoreCase("1")) {
+                                                    onlineCommFlag = true;
+                                                } else if (bankflag.equalsIgnoreCase("0")) {
+                                                    onlineCommFlag = false;
+                                                    //                                                btnCommPayment.setEnabled(false);
+                                                    btnCommPayment.setBackgroundResource(
+                                                        R.drawable.ic_disable_submit_btn);
+                                                    etCommFundTransferred.setEnabled(false);
+                                                    rbCommodityATM.setEnabled(false);
+                                                    rbCommodityVisa.setEnabled(false);
+                                                    llCommodityVisa.setEnabled(false);
+                                                    spCommDebitBankName.setEnabled(false);
+                                                }
                                             }
                                         }
+                                        showView(eqPaymentStatus, commPaymentStatus);
+                                        hideProgress();
                                     }
-                                    showView(eqPaymentStatus, commPaymentStatus);
-                                    hideProgress();
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
                             }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
+                    }
 
-                    } else {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
                         commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                         customProgress.setVisibility(View.GONE);
-//                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
@@ -466,14 +562,18 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                             viewPager.setCurrentItem(getUploadTab(), false);
                         }
                     } else if (!getIsAadharVerified()) {
-                        CustomDialog cd = new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar, true, false, false, "", "OK", "", new CustomDialog.CustomDialogListener() {
-                            @Override
-                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                Intent intent = new Intent(mContext, DirectResumeApplicationActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                            }
-                        });
+                        CustomDialog cd =
+                            new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar, true,
+                                false, false, "", "OK", "",
+                                new CustomDialog.CustomDialogListener() {
+                                    @Override public void dialogAction(MOSLCommon.Action action,
+                                        Object... data) {
+                                        Intent intent = new Intent(mContext,
+                                            DirectResumeApplicationActivity.class);
+                                        startActivity(intent);
+                                        getActivity().finish();
+                                    }
+                                });
                         cd.show();
                     }
                 } else {
@@ -501,14 +601,18 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                 viewPager.setCurrentItem(getUploadTab(), false);
                             }
                         } else if (!getIsAadharVerified()) {
-                            CustomDialog cd = new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar, true, false, false, "", "OK", "", new CustomDialog.CustomDialogListener() {
-                                @Override
-                                public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                    Intent intent = new Intent(mContext, DirectResumeApplicationActivity.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                            });
+                            CustomDialog cd =
+                                new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar,
+                                    true, false, false, "", "OK", "",
+                                    new CustomDialog.CustomDialogListener() {
+                                        @Override public void dialogAction(MOSLCommon.Action action,
+                                            Object... data) {
+                                            Intent intent = new Intent(mContext,
+                                                DirectResumeApplicationActivity.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        }
+                                    });
                             cd.show();
                         }
                     } else {
@@ -537,14 +641,18 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                 viewPager.setCurrentItem(getUploadTab(), false);
                             }
                         } else if (!getIsAadharVerified()) {
-                            CustomDialog cd = new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar, true, false, false, "", "OK", "", new CustomDialog.CustomDialogListener() {
-                                @Override
-                                public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                    Intent intent = new Intent(mContext, DirectResumeApplicationActivity.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                            });
+                            CustomDialog cd =
+                                new CustomDialog(mContext, Message_Fund_Transfer_For_No_Aadhaar,
+                                    true, false, false, "", "OK", "",
+                                    new CustomDialog.CustomDialogListener() {
+                                        @Override public void dialogAction(MOSLCommon.Action action,
+                                            Object... data) {
+                                            Intent intent = new Intent(mContext,
+                                                DirectResumeApplicationActivity.class);
+                                            startActivity(intent);
+                                            getActivity().finish();
+                                        }
+                                    });
                             cd.show();
                         }
                     } else {
@@ -558,19 +666,28 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         }
     }
 
+    private void showEquitypending() {
+        llEquFundOption.setVisibility(View.VISIBLE);
+        tvEquFundTransfered.setVisibility(View.GONE);
+    }
+
+    private void showCommPending() {
+        llCommFundOption.setVisibility(View.VISIBLE);
+        tvCommFundTransfered.setVisibility(View.GONE);
+    }
+
     private void setUpView(View debitCardView) {
-//        userID = "1451500";
+        //        userID = "1451500";
         userID = getUserID();
 
         try {
             CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
-                @Override
-                public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                @Override public void onCustomTabsServiceConnected(ComponentName componentName,
+                    CustomTabsClient customTabsClient) {
                     mClient = customTabsClient;
                 }
 
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
+                @Override public void onServiceDisconnected(ComponentName componentName) {
                     mClient = null;
                 }
             };
@@ -593,8 +710,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         scrollView.setFocusable(true);
         scrollView.setFocusableInTouchMode(true);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            @Override public boolean onTouch(View v, MotionEvent event) {
                 v.requestFocusFromTouch();
                 return false;
             }
@@ -617,13 +733,13 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         llCommodityVisa = (LinearLayout) debitCardView.findViewById(R.id.llCommodityVisa);
         llCommDebitBankName = (LinearLayout) debitCardView.findViewById(R.id.llCommDebitBankName);
         llEquityFundTransfer = (LinearLayout) debitCardView.findViewById(R.id.llEquityFundTransfer);
-        llCommodityFundTransfer = (LinearLayout) debitCardView.findViewById(R.id.llCommodityFundTransfer);
+        llCommodityFundTransfer =
+            (LinearLayout) debitCardView.findViewById(R.id.llCommodityFundTransfer);
         // customProgress = (LinearLayout) debitCardView.findViewById(R.id.customProgress);
         llEquFundOption = (LinearLayout) debitCardView.findViewById(R.id.llEquFundOption);
         llCommFundOption = (LinearLayout) debitCardView.findViewById(R.id.llCommFundOption);
         llEquPaymentButton = (LinearLayout) debitCardView.findViewById(R.id.llEquPaymentButton);
         llCommPaymentButton = (LinearLayout) debitCardView.findViewById(R.id.llCommPaymentButton);
-
 
         rbEquityATM.setOnClickListener(this);
         llEquityVisa.setOnClickListener(this);
@@ -632,26 +748,31 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         llCommodityVisa.setOnClickListener(this);
         rbCommodityVisa.setOnClickListener(this);
 
-
         spEquDebitBankName = (Spinner) debitCardView.findViewById(R.id.spEquDebitBankName);
         spCommDebitBankName = (Spinner) debitCardView.findViewById(R.id.spCommDebitBankName);
 
         etEquFundTransferred = (EditText) debitCardView.findViewById(R.id.etEquFundTransferred);
         etCommFundTransferred = (EditText) debitCardView.findViewById(R.id.etCommFundTransferred);
-        etEquDebitBankNameError = (TextView) debitCardView.findViewById(R.id.etEquDebitBankNameError);
-        etCommDebitBankNameError = (TextView) debitCardView.findViewById(R.id.etCommDebitBankNameError);
-        etEquFundTransferredError = (TextView) debitCardView.findViewById(R.id.etEquFundTransferredError);
-        etCommFundTransferredError = (TextView) debitCardView.findViewById(R.id.etCommFundTransferredError);
+        etEquDebitBankNameError =
+            (TextView) debitCardView.findViewById(R.id.etEquDebitBankNameError);
+        etCommDebitBankNameError =
+            (TextView) debitCardView.findViewById(R.id.etCommDebitBankNameError);
+        etEquFundTransferredError =
+            (TextView) debitCardView.findViewById(R.id.etEquFundTransferredError);
+        etCommFundTransferredError =
+            (TextView) debitCardView.findViewById(R.id.etCommFundTransferredError);
 
         tvCommFundTransfered = (TextView) debitCardView.findViewById(R.id.tvCommFundTransfered);
         tvEquFundTransfered = (TextView) debitCardView.findViewById(R.id.tvEquFundTransfered);
         rlEquSkipPayment = (RelativeLayout) debitCardView.findViewById(R.id.rlEquSkipPayment);
         rlCommSkipPayment = (RelativeLayout) debitCardView.findViewById(R.id.rlCommSkipPayment);
-        input_layout_equFundTransferred = (TextInputLayout) debitCardView.findViewById(R.id.input_layout_equFundTransferred);
-        input_layout_commFundTransferred = (TextInputLayout) debitCardView.findViewById(R.id.input_layout_commFundTransferred);
+        input_layout_equFundTransferred =
+            (TextInputLayout) debitCardView.findViewById(R.id.input_layout_equFundTransferred);
+        input_layout_commFundTransferred =
+            (TextInputLayout) debitCardView.findViewById(R.id.input_layout_commFundTransferred);
         if (getIsEquitySelected() && getIsCommoditySelected()) {
             llEquityFundTransfer.setVisibility(View.VISIBLE);
-//            llCommodityFundTransfer.setVisibility(View.VISIBLE);
+            //            llCommodityFundTransfer.setVisibility(View.VISIBLE);
             equATMSelected();
             commATMSelected();
         } else if (getIsEquitySelected() || getIsDerivativeSelected()) {
@@ -741,21 +862,28 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etEquFundTransferred.getText().toString())) {
                     input_layout_equFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
                         && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
-                        etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
+                        etEquFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg));
+                        etEquFundTransferred.requestFocus();
+                    } else if (getAppType().equalsIgnoreCase(DIRECT)
+                        && etEquFundTransferred.length() < 3) {
+                        etEquFundTransferredError.setVisibility(View.VISIBLE);
+                        etEquFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg_3digits));
                         etEquFundTransferred.requestFocus();
                     } else if (getAppType().equalsIgnoreCase(PP) && !getAppType().equalsIgnoreCase(
                         DIRECT) && !(Integer.parseInt(etEquFundTransferred.getText().toString())
                         > 0)) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
-                        etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg_PP));
+                        etEquFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg_PP));
                         etEquFundTransferred.requestFocus();
                     } else {
                         etEquFundTransferredError.setVisibility(View.GONE);
@@ -766,12 +894,10 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 }
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            @Override public void afterTextChanged(Editable s) {
 
             }
         });
-
 
         etCommFundTransferred.addTextChangedListener(new TextWatcher() {
             @Override
@@ -779,21 +905,28 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
             }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etCommFundTransferred.getText().toString())) {
                     input_layout_commFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
                         && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
-                        etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
+                        etCommFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg));
+                        etCommFundTransferred.requestFocus();
+                    } else if (getAppType().equalsIgnoreCase(DIRECT)
+                        && etCommFundTransferred.length() < 3) {
+                        etCommFundTransferredError.setVisibility(View.VISIBLE);
+                        etCommFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg_3digits));
                         etCommFundTransferred.requestFocus();
                     } else if (getAppType().equalsIgnoreCase(PP) && !getAppType().equalsIgnoreCase(
                         DIRECT) && !(Integer.parseInt(etCommFundTransferred.getText().toString())
                         > 0)) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
-                        etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg_PP));
+                        etCommFundTransferredError.setText(
+                            getResources().getString(R.string.fund_transfer_error_msg_PP));
                         etCommFundTransferred.requestFocus();
                     } else {
                         etCommFundTransferredError.setVisibility(View.GONE);
@@ -804,16 +937,13 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 }
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            @Override public void afterTextChanged(Editable s) {
 
             }
         });
 
-
         btnEquPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (onlineEquFlag) {
                     equMakePayment();
                     equMakePaymentButton = true;
@@ -828,8 +958,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         });
 
         btnCommPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 if (onlineCommFlag) {
                     commMakePayment();
                     commMakePaymentButton = true;
@@ -840,8 +969,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         });
 
         btnEquSkipPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 skipEquPayment();
                 equMakePaymentButton = true;
                 if (isCommodityOriginal()) {
@@ -852,24 +980,21 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         });
 
         btnCommSkipPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 skipCommPayment();
                 commMakePaymentButton = true;
             }
         });
 
         btnEquNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 tabPageIndicator.enableTab(getUploadTab());
                 viewPager.setCurrentItem(getUploadTab(), false);
             }
         });
 
         btnCommNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 tabPageIndicator.enableTab(getUploadTab());
                 viewPager.setCurrentItem(getUploadTab(), false);
             }
@@ -889,9 +1014,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
+    @Override public void onClick(View v) {
 
         if (v.getId() == R.id.rbEquityATM) {
             rbEquityVisa.setChecked(false);
@@ -942,14 +1065,24 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
     }
 
-    private void showEquitypending() {
-        llEquFundOption.setVisibility(View.VISIBLE);
-        tvEquFundTransfered.setVisibility(View.GONE);
+    private void equATMSelected() {
+        rbEquityATM.setChecked(true);
+        llEquDebitBankName.setVisibility(View.VISIBLE);
+        etEquFundTransferred.setText(equMargin);
     }
 
-    private void showCommPending() {
-        llCommFundOption.setVisibility(View.VISIBLE);
-        tvCommFundTransfered.setVisibility(View.GONE);
+    private void noCommSegment() {
+        llCommodityFundTransfer.setVisibility(View.GONE);
+    }
+
+    private void noEquitySegment() {
+        llEquityFundTransfer.setVisibility(View.GONE);
+    }
+
+    private void commATMSelected() {
+        rbCommodityATM.setChecked(true);
+        llCommDebitBankName.setVisibility(View.VISIBLE);
+        etCommFundTransferred.setText(commMargin);
     }
 
     private void equityPaid() {
@@ -957,12 +1090,12 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         tvEquFundTransfered.setVisibility(View.VISIBLE);
         tvEquFundTransfered.setText("Fund Transferred - " + eqPaymentMode);
         /*
-        *  fundTransferThroughId 1 fundTransferThrough Net Banking
-        *  fundTransferThroughId 2 fundTransferThrough Debit Card
-        *  fundTransferThroughId 3 fundTransferThrough Cheque
-        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-        */
+         *  fundTransferThroughId 1 fundTransferThrough Net Banking
+         *  fundTransferThroughId 2 fundTransferThrough Debit Card
+         *  fundTransferThroughId 3 fundTransferThrough Cheque
+         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+         */
         if (eqPaymentId == 2) {
             disableField(llEquFundOption);
             llEquPaymentButton.setVisibility(View.GONE);
@@ -995,12 +1128,12 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         tvCommFundTransfered.setVisibility(View.VISIBLE);
         tvCommFundTransfered.setText("Fund Transferred - " + commPaymentMode);
         /*
-        *  fundTransferThroughId 1 fundTransferThrough Net Banking
-        *  fundTransferThroughId 2 fundTransferThrough Debit Card
-        *  fundTransferThroughId 3 fundTransferThrough Cheque
-        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-        */
+         *  fundTransferThroughId 1 fundTransferThrough Net Banking
+         *  fundTransferThroughId 2 fundTransferThrough Debit Card
+         *  fundTransferThroughId 3 fundTransferThrough Cheque
+         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+         */
         if (commPaymentId == 2) {
             disableField(llCommFundOption);
             llCommPaymentButton.setVisibility(View.GONE);
@@ -1028,26 +1161,6 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         }
     }
 
-    private void equATMSelected() {
-        rbEquityATM.setChecked(true);
-        llEquDebitBankName.setVisibility(View.VISIBLE);
-        etEquFundTransferred.setText(equMargin);
-    }
-
-    private void noCommSegment() {
-        llCommodityFundTransfer.setVisibility(View.GONE);
-    }
-
-    private void noEquitySegment() {
-        llEquityFundTransfer.setVisibility(View.GONE);
-    }
-
-    private void commATMSelected() {
-        rbCommodityATM.setChecked(true);
-        llCommDebitBankName.setVisibility(View.VISIBLE);
-        etCommFundTransferred.setText(commMargin);
-    }
-
     private void getEquDebitCardBank() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             Map inputMap = new HashMap();
@@ -1056,134 +1169,131 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             String flag = GETDCBANK;
             String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
 
-                        try {
-                            if (response.has("FUNDTRANSFER")) {
-                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                            try {
+                                if (response.has("FUNDTRANSFER")) {
+                                    JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
 
-
-                                arrEquityBankName = new ArrayList<>();
-                                arrCommodityBankName = new ArrayList<>();
-                                if (jsonArray.length() != 0) {
-                                    arrEquityBankName.add(new RowData(0, "-1", "Select"));
-                                    arrCommodityBankName.add(new RowData(0, "-1", "Select"));
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
+                                    arrEquityBankName = new ArrayList<>();
+                                    arrCommodityBankName = new ArrayList<>();
+                                    if (jsonArray.length() != 0) {
+                                        arrEquityBankName.add(new RowData(0, "-1", "Select"));
+                                        arrCommodityBankName.add(new RowData(0, "-1", "Select"));
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
                                         /*{
                                             "BankName": "RuPay Debit Card",
                                                 "BankShortName": "URP",
                                                 "ProductId": "NA",
                                                 "Categroy": "Debit Card"
                                         }*/
-                                        String bankName = (object.isNull("BankName") || object.getString("BankName").equals("")) ? "" : object.getString("BankName");
-                                        String bankShortName = (object.isNull("BankShortName") || object.getString("BankShortName").equals("")) ? "" : object.getString("BankShortName");
-                                        String productId = (object.isNull("ProductId") || object.getString("ProductId").equals("")) ? "" : object.getString("ProductId");
-                                        String categroy = (object.isNull("Categroy") || object.getString("Categroy").equals("")) ? "" : object.getString("Categroy");
+                                            String bankName =
+                                                (object.isNull("BankName") || object.getString(
+                                                    "BankName").equals("")) ? ""
+                                                    : object.getString("BankName");
+                                            String bankShortName =
+                                                (object.isNull("BankShortName") || object.getString(
+                                                    "BankShortName").equals("")) ? ""
+                                                    : object.getString("BankShortName");
+                                            String productId =
+                                                (object.isNull("ProductId") || object.getString(
+                                                    "ProductId").equals("")) ? ""
+                                                    : object.getString("ProductId");
+                                            String categroy =
+                                                (object.isNull("Categroy") || object.getString(
+                                                    "Categroy").equals("")) ? ""
+                                                    : object.getString("Categroy");
 
-                                        arrEquityBankName.add(new RowData((i + 1), bankShortName, bankName));
-                                        arrCommodityBankName.add(new RowData((i + 1), bankShortName, bankName));
-
+                                            arrEquityBankName.add(
+                                                new RowData((i + 1), bankShortName, bankName));
+                                            arrCommodityBankName.add(
+                                                new RowData((i + 1), bankShortName, bankName));
+                                        }
                                     }
+                                    arrAdapEquityBankName = new ArrayAdapter<RowData>(mContext,
+                                        R.layout.simple_spinner_item, arrEquityBankName);
+                                    arrAdapEquityBankName.setDropDownViewResource(
+                                        android.R.layout.simple_spinner_dropdown_item);
+                                    arrAdapEquityBankName.notifyDataSetChanged();
+                                    spEquDebitBankName.setAdapter(arrAdapEquityBankName);
+                                    spEquDebitBankName.setOnItemSelectedListener(equBankListener);
+
+                                    arrAdapCommodityBankName = new ArrayAdapter<RowData>(mContext,
+                                        R.layout.simple_spinner_item, arrCommodityBankName);
+                                    arrAdapCommodityBankName.setDropDownViewResource(
+                                        android.R.layout.simple_spinner_dropdown_item);
+
+                                    spCommDebitBankName.setAdapter(arrAdapCommodityBankName);
+                                    spCommDebitBankName.setOnItemSelectedListener(equCommListener);
                                 }
-                                arrAdapEquityBankName = new ArrayAdapter<RowData>(mContext, R.layout.simple_spinner_item, arrEquityBankName);
-                                arrAdapEquityBankName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                arrAdapEquityBankName.notifyDataSetChanged();
-                                spEquDebitBankName.setAdapter(arrAdapEquityBankName);
-                                spEquDebitBankName.setOnItemSelectedListener(equBankListener);
-
-                                arrAdapCommodityBankName = new ArrayAdapter<RowData>(mContext, R.layout.simple_spinner_item, arrCommodityBankName);
-                                arrAdapCommodityBankName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                                spCommDebitBankName.setAdapter(arrAdapCommodityBankName);
-                                spCommDebitBankName.setOnItemSelectedListener(equCommListener);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-                    } else {
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
                         commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                         customProgress.setVisibility(View.GONE);
-//                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
         }
     }
 
-    private final AdapterView.OnItemSelectedListener equBankListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strEquBankShortName = ((RowData) arrEquityBankName.get(position)).getKey();
-            strEquBankName = ((RowData) arrEquityBankName.get(position)).getValue();
-            etEquDebitBankNameError.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private final AdapterView.OnItemSelectedListener equCommListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            strCommBankShortName = ((RowData) arrCommodityBankName.get(position)).getKey();
-            strCommBankName = ((RowData) arrCommodityBankName.get(position)).getValue();
-            etCommDebitBankNameError.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
     private void commMakePayment() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             String strCommFundAmount = etCommFundTransferred.getText().toString();
-            if (rbCommodityATM.isChecked() && spCommDebitBankName.getSelectedItem().toString().equalsIgnoreCase("Select")) {
+            if (rbCommodityATM.isChecked() && spCommDebitBankName.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase("Select")) {
                 etCommDebitBankNameError.setVisibility(View.VISIBLE);
                 etCommDebitBankNameError.setText("Select Bank for ATM cum-Debit Card");
                 etCommDebitBankNameError.requestFocus();
-            } else if (!validateEditText(etCommFundTransferred, input_layout_commFundTransferred, "Enter Amount")) {
+            } else if (!validateEditText(etCommFundTransferred, input_layout_commFundTransferred,
+                "Enter Amount")) {
                 return;
             } else if (!(Integer.parseInt(strCommFundAmount) > 0)) {
                 etCommFundTransferred.requestFocus();
@@ -1191,8 +1301,15 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
                 && etCommFundTransferred.length() < 5) {
-                etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
+                etCommFundTransferredError.setText(
+                    getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
+                etCommFundTransferred.requestFocus();
+            } else if (getAppType().equalsIgnoreCase(DIRECT)
+                && etCommFundTransferred.length() < 3) {
+                etCommFundTransferredError.setVisibility(View.VISIBLE);
+                etCommFundTransferredError.setText(
+                    getResources().getString(R.string.fund_transfer_error_msg_3digits));
                 etCommFundTransferred.requestFocus();
             } else {
                 etCommDebitBankNameError.setVisibility(View.GONE);
@@ -1223,89 +1340,100 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 String flag = UPDATEDCPAYMENT;
                 String category = FUNDTRANSFER;
                 customProgress.setVisibility(View.VISIBLE);
-                WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        if (response != null && response.length() != 0) {
+                WebServiceHandler.post(mContext, flag, category, inputMap,
+                    new JsonHttpResponseHandler() {
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONObject response) {
+                            if (response != null && response.length() != 0) {
 
-                            try {
-                                if (response.has("FUNDTRANSFER")) {
-                                    JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                    if (jsonArray.length() != 0) {
+                                try {
+                                    if (response.has("FUNDTRANSFER")) {
+                                        JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                        if (jsonArray.length() != 0) {
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject object = jsonArray.getJSONObject(i);
 
-                                            String status = (object.isNull("STATUS") || object.getString("STATUS").equals("")) ? "" : object.getString("STATUS");
-                                            if (Integer.valueOf(status) == 1) {
-                                                // EkycMainActivity.vpApply.setCurrentItem(2);
-                                                getPaymentStatus();
-                                            } else {
-                                                informationDialog(SOME_ERROR_OCCURED_WHILE_FUND_TRANSFER);
+                                                String status =
+                                                    (object.isNull("STATUS") || object.getString(
+                                                        "STATUS").equals("")) ? ""
+                                                        : object.getString("STATUS");
+                                                if (Integer.valueOf(status) == 1) {
+                                                    // EkycMainActivity.vpApply.setCurrentItem(2);
+                                                    getPaymentStatus();
+                                                } else {
+                                                    informationDialog(
+                                                        SOME_ERROR_OCCURED_WHILE_FUND_TRANSFER);
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                if (response.has("URLTable")) {
-                                    JSONArray jsonArray = response.getJSONArray("URLTable");
-                                    if (jsonArray.length() != 0) {
+                                    if (response.has("URLTable")) {
+                                        JSONArray jsonArray = response.getJSONArray("URLTable");
+                                        if (jsonArray.length() != 0) {
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject object = jsonArray.getJSONObject(i);
 
-                                            String urlPath = (object.isNull("URLPATH") || object.getString("URLPATH").equals("")) ? "" : object.getString("URLPATH");
-                                            if (!urlPath.equals("")) {
+                                                String urlPath =
+                                                    (object.isNull("URLPATH") || object.getString(
+                                                        "URLPATH").equals("")) ? ""
+                                                        : object.getString("URLPATH");
+                                                if (!urlPath.equals("")) {
                                                /* Intent intent = new Intent(mContext, WebActivity.class);
                                                 intent.putExtra(URL_PATH, urlPath);
                                                 startActivity(intent);*/
-                                                openWebUrl(Uri.parse(urlPath));
+                                                    openWebUrl(Uri.parse(urlPath));
+                                                }
                                             }
                                         }
                                     }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                        false, "");
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                            } else {
+                                commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false,
+                                    "");
+                                customProgress.setVisibility(View.GONE);
+                                //                            MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                             }
+                            customProgress.setVisibility(View.GONE);
+                        }
 
-                        } else {
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
+
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                        }
+
+                        @Override public void onFailure(int statusCode, Header[] headers,
+                            String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
                             commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                             customProgress.setVisibility(View.GONE);
-//                            MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-                        customProgress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                        }
+                    });
             }
         } else {
             MOSLCommon.alertDInternet(mContext);
@@ -1317,11 +1445,14 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             String strEquFundAmount = etEquFundTransferred.getText().toString();
 
-            if (rbEquityATM.isChecked() && spEquDebitBankName.getSelectedItem().toString().equalsIgnoreCase("Select")) {
+            if (rbEquityATM.isChecked() && spEquDebitBankName.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase("Select")) {
                 etEquDebitBankNameError.setVisibility(View.VISIBLE);
                 etEquDebitBankNameError.setText("Select Bank for ATM cum-Debit Card");
                 etEquDebitBankNameError.requestFocus();
-            } else if (!validateEditText(etEquFundTransferred, input_layout_equFundTransferred, "Enter Amount")) {
+            } else if (!validateEditText(etEquFundTransferred, input_layout_equFundTransferred,
+                "Enter Amount")) {
                 return;
             } else if (!(Integer.parseInt(strEquFundAmount) > 0) && !getAppType().equalsIgnoreCase(
                 DIRECT)) {
@@ -1330,8 +1461,14 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
                 && etEquFundTransferred.length() < 5) {
-                etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
+                etEquFundTransferredError.setText(
+                    getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
+                etEquFundTransferred.requestFocus();
+            } else if (getAppType().equalsIgnoreCase(DIRECT) && etEquFundTransferred.length() < 3) {
+                etEquFundTransferredError.setVisibility(View.VISIBLE);
+                etEquFundTransferredError.setText(
+                    getResources().getString(R.string.fund_transfer_error_msg_3digits));
                 etEquFundTransferred.requestFocus();
             } else {
                 etEquDebitBankNameError.setVisibility(View.GONE);
@@ -1342,7 +1479,6 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                     debitCardBankValue = strEquBankShortName;
                     debitCardBankName = strEquBankName;
                     cardType = ATM;
-
                 } else {
                     debitCardBankValue = "";
                     debitCardBankName = "";
@@ -1363,89 +1499,101 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 String flag = UPDATEDCPAYMENT;
                 String category = FUNDTRANSFER;
                 customProgress.setVisibility(View.VISIBLE);
-                WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        if (response != null && response.length() != 0) {
+                WebServiceHandler.post(mContext, flag, category, inputMap,
+                    new JsonHttpResponseHandler() {
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONObject response) {
+                            if (response != null && response.length() != 0) {
 
-                            try {
-                                if (response.has("FUNDTRANSFER")) {
-                                    JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                    if (jsonArray.length() != 0) {
+                                try {
+                                    if (response.has("FUNDTRANSFER")) {
+                                        JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                        if (jsonArray.length() != 0) {
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject object = jsonArray.getJSONObject(i);
 
-                                            String status = (object.isNull("STATUS") || object.getString("STATUS").equals("")) ? "" : object.getString("STATUS");
-                                            if (Integer.valueOf(status) == 1) {
-                                                //EkycMainActivity.vpApply.setCurrentItem(2);
-                                                getPaymentStatus();
-                                            } else {
-                                                informationDialog(SOME_ERROR_OCCURED_WHILE_FUND_TRANSFER);
+                                                String status =
+                                                    (object.isNull("STATUS") || object.getString(
+                                                        "STATUS").equals("")) ? ""
+                                                        : object.getString("STATUS");
+                                                if (Integer.valueOf(status) == 1) {
+                                                    //EkycMainActivity.vpApply.setCurrentItem(2);
+                                                    getPaymentStatus();
+                                                } else {
+                                                    informationDialog(
+                                                        SOME_ERROR_OCCURED_WHILE_FUND_TRANSFER);
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                if (response.has("URLTable")) {
-                                    JSONArray jsonArray = response.getJSONArray("URLTable");
-                                    if (jsonArray.length() != 0) {
+                                    if (response.has("URLTable")) {
+                                        JSONArray jsonArray = response.getJSONArray("URLTable");
+                                        if (jsonArray.length() != 0) {
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                                            for (int i = 0; i < jsonArray.length(); i++) {
+                                                JSONObject object = jsonArray.getJSONObject(i);
 
-                                            String urlPath = (object.isNull("URLPATH") || object.getString("URLPATH").equals("")) ? "" : object.getString("URLPATH");
+                                                String urlPath =
+                                                    (object.isNull("URLPATH") || object.getString(
+                                                        "URLPATH").equals("")) ? ""
+                                                        : object.getString("URLPATH");
 
-                                            if (!urlPath.equals("")) {
+                                                if (!urlPath.equals("")) {
                                                /* Intent intent = new Intent(mContext, WebActivity.class);
                                                 intent.putExtra(URL_PATH, urlPath);
                                                 startActivity(intent);*/
-                                                openWebUrl(Uri.parse(urlPath));
+                                                    openWebUrl(Uri.parse(urlPath));
+                                                }
                                             }
                                         }
                                     }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                        false, "");
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                            } else {
+                                commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false,
+                                    "");
+                                customProgress.setVisibility(View.GONE);
+                                //                            MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                             }
-                        } else {
+                            customProgress.setVisibility(View.GONE);
+                        }
+
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
+
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                        }
+
+                        @Override public void onFailure(int statusCode, Header[] headers,
+                            String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
                             commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                             customProgress.setVisibility(View.GONE);
-//                            MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-                        customProgress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                        customProgress.setVisibility(View.GONE);
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                        }
+                    });
             }
         } else {
             MOSLCommon.alertDInternet(mContext);
@@ -1469,20 +1617,18 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         }
     }
 
-
     private void openCustomTabsIntent(String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
         builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
         builder.setCloseButtonIcon(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
+            BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(getActivity(), Uri.parse(url));
     }
 
     private CustomTabsSession getSession() {
         return mClient.newSession(new CustomTabsCallback() {
-            @Override
-            public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            @Override public void onNavigationEvent(int navigationEvent, Bundle extras) {
                 super.onNavigationEvent(navigationEvent, extras);
             }
         });
@@ -1505,75 +1651,80 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             String flag = UPDATESKIPPAYMENT;
             String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
 
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                            if (jsonArray.length() != 0) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                if (jsonArray.length() != 0) {
 
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
 
-                                    String status = (object.isNull("STATUS") || object.getString("STATUS").equals("")) ? "" : object.getString("STATUS");
-                                    if (Integer.valueOf(status) == 1) {
-//                                        EkycMainActivity.vpApply.setCurrentItem(2);
-                                        getPaymentStatus();
-                                    } else {
-                                        informationDialog(COULD_NOT_SKIP_PAY);
+                                        String status =
+                                            (object.isNull("STATUS") || object.getString("STATUS")
+                                                .equals("")) ? "" : object.getString("STATUS");
+                                        if (Integer.valueOf(status) == 1) {
+                                            //                                        EkycMainActivity.vpApply.setCurrentItem(2);
+                                            getPaymentStatus();
+                                        } else {
+                                            informationDialog(COULD_NOT_SKIP_PAY);
+                                        }
                                     }
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-                    } else {
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
                         commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                         customProgress.setVisibility(View.GONE);
-//                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
         }
-
     }
 
     private void skipCommPayment() {
@@ -1586,75 +1737,80 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             String flag = UPDATESKIPPAYMENT;
             String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    if (response != null && response.length() != 0) {
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
 
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                            if (jsonArray.length() != 0) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                if (jsonArray.length() != 0) {
 
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject object = jsonArray.getJSONObject(i);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
 
-                                    String status = (object.isNull("STATUS") || object.getString("STATUS").equals("")) ? "" : object.getString("STATUS");
-                                    if (Integer.valueOf(status) == 1) {
-//                                        EkycMainActivity.vpApply.setCurrentItem(2);
-                                        getPaymentStatus();
-                                    } else {
-                                        informationDialog(COULD_NOT_SKIP_PAY);
+                                        String status =
+                                            (object.isNull("STATUS") || object.getString("STATUS")
+                                                .equals("")) ? "" : object.getString("STATUS");
+                                        if (Integer.valueOf(status) == 1) {
+                                            //                                        EkycMainActivity.vpApply.setCurrentItem(2);
+                                            getPaymentStatus();
+                                        } else {
+                                            informationDialog(COULD_NOT_SKIP_PAY);
+                                        }
                                     }
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
-                    } else {
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
                         commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
                         customProgress.setVisibility(View.GONE);
-//                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
-
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
         }
-
     }
 
     public void informationDialog(String msg) {
@@ -1664,36 +1820,34 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
         dialog.getWindow().setWindowAnimations(R.style.animationName);
         dialog.setContentView(R.layout.layout_dialog_info);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         TextView tvMsg = (TextView) dialog.findViewById(R.id.tvMsg);
         Button btnOK = (Button) dialog.findViewById(R.id.btnOK);
         ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
 
-
         tvMsg.setText(msg);
 
         ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 customProgress.setVisibility(View.GONE);
                 dialog.dismiss();
             }
         });
 
         btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 dialog.dismiss();
                 customProgress.setVisibility(View.GONE);
-
             }
         });
 
         dialog.show();
     }
 
-    private boolean validateEditText(EditText edietText, TextInputLayout textInputLayout, String error) {
+    private boolean validateEditText(EditText edietText, TextInputLayout textInputLayout,
+        String error) {
         if (edietText.getText().toString().trim().isEmpty()) {
             textInputLayout.setError(error);
             edietText.requestFocus();
@@ -1714,6 +1868,5 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             hideProgressCounter = 0;
             customProgress.setVisibility(View.GONE);
         }
-
     }
 }

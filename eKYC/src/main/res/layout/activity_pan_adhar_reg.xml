@@ -126,7 +126,54 @@
                     </LinearLayout>
                 </LinearLayout>
 
+              <LinearLayout
+                  android:id="@+id/llPaperLessRadioGroup"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:visibility="gone"
+                  >
+
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    >
+
+                  <RadioButton
+                      android:id="@+id/rbOnline"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:text="Open an Account in few minutes"
+                      android:textColor="@drawable/radiobutton_background"
+                      />
+
+                  <RadioButton
+                      android:id="@+id/rbOffline"
+                      android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:layout_weight="1"
+                      android:checked="true"
+                      android:text="Manual form filling process"
+                      android:textColor="@drawable/radiobutton_background"
+                      />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvPaperLessMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="@string/offline_msg"
+                    android:textSize="@dimen/_10sdp"
+                    />
+              </LinearLayout>
+
+              <LinearLayout
                     android:id="@+id/llAadhar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,6 +214,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llAadhaarEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp">
@@ -248,6 +296,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llAadhaarCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -622,11 +671,13 @@
             android:layout_marginTop="@dimen/_15sdp"
             android:background="@color/light_grey_menu"
             android:padding="@dimen/_5sdp"
-            android:visibility="visible">
+            android:visibility="visible"
+            >
 
             <include
+                layout="@layout/layout_merge_of_mosl_note"
                 android:id="@+id/layout_merge_note"
-                layout="@layout/layout_merge_of_mosl_note" />
+                />
 
             <Button
                 android:id="@+id/btnSubmit"
@@ -637,7 +688,8 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/ic_submit_btn"
                 android:text="@string/submit"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                />
         </RelativeLayout>
     </LinearLayout>
 

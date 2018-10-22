@@ -28,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomTabsHelper;
@@ -41,10 +40,7 @@ import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.mobile.ekyc.register.PANAdharRegistActivity;
 import com.mosl.mobile.ekyc.register.RegisterActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,15 +48,77 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setExistingSegment;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.clearAllCommonModelFields;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAddressMode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAddNewSegment;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommoditySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquitySegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfSegmentExist;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadhaarByPass;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAadharNo;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAddNewSegment;
+import static com.mosl.mobile.ekyc.model.CommonModel.setAddressMode;
+import static com.mosl.mobile.ekyc.model.CommonModel.setBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.setBioMetricVisibleForBranch;
+import static com.mosl.mobile.ekyc.model.CommonModel.setCity;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDob;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDownloadPdfUrl;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEqSchemeId;
+import static com.mosl.mobile.ekyc.model.CommonModel.setEsignService;
+import static com.mosl.mobile.ekyc.model.CommonModel.setGotoFundTransfer;
+import static com.mosl.mobile.ekyc.model.CommonModel.setGotoReviewEdit;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAllOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsAllSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsBankDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommoditySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsCurrencyOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsDerivativeOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityOriginal;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquitySelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsIPVDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsNomineeMandatory;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsOfflineCliencodeGenrated;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsPersonalDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsReviewEditDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsSchemeDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsSegmentSelected;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsWorkDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setOtpVisibleForBranch;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setPANno;
+import static com.mosl.mobile.ekyc.model.CommonModel.setRegisteredName;
+import static com.mosl.mobile.ekyc.model.CommonModel.setSipIntent;
+import static com.mosl.mobile.ekyc.model.CommonModel.setTokenKey;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 
 /**
  * Created by raju on 6/24/2016.
@@ -1271,6 +1329,12 @@ public class PostLoginFragment extends Fragment implements View.OnClickListener,
                                                 String otpVisible = (object.isNull("OTPVISIBLE") || object.getString("OTPVISIBLE").equals("")) ? "" : object.getString("OTPVISIBLE");
                                                 String biometricVisible = (object.isNull("BIOMETRICVISIBLE") || object.getString("BIOMETRICVISIBLE").equals("")) ? "" : object.getString("BIOMETRICVISIBLE");
                                                 String isNomineeMandatory = (object.isNull(NOMINEE_MANDATORY) || object.getString(NOMINEE_MANDATORY).equals("")) ? "" : object.getString(NOMINEE_MANDATORY);
+                                                String isAadhaarByPass =
+                                                    (object.isNull("ISAADHAARBYPASS")
+                                                        || object.getString("ISAADHAARBYPASS")
+                                                        .equals("")) ? ""
+                                                        : object.getString("ISAADHAARBYPASS")
+                                                            .trim();
                                                 if (isBlank(userId)) {
                                                     commonMsgDialog(postLoginContext, DATA_IS_MISSING, false, "");
                                                     return;
@@ -1279,9 +1343,12 @@ public class PostLoginFragment extends Fragment implements View.OnClickListener,
                                                 }
                                                 setAadharNo(aadharNo);
                                                 setPANno(panNo);
-                                                setIsAadharVerified(isAddharVerified != null && isAddharVerified.equals("1") ? true : false);
-                                                setIsCVLVerified(iscvlVerified != null && iscvlVerified.equals("1") ? true : false);
-                                                setIsNomineeMandatory(isNomineeMandatory != null && isNomineeMandatory.equals("1") ? true : false);
+                                                setIsAadharVerified(isAddharVerified.equals("1"));
+                                                setIsCVLVerified(iscvlVerified.equals("1"));
+                                                setIsNomineeMandatory(
+                                                    isNomineeMandatory != null && isNomineeMandatory
+                                                        .equals("1"));
+                                                setAadhaarByPass(isAadhaarByPass.equals("1"));
                                                 setCity(city);
                                                 setRegisteredName(registerName);
                                                 setAddressMode(addressMode);

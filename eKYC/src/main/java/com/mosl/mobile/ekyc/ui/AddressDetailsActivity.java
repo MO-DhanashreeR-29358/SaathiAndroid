@@ -14,8 +14,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
@@ -24,14 +22,11 @@ import com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity;
 import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.register.PANAdharRegistActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.HashMap;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.disableField;
@@ -46,9 +41,14 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAadhaarByPass;
+import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAddressMode;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 
 
 /**
@@ -227,17 +227,16 @@ public class AddressDetailsActivity extends Activity implements MOSLConstants, V
             cbNew.setOnClickListener(this);
             cbAadhar.setOnClickListener(this);
 
-
             if (getInterestedInMF()) {
                 if (getIsAadharVerified()) {
                     if (!getIsCVLVerified()) {
                         getAddress(false, true, true);
-
                     }
                 }
+            } else if (isAadhaarByPass()) {
+                getAddress(true, false, true);
             } else {
                 getAddress(true, true, true);
-
             }
             /*if (getAddressMode().equals("")) {
                 handleAAdhaarChek();
@@ -537,6 +536,9 @@ public class AddressDetailsActivity extends Activity implements MOSLConstants, V
                                 }
                             } else {
                                 //llAadharTitleLayout.setVisibility(View.GONE);
+                                cbAadhar.setEnabled(false);
+                                llAadharTitleLayout.setEnabled(false);
+                                llAadhar.setVisibility(View.GONE);
                             }
 
                             if (response.has("AddressDetails2")) {

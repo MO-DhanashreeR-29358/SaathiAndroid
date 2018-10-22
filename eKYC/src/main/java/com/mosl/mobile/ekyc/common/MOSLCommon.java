@@ -765,7 +765,7 @@ public class MOSLCommon implements MOSLConstants {
     * */
     public static int minMarginValueForOtherAmount() {
         //return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
-        return getAppType().equalsIgnoreCase(DIRECT) ? 0 : 50000;
+        return getAppType().equalsIgnoreCase(DIRECT) ? 1000 : 50000;
     }
 
     public static boolean isBrokingFundTransferDone(String segment) {

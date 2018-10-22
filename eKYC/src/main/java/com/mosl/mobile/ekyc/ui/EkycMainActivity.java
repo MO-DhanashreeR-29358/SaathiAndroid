@@ -57,6 +57,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getPersonalTab;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
 import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.isAadhaarByPass;
 import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
@@ -559,6 +560,18 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                             startActivity(intent);
                             finish();
                         }
+                    } else if (isAadhaarByPass() && getIsCVLVerified()) {
+                        Intent intent = new Intent(EkycMainActivity.this,
+                            PANAdharRegistActivity.class); // TODO: 28-03-2017
+                        intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
+                        startActivity(intent);
+                        finish();
+                    } else if (isAadhaarByPass() && !getIsCVLVerified()) {
+                        Intent intent = new Intent(EkycMainActivity.this,
+                            PANAdharRegistActivity.class); // TODO: 28-03-2017
+                        intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Intent intent = new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
                         startActivity(intent);
@@ -567,6 +580,12 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                 } else {
                     if (getAppType().equals(DIRECT)) {
                         if (!getIsAadharVerified() && !getIsCVLVerified()) {
+                            Intent intent = new Intent(EkycMainActivity.this,
+                                PANAdharRegistActivity.class); // TODO: 28-03-2017
+                            intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
+                            startActivity(intent);
+                            finish();
+                        } else if (isAadhaarByPass() && !getIsCVLVerified()) {
                             Intent intent = new Intent(EkycMainActivity.this, PANAdharRegistActivity.class); // TODO: 28-03-2017
                             intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
                             startActivity(intent);
@@ -576,6 +595,12 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                             startActivity(intent);
                             finish();
                         }
+                    } else if (isAadhaarByPass() && !getIsCVLVerified()) {
+                        Intent intent = new Intent(EkycMainActivity.this,
+                            PANAdharRegistActivity.class); // TODO: 28-03-2017
+                        intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Intent intent = new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
                         startActivity(intent);

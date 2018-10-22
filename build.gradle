@@ -89,6 +89,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
             'okHttp'              : ['core'  : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
                                      'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"],
+            'playService'         : "com.google.android.gms:play-services:${versions.firebase}",
             'compressor'          : "id.zelory:compressor:2.1.0",
             'location'            : "com.google.android.gms:play-services-location:11.8.0",
             'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",
