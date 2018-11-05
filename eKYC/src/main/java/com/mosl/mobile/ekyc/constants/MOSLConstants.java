@@ -542,7 +542,7 @@ public interface MOSLConstants {
      * Biometric Constants
      */
 
-    String BIO_USERID = "Userid";
+    String USERID = "Userid";
     String BIO_AADHAR_NUM = "AadharNumber";
     String BIO_DATA = "BiometricData";
     String BIO_ENCRYP_PID_BLOCK = "EncryptedPIDBlock";
@@ -868,7 +868,8 @@ public interface MOSLConstants {
 
     String Size_limit_is_2MB = "Size limit is 2MB.";
     String IFSC_code_blank_msg = "Kindly select Other bank than the one selected by you, as IFSC code is mandatory in order to proceed & save Bank section.";
-    String MF_NOCVL_NOAADHAR_CONGRATULATION_MSG = "Congratulations ! You are now our privileged client. You can start investing instantly using the login id password sent on your registered mobile no and email id\nKindly courier/post signed physical copy of kyc form and self-attested proofs to the below mentioned address\n\nAddress:\nMutual fund operations team. Motilal Oswal securities ltd*.\nPalm spring Centre, 2nd floor. Palm court complex,\nNew link road. Malad (west),  Mumbai - 400 064\n";
+    String MF_NOCVL_NOAADHAR_CONGRATULATION_MSG =
+        "Congratulations ! You are now our privileged client. You can start investing instantly using the login id password sent on your communication mobile no and email id\nKindly courier/post signed physical copy of kyc form and self-attested proofs to the below mentioned address\n\nAddress:\nMutual fund operations team. Motilal Oswal securities ltd*.\nPalm spring Centre, 2nd floor. Palm court complex,\nNew link road. Malad (west),  Mumbai - 400 064\n";
 
     /*Nominee validateion messages*/
     String Second_Joint_Holder_Aadhaar_Number_cannot_be_same_as_Primary_applicant_Aadhaar_Number_Please_enter_unique_details = "Second Joint Holder Aadhaar Number cannot be same as Primary applicant's Aadhaar Number. Please enter unique details.";

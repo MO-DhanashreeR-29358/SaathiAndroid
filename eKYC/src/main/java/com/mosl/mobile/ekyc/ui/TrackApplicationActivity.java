@@ -13,27 +13,21 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.model.RowData;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
@@ -121,7 +115,13 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
             setPermisson(TrackApplicationActivity.this, getApplicationContext());
             overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
             setUpView();
-            applicationTracker();
+            String userId = "";
+            if (getIntent().getExtras() != null) {
+                userId = getIntent().getExtras().getString(USERID);
+            } else {
+                userId = getUserID();
+            }
+            applicationTracker(userId);
         } catch (Exception e) {
             e.printStackTrace();
 //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
@@ -130,23 +130,23 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
     }
 
     private void setUpView() {
-        llClientInfo = (LinearLayout) findViewById(R.id.llClientInfo);
-        llFundTransfer = (LinearLayout) findViewById(R.id.llFundTransfer);
-        llProofVerification = (LinearLayout) findViewById(R.id.llProofVerification);
-        llApplicationSubmitted = (LinearLayout) findViewById(R.id.llApplicationSubmitted);
-        llDispacthStatus = (LinearLayout) findViewById(R.id.llDispacthStatus);
-        llKeyProofUploaded = (LinearLayout) findViewById(R.id.llKeyProofUploaded);
-        llMFAppilcationStatus = (LinearLayout) findViewById(R.id.llMFAppilcationStatus);
-        llMFProductStatus = (LinearLayout) findViewById(R.id.llMFProductStatus);
-        // llFirstProductStatus = (LinearLayout) findViewById(R.id.llFirstProductStatus);
-//        llSecondProductStatus = (LinearLayout) findViewById(R.id.llSecondProductStatus);
-        llKyc1 = (LinearLayout) findViewById(R.id.llKyc1);
-        llKyc2 = (LinearLayout) findViewById(R.id.llKyc2);
-        llKyc3 = (LinearLayout) findViewById(R.id.llKyc3);
-        llKyc4 = (LinearLayout) findViewById(R.id.llKyc4);
-        llKyc5 = (LinearLayout) findViewById(R.id.llKyc5);
-        customProgress = (RelativeLayout) findViewById(R.id.customProgress);
-        btnClose = (Button) findViewById(R.id.btnClose);
+        llClientInfo = findViewById(R.id.llClientInfo);
+        llFundTransfer = findViewById(R.id.llFundTransfer);
+        llProofVerification = findViewById(R.id.llProofVerification);
+        llApplicationSubmitted = findViewById(R.id.llApplicationSubmitted);
+        llDispacthStatus = findViewById(R.id.llDispacthStatus);
+        llKeyProofUploaded = findViewById(R.id.llKeyProofUploaded);
+        llMFAppilcationStatus = findViewById(R.id.llMFAppilcationStatus);
+        llMFProductStatus = findViewById(R.id.llMFProductStatus);
+        // llFirstProductStatus = findViewById(R.id.llFirstProductStatus);
+        //        llSecondProductStatus = findViewById(R.id.llSecondProductStatus);
+        llKyc1 = findViewById(R.id.llKyc1);
+        llKyc2 = findViewById(R.id.llKyc2);
+        llKyc3 = findViewById(R.id.llKyc3);
+        llKyc4 = findViewById(R.id.llKyc4);
+        llKyc5 = findViewById(R.id.llKyc5);
+        customProgress = findViewById(R.id.customProgress);
+        btnClose = findViewById(R.id.btnClose);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,73 +154,72 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
             }
         });
 
-        /*btnFundTransfer = (Button) findViewById(R.id.btnFundTransfer);
-        btnProofVerification = (Button) findViewById(R.id.btnProofVerification);
-        btnApplicationSubmitted = (Button) findViewById(R.id.btnApplicationSubmitted);
-        btnAccountActivated = (Button) findViewById(R.id.btnAccountActivated);
+        /*btnFundTransfer = findViewById(R.id.btnFundTransfer);
+        btnProofVerification = findViewById(R.id.btnProofVerification);
+        btnApplicationSubmitted = findViewById(R.id.btnApplicationSubmitted);
+        btnAccountActivated = findViewById(R.id.btnAccountActivated);
 
         btnFundTransfer.setOnClickListener(this);
         btnProofVerification.setOnClickListener(this);
         btnApplicationSubmitted.setOnClickListener(this);
         btnAccountActivated.setOnClickListener(this);*/
 
-        tvName = (TextView) findViewById(R.id.tvName);
-        tvEmailId = (TextView) findViewById(R.id.tvEmailId);
-        tvMobileNumber = (TextView) findViewById(R.id.tvMobileNumber);
-        tvPANNumber = (TextView) findViewById(R.id.tvPANNumber);
-        tvAadhaarNumber = (TextView) findViewById(R.id.tvAadhaarNumber);
-//        tvFirstProduct = (TextView) findViewById(R.id.tvFirstProduct);
-//        tvSecondProduct = (TextView) findViewById(R.id.tvSecondProduct);
-//        tvStatus = (TextView) findViewById(R.id.tvStatus);
-//        tvSecondProductStatus = (TextView) findViewById(R.id.tvSecondProductStatus);
-        tvTransactionReffNo = (TextView) findViewById(R.id.tvTransactionReffNo);
-        tvBankTransID = (TextView) findViewById(R.id.tvBankTransID);
-        tvFundTransferThrough = (TextView) findViewById(R.id.tvFundTransferThrough);
-        tvFundTransferDate = (TextView) findViewById(R.id.tvFundTransferDate);
-        tvBankName = (TextView) findViewById(R.id.tvBankName);
-        tvAmountTransferred = (TextView) findViewById(R.id.tvAmountTransferred);
-        tvPanStatus = (TextView) findViewById(R.id.tvPanStatus);
-        tvBankEqStatus = (TextView) findViewById(R.id.tvBankEqStatus);
-        tvBankCommStatus = (TextView) findViewById(R.id.tvBankCommStatus);
-        tvIncomeProofStatus = (TextView) findViewById(R.id.tvIncomeProofStatus);
-        tvFormStatus = (TextView) findViewById(R.id.tvFormStatus);
-        tvClientCode = (TextView) findViewById(R.id.tvClientCode);
-        tvDPID = (TextView) findViewById(R.id.tvDPID);
-        tvApplicationSubmittedDate = (TextView) findViewById(R.id.tvApplicationSubmittedDate);
-        tvDispatchDate = (TextView) findViewById(R.id.tvDispatchDate);
-        tvCourierName = (TextView) findViewById(R.id.tvCourierName);
-        tvAirwayBillNo = (TextView) findViewById(R.id.tvAirwayBillNo);
-        tvDispatchStatus = (TextView) findViewById(R.id.tvDispatchStatus);
+        tvName = findViewById(R.id.tvName);
+        tvEmailId = findViewById(R.id.tvEmailId);
+        tvMobileNumber = findViewById(R.id.tvMobileNumber);
+        tvPANNumber = findViewById(R.id.tvPANNumber);
+        tvAadhaarNumber = findViewById(R.id.tvAadhaarNumber);
+        //        tvFirstProduct = findViewById(R.id.tvFirstProduct);
+        //        tvSecondProduct = findViewById(R.id.tvSecondProduct);
+        //        tvStatus = findViewById(R.id.tvStatus);
+        //        tvSecondProductStatus = findViewById(R.id.tvSecondProductStatus);
+        tvTransactionReffNo = findViewById(R.id.tvTransactionReffNo);
+        tvBankTransID = findViewById(R.id.tvBankTransID);
+        tvFundTransferThrough = findViewById(R.id.tvFundTransferThrough);
+        tvFundTransferDate = findViewById(R.id.tvFundTransferDate);
+        tvBankName = findViewById(R.id.tvBankName);
+        tvAmountTransferred = findViewById(R.id.tvAmountTransferred);
+        tvPanStatus = findViewById(R.id.tvPanStatus);
+        tvBankEqStatus = findViewById(R.id.tvBankEqStatus);
+        tvBankCommStatus = findViewById(R.id.tvBankCommStatus);
+        tvIncomeProofStatus = findViewById(R.id.tvIncomeProofStatus);
+        tvFormStatus = findViewById(R.id.tvFormStatus);
+        tvClientCode = findViewById(R.id.tvClientCode);
+        tvDPID = findViewById(R.id.tvDPID);
+        tvApplicationSubmittedDate = findViewById(R.id.tvApplicationSubmittedDate);
+        tvDispatchDate = findViewById(R.id.tvDispatchDate);
+        tvCourierName = findViewById(R.id.tvCourierName);
+        tvAirwayBillNo = findViewById(R.id.tvAirwayBillNo);
+        tvDispatchStatus = findViewById(R.id.tvDispatchStatus);
 
-        tvClientInformation = (TextView) findViewById(R.id.tvClientInformation);
-        tvFundTransfer = (TextView) findViewById(R.id.tvFundTransfer);
-        tvProofVerification = (TextView) findViewById(R.id.tvProofVerification);
-        tvApplicationSubmitted = (TextView) findViewById(R.id.tvApplicationSubmitted);
-        tvDispacthStatusHeader = (TextView) findViewById(R.id.tvDispacthStatusHeader);
-        tvMFApplicationStatus = (TextView) findViewById(R.id.tvMFApplicationStatus);
-        tvKeyProofUploaded = (TextView) findViewById(R.id.tvKeyProofUploaded);
+        tvClientInformation = findViewById(R.id.tvClientInformation);
+        tvFundTransfer = findViewById(R.id.tvFundTransfer);
+        tvProofVerification = findViewById(R.id.tvProofVerification);
+        tvApplicationSubmitted = findViewById(R.id.tvApplicationSubmitted);
+        tvDispacthStatusHeader = findViewById(R.id.tvDispacthStatusHeader);
+        tvMFApplicationStatus = findViewById(R.id.tvMFApplicationStatus);
+        tvKeyProofUploaded = findViewById(R.id.tvKeyProofUploaded);
 
+        tvKyc1 = findViewById(R.id.tvKyc1);
+        tvKyc2 = findViewById(R.id.tvKyc2);
+        tvKyc3 = findViewById(R.id.tvKyc3);
+        tvKyc4 = findViewById(R.id.tvKyc4);
+        tvKyc5 = findViewById(R.id.tvKyc5);
+        tvMFBankProof = findViewById(R.id.tvMFBankProof);
+        tvMFCorresAddressProof = findViewById(R.id.tvMFCorresAddressProof);
+        tvMFPermAddressProof = findViewById(R.id.tvMFPermAddressProof);
+        tvPANCopy = findViewById(R.id.tvPANCopy);
+        tvMFProofVerificationStatus = findViewById(R.id.tvMFProofVerificationStatus);
+        //        tvMFBankProofStatus = findViewById(R.id.tvMFBankProofStatus);
+        tvMFClientCode = findViewById(R.id.tvMFClientCode);
+        tvMFAppSubmittedDate = findViewById(R.id.tvMFAppSubmittedDate);
+        tvMFProductStatus = findViewById(R.id.tvMFProductStatus);
+        tvNoDataFound = findViewById(R.id.tvNoDataFound);
 
-        tvKyc1 = (TextView) findViewById(R.id.tvKyc1);
-        tvKyc2 = (TextView) findViewById(R.id.tvKyc2);
-        tvKyc3 = (TextView) findViewById(R.id.tvKyc3);
-        tvKyc4 = (TextView) findViewById(R.id.tvKyc4);
-        tvKyc5 = (TextView) findViewById(R.id.tvKyc5);
-        tvMFBankProof = (TextView) findViewById(R.id.tvMFBankProof);
-        tvMFCorresAddressProof = (TextView) findViewById(R.id.tvMFCorresAddressProof);
-        tvMFPermAddressProof = (TextView) findViewById(R.id.tvMFPermAddressProof);
-        tvPANCopy = (TextView) findViewById(R.id.tvPANCopy);
-        tvMFProofVerificationStatus = (TextView) findViewById(R.id.tvMFProofVerificationStatus);
-//        tvMFBankProofStatus = (TextView) findViewById(R.id.tvMFBankProofStatus);
-        tvMFClientCode = (TextView) findViewById(R.id.tvMFClientCode);
-        tvMFAppSubmittedDate = (TextView) findViewById(R.id.tvMFAppSubmittedDate);
-        tvMFProductStatus = (TextView) findViewById(R.id.tvMFProductStatus);
-        tvNoDataFound = (TextView) findViewById(R.id.tvNoDataFound);
+        scrollView = findViewById(R.id.scrollView);
 
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
-
-//        tvAccountActivated = (TextView) findViewById(R.id.tvAccountActivated);
-        spProduct = (Spinner) findViewById(R.id.spProduct);
+        //        tvAccountActivated = findViewById(R.id.tvAccountActivated);
+        spProduct = findViewById(R.id.spProduct);
 
         tvFundTransfer.setOnClickListener(this);
         tvProofVerification.setOnClickListener(this);
@@ -299,16 +298,17 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
         }
     }
 
-    public void applicationTracker() {
+    public void applicationTracker(String userId) {
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("PanNo", getPANno());
+            inputMap.put("UserId", userId);
+            inputMap.put("_Otp", "");
+            inputMap.put("_uniqueId", "");
 
-            String flag = TRACKAPPLICATION;
-            String category = TRACK;
-
-            WebServiceHandler.post(TrackApplicationActivity.this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(TrackApplicationActivity.this, TRACKAPPLICATION, TRACK, inputMap,
+                new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     arrProduct = new ArrayList<>();
@@ -370,7 +370,7 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
                             }
                             if (response.has("ApplicationTracker2")) {
                                 JSONArray jsonArray = response.getJSONArray("ApplicationTracker2");
-                                allDetailMap = new HashMap<String, Map<String, String>>();
+                                allDetailMap = new HashMap<>();
                                 if (jsonArray.length() != 0) {
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         /*"Name":"Vaibhav Dasharath Chavan",
@@ -395,7 +395,7 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
                                                 "AdvisorName":"",
                                                 "ISADDHARVERIFIED":"1"*/
                                         JSONObject object = jsonArray.getJSONObject(i);
-                                        Map stageMap = new HashMap();
+                                        Map<String, String> stageMap = new HashMap<>();
                                         String name = (object.isNull(Name) || object.getString(Name).equals("")) ? "" : object.getString(Name);
                                         String emailId = (object.isNull(EmailID) || object.getString(EmailID).equals("")) ? "" : object.getString(EmailID);
                                         String mobileNo = (object.isNull(MobileNo) || object.getString(MobileNo).equals("")) ? "" : object.getString(MobileNo);
@@ -492,7 +492,7 @@ public class TrackApplicationActivity extends FragmentActivity implements View.O
                                 if (jsonArray.length() != 0) {
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
-                                        Map stageMap = new HashMap();
+                                        Map<String, String> stageMap = new HashMap();
                                         String name = (object.isNull("NAME") || object.getString("NAME").equals("")) ? "" : object.getString("NAME");
                                         String emailId = (object.isNull("EMAILID") || object.getString("EMAILID").equals("")) ? "" : object.getString("EMAILID");
                                         String mobileNo = (object.isNull("MOBILENO") || object.getString("MOBILENO").equals("")) ? "" : object.getString("MOBILENO");

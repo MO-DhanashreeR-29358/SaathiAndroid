@@ -9,6 +9,8 @@ import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -126,12 +128,15 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
 
     //Dialog
     private ImageView ivClose;
-    private Button btnForgotSubmit, ivSubmit, ivResumeApp, ivTrackApp;
+    RelativeLayout customProgress_forgot_password;
     LinearLayout customProgress;
-    private EditText etForgotEmail, etForgotMobileNumber;
-    private TextView etForgotEmailError, etForgotMobileNumberError;
+    String uniqueId;
+    int submitOTP = 1, resendOTP = 2, submit = 0;
     Map<String, Map<String, String>> allStageMap;
     boolean prospectTable;
+    private Button btnForgotSubmit, ivSubmit, ivResumeApp, ivTrackApp, btnResendOTP;
+    private EditText etForgotEmail, etForgotMobileNumber, etOTP;
+    private TextView etForgotEmailError, etForgotMobileNumberError, etOTPError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -340,12 +345,17 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
         forgotDialog.setContentView(R.layout.dc_forgot_password);
         forgotDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        ivClose = (ImageView) forgotDialog.findViewById(R.id.ivClose);
-        btnForgotSubmit = (Button) forgotDialog.findViewById(R.id.btnForgotSubmit);
-        etForgotEmail = (EditText) forgotDialog.findViewById(R.id.etForgotEmail);
-        etForgotMobileNumber = (EditText) forgotDialog.findViewById(R.id.etForgotMobileNumber);
-        etForgotEmailError = (TextView) forgotDialog.findViewById(R.id.etForgotEmailError);
-        etForgotMobileNumberError = (TextView) forgotDialog.findViewById(R.id.etForgotMobileNumberError);
+        ivClose = forgotDialog.findViewById(R.id.ivClose);
+        btnForgotSubmit = forgotDialog.findViewById(R.id.btnForgotSubmit);
+        etForgotEmail = forgotDialog.findViewById(R.id.etForgotEmail);
+        etForgotMobileNumber = forgotDialog.findViewById(R.id.etForgotMobileNumber);
+        etForgotEmailError = forgotDialog.findViewById(R.id.etForgotEmailError);
+        etForgotMobileNumberError = forgotDialog.findViewById(R.id.etForgotMobileNumberError);
+        etOTP = forgotDialog.findViewById(R.id.etOTP);
+        etOTPError = forgotDialog.findViewById(R.id.etOTPError);
+        btnResendOTP = forgotDialog.findViewById(R.id.btnResendOTP);
+        customProgress_forgot_password =
+            forgotDialog.findViewById(R.id.customProgress_forgot_password);
 
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -357,27 +367,37 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
         btnForgotSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etForgotEmail.getText().toString().trim().equals("")) {
-                    etForgotEmailError.setText("Enter email id");
-                    etForgotEmailError.setVisibility(View.VISIBLE);
-                } else if (!isValidEmail(etForgotEmail.getText())) {
-                    etForgotEmailError.setText("Email is not valid");
-                    etForgotEmailError.setVisibility(View.VISIBLE);
-                } else if (etForgotMobileNumber.getText().toString().trim().equals("")) {
-                    etForgotEmailError.setVisibility(View.GONE);
-                    etForgotMobileNumberError.setText("Enter mobile number");
-                    etForgotMobileNumberError.setVisibility(View.VISIBLE);
-                } else if (etForgotMobileNumber.length() < 10) {
-                    etForgotEmailError.setVisibility(View.GONE);
-                    etForgotMobileNumberError.setText("Invalid mobile no.");
-                    etForgotMobileNumberError.setVisibility(View.VISIBLE);
-                } else {
-                    removeKeyboard(DirectResumeApplicationActivity.this, etForgotMobileNumber);
-                    etForgotEmailError.setVisibility(View.GONE);
-                    etForgotMobileNumberError.setVisibility(View.GONE);
-                    forgotPassowrd();
-                    forgotDialog.dismiss();
+                if (btnForgotSubmit.getText().equals(getResources().getString(R.string.submit))
+                    && validateData()) {
+                    forgotPassowrd(forgotDialog, submit);
+                } else if (btnForgotSubmit.getText()
+                    .equals(getResources().getString(R.string.button_label_submit_otp))
+                    && validateOTP()) {
+                    forgotPassowrd(forgotDialog, submitOTP);
                 }
+            }
+        });
+
+        etForgotMobileNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isBlank(etForgotMobileNumber.getText().toString())
+                    || etForgotMobileNumber.length() < 10) {
+                    visibilityCode(false);
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) {
+
+            }
+        });
+        btnResendOTP.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                forgotPassowrd(forgotDialog, resendOTP);
             }
         });
 
@@ -424,18 +444,87 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
         overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
     }
 
-    private void forgotPassowrd() {
+    private boolean validateData() {
+        if (etForgotEmail.getVisibility() == View.VISIBLE && etForgotEmail.getText()
+            .toString()
+            .trim()
+            .equals("")) {
+            etForgotEmailError.setText("Enter email id");
+            etForgotEmailError.setVisibility(View.VISIBLE);
+            return false;
+        } else if (etForgotEmail.getVisibility() == View.VISIBLE && !isValidEmail(
+            etForgotEmail.getText())) {
+            etForgotEmailError.setText("Email is not valid");
+            etForgotEmailError.setVisibility(View.VISIBLE);
+            return false;
+        } else if (etForgotMobileNumber.getText().toString().trim().equals("")) {
+            etForgotEmailError.setVisibility(View.GONE);
+            etForgotMobileNumberError.setText("Enter mobile number");
+            etForgotMobileNumberError.setVisibility(View.VISIBLE);
+            return false;
+        } else if (etForgotMobileNumber.length() < 10) {
+            etForgotEmailError.setVisibility(View.GONE);
+            etForgotMobileNumberError.setText("Invalid mobile no.");
+            etForgotMobileNumberError.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            removeKeyboard(DirectResumeApplicationActivity.this, etForgotMobileNumber);
+            etForgotEmailError.setVisibility(View.GONE);
+            etForgotMobileNumberError.setVisibility(View.GONE);
+            return true;
+        }
+    }
+
+    private boolean validateOTP() {
+        if (etOTP.getText().toString().equals("") || etOTP.length() < 4) {
+            etOTPError.setVisibility(View.VISIBLE);
+            etOTPError.setText(getResources().getString(R.string.error_text_otp));
+            return false;
+        } else {
+            etForgotEmailError.setVisibility(View.GONE);
+            etForgotMobileNumberError.setVisibility(View.GONE);
+            etOTPError.setVisibility(View.GONE);
+            return true;
+        }
+    }
+
+    private void visibilityCode(boolean value) {
+        if (value) {
+            etOTP.setVisibility(View.VISIBLE);
+            btnResendOTP.setVisibility(View.VISIBLE);
+            btnForgotSubmit.setText(getResources().getString(R.string.button_label_submit_otp));
+        } else {
+            etOTP.setVisibility(View.GONE);
+            btnResendOTP.setVisibility(View.GONE);
+            btnForgotSubmit.setText(getResources().getString(R.string.submit));
+        }
+    }
+
+    private void forgotPassowrd(final Dialog forgotDialog, int type) {
         if (MOSLCommon.isNetworkEnabled(DirectResumeApplicationActivity.this)) {
-            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
+            customProgress_forgot_password.setVisibility(View.VISIBLE);
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_emailid", etForgotEmail.getText().toString().trim());
             inputMap.put("_mobile", etForgotMobileNumber.getText().toString().trim());
             inputMap.put("_ApplicationType", DIRECT);
             inputMap.put("_AppLoginId", "");
-            String flag = GETFORGOTPASSWORD;
-            String category = SIGNUP;
+            switch (type) {
+                case 0:
+                    inputMap.put("_Otp", "");
+                    inputMap.put("_uniqueId", "");
+                    break;
+                case 1:
+                    inputMap.put("_Otp", etOTP.getText().toString().trim());
+                    inputMap.put("_uniqueId", uniqueId);
+                    break;
+                case 2:
+                    inputMap.put("_Otp", "");
+                    inputMap.put("_uniqueId", uniqueId);
+                    break;
+            }
 
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, GETFORGOTPASSWORD, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
 
                 @Override
                 public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
@@ -459,14 +548,38 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
                               "_AppLoginId": null,
                               "_ShowChangePassword": null
                             }*/
-                                String status = (response.isNull(FORGOTSTATUS) || response.getString(FORGOTSTATUS).equals("")) ? "" : response.getString(FORGOTSTATUS).trim();
-                                String msg = (response.isNull(FORGOTMSG) || response.getString(FORGOTMSG).equals("")) ? "" : response.getString(FORGOTMSG);
+                                String status =
+                                    (response.isNull(FORGOTSTATUS) || response.getString(
+                                        FORGOTSTATUS).equals("")) ? ""
+                                        : response.getString(FORGOTSTATUS).trim();
+                                String msg =
+                                    (response.isNull(FORGOTMSG) || response.getString(FORGOTMSG)
+                                        .equals("")) ? "" : response.getString(FORGOTMSG);
+                                uniqueId =
+                                    (response.isNull("_uniqueId") || response.getString("_uniqueId")
+                                        .equals("")) ? "" : response.getString("_uniqueId");
 
-                                commonMsgDialog(DirectResumeApplicationActivity.this, msg, false, "");
+                                switch (status) {
+                                    case "0":
+                                        visibilityCode(false);
+                                        MOSLCommon.showToastMsg(
+                                            DirectResumeApplicationActivity.this, msg);
+                                        break;
+                                    case "1":
+                                        visibilityCode(true);
+                                        MOSLCommon.showToastMsg(
+                                            DirectResumeApplicationActivity.this, msg);
+                                        break;
+                                    case "2":
+                                        forgotDialog.dismiss();
+                                        commonMsgDialog(DirectResumeApplicationActivity.this, msg,
+                                            false, "");
+                                        break;
+                                }
 //                                MOSLCommon.alertDialog(DirectResumeApplicationActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
 
                             } else {
-                                customProgress.setVisibility(View.GONE);
+                                customProgress_forgot_password.setVisibility(View.GONE);
                                 commonMsgDialog(DirectResumeApplicationActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
 //                                MOSLCommon.showToastMsg(DirectResumeApplicationActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY);
                             }
@@ -474,51 +587,25 @@ public class DirectResumeApplicationActivity extends Activity implements View.On
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        customProgress.setVisibility(View.GONE);
+                        customProgress_forgot_password.setVisibility(View.GONE);
                         commonMsgDialog(DirectResumeApplicationActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
 //                        MOSLCommon.alertDialog(DirectResumeApplicationActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                    customProgress.setVisibility(View.GONE);
+                    customProgress_forgot_password.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
+                    customProgress_forgot_password.setVisibility(View.GONE);
                     commonMsgDialog(DirectResumeApplicationActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
 
-                }
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(DirectResumeApplicationActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(DirectResumeApplicationActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
                 }
 
             });
         } else {
             MOSLCommon.alertDInternet(DirectResumeApplicationActivity.this);
-            customProgress.setVisibility(View.GONE);
+            customProgress_forgot_password.setVisibility(View.GONE);
         }
     }
 

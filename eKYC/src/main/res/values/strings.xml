@@ -148,7 +148,7 @@
     <string name="lead_already_transfered">Lead is already transferred to Ekyc</string>
     <string name="pan_status">Your PAN is verified.</string>
 
-    <string name="review_submit">Congratulations account has been successfully activated. Details have been sent to your client\'s registered email id and mobile number.</string>
+    <string name="review_submit">Congratulations account has been successfully activated. Details have been sent to your client\'s communication email id and mobile number.</string>
     <string name="cvl_add_warning">Are you sure you want to proceed with CVL address ?</string>
     <string name="aadhaar_add_warning">Are you sure you want to proceed with Aadhaar address ?</string>
     <string name="manual_add_other_than_aadhaar_warning">Address other than Aadhaar will require an additional proof upload, do you still wish to proceed ?</string>
@@ -174,7 +174,7 @@
     <string name="crm_success_reg">Your prospect has been registered successfully! Go ahead &amp; begin their application.\nFor paperless A/c opening, all you need to have:\n\n1.  Valid PAN no\n2.  Valid Aadhaar ID\n3.  Supporting Documents</string>
     <string name="pp_success_reg">Your prospect has been registered successfully! Go ahead &amp; begin their application.\nFor paperless A/c opening, all you need to have:\n\n1.  Valid PAN no\n2.  Valid Aadhaar ID\n3.  Supporting Documents</string>
     <!--<string name="pp_success_reg">Your prospect has been registered successfully! Go ahead &amp; begin their application.\nFor paperless A/c opening, all you need to have:\n\n1.  Valid Aadhaar ID\n2.  Aadhaar linked active mobile number\n3.  Supporting documents</string>-->
-    <string name="direct_success_reg">Thank you for registering! Log-in details are sent to your mobile no. &amp; e-mail id. Go ahead &amp; begin your application .\nFor paperless A/c opening, All you need to have:\n\n1.  Valid PAN No\n2.  Valid Aadhaar ID\n3.  Aadhaar linked active mobile number\n4.  Supporting documents</string>
+    <string name="direct_success_reg">Thank you for registering! Log-in details are sent to your mobile no. Go ahead &amp; begin your application .\nFor paperless A/c opening, All you need to have:\n\n1.  Valid PAN No\n2.  Valid Aadhaar ID\n3.  Aadhaar linked active mobile number\n4.  Supporting documents</string>
     <string name="mf_direct_success_reg">Thank you for registering! Log-in details are sent to your mobile no. &amp; email id. Go ahead &amp; begin your application .\nFor paperless A/c opening, All you need to have:\n\n1.  Valid PAN No\n2.  Valid Aadhaar ID\n3.  Supporting documents</string>
     <string name="mf_success_reg">Your prospect has been registered successfully! Go ahead &amp; begin their application.\nFor paperless A/c opening, All you need to have:\n\n1.  Valid PAN No\n2.  Valid Aadhaar ID\n3.  Supporting documents</string>
 
@@ -197,7 +197,7 @@
 	\u25CF The client is required to upload all documents, records etc which shall be verified with the originals as stipulated in Know Your Client documents in order to open account. \n\n
 	\u25CF Client shall be required to affix his own digital signature / e-sign at the relevant pages of account opening form so as to enable MOSL* to open the said account \n\n
 	\u25CF The Client is required to fill necessary details and make payment via online through his registered Bank Account - Net banking facility. \n\n
-	\u25CF MOSL* after receipt of the payment towards account opening charges for Trading Account etc shall send the account opening document at the registered E-mail ID furnished
+	\u25CF MOSL* after receipt of the payment towards account opening charges for Trading Account etc shall send the account opening document at the communication E-mail ID furnished
         by the client. \n\n
 	\u25CF MOSL* shall reject the application if it is found that the client is barred from trading or any investigation from SEBI or any other regulatory authorities is pending
         against the said client, decision taken by MOSL* shall be final and binding upon the client. \n\n
@@ -234,7 +234,7 @@
 	\u25CF The client is required to upload all documents, records etc which shall be verified with the originals as stipulated in Know Your Client documents in order to open account \n\n
 	\u25CF Client shall be required to affix his own digital signature / e-sign at the relevant pages of account opening form so as to enable MOCBPL to open the said account. \n\n
 	\u25CF The Client is required to fill necessary details and make payment via online through his registered Bank Account - Net banking facility. \n\n
-	\u25CF MOCBPL after receipt of the payment towards account opening charges for Trading Account shall send the account opening document at the registered E-mail ID furnished by
+	\u25CF MOCBPL after receipt of the payment towards account opening charges for Trading Account shall send the account opening document at the communication E-mail ID furnished by
         the client. \n\n
 	\u25CF MOCBPL shall reject the application if it is found that the client is barred from trading or any investigation from Ministry of Finance/SEBI or any other regulatory
         authorities is pending against the said client, decision taken by MOCBPL shall be final and binding upon the client. \n\n
@@ -532,4 +532,15 @@
     <string name="mosl_merge_note">* MOSL has been amalgamated with Motilal Oswal Financial Services Limited (MOFSL) w.e.f August 21, 2018 pursuant to order dated July 30, 2018 issued by Hon\'ble National Company Law Tribunal, Mumbai Bench. The existing registration no(s) of MOSL would be used until receipt of new MOFSL registration numbers</string>
     <string name="online_msg">Required: Aadhaar registered Mobile No. to get One time password for eSign. &lt;u>(Verify Your Mobile no.)&lt;/u></string>
     <string name="offline_msg">On filling the account form, we will verify and send the filled physical form to your address. You need to sign the form and attach the proof required and resend the documents</string>
+    <string name="hint_text_label_pan_no">Enter Your PAN Number</string>
+    <string name="hint_text_label_enter_otp">Enter OTP</string>
+    <string name="error_text_track_application_login">Please enter valid PAN No.</string>
+    <string name="error_text_otp">Please enter valid OTP</string>
+    <string name="button_label_verify">Verify</string>
+    <string name="button_label_verify_otp">Verify OTP</string>
+    <string name="text_label_loading">Loading</string>
+    <string name="header_label_forgot_password">Forgot Password</string>
+    <string name="hint_label_enter_email_id">Enter Email ID</string>
+    <string name="hint_label_enter_mobile_number">Enter Mobile Number</string>
+    <string name="button_label_submit_otp">Submit OTP</string>
 </resources>

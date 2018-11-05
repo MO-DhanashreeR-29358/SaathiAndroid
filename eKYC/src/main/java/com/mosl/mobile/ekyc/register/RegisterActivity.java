@@ -87,7 +87,7 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     private ImageView ivClose;
     private EditText etStateError, etCityError, etInterestedInError, etMobileError, etPincodeError, etNameError, etEmailError;
     private TextInputLayout input_layout_name, input_layout_email, input_layout_mobile, inputLayoutPincode, inputLayoutBABranchCode;
-    private LinearLayout llPincode, llCity, llState, llBABranchCode;
+    private LinearLayout llPincode, llCity, llState, llBABranchCode, llEditText;
     private ScrollView scrollview;
 
     @Override
@@ -105,9 +105,187 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         }
     }
 
+    private AdapterView.OnItemSelectedListener interestedInListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                interestedInStr = ((RowData) spInterestedIn.getSelectedItem()).getKey();
+                if (!interestedInStr.equals("")) {
+                    if (interestedInStr.equals(MF) || interestedInStr.equalsIgnoreCase("SIP")) {
+                        setIsInterestedInMF(true);
+                    } else {
+                        setIsInterestedInMF(false);
+                    }
+                }
+                etInterestedInError.setVisibility(View.GONE);
+                //getCity(stateCodeStr);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private AdapterView.OnItemSelectedListener stateListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
+                stateNameStr = ((RowData) spState.getSelectedItem()).getValue();
+                etStateError.setVisibility(View.GONE);
+                getCity(stateCodeStr);
+                if (!stateCodeStr.equals("") && !stateCodeStr.equals("-1")) {
+                    spCity.setEnabled(true);
+                } else {
+                    spCity.setEnabled(false);
+                }
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+    private void sendRepresentative(final String name, final String emailId, final String mob,
+        String otp, String uniqueId) {
+
+        if (MOSLCommon.isNetworkEnabled(this)) {
+            customProgress.setVisibility(View.VISIBLE);
+            Map inputMap = new HashMap<>();
+            inputMap.put("_name", name);
+            inputMap.put("_emailid", emailId);
+            inputMap.put("_mobile", mob);
+            inputMap.put("_state", stateNameStr);
+            inputMap.put("_pincode", etPincode.getText().toString());
+            inputMap.put("_city", cityNameStr);
+            inputMap.put("_strPSource", OAO);
+            inputMap.put("_strPSourceDetails", OAO);
+            inputMap.put("_strSource", ONLINE);
+            inputMap.put("_interestedin", interestedInStr);
+            inputMap.put("_myIP", getDeviceID(RegisterActivity.this, getContentResolver()));
+            inputMap.put(APPLICATION_TYPE, getAppType());
+            inputMap.put("_Otp", otp);
+            inputMap.put("_uniqueId", uniqueId);
+
+            inputMap.put("_applicationFrom", "Mobile");
+            if (getAppType().equals(CRM)) {
+                inputMap.put(ROLE_MAPPING_ID, RoleSelectionModel.getRoleMappingID());
+            } else {
+                inputMap.put(ROLE_MAPPING_ID, "");
+            }
+            if (getAppType().equals(DIRECT)) {
+                inputMap.put("_AppLoginId", "");//told to set empty
+            } else {
+                inputMap.put("_AppLoginId", getAppLoginID());
+            }
+
+            String flag = SENDREPRESENTATIVE;
+            String category = SIGNUP;
+            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    /*{"_userid":"","_isnewcustomer":"0","_msg":"Please enter correct OTP",
+                            "_Success":0,"_Step":0,"_uniqueId":"","_Status":"1","_OTP":"",
+                            "_BusinessUnitId":null,"_Role":null,"_ShowChangePassword":"0"}*/
+                    if (response.length() != 0) {
+                        try {
+                            //                            dialog.dismiss();
+                            String userID =
+                                (response.isNull("_userid") || response.getString("_userid")
+                                    .equals("")) ? "" : response.getString("_userid");
+                            String isNewCustomer =
+                                (response.isNull("_isnewcustomer") || response.getString(
+                                    "_isnewcustomer").equals("")) ? ""
+                                    : response.getString("_isnewcustomer");
+                            String msg =
+                                (response.isNull("_msg") || response.getString("_msg").equals(""))
+                                    ? "" : response.getString("_msg");
+                            String success =
+                                (response.isNull("_Success") || response.getString("_Success")
+                                    .equals("")) ? "" : response.getString("_Success");
+                            String step =
+                                (response.isNull("_Step") || response.getString("_Step").equals(""))
+                                    ? "" : response.getString("_Step");
+                            String uniqueID =
+                                (response.isNull("_uniqueId") || response.getString("_uniqueId")
+                                    .equals("")) ? "" : response.getString("_uniqueId");
+                            String status =
+                                (response.isNull("_Status") || response.getString("_Status")
+                                    .equals("")) ? "" : response.getString("_Status").trim();
+                            String otp =
+                                (response.isNull("_OTP") || response.getString("_OTP").equals(""))
+                                    ? "" : response.getString("_OTP");
+                            String showChangePassword =
+                                (response.isNull("_ShowChangePassword") || response.getString(
+                                    "_ShowChangePassword").equals("")) ? ""
+                                    : response.getString("_ShowChangePassword").trim();
+                            int intStatus = Integer.parseInt(status);
+
+                            if (intStatus == 0 || intStatus == 4 || intStatus == 1) {
+                                submitDialog(msg, intStatus, SENDREPRESENTATIVE,
+                                    showChangePassword);
+                            }
+
+                            if (intStatus == 2) {
+                                sendOTP(name, emailId, mob, otp, SENDREPRESENTATIVE, uniqueID);
+                            }
+                            if (intStatus == 3) {
+                                commonMsgDialog(RegisterActivity.this, msg, false, "");
+                                //                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
+                            }
+                            customProgress.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                false, "");
+                            //                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                    super.onSuccess(statusCode, headers, response);
+                }
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                    super.onSuccess(statusCode, headers, responseString);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString,
+                    Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    customProgress.setVisibility(View.GONE);
+                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                    JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    customProgress.setVisibility(View.GONE);
+                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                    JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                    customProgress.setVisibility(View.GONE);
+                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                }
+            });
+        } else {
+            MOSLCommon.alertDInternet(RegisterActivity.this);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
     private void setUpView() {
         clearAllCommonModelFields();
-        scrollview = (ScrollView) findViewById(R.id.scrollview);
+        scrollview = findViewById(R.id.scrollview);
         scrollview.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         scrollview.setFocusable(true);
         scrollview.setFocusableInTouchMode(true);
@@ -119,38 +297,39 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             }
         });
 
-        spState = (SearchableSpinner) findViewById(R.id.spState);
-        spCity = (SearchableSpinner) findViewById(R.id.spCity);
-        spInterestedIn = (Spinner) findViewById(R.id.spInterestedIn);
+        llEditText = findViewById(R.id.llEditText);
+        spState = findViewById(R.id.spState);
+        spCity = findViewById(R.id.spCity);
+        spInterestedIn = findViewById(R.id.spInterestedIn);
 
-        btnProceed = (Button) findViewById(R.id.btnProceed);
-//        btnSendRepresentative = (Button) findViewById(R.id.btnSendRepresentative);
+        btnProceed = findViewById(R.id.btnProceed);
+        //        btnSendRepresentative = findViewById(R.id.btnSendRepresentative);
 
-        tvTC = (TextView) findViewById(R.id.tvTC);
+        tvTC = findViewById(R.id.tvTC);
 
-        etName = (EditText) findViewById(R.id.etName);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etMobile = (EditText) findViewById(R.id.etMobile);
-        etPincode = (EditText) findViewById(R.id.etPincode);
-        etStateError = (EditText) findViewById(R.id.etStateError);
-        etCityError = (EditText) findViewById(R.id.etCityError);
-        etNameError = (EditText) findViewById(R.id.etNameError);
-        etEmailError = (EditText) findViewById(R.id.etEmailError);
-        etInterestedInError = (EditText) findViewById(R.id.etInterestedInError);
-        etMobileError = (EditText) findViewById(R.id.etMobileError);
-        etPincodeError = (EditText) findViewById(R.id.etPincodeError);
-        input_layout_name = (TextInputLayout) findViewById(R.id.input_layout_name);
-        input_layout_email = (TextInputLayout) findViewById(R.id.input_layout_email);
-        input_layout_mobile = (TextInputLayout) findViewById(R.id.input_layout_mobile);
-        inputLayoutPincode = (TextInputLayout) findViewById(R.id.inputLayoutPincode);
-        llPincode = (LinearLayout) findViewById(R.id.llPincode);
-        llCity = (LinearLayout) findViewById(R.id.llCity);
-        llState = (LinearLayout) findViewById(R.id.llState);
-        llBABranchCode = (LinearLayout) findViewById(R.id.llBABranchCode);
-        etBABranchCode = (EditText) findViewById(R.id.etBABranchCode);
-        inputLayoutBABranchCode = (TextInputLayout) findViewById(R.id.inputLayoutBABranchCode);
+        etName = findViewById(R.id.etName);
+        etEmail = findViewById(R.id.etEmail);
+        etMobile = findViewById(R.id.etMobile);
+        etPincode = findViewById(R.id.etPincode);
+        etStateError = findViewById(R.id.etStateError);
+        etCityError = findViewById(R.id.etCityError);
+        etNameError = findViewById(R.id.etNameError);
+        etEmailError = findViewById(R.id.etEmailError);
+        etInterestedInError = findViewById(R.id.etInterestedInError);
+        etMobileError = findViewById(R.id.etMobileError);
+        etPincodeError = findViewById(R.id.etPincodeError);
+        input_layout_name = findViewById(R.id.input_layout_name);
+        input_layout_email = findViewById(R.id.input_layout_email);
+        input_layout_mobile = findViewById(R.id.input_layout_mobile);
+        inputLayoutPincode = findViewById(R.id.inputLayoutPincode);
+        llPincode = findViewById(R.id.llPincode);
+        llCity = findViewById(R.id.llCity);
+        llState = findViewById(R.id.llState);
+        llBABranchCode = findViewById(R.id.llBABranchCode);
+        etBABranchCode = findViewById(R.id.etBABranchCode);
+        inputLayoutBABranchCode = findViewById(R.id.inputLayoutBABranchCode);
         if (getAppType().equals(DIRECT)) {
-            llPincode.setVisibility(View.VISIBLE);
+            llPincode.setVisibility(View.GONE);//Registration Change 26-10-2018 before its Visible
             llBABranchCode.setVisibility(View.VISIBLE);//BA branch code layout visible for Direct
         } else {
             llPincode.setVisibility(View.GONE);
@@ -161,14 +340,14 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             llState.setVisibility(View.GONE);
         } else {
             llCity.setVisibility(View.VISIBLE);
-            llState.setVisibility(View.VISIBLE);
+            llState.setVisibility(View.GONE);//Registration Change 26-10-2018 before its Visible
         }
-        customProgress = (LinearLayout) findViewById(R.id.customProgress);
+        customProgress = findViewById(R.id.customProgress);
 
-       /* etCountryCode = (EditText) findViewById(R.id.etCountryCode);
+       /* etCountryCode = findViewById(R.id.etCountryCode);
         etCountryCode.setText("91");*/
 
-        cbTC = (CheckBox) findViewById(R.id.cbTC);
+        cbTC = findViewById(R.id.cbTC);
         cbTC.setChecked(true);
 
         etPincode.addTextChangedListener(new TextWatcher() {
@@ -305,7 +484,7 @@ public class RegisterActivity extends Activity implements MOSLConstants {
 
             }
         });
-        getState();
+        getCity("0");//Registration Change 26-10-2018 before its getState()
         getInterestedIn();
 
         spCity.setAdapter(arrAdapCity);
@@ -321,9 +500,11 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                     etNameError.setText(ErrorMsgName);
                     etName.requestFocus();
                     return;
-                } else if (!validateEditText(etEmail, input_layout_email, "Enter email id")) {
+                } else if (llEditText.getVisibility() == View.VISIBLE && !validateEditText(etEmail,
+                    input_layout_email, "Enter email id")) {
                     return;
-                } else if (!isValidEmail(etEmail.getText())) {
+                } else if (llEditText.getVisibility() == View.VISIBLE && !isValidEmail(
+                    etEmail.getText())) {
                     etEmail.requestFocus();
                     return;
                 } else if (!validateEditText(etMobile, input_layout_mobile, "Enter mobile no.")) {
@@ -334,7 +515,9 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 } else if (!ValidationRule.validateMobile(etMobile.getText().toString())) {
                     etMobile.requestFocus();
                     return;
-                } else if (!getAppType().equals(PP) && (spState.getSelectedItem() == null || ((RowData) spState.getSelectedItem()).getKey().equals("-1"))) {
+                } else if (llState.getVisibility() == View.VISIBLE && !getAppType().equals(PP) && (
+                    spState.getSelectedItem() == null
+                        || ((RowData) spState.getSelectedItem()).getKey().equals("-1"))) {
                     etStateError.setVisibility(View.VISIBLE);
                     etStateError.setText("Select your state");
                     etStateError.requestFocus();
@@ -424,122 +607,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         });
     }
 
-    private void sendRepresentative(final String name, final String emailId, final String mob, String otp, String uniqueId) {
-
-        if (MOSLCommon.isNetworkEnabled(this)) {
-            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("_name", name);
-            inputMap.put("_emailid", emailId);
-            inputMap.put("_mobile", mob);
-            inputMap.put("_state", stateNameStr);
-            inputMap.put("_pincode", etPincode.getText().toString());
-            inputMap.put("_city", cityNameStr);
-            inputMap.put("_strPSource", OAO);
-            inputMap.put("_strPSourceDetails", OAO);
-            inputMap.put("_strSource", ONLINE);
-            inputMap.put("_interestedin", interestedInStr);
-            inputMap.put("_myIP", getDeviceID(RegisterActivity.this, getContentResolver()));
-            inputMap.put(APPLICATION_TYPE, getAppType());
-            inputMap.put("_Otp", otp);
-            inputMap.put("_uniqueId", uniqueId);
-
-            inputMap.put("_applicationFrom", "Mobile");
-            if (getAppType().equals(CRM)) {
-                inputMap.put(ROLE_MAPPING_ID, RoleSelectionModel.getRoleMappingID());
-            } else {
-                inputMap.put(ROLE_MAPPING_ID, "");
-            }
-            if (getAppType().equals(DIRECT)) {
-                inputMap.put("_AppLoginId", "");//told to set empty
-            } else {
-                inputMap.put("_AppLoginId", getAppLoginID());
-            }
-
-            String flag = SENDREPRESENTATIVE;
-            String category = SIGNUP;
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    /*{"_userid":"","_isnewcustomer":"0","_msg":"Please enter correct OTP",
-                            "_Success":0,"_Step":0,"_uniqueId":"","_Status":"1","_OTP":"",
-                            "_BusinessUnitId":null,"_Role":null,"_ShowChangePassword":"0"}*/
-                    if (response.length() != 0) {
-                        try {
-//                            dialog.dismiss();
-                            String userID = (response.isNull("_userid") || response.getString("_userid").equals("")) ? "" : response.getString("_userid");
-                            String isNewCustomer = (response.isNull("_isnewcustomer") || response.getString("_isnewcustomer").equals("")) ? "" : response.getString("_isnewcustomer");
-                            String msg = (response.isNull("_msg") || response.getString("_msg").equals("")) ? "" : response.getString("_msg");
-                            String success = (response.isNull("_Success") || response.getString("_Success").equals("")) ? "" : response.getString("_Success");
-                            String step = (response.isNull("_Step") || response.getString("_Step").equals("")) ? "" : response.getString("_Step");
-                            String uniqueID = (response.isNull("_uniqueId") || response.getString("_uniqueId").equals("")) ? "" : response.getString("_uniqueId");
-                            String status = (response.isNull("_Status") || response.getString("_Status").equals("")) ? "" : response.getString("_Status").trim();
-                            String otp = (response.isNull("_OTP") || response.getString("_OTP").equals("")) ? "" : response.getString("_OTP");
-                            String showChangePassword = (response.isNull("_ShowChangePassword") || response.getString("_ShowChangePassword").equals("")) ? "" : response.getString("_ShowChangePassword").trim();
-                            int intStatus = Integer.parseInt(status);
-
-                            if (intStatus == 0 || intStatus == 4 || intStatus == 1) {
-                                submitDialog(msg, intStatus, SENDREPRESENTATIVE, showChangePassword);
-                            }
-
-                            if (intStatus == 2) {
-                                sendOTP(name, emailId, mob, otp, SENDREPRESENTATIVE, uniqueID);
-                            }
-                            if (intStatus == 3) {
-                                commonMsgDialog(RegisterActivity.this, msg, false, "");
-//                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
-                            }
-                            customProgress.setVisibility(View.GONE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
-                        }
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
-
-        } else {
-            MOSLCommon.alertDInternet(RegisterActivity.this);
-            customProgress.setVisibility(View.GONE);
-        }
-
-    }
-
     public void signUp(final String name, final String emailId, final String mob, String otp, String uniqueId) {
-        Map inputMap = new HashMap<>();
+        Map<String, String> inputMap = new HashMap<>();
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
             inputMap.put("_name", name);
@@ -549,7 +618,7 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 inputMap.put("_state", "");
                 inputMap.put("_city", "");
             } else {
-                inputMap.put("_state", stateNameStr);
+                inputMap.put("_state", "");//Registration Change 26-10-2018 before its stateNameStr
                 inputMap.put("_city", cityNameStr);
             }
             if (getAppType().equals(DIRECT)) {
@@ -588,9 +657,7 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 inputMap.put("_AppLoginId", getAppLoginID());
             }
 
-            String flag = SIGNUP;
-            String category = SIGNUP;
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, SIGNUP, SIGNUP, inputMap, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
@@ -715,13 +782,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
 
-        tvMsg = (TextView) dialog.findViewById(R.id.tvMsg);
-        tvMsg1 = (TextView) dialog.findViewById(R.id.tvMsg1);
-        tvMsg2 = (TextView) dialog.findViewById(R.id.tvMsg2);
-        tvMsg3 = (TextView) dialog.findViewById(R.id.tvMsg3);
+        tvMsg = dialog.findViewById(R.id.tvMsg);
+        tvMsg1 = dialog.findViewById(R.id.tvMsg1);
+        tvMsg2 = dialog.findViewById(R.id.tvMsg2);
+        tvMsg3 = dialog.findViewById(R.id.tvMsg3);
 
-        btnOK = (Button) dialog.findViewById(R.id.btnOK);
-        ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
+        btnOK = dialog.findViewById(R.id.btnOK);
+        ivClose = dialog.findViewById(R.id.ivClose);
 
         if (flag.equalsIgnoreCase(SIGNUP)) {
             if (status == 0) {
@@ -866,10 +933,10 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         dialog.setContentView(R.layout.dc_otp);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
-        TextView tvEditMobileNumber = (TextView) dialog.findViewById(R.id.tvEditMobileNumber);
-        final EditText etOTP = (EditText) dialog.findViewById(R.id.etOTP);
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-        Button btnResendOTP = (Button) dialog.findViewById(R.id.btnResendOTP);
+        TextView tvEditMobileNumber = dialog.findViewById(R.id.tvEditMobileNumber);
+        final EditText etOTP = dialog.findViewById(R.id.etOTP);
+        Button btnSubmit = dialog.findViewById(R.id.btnSubmit);
+        Button btnResendOTP = dialog.findViewById(R.id.btnResendOTP);
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -920,15 +987,14 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     public void resendOTP(final String name, final String emailId, final String mob, final String type, final String uniqueId) {
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_name", name);
             inputMap.put("_emailid", emailId);
             inputMap.put("_mobile", mob);
             inputMap.put("_uniqueId", uniqueId);
 
-            String flag = SIGNUPRESENDOTP;
-            String category = SIGNUP;
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, SIGNUPRESENDOTP, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
@@ -991,13 +1057,12 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     }
 
     public void getState() {
-        Map inputMap = new HashMap<>();
+        Map<String, String> inputMap = new HashMap<>();
         inputMap.put("", "");
-        String flag = BINDSTATE;
-        String category = SIGNUP;
         if (MOSLCommon.isNetworkEnabled(RegisterActivity.this)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, BINDSTATE, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
@@ -1086,16 +1151,14 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     }
 
     private void getCity(String stateCodeStr) {
-        Map inputMap = new HashMap<>();
+        Map<String, String> inputMap = new HashMap<>();
         inputMap.put("_stateid", stateCodeStr);
 
         String input = "";
-        String flag = BINDCITY;
-        String category = SIGNUP;
 
         if (MOSLCommon.isNetworkEnabled(RegisterActivity.this)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, BINDCITY, SIGNUP, inputMap, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
@@ -1182,17 +1245,15 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     }
 
     private void getInterestedIn() {
-        Map inputMap = new HashMap<>();
+        Map<String, String> inputMap = new HashMap<>();
         inputMap.put(APPLICATION_TYPE, getAppType());
         inputMap.put(COMMAND_TEXT, FILL_INTERESTEDIN_REGISTRATION);
         inputMap.put(APP_LOGIN_ID, getAppLoginID());
 
-        String flag = BINDINTERESTEDIN;
-        String category = SIGNUP;
-
         if (MOSLCommon.isNetworkEnabled(RegisterActivity.this)) {
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, BINDINTERESTEDIN, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
@@ -1277,52 +1338,6 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         }
     }
 
-    private AdapterView.OnItemSelectedListener stateListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
-            stateNameStr = ((RowData) spState.getSelectedItem()).getValue();
-            etStateError.setVisibility(View.GONE);
-            getCity(stateCodeStr);
-            if (!stateCodeStr.equals("") && !stateCodeStr.equals("-1")) {
-
-                spCity.setEnabled(true);
-            } else {
-                spCity.setEnabled(false);
-            }
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private AdapterView.OnItemSelectedListener interestedInListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            interestedInStr = ((RowData) spInterestedIn.getSelectedItem()).getKey();
-            if (!interestedInStr.equals("")) {
-                if (interestedInStr.equals(MF)) {
-                    setIsInterestedInMF(true);
-                } else {
-                    setIsInterestedInMF(false);
-                }
-            }
-
-            etInterestedInError.setVisibility(View.GONE);
-
-            //getCity(stateCodeStr);
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
     private AdapterView.OnItemSelectedListener cityListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -1379,16 +1394,15 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     private void getPincodeDetails() {
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_state", stateNameStr);
             inputMap.put("_city", cityNameStr);
             inputMap.put("_pincode", etPincode.getText().toString());
 
-            String flag = GETPINCODEDETAILS;
-            String category = SIGNUP;
             MOSLCommon.removeKeyboard(RegisterActivity.this, customProgress);
 
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(this, GETPINCODEDETAILS, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     super.onSuccess(statusCode, headers, response);
@@ -1467,6 +1481,182 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         return true;
     }
 
+    //  get Franchise details
+    private void getBADetails() {
+        if (MOSLCommon.isNetworkEnabled(this)) {
+            customProgress.setVisibility(View.VISIBLE);
+            Map<String, String> inputMap = new HashMap<>();
+            //            inputMap.put("_AppLoginId", getAppLoginID());
+            inputMap.put("_AppLoginId", etBABranchCode.getText().toString().trim());
+            inputMap.put("_BACODE", etBABranchCode.getText().toString().trim());
+
+            WebServiceHandler.post(this, GETBADETAILS, SIGNUP, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        customProgress.setVisibility(View.GONE);
+                        if (response != null) {
+                            try {
+                                showBADetailDailog(response);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(this);
+        }
+    }
+
+    private void showBADetailDailog(JSONObject response) {
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setWindowAnimations(R.style.animationName);
+        dialog.setContentView(R.layout.dialog_ba_branch_code_detail);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCanceledOnTouchOutside(false);
+
+        ImageView ivClose = dialog.findViewById(R.id.ivClose);
+        TextView tvFirmName = dialog.findViewById(R.id.tvFirmName);
+        TextView tvFirmCode = dialog.findViewById(R.id.tvFirmCode);
+        TextView tvFirmAddress = dialog.findViewById(R.id.tvFirmAddress);
+        TextView tvPartnerCode = dialog.findViewById(R.id.tvPartnerCode);
+        Button btnEdit = dialog.findViewById(R.id.btnEdit);
+        Button btnSubmit = dialog.findViewById(R.id.btnSubmit);
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialog.dismiss();
+                etBABranchCode.requestFocus();
+            }
+        });
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                dialog.dismiss();
+                signUp(etName.getText().toString(), etEmail.getText().toString(),
+                    etMobile.getText().toString(), "", "");
+            }
+        });
+
+        JSONArray jsonArray = null, jsonArray1 = null;
+        try {
+            if (response.has("BADETAILS")) {
+                jsonArray = response.getJSONArray("BADETAILS");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject object = jsonArray.getJSONObject(i);
+                    String loginId =
+                        (object.isNull("LoginId") || object.getString("LoginId").equals("")) ? ""
+                            : object.getString("LoginId");
+                    String userType =
+                        (object.isNull("UserType") || object.getString("UserType").equals("")) ? ""
+                            : object.getString("UserType");
+                    String branchCode =
+                        (object.isNull("BranchCode") || object.getString("BranchCode").equals(""))
+                            ? "" : object.getString("BranchCode");
+                    String subBrokerCode =
+                        (object.isNull("SubBrokerCode") || object.getString("SubBrokerCode")
+                            .equals("")) ? "" : object.getString("SubBrokerCode");
+                    String area =
+                        (object.isNull("Area") || object.getString("Area").equals("")) ? ""
+                            : object.getString("Area");
+                    String region =
+                        (object.isNull("Region") || object.getString("Region").equals("")) ? ""
+                            : object.getString("Region");
+                    String TraderCode =
+                        (object.isNull("TraderCode") || object.getString("TraderCode").equals(""))
+                            ? "" : object.getString("TraderCode");
+                    String active =
+                        (object.isNull("Active") || object.getString("Active").equals("")) ? ""
+                            : object.getString("Active");
+                    String product =
+                        (object.isNull("Product") || object.getString("Product").equals("")) ? ""
+                            : object.getString("Product");
+                    String branch_Name =
+                        (object.isNull("Branch_Name") || object.getString("Branch_Name").equals(""))
+                            ? "" : object.getString("Branch_Name");
+                    String clCode =
+                        (object.isNull("ClCode") || object.getString("ClCode").equals("")) ? ""
+                            : object.getString("ClCode");
+                    String emailID =
+                        (object.isNull("EmailID") || object.getString("EmailID").equals("")) ? ""
+                            : object.getString("EmailID");
+                    String city =
+                        (object.isNull("City") || object.getString("City").equals("")) ? ""
+                            : object.getString("City");
+                    String mobileNo =
+                        (object.isNull("MobileNo") || object.getString("MobileNo").equals("")) ? ""
+                            : object.getString("MobileNo");
+                    String default_SubBroker =
+                        (object.isNull("Default_SubBroker") || object.getString("Default_SubBroker")
+                            .equals("")) ? "" : object.getString("Default_SubBroker");
+                    tvFirmName.setText(branch_Name);
+                    tvFirmCode.setText(branchCode);
+                    tvFirmAddress.setText("");
+                    tvPartnerCode.setText(clCode);
+                    dialog.show();
+                }
+            }
+
+            if (response.has("BADETAILS1")) {
+                String massage = "";
+                jsonArray1 = response.getJSONArray("BADETAILS1");
+                for (int i = 0; i < jsonArray1.length(); i++) {
+                    JSONObject jsonObject = jsonArray1.getJSONObject(i);
+                    massage =
+                        (jsonObject.isNull("Message") || jsonObject.getString("Message").equals(""))
+                            ? "" : jsonObject.getString("Message");
+                }
+                commonMsgDialog(RegisterActivity.this, massage, false, "");
+                etBABranchCode.setText("");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public class ChangePassword extends Dialog implements MOSLConstants {
 
         Context mContext;
@@ -1494,19 +1684,19 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         }
 
         private void setUpView() {
-            customProgress = (RelativeLayout) findViewById(R.id.customProgress);
-            ivClose = (ImageView) findViewById(R.id.ivClose);
-            btnChangePasswordSubmit = (Button) findViewById(R.id.btnChangePasswordSubmit);
-            btnChangePasswordReset = (Button) findViewById(R.id.btnChangePasswordReset);
-            etChangePasswordUserId = (EditText) findViewById(R.id.etChangePasswordUserId);
-            etOldPassword = (EditText) findViewById(R.id.etOldPassword);
-            etNewPassword = (EditText) findViewById(R.id.etNewPassword);
-            etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
-            etConfirmPasswordError = (EditText) findViewById(R.id.etConfirmPasswordError);
-            etNewPasswordError = (EditText) findViewById(R.id.etNewPasswordError);
-            input_layout_oldPassword = (TextInputLayout) findViewById(R.id.input_layout_oldPassword);
-            input_layout_newPassword = (TextInputLayout) findViewById(R.id.input_layout_newPassword);
-            input_layout_confirmPassword = (TextInputLayout) findViewById(R.id.input_layout_confirmPassword);
+            customProgress = findViewById(R.id.customProgress);
+            ivClose = findViewById(R.id.ivClose);
+            btnChangePasswordSubmit = findViewById(R.id.btnChangePasswordSubmit);
+            btnChangePasswordReset = findViewById(R.id.btnChangePasswordReset);
+            etChangePasswordUserId = findViewById(R.id.etChangePasswordUserId);
+            etOldPassword = findViewById(R.id.etOldPassword);
+            etNewPassword = findViewById(R.id.etNewPassword);
+            etConfirmPassword = findViewById(R.id.etConfirmPassword);
+            etConfirmPasswordError = findViewById(R.id.etConfirmPasswordError);
+            etNewPasswordError = findViewById(R.id.etNewPasswordError);
+            input_layout_oldPassword = findViewById(R.id.input_layout_oldPassword);
+            input_layout_newPassword = findViewById(R.id.input_layout_newPassword);
+            input_layout_confirmPassword = findViewById(R.id.input_layout_confirmPassword);
 
             etChangePasswordUserId.setText(getRegisterEmail());
             ivClose.setOnClickListener(new View.OnClickListener() {
@@ -1557,15 +1747,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         private void changePassword(String newPassword, String oldPassword) {
             if (MOSLCommon.isNetworkEnabled(RegisterActivity.this)) {
                 customProgress.setVisibility(View.VISIBLE);
-                Map inputMap = new HashMap<>();
+                Map<String, String> inputMap = new HashMap<>();
                 inputMap.put("_USERID", getUserID());
                 inputMap.put("_NewPassword", newPassword);
                 inputMap.put("_CurrentPassword", oldPassword);
 
-                String flag = CHANGEPASSWORD;
-                String category = LOGIN;
-
-                WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
+                WebServiceHandler.post(mContext, CHANGEPASSWORD, LOGIN, inputMap,
+                    new JsonHttpResponseHandler() {
 
                     @Override
                     public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
@@ -1680,150 +1868,6 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             }
 
             return true;
-        }
-    }
-
-    //  get Franchise details
-    private void getBADetails() {
-        if (MOSLCommon.isNetworkEnabled(this)) {
-            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-//            inputMap.put("_AppLoginId", getAppLoginID());
-            inputMap.put("_AppLoginId", etBABranchCode.getText().toString().trim());
-            inputMap.put("_BACODE", etBABranchCode.getText().toString().trim());
-
-            String flag = GETBADETAILS;
-            String category = SIGNUP;
-            WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    customProgress.setVisibility(View.GONE);
-                    if (response != null) {
-                        try {
-                            showBADetailDailog(response);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                }
-            });
-        } else {
-            MOSLCommon.alertDInternet(this);
-        }
-
-    }
-
-    private void showBADetailDailog(JSONObject response) {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setWindowAnimations(R.style.animationName);
-        dialog.setContentView(R.layout.dialog_ba_branch_code_detail);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCanceledOnTouchOutside(false);
-
-        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
-        TextView tvFirmName = (TextView) dialog.findViewById(R.id.tvFirmName);
-        TextView tvFirmCode = (TextView) dialog.findViewById(R.id.tvFirmCode);
-        TextView tvFirmAddress = (TextView) dialog.findViewById(R.id.tvFirmAddress);
-        TextView tvPartnerCode = (TextView) dialog.findViewById(R.id.tvPartnerCode);
-        Button btnEdit = (Button) dialog.findViewById(R.id.btnEdit);
-        Button btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
-
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                etBABranchCode.requestFocus();
-            }
-        });
-
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                signUp(etName.getText().toString(), etEmail.getText().toString(), etMobile.getText().toString(), "", "");
-            }
-        });
-
-        JSONArray jsonArray = null, jsonArray1 = null;
-        try {
-            if (response.has("BADETAILS")) {
-                jsonArray = response.getJSONArray("BADETAILS");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject object = jsonArray.getJSONObject(i);
-                    String loginId = (object.isNull("LoginId") || object.getString("LoginId").equals("")) ? "" : object.getString("LoginId");
-                    String userType = (object.isNull("UserType") || object.getString("UserType").equals("")) ? "" : object.getString("UserType");
-                    String branchCode = (object.isNull("BranchCode") || object.getString("BranchCode").equals("")) ? "" : object.getString("BranchCode");
-                    String subBrokerCode = (object.isNull("SubBrokerCode") || object.getString("SubBrokerCode").equals("")) ? "" : object.getString("SubBrokerCode");
-                    String area = (object.isNull("Area") || object.getString("Area").equals("")) ? "" : object.getString("Area");
-                    String region = (object.isNull("Region") || object.getString("Region").equals("")) ? "" : object.getString("Region");
-                    String TraderCode = (object.isNull("TraderCode") || object.getString("TraderCode").equals("")) ? "" : object.getString("TraderCode");
-                    String active = (object.isNull("Active") || object.getString("Active").equals("")) ? "" : object.getString("Active");
-                    String product = (object.isNull("Product") || object.getString("Product").equals("")) ? "" : object.getString("Product");
-                    String branch_Name = (object.isNull("Branch_Name") || object.getString("Branch_Name").equals("")) ? "" : object.getString("Branch_Name");
-                    String clCode = (object.isNull("ClCode") || object.getString("ClCode").equals("")) ? "" : object.getString("ClCode");
-                    String emailID = (object.isNull("EmailID") || object.getString("EmailID").equals("")) ? "" : object.getString("EmailID");
-                    String city = (object.isNull("City") || object.getString("City").equals("")) ? "" : object.getString("City");
-                    String mobileNo = (object.isNull("MobileNo") || object.getString("MobileNo").equals("")) ? "" : object.getString("MobileNo");
-                    String default_SubBroker = (object.isNull("Default_SubBroker") || object.getString("Default_SubBroker").equals("")) ? "" : object.getString("Default_SubBroker");
-                    tvFirmName.setText(branch_Name);
-                    tvFirmCode.setText(branchCode);
-                    tvFirmAddress.setText("");
-                    tvPartnerCode.setText(clCode);
-                    dialog.show();
-                }
-            }
-
-            if (response.has("BADETAILS1")) {
-                String massage = "";
-                jsonArray1 = response.getJSONArray("BADETAILS1");
-                for (int i = 0; i < jsonArray1.length(); i++) {
-                    JSONObject jsonObject = jsonArray1.getJSONObject(i);
-                    massage = (jsonObject.isNull("Message") || jsonObject.getString("Message").equals("")) ? "" : jsonObject.getString("Message");
-                }
-                commonMsgDialog(RegisterActivity.this, massage, false, "");
-                etBABranchCode.setText("");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 }

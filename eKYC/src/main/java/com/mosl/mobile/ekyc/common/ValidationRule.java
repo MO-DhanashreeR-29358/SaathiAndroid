@@ -27,7 +27,7 @@ public class ValidationRule {
     }
 
     public static boolean validateMobile(String input){
-        //first character should b >=7
+        //first character should b >=6 //Registration Change 26-10-2018 before its 7
         //total length = 10
 
         if(MOSLCommon.isBlank(input)){
@@ -39,7 +39,7 @@ public class ValidationRule {
             return false;
         }
         int start = Integer.parseInt(input.charAt(0)+"");
-        if(start<7){
+        if (start < 6) {//Registration Change 26-10-2018 before its 7
             return false;
         }
         return true;
