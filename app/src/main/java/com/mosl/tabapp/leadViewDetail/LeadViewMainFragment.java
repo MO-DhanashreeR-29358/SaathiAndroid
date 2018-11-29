@@ -1,15 +1,12 @@
 package com.mosl.tabapp.leadViewDetail;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -705,20 +702,9 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                         @Override
                         public void alertDialogAction(MSFDialog.Action action, Object... data) {
                             if (action == MSFDialog.Action.OK) {
-                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                 callIntent.setData(Uri.parse("tel:" + mobileNo));
                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                    // TODO: Consider calling
-                                    //    ActivityCompat#requestPermissions
-                                    // here to request the missing permissions, and then overriding
-                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                    //                                          int[] grantResults)
-                                    // to handle the case where the user grants the permission. See the documentation
-                                    // for ActivityCompat#requestPermissions for more details.
-                                    Toast.makeText(getMainActivity(), "No permission for call", Toast.LENGTH_LONG).show();
-                                    return;
-                                }
                                 getMainActivity().startActivity(callIntent);
                             }
                         }
@@ -732,16 +718,10 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             public void onClick(View view) {
 
                 if (!CRMAppUtil.isBlank(mobileNo)) {
-                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                    Intent smsIntent = new Intent("android.intent.action.VIEW");
                     smsIntent.setData(Uri.parse("smsto:" + mobileNo));
                     smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getMainActivity().startActivity(smsIntent);
-                    //                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                    //                            smsIntent.setType("vnd.android-dir/mms-sms");
-                    //                            smsIntent.putExtra("address",model.getContactNo() );
-                    //                            smsIntent.putExtra("sms_body", model.getTitle().equalsIgnoreCase("birthday") ? MOSLConstants.BIRTHDAY_MESSAGE : MOSLConstants.ANNIVERSARY_MESSAGE);
-                    //                            smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    //                            getMainActivity().startActivity(smsIntent);
                 } else {
                     Toast.makeText(getMainActivity(), "Contact number not available", Toast.LENGTH_LONG).show();
                 }

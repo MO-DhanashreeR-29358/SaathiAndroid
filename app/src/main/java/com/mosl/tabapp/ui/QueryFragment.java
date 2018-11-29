@@ -1,12 +1,9 @@
 package com.mosl.tabapp.ui;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -108,12 +104,8 @@ public class QueryFragment extends MOSLCommonFragment implements View.OnClickLis
                     @Override
                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                         if (action == MSFDialog.Action.OK) {
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
                             callIntent.setData(Uri.parse("tel:" + "02239982515"));
-                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                Toast.makeText(getActivity(), "No permission for call", Toast.LENGTH_LONG).show();
-                                return;
-                            }
                             startActivity(callIntent);
                         }
                     }
@@ -125,12 +117,8 @@ public class QueryFragment extends MOSLCommonFragment implements View.OnClickLis
                     @Override
                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                         if (action == MSFDialog.Action.OK) {
-                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
                             callIntent.setData(Uri.parse("tel:" + "02267490600"));
-                            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                Toast.makeText(getActivity(), "No permission for call", Toast.LENGTH_LONG).show();
-                                return;
-                            }
                             startActivity(callIntent);
                         }
                     }

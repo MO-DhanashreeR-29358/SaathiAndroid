@@ -1,14 +1,11 @@
 package com.mosl.tabapp.birthdayanniversary;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +19,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -35,18 +31,15 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import info.hoang8f.android.segmented.SegmentedGroup;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import info.hoang8f.android.segmented.SegmentedGroup;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -909,20 +902,9 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment implements R
                                             if (birthdayAnniversaryModel.getContactNo().equalsIgnoreCase("")) {
                                                 Toast.makeText(getMainActivity(), "Contact number not available", Toast.LENGTH_LONG).show();
                                             } else {
-                                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
                                                 callIntent.setData(Uri.parse("tel:" + birthdayAnniversaryModel.getContactNo()));
                                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                if (ActivityCompat.checkSelfPermission(getMainActivity(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                                    // TODO: Consider calling
-                                                    //    ActivityCompat#requestPermissions
-                                                    // here to request the missing permissions, and then overriding
-                                                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                                    //                                          int[] grantResults)
-                                                    // to handle the case where the user grants the permission. See the documentation
-                                                    // for ActivityCompat#requestPermissions for more details.
-                                                    Toast.makeText(getMainActivity(), "No permission for call", Toast.LENGTH_LONG).show();
-                                                    return;
-                                                }
                                                 getMainActivity().startActivity(callIntent);
                                             }
                                         }
@@ -936,18 +918,13 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment implements R
                         @Override
                         public void onClick(View view) {
                             if (!filterType.equalsIgnoreCase("3")) {
-                                if (!(birthdayAnniversaryModel.getContactNo().equals(""))) {
-                                    Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+                                if (!(birthdayAnniversaryModel.getContactNo()
+                                    .equals("android.intent.action.VIEW"))) {
+                                    Intent smsIntent = new Intent("");
                                     smsIntent.setData(Uri.parse("smsto:" + Uri.encode(birthdayAnniversaryModel.getContactNo())));
                                     smsIntent.putExtra("sms_body", birthdayAnniversaryModel.getTitle().equalsIgnoreCase("birthday") ? MOSLConstants.BIRTHDAY_MESSAGE : MOSLConstants.ANNIVERSARY_MESSAGE);
                                     smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     getMainActivity().startActivity(smsIntent);
-                                    //                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                                    //                            smsIntent.setType("vnd.android-dir/mms-sms");
-                                    //                            smsIntent.putExtra("address",model.getContactNo() );
-                                    //                            smsIntent.putExtra("sms_body", model.getTitle().equalsIgnoreCase("birthday") ? MOSLConstants.BIRTHDAY_MESSAGE : MOSLConstants.ANNIVERSARY_MESSAGE);
-                                    //                            smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    //                            getMainActivity().startActivity(smsIntent);
                                 } else {
                                     Toast.makeText(getMainActivity(), "Contact number not available", Toast.LENGTH_LONG).show();
                                 }
