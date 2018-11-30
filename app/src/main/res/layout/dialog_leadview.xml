@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,19 +21,22 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@color/black"
             android:orientation="vertical"
-            android:padding="@dimen/_15sdp">
+            android:padding="@dimen/_15sdp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/ivCreateMeeting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_create_meeting_white" />
+                    app:srcCompat="@drawable/ic_new_create_meeting_white"
+                    />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/ivSetAppointment"
@@ -40,7 +45,8 @@
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_set_app_white" />
+                    app:srcCompat="@drawable/ic_new_set_app_white"
+                    />
 
 
                 <android.support.v7.widget.AppCompatImageView
@@ -48,8 +54,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_open_account" />
+                    android:visibility="visible"
+                    app:srcCompat="@drawable/ic_open_account"
+                    />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/ivOaoForm"
@@ -57,28 +64,40 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/ic_oao_form" />
+                    app:srcCompat="@drawable/ic_oao_form"
+                    />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="@dimen/_5sdp">
+                android:paddingTop="@dimen/_5sdp"
+                >
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/ivCall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_call_white" />
+                    app:srcCompat="@drawable/ic_call_white"
+                    />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/ivSms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_sms" />
+                    app:srcCompat="@drawable/ic_new_sms"
+                    />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/ivSuggestMe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_suggest_me"
+                    />
             </LinearLayout>
         </LinearLayout>
 
@@ -89,6 +108,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/_minus15sdp"
-            app:srcCompat="@drawable/ic_new_closed" />
+            app:srcCompat="@drawable/ic_new_closed"
+            />
     </RelativeLayout>
 </LinearLayout>

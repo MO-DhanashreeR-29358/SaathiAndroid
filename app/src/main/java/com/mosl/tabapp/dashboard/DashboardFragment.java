@@ -39,7 +39,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -84,11 +83,6 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -108,6 +102,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -238,25 +235,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 return false;
             }
         });
-       /* try {
-            CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
-                @Override
-                public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-                    mClient = customTabsClient;
-                }
 
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
-                    mClient = null;
-                }
-            };
-
-            String packag = CustomTabsHelper.getPackageNameToUse(getContext());
-
-            CustomTabsClient.bindCustomTabsService(getContext(), packag, mConnection);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
 
         tvDetailIncentive = (TextView) dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
         tvQuarterStatus = (TextView) dashAdvisoryView.findViewById(R.id.tvQuarterStatus);

@@ -53,7 +53,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -71,6 +74,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
 import com.mosl.tabapp.calendar.CalendarFragment;
 import com.mosl.tabapp.collateral.CollateralWebActivity;
 import com.mosl.tabapp.collateral.CustomTabsHelper;
+import com.mosl.tabapp.collateral.WebActivity;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.CRMSecurityUtil;
@@ -99,10 +103,7 @@ import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,12 +113,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
-
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.getAppVersionCode;
@@ -145,9 +142,10 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-
-public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
+public class MOSLCommonActivity extends AppCompatActivity
+    implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
     private static final int ID_LEAD = 1;
     private static final int ID_CLEINT = 2;
     private static final int ID_EMP = 3;
@@ -174,15 +172,13 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
+        @Override public void onServiceConnected(ComponentName name, IBinder service) {
             ForegroundService.LocalBinder binder = (ForegroundService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
         }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
+        @Override public void onServiceDisconnected(ComponentName name) {
             mService = null;
             mBound = false;
         }
@@ -195,9 +191,7 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
     private final View.OnClickListener menuslide = new View.OnClickListener() {
 
-
-        @Override
-        public void onClick(View v) {
+        @Override public void onClick(View v) {
             hideKeyboard(v);
             openMenuDrawer();
         }
@@ -240,14 +234,129 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private AdapterView.OnItemSelectedListener roleListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                roleID = ((RowData) spRoleSel.getSelectedItem()).getKey();
+                getRoleDetails(roleID);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            actionBar.updateMsgCount(1);
+        }
+    };
+
+    public String data(String key) {
+        return key;
+    }
+
+    public void setAppTitle(String key, String title) {
+        if (key.equals(currentPage)) {
+            globalTitles.put(key, title);
+            actionBar.setTitle(title);
+            actionBar.setTitleVisibility(View.VISIBLE);
+        } else {
+            currentPage = key;
+            globalTitles.put(key, title);
+            actionBar.setTitle(title);
+            actionBar.setTitleVisibility(View.VISIBLE);
+        }
+
+        if (key.contains("Margin") || key.contains("Old Margin Summary")) {
+            value = false;
+        }
+    }
+
+    public void hideAppTitle(String key) {
+        if (actionBar != null) {
+            actionBar.setTitleVisibility(View.GONE);
+        }
+    }
+
+    public static Map getHeader(Context context) {
+        Map headerMap = new HashMap<>();
+        headerMap.put("Content-Type", "application/json; charset=UTF-8");
+        headerMap.put("token", AccountDetails.getToken());
+        headerMap.put("userid", AccountDetails.getUserId());
+        headerMap.put("clientinfo", "android");
+        headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
+        headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
+        headerMap.put("macaddress",
+            CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
+        headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
+        headerMap.put("AppId", "2");
+        return headerMap;
+    }
+
+    //notification
+    public static void sendRegistrationToServer(Context context, ContentResolver resolver,
+        boolean isLogout) throws Exception {
+        boolean isAuthenticated = getPrefs(context).getBoolean("AUTHENTICATED", false);
+
+        if (isLogout) {
+            AccountDetails.setUserId("");
+            sendToken(context, resolver);
+        } else {
+            sendToken(context, resolver);
+        }
+    }
+
+    /**
+     * This is use to send fcm push notification token on first run
+     */
+
+    private static void sendToken(Context context, ContentResolver resolver) throws Exception {
+        String token = getPrefs(context).getString("TOKEN_ID", null);
+
+        String deviceId = Settings.Secure.getString(resolver, Settings.Secure.ANDROID_ID);
+
+        Map requestMap = new HashMap();
+        Map headerMap = getHeader(context);
+        String serviceMethod = "Auth/UpdateFCMToken";
+        requestMap.put("DeviceToken", token);
+        requestMap.put("DeviceId", deviceId);
+
+        CRMWebServiceHandler.post(context, serviceMethod, headerMap, requestMap,
+            new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    super.onSuccess(statusCode, headers, response);
+                    Log.d("Send Token Response: ", response.toString());
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                    JSONObject errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                    JSONArray errorResponse) {
+                    super.onFailure(statusCode, headers, throwable, errorResponse);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString,
+                    Throwable throwable) {
+                    super.onFailure(statusCode, headers, responseString, throwable);
+                    Log.e("Failure", responseString);
+                }
+            });
+    }
+
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (isBlank(getPrefs(this).getString("PASSWORD", ""))) {
             Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivity.class);
             startActivity(intentLogin);
             finish();
-
         }
         setContentView(R.layout.crm_activity_main);
         mWorkManager = WorkManager.getInstance();
@@ -256,7 +365,7 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         //region Get intent
         Intent intent = getIntent();
 
-//Replace here 
+        //Replace here
         actionBar = (CRMAppActionBar) findViewById(R.id.actionBarCommon);
         if (intent != null) {
             Bundle bundel = intent.getExtras();
@@ -296,8 +405,7 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         actionBar.setAdapter(autoCompleteAdapter);
         actionBar.onClickSearch(this);
         actionBar.showNotification(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            @Override public void onClick(View v) {
                 if (!isNotificationVisible()) {
                     NotificationFragment frag = new NotificationFragment();
                     addFragment(R.id.activityFrameLayout, frag, true, false);
@@ -309,13 +417,12 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
         try {
             CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
-                @Override
-                public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
+                @Override public void onCustomTabsServiceConnected(ComponentName componentName,
+                    CustomTabsClient customTabsClient) {
                     mClient = customTabsClient;
                 }
 
-                @Override
-                public void onServiceDisconnected(ComponentName componentName) {
+                @Override public void onServiceDisconnected(ComponentName componentName) {
                     mClient = null;
                 }
             };
@@ -325,35 +432,14 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-
-    public String data(String key) {
-        return key;
+    public void showProgress() {
+        if (progressLayout != null) progressLayout.setVisibility(View.VISIBLE);
     }
 
-    public void setAppTitle(String key, String title) {
-        if (key.equals(currentPage)) {
-            globalTitles.put(key, title);
-            actionBar.setTitle(title);
-            actionBar.setTitleVisibility(View.VISIBLE);
-        } else {
-            currentPage = key;
-            globalTitles.put(key, title);
-            actionBar.setTitle(title);
-            actionBar.setTitleVisibility(View.VISIBLE);
-        }
-
-        if (key.contains("Margin") || key.contains("Old Margin Summary")) {
-            value = false;
-        }
-    }
-
-    public void hideAppTitle(String key) {
-        if (actionBar != null) {
-            actionBar.setTitleVisibility(View.GONE);
-        }
+    public void hideProgress() {
+        progressLayout.setVisibility(View.GONE);
     }
 
     public boolean isDashBoardVisible() {
@@ -362,13 +448,26 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         if (fragments != null) {
             for (Fragment fragment : fragments) {
                 if (fragment != null && fragment.isVisible()) {
-                    if (fragment
-                            instanceof DashboardFragment)
-                        return true;
+                    if (fragment instanceof DashboardFragment) return true;
                 }
             }
         }
         return false;
+    }
+
+    private void getLastTitle(String currentPage) {
+        String title = globalTitles.get(currentPage);
+        if (title != null && !title.isEmpty()) {
+            actionBar.setTitle(title);
+            actionBar.setTitleVisibility(View.VISIBLE);
+        } else {
+            hideAppTitle(currentPage);
+        }
+    }
+
+    public void hideAppTitle() {
+        actionBar.setTitle("");
+        actionBar.setTitleVisibility(View.GONE);
     }
 
     public boolean isNotificationVisible() {
@@ -377,17 +476,14 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         if (fragments != null) {
             for (Fragment fragment : fragments) {
                 if (fragment != null && fragment.isVisible()) {
-                    if (fragment
-                            instanceof NotificationFragment)
-                        return true;
+                    if (fragment instanceof NotificationFragment) return true;
                 }
             }
         }
         return false;
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.d("Called", "on Back Press Also" + keyCode);
             value = false;
@@ -406,193 +502,28 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             if (count == 0) {
                 if (isDashBoardVisible()) {
                     //Show back
-                    MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal), "Do you want to exit the application?", "Yes", "No", true, new MSFDialog.DialogListener() {
+                    MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
+                        "Do you want to exit the application?", "Yes", "No", true,
+                        new MSFDialog.DialogListener() {
 
-                        @Override
-                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                            if (action == MSFDialog.Action.OK) {
-                                finish();
+                            @Override
+                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                if (action == MSFDialog.Action.OK) {
+                                    finish();
+                                }
                             }
-                        }
-                    });
+                        });
                 } else {
                     Intent intent = new Intent(MOSLCommonActivity.this, MOSLCommonActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
-
             } else {
                 goBackOnce();
                 return true;
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public void setupDefaultFragment(Intent data) {
-        int isProceed = data.getIntExtra("isProceed", 0);
-
-        String source = data.getStringExtra(SOURCE);
-        String strAction = data.getAction();
-
-        if (source != null && source.equalsIgnoreCase(FCM_NOTIFICATION_SOURCE)) {
-            String nData = getIntent().getExtras().getString(FCM_NOTIFICATION_CATEGORY, "");
-
-
-            navigateToFromNotification(nData);
-            setIntent(new Intent());
-        } else if (strAction != null) {
-            if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.ADD_QUERY")) {
-                setupFragment(new QueryFragment());
-            } else if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
-                setupFragment(new CalendarFragment());
-            } else if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
-                setupFragment(new BirthdayAnniversaryFragment());
-            } else if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
-                setupFragment(new LeadCreationFragment());
-            } else {
-                MOSLCommonFragment fragment = null;
-
-                switch (isProceed) {
-                    case MOSL_MENU_DASHBOARD:
-                        args.clear();
-                        args.putInt("Source", 0);
-                        setupFragment(new DashboardFragment());
-                        break;
-
-                }
-            }
-
-        } else {
-            MOSLCommonFragment fragment = null;
-
-            switch (isProceed) {
-                case MOSL_MENU_DASHBOARD:
-                    args.clear();
-                    args.putInt("Source", 0);
-                    setupFragment(new DashboardFragment());
-                    break;
-
-            }
-
-        }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.srchImg:
-                //Search image on click
-                openSearchOptions(v);
-                hideKeyboard(v);
-                break;
-
-        }
-
-    }
-
-    public void showProgress() {
-        if (progressLayout != null) progressLayout.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgress() {
-        progressLayout.setVisibility(View.GONE);
-    }
-
-
-    public void goBackOnce() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MOSLCommonFragment currentFragment;
-        FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
-        String tag = backEntry.getName();
-        MOSLCommonFragment closingFragment = (MOSLCommonFragment) fragmentManager.findFragmentByTag(tag);
-        closingFragment.onFragmentPause();
-        fragmentManager.popBackStackImmediate();
-
-        if (fragmentManager.getBackStackEntryCount() != 0) {
-            backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
-            tag = backEntry.getName();
-            currentFragment = (MOSLCommonFragment) fragmentManager.findFragmentByTag(tag);
-
-        } else {
-            currentFragment = (MOSLCommonFragment) fragmentManager.findFragmentById(R.id.activityFrameLayout);
-            if (currentFragment instanceof PendingApprovalFragment) {
-
-                ((PendingApprovalFragment) currentFragment).getAprovalCoutSummary();
-                ((PendingApprovalFragment) currentFragment).getAprovalList();
-            }
-        }
-        getLastTitle(currentFragment.getClass().toString());
-    }
-
-    private void getLastTitle(String currentPage) {
-        String title = globalTitles.get(currentPage);
-        if (title != null && !title.isEmpty()) {
-            actionBar.setTitle(title);
-            actionBar.setTitleVisibility(View.VISIBLE);
-        } else {
-            hideAppTitle(currentPage);
-        }
-    }
-
-    public void hideAppTitle() {
-        actionBar.setTitle("");
-        actionBar.setTitleVisibility(View.GONE);
-
-    }
-
-    public void addFragment(int containerViewId, Fragment fragment, boolean addStack, FragmentManager fragmentManager, boolean isReplace) {
-        addFragment(containerViewId, fragment, addStack, isReplace);
-    }
-
-    public void addFragment(int containerViewId, Fragment fragment, boolean addStack, boolean isReplace) {
-        if (fragment == null) {
-            Log.e("MOSLCommonActivity", "Fragment is null.");
-            return;
-        }
-
-        if (!addStack) clearTitles();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        String tag = fragment.getClass().toString();
-
-        if (fragmentManager.getBackStackEntryCount() != 0) {
-            FragmentManager.BackStackEntry backEntry = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
-            MOSLCommonFragment currentFragment = (MOSLCommonFragment) fragmentManager.findFragmentByTag(backEntry.getName());
-
-            currentFragment.onFragmentPause();
-
-
-        } else {
-            MOSLCommonFragment currentFragment = (MOSLCommonFragment) fragmentManager.findFragmentById(containerViewId);
-            if (currentFragment != null) currentFragment.onFragmentPause();
-        }
-
-        if (!addStack) {
-            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fragmentManager.executePendingTransactions();
-        }
-
-        if (fragment.isAdded()) {
-            fragmentTransaction.show(fragment);
-        } else {
-
-            if (addStack) fragmentTransaction.add(containerViewId, fragment, tag);
-            else {
-                fragmentTransaction.replace(containerViewId, fragment, tag);
-            }
-        }
-
-        if (addStack) {
-            fragmentTransaction.addToBackStack(tag);
-        } else {
-
-        }
-        fragmentTransaction.commit();
-        fragmentManager.executePendingTransactions();
-        if (!addStack) ((MOSLCommonFragment) fragment).onFragmentResume();
     }
 
     private void clearTitles() {
@@ -604,39 +535,51 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
-    private void setupMenuDrawer() {
-        menuList = (ExpandableListView) findViewById(R.id.homeGridView);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLay);
-        LinearLayout pageHeaderLayout = (LinearLayout) findViewById(R.id.pageHeaderLayout);
-        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        pageHeaderLayout.setOnClickListener(null);
-        tvPartnerName = (TextView) findViewById(R.id.tvPartnerName);
-        tvBusinessProfileName = (TextView) findViewById(R.id.tvBusinessProfileName);
-        ivPartnerImage = (ImageView) findViewById(R.id.ivPartnerImage);
-        ivCloseImage = (ImageView) findViewById(R.id.ivCloseImage);
-        ivCloseImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideKeyboard(view);
-                drawerLayout.closeDrawers();
-            }
-        });
-        Glide.with(this).load(AccountDetails.getImageUrl().toLowerCase()).asBitmap().placeholder(R.drawable.menu_profile_pic).centerCrop().into(new BitmapImageViewTarget(ivPartnerImage) {
-            @Override
-            protected void setResource(Bitmap resource) {
-                RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(getResources(), resource);
-                circularBitmapDrawable.setCircular(true);
-                ivPartnerImage.setImageDrawable(circularBitmapDrawable);
-            }
-        });
-        String name = AccountDetails.getFirstName() + " " + AccountDetails.getLastName();
-        if (!CRMAppUtil.isBlank(AccountDetails.getEmployeeCode())) {
-            tvBusinessProfileName.setText(AccountDetails.getBusinessProfileName());
-        }
-        tvPartnerName.setText(name);
+    public void setupDefaultFragment(Intent data) {
+        int isProceed = data.getIntExtra("isProceed", 0);
 
-        setMenuController();
+        String source = data.getStringExtra(SOURCE);
+        String strAction = data.getAction();
+
+        if (source != null && source.equalsIgnoreCase(FCM_NOTIFICATION_SOURCE)) {
+            String nData = getIntent().getExtras().getString(FCM_NOTIFICATION_CATEGORY, "");
+
+            navigateToFromNotification(nData);
+            setIntent(new Intent());
+        } else if (strAction != null) {
+            if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.ADD_QUERY")) {
+                setupFragment(new QueryFragment());
+            } else if (strAction.trim()
+                .equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
+                setupFragment(new CalendarFragment());
+            } else if (strAction.trim()
+                .equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
+                setupFragment(new BirthdayAnniversaryFragment());
+            } else if (strAction.trim()
+                .equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
+                setupFragment(new LeadCreationFragment());
+            } else {
+                MOSLCommonFragment fragment = null;
+
+                switch (isProceed) {
+                    case MOSL_MENU_DASHBOARD:
+                        args.clear();
+                        args.putInt("Source", 0);
+                        setupFragment(new DashboardFragment());
+                        break;
+                }
+            }
+        } else {
+            MOSLCommonFragment fragment = null;
+
+            switch (isProceed) {
+                case MOSL_MENU_DASHBOARD:
+                    args.clear();
+                    args.putInt("Source", 0);
+                    setupFragment(new DashboardFragment());
+                    break;
+            }
+        }
     }
 
     public void setupFragment(MOSLCommonFragment fragment) {
@@ -651,15 +594,155 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         }
     }
 
+    @Override public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.srchImg:
+                //Search image on click
+                openSearchOptions(v);
+                hideKeyboard(v);
+                break;
+        }
+    }
+
+    public void goBackOnce() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        MOSLCommonFragment currentFragment;
+        FragmentManager.BackStackEntry backEntry =
+            fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+        String tag = backEntry.getName();
+        MOSLCommonFragment closingFragment =
+            (MOSLCommonFragment) fragmentManager.findFragmentByTag(tag);
+        closingFragment.onFragmentPause();
+        fragmentManager.popBackStackImmediate();
+
+        if (fragmentManager.getBackStackEntryCount() != 0) {
+            backEntry =
+                fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+            tag = backEntry.getName();
+            currentFragment = (MOSLCommonFragment) fragmentManager.findFragmentByTag(tag);
+        } else {
+            currentFragment =
+                (MOSLCommonFragment) fragmentManager.findFragmentById(R.id.activityFrameLayout);
+            if (currentFragment instanceof PendingApprovalFragment) {
+
+                ((PendingApprovalFragment) currentFragment).getAprovalCoutSummary();
+                ((PendingApprovalFragment) currentFragment).getAprovalList();
+            }
+        }
+        getLastTitle(currentFragment.getClass().toString());
+    }
+
+    public void addFragment(int containerViewId, Fragment fragment, boolean addStack,
+        FragmentManager fragmentManager, boolean isReplace) {
+        addFragment(containerViewId, fragment, addStack, isReplace);
+    }
+
+    public void openInBrowser(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void addFragment(int containerViewId, Fragment fragment, boolean addStack,
+        boolean isReplace) {
+        if (fragment == null) {
+            Log.e("MOSLCommonActivity", "Fragment is null.");
+            return;
+        }
+
+        if (!addStack) clearTitles();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        String tag = fragment.getClass().toString();
+
+        if (fragmentManager.getBackStackEntryCount() != 0) {
+            FragmentManager.BackStackEntry backEntry =
+                fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+            MOSLCommonFragment currentFragment =
+                (MOSLCommonFragment) fragmentManager.findFragmentByTag(backEntry.getName());
+
+            currentFragment.onFragmentPause();
+        } else {
+            MOSLCommonFragment currentFragment =
+                (MOSLCommonFragment) fragmentManager.findFragmentById(containerViewId);
+            if (currentFragment != null) currentFragment.onFragmentPause();
+        }
+
+        if (!addStack) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fragmentManager.executePendingTransactions();
+        }
+
+        if (fragment.isAdded()) {
+            fragmentTransaction.show(fragment);
+        } else {
+
+            if (addStack) {
+                fragmentTransaction.add(containerViewId, fragment, tag);
+            } else {
+                fragmentTransaction.replace(containerViewId, fragment, tag);
+            }
+        }
+
+        if (addStack) {
+            fragmentTransaction.addToBackStack(tag);
+        } else {
+
+        }
+        fragmentTransaction.commit();
+        fragmentManager.executePendingTransactions();
+        if (!addStack) ((MOSLCommonFragment) fragment).onFragmentResume();
+    }
+
+    private void setupMenuDrawer() {
+        menuList = (ExpandableListView) findViewById(R.id.homeGridView);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLay);
+        LinearLayout pageHeaderLayout = (LinearLayout) findViewById(R.id.pageHeaderLayout);
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        pageHeaderLayout.setOnClickListener(null);
+        tvPartnerName = (TextView) findViewById(R.id.tvPartnerName);
+        tvBusinessProfileName = (TextView) findViewById(R.id.tvBusinessProfileName);
+        ivPartnerImage = (ImageView) findViewById(R.id.ivPartnerImage);
+        ivCloseImage = (ImageView) findViewById(R.id.ivCloseImage);
+        ivCloseImage.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                hideKeyboard(view);
+                drawerLayout.closeDrawers();
+            }
+        });
+        Glide.with(this)
+            .load(AccountDetails.getImageUrl().toLowerCase())
+            .asBitmap()
+            .placeholder(R.drawable.menu_profile_pic)
+            .centerCrop()
+            .into(new BitmapImageViewTarget(ivPartnerImage) {
+                @Override protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(getResources(), resource);
+                    circularBitmapDrawable.setCircular(true);
+                    ivPartnerImage.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+        String name = AccountDetails.getFirstName() + " " + AccountDetails.getLastName();
+        if (!CRMAppUtil.isBlank(AccountDetails.getEmployeeCode())) {
+            tvBusinessProfileName.setText(AccountDetails.getBusinessProfileName());
+        }
+        tvPartnerName.setText(name);
+
+        setMenuController();
+    }
+
     private void setMenuController() {
         final List<ScreenDetails> groupList = DrawerMenu.createGroupList(this);
-        final Map<String, Vector<SubMenu>> subMenuCollections = DrawerMenu.createCollection(this, groupList);
+        final Map<String, Vector<SubMenu>> subMenuCollections =
+            DrawerMenu.createCollection(this, groupList);
         menuAdapter = new MenuAdapter(this, groupList, subMenuCollections);
         menuList.setAdapter(menuAdapter);
         menuList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
-            @Override
-            public void onGroupExpand(int groupPosition) {
+            @Override public void onGroupExpand(int groupPosition) {
                 if (lastExpandedPosition != -1 && groupPosition != lastExpandedPosition) {
                     menuList.collapseGroup(lastExpandedPosition);
                 }
@@ -667,11 +750,11 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             }
         });
         menuList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(final ExpandableListView parent, View view, final int position, final int childPosition, long id) {
+            @Override public boolean onChildClick(final ExpandableListView parent, View view,
+                final int position, final int childPosition, long id) {
                 value = false;
                 drawerLayout.closeDrawers();
-                final boolean[] setMenuSelection = {false};
+                final boolean[] setMenuSelection = { false };
                 String clickedPosDetails = "";
                 Vector<SubMenu> sub = subMenuCollections.get(groupList.get(position).getTitle());
                 if (sub.size() > 0) {
@@ -681,7 +764,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                 if (position == MOSL_MENU_DASHBOARD) {
                     setMenuSelection[0] = true;
                     performMenuAction(clickedPosDetails);
-
                 } else if (position == MOSL_MENU_EKYC) {
                     if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
                         if (AccountDetails.isNewEkyc()) {
@@ -715,22 +797,23 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                 } else if (position == MOSL_MENU_MY_REPORTS) {
                     ReportFragment reportFragment = new ReportFragment();
                     Bundle bund = new Bundle();
-                    bund.putString(SYSTEM_NAME, SplashActivity.menuReportArrayList.get(childPosition).getSystemsName());
-                    bund.putString(NAME, SplashActivity.menuReportArrayList.get(childPosition).getMenuName());
+                    bund.putString(SYSTEM_NAME,
+                        SplashActivity.menuReportArrayList.get(childPosition).getSystemsName());
+                    bund.putString(NAME,
+                        SplashActivity.menuReportArrayList.get(childPosition).getMenuName());
                     reportFragment.setArguments(bund);
                     setupFragment(reportFragment);
-
                 }
                 return false;
             }
         });
 
         menuList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView expandableListView, View view, int position, long l) {
+            @Override public boolean onGroupClick(ExpandableListView expandableListView, View view,
+                int position, long l) {
                 boolean clickHandled = false;
                 value = false;
-                final boolean[] setMenuSelection = {false};
+                final boolean[] setMenuSelection = { false };
                 if (position == MOSL_MENU_EKYC || position == MOSL_MENU_MY_REPORTS) {
                     clickHandled = false;
                 } else {
@@ -742,15 +825,19 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                         setupFragment(new DashboardFragment());
                     } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
                         setupFragment(new BirthdayAnniversaryFragment());
+                    } else if (position == MOSL_MENU_SUGGEST_ME) {
+                        getSuggestMe();
                     } else if (position == MOSL_MENU_CALENDAR) {
                         setupFragment(new CalendarFragment());
                     } else if (position == MOSL_MENU_QUERY) {
                         setupFragment(new QueryFragment());
                     } else if (position == MOSL_MENU_KNOWLEDGE_CENTRE) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                            String packag = CustomTabsHelper.getPackageNameToUse(MOSLCommonActivity.this);
+                            String packag =
+                                CustomTabsHelper.getPackageNameToUse(MOSLCommonActivity.this);
                             if (packag == null) {
-                                Intent intent = new Intent(MOSLCommonActivity.this, CollateralWebActivity.class);
+                                Intent intent = new Intent(MOSLCommonActivity.this,
+                                    CollateralWebActivity.class);
                                 intent.putExtra(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL);
                                 startActivity(intent);
                             } else {
@@ -771,11 +858,9 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         });
     }
 
-
     private CustomTabsSession getSession() {
         return mClient.newSession(new CustomTabsCallback() {
-            @Override
-            public void onNavigationEvent(int navigationEvent, Bundle extras) {
+            @Override public void onNavigationEvent(int navigationEvent, Bundle extras) {
                 super.onNavigationEvent(navigationEvent, extras);
             }
         });
@@ -785,32 +870,31 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
         builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
         builder.setCloseButtonIcon(
-                BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
+            BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(this, Uri.parse(url));
     }
 
-    public void openInBrowser(Uri uri) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void logoutCustomer() {
-        MSFDialog.alertDialog(MOSLCommonActivity.this, LOGOUT_CODE, getString(R.string.motilal_oswal), getString(R.string.MOSL_LOGOUT_ALERT_MSG), "Yes", "No", true, new MSFDialog.DialogListener() {
-            @Override
-            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                if (action == MSFDialog.Action.OK) {
-                    doLogout(LOGOUT_CODE);
+        MSFDialog.alertDialog(MOSLCommonActivity.this, LOGOUT_CODE,
+            getString(R.string.motilal_oswal), getString(R.string.MOSL_LOGOUT_ALERT_MSG), "Yes",
+            "No", true, new MSFDialog.DialogListener() {
+                @Override public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                    if (action == MSFDialog.Action.OK) {
+                        doLogout(LOGOUT_CODE);
+                    }
                 }
-            }
-        });
+            });
     }
 
     public void doLogout(int code) {
         //LruCacheManager.getInstance().clearCache();
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager =
+            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
         getPrefs(this).edit().putString("PASSWORD", null).apply();
         getPrefs(this).edit().putString("EmployeeCode", null).apply();
@@ -838,570 +922,111 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
             showProgress();
             try {
-                CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod, getHeader(getApplicationContext()), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
+                    getHeader(getApplicationContext()), inputMap, new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-                                    stopService(new Intent(MOSLCommonActivity.this, ForegroundService.class));
-                                    mWorkManager.cancelWorkById(compressionWorkId);
-                                    Intent i = new Intent(MOSLCommonActivity.this, ImageSliderActivity.class);
-                                    startActivity(i);
-                                    finish();
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    hideProgress();
+                                    if (status.equalsIgnoreCase("true")) {
+                                        stopService(new Intent(MOSLCommonActivity.this,
+                                            ForegroundService.class));
+                                        mWorkManager.cancelWorkById(compressionWorkId);
+                                        Intent i = new Intent(MOSLCommonActivity.this,
+                                            ImageSliderActivity.class);
+                                        startActivity(i);
+                                        finish();
+                                    } else {
+                                        String message = response.getString(MESSAGE);
+                                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            message, "Ok", true, null);
+                                    }
                                 } else {
-                                    String message = response.getString(MESSAGE);
-                                    MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), message, "Ok", true, null);
+                                    hideProgress();
                                 }
-
-                            } else {
                                 hideProgress();
-
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                hideProgress();
+                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                            hideProgress();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
 
-                MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
-
-
     }
 
-
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
+    @Override protected void onPause() {
         super.onPause();
     }
 
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
-        Context context;
-        private LayoutInflater inflater;
-        private List<SearchResultModel> resultList = new ArrayList<>();
-
-        public AutoCompleteAdapter(Context context) {
-            this.inflater = LayoutInflater.from(context);
-            this.context = context;
-        }
-
-        public void clearAll() {
-            resultList.clear();
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getCount() {
-            return resultList.size();
-        }
-
-        @Override
-        public SearchResultModel getItem(int index) {
-            return resultList.get(index);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            final HolderView holderView;
-            final SearchResultModel searchResultModel = resultList.get(position);
-            if (convertView == null) {
-                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.crm_client_search_item, parent, false);
-                holderView = new HolderView(convertView);
-                convertView.setTag(holderView);
-            } else {
-                holderView = (HolderView) convertView.getTag();
-            }
-            String name = resultList.get(position).getName();
-            if (CRMAppUtil.isBlank(name)) {
-                holderView.llExpand.setVisibility(View.GONE);
-            } else {
-                holderView.llExpand.setVisibility(View.VISIBLE);
-            }
-
-            if (searchResultModel.isExpanded()) {
-                holderView.llDropDownMenuLayout.setVisibility(View.VISIBLE);
-                ((ListView) parent).smoothScrollToPosition(position);
-            } else {
-                holderView.llDropDownMenuLayout.setVisibility(View.GONE);
-            }
-
-            if (searchType.equalsIgnoreCase(SEARCH_TYPE_EMP)) {// employee
-
-                String empCode = resultList.get(position).getEmpCode();
-                String businessProfileName = resultList.get(position).getBusinessProfileName();
-                if (name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
-                    holderView.ivDropDownArrow.setVisibility(View.GONE);
-                    holderView.llExpand.setOnClickListener(null);
-                    holderView.tvClientID.setText("");
-                    holderView.tvUCID.setText("");
-                    holderView.tvClientName.setText("");
-                    holderView.tvError.setVisibility(View.VISIBLE);
-                } else {
-                    holderView.ivDropDownArrow.setVisibility(View.GONE);
-                    holderView.llExpand.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DashboardFragment mDashBoard = new DashboardFragment();
-                            Bundle bund = new Bundle();
-                            bund.putString(PROFILE_ID, searchResultModel.getBusinessProfileId());
-                            bund.putString(PRODUCT_ID, searchResultModel.getProductId());
-                            bund.putString(EMPLOYEE_CODE, searchResultModel.getEmpCode());
-                            mDashBoard.setArguments(bund);
-                            setupFragment(mDashBoard);
-                            autoCompleteAdapter.clearAll();
-                            actionBar.clearSearchText();
-
-                        }
-                    });
-                    holderView.tvClientName.setText("Name :" + name);
-                    holderView.tvClientID.setText("Emp Id: " + empCode);
-                    holderView.tvUCID.setText("Business Profile: " + businessProfileName);
-
-                    holderView.tvError.setVisibility(View.GONE);
-                    searchFoundFlag = false;
-                }
-
-            } else {
-                String leadID = resultList.get(position).getLeadId();
-                String ucid = resultList.get(position).getUCID();
-
-
-                setAppointmentFragment = new SetAppointmentFragment();
-                leadViewMainFragment = new LeadViewMainFragment();
-                createMeetingFragment = new CreateMeetingFragment();
-                holderView.tvClientName.setText(name);
-                if (!resultList.get(position).getClientCode().equalsIgnoreCase("0")) {
-                    holderView.tvClientID.setText("Lead Id/Client Code: " + resultList.get(position).getClientCode());
-                } else {
-                    holderView.tvClientID.setText("Lead Id/Client Code: " + leadID);
-                }
-                holderView.tvUCID.setText("UCID: " + ucid);
-                if (!resultList.get(position).getUCID().equalsIgnoreCase("0")) {
-                    ekycMenuType = SEARCH_TYPE_CLIENT;
-                } else {
-                    ekycMenuType = SEARCH_TYPE_LEAD;
-                }
-                if (ekycMenuType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
-                    Integer oaoUserId = resultList.get(position).getOaoUserId();
-                    if (oaoUserId != null && oaoUserId > 0) {
-                        holderView.rlOpenAccount.setVisibility(View.GONE);
-                        holderView.rlOAOForm.setVisibility(View.VISIBLE);
-                    } else {
-                        //show OAOForm if oaoUserId exists
-                        holderView.rlOpenAccount.setVisibility(View.VISIBLE);
-                        holderView.rlOAOForm.setVisibility(View.GONE);
-                    }
-                } else if (ekycMenuType.equalsIgnoreCase(SEARCH_TYPE_CLIENT)) {
-                    Integer oaoUserId = resultList.get(position).getOaoUserId();
-                    if (oaoUserId != null && oaoUserId > 0) {
-                        holderView.rlOpenAccount.setVisibility(View.GONE);
-                        holderView.rlOAOForm.setVisibility(View.VISIBLE);
-                    } else {//show OAOForm if oaoUserId exists
-                        holderView.rlOpenAccount.setVisibility(View.GONE);
-                        holderView.rlOAOForm.setVisibility(View.GONE);
-                    }
-                }
-
-                holderView.rlSetAppointment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
-                        bundle.putString(UCID, searchResultModel.getUCID());
-                        setAppointmentFragment.setArguments(bundle);
-                        addFragment(R.id.activityFrameLayout, setAppointmentFragment, true, false);
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        autoCompleteAdapter.clearAll();
-                        actionBar.clearSearchText();
-
-                    }
-                });
-                holderView.rlCrateMeeting.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
-                        bundle.putString(UCID, searchResultModel.getUCID());
-                        createMeetingFragment.setArguments(bundle);
-                        addFragment(R.id.activityFrameLayout, createMeetingFragment, true, false);
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        autoCompleteAdapter.clearAll();
-                        actionBar.clearSearchText();
-
-                    }
-                });
-                holderView.rlViewDetail.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
-                        bundle.putString(MOBILE, searchResultModel.getMobileNo());
-                        bundle.putString(UCID, searchResultModel.getUCID());
-                        leadViewMainFragment.setArguments(bundle);
-                        addFragment(R.id.activityFrameLayout, leadViewMainFragment, true, false);
-                        hideKeyboard(view);
-                        autoCompleteAdapter.clearAll();
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        actionBar.clearSearchText();
-
-                    }
-                });
-                holderView.rlOpenAccount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO call: convert to eKYC
-                        autoCompleteAdapter.clearAll();
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        actionBar.clearSearchText();
-                        Map inpuMap = new HashMap();
-                        inpuMap.put(MOBILE, searchResultModel.getMobileNo());
-                        inpuMap.put(EMAIL, searchResultModel.getGmail());
-                        inpuMap.put(LEAD_OWNER, searchResultModel.getLeadOwner());
-                        inpuMap.put(SOURCENAME, searchResultModel.getSourceName());
-                        inpuMap.put(PROSPECT_SOURCENAME, searchResultModel.getProspectSourceName());
-                        inpuMap.put(PROSPECT_SOURCEDETAIL, searchResultModel.getProspectSourceDetails());
-                        inpuMap.put(INTRESTEDIN, searchResultModel.getInterestedIn());
-                        if (AccountDetails.isNewEkyc()) {
-                            gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
-                        } else {
-                            ekycVersionCheck(CALL_CONVERT_EKYC, inpuMap);
-                        }
-                    }
-                });
-                holderView.rlOAOForm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //TODO call: resume eKYC application (BRANCH)
-                        autoCompleteAdapter.clearAll();
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        actionBar.clearSearchText();
-                        Map hashMap = new HashMap();
-                        hashMap.put(USERID, searchResultModel.getOaoUserId().toString());
-                        if (AccountDetails.isNewEkyc()) {
-                            HashMap<String, String> map = new HashMap();
-                            map.put(NEW_USERID, searchResultModel.getOaoUserId().toString());
-                            map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-                            map.put(COMMANDTYPE, "RESUME");
-                            map.put(APPLICATIONTYPE, "CRM");
-                            map.put(OSTYPE, "ANDROID");
-                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-                            map.put(TOKENKEY, AccountDetails.getToken());
-                            newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(CALL_PROSPECT_DETAILS, hashMap);
-
-                        }
-
-                    }
-                });
-
-                holderView.llExpand.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        hideKeyboard(actionBar.getSearchBoxView());
-                        if (!searchResultModel.isExpanded()) {
-                            searchResultModel.setExpanded(true);
-                        } else {
-                            searchResultModel.setExpanded(false);
-                        }
-                        notifyDataSetChanged();
-                    }
-                });
-
-
-                if (CRMAppUtil.isBlank(leadID)) {
-                    holderView.ivDropDownArrow.setVisibility(View.GONE);
-                    holderView.llExpand.setOnClickListener(null);
-                    holderView.tvClientID.setText("");
-                    holderView.tvUCID.setText("");
-                    holderView.tvClientName.setText("");
-                } else {
-                    holderView.ivDropDownArrow.setVisibility(View.VISIBLE);
-                    holderView.tvError.setVisibility(View.GONE);
-                }
-                if (searchFoundFlag && name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
-                    holderView.llExpand.setVisibility(View.GONE);
-                    holderView.ivDropDownArrow.setVisibility(View.GONE);
-                    holderView.llExpand.setOnClickListener(null);
-                    holderView.tvClientID.setText("");
-                    holderView.tvUCID.setText("");
-                    holderView.tvClientName.setText("");
-                    holderView.tvError.setVisibility(View.GONE);
-                    searchFoundFlag = false;
-                } else if (name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
-                    holderView.ivDropDownArrow.setVisibility(View.GONE);
-                    holderView.llExpand.setOnClickListener(null);
-                    holderView.tvClientID.setText("");
-                    holderView.tvUCID.setText("");
-                    holderView.tvClientName.setText("");
-                    holderView.tvError.setVisibility(View.VISIBLE);
-                } else {
-                    holderView.tvError.setVisibility(View.GONE);
-                    holderView.llExpand.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-
-            return convertView;
-        }
-
-        @Override
-        public Filter getFilter() {
-            return new Filter() {
-                @Override
-                protected FilterResults performFiltering(CharSequence constraint) {
-                    final FilterResults filterResults = new FilterResults();
-                    try {
-                        if (constraint != null) {
-                            String SearchText;
-                            int strLen = constraint.toString().trim().length();
-                            if (strLen < 3) {
-                                return filterResults;
-                            }
-                            if (URLEncoder.encode(constraint.toString(), "utf-8").equalsIgnoreCase("+")) {
-                                SearchText = "";
-                            } else {
-                                SearchText = constraint.toString().trim();
-                            }
-                            Map requestMap = new HashMap();
-                            requestMap.put("SearchText", SearchText);
-                            requestMap.put("SearchType", searchType);
-                            requestMap.put("ViewAll", "false");
-                            Map headerMap = new HashMap();
-                            headerMap.put("Content-Type", "application/json; charset=UTF-8");
-                            headerMap.put("token", AccountDetails.getToken());
-                            headerMap.put("AppId", "2");
-                            headerMap.put("userid", AccountDetails.getUserId());
-                            headerMap.put("clientinfo", "android");
-                            headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
-                            headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-                            headerMap.put("macaddress", CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
-                            headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-                            String serviceMethod = "Lead/SearchCommonMetaData";
-
-                            if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
-                                JSONObject response = WebServiceDirectCall.getData(serviceMethod, headerMap, requestMap);
-                                ArrayList<SearchResultModel> modelList = new ArrayList<>();
-                                if (response == null) {
-                                    return null;
-                                }
-                                String status = response.getString(STATUS);
-                                String leadOwner = "";
-                                Integer oaoUserId = 0;
-                                String sourceName = "";
-                                String prospectSourceName = "";
-                                String prospectSourceDetails = "";
-                                String interestedIn = "";
-                                String clientCode = "0";
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                    JSONArray jsonArray = objDetail.getJSONArray(DATA);
-                                    if (jsonArray != null && jsonArray.length() != 0) {
-
-
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            String metadata = jsonObject.getString(METADATA) == null ? "" : jsonObject.getString(METADATA);
-                                            JSONObject jsonObjMetatata = new JSONObject(metadata.trim());
-
-                                            if (searchType.equalsIgnoreCase(SEARCH_TYPE_EMP)) {
-
-                                                String empCode = jsonObjMetatata.getString(EMPLOYEE_CODE) == null ? "" : jsonObjMetatata.getString(EMPLOYEE_CODE);
-                                                String name = jsonObjMetatata.getString(NAME) == null ? "" : jsonObjMetatata.getString(NAME);
-                                                String businessProfileName = jsonObjMetatata.getString(BUSINESS_PROFILE) == null ? "" : jsonObjMetatata.getString(BUSINESS_PROFILE);
-                                                String businessProfileId = jsonObjMetatata.getString(PROFILE_ID) == null ? "" : jsonObjMetatata.getString(PROFILE_ID);
-                                                String productId = jsonObjMetatata.getString(PRODUCT_ID) == null ? "" : jsonObjMetatata.getString(PRODUCT_ID);
-
-                                                if (jsonArray.length() == 1) {
-                                                    modelList.add(new SearchResultModel(searchType, empCode, name, businessProfileId, businessProfileName, productId));
-                                                    modelList.add(new SearchResultModel(searchType, "", "", "", "", ""));
-                                                } else {
-                                                    modelList.add(new SearchResultModel(searchType, empCode, name, businessProfileId, businessProfileName, productId));
-                                                    if (jsonArray.length() > 7 && i == (jsonArray.length() - 1)) {
-                                                        modelList.add(new SearchResultModel(searchType, "", "", "", "", ""));
-                                                    }
-                                                }
-
-                                                // Assign the data to the FilterResults
-                                                filterResults.values = modelList;
-                                                filterResults.count = modelList.size();
-
-                                            } else {
-                                                String ucid = jsonObjMetatata.getString(UCID) == null || jsonObjMetatata.getString(UCID).equals("") ? "0" : jsonObjMetatata.getString(UCID);
-                                                String leadID = jsonObjMetatata.getString(LEADID) == null ? "" : jsonObjMetatata.getString(LEADID);
-                                                String name = jsonObjMetatata.getString(NAME) == null ? "" : jsonObjMetatata.getString(NAME);
-                                                String mobileNo = jsonObjMetatata.getString(MOBILE) == null ? "" : jsonObjMetatata.getString(MOBILE);
-                                                String email = jsonObjMetatata.getString(EMAIL) == null ? "" : jsonObjMetatata.getString(EMAIL);
-                                                // String clientCode = jsonObjMetatata.getString(CLIENTCODE) == null ? "" : jsonObjMetatata.getString(CLIENTCODE);
-
-                                                if (jsonObjMetatata.has(CLIENTCODE)) {
-                                                    clientCode = jsonObjMetatata.getString(CLIENTCODE) == null || jsonObjMetatata.getString(CLIENTCODE).equals("") ? "0" : jsonObjMetatata.getString(CLIENTCODE);
-                                                }
-                                                if (jsonObjMetatata.has("SourceName")) {
-                                                    sourceName = jsonObjMetatata.getString("SourceName") == null ? "" : jsonObjMetatata.getString("SourceName");
-                                                }
-                                                if (jsonObjMetatata.has("ProspectSourceName")) {
-                                                    prospectSourceName = jsonObjMetatata.getString("ProspectSourceName") == null ? "" : jsonObjMetatata.getString("ProspectSourceName");
-
-                                                }
-                                                if (jsonObjMetatata.has("ProspectSourceDetails")) {
-                                                    prospectSourceDetails = jsonObjMetatata.getString("ProspectSourceDetails") == null ? "" : jsonObjMetatata.getString("ProspectSourceDetails");
-                                                }
-                                                if (jsonObjMetatata.has("InterestedIn")) {
-                                                    interestedIn = jsonObjMetatata.getString("InterestedIn") == null ? "" : jsonObjMetatata.getString("InterestedIn");
-                                                }
-                                                oaoUserId = jsonObjMetatata.has(OAOUSERID) && !jsonObjMetatata.isNull(OAOUSERID) ? jsonObjMetatata.getInt(OAOUSERID) : null;
-                                                if (searchType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
-                                                    leadOwner = jsonObjMetatata.getString(LEAD_OWNER) == null ? "" : jsonObjMetatata.getString(LEAD_OWNER);
-                                                }
-
-                                                if (jsonArray.length() == 1) {
-                                                    modelList.add(new SearchResultModel(searchType, leadID, name, mobileNo, email, ucid, leadOwner, oaoUserId, sourceName, prospectSourceName, prospectSourceDetails, interestedIn, clientCode));
-                                                    modelList.add(new SearchResultModel(searchType, "", "", "", "", "", "", null, "", "", "", "", ""));
-                                                } else {
-                                                    modelList.add(new SearchResultModel(searchType, leadID, name, mobileNo, email, ucid, leadOwner, oaoUserId, sourceName, prospectSourceName, prospectSourceDetails, interestedIn, clientCode));
-                                                    if (jsonArray.length() > 7 && i == (jsonArray.length() - 1)) {
-                                                        modelList.add(new SearchResultModel(searchType, "", "", "", "", "", "", null, "", "", "", "", ""));
-                                                    }
-                                                }
-
-                                                // Assign the data to the FilterResults
-                                                filterResults.values = modelList;
-                                                filterResults.count = modelList.size();
-                                            }
-
-                                        }
-
-                                    } else {
-                                        modelList.add(new SearchResultModel("", "", NO_RECORDS_FOUND, "", "", ""));
-                                        filterResults.values = modelList;
-                                        filterResults.count = modelList.size();
-
-                                    }
-                                } else {
-                                    if (URLEncoder.encode(constraint.toString(), "utf-8").equalsIgnoreCase("+")) {
-                                        searchFoundFlag = true;
-                                        modelList.add(new SearchResultModel("", "", NO_RECORDS_FOUND, "", "", ""));
-                                        filterResults.values = modelList;
-                                        filterResults.count = modelList.size();
-                                    } else {
-                                        String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    }
-                                }
-
-
-                            } else {
-                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-                            }
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    return filterResults;
-                }
-
-                @Override
-                protected void publishResults(CharSequence constraint, FilterResults results) {
-                    if (results != null && results.count > 0) {
-                        resultList = (List<SearchResultModel>) results.values;
-                        notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
-                    }
-                }
-            };
-        }
-
-        class HolderView {
-            TextView tvClientName, tvClientID, tvUCID, tvError;
-            ImageView ivDropDownArrow;
-            LinearLayout llDropDownMenuLayout, llExpand;
-            RelativeLayout rlSetAppointment, rlCrateMeeting, rlViewDetail, rlOpenAccount, rlOAOForm;
-
-            public HolderView(View parent) {
-                tvClientName = (TextView) parent.findViewById(R.id.tvClientname);
-                tvClientID = (TextView) parent.findViewById(R.id.tvClientID);
-                tvUCID = (TextView) parent.findViewById(R.id.tvUCID);
-                ivDropDownArrow = (ImageView) parent.findViewById(R.id.ivDropDownArrow);
-                llDropDownMenuLayout = (LinearLayout) parent.findViewById(R.id.llDropDownMenuLayout);
-                llExpand = (LinearLayout) parent.findViewById(R.id.llExpand);
-                rlSetAppointment = (RelativeLayout) parent.findViewById(R.id.rlSetAppointment);
-                rlCrateMeeting = (RelativeLayout) parent.findViewById(R.id.rlCrateMeeting);
-                rlViewDetail = (RelativeLayout) parent.findViewById(R.id.rlViewDetail);
-                rlOpenAccount = (RelativeLayout) parent.findViewById(R.id.rlOpenAccount);
-                rlOAOForm = (RelativeLayout) parent.findViewById(R.id.rlOAOForm);
-                tvError = (TextView) parent.findViewById(R.id.tvError);
-            }
-        }
-    }
-
-    private void ConvertEkycApi(final String mobile, final String email, final String branchEmplyeeCode,
-                                final String SourceName, final String ProspectSourceName, final String ProspectSourceDetails, final String InterestedIn) {
+    private void ConvertEkycApi(final String mobile, final String email,
+        final String branchEmplyeeCode, final String SourceName, final String ProspectSourceName,
+        final String ProspectSourceDetails, final String InterestedIn) {
         if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {
             showProgress();
             final Map inputMap = new HashMap<>();
@@ -1416,197 +1041,165 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             String serviceMethod = "Prospect/RegisterProspectOnline";
 
             try {
-                CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod, getHeader(MOSLCommonActivity.this), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
+                    getHeader(MOSLCommonActivity.this), inputMap, new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            //after success code goes here
+                            try {
 
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                String message = response.getString(MESSAGE);
-                                if (status.equalsIgnoreCase("true")) {
-                                    hideProgress();
-                                    JSONArray jsonArray = response.getJSONArray("Response");
-                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                    String RegistrationAllowed = (jsonObject.isNull("RegistrationAllowed") || jsonObject.getString("RegistrationAllowed").equals("")) ? "" : jsonObject.getString("RegistrationAllowed");
-                                    if (RegistrationAllowed.equalsIgnoreCase("true")) {
-                                        String eKYC_UserID = (jsonObject.isNull("eKYC_UserID") || jsonObject.getString("eKYC_UserID").equals("")) ? "0" : jsonObject.getString("eKYC_UserID");
-                                        HashMap<String, String> map = new HashMap();
-                                        map.put(NEW_USERID, eKYC_UserID);
-                                        map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-                                        map.put(COMMANDTYPE, "RESUME");
-                                        map.put(APPLICATIONTYPE, "CRM");
-                                        map.put(OSTYPE, "ANDROID");
-                                        map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-                                        map.put(TOKENKEY, AccountDetails.getToken());
-                                        newEkyc(getInputBody(map));
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    String message = response.getString(MESSAGE);
+                                    if (status.equalsIgnoreCase("true")) {
+                                        hideProgress();
+                                        JSONArray jsonArray = response.getJSONArray("Response");
+                                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                        String RegistrationAllowed =
+                                            (jsonObject.isNull("RegistrationAllowed")
+                                                || jsonObject.getString("RegistrationAllowed")
+                                                .equals("")) ? ""
+                                                : jsonObject.getString("RegistrationAllowed");
+                                        if (RegistrationAllowed.equalsIgnoreCase("true")) {
+                                            String eKYC_UserID = (jsonObject.isNull("eKYC_UserID")
+                                                || jsonObject.getString("eKYC_UserID").equals(""))
+                                                ? "0" : jsonObject.getString("eKYC_UserID");
+                                            HashMap<String, String> map = new HashMap();
+                                            map.put(NEW_USERID, eKYC_UserID);
+                                            map.put(BRANCHEMPCODE,
+                                                AccountDetails.getEmployeeCode());
+                                            map.put(COMMANDTYPE, "RESUME");
+                                            map.put(APPLICATIONTYPE, "CRM");
+                                            map.put(OSTYPE, "ANDROID");
+                                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                                            map.put(TOKENKEY, AccountDetails.getToken());
+                                            newEkyc(getInputBody(map));
+                                        } else {
+                                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                                getResources().getString(R.string.motilal_oswal),
+                                                message, "OK", true, null);
+                                        }
                                     } else {
-                                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), message, "OK", true, null);
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                     }
                                 } else {
                                     hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                 }
-
-                            } else {
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 hideProgress();
+                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
                             hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(MOSLCommonActivity.this, LoginActivity.class);
-                                            startActivity(i);
-                                            finish();
-                                        }
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(MOSLCommonActivity.this,
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                    MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
                                 }
-                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
-                MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(MOSLCommonActivity.this, 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
-    }
-
-    public static Map getHeader(Context context) {
-        Map headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json; charset=UTF-8");
-        headerMap.put("token", AccountDetails.getToken());
-        headerMap.put("userid", AccountDetails.getUserId());
-        headerMap.put("clientinfo", "android");
-        headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
-        headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-        headerMap.put("macaddress", CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
-        headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-        headerMap.put("AppId", "2");
-        return headerMap;
-    }
-
-    //notification
-    public static void sendRegistrationToServer(Context context, ContentResolver resolver, boolean isLogout) throws Exception {
-        boolean isAuthenticated = getPrefs(context).getBoolean("AUTHENTICATED", false);
-
-        if (isLogout) {
-            AccountDetails.setUserId("");
-            sendToken(context, resolver);
-        } else {
-            sendToken(context, resolver);
-        }
-    }
-
-    /**
-     * This is use to send fcm push notification token on first run
-     */
-
-    private static void sendToken(Context context, ContentResolver resolver) throws Exception {
-        String token = getPrefs(context).getString("TOKEN_ID", null);
-
-        String deviceId = Settings.Secure.getString(resolver, Settings.Secure.ANDROID_ID);
-
-        Map requestMap = new HashMap();
-        Map headerMap = getHeader(context);
-        String serviceMethod = "Auth/UpdateFCMToken";
-        requestMap.put("DeviceToken", token);
-        requestMap.put("DeviceId", deviceId);
-
-        CRMWebServiceHandler.post(context, serviceMethod, headerMap, requestMap, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                Log.d("Send Token Response: ", response.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.e("Failure", responseString);
-            }
-        });
     }
 
     //quick dialog
     public void openSearchOptions(View v) {
-        ActionItem acLead = new ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this);
-        ActionItem acCleint = new ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this);
-        ActionItem acDadhBoard = new ActionItem(ID_EMP, "Dashbord for", getChecedStateIcon(SEARCH_TYPE_EMP), this);
+        ActionItem acLead =
+            new ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this);
+        ActionItem acCleint =
+            new ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this);
+        ActionItem acDadhBoard =
+            new ActionItem(ID_EMP, "Dashbord for", getChecedStateIcon(SEARCH_TYPE_EMP), this);
 
-        final QuickAction quickAction = new QuickAction(this,
-                QuickAction.VERTICAL);
+        final QuickAction quickAction = new QuickAction(this, QuickAction.VERTICAL);
         quickAction.addActionItem(acLead);
         quickAction.addActionItem(acCleint);
         quickAction.addActionItem(acDadhBoard);
@@ -1614,11 +1207,16 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         quickAction.show(v);
     }
 
+    private int getChecedStateIcon(String data) {
+        if (searchType.equalsIgnoreCase(data)) {
+            return R.drawable.ic_check_black;
+        } else {
+            return R.drawable.ic_check_blank;
+        }
+    }
 
     //search option listren
-    @Override
-    public void onItemClick(QuickAction source, int pos,
-                            int actionId) {
+    @Override public void onItemClick(QuickAction source, int pos, int actionId) {
 
         switch (actionId) {
             case ID_LEAD: {
@@ -1642,16 +1240,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         }
     }
 
-    private int getChecedStateIcon(String data) {
-        if (searchType.equalsIgnoreCase(data)) {
-            return R.drawable.ic_check_black;
-        } else {
-            return R.drawable.ic_check_blank;
-        }
-
-    }
-
-
     public void getRoleDetails(String roleID) {
         if (MOSLCommon.isNetworkEnabled(this)) {
             Map inputMap = new HashMap<>();
@@ -1661,78 +1249,112 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
             String flag = GETCRMROLEDETAILS;
             String category = LOGIN;
             progressLayout.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    if (response != null) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("CRMROLE");
-                            if (jsonArray.length() != 0) {
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject object = jsonArray.getJSONObject(i);
+            WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        if (response != null) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("CRMROLE");
+                                if (jsonArray.length() != 0) {
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
 
-                                    String boBranch = (object.isNull("BOBRANCH") || object.getString("BOBRANCH").equals("")) ? "" : object.getString("BOBRANCH");
-                                    String boSubBroker = (object.isNull("BOSUBBROKER") || object.getString("BOSUBBROKER").equals("")) ? "" : object.getString("BOSUBBROKER");
-                                    String boTraders = (object.isNull("BOTRADERS") || object.getString("BOTRADERS").equals("")) ? "" : object.getString("BOTRADERS");
-                                    String crmBranch = (object.isNull("CRMBRANCH") || object.getString("CRMBRANCH").equals("")) ? "" : object.getString("CRMBRANCH");
-                                    String loginUserID = (object.isNull("LOGINUSERID") || object.getString("LOGINUSERID").equals("")) ? "" : object.getString("LOGINUSERID");
-                                    String roleMappingID = (object.isNull("ROLEMAPPINGID") || object.getString("ROLEMAPPINGID").equals("")) ? "" : object.getString("ROLEMAPPINGID");
-                                    String businessUnitID = (object.isNull("BUSINESSUNITID") || object.getString("BUSINESSUNITID").equals("")) ? "" : object.getString("BUSINESSUNITID");
-                                    String teamID = (object.isNull("TEAMID") || object.getString("TEAMID").equals("")) ? "" : object.getString("TEAMID");
-                                    String roleID = (object.isNull("ROLEID") || object.getString("ROLEID").equals("")) ? "" : object.getString("ROLEID");
-                                    SharedPreferences.Editor editor = MOSLCommon.getPrefs(MOSLCommonActivity.this).edit();
-                                    SharedPreferences.Editor editor1 = editor.putString(BOBRANCH, boBranch);
-                                    editor.putString(BOSUBBROKER, boSubBroker);
-                                    editor.putString(BOTRADERS, boTraders);
-                                    editor.putString(CRMBRANCH, crmBranch);
-                                    editor.putString(LOGINUSERID, loginUserID);
-                                    editor.putString(ROLEMAPPINGID, roleMappingID);
-                                    editor.putString(BUSINESSUNITID, businessUnitID);
-                                    editor.putString(TEAMID, teamID);
-                                    editor.putString(ROLEID, roleID);
+                                        String boBranch =
+                                            (object.isNull("BOBRANCH") || object.getString(
+                                                "BOBRANCH").equals("")) ? ""
+                                                : object.getString("BOBRANCH");
+                                        String boSubBroker =
+                                            (object.isNull("BOSUBBROKER") || object.getString(
+                                                "BOSUBBROKER").equals("")) ? ""
+                                                : object.getString("BOSUBBROKER");
+                                        String boTraders =
+                                            (object.isNull("BOTRADERS") || object.getString(
+                                                "BOTRADERS").equals("")) ? ""
+                                                : object.getString("BOTRADERS");
+                                        String crmBranch =
+                                            (object.isNull("CRMBRANCH") || object.getString(
+                                                "CRMBRANCH").equals("")) ? ""
+                                                : object.getString("CRMBRANCH");
+                                        String loginUserID =
+                                            (object.isNull("LOGINUSERID") || object.getString(
+                                                "LOGINUSERID").equals("")) ? ""
+                                                : object.getString("LOGINUSERID");
+                                        String roleMappingID =
+                                            (object.isNull("ROLEMAPPINGID") || object.getString(
+                                                "ROLEMAPPINGID").equals("")) ? ""
+                                                : object.getString("ROLEMAPPINGID");
+                                        String businessUnitID =
+                                            (object.isNull("BUSINESSUNITID") || object.getString(
+                                                "BUSINESSUNITID").equals("")) ? ""
+                                                : object.getString("BUSINESSUNITID");
+                                        String teamID =
+                                            (object.isNull("TEAMID") || object.getString("TEAMID")
+                                                .equals("")) ? "" : object.getString("TEAMID");
+                                        String roleID =
+                                            (object.isNull("ROLEID") || object.getString("ROLEID")
+                                                .equals("")) ? "" : object.getString("ROLEID");
+                                        SharedPreferences.Editor editor =
+                                            MOSLCommon.getPrefs(MOSLCommonActivity.this).edit();
+                                        SharedPreferences.Editor editor1 =
+                                            editor.putString(BOBRANCH, boBranch);
+                                        editor.putString(BOSUBBROKER, boSubBroker);
+                                        editor.putString(BOTRADERS, boTraders);
+                                        editor.putString(CRMBRANCH, crmBranch);
+                                        editor.putString(LOGINUSERID, loginUserID);
+                                        editor.putString(ROLEMAPPINGID, roleMappingID);
+                                        editor.putString(BUSINESSUNITID, businessUnitID);
+                                        editor.putString(TEAMID, teamID);
+                                        editor.putString(ROLEID, roleID);
 
-                                    editor.commit();
-                                    roleSelectionModel = new RoleSelectionModel(boBranch, boSubBroker, boTraders, crmBranch, loginUserID, roleMappingID, businessUnitID, teamID, roleID);
-                                    progressLayout.setVisibility(View.GONE);
+                                        editor.commit();
+                                        roleSelectionModel =
+                                            new RoleSelectionModel(boBranch, boSubBroker, boTraders,
+                                                crmBranch, loginUserID, roleMappingID,
+                                                businessUnitID, teamID, roleID);
+                                        progressLayout.setVisibility(View.GONE);
+                                    }
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        } else {
+                            progressLayout.setVisibility(View.GONE);
                         }
-                    } else {
-                        progressLayout.setVisibility(View.GONE);
                     }
 
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        progressLayout.setVisibility(View.GONE);
+                        commonMsgDialog(MOSLCommonActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY,
+                            false, "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    progressLayout.setVisibility(View.GONE);
-                    commonMsgDialog(MOSLCommonActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(this);
         }
@@ -1743,31 +1365,34 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         dialog.setContentView(com.mosl.mobile.ekyc.R.layout.dialog_role_selection);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
         spRoleSel = (Spinner) dialog.findViewById(com.mosl.mobile.ekyc.R.id.spRoleSel);
         Button btnGoToEkyc = (Button) dialog.findViewById(com.mosl.mobile.ekyc.R.id.btnGoToEkyc);
 
-        arrAdapRoleSel = new ArrayAdapter<RowData>(MOSLCommonActivity.this, com.mosl.mobile.ekyc.R.layout.simple_spinner_item, arrRoleSel);
+        arrAdapRoleSel = new ArrayAdapter<RowData>(MOSLCommonActivity.this,
+            com.mosl.mobile.ekyc.R.layout.simple_spinner_item, arrRoleSel);
         arrAdapRoleSel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spRoleSel.setAdapter(arrAdapRoleSel);
         spRoleSel.setOnItemSelectedListener(roleListener);
         progressLayout.setVisibility(View.GONE);
 
         btnGoToEkyc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RoleSelectionModel.getRoleMappingID() != null && !RoleSelectionModel.getRoleMappingID().equals("")) {
+            @Override public void onClick(View v) {
+                if (RoleSelectionModel.getRoleMappingID() != null
+                    && !RoleSelectionModel.getRoleMappingID().equals("")) {
                     if (tab == 1) {
-                        Intent intent = new Intent(MOSLCommonActivity.this, com.mosl.mobile.ekyc.ui.PostLoginActivity.class);
+                        Intent intent = new Intent(MOSLCommonActivity.this,
+                            com.mosl.mobile.ekyc.ui.PostLoginActivity.class);
                         startActivity(intent);
                     } else {
-                        Intent intent = new Intent(MOSLCommonActivity.this, com.mosl.mobile.ekyc.register.RegisterActivity.class);
+                        Intent intent = new Intent(MOSLCommonActivity.this,
+                            com.mosl.mobile.ekyc.register.RegisterActivity.class);
                         startActivity(intent);
                     }
                 } else {
                     MOSLCommon.showToastMsg(MOSLCommonActivity.this, SELECT_ROLE);
-
                 }
 
                 dialog.dismiss();
@@ -1775,20 +1400,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         });
         dialog.show();
     }
-
-    private AdapterView.OnItemSelectedListener roleListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            roleID = ((RowData) spRoleSel.getSelectedItem()).getKey();
-            getRoleDetails(roleID);
-
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
 
     //region login methods
 
@@ -1799,7 +1410,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         String empCode = getPrefs(this).getString("EmployeeCode", null);
         String password = getPrefs(this).getString("PASSWORD", null);
 
-
         if (empCode != null && password != null) {
             if (CRMAppUtil.isNetworkEnabled(this)) {
 
@@ -1808,120 +1418,185 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                 inputMap.put("Password", password);
                 inputMap.put("IPAddress", CRMAppUtil.getLocalIpAddress());
                 inputMap.put("ClientInfo", CLIENT_INFO);
-                inputMap.put("Macaddress", CRMMOSLCommon.getDeviceID(getApplicationContext(), getContentResolver()));
+                inputMap.put("Macaddress",
+                    CRMMOSLCommon.getDeviceID(getApplicationContext(), getContentResolver()));
                 inputMap.put("AppId", "2");
 
                 Map headerMap = null;
                 String serviceMethod = "Auth/Login";
 
                 try {
-                    CRMWebServiceHandler.post(this, serviceMethod, headerMap, inputMap, new JsonHttpResponseHandler() {
+                    CRMWebServiceHandler.post(this, serviceMethod, headerMap, inputMap,
+                        new JsonHttpResponseHandler() {
 
-                        @Override
-                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            try {
-                                if (statusCode == 200) {
+                            @Override public void onSuccess(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers,
+                                JSONObject response) {
+                                super.onSuccess(statusCode, headers, response);
+                                //after success code goes here
+                                try {
+                                    if (statusCode == 200) {
 
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                        JSONObject objDetailUser = objDetail.getJSONObject(USER);
-                                        String userId = (objDetailUser.isNull(USER_ID) || objDetailUser.getString(USER_ID).equals("")) ? "" : objDetailUser.getString(USER_ID);
-                                        String employeeCode = (objDetailUser.isNull(EMPLOYEE_CODE) || objDetailUser.getString(EMPLOYEE_CODE).equals("")) ? "" : objDetailUser.getString(EMPLOYEE_CODE);
-                                        String firstName = (objDetailUser.isNull(FIRST_NAME) || objDetailUser.getString(FIRST_NAME).equals("")) ? "" : objDetailUser.getString(FIRST_NAME);
-                                        String lastName = (objDetailUser.isNull(LAST_NAME) || objDetailUser.getString(LAST_NAME).equals("")) ? "" : objDetailUser.getString(LAST_NAME);
-                                        String imageUrl = (objDetailUser.isNull(IMAGE_URL) || objDetailUser.getString(IMAGE_URL).equals("")) ? "" : objDetailUser.getString(IMAGE_URL);
-                                        String mobile = (objDetailUser.isNull(MOBILE) || objDetailUser.getString(MOBILE).equals("")) ? "" : objDetailUser.getString(MOBILE);
-                                        String email = (objDetailUser.isNull(EMAIL) || objDetailUser.getString(EMAIL).equals("")) ? "" : objDetailUser.getString(EMAIL);
-                                        String token = (objDetailUser.isNull(TOKEN) || objDetailUser.getString(TOKEN).equals("")) ? "" : objDetailUser.getString(TOKEN);
-                                        String userType = (objDetailUser.isNull(USER_TYPE_SEQ) || objDetailUser.getString(USER_TYPE_SEQ).equals("")) ? "" : objDetailUser.getString(USER_TYPE_SEQ);
-// getting Branch code from DEFAULT_BUSINESS_PROFILE
-                                        JSONObject objDetailDefaultBusinessProfile = objDetailUser.getJSONObject(DEFAULT_BUSINESS_PROFILE);
-                                        String branchCode = (objDetailDefaultBusinessProfile.isNull(BRANCHCODE_DEFAULT_BUSINESS_PROFILE) || objDetailDefaultBusinessProfile.getString(BRANCHCODE_DEFAULT_BUSINESS_PROFILE).equals("")) ? "" : objDetailDefaultBusinessProfile.getString(BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
-                                        setAppLoginID(employeeCode);
-                                        setAppType(CRM);
+                                        String status = response.getString(STATUS);
+                                        if (status.equalsIgnoreCase("true")) {
+                                            JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                            JSONObject objDetailUser =
+                                                objDetail.getJSONObject(USER);
+                                            String userId = (objDetailUser.isNull(USER_ID)
+                                                || objDetailUser.getString(USER_ID).equals("")) ? ""
+                                                : objDetailUser.getString(USER_ID);
+                                            String employeeCode =
+                                                (objDetailUser.isNull(EMPLOYEE_CODE)
+                                                    || objDetailUser.getString(EMPLOYEE_CODE)
+                                                    .equals("")) ? ""
+                                                    : objDetailUser.getString(EMPLOYEE_CODE);
+                                            String firstName = (objDetailUser.isNull(FIRST_NAME)
+                                                || objDetailUser.getString(FIRST_NAME).equals(""))
+                                                ? "" : objDetailUser.getString(FIRST_NAME);
+                                            String lastName = (objDetailUser.isNull(LAST_NAME)
+                                                || objDetailUser.getString(LAST_NAME).equals(""))
+                                                ? "" : objDetailUser.getString(LAST_NAME);
+                                            String imageUrl = (objDetailUser.isNull(IMAGE_URL)
+                                                || objDetailUser.getString(IMAGE_URL).equals(""))
+                                                ? "" : objDetailUser.getString(IMAGE_URL);
+                                            String mobile = (objDetailUser.isNull(MOBILE)
+                                                || objDetailUser.getString(MOBILE).equals("")) ? ""
+                                                : objDetailUser.getString(MOBILE);
+                                            String email = (objDetailUser.isNull(EMAIL)
+                                                || objDetailUser.getString(EMAIL).equals("")) ? ""
+                                                : objDetailUser.getString(EMAIL);
+                                            String token = (objDetailUser.isNull(TOKEN)
+                                                || objDetailUser.getString(TOKEN).equals("")) ? ""
+                                                : objDetailUser.getString(TOKEN);
+                                            String userType = (objDetailUser.isNull(USER_TYPE_SEQ)
+                                                || objDetailUser.getString(USER_TYPE_SEQ)
+                                                .equals("")) ? ""
+                                                : objDetailUser.getString(USER_TYPE_SEQ);
+                                            // getting Branch code from DEFAULT_BUSINESS_PROFILE
+                                            JSONObject objDetailDefaultBusinessProfile =
+                                                objDetailUser.getJSONObject(
+                                                    DEFAULT_BUSINESS_PROFILE);
+                                            String branchCode =
+                                                (objDetailDefaultBusinessProfile.isNull(
+                                                    BRANCHCODE_DEFAULT_BUSINESS_PROFILE)
+                                                    || objDetailDefaultBusinessProfile.getString(
+                                                    BRANCHCODE_DEFAULT_BUSINESS_PROFILE).equals(""))
+                                                    ? ""
+                                                    : objDetailDefaultBusinessProfile.getString(
+                                                        BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
+                                            setAppLoginID(employeeCode);
+                                            setAppType(CRM);
 
-                                        JSONObject objDetailBusinessProfile = objDetailUser.getJSONObject(CURRENT_BUSINESS_PROFILE);
-                                        String businessProfileId = (objDetailBusinessProfile.isNull(BUSINESS_PROFILE_ID) || objDetailBusinessProfile.getString(BUSINESS_PROFILE_ID).equals("")) ? "" : objDetailBusinessProfile.getString(BUSINESS_PROFILE_ID);
-                                        String businessProfileName = (objDetailBusinessProfile.isNull(CURRENT_BUSINESS_PROFILE_NAME) || objDetailBusinessProfile.getString(CURRENT_BUSINESS_PROFILE_NAME).equals("")) ? "" : objDetailBusinessProfile.getString(CURRENT_BUSINESS_PROFILE_NAME);
-                                        String businessUnitId = (objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) || objDetailBusinessProfile.getString(BUSINESS_UNIT_ID).equals("")) ? "" : objDetailBusinessProfile.getString(BUSINESS_UNIT_ID);
-                                        LoginResponseData loginData = new LoginResponseData();
-                                        loginData.setUserId(userId);
-                                        loginData.setEmployeeCode(employeeCode);
-                                        loginData.setFirstName(firstName);
-                                        loginData.setLastName(lastName);
-                                        loginData.setImageUrl(imageUrl);
-                                        loginData.setMobileNo(mobile);
-                                        loginData.setEmail(email);
-                                        loginData.setToken(token);
-                                        loginData.setBusinessProfileId(businessProfileId);
-                                        loginData.setBusinessProfileName(businessProfileName);
-                                        loginData.setBusinessUnitId(businessUnitId);
-                                        loginData.setBranchCode(branchCode);
-                                        loginData.setUserType(userType);
+                                            JSONObject objDetailBusinessProfile =
+                                                objDetailUser.getJSONObject(
+                                                    CURRENT_BUSINESS_PROFILE);
+                                            String businessProfileId =
+                                                (objDetailBusinessProfile.isNull(
+                                                    BUSINESS_PROFILE_ID) || objDetailBusinessProfile
+                                                    .getString(BUSINESS_PROFILE_ID)
+                                                    .equals("")) ? ""
+                                                    : objDetailBusinessProfile.getString(
+                                                        BUSINESS_PROFILE_ID);
+                                            String businessProfileName =
+                                                (objDetailBusinessProfile.isNull(
+                                                    CURRENT_BUSINESS_PROFILE_NAME)
+                                                    || objDetailBusinessProfile.getString(
+                                                    CURRENT_BUSINESS_PROFILE_NAME).equals("")) ? ""
+                                                    : objDetailBusinessProfile.getString(
+                                                        CURRENT_BUSINESS_PROFILE_NAME);
+                                            String businessUnitId =
+                                                (objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID)
+                                                    || objDetailBusinessProfile.getString(
+                                                    BUSINESS_UNIT_ID).equals("")) ? ""
+                                                    : objDetailBusinessProfile.getString(
+                                                        BUSINESS_UNIT_ID);
+                                            LoginResponseData loginData = new LoginResponseData();
+                                            loginData.setUserId(userId);
+                                            loginData.setEmployeeCode(employeeCode);
+                                            loginData.setFirstName(firstName);
+                                            loginData.setLastName(lastName);
+                                            loginData.setImageUrl(imageUrl);
+                                            loginData.setMobileNo(mobile);
+                                            loginData.setEmail(email);
+                                            loginData.setToken(token);
+                                            loginData.setBusinessProfileId(businessProfileId);
+                                            loginData.setBusinessProfileName(businessProfileName);
+                                            loginData.setBusinessUnitId(businessUnitId);
+                                            loginData.setBranchCode(branchCode);
+                                            loginData.setUserType(userType);
 
-                                        new AccountDetails(loginData.getUserId(), loginData.getFirstName(), loginData.getLastName(), loginData.getImageUrl().replaceAll(" ", "%20"), loginData.getMobileNo(), loginData.getEmail(), loginData.getBusinessProfileId(), loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(), loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType());
-                                        MOSLCommonActivity.sendRegistrationToServer(MOSLCommonActivity.this, getContentResolver(), false);
-                                        initView();
-                                    } else {
+                                            new AccountDetails(loginData.getUserId(),
+                                                loginData.getFirstName(), loginData.getLastName(),
+                                                loginData.getImageUrl().replaceAll(" ", "%20"),
+                                                loginData.getMobileNo(), loginData.getEmail(),
+                                                loginData.getBusinessProfileId(),
+                                                loginData.getBusinessProfileName(),
+                                                loginData.getEmployeeCode(), loginData.getToken(),
+                                                loginData.getBusinessUnitId(),
+                                                loginData.getBranchCode(), loginData.getUserType());
+                                            MOSLCommonActivity.sendRegistrationToServer(
+                                                MOSLCommonActivity.this, getContentResolver(),
+                                                false);
+                                            initView();
+                                        } else {
 
-                                        handleLoginError();
+                                            handleLoginError();
+                                        }
                                     }
-
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
 
-                        @Override
-                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
+                            @Override public void onSuccess(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers,
+                                JSONArray response) {
+                                super.onSuccess(statusCode, headers, response);
+                            }
 
-                        @Override
-                        public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
+                            @Override public void onSuccess(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers,
+                                String responseString) {
+                                super.onSuccess(statusCode, headers, responseString);
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            handleLoginError();
-                        }
+                            @Override public void onFailure(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                                JSONObject errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                                handleLoginError();
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                        }
+                            @Override public void onFailure(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                                JSONArray errorResponse) {
+                                super.onFailure(statusCode, headers, throwable, errorResponse);
+                            }
 
-                        @Override
-                        public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                        }
-
-                    });
+                            @Override public void onFailure(int statusCode,
+                                cz.msebera.android.httpclient.Header[] headers,
+                                String responseString, Throwable throwable) {
+                                super.onFailure(statusCode, headers, responseString, throwable);
+                            }
+                        });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else {
-                MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", false, new MSFDialog.DialogListener() {
-                    @Override
-                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                        if (action == MSFDialog.Action.OK) {
-                            finish();
+                MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
+                    INTERNET_CONNECTION, "OK", false, new MSFDialog.DialogListener() {
+                        @Override
+                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                finish();
+                            }
                         }
-                    }
-                });
-
+                    });
             }
         } else {
 
             handleLoginError();
         }
-
     }
 
     private void handleLoginError() {
@@ -1936,10 +1611,8 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
         getPrefs(this).edit().remove("EmployeeCode");
         getPrefs(this).edit().remove("PASSWORD");
-
     }
     //endregion
-
 
     /**
      * this method methods is goto
@@ -1977,7 +1650,6 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         //BIRTHDAY
         else if (data.getPage().equalsIgnoreCase("BIRTHDAY")) {
             setupFragment(new BirthdayAnniversaryFragment());
-
         }
         //DASHBOARD
         else if (data.getPage().equalsIgnoreCase("DASHBOARD")) {
@@ -1992,51 +1664,48 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         }
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+    @Override public boolean dispatchTouchEvent(MotionEvent ev) {
         View view = getCurrentFocus();
-        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+        if (view != null
+            && (ev.getAction() == MotionEvent.ACTION_UP
+            || ev.getAction() == MotionEvent.ACTION_MOVE)
+            && view instanceof EditText
+            && !view.getClass().getName().startsWith("android.webkit.")) {
             int scrcoords[] = new int[2];
             view.getLocationOnScreen(scrcoords);
             float x = ev.getRawX() + view.getLeft() - scrcoords[0];
             float y = ev.getRawY() + view.getTop() - scrcoords[1];
-            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
-                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+            if (x < view.getLeft()
+                || x > view.getRight()
+                || y < view.getTop()
+                || y > view.getBottom()) {
+                ((InputMethodManager) this.getSystemService(
+                    Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+                    (this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+            }
         }
         return super.dispatchTouchEvent(ev);
     }
 
-
     ///////NOTIFICATION COUNT /////////////
-    @Override
-    protected void onStart() {
+    @Override protected void onStart() {
         if (AccountDetails.getToken() == null) {
             Intent intent = new Intent(MOSLCommonActivity.this, SplashActivity.class);
             startActivity(intent);
         }
         super.onStart();
-        LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
-                new IntentFilter("NotificationCountIntent")
-        );
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver((mMessageReceiver), new IntentFilter("NotificationCountIntent"));
         bindService(new Intent(this, ForegroundService.class), mServiceConnection,
-                Context.BIND_AUTO_CREATE);
+            Context.BIND_AUTO_CREATE);
     }
 
-    @Override
-    protected void onStop() {
+    @Override protected void onStop() {
         super.onStop();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         unbindService(mServiceConnection);
         mBound = false;
     }
-
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            actionBar.updateMsgCount(1);
-        }
-    };
-
 
     public void ekycVersionCheck(final int gotoEkyc, final Map hashMap) {
         Map inputMap = new HashMap<>();
@@ -2049,7 +1718,8 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 //after success code goes here
                 try {
@@ -2058,26 +1728,36 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                             String success = response.getString("_Status");
                             String msg = response.getString("_msg");
                             if (success.equals("0")) {
-                                CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, msg, true, false, false, "", "UPDATE NOW", "", new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                        if (action == MOSLCommon.Action.OK) {
-                                            Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-                                            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.mosl.tabapp"));
-                                            startActivity(i);
-                                            finish();
-                                        } else if (action == MOSLCommon.Action.CANCEL) {
-                                        }
-                                    }
-                                });
+                                CustomDialog dialogMsg =
+                                    new CustomDialog(MOSLCommonActivity.this, msg, true, false,
+                                        false, "", "UPDATE NOW", "",
+                                        new CustomDialog.CustomDialogListener() {
+                                            @Override
+                                            public void dialogAction(MOSLCommon.Action action,
+                                                Object... data) {
+                                                if (action == MOSLCommon.Action.OK) {
+                                                    Intent i = new Intent(
+                                                        android.content.Intent.ACTION_VIEW);
+                                                    i.setData(Uri.parse(
+                                                        "https://play.google.com/store/apps/details?id=com.mosl.tabapp"));
+                                                    startActivity(i);
+                                                    finish();
+                                                } else if (action == MOSLCommon.Action.CANCEL) {
+                                                }
+                                            }
+                                        });
                                 dialogMsg.show();
                             } else if (success.equals("2")) {
-                                CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, msg, true, false, false, "", "OK", "", new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action, Object... data) {
+                                CustomDialog dialogMsg =
+                                    new CustomDialog(MOSLCommonActivity.this, msg, true, false,
+                                        false, "", "OK", "",
+                                        new CustomDialog.CustomDialogListener() {
+                                            @Override
+                                            public void dialogAction(MOSLCommon.Action action,
+                                                Object... data) {
 
-                                    }
-                                });
+                                            }
+                                        });
                                 dialogMsg.show();
                             } else {
                                 SharedPreferences prefs = getSharedPreferences(BINDCOUNTRY, 0);
@@ -2091,45 +1771,46 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                         } else {
                             MOSLCommon.showToastMsg(MOSLCommonActivity.this, EKYC_SERVER_DOWN);
                         }
-
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MOSLCommon.commonMsgDialog(MOSLCommonActivity.this, EKYC_SERVER_DOWN, false, "");
+                    MOSLCommon.commonMsgDialog(MOSLCommonActivity.this, EKYC_SERVER_DOWN, false,
+                        "");
                 }
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
             }
 
             @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                String responseString) {
                 super.onSuccess(statusCode, headers, responseString);
             }
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-
             }
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-
             }
 
             @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
                 MOSLCommon.showToastMsg(MOSLCommonActivity.this, responseString);
             }
-
         });
     }
-
 
     public ArrayList countryAPI(final int gotoEkyc, final Map hashMap) {
         SharedPreferences prefs = getSharedPreferences(BINDCOUNTRY, 0);
@@ -2143,110 +1824,129 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
 
             if (MOSLCommon.isNetworkEnabled(MOSLCommonActivity.this)) {
 
-                WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        if (response != null) {
-                            try {
-                                String countryDetails = (response.isNull("CountryDetails") || response.getString("CountryDetails").equals("")) ? "" : response.getString("CountryDetails");
-                                JSONArray jsonArray = new JSONArray(countryDetails);
-                                array.clear();
-                                array.add("Select");
-                                for (int i = 0; i < jsonArray.length(); i++) {
-                                    JSONObject countryObj = jsonArray.getJSONObject(i);
+                WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap,
+                    new JsonHttpResponseHandler() {
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            if (response != null) {
+                                try {
+                                    String countryDetails =
+                                        (response.isNull("CountryDetails") || response.getString(
+                                            "CountryDetails").equals("")) ? ""
+                                            : response.getString("CountryDetails");
+                                    JSONArray jsonArray = new JSONArray(countryDetails);
+                                    array.clear();
+                                    array.add("Select");
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject countryObj = jsonArray.getJSONObject(i);
 
-                                    String country = (countryObj.isNull("Country") || countryObj.getString("Country").equals("")) ? "" : countryObj.getString("Country");
-                                    array.add(country);
-
-                                }
-                                if (array.size() != 0) {
-                                    SharedPreferences prefs = getSharedPreferences(BINDCOUNTRY, 0);
-                                    SharedPreferences.Editor editor = prefs.edit();
-                                    editor.putInt(BINDCOUNTRY + "_size", array.size());
-                                    for (int i = 0; i < array.size(); i++) {
-                                        editor.putString(BINDCOUNTRY + "_" + i, array.get(i).toString());
+                                        String country =
+                                            (countryObj.isNull("Country") || countryObj.getString(
+                                                "Country").equals("")) ? ""
+                                                : countryObj.getString("Country");
+                                        array.add(country);
                                     }
-                                    editor.commit();
-                                    gotoEkycPage(gotoEkyc, hashMap);
-                                } else {
-                                    CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                                        @Override
-                                        public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                            if (action == MOSLCommon.Action.OK) {
-                                                finish();
-                                            } else if (action == MOSLCommon.Action.CANCEL) {
-                                                finish();
-                                            }
+                                    if (array.size() != 0) {
+                                        SharedPreferences prefs =
+                                            getSharedPreferences(BINDCOUNTRY, 0);
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        editor.putInt(BINDCOUNTRY + "_size", array.size());
+                                        for (int i = 0; i < array.size(); i++) {
+                                            editor.putString(BINDCOUNTRY + "_" + i,
+                                                array.get(i).toString());
                                         }
-                                    });
-                                    dialogMsg.show();
+                                        editor.commit();
+                                        gotoEkycPage(gotoEkyc, hashMap);
+                                    } else {
+                                        CustomDialog dialogMsg =
+                                            new CustomDialog(MOSLCommonActivity.this,
+                                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "",
+                                                OK, "", new CustomDialog.CustomDialogListener() {
+                                                @Override
+                                                public void dialogAction(MOSLCommon.Action action,
+                                                    Object... data) {
+                                                    if (action == MOSLCommon.Action.OK) {
+                                                        finish();
+                                                    } else if (action == MOSLCommon.Action.CANCEL) {
+                                                        finish();
+                                                    }
+                                                }
+                                            });
+                                        dialogMsg.show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
+                        @Override public void onSuccess(int statusCode, Header[] headers,
+                            String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                            @Override
-                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                if (action == MOSLCommon.Action.OK) {
-                                    finish();
-                                } else if (action == MOSLCommon.Action.CANCEL) {
-                                    finish();
-                                }
-                            }
-                        });
-                        dialogMsg.show();
-                    }
+                        @Override public void onFailure(int statusCode, Header[] headers,
+                            String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
+                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
+                                new CustomDialog.CustomDialogListener() {
+                                    @Override public void dialogAction(MOSLCommon.Action action,
+                                        Object... data) {
+                                        if (action == MOSLCommon.Action.OK) {
+                                            finish();
+                                        } else if (action == MOSLCommon.Action.CANCEL) {
+                                            finish();
+                                        }
+                                    }
+                                });
+                            dialogMsg.show();
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                            @Override
-                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                if (action == MOSLCommon.Action.OK) {
-                                    finish();
-                                } else if (action == MOSLCommon.Action.CANCEL) {
-                                    finish();
-                                }
-                            }
-                        });
-                        dialogMsg.show();
-                    }
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
+                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
+                                new CustomDialog.CustomDialogListener() {
+                                    @Override public void dialogAction(MOSLCommon.Action action,
+                                        Object... data) {
+                                        if (action == MOSLCommon.Action.OK) {
+                                            finish();
+                                        } else if (action == MOSLCommon.Action.CANCEL) {
+                                            finish();
+                                        }
+                                    }
+                                });
+                            dialogMsg.show();
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this, SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                            @Override
-                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                if (action == MOSLCommon.Action.OK) {
-                                    finish();
-                                } else if (action == MOSLCommon.Action.CANCEL) {
-                                    finish();
-                                }
-                            }
-                        });
-                        dialogMsg.show();
-                    }
-                });
-
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
+                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
+                                new CustomDialog.CustomDialogListener() {
+                                    @Override public void dialogAction(MOSLCommon.Action action,
+                                        Object... data) {
+                                        if (action == MOSLCommon.Action.OK) {
+                                            finish();
+                                        } else if (action == MOSLCommon.Action.CANCEL) {
+                                            finish();
+                                        }
+                                    }
+                                });
+                            dialogMsg.show();
+                        }
+                    });
             } else {
                 MOSLCommon.alertDInternet(MOSLCommonActivity.this);
             }
@@ -2264,32 +1964,44 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
                 startActivity(registerIntent);
                 break;
             case MOSL_MENU_EXISTINGS_APPLICATIONS:
-                Intent postLoginIntent = new Intent(MOSLCommonActivity.this, PostLoginActivity.class);
+                Intent postLoginIntent =
+                    new Intent(MOSLCommonActivity.this, PostLoginActivity.class);
                 startActivity(postLoginIntent);
                 break;
             case CALL_CONVERT_EKYC:
-                ConvertEkycApi(hashMap.get(MOBILE).toString(), hashMap.get(EMAIL).toString(), hashMap.get(LEAD_OWNER).toString(), hashMap.get(SOURCENAME).toString(), hashMap.get(PROSPECT_SOURCENAME).toString(),
-                        hashMap.get(PROSPECT_SOURCEDETAIL).toString(), hashMap.get(INTRESTEDIN).toString());
+                ConvertEkycApi(hashMap.get(MOBILE).toString(), hashMap.get(EMAIL).toString(),
+                    hashMap.get(LEAD_OWNER).toString(), hashMap.get(SOURCENAME).toString(),
+                    hashMap.get(PROSPECT_SOURCENAME).toString(),
+                    hashMap.get(PROSPECT_SOURCEDETAIL).toString(),
+                    hashMap.get(INTRESTEDIN).toString());
                 break;
             case CALL_PROSPECT_DETAILS:
-                Intent intent = new Intent(MOSLCommonActivity.this, BranchResumeApplicationActivity.class);
+                Intent intent =
+                    new Intent(MOSLCommonActivity.this, BranchResumeApplicationActivity.class);
                 intent.putExtra("UserId", hashMap.get(USERID).toString());
                 startActivity(intent);
                 break;
         }
-
     }
 
     public void newEkyc(final String body) {
         try {
-            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME);
+            Intent launchIntent =
+                getPackageManager().getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME);
             launchIntent.putExtra(OUTPUT, CRMSecurityUtil.encrypt(body));
             startActivity(launchIntent);
         } catch (Exception e) {
             Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-            i.setData(Uri.parse("https://play.google.com/store/apps/details?id=" + NEWEKYC_PACKAGE_NAME));
+            i.setData(
+                Uri.parse("https://play.google.com/store/apps/details?id=" + NEWEKYC_PACKAGE_NAME));
             startActivity(i);
         }
+    }
+
+    private Constraints networkConstraints() {
+        Constraints constraints =
+            new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        return constraints;
     }
 
     public static String getInputBody(Map param) {
@@ -2310,21 +2022,697 @@ public class MOSLCommonActivity extends AppCompatActivity implements MOSLConstan
         return result;
     }
 
-    private Constraints networkConstraints() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build();
-        return constraints;
-    }
-
     private void startWorkManager() {
-        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 15, TimeUnit.MINUTES)
-                .setConstraints(networkConstraints()).build();
+        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 15,
+            TimeUnit.MINUTES).setConstraints(networkConstraints()).build();
         mWorkManager.enqueue(periodicWork);
 
         compressionWorkId = periodicWork.getId();
-
     }
 
+    private void getSuggestMe() {
 
+        if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {
+            showProgress();
+            Map inputMap = new HashMap<>();
+            inputMap.put(UCID, ZERO);
+            inputMap.put(LEAD_ID, ZERO);
+            String serviceMethod = "Prospect/SMT_RegisterProspectOnline/";
+            try {
+                CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
+                    getHeader(MOSLCommonActivity.this), inputMap, new JsonHttpResponseHandler() {
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            //after success code goes here
+                            try {
+
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    if (status.equalsIgnoreCase("true")) {
+                                        hideProgress();
+                                        JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                        String encryptedUrl = (objDetail.isNull(ENCRYPTED_URL)) ? ""
+                                            : objDetail.getString(ENCRYPTED_URL);
+                                        if (Build.VERSION.SDK_INT
+                                            >= Build.VERSION_CODES.JELLY_BEAN) {
+                                            String packag = CustomTabsHelper.getPackageNameToUse(
+                                                MOSLCommonActivity.this);
+                                            if (packag == null) {
+                                                Intent intent = new Intent(MOSLCommonActivity.this,
+                                                    WebActivity.class);
+                                                intent.putExtra(URL_PATH, encryptedUrl);
+                                                startActivity(intent);
+                                            } else {
+                                                openCustomTabsIntent(encryptedUrl);
+                                            }
+                                        } else {
+                                            openInBrowser(Uri.parse(encryptedUrl));
+                                        }
+                                    } else {
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        alertDialog(MOSLCommonActivity.this, 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
+                                    }
+                                } else {
+                                    hideProgress();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                hideProgress();
+                                alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                            }
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                            hideProgress();
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    alertDialog(MOSLCommonActivity.this, 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(MOSLCommonActivity.this,
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
+                                    }
+                                    MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                            }
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
+            } catch (Exception e) {
+                e.printStackTrace();
+                hideProgress();
+                alertDialog(MOSLCommonActivity.this, 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        } else {
+            hideProgress();
+            alertDialog(MOSLCommonActivity.this, 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }
+    }
+
+    public class AutoCompleteAdapter extends BaseAdapter implements Filterable {
+        Context context;
+        private LayoutInflater inflater;
+        private List<SearchResultModel> resultList = new ArrayList<>();
+
+        public AutoCompleteAdapter(Context context) {
+            this.inflater = LayoutInflater.from(context);
+            this.context = context;
+        }
+
+        public void clearAll() {
+            resultList.clear();
+            notifyDataSetChanged();
+        }
+
+        @Override public int getCount() {
+            return resultList.size();
+        }
+
+        @Override public SearchResultModel getItem(int index) {
+            return resultList.get(index);
+        }
+
+        @Override public long getItemId(int position) {
+            return position;
+        }
+
+        @Override public View getView(int position, View convertView, ViewGroup parent) {
+            final HolderView holderView;
+            final SearchResultModel searchResultModel = resultList.get(position);
+            if (convertView == null) {
+                inflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.crm_client_search_item, parent, false);
+                holderView = new HolderView(convertView);
+                convertView.setTag(holderView);
+            } else {
+                holderView = (HolderView) convertView.getTag();
+            }
+            String name = resultList.get(position).getName();
+            if (CRMAppUtil.isBlank(name)) {
+                holderView.llExpand.setVisibility(View.GONE);
+            } else {
+                holderView.llExpand.setVisibility(View.VISIBLE);
+            }
+
+            if (searchResultModel.isExpanded()) {
+                holderView.llDropDownMenuLayout.setVisibility(View.VISIBLE);
+                ((ListView) parent).smoothScrollToPosition(position);
+            } else {
+                holderView.llDropDownMenuLayout.setVisibility(View.GONE);
+            }
+
+            if (searchType.equalsIgnoreCase(SEARCH_TYPE_EMP)) {// employee
+
+                String empCode = resultList.get(position).getEmpCode();
+                String businessProfileName = resultList.get(position).getBusinessProfileName();
+                if (name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
+                    holderView.ivDropDownArrow.setVisibility(View.GONE);
+                    holderView.llExpand.setOnClickListener(null);
+                    holderView.tvClientID.setText("");
+                    holderView.tvUCID.setText("");
+                    holderView.tvClientName.setText("");
+                    holderView.tvError.setVisibility(View.VISIBLE);
+                } else {
+                    holderView.ivDropDownArrow.setVisibility(View.GONE);
+                    holderView.llExpand.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            DashboardFragment mDashBoard = new DashboardFragment();
+                            Bundle bund = new Bundle();
+                            bund.putString(PROFILE_ID, searchResultModel.getBusinessProfileId());
+                            bund.putString(PRODUCT_ID, searchResultModel.getProductId());
+                            bund.putString(EMPLOYEE_CODE, searchResultModel.getEmpCode());
+                            mDashBoard.setArguments(bund);
+                            setupFragment(mDashBoard);
+                            autoCompleteAdapter.clearAll();
+                            actionBar.clearSearchText();
+                        }
+                    });
+                    holderView.tvClientName.setText("Name :" + name);
+                    holderView.tvClientID.setText("Emp Id: " + empCode);
+                    holderView.tvUCID.setText("Business Profile: " + businessProfileName);
+
+                    holderView.tvError.setVisibility(View.GONE);
+                    searchFoundFlag = false;
+                }
+            } else {
+                String leadID = resultList.get(position).getLeadId();
+                String ucid = resultList.get(position).getUCID();
+
+                setAppointmentFragment = new SetAppointmentFragment();
+                leadViewMainFragment = new LeadViewMainFragment();
+                createMeetingFragment = new CreateMeetingFragment();
+                holderView.tvClientName.setText(name);
+                if (!resultList.get(position).getClientCode().equalsIgnoreCase("0")) {
+                    holderView.tvClientID.setText(
+                        "Lead Id/Client Code: " + resultList.get(position).getClientCode());
+                } else {
+                    holderView.tvClientID.setText("Lead Id/Client Code: " + leadID);
+                }
+                holderView.tvUCID.setText("UCID: " + ucid);
+                if (!resultList.get(position).getUCID().equalsIgnoreCase("0")) {
+                    ekycMenuType = SEARCH_TYPE_CLIENT;
+                } else {
+                    ekycMenuType = SEARCH_TYPE_LEAD;
+                }
+                if (ekycMenuType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
+                    Integer oaoUserId = resultList.get(position).getOaoUserId();
+                    if (oaoUserId != null && oaoUserId > 0) {
+                        holderView.rlOpenAccount.setVisibility(View.GONE);
+                        holderView.rlOAOForm.setVisibility(View.VISIBLE);
+                    } else {
+                        //show OAOForm if oaoUserId exists
+                        holderView.rlOpenAccount.setVisibility(View.VISIBLE);
+                        holderView.rlOAOForm.setVisibility(View.GONE);
+                    }
+                } else if (ekycMenuType.equalsIgnoreCase(SEARCH_TYPE_CLIENT)) {
+                    Integer oaoUserId = resultList.get(position).getOaoUserId();
+                    if (oaoUserId != null && oaoUserId > 0) {
+                        holderView.rlOpenAccount.setVisibility(View.GONE);
+                        holderView.rlOAOForm.setVisibility(View.VISIBLE);
+                    } else {//show OAOForm if oaoUserId exists
+                        holderView.rlOpenAccount.setVisibility(View.GONE);
+                        holderView.rlOAOForm.setVisibility(View.GONE);
+                    }
+                }
+
+                holderView.rlSetAppointment.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
+                        bundle.putString(UCID, searchResultModel.getUCID());
+                        setAppointmentFragment.setArguments(bundle);
+                        addFragment(R.id.activityFrameLayout, setAppointmentFragment, true, false);
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        autoCompleteAdapter.clearAll();
+                        actionBar.clearSearchText();
+                    }
+                });
+                holderView.rlCrateMeeting.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
+                        bundle.putString(UCID, searchResultModel.getUCID());
+                        createMeetingFragment.setArguments(bundle);
+                        addFragment(R.id.activityFrameLayout, createMeetingFragment, true, false);
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        autoCompleteAdapter.clearAll();
+                        actionBar.clearSearchText();
+                    }
+                });
+                holderView.rlViewDetail.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(LEAD_ID, searchResultModel.getLeadId());
+                        bundle.putString(MOBILE, searchResultModel.getMobileNo());
+                        bundle.putString(UCID, searchResultModel.getUCID());
+                        leadViewMainFragment.setArguments(bundle);
+                        addFragment(R.id.activityFrameLayout, leadViewMainFragment, true, false);
+                        hideKeyboard(view);
+                        autoCompleteAdapter.clearAll();
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        actionBar.clearSearchText();
+                    }
+                });
+                holderView.rlOpenAccount.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        //TODO call: convert to eKYC
+                        autoCompleteAdapter.clearAll();
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        actionBar.clearSearchText();
+                        Map inpuMap = new HashMap();
+                        inpuMap.put(MOBILE, searchResultModel.getMobileNo());
+                        inpuMap.put(EMAIL, searchResultModel.getGmail());
+                        inpuMap.put(LEAD_OWNER, searchResultModel.getLeadOwner());
+                        inpuMap.put(SOURCENAME, searchResultModel.getSourceName());
+                        inpuMap.put(PROSPECT_SOURCENAME, searchResultModel.getProspectSourceName());
+                        inpuMap.put(PROSPECT_SOURCEDETAIL,
+                            searchResultModel.getProspectSourceDetails());
+                        inpuMap.put(INTRESTEDIN, searchResultModel.getInterestedIn());
+                        if (AccountDetails.isNewEkyc()) {
+                            gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
+                        } else {
+                            ekycVersionCheck(CALL_CONVERT_EKYC, inpuMap);
+                        }
+                    }
+                });
+                holderView.rlOAOForm.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        //TODO call: resume eKYC application (BRANCH)
+                        autoCompleteAdapter.clearAll();
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        actionBar.clearSearchText();
+                        Map hashMap = new HashMap();
+                        hashMap.put(USERID, searchResultModel.getOaoUserId().toString());
+                        if (AccountDetails.isNewEkyc()) {
+                            HashMap<String, String> map = new HashMap();
+                            map.put(NEW_USERID, searchResultModel.getOaoUserId().toString());
+                            map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+                            map.put(COMMANDTYPE, "RESUME");
+                            map.put(APPLICATIONTYPE, "CRM");
+                            map.put(OSTYPE, "ANDROID");
+                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                            map.put(TOKENKEY, AccountDetails.getToken());
+                            newEkyc(getInputBody(map));
+                        } else {
+                            ekycVersionCheck(CALL_PROSPECT_DETAILS, hashMap);
+                        }
+                    }
+                });
+
+                holderView.llExpand.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        hideKeyboard(actionBar.getSearchBoxView());
+                        if (!searchResultModel.isExpanded()) {
+                            searchResultModel.setExpanded(true);
+                        } else {
+                            searchResultModel.setExpanded(false);
+                        }
+                        notifyDataSetChanged();
+                    }
+                });
+
+                if (CRMAppUtil.isBlank(leadID)) {
+                    holderView.ivDropDownArrow.setVisibility(View.GONE);
+                    holderView.llExpand.setOnClickListener(null);
+                    holderView.tvClientID.setText("");
+                    holderView.tvUCID.setText("");
+                    holderView.tvClientName.setText("");
+                } else {
+                    holderView.ivDropDownArrow.setVisibility(View.VISIBLE);
+                    holderView.tvError.setVisibility(View.GONE);
+                }
+                if (searchFoundFlag && name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
+                    holderView.llExpand.setVisibility(View.GONE);
+                    holderView.ivDropDownArrow.setVisibility(View.GONE);
+                    holderView.llExpand.setOnClickListener(null);
+                    holderView.tvClientID.setText("");
+                    holderView.tvUCID.setText("");
+                    holderView.tvClientName.setText("");
+                    holderView.tvError.setVisibility(View.GONE);
+                    searchFoundFlag = false;
+                } else if (name.equalsIgnoreCase(NO_RECORDS_FOUND)) {
+                    holderView.ivDropDownArrow.setVisibility(View.GONE);
+                    holderView.llExpand.setOnClickListener(null);
+                    holderView.tvClientID.setText("");
+                    holderView.tvUCID.setText("");
+                    holderView.tvClientName.setText("");
+                    holderView.tvError.setVisibility(View.VISIBLE);
+                } else {
+                    holderView.tvError.setVisibility(View.GONE);
+                    holderView.llExpand.setVisibility(View.VISIBLE);
+                }
+            }
+
+            return convertView;
+        }
+
+        @Override public Filter getFilter() {
+            return new Filter() {
+                @Override protected FilterResults performFiltering(CharSequence constraint) {
+                    final FilterResults filterResults = new FilterResults();
+                    try {
+                        if (constraint != null) {
+                            String SearchText;
+                            int strLen = constraint.toString().trim().length();
+                            if (strLen < 3) {
+                                return filterResults;
+                            }
+                            if (URLEncoder.encode(constraint.toString(), "utf-8")
+                                .equalsIgnoreCase("+")) {
+                                SearchText = "";
+                            } else {
+                                SearchText = constraint.toString().trim();
+                            }
+                            Map requestMap = new HashMap();
+                            requestMap.put("SearchText", SearchText);
+                            requestMap.put("SearchType", searchType);
+                            requestMap.put("ViewAll", "false");
+                            Map headerMap = new HashMap();
+                            headerMap.put("Content-Type", "application/json; charset=UTF-8");
+                            headerMap.put("token", AccountDetails.getToken());
+                            headerMap.put("AppId", "2");
+                            headerMap.put("userid", AccountDetails.getUserId());
+                            headerMap.put("clientinfo", "android");
+                            headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
+                            headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
+                            headerMap.put("macaddress",
+                                CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
+                            headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
+                            String serviceMethod = "Lead/SearchCommonMetaData";
+
+                            if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
+                                JSONObject response =
+                                    WebServiceDirectCall.getData(serviceMethod, headerMap,
+                                        requestMap);
+                                ArrayList<SearchResultModel> modelList = new ArrayList<>();
+                                if (response == null) {
+                                    return null;
+                                }
+                                String status = response.getString(STATUS);
+                                String leadOwner = "";
+                                Integer oaoUserId = 0;
+                                String sourceName = "";
+                                String prospectSourceName = "";
+                                String prospectSourceDetails = "";
+                                String interestedIn = "";
+                                String clientCode = "0";
+                                if (status.equalsIgnoreCase("true")) {
+                                    JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                    JSONArray jsonArray = objDetail.getJSONArray(DATA);
+                                    if (jsonArray != null && jsonArray.length() != 0) {
+
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                            String metadata =
+                                                jsonObject.getString(METADATA) == null ? ""
+                                                    : jsonObject.getString(METADATA);
+                                            JSONObject jsonObjMetatata =
+                                                new JSONObject(metadata.trim());
+
+                                            if (searchType.equalsIgnoreCase(SEARCH_TYPE_EMP)) {
+
+                                                String empCode =
+                                                    jsonObjMetatata.getString(EMPLOYEE_CODE) == null
+                                                        ? ""
+                                                        : jsonObjMetatata.getString(EMPLOYEE_CODE);
+                                                String name =
+                                                    jsonObjMetatata.getString(NAME) == null ? ""
+                                                        : jsonObjMetatata.getString(NAME);
+                                                String businessProfileName =
+                                                    jsonObjMetatata.getString(BUSINESS_PROFILE)
+                                                        == null ? "" : jsonObjMetatata.getString(
+                                                        BUSINESS_PROFILE);
+                                                String businessProfileId =
+                                                    jsonObjMetatata.getString(PROFILE_ID) == null
+                                                        ? ""
+                                                        : jsonObjMetatata.getString(PROFILE_ID);
+                                                String productId =
+                                                    jsonObjMetatata.getString(PRODUCT_ID) == null
+                                                        ? ""
+                                                        : jsonObjMetatata.getString(PRODUCT_ID);
+
+                                                if (jsonArray.length() == 1) {
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, empCode,
+                                                            name, businessProfileId,
+                                                            businessProfileName, productId));
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, "", "",
+                                                            "", "", ""));
+                                                } else {
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, empCode,
+                                                            name, businessProfileId,
+                                                            businessProfileName, productId));
+                                                    if (jsonArray.length() > 7
+                                                        && i == (jsonArray.length() - 1)) {
+                                                        modelList.add(
+                                                            new SearchResultModel(searchType, "",
+                                                                "", "", "", ""));
+                                                    }
+                                                }
+
+                                                // Assign the data to the FilterResults
+                                                filterResults.values = modelList;
+                                                filterResults.count = modelList.size();
+                                            } else {
+                                                String ucid =
+                                                    jsonObjMetatata.getString(UCID) == null
+                                                        || jsonObjMetatata.getString(UCID)
+                                                        .equals("") ? "0"
+                                                        : jsonObjMetatata.getString(UCID);
+                                                String leadID =
+                                                    jsonObjMetatata.getString(LEADID) == null ? ""
+                                                        : jsonObjMetatata.getString(LEADID);
+                                                String name =
+                                                    jsonObjMetatata.getString(NAME) == null ? ""
+                                                        : jsonObjMetatata.getString(NAME);
+                                                String mobileNo =
+                                                    jsonObjMetatata.getString(MOBILE) == null ? ""
+                                                        : jsonObjMetatata.getString(MOBILE);
+                                                String email =
+                                                    jsonObjMetatata.getString(EMAIL) == null ? ""
+                                                        : jsonObjMetatata.getString(EMAIL);
+                                                // String clientCode = jsonObjMetatata.getString(CLIENTCODE) == null ? "" : jsonObjMetatata.getString(CLIENTCODE);
+
+                                                if (jsonObjMetatata.has(CLIENTCODE)) {
+                                                    clientCode =
+                                                        jsonObjMetatata.getString(CLIENTCODE)
+                                                            == null || jsonObjMetatata.getString(
+                                                            CLIENTCODE).equals("") ? "0"
+                                                            : jsonObjMetatata.getString(CLIENTCODE);
+                                                }
+                                                if (jsonObjMetatata.has("SourceName")) {
+                                                    sourceName =
+                                                        jsonObjMetatata.getString("SourceName")
+                                                            == null ? ""
+                                                            : jsonObjMetatata.getString(
+                                                                "SourceName");
+                                                }
+                                                if (jsonObjMetatata.has("ProspectSourceName")) {
+                                                    prospectSourceName = jsonObjMetatata.getString(
+                                                        "ProspectSourceName") == null ? ""
+                                                        : jsonObjMetatata.getString(
+                                                            "ProspectSourceName");
+                                                }
+                                                if (jsonObjMetatata.has("ProspectSourceDetails")) {
+                                                    prospectSourceDetails =
+                                                        jsonObjMetatata.getString(
+                                                            "ProspectSourceDetails") == null ? ""
+                                                            : jsonObjMetatata.getString(
+                                                                "ProspectSourceDetails");
+                                                }
+                                                if (jsonObjMetatata.has("InterestedIn")) {
+                                                    interestedIn =
+                                                        jsonObjMetatata.getString("InterestedIn")
+                                                            == null ? ""
+                                                            : jsonObjMetatata.getString(
+                                                                "InterestedIn");
+                                                }
+                                                oaoUserId = jsonObjMetatata.has(OAOUSERID)
+                                                    && !jsonObjMetatata.isNull(OAOUSERID)
+                                                    ? jsonObjMetatata.getInt(OAOUSERID) : null;
+                                                if (searchType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
+                                                    leadOwner =
+                                                        jsonObjMetatata.getString(LEAD_OWNER)
+                                                            == null ? ""
+                                                            : jsonObjMetatata.getString(LEAD_OWNER);
+                                                }
+
+                                                if (jsonArray.length() == 1) {
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, leadID,
+                                                            name, mobileNo, email, ucid, leadOwner,
+                                                            oaoUserId, sourceName,
+                                                            prospectSourceName,
+                                                            prospectSourceDetails, interestedIn,
+                                                            clientCode));
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, "", "",
+                                                            "", "", "", "", null, "", "", "", "",
+                                                            ""));
+                                                } else {
+                                                    modelList.add(
+                                                        new SearchResultModel(searchType, leadID,
+                                                            name, mobileNo, email, ucid, leadOwner,
+                                                            oaoUserId, sourceName,
+                                                            prospectSourceName,
+                                                            prospectSourceDetails, interestedIn,
+                                                            clientCode));
+                                                    if (jsonArray.length() > 7
+                                                        && i == (jsonArray.length() - 1)) {
+                                                        modelList.add(
+                                                            new SearchResultModel(searchType, "",
+                                                                "", "", "", "", "", null, "", "",
+                                                                "", "", ""));
+                                                    }
+                                                }
+
+                                                // Assign the data to the FilterResults
+                                                filterResults.values = modelList;
+                                                filterResults.count = modelList.size();
+                                            }
+                                        }
+                                    } else {
+                                        modelList.add(
+                                            new SearchResultModel("", "", NO_RECORDS_FOUND, "", "",
+                                                ""));
+                                        filterResults.values = modelList;
+                                        filterResults.count = modelList.size();
+                                    }
+                                } else {
+                                    if (URLEncoder.encode(constraint.toString(), "utf-8")
+                                        .equalsIgnoreCase("+")) {
+                                        searchFoundFlag = true;
+                                        modelList.add(
+                                            new SearchResultModel("", "", NO_RECORDS_FOUND, "", "",
+                                                ""));
+                                        filterResults.values = modelList;
+                                        filterResults.count = modelList.size();
+                                    } else {
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
+                                    }
+                                }
+                            } else {
+                                MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    INTERNET_CONNECTION, "OK", true, null);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        resultList = (List<SearchResultModel>) results.values;
+                        notifyDataSetChanged();
+                    } else {
+                        notifyDataSetInvalidated();
+                    }
+                }
+            };
+        }
+
+        class HolderView {
+            TextView tvClientName, tvClientID, tvUCID, tvError;
+            ImageView ivDropDownArrow;
+            LinearLayout llDropDownMenuLayout, llExpand;
+            RelativeLayout rlSetAppointment, rlCrateMeeting, rlViewDetail, rlOpenAccount, rlOAOForm;
+
+            public HolderView(View parent) {
+                tvClientName = (TextView) parent.findViewById(R.id.tvClientname);
+                tvClientID = (TextView) parent.findViewById(R.id.tvClientID);
+                tvUCID = (TextView) parent.findViewById(R.id.tvUCID);
+                ivDropDownArrow = (ImageView) parent.findViewById(R.id.ivDropDownArrow);
+                llDropDownMenuLayout =
+                    (LinearLayout) parent.findViewById(R.id.llDropDownMenuLayout);
+                llExpand = (LinearLayout) parent.findViewById(R.id.llExpand);
+                rlSetAppointment = (RelativeLayout) parent.findViewById(R.id.rlSetAppointment);
+                rlCrateMeeting = (RelativeLayout) parent.findViewById(R.id.rlCrateMeeting);
+                rlViewDetail = (RelativeLayout) parent.findViewById(R.id.rlViewDetail);
+                rlOpenAccount = (RelativeLayout) parent.findViewById(R.id.rlOpenAccount);
+                rlOAOForm = (RelativeLayout) parent.findViewById(R.id.rlOAOForm);
+                tvError = (TextView) parent.findViewById(R.id.tvError);
+            }
+        }
+    }
 }

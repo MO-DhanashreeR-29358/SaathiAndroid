@@ -34,8 +34,9 @@ public interface MOSLConstants extends LabelConfig {
     int MOSL_MENU_PENDING_APPROVALS = 4;
     int MOSL_MENU_KNOWLEDGE_CENTRE = 5;
     int MOSL_MENU_BIRTHDAY_ANIVERSARY = 6;
-    int MOSL_MENU_QUERY = 7;
-    int MOSL_MENU_LOGOUT = 8;
+    int MOSL_MENU_SUGGEST_ME = 7;
+    int MOSL_MENU_QUERY = 8;
+    int MOSL_MENU_LOGOUT = 9;
     int LOGOUT_CODE = 4;
     int CALL_PROSPECT_DETAILS = 2;
     int CALL_CONVERT_EKYC = 3;
@@ -50,13 +51,10 @@ public interface MOSLConstants extends LabelConfig {
     int NAV_TO_LEAD_VIEW_MAIN = 16;
     int NAV_TO_LEAD_ACTIVITIES_DETAIL = 17;
     int NAV_TO_LEAD_DOCUMENT = 18;
-    int SECOND_CLICK_DASHBORD_MEETING = 19;
-    int NAV_TO_FRANCHIES_LEAD_DOCUMENT = 20;
+
     int NAV_TO_LEAD_CREATION = 21;
     int NAV_TO_ADVISORY_DASHBOARD = 22;
-    int NAV_TO_HIERARCHY_DASHBOARD = 23;
-    int NAV_TO_TEAM_DASHBOARD = 24;
-    int NAV_TO_FRANCHIES_LEAD_CREATION = 25;
+
     int NAV_TO_SECOND_LEVEL_REPORT = 26;
     int NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT = 27;
 
@@ -235,6 +233,7 @@ public interface MOSLConstants extends LabelConfig {
 
     String TRADING_CODE = "Trading Code";
     String UCID = "UCID";
+    String ZERO = "0";
     String AMC_NAME = "AMC Name";
     String SCHEME_NAME = "Scheme Name";
     String FOLIO_NUMBER = "Folio Number";
@@ -426,6 +425,7 @@ public interface MOSLConstants extends LabelConfig {
     String PENDING_DAYS = "PendingDays";
     String CONTACT = "contact";
     String CLIENTCODE = "ClientCode";
+    String ENCRYPTED_URL = "EncryptedURL";
     String LEADPRODUCTMAPPING = "leadProductMapping";
     //Size if lru chache
     int CHACHE_SIZE = 10;

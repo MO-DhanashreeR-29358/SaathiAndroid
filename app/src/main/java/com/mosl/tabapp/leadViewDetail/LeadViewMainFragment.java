@@ -1,11 +1,19 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsCallback;
+import android.support.customtabs.CustomTabsClient;
+import android.support.customtabs.CustomTabsIntent;
+import android.support.customtabs.CustomTabsServiceConnection;
+import android.support.customtabs.CustomTabsSession;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
@@ -14,12 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
 import com.mosl.tabapp.R;
+import com.mosl.tabapp.collateral.CustomTabsHelper;
+import com.mosl.tabapp.collateral.WebActivity;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.LockedViewPager;
@@ -48,7 +56,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
     private View leadViewMainView;
     private LockedViewPager vpLeadView;
     private TabLayout indicatorLeadView;
-    private LinearLayout mTabsLinearLayoutTarget;
     private LeadViewDetailFragment leadViewDetailFragment;
     private LeadViewActivitiesFragment leadViewActivitieFragment;
     private LeadProfilingFragment leadViewProfilingFragment;
@@ -56,32 +63,33 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
     private LeadViewInteractionFragment leadViewInteractionFragment;
     private ArrayList<Fragment> pageListLeadView = new ArrayList<>();
     private ImageView ivLead, ivLeadViewArrow;
-    private TextView tvClientCode, tvLeadId, tvBranchCode, tvCurrentStage, tvCurrentStageSince, tvName, textView;
+    private TextView tvClientCode, tvLeadId, tvBranchCode, tvCurrentStage, tvCurrentStageSince,
+        tvName;
     private String leadId;
     private String mobileNo, sourceName, prospectSourceName, prospectSourceDetail, intrestedIn;
     private String email;
     private String mUCID = "0";
     private Integer oaoUserId = 0;
-    private String LeadOwner;
+    private String LeadOwner = "";
     private static final String SEARCH_TYPE_LEAD = "Lead";
     private static final String SEARCH_TYPE_CLIENT = "Client";
-    private static final String SEARCH_TYPE_EMP = "Employee";
     private String searchType = SEARCH_TYPE_LEAD;
+    private CustomTabsClient mClient;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         leadViewMainView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_leadview_main);
 
         try {
             leadId = this.getArguments().getString(LEAD_ID);
             if (this.getArguments().containsKey(UCID)) {
-                mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0" : this.getArguments().getString(UCID, "0");
+                mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0"
+                    : this.getArguments().getString(UCID, "0");
             }
             if (!mUCID.equalsIgnoreCase("0")) {
                 getClientDetail(mUCID);
                 setProfileImage(mUCID);
-
             } else {
                 getLeadByIdFromServer(leadId);
             }
@@ -90,11 +98,29 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try {
+            CustomTabsServiceConnection mConnection = new CustomTabsServiceConnection() {
+                @Override public void onCustomTabsServiceConnected(ComponentName componentName,
+                    CustomTabsClient customTabsClient) {
+                    mClient = customTabsClient;
+                }
+
+                @Override public void onServiceDisconnected(ComponentName componentName) {
+                    mClient = null;
+                }
+            };
+
+            String packag = CustomTabsHelper.getPackageNameToUse(getContext());
+            CustomTabsClient.bindCustomTabsService(getContext(), packag, mConnection);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return leadViewMainView;
     }
 
     private void setUpView(View leadViewDetailView) {
-
 
         vpLeadView = (LockedViewPager) leadViewDetailView.findViewById(R.id.vpLeadView);
         vpLeadView.setPagingEnabled(false);
@@ -120,10 +146,15 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             headingClient[1] = ACTIVITIES;
             headingClient[2] = MAPPING_HISTORY;
             headingClient[3] = MAPPING_INTERACTION;
-            leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS, this.getArguments().getString(LEAD_ID), mUCID);
-            leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, this.getArguments().getString(LEAD_ID), mUCID);
-            leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(2, MAPPING_HISTORY, this.getArguments().getString(LEAD_ID), mUCID);
-            leadViewInteractionFragment = LeadViewInteractionFragment.newInstance(3, MAPPING_INTERACTION, this.getArguments().getString(LEAD_ID), mUCID);
+            leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
+                this.getArguments().getString(LEAD_ID), mUCID);
+            leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
+                this.getArguments().getString(LEAD_ID), mUCID);
+            leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(2, MAPPING_HISTORY,
+                this.getArguments().getString(LEAD_ID), mUCID);
+            leadViewInteractionFragment =
+                LeadViewInteractionFragment.newInstance(3, MAPPING_INTERACTION,
+                    this.getArguments().getString(LEAD_ID), mUCID);
             leadViewDetailFragment.setViewPager(vpLeadView);
             leadViewActivitieFragment.setViewPager(vpLeadView);
             leadViewHistoryFragment.setViewPager(vpLeadView);
@@ -140,10 +171,13 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             headingClient[3] = MAPPING_HISTORY;
             headingClient[4] = MAPPING_INTERACTION;
             leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS, leadId, mUCID);
-            leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
+            leadViewActivitieFragment =
+                LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
             leadViewProfilingFragment = LeadProfilingFragment.newInstance(2, PROFILING, leadId);
-            leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(3, MAPPING_HISTORY, leadId, mUCID);
-            leadViewInteractionFragment = LeadViewInteractionFragment.newInstance(4, MAPPING_INTERACTION, leadId, mUCID);
+            leadViewHistoryFragment =
+                LeadViewHistoryFragment.newInstance(3, MAPPING_HISTORY, leadId, mUCID);
+            leadViewInteractionFragment =
+                LeadViewInteractionFragment.newInstance(4, MAPPING_INTERACTION, leadId, mUCID);
             leadViewDetailFragment.setViewPager(vpLeadView);
             leadViewActivitieFragment.setViewPager(vpLeadView);
             leadViewProfilingFragment.setViewPager(vpLeadView);
@@ -157,13 +191,10 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             indicatorLeadView.setTabMode(TabLayout.MODE_SCROLLABLE);
         }
 
-
-        final LeadViewAdapter adapterClient = new LeadViewAdapter(getChildFragmentManager(), pageListLeadView, headingClient);
+        final LeadViewAdapter adapterClient =
+            new LeadViewAdapter(getChildFragmentManager(), pageListLeadView, headingClient);
         vpLeadView.setAdapter(adapterClient);
         indicatorLeadView.setupWithViewPager(vpLeadView);
-
-        mTabsLinearLayoutTarget = ((LinearLayout) indicatorLeadView.getChildAt(0));
-
 
         //Go to section
         NotificationData section = this.getArguments().getParcelable(NOTIFICATION_DATA);
@@ -177,13 +208,9 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 vpLeadView.setCurrentItem(0);
             }
         }
-
-
     }
 
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
+    @Override public void setUserVisibleHint(boolean isVisibleToUser) {
         try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && leadViewMainView != null) {
@@ -191,134 +218,148 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             }
         } catch (Exception e) {
             e.printStackTrace();
-        /*    Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-            Crashlytics.logException(e);*/
         }
     }
 
     private void setProfileImage(String ucid) {
 
-
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
-            Map inputMap = new HashMap<>();
             String serviceMethod = "Client/GetClientImage";
             String tmpReq = String.format(ID_OBJECT, ucid);
-            //  String serviceMethod = "Client/GetClientImage/" + ucid;
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
+                    new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            //after success code goes here
 
-                        try {
+                            try {
 
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    String objDetail = response.getString(RESPONSE);
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    if (status.equalsIgnoreCase("true")) {
+                                        String objDetail = response.getString(RESPONSE);
 
-                                    byte[] byt = Base64.decode(objDetail, Base64.DEFAULT);
-                                    if (byt != null) {
-                                        CRMAppUtil.setImage(byt, ivLead, getMainActivity());
-
+                                        byte[] byt = Base64.decode(objDetail, Base64.DEFAULT);
+                                        if (byt != null) {
+                                            CRMAppUtil.setImage(byt, ivLead, getMainActivity());
+                                        } else {
+                                            CRMAppUtil.setImage(new byte[0], ivLead,
+                                                getMainActivity());
+                                        }
                                     } else {
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                         CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
                                     }
-
-
                                 } else {
                                     hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                     CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
                                 }
-
-                            } else {
+                            } catch (Exception e) {
+                                CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
+                                e.printStackTrace();
                                 hideProgress();
-                                CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
+                                alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
-                            e.printStackTrace();
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
                             hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(getMainActivity(),
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    getActivity().finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
                                     }
-                                });
-                                return;
-                            } else {
-                                CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         } else {
             hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
         }
-
     }
-
 
     private void getClientDetail(final String ucid) {
 
@@ -326,269 +367,372 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             showProgress();
             Map inputMap = new HashMap<>();
             inputMap.put(UCID, ucid);
-//            inputMap.put("Id", this.getArguments().getString(LEAD_ID));
+            //            inputMap.put("Id", this.getArguments().getString(LEAD_ID));
 
             String serviceMethod = "Client/GetClientViewByCommand/";
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                    new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            //after success code goes here
 
-                        try {
+                            try {
 
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    if (status.equalsIgnoreCase("true")) {
+                                        JSONObject objDetail = response.getJSONObject(RESPONSE);
 
-                                    new ClientDetail(objDetail);
-                                    tvName.setText(ClientDetail.getName());
-                                    setTitle(ClientDetail.getName());
-                                    tvLeadId.setText(ClientDetail.getLeadId());
-                                    tvCurrentStage.setText(ClientDetail.getCurrentStage());
-                                    if (!ClientDetail.getCurrentStageSince().isEmpty()) {
-                                        tvCurrentStageSince.setText(ClientDetail.getCurrentStageSince() + " Days");
+                                        new ClientDetail(objDetail);
+                                        tvName.setText(ClientDetail.getName());
+                                        setTitle(ClientDetail.getName());
+                                        tvLeadId.setText(ClientDetail.getLeadId());
+                                        tvCurrentStage.setText(ClientDetail.getCurrentStage());
+                                        if (!ClientDetail.getCurrentStageSince().isEmpty()) {
+                                            tvCurrentStageSince.setText(
+                                                ClientDetail.getCurrentStageSince() + " Days");
+                                        }
+                                        tvClientCode.setText(ClientDetail.getClientCode());
+                                        tvBranchCode.setText(ClientDetail.getBranchCode());
+                                        mobileNo = ClientDetail.getMobile();
+                                        oaoUserId = ClientDetail.getOaoUserId();
+                                        searchType = SEARCH_TYPE_CLIENT;
+                                    } else {
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                     }
-                                    tvClientCode.setText(ClientDetail.getClientCode());
-                                    tvBranchCode.setText(ClientDetail.getBranchCode());
-                                    mobileNo = ClientDetail.getMobile();
-                                    oaoUserId = ClientDetail.getOaoUserId();
-                                    searchType = SEARCH_TYPE_CLIENT;
                                 } else {
                                     hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                 }
-
-                            } else {
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 hideProgress();
+                                alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
                             hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(getMainActivity(),
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    getActivity().finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         } else {
             hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
-
     private void getLeadByIdFromServer(CharSequence strLeadId) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-
-            Map inputMap = new HashMap<>();
-            // String serviceMethod = "Lead/GetLeadView/" + strLeadId;
-            String serviceMethod = "Lead/GetLeadView";//" + mLeadId;
+            String serviceMethod = "Lead/GetLeadView";
             String tmpReq = String.format(ID_OBJECT, strLeadId);
             showProgress();
 
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
+                    new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        //    arrInterested = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-//                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject Response_obj = response.getJSONObject(RESPONSE);
-                                    String leadID = (Response_obj.isNull(LEADID) || Response_obj.getString(LEADID).equals("")) ? "" : Response_obj.getString(LEADID);
-                                    String branchcode = (Response_obj.isNull(BRANCHCODE) || Response_obj.getString(BRANCHCODE).equals("")) ? "" : Response_obj.getString(BRANCHCODE);
-                                    JSONObject contact_obj = Response_obj.getJSONObject(CONTACT);
-                                    LeadOwner = (Response_obj.isNull(LEAD_OWNER) || Response_obj.getString(LEAD_OWNER).equals("")) ? "" : Response_obj.getString(LEAD_OWNER);
-                                    sourceName = (Response_obj.isNull("SourceName") || Response_obj.getString("SourceName").equals("")) ? "" : Response_obj.getString("SourceName");
-                                    prospectSourceName = (Response_obj.isNull("ProspectSource") || Response_obj.getString("ProspectSource").equals("")) ? "" : Response_obj.getString("ProspectSource");
-                                    prospectSourceDetail = (Response_obj.isNull("LeadSourceDetailsID") || Response_obj.getString("LeadSourceDetailsID").equals("")) ? "" : Response_obj.getString("LeadSourceDetailsID");
-                                    oaoUserId = Response_obj.has("OAOUserid") && !Response_obj.isNull("OAOUserid") ? Response_obj.getInt("OAOUserid") : 0;
-                                    String Name = (contact_obj.isNull(NAME) || contact_obj.getString(NAME).equals("")) ? "" : contact_obj.getString(NAME);
-                                    setTitle(Name);
-                                    JSONArray leadProductMapping = Response_obj.getJSONArray(LEADPRODUCTMAPPING);
-                                    if (leadProductMapping.length() != 0) {
-                                        for (int leadProductMapping_i = 0; leadProductMapping_i < leadProductMapping.length(); leadProductMapping_i++) {
-                                            JSONObject leadProductMapping_obj = leadProductMapping.getJSONObject(leadProductMapping_i);
-                                            String clientCode = (leadProductMapping_obj.isNull(CLIENTCODE) || leadProductMapping_obj.getString(CLIENTCODE).equals("")) ? "" : leadProductMapping_obj.getString(CLIENTCODE);
-                                            String StageName = (leadProductMapping_obj.isNull(STAGENAME) || leadProductMapping_obj.getString(STAGENAME).equals("")) ? "" : leadProductMapping_obj.getString(STAGENAME);
-                                            String isDefault = (leadProductMapping_obj.isNull(IS_DEFAULT) || leadProductMapping_obj.getString(IS_DEFAULT).equals("")) ? "" : leadProductMapping_obj.getString(IS_DEFAULT);
-                                            String pendingDays = (leadProductMapping_obj.isNull(PENDING_DAYS) || leadProductMapping_obj.getString(PENDING_DAYS).equals("")) ? "" : leadProductMapping_obj.getString(PENDING_DAYS);
-                                            intrestedIn = (leadProductMapping_obj.isNull("InterestedIn") || leadProductMapping_obj.getString("InterestedIn").equals("")) ? "" : leadProductMapping_obj.getString("InterestedIn");
-                                            if (isDefault.equalsIgnoreCase("true")) {
-                                                tvClientCode.setText(clientCode);
-                                                tvCurrentStage.setText(StageName);
-                                                tvCurrentStageSince.setText(pendingDays + " Days");
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    //                                hideProgress();
+                                    if (status.equalsIgnoreCase("true")) {
+                                        JSONObject Response_obj = response.getJSONObject(RESPONSE);
+                                        String leadID =
+                                            (Response_obj.isNull(LEADID) || Response_obj.getString(
+                                                LEADID).equals("")) ? ""
+                                                : Response_obj.getString(LEADID);
+                                        String branchcode = (Response_obj.isNull(BRANCHCODE)
+                                            || Response_obj.getString(BRANCHCODE).equals("")) ? ""
+                                            : Response_obj.getString(BRANCHCODE);
+                                        JSONObject contact_obj =
+                                            Response_obj.getJSONObject(CONTACT);
+                                        LeadOwner = (Response_obj.isNull(LEAD_OWNER)
+                                            || Response_obj.getString(LEAD_OWNER).equals("")) ? ""
+                                            : Response_obj.getString(LEAD_OWNER);
+                                        sourceName = (Response_obj.isNull("SourceName")
+                                            || Response_obj.getString("SourceName").equals("")) ? ""
+                                            : Response_obj.getString("SourceName");
+                                        prospectSourceName = (Response_obj.isNull("ProspectSource")
+                                            || Response_obj.getString("ProspectSource").equals(""))
+                                            ? "" : Response_obj.getString("ProspectSource");
+                                        prospectSourceDetail =
+                                            (Response_obj.isNull("LeadSourceDetailsID")
+                                                || Response_obj.getString("LeadSourceDetailsID")
+                                                .equals("")) ? ""
+                                                : Response_obj.getString("LeadSourceDetailsID");
+                                        oaoUserId =
+                                            Response_obj.has("OAOUserid") && !Response_obj.isNull(
+                                                "OAOUserid") ? Response_obj.getInt("OAOUserid") : 0;
+                                        String Name =
+                                            (contact_obj.isNull(NAME) || contact_obj.getString(NAME)
+                                                .equals("")) ? "" : contact_obj.getString(NAME);
+                                        setTitle(Name);
+                                        JSONArray leadProductMapping =
+                                            Response_obj.getJSONArray(LEADPRODUCTMAPPING);
+                                        if (leadProductMapping.length() != 0) {
+                                            for (int leadProductMapping_i = 0;
+                                                leadProductMapping_i < leadProductMapping.length();
+                                                leadProductMapping_i++) {
+                                                JSONObject leadProductMapping_obj =
+                                                    leadProductMapping.getJSONObject(
+                                                        leadProductMapping_i);
+                                                String clientCode =
+                                                    (leadProductMapping_obj.isNull(CLIENTCODE)
+                                                        || leadProductMapping_obj.getString(
+                                                        CLIENTCODE).equals("")) ? ""
+                                                        : leadProductMapping_obj.getString(
+                                                            CLIENTCODE);
+                                                String StageName =
+                                                    (leadProductMapping_obj.isNull(STAGENAME)
+                                                        || leadProductMapping_obj.getString(
+                                                        STAGENAME).equals("")) ? ""
+                                                        : leadProductMapping_obj.getString(
+                                                            STAGENAME);
+                                                String isDefault =
+                                                    (leadProductMapping_obj.isNull(IS_DEFAULT)
+                                                        || leadProductMapping_obj.getString(
+                                                        IS_DEFAULT).equals("")) ? ""
+                                                        : leadProductMapping_obj.getString(
+                                                            IS_DEFAULT);
+                                                String pendingDays =
+                                                    (leadProductMapping_obj.isNull(PENDING_DAYS)
+                                                        || leadProductMapping_obj.getString(
+                                                        PENDING_DAYS).equals("")) ? ""
+                                                        : leadProductMapping_obj.getString(
+                                                            PENDING_DAYS);
+                                                intrestedIn =
+                                                    (leadProductMapping_obj.isNull("InterestedIn")
+                                                        || leadProductMapping_obj.getString(
+                                                        "InterestedIn").equals("")) ? ""
+                                                        : leadProductMapping_obj.getString(
+                                                            "InterestedIn");
+                                                if (isDefault.equalsIgnoreCase("true")) {
+                                                    tvClientCode.setText(clientCode);
+                                                    tvCurrentStage.setText(StageName);
+                                                    tvCurrentStageSince.setText(
+                                                        pendingDays + " Days");
+                                                }
                                             }
-
                                         }
-                                    }
-                                    if (Response_obj.has("contact")) {
-                                        JSONObject contacObj = Response_obj.getJSONObject("contact");
+                                        if (Response_obj.has("contact")) {
+                                            JSONObject contacObj =
+                                                Response_obj.getJSONObject("contact");
 
-                                        mUCID = (contacObj.isNull(UCID) || contacObj.getString(UCID).equals("")) ? "0" : contacObj.getString(UCID);
-                                        mobileNo = (contacObj.isNull(MOBILE) || contacObj.getString(MOBILE).equals("")) ? "" : contacObj.getString(MOBILE);
-                                        email = (contacObj.isNull("EmailId") || contacObj.getString("EmailId").equals("")) ? "" : contacObj.getString("EmailId");
-                                    }
-                                    if (!mUCID.equalsIgnoreCase("0")) {
-                                        searchType = SEARCH_TYPE_CLIENT;
+                                            mUCID =
+                                                (contacObj.isNull(UCID) || contacObj.getString(UCID)
+                                                    .equals("")) ? "0" : contacObj.getString(UCID);
+                                            mobileNo =
+                                                (contacObj.isNull(MOBILE) || contacObj.getString(
+                                                    MOBILE).equals("")) ? ""
+                                                    : contacObj.getString(MOBILE);
+                                            email =
+                                                (contacObj.isNull("EmailId") || contacObj.getString(
+                                                    "EmailId").equals("")) ? ""
+                                                    : contacObj.getString("EmailId");
+                                        }
+                                        if (!mUCID.equalsIgnoreCase("0")) {
+                                            searchType = SEARCH_TYPE_CLIENT;
+                                        } else {
+                                            searchType = SEARCH_TYPE_LEAD;
+                                        }
+                                        // tvName.setText(Name);
+                                        tvLeadId.setText(leadID);
+                                        tvBranchCode.setText(branchcode);
                                     } else {
-                                        searchType = SEARCH_TYPE_LEAD;
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        MSFDialog.alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                     }
-                                    // tvName.setText(Name);
-                                    tvLeadId.setText(leadID);
-                                    tvBranchCode.setText(branchcode);
                                 } else {
                                     hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                 }
-                            } else {
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 hideProgress();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        hideProgress();
-                    }
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            //                        hideProgress();
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(getMainActivity(),
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    getActivity().finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
                 // Log.e(TAG, e.toString());
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
@@ -598,16 +742,18 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_leadview);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
 
-        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
-        ImageView ivCreateMeeting = (ImageView) dialog.findViewById(R.id.ivCreateMeeting);
-        ImageView ivSetAppointment = (ImageView) dialog.findViewById(R.id.ivSetAppointment);
-        ImageView ivCall = (ImageView) dialog.findViewById(R.id.ivCall);
-        ImageView ivSms = (ImageView) dialog.findViewById(R.id.ivSms);
-        ImageView ivOpenAccount = (ImageView) dialog.findViewById(R.id.ivOpenAccount);
-        ImageView ivOaoForm = (ImageView) dialog.findViewById(R.id.ivOaoForm);
+        ImageView ivClose = dialog.findViewById(R.id.ivClose);
+        ImageView ivCreateMeeting = dialog.findViewById(R.id.ivCreateMeeting);
+        ImageView ivSetAppointment = dialog.findViewById(R.id.ivSetAppointment);
+        ImageView ivCall = dialog.findViewById(R.id.ivCall);
+        ImageView ivSms = dialog.findViewById(R.id.ivSms);
+        ImageView ivOpenAccount = dialog.findViewById(R.id.ivOpenAccount);
+        ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
+        ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
         if (searchType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
             if (oaoUserId != null && oaoUserId > 0) {
                 ivOpenAccount.setVisibility(View.GONE);
@@ -627,12 +773,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         }
 
         ivOaoForm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-              /*  Intent intent = new Intent(getMainActivity(), BranchResumeApplicationActivity.class);
-                intent.putExtra("UserId", oaoUserId.toString());
-                startActivity(intent);*/
+            @Override public void onClick(View view) {
                 dialog.dismiss();
                 Map inpuMap = new HashMap();
                 inpuMap.put(USERID, oaoUserId.toString());
@@ -649,12 +790,10 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 } else {
                     gotoEkycVersionCheck(CALL_PROSPECT_DETAILS, inpuMap);
                 }
-
             }
         });
         ivOpenAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 dialog.dismiss();
                 Map inpuMap = new HashMap();
                 inpuMap.put(MOBILE, mobileNo);
@@ -669,12 +808,10 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 } else {
                     gotoEkycVersionCheck(CALL_CONVERT_EKYC, inpuMap);
                 }
-
             }
         });
         ivCreateMeeting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
                 bundle.putString(UCID, mUCID);
@@ -683,8 +820,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             }
         });
         ivSetAppointment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
                 bundle.putString(UCID, mUCID);
@@ -693,29 +829,30 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             }
         });
         ivCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
                 if (CRMAppUtil.isBlank(mobileNo)) {
-                    Toast.makeText(getMainActivity(), "Contact number not available", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getMainActivity(), "Contact number not available",
+                        Toast.LENGTH_LONG).show();
                 } else {
-                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes", "No", true, new MSFDialog.DialogListener() {
-                        @Override
-                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                            if (action == MSFDialog.Action.OK) {
-                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                callIntent.setData(Uri.parse("tel:" + mobileNo));
-                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                getMainActivity().startActivity(callIntent);
+                    MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), "Do you want to call?",
+                        "Yes", "No", true, new MSFDialog.DialogListener() {
+                            @Override
+                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                                if (action == MSFDialog.Action.OK) {
+                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                    callIntent.setData(Uri.parse("tel:" + mobileNo));
+                                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    getMainActivity().startActivity(callIntent);
+                                }
                             }
-                        }
-                    });
+                        });
                 }
                 dialog.dismiss();
             }
         });
         ivSms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
 
                 if (!CRMAppUtil.isBlank(mobileNo)) {
                     Intent smsIntent = new Intent("android.intent.action.VIEW");
@@ -723,24 +860,28 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                     smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getMainActivity().startActivity(smsIntent);
                 } else {
-                    Toast.makeText(getMainActivity(), "Contact number not available", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getMainActivity(), "Contact number not available",
+                        Toast.LENGTH_LONG).show();
                 }
                 dialog.dismiss();
             }
         });
 
         ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            @Override public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        ivSuggestMe.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                getSuggestMe();
                 dialog.dismiss();
             }
         });
         dialog.show();
-
     }
 
-    @Override
-    public void onClick(View view) {
+    @Override public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ivLeadViewArrow:
                 leadViewDialog();
@@ -749,283 +890,179 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
     }
 
     private void setTitle(String name) {
-        //   setAppTitle(getClass().toString(), name.toUpperCase());
         tvName.setText(name.toUpperCase());
         hideAppTitle();
     }
 
-    private void getClientImageFromServer(CharSequence strLeadId) {
+    private void getSuggestMe() {
+
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            //TODO call progress bar
-//            customProgress.setVisibility(View.VISIBLE);
-            //   Map inputMap = new HashMap<>();
-
-            //  String serviceMethod = "Client/GetClientImage/" + strLeadId;
-            String serviceMethod = "Client/GetClientImage";
-            String tmpReq = String.format(ID_OBJECT, strLeadId);
             showProgress();
+            Map inputMap = new HashMap<>();
+            inputMap.put(UCID, mUCID);
+            inputMap.put(LEAD_ID, this.getArguments().getString(LEAD_ID));
 
+            String serviceMethod = "Prospect/SMT_RegisterProspectOnline/";
             try {
+                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+                    new JsonHttpResponseHandler() {
 
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            //after success code goes here
+                            try {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        //    arrInterested = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-//                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject Response_obj = response.getJSONObject(RESPONSE);
-                                    String leadID = (Response_obj.isNull(LEADID) || Response_obj.getString(LEADID).equals("")) ? "" : Response_obj.getString(LEADID);
-                                    String branchcode = (Response_obj.isNull(BRANCHCODE) || Response_obj.getString(BRANCHCODE).equals("")) ? "" : Response_obj.getString(BRANCHCODE);
-                                    JSONObject contact_obj = Response_obj.getJSONObject(CONTACT);
-                                    String Name = (contact_obj.isNull(NAME) || contact_obj.getString(NAME).equals("")) ? "" : contact_obj.getString(NAME);
-                                    setTitle(Name);
-                                    JSONArray leadProductMapping = Response_obj.getJSONArray(LEADPRODUCTMAPPING);
-                                    if (leadProductMapping.length() != 0) {
-                                        for (int leadProductMapping_i = 0; leadProductMapping_i < leadProductMapping.length(); leadProductMapping_i++) {
-                                            JSONObject leadProductMapping_obj = leadProductMapping.getJSONObject(leadProductMapping_i);
-                                            String clientCode = (leadProductMapping_obj.isNull(CLIENTCODE) || leadProductMapping_obj.getString(CLIENTCODE).equals("")) ? "" : leadProductMapping_obj.getString(CLIENTCODE);
-                                            String StageName = (leadProductMapping_obj.isNull(STAGENAME) || leadProductMapping_obj.getString(STAGENAME).equals("")) ? "" : leadProductMapping_obj.getString(STAGENAME);
-                                            String isDefault = (leadProductMapping_obj.isNull(IS_DEFAULT) || leadProductMapping_obj.getString(IS_DEFAULT).equals("")) ? "" : leadProductMapping_obj.getString(IS_DEFAULT);
-                                            String pendingDays = (leadProductMapping_obj.isNull(PENDING_DAYS) || leadProductMapping_obj.getString(PENDING_DAYS).equals("")) ? "" : leadProductMapping_obj.getString(PENDING_DAYS);
-                                            if (isDefault.equalsIgnoreCase("true")) {
-                                                tvClientCode.setText(clientCode);
-                                                tvCurrentStage.setText(StageName);
-                                                tvCurrentStageSince.setText(pendingDays + " Days");
+                                if (statusCode == 200) {
+                                    String status = response.getString(STATUS);
+                                    if (status.equalsIgnoreCase("true")) {
+                                        hideProgress();
+                                        JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                        String encryptedUrl = (objDetail.isNull(ENCRYPTED_URL)) ? ""
+                                            : objDetail.getString(ENCRYPTED_URL);
+                                        if (Build.VERSION.SDK_INT
+                                            >= Build.VERSION_CODES.JELLY_BEAN) {
+                                            String packag =
+                                                CustomTabsHelper.getPackageNameToUse(getContext());
+                                            if (packag == null) {
+                                                Intent intent =
+                                                    new Intent(getContext(), WebActivity.class);
+                                                intent.putExtra(URL_PATH, encryptedUrl);
+                                                startActivity(intent);
+                                            } else {
+                                                openCustomTabsIntent(encryptedUrl);
                                             }
-
+                                        } else {
+                                            openInBrowser(Uri.parse(encryptedUrl));
                                         }
+                                    } else {
+                                        hideProgress();
+                                        String errorMsg =
+                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
+                                        alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                     }
-                                    if (Response_obj.has("contact")) {
-                                        JSONObject contacObj = Response_obj.getJSONObject("contact");
-
-                                        mUCID = (contacObj.isNull(UCID) || contacObj.getString(UCID).equals("")) ? "0" : contacObj.getString(UCID);
-                                        mobileNo = (contacObj.isNull(MOBILE) || contacObj.getString(MOBILE).equals("")) ? "" : contacObj.getString(MOBILE);
-                                    }
-                                    // tvName.setText(Name);
-                                    tvLeadId.setText(leadID);
-                                    tvBranchCode.setText(branchcode);
                                 } else {
                                     hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                 }
-                            } else {
+                            } catch (Exception e) {
+                                e.printStackTrace();
                                 hideProgress();
+                                alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
                             hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
+                        }
+
+                        @Override public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            hideProgress();
+                        }
+
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            try {
+                                hideProgress();
+                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                                    alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        UNAUTHORIZE_USER, "OK", false,
+                                        new MSFDialog.DialogListener() {
+                                            @Override
+                                            public void alertDialogAction(MSFDialog.Action action,
+                                                Object... data) {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Intent i = new Intent(getMainActivity(),
+                                                        LoginActivity.class);
+                                                    startActivity(i);
+                                                    getActivity().finish();
+                                                }
+                                            }
+                                        });
+                                    return;
+                                } else {
+                                    String error =
+                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                                    if (CRMAppUtil.isBlank(error)) {
+                                        error = SOME_SERVER_ERROR_OCCURRED;
                                     }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), error,
+                                        "OK", true, null);
+                                    return;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
-                    }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
+                        @Override public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            hideProgress();
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        }
+                    });
             } catch (Exception e) {
                 e.printStackTrace();
-                // Log.e(TAG, e.toString());
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
-    private void ConvertEkycApi(final String mobile, final String email, final String branchEmplyeeCode
-            , final String SourceName
-            , final String ProspectSourceName
-            , final String ProspectSourceDetails
-            , final String InterestedIn) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            final Map inputMap = new HashMap<>();
-
-            inputMap.put("Mobile", mobile);
-            inputMap.put("Email", email);
-            inputMap.put("BranchRm_EmpCode", branchEmplyeeCode);
-            inputMap.put("SourceName", SourceName);
-            inputMap.put("ProspectSourceName", ProspectSourceName);
-            inputMap.put("ProspectSourceDetails", ProspectSourceDetails);
-            inputMap.put("InterestedIn", InterestedIn);
-            String serviceMethod = "Prospect/RegisterProspectOnline";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                String message = response.getString(MESSAGE);
-                                if (status.equalsIgnoreCase("true")) {
-                                    hideProgress();
-                                    JSONArray jsonArray = response.getJSONArray("Response");
-                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                    String RegistrationAllowed = (jsonObject.isNull("RegistrationAllowed") || jsonObject.getString("RegistrationAllowed").equals("")) ? "" : jsonObject.getString("RegistrationAllowed");
-                                    if (RegistrationAllowed.equalsIgnoreCase("true")) {
-                                        String eKYC_UserID = (jsonObject.isNull("eKYC_UserID") || jsonObject.getString("eKYC_UserID").equals("")) ? "0" : jsonObject.getString("eKYC_UserID");
-                                        try {
-                                            oaoUserId = Integer.parseInt(eKYC_UserID);
-                                        } catch (NumberFormatException e) {
-                                            e.printStackTrace();
-                                        }
-                                        Intent intent = new Intent(getMainActivity(), BranchResumeApplicationActivity.class);
-                                        intent.putExtra("UserId", eKYC_UserID);
-                                        startActivity(intent);
-                                    } else {
-                                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), message, "OK", true, null);
-                                    }
-                                    //TODO flag condition
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), remarks, "Ok", true, null);
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                hideProgress();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+    private CustomTabsSession getSession() {
+        return mClient.newSession(new CustomTabsCallback() {
+            @Override public void onNavigationEvent(int navigationEvent, Bundle extras) {
+                super.onNavigationEvent(navigationEvent, extras);
             }
-        } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+        });
+    }
+
+    private void openCustomTabsIntent(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder(getSession());
+        builder.setToolbarColor(getResources().getColor(R.color.secondaryBackground));
+        builder.setCloseButtonIcon(
+            BitmapFactory.decodeResource(getResources(), R.drawable.ic_back_arrow));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(getContext(), Uri.parse(url));
+    }
+
+    public void openInBrowser(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(intent);
         }
     }
 }
