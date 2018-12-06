@@ -7,17 +7,18 @@ import java.io.Serializable;
  * Created by raju 27/03/2017.
  */
 public class LoginResponseData implements Serializable {
-    String userId;
-    String firstName;
-    String lastName;
-    String imageUrl;
-    String mobileNo;
-    String email;
-    String businessProfileId;
-    String businessProfileName;
-    String employeeCode;
-    String businessUnitId;
-    String userType;
+    String userId = "";
+    String firstName = "";
+    String lastName = "";
+    String imageUrl = "";
+    String mobileNo = "";
+    String email = "";
+    String businessProfileId = "";
+    String businessProfileName = "";
+    String employeeCode = "";
+    String businessUnitId = "";
+    String userType = "";
+    boolean smtEnabled;
 
     public String getUserType() {
         return userType;
@@ -125,5 +126,13 @@ public class LoginResponseData implements Serializable {
 
     public void setBusinessProfileName(String businessProfileName) {
         this.businessProfileName = businessProfileName;
+    }
+
+    public boolean isSmtEnabled() {
+        return smtEnabled;
+    }
+
+    public void setSmtEnabled(boolean smtEnabled) {
+        this.smtEnabled = smtEnabled;
     }
 }

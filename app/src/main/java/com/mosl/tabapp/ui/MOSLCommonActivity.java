@@ -823,14 +823,10 @@ public class MOSLCommonActivity extends AppCompatActivity
                         searchType = SEARCH_TYPE_LEAD;
                         actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
                         setupFragment(new DashboardFragment());
-                    } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
-                        setupFragment(new BirthdayAnniversaryFragment());
-                    } else if (position == MOSL_MENU_SUGGEST_ME) {
-                        getSuggestMe();
                     } else if (position == MOSL_MENU_CALENDAR) {
                         setupFragment(new CalendarFragment());
-                    } else if (position == MOSL_MENU_QUERY) {
-                        setupFragment(new QueryFragment());
+                    } else if (position == MOSL_MENU_PENDING_APPROVALS) {
+                        setupFragment(new PendingApprovalFragment());
                     } else if (position == MOSL_MENU_KNOWLEDGE_CENTRE) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                             String packag =
@@ -846,10 +842,23 @@ public class MOSLCommonActivity extends AppCompatActivity
                         } else {
                             openInBrowser(Uri.parse(CRMWebServiceHandler.COLLATERAL_URL));
                         }
-                    } else if (position == MOSL_MENU_PENDING_APPROVALS) {
-                        setupFragment(new PendingApprovalFragment());
-                    } else if (position == MOSL_MENU_LOGOUT) {
-                        logoutCustomer();
+                    } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
+                        setupFragment(new BirthdayAnniversaryFragment());
+                    }
+                    if (AccountDetails.isSmtEnabled()) {
+                        if (position == MOSL_MENU_SUGGEST_ME) {
+                            getSuggestMe();
+                        } else if (position == MOSL_MENU_QUERY) {
+                            setupFragment(new QueryFragment());
+                        } else if (position == MOSL_MENU_LOGOUT) {
+                            logoutCustomer();
+                        }
+                    } else {
+                        if (position == 7) {
+                            setupFragment(new QueryFragment());
+                        } else if (position == 8) {
+                            logoutCustomer();
+                        }
                     }
                 }
 
@@ -1440,6 +1449,9 @@ public class MOSLCommonActivity extends AppCompatActivity
                                         String status = response.getString(STATUS);
                                         if (status.equalsIgnoreCase("true")) {
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                            boolean smtEnabled =
+                                                (objDetail.getString(SMT_ENABLED).equals("1"))
+                                                    ? true : false;
                                             JSONObject objDetailUser =
                                                 objDetail.getJSONObject(USER);
                                             String userId = (objDetailUser.isNull(USER_ID)
@@ -1533,7 +1545,8 @@ public class MOSLCommonActivity extends AppCompatActivity
                                                 loginData.getBusinessProfileName(),
                                                 loginData.getEmployeeCode(), loginData.getToken(),
                                                 loginData.getBusinessUnitId(),
-                                                loginData.getBranchCode(), loginData.getUserType());
+                                                loginData.getBranchCode(), loginData.getUserType(),
+                                                smtEnabled);
                                             MOSLCommonActivity.sendRegistrationToServer(
                                                 MOSLCommonActivity.this, getContentResolver(),
                                                 false);

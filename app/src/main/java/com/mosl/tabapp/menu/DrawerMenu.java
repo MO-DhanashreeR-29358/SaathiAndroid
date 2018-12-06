@@ -3,6 +3,7 @@ package com.mosl.tabapp.menu;
 import android.content.Context;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ui.SplashActivity;
 import java.util.ArrayList;
@@ -32,8 +33,11 @@ public class DrawerMenu implements MOSLConstants {
         groupList.add(new ScreenDetails(R.drawable.ic_menu_birthday_aniversary,
             context.getString(R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT),
             MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT, false));
-        groupList.add(new ScreenDetails(R.drawable.ic_menu_suggest_me_tool,
-            context.getString(R.string.MOSL_MENU_SUGGEST_ME_TXT), MOSL_MENU_SUGGEST_ME_TXT, false));
+        if (AccountDetails.isSmtEnabled()) {
+            groupList.add(new ScreenDetails(R.drawable.ic_menu_suggest_me_tool,
+                context.getString(R.string.MOSL_MENU_SUGGEST_ME_TXT), MOSL_MENU_SUGGEST_ME_TXT,
+                false));
+        }
         groupList.add(new ScreenDetails(R.drawable.ic_new_query,
             context.getString(R.string.MOSL_MENU_QUERY_TXT), MOSL_MENU_QUERY_TXT, false));
         groupList.add(new ScreenDetails(R.drawable.ic_new_logout,

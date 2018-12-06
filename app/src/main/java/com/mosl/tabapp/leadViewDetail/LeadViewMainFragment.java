@@ -754,6 +754,11 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         ImageView ivOpenAccount = dialog.findViewById(R.id.ivOpenAccount);
         ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
         ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
+        if (AccountDetails.isSmtEnabled()) {
+            ivSuggestMe.setVisibility(View.VISIBLE);
+        } else {
+            ivSuggestMe.setVisibility(View.GONE);
+        }
         if (searchType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
             if (oaoUserId != null && oaoUserId > 0) {
                 ivOpenAccount.setVisibility(View.GONE);

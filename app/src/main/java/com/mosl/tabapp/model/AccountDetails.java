@@ -1,7 +1,6 @@
 package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.constants.MOSLConstants;
-
 import java.io.Serializable;
 
 /**
@@ -24,6 +23,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
     private static String userType="";
     private static String profileType="";
     private static boolean newEkyc;
+    private static boolean smtEnabled;
 
 
     public static boolean isFranchiseUser() {
@@ -46,7 +46,10 @@ public class AccountDetails implements MOSLConstants,Serializable {
         AccountDetails.businessUnitId = businessUnitId;
     }
 
-    public AccountDetails(String userId, String firstName, String lastName, String imageUrl, String mobileNo, String email, String businessProfileId, String businessProfileName, String employeeCode, String token, String businessUnitId, String branchCode, String userType) {
+    public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
+        String mobileNo, String email, String businessProfileId, String businessProfileName,
+        String employeeCode, String token, String businessUnitId, String branchCode,
+        String userType, boolean smtEnabled) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -61,6 +64,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
         this.branchCode = branchCode;
         this.userType = userType;
         this.profileType = profileFlag(businessUnitId);
+        this.smtEnabled = smtEnabled;
     }
 
 
@@ -182,5 +186,13 @@ public class AccountDetails implements MOSLConstants,Serializable {
 
     public static void setNewEkyc(boolean newEkyc) {
         AccountDetails.newEkyc = newEkyc;
+    }
+
+    public static boolean isSmtEnabled() {
+        return smtEnabled;
+    }
+
+    public static void setSmtEnabled(boolean smtEnabled) {
+        AccountDetails.smtEnabled = smtEnabled;
     }
 }
