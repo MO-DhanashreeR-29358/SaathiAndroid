@@ -2617,7 +2617,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         if (response != null && response.length() != 0) {
                             try {
-                                String emandate =
+                                String status =
                                     (response.isNull("ReturnStatus") || response.getString(
                                         "ReturnStatus").equals("")) ? ""
                                         : response.getString("ReturnStatus");
@@ -2628,6 +2628,18 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                     (response.isNull("eSignPDFURL") || response.getString(
                                         "eSignPDFURL").equals("")) ? ""
                                         : response.getString("eSignPDFURL");
+                                if (status.equals("1")) {
+                                    llOTPThumbLayout.setVisibility(View.GONE);
+                                    if (getAppType().equals(CRM) || getAppType().equals(PP)) {
+                                        getAvailableClientCode();
+                                    } else {
+                                        showAuthenticationModeMsg(false, noMode);
+                                        llParentOTPBio.setVisibility(View.GONE);
+                                        btnSubmit.setVisibility(View.VISIBLE);
+                                    }
+                                } else {
+                                    customProgress.setVisibility(View.GONE);
+                                }
                                 if (!isBlank(message)) {
                                     commonMsgDialog(mContext, message, false, "");
                                     pdfAdapter.setPostPdf(eSignPDFURL);
@@ -2686,7 +2698,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         digioConfig.setLogo(logo); //Your company logo
         digioConfig.setEnvironment(UID_ENV.equals("P") ? DigioEnvironment.PRODUCTION
             : DigioEnvironment.PRODUCTION); //Stage is sandbox
-        digioConfig.setServiceMode(mode.equalsIgnoreCase(FINGER) ? DigioServiceMode.FP
+        digioConfig.setServiceMode(mode.equalsIgnoreCase(BIOMETRIC) ? DigioServiceMode.FP
             : DigioServiceMode.OTP); //FP is fingerprint
         if (type.equals(ESIGN)) {
             digioConfig.setAadhaarId("");
