@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('digio-esign-v2.2.aar'))

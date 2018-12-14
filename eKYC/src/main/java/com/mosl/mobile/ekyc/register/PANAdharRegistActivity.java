@@ -3289,6 +3289,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     private void validateAadharAvailability() {
         if (isFundTransferDone() || isMfIpvDone())
             return;
+        if (isAadhaarByPass()) {
+            return;
+        }
         if (isAdharChanged || !getIsAadharVerified()) {
             isAdharChanged = false;
             if (MOSLCommon.isNetworkEnabled(this)) {

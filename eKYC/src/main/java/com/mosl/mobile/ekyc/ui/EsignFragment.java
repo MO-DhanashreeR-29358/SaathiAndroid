@@ -151,7 +151,7 @@ public class EsignFragment extends Fragment implements MOSLConstants {
     static final String ACTION_ESIGNRESPONSE = "com.nsdl.egov.esign.rdservice.fp.CAPTURE";
     private int REQUEST_CODE = 100;
     private String requestId, nsdlMode;
-    private boolean otpCalled = false;
+    private boolean otpCalled = false, digioEsign = false;
     private Uri emendateURL;
     private String bankName, bankIfscCode, bankAccNo, bankAcType, corresMobileNo, corresEmailId,
         uid, fullName, mandateCreationDateTime, firstCollectionDate, finalCollectionDate,
@@ -396,6 +396,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                     {
                         genrateEsignXML(NSDL_OTP);
                     }
+                } else if (getEsignService().equalsIgnoreCase(DIGIO)) {
+                    getDigioEsign(NSDL_OTP);
                 } else {
                     llOTPThumbLayout.setVisibility(View.VISIBLE);
                     rlOTP.setVisibility(View.VISIBLE);
@@ -435,6 +437,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                 fingerIrisDialog(ESIGN);
                             }
                         }
+                    } else if (getEsignService().equalsIgnoreCase(DIGIO)) {
+                        getDigioEsign(NSDL_FINGER);
                     } else {
                         llOTPThumbLayout.setVisibility(View.GONE);
                         rlOTP.setVisibility(View.GONE);
@@ -2325,7 +2329,8 @@ public class EsignFragment extends Fragment implements MOSLConstants {
                                 digioDocId = id;
                                 emendateMode = mode;
                                 if (!isBlank(logo)) {
-                                    callEmendate(mode, logo, id, customerEmail, corresMobileNo);
+                                    digioEsign = false;
+                                    callEmendate(mode, logo, id, corresMobileNo, EMENDATE);
                                 }
                                 customProgress.setVisibility(View.GONE);
                             } catch (Exception e) {
@@ -2484,7 +2489,197 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         }
     }
 
-    private void callEmendate(String mode, String logo, String id, String emailId, String mobile) {
+    private void getDigioEsign(final int mode) {
+
+        Map inputMap = new HashMap<>();
+        inputMap.put("Userid", CommonModel.getUserID());
+        inputMap.put("Mode", String.valueOf(mode)); // OTP =1,Bio=2
+        inputMap.put("SourceMode", "MOBILE");
+
+        String flag = PERFORM_DIGIO_ESIGN_REQUEST;
+        String category = ESIGN;
+
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            if (response != null) {
+                                String errorCode =
+                                    (response.isNull("ErrorCode") || response.getString("ErrorCode")
+                                        .equals("")) ? "" : response.getString("ErrorCode");
+                                String errorMessage =
+                                    (response.isNull("ErrorMessage") || response.getString(
+                                        "ErrorMessage").equals("")) ? ""
+                                        : response.getString("ErrorMessage");
+                                String returnStatus =
+                                    (response.isNull("ReturnStatus") || response.getString(
+                                        "ReturnStatus").equals("")) ? ""
+                                        : response.getString("ReturnStatus");
+                                String documentId =
+                                    (response.isNull("DocumentId") || response.getString(
+                                        "DocumentId").equals("")) ? ""
+                                        : response.getString("DocumentId");
+
+                                String xmlResponse =
+                                    (response.isNull("Response") || response.getString("Response")
+                                        .equals("")) ? "" : response.getString("Response");
+                                requestId =
+                                    (response.isNull("RequestId") || response.getString("RequestId")
+                                        .equals("")) ? "" : response.getString("RequestId");
+                                String logo = (response.isNull("Logo") || response.getString("Logo")
+                                    .equals("")) ? "" : response.getString("Logo");
+                                corresMobileNo =
+                                    (response.isNull("MobileNumber") || response.getString(
+                                        "MobileNumber").equals("")) ? ""
+                                        : response.getString("MobileNumber");
+
+                                if (isBlank(returnStatus) || returnStatus.equalsIgnoreCase("")) {
+                                    commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                        "");
+                                } else if (returnStatus.equalsIgnoreCase("1")) {
+
+                                    if (!isBlank(logo)) {
+                                        digioEsign = true;
+                                        callEmendate(mode == 1 ? OTP : BIOMETRIC, logo, documentId,
+                                            corresMobileNo, ESIGN);
+                                    } else {
+                                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false,
+                                            "");
+                                    }
+                                } else {
+                                    commonMsgDialog(mContext, errorMessage, false, "");
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            customProgress.setVisibility(View.GONE);
+                        }
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+        }
+    }
+
+    private void digioEsignResponse() {
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map<String, String> inputMap = new HashMap();
+            inputMap.put("Userid", getUserID());
+            inputMap.put("DocumentId", txnId);
+            inputMap.put("ErrorCode", errorCode);
+            inputMap.put("ErrorMessage", digiomessage);
+
+            String flag = PERFORM_DIGIO_ESIGN_RESPONSE;
+            String category = ESIGN;
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+                            try {
+                                String emandate =
+                                    (response.isNull("ReturnStatus") || response.getString(
+                                        "ReturnStatus").equals("")) ? ""
+                                        : response.getString("ReturnStatus");
+                                String message =
+                                    (response.isNull("Message") || response.getString("Message")
+                                        .equals("")) ? "" : response.getString("Message");
+                                String eSignPDFURL =
+                                    (response.isNull("eSignPDFURL") || response.getString(
+                                        "eSignPDFURL").equals("")) ? ""
+                                        : response.getString("eSignPDFURL");
+                                if (!isBlank(message)) {
+                                    commonMsgDialog(mContext, message, false, "");
+                                    pdfAdapter.setPostPdf(eSignPDFURL);
+                                    setListViewHeightBasedOnChildren(pdfListView);
+                                }
+                                customProgress.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void callEmendate(String mode, String logo, String id, String mobile, String type) {
         Digio digio = new Digio();
         DigioConfig digioConfig = new DigioConfig();
         //        digioConfig.setLogo(" www.your-website/logo-image "); //Your company logo
@@ -2493,6 +2688,10 @@ public class EsignFragment extends Fragment implements MOSLConstants {
             : DigioEnvironment.PRODUCTION); //Stage is sandbox
         digioConfig.setServiceMode(mode.equalsIgnoreCase(FINGER) ? DigioServiceMode.FP
             : DigioServiceMode.OTP); //FP is fingerprint
+        if (type.equals(ESIGN)) {
+            digioConfig.setAadhaarId("");
+            digioConfig.setVirtualId("");
+        }
         try {
             digio.init((EkycMainActivity) mContext, digioConfig);
         } catch (Exception e) {
@@ -2513,7 +2712,11 @@ public class EsignFragment extends Fragment implements MOSLConstants {
         this.lastStateScreen = lastStateScreen;
         this.lastStateCode = lastStateCode;
         this.lastStateMessage = lastStateMessage;
-        emendateResponse();
+        if (digioEsign) {
+            digioEsignResponse();
+        } else {
+            emendateResponse();
+        }
     }
 
     private void updateAndroidSecurityProvider() {

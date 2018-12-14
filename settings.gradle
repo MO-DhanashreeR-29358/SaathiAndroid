@@ -1,1 +1,1 @@
-include ':app', ':TabLibrary', ':eKYC', ':emendate'
+include ':app', ':TabLibrary', ':eKYC', ':emendate', ':digio-esign2'

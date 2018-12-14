@@ -7369,22 +7369,40 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
         else if (!cbDeclaration.isChecked()) {
             commonMsgDialog(mContext, getResources().getString(R.string.fatca_declaration_warning), false, "");
             return;
-        } else if (etBldgNameCorres.getText().toString().trim().equalsIgnoreCase(etFlatNoCorres.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNameCorres.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etFlatNoCorres.getText().toString().trim())) {
             commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
-        } else if (etFlatNoCorres.getText().toString().trim().equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etFlatNoCorres.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
             commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
-        } else if (etBldgNameCorres.getText().toString().trim().equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNameCorres.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
             commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
-        } else if (etBldgNamePerm.getText().toString().trim().equalsIgnoreCase(etFlatNamePerm.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNamePerm.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etFlatNamePerm.getText().toString().trim())) {
             commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
-        } else if (etFlatNamePerm.getText().toString().trim().equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etFlatNamePerm.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
             commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
-        } else if (etBldgNamePerm.getText().toString().trim().equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
+        } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNamePerm.getText()
+            .toString()
+            .trim()
+            .equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
             commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
             return;
         } else {
@@ -7956,22 +7974,40 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                 } else if (!cbDeclaration.isChecked()) {
                     commonMsgDialog(mContext, getResources().getString(R.string.fatca_declaration_warning), false, "");
                     return;
-                } else if (etBldgNameCorres.getText().toString().trim().equalsIgnoreCase(etFlatNoCorres.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNameCorres.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etFlatNoCorres.getText().toString().trim())) {
                     commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
-                } else if (etFlatNoCorres.getText().toString().trim().equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etFlatNoCorres.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
                     commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
-                } else if (etBldgNameCorres.getText().toString().trim().equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNameCorres.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etAreaCorres.getText().toString().trim())) {
                     commonMsgDialog(mContext, Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
-                } else if (etBldgNamePerm.getText().toString().trim().equalsIgnoreCase(etFlatNamePerm.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNamePerm.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etFlatNamePerm.getText().toString().trim())) {
                     commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
-                } else if (etFlatNamePerm.getText().toString().trim().equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etFlatNamePerm.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
                     commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
-                } else if (etBldgNamePerm.getText().toString().trim().equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
+                } else if (getAddressMode().equalsIgnoreCase(MANUAL) && etBldgNamePerm.getText()
+                    .toString()
+                    .trim()
+                    .equalsIgnoreCase(etAreaPerm.getText().toString().trim())) {
                     commonMsgDialog(mContext, Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field, false, "");
                     return;
                 } else {
