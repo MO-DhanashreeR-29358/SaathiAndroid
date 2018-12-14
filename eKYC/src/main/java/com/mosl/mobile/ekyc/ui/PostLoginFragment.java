@@ -111,6 +111,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setIsReviewEditDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsSchemeDetailDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsSegmentSelected;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsWorkDetailDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setOnlineOfflineFlag;
 import static com.mosl.mobile.ekyc.model.CommonModel.setOtpVisibleForBranch;
 import static com.mosl.mobile.ekyc.model.CommonModel.setPANName;
 import static com.mosl.mobile.ekyc.model.CommonModel.setPANno;
@@ -1329,6 +1330,11 @@ public class PostLoginFragment extends Fragment implements View.OnClickListener,
                                                 String otpVisible = (object.isNull("OTPVISIBLE") || object.getString("OTPVISIBLE").equals("")) ? "" : object.getString("OTPVISIBLE");
                                                 String biometricVisible = (object.isNull("BIOMETRICVISIBLE") || object.getString("BIOMETRICVISIBLE").equals("")) ? "" : object.getString("BIOMETRICVISIBLE");
                                                 String isNomineeMandatory = (object.isNull(NOMINEE_MANDATORY) || object.getString(NOMINEE_MANDATORY).equals("")) ? "" : object.getString(NOMINEE_MANDATORY);
+                                                String onlineOffline =
+                                                    (object.isNull("ONLINEOFFLINE")
+                                                        || object.getString("ONLINEOFFLINE")
+                                                        .equals("")) ? ""
+                                                        : object.getString("ONLINEOFFLINE");
                                                 String isAadhaarByPass =
                                                     (object.isNull("ISAADHAARBYPASS")
                                                         || object.getString("ISAADHAARBYPASS")
@@ -1341,6 +1347,7 @@ public class PostLoginFragment extends Fragment implements View.OnClickListener,
                                                 } else {
                                                     setUserID(userId);
                                                 }
+                                                setOnlineOfflineFlag(onlineOffline);
                                                 setAadharNo(aadharNo);
                                                 setPANno(panNo);
                                                 setIsAadharVerified(isAddharVerified.equals("1"));
