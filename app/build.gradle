@@ -82,10 +82,10 @@ android {
   buildTypes {
     release {
       debuggable false
-      minifyEnabled true
-      shrinkResources true
       multiDexEnabled true
       multiDexKeepFile file('multidex-config.txt')
+      minifyEnabled true
+      shrinkResources true
       proguardFile 'proguard-library.pro'
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'

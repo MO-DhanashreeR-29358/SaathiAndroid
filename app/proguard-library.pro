@@ -63,3 +63,6 @@
 -keep class org.jaxen.**{ *; }
 -keep class org.w3c.dom.**{ *; }
 -keep class com.mosl.mobile.ekyc.service.**{ *; }
+-keep class com.mosl.mobile.ekyc.ui.EkycMainActivity {
+  public void onSigning*(...);
+}
