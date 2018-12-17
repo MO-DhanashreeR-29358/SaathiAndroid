@@ -26,6 +26,7 @@ public interface MOSLConstants {
     String REALTIME = "Real time";
     String OFFLINE  = "Offline ";
     String OTP = "OTP";
+    String BIOMETRIC = "BIOMETRIC";
     String IRIS = "IRIS";
     String FINGER = "FINGER";
     String UPLOAD_FINAL_SUBMIT = "UPLOAD_FINAL_SUBMIT";
@@ -903,8 +904,12 @@ public interface MOSLConstants {
     String Permanent_address_fields_for_Third_Joint_holder_cannot_be_same_Please_enter_unique_details_in_each_address_field = "Permanent address fields for Third Joint holder cannot be same. Please enter unique details in each address field";
 
     String NSDL = "NSDL";
+    String DIGIO = "DIGIO";
+    String EMENDATE = "EMENDATE";
     String CDSL = "CDSL";
     String PERFORM_NSDL_ESIGN = "PERFORM_NSDL_ESIGN_REQUEST";
+    String PERFORM_DIGIO_ESIGN_REQUEST = "PERFORM_DIGIO_ESIGN_REQUEST";
+    String PERFORM_DIGIO_ESIGN_RESPONSE = "PERFORM_DIGIO_ESIGN_RESPONSE";
     String PERFORM_NSDL_ESIGN_RESPONSE = "PERFORM_NSDL_ESIGN_RESPONSE";
     String BANK_EMANDATE = "Bank_eMandate";
     String BANK_EMANDATE_RESPONSE = "Bank_eMandateResponse";

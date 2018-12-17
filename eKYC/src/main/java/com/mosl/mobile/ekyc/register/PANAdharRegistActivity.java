@@ -89,6 +89,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getDob;
 import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getOnlineOfflineFlag;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANName;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANno;
 import static com.mosl.mobile.ekyc.model.CommonModel.getRegisteredName;
@@ -114,6 +115,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setIsCVLVerified;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsDirectProspect;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquitySelected;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.setOnlineOfflineFlag;
 import static com.mosl.mobile.ekyc.model.CommonModel.setPANName;
 import static com.mosl.mobile.ekyc.model.CommonModel.setPANStatus;
 import static com.mosl.mobile.ekyc.model.CommonModel.setPANno;
@@ -143,7 +145,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     private boolean isPANChanged = false;
     private boolean isAdharChanged = false;
     private Bundle bundle;
-    private String userID, onlineOffline = "Offline";
+    private String userID;
     private String aadharValidationSuccess;
     private ImageView ivExit, ivBack;
     private TextView tvExitForm, tvAppLoginId, tvUserName, tvAuthenticationMode, tvBABranchCode;
@@ -295,7 +297,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     if (rbOnline.isChecked()) {
                         rbOffline.setChecked(false);
                         setIsAadharVerified(true);
-                        onlineOffline = "Online";
+                        setOnlineOfflineFlag("Online");
                         tvPaperLessMessage.setText(
                             Html.fromHtml(getResources().getString(R.string.online_msg)));
                     }
@@ -307,7 +309,7 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     if (rbOffline.isChecked()) {
                         rbOnline.setChecked(false);
                         setIsAadharVerified(false);
-                        onlineOffline = "Offline";
+                        setOnlineOfflineFlag("Offline");
                         tvPaperLessMessage.setText(
                             Html.fromHtml(getResources().getString(R.string.offline_msg)));
                     }
@@ -2434,8 +2436,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
         inputMap.put("_IP", getDeviceID(PANAdharRegistActivity.this, getContentResolver()));
         inputMap.put("_Segment", seg);
         inputMap.put("_chkSIPIntent", getSipIntent());
-        if (!getAppType().equalsIgnoreCase(DIRECT)) onlineOffline = "Online";
-        inputMap.put("ONLINEOFFLINE", onlineOffline);
+        if (!getAppType().equalsIgnoreCase(DIRECT)) setOnlineOfflineFlag("Online");
+        inputMap.put("ONLINEOFFLINE", getOnlineOfflineFlag());
 
         String flag = UPDATEPANAADHARDETAILS;
         String category = PANADDHARDETAILS;
@@ -3289,6 +3291,9 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
     private void validateAadharAvailability() {
         if (isFundTransferDone() || isMfIpvDone())
             return;
+        if (isAadhaarByPass()) {
+            return;
+        }
         if (isAdharChanged || !getIsAadharVerified()) {
             isAdharChanged = false;
             if (MOSLCommon.isNetworkEnabled(this)) {

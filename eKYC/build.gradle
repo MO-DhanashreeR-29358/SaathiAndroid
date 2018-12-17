@@ -46,6 +46,7 @@ dependencies {
     implementation deps.constraintLayout
     implementation deps.compressor
     implementation deps.playService
-    implementation project(':emendate')
+//    implementation project(':emendate')
+    implementation project(':digio-esign2')
     implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
 }

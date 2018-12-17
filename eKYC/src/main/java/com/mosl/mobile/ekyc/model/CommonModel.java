@@ -120,6 +120,15 @@ public class CommonModel implements Serializable {
     private static String esignService;
     private static boolean isNomineeMandatory = false;
     private static boolean aadhaarByPass;
+    private static String onlineOfflineFlag;
+
+    public static String getOnlineOfflineFlag() {
+        return onlineOfflineFlag;
+    }
+
+    public static void setOnlineOfflineFlag(String onlineOfflineFlag) {
+        CommonModel.onlineOfflineFlag = onlineOfflineFlag;
+    }
 
     public static boolean isNomineeMandatory() {
         return isNomineeMandatory;
@@ -897,6 +906,7 @@ public class CommonModel implements Serializable {
     public static void clearAllCommonModelFields() {
         //setAppLoginID("");
         //setUserID("");
+        setOnlineOfflineFlag("");
         setPANno("");
         setAadharNo("");
         setDob("");
