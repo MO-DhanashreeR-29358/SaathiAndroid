@@ -57,6 +57,7 @@ public interface MOSLConstants extends LabelConfig {
 
     int NAV_TO_SECOND_LEVEL_REPORT = 26;
     int NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT = 27;
+    int NAV_TO_WEB_VIEW = 28;
 
     // LookupType (GetAllLookup API)
     int CLIENTSTATUS = 1;

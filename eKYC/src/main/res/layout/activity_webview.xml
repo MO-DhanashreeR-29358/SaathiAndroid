@@ -10,7 +10,7 @@
         android:id="@+id/webView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="@dimen/_10sdp" />
+        />
 
     <ImageView
         android:id="@+id/ivClose"
@@ -18,11 +18,12 @@
         android:layout_height="@dimen/_30sdp"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/_minus15sdp"
+        android:visibility="gone"
         android:src="@drawable/ic_closed" />
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
+        style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

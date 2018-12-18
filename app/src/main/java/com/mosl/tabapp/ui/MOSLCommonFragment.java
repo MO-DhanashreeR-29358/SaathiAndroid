@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
@@ -27,20 +28,24 @@ import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-import io.reactivex.disposables.CompositeDisposable;
+
 import java.util.Map;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
     public CompositeDisposable compositeDisposable;
+
     public MOSLCommonFragment() {
         super();
     }
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View mCommonview = inflater.inflate(R.layout.common_base_layout, container, false);
         setupViews(mCommonview);
         compositeDisposable = new CompositeDisposable();
@@ -53,7 +58,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         mLinearContainerView = (FrameLayout) mCommonview.findViewById(R.id.commonContainerView);
     }
 
-    @Override public void onAttach(Context context) {
+    @Override
+    public void onAttach(Context context) {
         super.onAttach(context);
         this.context = (FragmentActivity) context;
     }
@@ -83,7 +89,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         try {
             view = LayoutInflater.from(getMainActivity()).inflate(layoutId, null, false);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+                    ViewGroup.LayoutParams.MATCH_PARENT));
             mLinearContainerView.addView(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -92,13 +98,13 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void navigateTo(int id, Bundle bundle, FragmentManager fragmentManager,
-        final boolean addStack) {
+                           final boolean addStack) {
         InputMethodManager inputManager =
-            (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputManager.isAcceptingText() && getMainActivity().getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(
-                getMainActivity().getCurrentFocus().getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
+                    getMainActivity().getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
         }
         MOSLCommonFragment fragment = null;
         switch (id) {
@@ -158,6 +164,10 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment = new SecondLevelReportFragment();
                 fragment.setArguments(bundle);
                 break;
+            case NAV_TO_WEB_VIEW:
+                fragment = new WebViewFragment();
+                fragment.setArguments(bundle);
+                break;
         }
         if (fragment != null) {
             fragment.previousFragment = this;
@@ -168,7 +178,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     private void addFragment(int containerViewId, Fragment fragment, boolean addStack) {
         ((MOSLCommonActivity) getMainActivity()).addFragment(containerViewId, fragment, addStack,
-            false);
+                false);
     }
 
     public void showProgress() {
@@ -181,7 +191,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
-            getMainActivity().getIntent());
+                getMainActivity().getIntent());
     }
 
     public void gotoEkycVersionCheck(int gotoEkyc, Map hashMap) {
@@ -204,7 +214,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         return "";
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         if (previousFragment != null) previousFragment.onFragmentResult(null);
         super.onDetach();
     }
@@ -265,7 +276,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public void hideKeyboard(View view) {
         InputMethodManager in =
-            (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
@@ -273,7 +284,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         return MOSLCommonActivity.getHeader(context);
     }
 
-    @Override @CallSuper public void onDestroyView() {
+    @Override
+    @CallSuper
+    public void onDestroyView() {
         compositeDisposable.dispose();
         super.onDestroyView();
     }
