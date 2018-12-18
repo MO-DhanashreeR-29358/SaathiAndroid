@@ -1075,16 +1075,23 @@ public class MOSLCommonActivity extends AppCompatActivity
                                             String eKYC_UserID = (jsonObject.isNull("eKYC_UserID")
                                                 || jsonObject.getString("eKYC_UserID").equals(""))
                                                 ? "0" : jsonObject.getString("eKYC_UserID");
-                                            HashMap<String, String> map = new HashMap();
-                                            map.put(NEW_USERID, eKYC_UserID);
-                                            map.put(BRANCHEMPCODE,
-                                                AccountDetails.getEmployeeCode());
-                                            map.put(COMMANDTYPE, "RESUME");
-                                            map.put(APPLICATIONTYPE, "CRM");
-                                            map.put(OSTYPE, "ANDROID");
-                                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-                                            map.put(TOKENKEY, AccountDetails.getToken());
-                                            newEkyc(getInputBody(map));
+                                            if (AccountDetails.isNewEkyc()) {
+                                                HashMap<String, String> map = new HashMap();
+                                                map.put(NEW_USERID, eKYC_UserID);
+                                                map.put(BRANCHEMPCODE,
+                                                    AccountDetails.getEmployeeCode());
+                                                map.put(COMMANDTYPE, "RESUME");
+                                                map.put(APPLICATIONTYPE, "CRM");
+                                                map.put(OSTYPE, "ANDROID");
+                                                map.put(APPLOGINID,
+                                                    AccountDetails.getEmployeeCode());
+                                                map.put(TOKENKEY, AccountDetails.getToken());
+                                                newEkyc(getInputBody(map));
+                                            } else {
+                                                HashMap<String, String> hashMap = new HashMap();
+                                                hashMap.put(USERID, eKYC_UserID);
+                                                gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
+                                            }
                                         } else {
                                             MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
                                                 getResources().getString(R.string.motilal_oswal),
