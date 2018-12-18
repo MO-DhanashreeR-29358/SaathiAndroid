@@ -22,7 +22,7 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
                              Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_webview);
-
+        hideAppTitle();
         setUpView(this.getArguments().getString(URL_PATH));
 
         return view;
@@ -67,4 +67,6 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
         }
 
     }
+
+
 }
