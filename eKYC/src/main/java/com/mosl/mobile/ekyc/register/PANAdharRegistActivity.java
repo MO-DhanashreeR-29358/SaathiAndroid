@@ -49,7 +49,6 @@ import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.directmodule.DirectResumeApplicationActivity;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.AddressDetailsActivity;
-import com.mosl.mobile.ekyc.ui.BranchLoginActivity;
 import com.mosl.mobile.ekyc.ui.CustomDatePickerDialog;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.DatePickerListener;
@@ -639,7 +638,6 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 @Override
                 public void onClick(View v) {
                     getPrefs(PANAdharRegistActivity.this).edit().putBoolean("AUTHENTICATED", false).apply();
-                    //Util.getPrefs(this).edit().putString("LOGIN_ID", null).apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString("APP_LOGIN_ID", null).apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString("PASSWORD", null).apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(BOBRANCH, "").apply();
@@ -651,8 +649,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                     getPrefs(PANAdharRegistActivity.this).edit().putString(BUSINESSUNITID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(TEAMID, "").apply();
                     getPrefs(PANAdharRegistActivity.this).edit().putString(ROLEID, "").apply();
-                    Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
-                    startActivity(intent);
+                    //Intent intent = new Intent(PANAdharRegistActivity.this, BranchLoginActivity.class);
+                    //startActivity(intent);
                     finish();
                 }
             });
