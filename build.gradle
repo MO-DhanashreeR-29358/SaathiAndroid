@@ -1,13 +1,13 @@
 buildscript {
   ext.google_services_version = '4.0.1'
-  ext.android_plugin_version = '3.2.0'
+  ext.android_plugin_version = '3.2.1'
   repositories {
     google()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
   }
   dependencies {
-    classpath "com.android.tools.build:gradle:$android_plugin_version"
+    classpath "com.android.tools.build:gradle:3.2.1"
     classpath "com.google.gms:google-services:$google_services_version"
     classpath 'io.fabric.tools:gradle:1.26.1'
   }
@@ -15,7 +15,7 @@ buildscript {
 
 ext.versions = ["compileSdkVersion"   : 27,
                 "targetSdkVersion"    : 27,
-                "buildToolsVersion"   : "28.0.2",
+                "buildToolsVersion"   : "28.0.3",
                 'supportLibrary'      : '27.1.1',
                 'multidex'            : '1.0.3',
                 'pagerslidingtabstrip': '1.0.1',
