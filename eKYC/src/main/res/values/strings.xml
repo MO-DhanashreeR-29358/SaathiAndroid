@@ -101,7 +101,7 @@
 
     <!--Aadhaar Register-->
     <string name="pan">Permanent Account No.(PAN)</string>
-    <string name="dob">Date Of Birth (as per PAN)</string>
+    <string name="dob">Date Of Birth</string>
     <string name="aadhaar">Aadhaar No.</string>
     <string name="note_aadhaar">Please Note : 1. Aadhaar number is compulsory for Account Opening.\n
         2. Account opening facility is available only for \'Resident Individual\'</string>
