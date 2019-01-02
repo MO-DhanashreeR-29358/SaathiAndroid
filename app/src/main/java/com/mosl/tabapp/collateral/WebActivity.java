@@ -64,6 +64,7 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
                     DownloadManager dm =
                         (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
+                    progressBar.setVisibility(View.GONE);
                 }
             });
 

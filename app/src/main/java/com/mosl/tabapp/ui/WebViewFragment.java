@@ -60,6 +60,7 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
                 DownloadManager dm =
                     (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
                 dm.enqueue(request);
+                progressBar.setVisibility(View.GONE);
             }
         });
 
