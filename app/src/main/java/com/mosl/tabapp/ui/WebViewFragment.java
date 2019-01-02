@@ -1,16 +1,23 @@
 package com.mosl.tabapp.ui;
 
+import android.app.DownloadManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
+
+import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants {
     private View view;
@@ -35,6 +42,27 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
+
+        webView.setDownloadListener(new DownloadListener() {
+            @Override
+            public void onDownloadStart(String url, String userAgent, String contentDisposition,
+                String mimetype, long contentLength) {
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                request.setMimeType(mimetype);
+                String cookies = CookieManager.getInstance().getCookie(url);
+                request.addRequestHeader("cookie", cookies);
+                request.addRequestHeader("User-Agent", userAgent);
+                request.setDescription("Downloading File");
+                request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimetype));
+                request.allowScanningByMediaScanner();
+                request.setNotificationVisibility(
+                    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                DownloadManager dm =
+                    (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
+                dm.enqueue(request);
+            }
+        });
+
 
         webView.loadUrl(url);
     }

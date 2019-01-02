@@ -1,10 +1,15 @@
 package com.mosl.tabapp.collateral;
 
+import android.app.DownloadManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.DownloadListener;
+import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -41,6 +46,26 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
             if (bundle != null) {
                 url = getIntent().getExtras().getString(URL_PATH);
             }
+
+            webView.setDownloadListener(new DownloadListener() {
+                @Override
+                public void onDownloadStart(String url, String userAgent, String contentDisposition,
+                    String mimetype, long contentLength) {
+                    DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+                    request.setMimeType(mimetype);
+                    String cookies = CookieManager.getInstance().getCookie(url);
+                    request.addRequestHeader("cookie", cookies);
+                    request.addRequestHeader("User-Agent", userAgent);
+                    request.setDescription("Downloading File");
+                    request.setTitle(URLUtil.guessFileName(url, contentDisposition, mimetype));
+                    request.allowScanningByMediaScanner();
+                    request.setNotificationVisibility(
+                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                    DownloadManager dm =
+                        (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                    dm.enqueue(request);
+                }
+            });
 
             webView.loadUrl(url);
 
