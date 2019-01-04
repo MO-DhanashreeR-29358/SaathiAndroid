@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.CookieManager;
@@ -14,6 +13,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import androidx.fragment.app.FragmentActivity;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 

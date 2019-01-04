@@ -1,8 +1,7 @@
 package com.mosl.mobile.ekyc.ui;
 
-import android.support.v4.app.Fragment;
 
-import com.mosl.mobile.ekyc.service.SignalRService;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by pramod on 31-10-2016.

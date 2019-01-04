@@ -1,6 +1,6 @@
 package com.mosl.tabapp.ui;
 
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 

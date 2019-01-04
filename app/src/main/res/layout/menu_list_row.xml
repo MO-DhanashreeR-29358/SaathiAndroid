@@ -17,7 +17,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp" />-->
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgGroupImage"
         android:layout_width="@dimen/_24sdp"
         android:layout_height="@dimen/_24sdp"

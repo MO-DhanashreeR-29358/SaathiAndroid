@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_4sdp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivLeadViewArrow"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content"

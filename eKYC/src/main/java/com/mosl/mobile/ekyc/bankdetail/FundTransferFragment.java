@@ -2,28 +2,23 @@ package com.mosl.mobile.ekyc.bankdetail;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomViewPager;
-import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
 
 /**
  * Created by Owner on 7/8/2016.

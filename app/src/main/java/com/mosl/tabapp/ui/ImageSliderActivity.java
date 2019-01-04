@@ -4,22 +4,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import androidx.viewpager.widget.ViewPager;
 import com.mosl.tabapp.R;
 import me.relex.circleindicator.CircleIndicator;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
-/**
- * Created by Raju on 06-09-2017.
- */
+
 
 public class ImageSliderActivity extends FragmentActivity {
 

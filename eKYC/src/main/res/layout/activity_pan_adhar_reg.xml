@@ -48,7 +48,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -60,7 +60,7 @@
                                 android:maxLength="10"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <EditText
                             android:id="@+id/etPanError"
@@ -100,7 +100,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_dob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -114,7 +114,7 @@
                                 android:inputType="date"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -231,7 +231,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_aadhar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -245,7 +245,7 @@
                                 android:maxLength="12"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -478,7 +478,7 @@
                                         android:orientation="vertical"
                                         android:visibility="gone">
 
-                                        <android.support.design.widget.TextInputLayout
+                                        <com.google.android.material.textfield.TextInputLayout
                                             android:id="@+id/input_layout_otp"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -495,7 +495,7 @@
                                                 android:maxLength="6"
                                                 android:maxLines="1"
                                                 android:singleLine="true" />
-                                        </android.support.design.widget.TextInputLayout>
+                                        </com.google.android.material.textfield.TextInputLayout>
                                     </LinearLayout>
 
                                     <LinearLayout
@@ -505,7 +505,7 @@
                                         android:orientation="vertical"
                                         android:visibility="gone">
 
-                                        <android.support.design.widget.TextInputLayout
+                                        <com.google.android.material.textfield.TextInputLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_below="@+id/tvOTPHeading">
@@ -533,7 +533,7 @@
                                                 android:maxLines="1"
                                                 android:visibility="gone"
                                                 android:singleLine="true" />-->
-                                        </android.support.design.widget.TextInputLayout>
+                                        </com.google.android.material.textfield.TextInputLayout>
                                     </LinearLayout>
 
                                     <TextView

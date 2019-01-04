@@ -85,7 +85,7 @@
             android:name="io.fabric.ApiKey"
             android:value="3cc8c76f5c3a4f08cb553d9080f4c4f1cade791c" />-->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.mosl.tabapp.provider"
             android:exported="false"
             android:grantUriPermissions="true">

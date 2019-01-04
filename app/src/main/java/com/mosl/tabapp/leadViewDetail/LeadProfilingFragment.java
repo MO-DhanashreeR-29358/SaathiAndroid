@@ -2,8 +2,8 @@ package com.mosl.tabapp.leadViewDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;

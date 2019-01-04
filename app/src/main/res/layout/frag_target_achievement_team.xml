@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/horizontalRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/_minus10sdp" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivLeftArrowFirst"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_left_arrow" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivRightArrowFirst"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -245,7 +245,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_new_right_arrow_gray" />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewFirst"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/_minus10sdp" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivLeftArrowSecond"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_left_arrow" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivRightArrowSecond"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -319,7 +319,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_new_right_arrow_gray" />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewSecond"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -375,7 +375,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/_minus10sdp" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivLeftArrowThird"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -384,7 +384,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_left_arrow" />
 
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/ivRightArrowThird"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -393,7 +393,7 @@
                             android:layout_marginTop="@dimen/_56sdp"
                             app:srcCompat="@drawable/ic_new_right_arrow_gray" />
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewThird"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

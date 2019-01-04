@@ -1,10 +1,9 @@
 package com.mosl.tabapp.model.dashboard;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 
 import java.io.Serializable;

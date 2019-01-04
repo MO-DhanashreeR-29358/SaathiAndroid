@@ -1,6 +1,6 @@
 package com.mosl.tabapp.urls;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.Contract;
 

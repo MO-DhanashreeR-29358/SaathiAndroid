@@ -1,7 +1,8 @@
 package com.mosl.tabapp.common;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class UiModel<T> {
     public final boolean inProgress;

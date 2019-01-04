@@ -13,8 +13,8 @@ buildscript {
   }
 }
 
-ext.versions = ["compileSdkVersion"   : 27,
-                "targetSdkVersion"    : 27,
+ext.versions = ["compileSdkVersion"   : 28,
+                "targetSdkVersion"    : 28,
                 "buildToolsVersion"   : "28.0.3",
                 'supportLibrary'      : '27.1.1',
                 'multidex'            : '1.0.3',
@@ -30,7 +30,7 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'espresso'            : '3.0.2',
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
-                'circleIndicator'     : '1.2.2',
+                'circleIndicator'     : '2.1.0',
                 'okhttp'              : '3.11.0',
                 'stetho'              : '1.5.0',
                 'gson'                : '2.8.2',

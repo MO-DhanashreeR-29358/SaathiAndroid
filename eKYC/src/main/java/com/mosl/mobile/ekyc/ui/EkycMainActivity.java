@@ -1,13 +1,11 @@
 package com.mosl.mobile.ekyc.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.ApplyNowAdapter;
@@ -93,11 +94,11 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             if (getAppType().equals(DIRECT) && !getIsCVLVerified()) {
                 requestWindowFeature(Window.FEATURE_NO_TITLE);
                 getWindow().addFlags(
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN
-                                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
             }
 
             setContentView(R.layout.activity_applynow);
@@ -105,8 +106,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             setUpView();
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
+            //            Crashlytics.logException(e);
         }
     }
 
@@ -126,7 +127,7 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         tvAppLoginId = (TextView) findViewById(R.id.tvAppLoginId);
         tvUserName = (TextView) findViewById(R.id.tvUserName);
 
-//        tvExitForm.setText("Exit Form");
+        //        tvExitForm.setText("Exit Form");
         if (getAppType().equals(DIRECT) || isDirectProspect()) {
             tvAppLoginId.setVisibility(View.GONE);
             tvUserName.setText(getRegisteredName().toUpperCase());
@@ -148,14 +149,14 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         dialogReview.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogReview.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogReview.setContentView(R.layout.frag_review_and_edit);
-        dialogReview.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogReview.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogReview.setCanceledOnTouchOutside(false);
 
         rlExitForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 formExit();
-
             }
         });
         rlLogout.setOnClickListener(new View.OnClickListener() {
@@ -195,13 +196,13 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         personalDetailFragment.setTabPageIndicator(indicatorDetail);
         esignFragment = new EsignFragment();
         esignFragment.setContext(EkycMainActivity.this);
-//        esignFragment.setTabPageIndicator(indicatorDetail);
+        //        esignFragment.setTabPageIndicator(indicatorDetail);
         jointHolderAndNomineeFragment = new JointHolderAndNomineeFragment();
         jointHolderAndNomineeFragment.setContext(EkycMainActivity.this);
         jointHolderAndNomineeFragment.setTabPageIndicator(indicatorDetail);
-//        personalDetailFragment.setViewPager(vpApply);
+        //        personalDetailFragment.setViewPager(vpApply);
         bankDetailsFormFragment = new BankDetailsFormFragment();
-//        bankDetailsFormFragment.setContext(EkycMainActivity.this);
+        //        bankDetailsFormFragment.setContext(EkycMainActivity.this);
         bankDetailsFormFragment.setViewPager(vpApply);
         bankDetailsFormFragment.setTabPageIndicator(indicatorDetail);
         bankDetailsFormFragment.setReviewDialog(dialogReview);
@@ -213,17 +214,17 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         int[] icons = new int[5];
         if (!isNomineeTabApplicable()) {
             headingClient[0] = "";
-//                headingClient[1] = "";
+            //                headingClient[1] = "";
             headingClient[1] = "";
             headingClient[2] = "";
             headingClient[3] = "";
             icons[0] = R.drawable.ic_personal_tab;
-//                icons[1] = R.drawable.ic_demat_tab;
+            //                icons[1] = R.drawable.ic_demat_tab;
             icons[1] = R.drawable.ic_bank_tab;
             icons[2] = R.drawable.ic_upload_tab;
             icons[3] = R.drawable.ic_esign_tab;
             pageListDetail.add(personalDetailFragment);
-//                pageListDetail.add(jointHolderAndNomineeFragment);
+            //                pageListDetail.add(jointHolderAndNomineeFragment);
             pageListDetail.add(bankDetailsFormFragment);
             pageListDetail.add(uploadDetailsFragment);
             pageListDetail.add(esignFragment);
@@ -273,7 +274,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             pageListDetail.add(esignFragment);
         }
 
-        final ApplyNowAdapter adapterClient = new ApplyNowAdapter(getSupportFragmentManager(), pageListDetail, headingClient, icons);
+        final ApplyNowAdapter adapterClient =
+            new ApplyNowAdapter(getSupportFragmentManager(), pageListDetail, headingClient, icons);
         vpApply.setAdapter(adapterClient);
         adapterClient.notifyDataSetChanged();
         vpApply.setPagingEnabled(false);
@@ -292,25 +294,25 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         }
         indicatorDetail.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset,
+                int positionOffsetPixels) {
 
             }
 
             @Override
             public void onPageSelected(int position) {
                 if (position == getPersonalTab()) {
-//                    PersonalDetailFragment fragmentToShow = (PersonalDetailFragment) adapterClient.getItem(position);
-//                    fragmentToShow.loadPersonalDetails();
+                    //                    PersonalDetailFragment fragmentToShow = (PersonalDetailFragment) adapterClient.getItem(position);
+                    //                    fragmentToShow.loadPersonalDetails();
                 }
                 if (position == getDematTab()) {
 
                 }
                 if (position == getBankTab()) {
-//                    BankDetailsFragment fragmentToShow = (BankDetailsFragment) adapterClient.getItem(position);
+                    //                    BankDetailsFragment fragmentToShow = (BankDetailsFragment) adapterClient.getItem(position);
 
-//                    BankDetailsFormFragment fragmentToShow = (BankDetailsFormFragment) adapterClient.getItem(position);
-//                    fragmentToShow.showBankDetailForm();
-
+                    //                    BankDetailsFormFragment fragmentToShow = (BankDetailsFormFragment) adapterClient.getItem(position);
+                    //                    fragmentToShow.showBankDetailForm();
 
                     //  fragmentToShow.getState();
 
@@ -319,10 +321,11 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                     fundTransferFragment.loadTransferDetails();*/
                 }
                 if (position == getUploadTab()) {
-                    UploadDetailsFragment uploadDetailsFragment = (UploadDetailsFragment) adapterClient.getItem(position);
+                    UploadDetailsFragment uploadDetailsFragment =
+                        (UploadDetailsFragment) adapterClient.getItem(position);
                     //uploadDetailsFragment.showVideoSection();
-//                    UploadFragment fragmentToShow = (UploadFragment) adapterClient.getItem(position);
-//                    fragmentToShow.loadUploadDetails();
+                    //                    UploadFragment fragmentToShow = (UploadFragment) adapterClient.getItem(position);
+                    //                    fragmentToShow.loadUploadDetails();
                     /*if(adapterClient.getItem(position) instanceof UploadDetailsFragment) {
                         UploadDetailsFragment fragmentToShow = (UploadDetailsFragment) adapterClient.getItem(position);
                         fragmentToShow.loadUploadDetails();
@@ -345,41 +348,51 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            if (bundle.getString(PERSONAL_DETAIL) != null && bundle.getString(PERSONAL_DETAIL).equals(MOSLConstants.PERSONAL_DETAIL)) {
+            if (bundle.getString(PERSONAL_DETAIL) != null && bundle.getString(PERSONAL_DETAIL)
+                .equals(MOSLConstants.PERSONAL_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(PERSONAL_DETAIL);
                 vpApply.setCurrentItem(getPersonalTab());
-            } else if (bundle.getString(DEMAT_DETAIL) != null && bundle.getString(DEMAT_DETAIL).equals(DEMAT_DETAIL)) {
+            } else if (bundle.getString(DEMAT_DETAIL) != null && bundle.getString(DEMAT_DETAIL)
+                .equals(DEMAT_DETAIL)) {
                 disableEnableTab(DEMAT_DETAIL);
                 vpApply.setCurrentItem(getDematTab());
-            } else if (bundle.getString(BANK_DETAIL) != null && bundle.getString(BANK_DETAIL).equals(BANK_DETAIL)) {
+            } else if (bundle.getString(BANK_DETAIL) != null && bundle.getString(BANK_DETAIL)
+                .equals(BANK_DETAIL)) {
                 disableEnableTab(BANK_DETAIL);
                 vpApply.setCurrentItem(getBankTab());
-            } else if (bundle.getString(UPLOAD_DETAIL) != null && bundle.getString(UPLOAD_DETAIL).equals(UPLOAD_DETAIL)) {
+            } else if (bundle.getString(UPLOAD_DETAIL) != null && bundle.getString(UPLOAD_DETAIL)
+                .equals(UPLOAD_DETAIL)) {
                 disableEnableTab(UPLOAD_DETAIL);
                 vpApply.setCurrentItem(getUploadTab());
-            } else if (bundle.getString(ESIGN_DETAIL) != null && bundle.getString(ESIGN_DETAIL).equals(ESIGN_DETAIL)) {
+            } else if (bundle.getString(ESIGN_DETAIL) != null && bundle.getString(ESIGN_DETAIL)
+                .equals(ESIGN_DETAIL)) {
                 disableEnableTab(ESIGN_DETAIL);
                 vpApply.setCurrentItem(getEsignTab());
             }
 
-            if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL).equals(PERSONAL_DETAIL)) {
+            if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL)
+                .equals(PERSONAL_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(PERSONAL_DETAIL);
                 vpApply.setCurrentItem(getPersonalTab());
-            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL).equals(DEMAT_DETAIL)) {
+            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL)
+                .equals(DEMAT_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(DEMAT_DETAIL);
                 vpApply.setCurrentItem(getDematTab());
-            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL).equals(BANK_DETAIL)) {
+            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL)
+                .equals(BANK_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(BANK_DETAIL);
                 vpApply.setCurrentItem(getBankTab(), false);
-            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL).equals(UPLOAD_DETAIL)) {
+            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL)
+                .equals(UPLOAD_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(UPLOAD_DETAIL);
                 vpApply.setCurrentItem(getUploadTab());
-            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL).equals(ESIGN_DETAIL)) {
+            } else if (bundle.getString(TAB_DETAIL) != null && bundle.getString(TAB_DETAIL)
+                .equals(ESIGN_DETAIL)) {
                 userID = getUserID();
                 disableEnableTab(ESIGN_DETAIL);
                 vpApply.setCurrentItem(getEsignTab());
@@ -395,83 +408,92 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             inputMap.put("_userid", userID);
             inputMap.put(APP_LOGIN_ID, CommonModel.getAppLoginID());
 
-
             String flag = USER_LOGOUT;
             String category = SIGNUP;
 
-            WebServiceHandler.post(EkycMainActivity.this, flag, category, inputMap, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    if (response != null) {
-                        try {
-                            String msg = (response.isNull("_msg") || response.getString("_msg").equals("")) ? "" : response.getString("_msg");
-                            String status = (response.isNull("_Status") || response.getString("_Status").equals("")) ? "" : response.getString("_Status");
-                            if (Integer.valueOf(status) == 1) {
-                                setUserID("");
-                                setUserType("");
-                                if (getAppType().equals(CRM)) {
-                                    Intent intent = new Intent(EkycMainActivity.this, PostLoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else if (getAppType().equals(PP)) {
-                                    if (isDirectProspect()) { //goto resume page for Direct prospect user
-                                        Intent intent = new Intent(EkycMainActivity.this, DirectResumeApplicationActivity.class);
+            WebServiceHandler.post(EkycMainActivity.this, flag, category, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        if (response != null) {
+                            try {
+                                String msg = (response.isNull("_msg") || response.getString("_msg")
+                                    .equals("")) ? "" : response.getString("_msg");
+                                String status =
+                                    (response.isNull("_Status") || response.getString("_Status")
+                                        .equals("")) ? "" : response.getString("_Status");
+                                if (Integer.valueOf(status) == 1) {
+                                    setUserID("");
+                                    setUserType("");
+                                    if (getAppType().equals(CRM)) {
+                                        Intent intent = new Intent(EkycMainActivity.this,
+                                            PostLoginActivity.class);
                                         startActivity(intent);
                                         finish();
-                                    } else {
-                                        Intent intent = new Intent(EkycMainActivity.this, PostLoginActivity.class);
+                                    } else if (getAppType().equals(PP)) {
+                                        if (isDirectProspect()) { //goto resume page for Direct prospect user
+                                            Intent intent = new Intent(EkycMainActivity.this,
+                                                DirectResumeApplicationActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Intent intent = new Intent(EkycMainActivity.this,
+                                                PostLoginActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    } else if (getAppType().equals(DIRECT)) {
+                                        Intent intent = new Intent(EkycMainActivity.this,
+                                            DirectResumeApplicationActivity.class);
                                         startActivity(intent);
                                         finish();
                                     }
-                                } else if (getAppType().equals(DIRECT)) {
-                                    Intent intent = new Intent(EkycMainActivity.this, DirectResumeApplicationActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                } else {
+                                    commonMsgDialog(EkycMainActivity.this, msg, false, "");
                                 }
-                            } else {
-                                commonMsgDialog(EkycMainActivity.this, msg, false, "");
+                                customProgress.setVisibility(View.GONE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            customProgress.setVisibility(View.GONE);
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    if (statusCode == 0) {
-                        commonMsgDialog(EkycMainActivity.this, CONNECTION_TIMEOUT, false, "");
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                        customProgress.setVisibility(View.GONE);
                     }
-                }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                }
-            });
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                        customProgress.setVisibility(View.GONE);
+                    }
 
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        if (statusCode == 0) {
+                            commonMsgDialog(EkycMainActivity.this, CONNECTION_TIMEOUT, false, "");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(this);
         }
@@ -498,7 +520,7 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         super.onDestroy();
     }
 
-    @Override public boolean dispatchKeyEvent(KeyEvent event) {
+    @SuppressLint("RestrictedApi") @Override public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT
             || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
             return true;
@@ -507,8 +529,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
     }
 
     /*
-    * Tab disable enable code
-    */
+     * Tab disable enable code
+     */
     public void disableEnableTab(String tab) {
         if (tab.equals(PERSONAL_DETAIL)) {
             indicatorDetail.enableTab(getPersonalTab());
@@ -551,12 +573,14 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                 if (getInterestedInMF()) {
                     if (!getIsAadharVerified()) {
                         if (getAppType().equals(DIRECT)) {
-                            Intent intent = new Intent(EkycMainActivity.this, PANAdharRegistActivity.class); // TODO: 28-03-2017
+                            Intent intent = new Intent(EkycMainActivity.this,
+                                PANAdharRegistActivity.class); // TODO: 28-03-2017
                             intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
                             startActivity(intent);
                             finish();
                         } else {
-                            Intent intent = new Intent(EkycMainActivity.this, PostLoginActivity.class);
+                            Intent intent =
+                                new Intent(EkycMainActivity.this, PostLoginActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -573,7 +597,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                         startActivity(intent);
                         finish();
                     } else {
-                        Intent intent = new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
+                        Intent intent =
+                            new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -586,12 +611,14 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                             startActivity(intent);
                             finish();
                         } else if (isAadhaarByPass() && !getIsCVLVerified()) {
-                            Intent intent = new Intent(EkycMainActivity.this, PANAdharRegistActivity.class); // TODO: 28-03-2017
+                            Intent intent = new Intent(EkycMainActivity.this,
+                                PANAdharRegistActivity.class); // TODO: 28-03-2017
                             intent.putExtra(SOURCE, BACK_FROM_PREVIOUS_SCREEN);
                             startActivity(intent);
                             finish();
                         } else {
-                            Intent intent = new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
+                            Intent intent =
+                                new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -602,7 +629,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
                         startActivity(intent);
                         finish();
                     } else {
-                        Intent intent = new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
+                        Intent intent =
+                            new Intent(EkycMainActivity.this, AddressDetailsActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -618,8 +646,10 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             } else if (vpApply.getCurrentItem() == getUploadTab()) {
                 try {
                     ApplyNowAdapter adapterClient = (ApplyNowAdapter) vpApply.getAdapter();
-                    UploadDetailsFragment uploadDetailsFragment = (UploadDetailsFragment) adapterClient.getItem(getUploadTab());
-                    boolean isVerifierConnected = uploadDetailsFragment.getUploadDetailAdapter().isVerifierConnected();
+                    UploadDetailsFragment uploadDetailsFragment =
+                        (UploadDetailsFragment) adapterClient.getItem(getUploadTab());
+                    boolean isVerifierConnected =
+                        uploadDetailsFragment.getUploadDetailAdapter().isVerifierConnected();
                     if (!isVerifierConnected) {
                         vpApply.setCurrentItem(getBankTab());
                     }
@@ -645,16 +675,37 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         Log.d("SigningFailure", response);
         try {
             JSONObject obj = new JSONObject(response);
-            String txn_id = (obj.isNull("txn_id") || obj.getString("txn_id").equals("")) ? "" : obj.getString("txn_id");
-            String digio_doc_id = (obj.isNull("digio_doc_id") || obj.getString("digio_doc_id").equals("")) ? "" : obj.getString("digio_doc_id");
+            String txn_id = (obj.isNull("txn_id") || obj.getString("txn_id").equals("")) ? ""
+                : obj.getString("txn_id");
+            String digio_doc_id =
+                (obj.isNull("digio_doc_id") || obj.getString("digio_doc_id").equals("")) ? ""
+                    : obj.getString("digio_doc_id");
             JSONObject lastStateObj = obj.getJSONObject("last_state");
-            String screen = (lastStateObj.isNull("screen") || lastStateObj.getString("screen").equals("")) ? "" : lastStateObj.getString("screen");
-            String state_code = (lastStateObj.isNull("state_code") || lastStateObj.getString("state_code").equals("")) ? "" : lastStateObj.getString("state_code");
-            String error_code = (lastStateObj.isNull("error_code") || lastStateObj.getString("error_code").equals("")) ? "" : lastStateObj.getString("error_code");
-            String message = (lastStateObj.isNull("message") || lastStateObj.getString("message").equals("")) ? "" : lastStateObj.getString("message");
+            String screen =
+                (lastStateObj.isNull("screen") || lastStateObj.getString("screen").equals("")) ? ""
+                    : lastStateObj.getString("screen");
+            String state_code =
+                (lastStateObj.isNull("state_code") || lastStateObj.getString("state_code")
+                    .equals("")) ? "" : lastStateObj.getString("state_code");
+            String error_code =
+                (lastStateObj.isNull("error_code") || lastStateObj.getString("error_code")
+                    .equals("")) ? "" : lastStateObj.getString("error_code");
+            String message =
+                (lastStateObj.isNull("message") || lastStateObj.getString("message").equals(""))
+                    ? "" : lastStateObj.getString("message");
 
             esignFragment.setDigioData(txn_id, message, error_code, screen, state_code, message);
-            Log.d("SigningFailure123", txn_id + " " + digio_doc_id + " " + screen + " " + state_code + " " + error_code + " " + message);
+            Log.d("SigningFailure123", txn_id
+                + " "
+                + digio_doc_id
+                + " "
+                + screen
+                + " "
+                + state_code
+                + " "
+                + error_code
+                + " "
+                + message);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -62,7 +62,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -77,7 +77,7 @@
                                 android:singleLine="true"
                                 android:textSize="@dimen/_14sdp" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <EditText
                             android:id="@+id/etNameError"
@@ -112,7 +112,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -128,7 +128,7 @@
                                 android:singleLine="true"
                                 android:textSize="@dimen/_14sdp" />
 
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <EditText
                             android:id="@+id/etEmailError"
@@ -162,7 +162,7 @@
                         android:orientation="vertical">
 
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_mobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -178,7 +178,7 @@
                                 android:padding="6dp"
                                 android:singleLine="true"
                                 android:textSize="@dimen/_14sdp" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <EditText
                             android:id="@+id/etMobileError"
@@ -356,7 +356,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -372,7 +372,7 @@
                                 android:padding="6dp"
                                 android:singleLine="true"
                                 android:textSize="@dimen/_14sdp" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <EditText
                             android:id="@+id/etPincodeError"
@@ -414,7 +414,7 @@
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutBABranchCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -429,7 +429,7 @@
                                 android:padding="6dp"
                                 android:singleLine="true"
                                 android:textSize="@dimen/_14sdp" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:layout_width="wrap_content"

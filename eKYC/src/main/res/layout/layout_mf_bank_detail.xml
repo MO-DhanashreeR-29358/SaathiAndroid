@@ -61,7 +61,7 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_MFMICR"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                     android:maxLength="20"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/btnMFBankDetails"
@@ -258,7 +258,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_MFAccNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -274,7 +274,7 @@
                         android:maxLength="18"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etMFAccNumberError"
@@ -296,7 +296,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_confirm_MFAccNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
                         android:maxLength="18"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etConfirmMFAccNumberError"

@@ -1,6 +1,6 @@
 package com.mosl.mobile.ekyc.model;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.widget.ArrayAdapter;
 
 import com.mosl.mobile.ekyc.common.MOSLCommon;

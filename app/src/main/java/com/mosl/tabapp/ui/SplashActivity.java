@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.FragmentActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.tabapp.R;

@@ -2,21 +2,16 @@ package com.mosl.mobile.ekyc.directmodule;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.register.RegisterActivity;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
 import static com.mosl.mobile.ekyc.model.CommonModel.clearAllCommonModelFields;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 
 /**

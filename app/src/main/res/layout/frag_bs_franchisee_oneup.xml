@@ -909,7 +909,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivAcqActual"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -948,7 +948,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivAcqProjected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1018,7 +1018,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivActActual"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -1057,7 +1057,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivActProjected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

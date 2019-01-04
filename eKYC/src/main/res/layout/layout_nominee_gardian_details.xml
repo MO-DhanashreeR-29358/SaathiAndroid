@@ -54,7 +54,7 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:entries="@array/title" />-->
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeGuardianFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                             android:hint="First Name"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/etNomineeGuardianFirstNameError"
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutNomineeGuardianMiddleName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -106,7 +106,7 @@
                                 android:hint="Middle Name"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etNomineeGuardianMiddleNameError"
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutNomineeGuardianLastName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -139,7 +139,7 @@
                                 android:hint="Last Name"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etNomineeGuardianLastNameError"
@@ -183,7 +183,7 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_2sdp" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineesGuardianRelationship"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:visibility="gone" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <CheckBox
                     android:id="@+id/cbNomineeGuardianSameAsPrimaryCorrespondence"
@@ -208,7 +208,7 @@
                     android:button="@drawable/checkbox"
                     android:text=" Same as primary applicants correspondence address" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianBldgNameCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -223,9 +223,9 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianFlatNoCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -240,9 +240,9 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianAreaCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -257,9 +257,9 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianPincodeCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etNomineeGuardianPincodeCorresError"
@@ -363,7 +363,7 @@
                     android:enabled="false"
                     android:visibility="gone" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianCorresCityOther"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:visibility="gone" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -440,7 +440,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeGuardianSTD"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -457,9 +457,9 @@
                             android:maxLength="5"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeGuardianTelNo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -476,7 +476,7 @@
                             android:maxLength="8"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <TextView
@@ -492,7 +492,7 @@
                     android:textSize="@dimen/_10sdp"
                     android:visibility="gone" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeGuardianEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -507,7 +507,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etNomineeGuardianEmailError"

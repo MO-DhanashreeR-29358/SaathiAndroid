@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnMenu"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_18sdp"
@@ -43,7 +43,7 @@
             android:background="@drawable/textborder"
             android:orientation="horizontal">
             <!--
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                         android:layout_marginRight="5dp"
                         android:visibility="gone" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/srchImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
 
                 <view
                     android:id="@+id/ivIcon"
-                    class="android.support.v7.widget.AppCompatImageView"
+                    class="androidx.appcompat.widget.AppCompatImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/notification_icon"

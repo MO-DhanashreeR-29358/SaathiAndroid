@@ -281,7 +281,7 @@
                          android:text="Resident Status"
                          android:textSize="@dimen/_11sdp"
                          android:textColor="@color/text_color_personal" />-->
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_residentStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
                             android:hint="@string/residentstatus"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!--<TextView
                         android:layout_width="match_parent"
@@ -305,7 +305,7 @@
                         android:text="Sub Status"
                         android:textSize="@dimen/_11sdp"
                         android:textColor="@color/text_color_personal" />-->
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_subStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -320,7 +320,7 @@
                             android:hint="@string/substatus"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- <TextView
                          android:layout_width="wrap_content"
@@ -368,7 +368,7 @@
                                 android:orientation="horizontal">
 
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_firstname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -380,7 +380,7 @@
                                         android:hint="@string/firstname"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
                             </LinearLayout>
 
                             <TextView
@@ -409,7 +409,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
@@ -420,7 +420,7 @@
                                         android:hint="@string/middlename"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etMiddleNameError"
@@ -441,7 +441,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_lastname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -453,7 +453,7 @@
                                         android:hint="@string/lastname"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etLastNameError"
@@ -695,7 +695,7 @@
                         android:textColor="@color/upload_red"
                         android:textSize="@dimen/_1sdp" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -710,7 +710,7 @@
                             android:inputType="date"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!--<TextView
                         android:layout_width="wrap_content"
@@ -736,7 +736,7 @@
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />-->
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_birthPlace"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -749,7 +749,7 @@
                             android:hint="@string/placeofbirth"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/etBirthPlaceError"
@@ -855,7 +855,7 @@
                                 android:orientation="horizontal">
 
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_fatherSpouseFirstName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -867,7 +867,7 @@
                                         android:hint="@string/fatherspousenamefirstname"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
                             </LinearLayout>
 
                             <TextView
@@ -884,7 +884,7 @@
                                 android:visibility="gone" />
                         </LinearLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_fatherSpouseMidName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -897,7 +897,7 @@
                                 android:hint="@string/fatherspousenamemiddlename"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etFatherSpouseMidNameError"
@@ -912,7 +912,7 @@
                             android:textSize="@dimen/_10sdp"
                             android:visibility="gone" />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/input_layout_fatherSpouseLastName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -925,7 +925,7 @@
                                 android:hint="@string/fatherspousenamlastname"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etFatherSpouseLastNameError"
@@ -948,7 +948,7 @@
                          android:text="Mother Name"
                          android:textSize="@dimen/_11sdp"
                          android:textColor="@color/text_color_personal" />-->
-                    <!--<android.support.design.widget.TextInputLayout
+                    <!--<com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_motherName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -960,7 +960,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Mother Name"
                             android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>-->
+                    </com.google.android.material.textfield.TextInputLayout>-->
 
                     <LinearLayout
                         android:id="@+id/llMotherDetail"
@@ -999,7 +999,7 @@
                                 android:orientation="horizontal">
 
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MotherFirstname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1011,7 +1011,7 @@
                                         android:hint="@string/motherfirstname"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
                             </LinearLayout>
 
                             <TextView
@@ -1039,7 +1039,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MotherMiddlename"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1051,7 +1051,7 @@
                                         android:hint="@string/mothermiddlename"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etMotherMiddleNameError"
@@ -1072,7 +1072,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MotherLastname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1084,7 +1084,7 @@
                                         android:hint="@string/motherlasname"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etMotherLastNameError"
@@ -1108,7 +1108,7 @@
                         android:text="Maiden Name"
                         android:textSize="@dimen/_11sdp"
                         android:textColor="@color/text_color_personal" />-->
-                    <!--<android.support.design.widget.TextInputLayout
+                    <!--<com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_maidenName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1120,7 +1120,7 @@
                             android:layout_height="wrap_content"
                             android:hint="Maiden Name"
                             android:inputType="text" />
-                    </android.support.design.widget.TextInputLayout>-->
+                    </com.google.android.material.textfield.TextInputLayout>-->
 
 
                     <LinearLayout
@@ -1161,7 +1161,7 @@
                                 android:orientation="horizontal">
 
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MaidenFirstname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1173,7 +1173,7 @@
                                         android:hint="Maiden First Name"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
                             </LinearLayout>
 
                             <TextView
@@ -1201,7 +1201,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MaidenMiddlename"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1213,7 +1213,7 @@
                                         android:hint="Maiden Middle Name"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etMaidenMiddleNameError"
@@ -1234,7 +1234,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                                <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_MaidenLastname"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -1246,7 +1246,7 @@
                                         android:hint="Maiden Last Name"
                                         android:maxLines="1"
                                         android:singleLine="true" />
-                                </android.support.design.widget.TextInputLayout>
+                                </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etMaidenLastNameError"
@@ -1271,7 +1271,7 @@
                         android:text="Permanent Account Number"
                         android:textSize="@dimen/_11sdp"
                         android:textColor="@color/text_color_personal"/>-->
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_PAN"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1287,7 +1287,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!--<TextView
                         android:layout_width="wrap_content"
@@ -1296,7 +1296,7 @@
                         android:text="Unique Identification Number(UID) / Aadhaar"
                         android:textSize="@dimen/_11sdp"
                         android:textColor="@color/text_color_personal" />-->
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_aadhar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1313,7 +1313,7 @@
                             android:maxLength="12"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- <TextView
                          android:layout_width="wrap_content"
@@ -1322,7 +1322,7 @@
                          android:text="Name as on PAN Card"
                          android:textSize="@dimen/_11sdp"
                          android:textColor="@color/text_color_personal" />-->
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_nameOnPAN"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1337,9 +1337,9 @@
                             android:inputType="text"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_GST"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -1353,7 +1353,7 @@
                             android:maxLength="15"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <!--<EditText

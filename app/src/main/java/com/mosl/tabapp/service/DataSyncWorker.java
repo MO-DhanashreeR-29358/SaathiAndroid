@@ -1,7 +1,7 @@
 package com.mosl.tabapp.service;
 
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import androidx.work.Worker;
 import com.mosl.tabapp.CrmApp;

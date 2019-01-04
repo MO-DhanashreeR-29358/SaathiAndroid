@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 /**
  *

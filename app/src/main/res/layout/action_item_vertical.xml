@@ -19,7 +19,7 @@
         android:textSize="@dimen/_13sdp"
         android:textAppearance="?android:textAppearanceMedium"
         tools:text="Chart" />
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_icon"
         android:layout_width="@dimen/_18sdp"
         android:layout_height="@dimen/_18sdp" />

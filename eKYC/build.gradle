@@ -28,22 +28,23 @@ dependencies {
     implementation files('libs/protobuf_2_4_1.jar')
     implementation project(':TabLibrary')
     testImplementation deps.testing.junit
-    androidTestImplementation(deps.testing.espresso.core)
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation deps.sdpAndroid
-    implementation deps.support.design
-    implementation deps.support.customtabs
-    implementation deps.support.appcompat
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'androidx.browser:browser:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
     implementation deps.slidinguppanel
     implementation deps.okHttp.core
     implementation deps.timber
     compileOnly deps.javax
     implementation deps.asyncHttp
     implementation deps.imageLoader
-    implementation deps.multidex
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation(deps.crashlytics) {
         transitive = true;
     }
-    implementation deps.constraintLayout
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation deps.compressor
     implementation deps.playService
 //    implementation project(':emendate')

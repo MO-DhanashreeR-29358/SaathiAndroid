@@ -1,7 +1,7 @@
 package com.mosl.tabapp.menu;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.dashboard.DashboardFragment;

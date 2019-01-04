@@ -31,7 +31,7 @@
         android:padding="@dimen/_6sdp">
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ibtnClose"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="48dp"

@@ -71,7 +71,7 @@
                     android:textSize="@dimen/_10sdp"
                     android:visibility="gone" />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_layout_equityMICR"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                         android:maxLength="20"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -289,7 +289,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_equityAccNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -305,7 +305,7 @@
                             android:maxLength="18"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/etEquityAccNumberError"
@@ -327,7 +327,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_layout_confirm_equityAccNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -342,7 +342,7 @@
                             android:maxLength="18"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/etConfirmEquityAccNumberError"
