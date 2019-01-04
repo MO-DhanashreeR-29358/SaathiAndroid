@@ -12,13 +12,7 @@ import com.mosl.tabapp.R;
  */
 public class MSFDialog {
 
-    /**
-     * It prompts a dialog with positive button. On clicking positive-button
-     * {@link alertDialogWithOneButton } will be triggered
-     *
-     * @param title
-     * @param message
-     */
+
     public static AlertDialog alertDialog(Context context, final int id, String title, String message, String buttonText, boolean cancelable, final DialogListener listener) {
         AlertDialog dialog = null;
         try {
