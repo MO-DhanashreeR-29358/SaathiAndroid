@@ -653,7 +653,8 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
             String error_code = (lastStateObj.isNull("error_code") || lastStateObj.getString("error_code").equals("")) ? "" : lastStateObj.getString("error_code");
             String message = (lastStateObj.isNull("message") || lastStateObj.getString("message").equals("")) ? "" : lastStateObj.getString("message");
 
-            esignFragment.setDigioData(txn_id, message, error_code, screen, state_code, message);
+            esignFragment.setDigioData(digio_doc_id, message, error_code, screen, state_code,
+                message);
             Log.d("SigningFailure123", txn_id + " " + digio_doc_id + " " + screen + " " + state_code + " " + error_code + " " + message);
         } catch (Exception e) {
             e.printStackTrace();
