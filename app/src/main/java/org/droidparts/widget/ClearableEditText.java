@@ -5,13 +5,13 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
- * limitations under the License. 
+ * limitations under the License.
  */
 package org.droidparts.widget;
 
@@ -23,8 +23,6 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import androidx.appcompat.widget.AppCompatEditText;
 import org.droidparts.adapter.widget.TextWatcherAdapter;
 import org.droidparts.adapter.widget.TextWatcherAdapter.TextWatcherListener;
@@ -105,8 +103,10 @@ public class ClearableEditText extends AppCompatEditText
         if (getDisplayedDrawable() != null) {
             int x = (int) event.getX();
             int y = (int) event.getY();
-            int left = (loc == Location.LEFT) ? 0 : getWidth() - getPaddingRight() - xD.getIntrinsicWidth();
-            int right = (loc == Location.LEFT) ? getPaddingLeft() + xD.getIntrinsicWidth() : getWidth();
+            int left = (loc == Location.LEFT) ? 0
+                : getWidth() - getPaddingRight() - xD.getIntrinsicWidth();
+            int right =
+                (loc == Location.LEFT) ? getPaddingLeft() + xD.getIntrinsicWidth() : getWidth();
             boolean tappedX = x >= left && x <= right && y >= 0 && y <= (getBottom() - getTop());
             if (tappedX) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -183,16 +183,17 @@ public class ClearableEditText extends AppCompatEditText
         boolean wasVisible = (displayed != null);
         if (visible != wasVisible) {
             Drawable x = visible ? xD : null;
-            super.setCompoundDrawables((loc == Location.LEFT) ? x : cd[0], cd[1], (loc == Location.RIGHT) ? x : cd[2],
-                    cd[3]);
+            super.setCompoundDrawables((loc == Location.LEFT) ? x : cd[0], cd[1],
+                (loc == Location.RIGHT) ? x : cd[2],
+                cd[3]);
         }
     }
+
     public static boolean isNotEmpty(CharSequence str) {
         return !isEmpty(str);
     }
+
     public static boolean isEmpty(CharSequence str) {
         return str == null || str.length() == 0;
     }
-
-
 }
