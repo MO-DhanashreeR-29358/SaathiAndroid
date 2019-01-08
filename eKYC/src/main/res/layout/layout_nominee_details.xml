@@ -258,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:hint="Bldg No/Bldg Name"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -275,7 +275,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:hint="Flat No/Road Name"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:hint="Area /Locality"
-                        android:maxLength="30"
+                        android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>

@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:hint="@string/bldgnobldgname"
-                android:maxLength="30"
+                android:maxLength="50"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:hint="@string/flatnoroadname"
-                android:maxLength="30"
+                android:maxLength="50"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:hint="@string/arealocality"
-                android:maxLength="30"
+                android:maxLength="50"
                 android:maxLines="1"
                 android:singleLine="true" />
 

@@ -892,7 +892,8 @@ public interface MOSLConstants {
     String Second_Joint_Holder_name_cannot_be_same_as_Third_Joint_holder_name_Please_enter_unique_details = "Second Joint Holder name cannot be same as Third Joint holder name. Please enter unique details.";
     String Second_Joint_Holder_name_cannot_be_same_as_Nominee_guardian_name_Please_enter_unique_details = "Second Joint Holder name cannot be same as Nominee guardian name. Please enter unique details.";
     String Third_Joint_Holder_name_cannot_be_same_as_Nominee_guardian_name_Please_enter_unique_details = "Third Joint Holder name cannot be same as Nominee guardian name. Please enter unique details.";
-    String Details_entered_should_be_of_minimum_5_and_max_30_characters_without_special_characters = "Details entered should be of minimum 5 & max 30 characters without special characters.";
+    String Details_entered_should_be_of_minimum_5_and_max_30_characters_without_special_characters =
+        "Details entered should be of minimum 5 & max 50 characters without special characters.";
     String Correspondence_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field = "Correspondence address fields cannot be same. Please enter unique details in each address field.";
     String Permanent_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field = "Permanent address fields cannot be same. Please enter unique details in each address field.";
     String Nominee_address_fields_cannot_be_same_Please_enter_unique_details_in_each_address_field = "Nominee address fields cannot be same. Please enter unique details in each address field";
