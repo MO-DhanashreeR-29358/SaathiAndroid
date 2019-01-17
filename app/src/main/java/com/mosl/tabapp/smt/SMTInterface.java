@@ -9,9 +9,9 @@ public class SMTInterface {
         this.callback = callback;
     }
 
-    @JavascriptInterface public void openEKYC() {
-
-        callback.openEkyc();
+    @JavascriptInterface public void openEKYC(String LeadId, String OAOUserId) {
+        if (OAOUserId == null || OAOUserId.isEmpty()) return;
+        callback.openEkyc(OAOUserId);
     }
 
 }

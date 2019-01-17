@@ -19,6 +19,7 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.ui.MOSLCommonActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
+import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -72,10 +73,10 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
             webView.addJavascriptInterface(new SMTInterface(this), "UpperMost");
         }
 
-    @Override public void openEkyc() {
-        Intent postLoginIntent =
-            new Intent(getMainActivity(), PostLoginActivity.class);
-        startActivity(postLoginIntent);
+    @Override public void openEkyc(String OAOUserId) {
+        HashMap<String, String> hashMap = new HashMap();
+        hashMap.put(USERID, OAOUserId);
+        gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
     }
 
     public class WebViewClient extends android.webkit.WebViewClient {
