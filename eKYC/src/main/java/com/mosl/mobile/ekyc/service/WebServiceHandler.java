@@ -2,18 +2,15 @@ package com.mosl.mobile.ekyc.service;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mosl.mobile.ekyc.common.EkycUtil;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 

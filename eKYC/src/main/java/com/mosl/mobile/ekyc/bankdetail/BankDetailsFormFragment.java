@@ -196,10 +196,14 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
             strOptProfNameCOMM = "", strDelCOMMProfIdCOMM = "", strDelCOMMProfNameCOMM = "", strNCXFutProfIdCOMM = "", strNCXFutProfNameCOMM = "", strNCXOptProfIdCOMM = "", strNCXOptProfNameCOMM = "", strNCXDelCOMMProfId = "", strNCXDelCOMMProfName = "",
             strDpSchName = "", strDpSchID = "0";
 
-    TextView tvequSchInfoAccOpenCharge, tvequSchInfoSoftCharge, tvequSchInfoIntraday1stLeg, tvequSchInfoIntraday2ndLeg, tvequSchInfoDelivery, tvequSchInfoFutures1stLeg, tvequSchInfoFutures2ndLeg,
+    TextView tvequSchInfoAccOpenCharge, tvequSchInfoSoftCharge, tvequSchInfoIntraday1stLeg,
+        tvequSchInfoIntraday2ndLeg, tvequSchInfoDelivery, tvequSchInfoFutures1stLeg,
+        tvequSchInfoFutures2ndLeg, tvEqAdminCharges, tvEqBrokingAmc,
             tvequSchInfoOptions, tvequSchInfoCurrFuture, tvequSchInfoCurrOption, tvEquAccOpenNote, tvCommAccOpenNote, tvCommDelBrok, tvCommIntradayBrok;
 
-    LinearLayout llequSchInfoFutures1stLeg, llequSchInfoFutures2ndLeg, llequSchInfoOptions, llequSchInfoCurrFuture, llequSchInfoCurrOption;
+    LinearLayout llequSchInfoFutures1stLeg, llequSchInfoFutures2ndLeg, llequSchInfoOptions,
+        llequSchInfoCurrFuture, llequSchInfoCurrOption,
+        llAdminCharges, llBrokingAmc;
 
     //Button btnUpdateScheme;
     Button btnBankAndSchemeUpdate;
@@ -417,6 +421,14 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
             llSchemeDetailValues.setVisibility(View.GONE);
         } else {
             llSchemeDetailValues.setVisibility(View.VISIBLE);
+        }
+
+        if (getAppType().equalsIgnoreCase(CRM)) {
+            llAdminCharges.setVisibility(View.VISIBLE);
+            llBrokingAmc.setVisibility(View.VISIBLE);
+        } else {
+            llAdminCharges.setVisibility(View.GONE);
+            llBrokingAmc.setVisibility(View.GONE);
         }
     }
 
@@ -708,6 +720,11 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
         rbValuePacAcc = (RadioButton) bankDetailFormView.findViewById(R.id.rbValuePacAcc);
         spDpScheme = (Spinner) bankDetailFormView.findViewById(R.id.spDpScheme);
         etDpSchemeError = (TextView) bankDetailFormView.findViewById(R.id.etDpSchemeError);
+
+        llAdminCharges = bankDetailFormView.findViewById(R.id.llAdminCharges);
+        llBrokingAmc = bankDetailFormView.findViewById(R.id.llBrokingAmc);
+        tvEqAdminCharges = bankDetailFormView.findViewById(R.id.tvEqAdminCharges);
+        tvEqBrokingAmc = bankDetailFormView.findViewById(R.id.tvEqBrokingAmc);
 
         tvEquSchemeTermCondition.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
         tvEquValuePackTermCondition.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -7424,6 +7441,16 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                                 String options1stLegAnd2ndLegINR = (object.isNull("Options1stLegAnd2ndLegINR") || object.getString("Options1stLegAnd2ndLegINR").equals("")) ? "" : object.getString("Options1stLegAnd2ndLegINR");
                                                 String currencyFut1st2ndLegINR = (object.isNull("CURRENCYFUT1ST2NDLEGINR") || object.getString("CURRENCYFUT1ST2NDLEGINR").equals("")) ? "" : object.getString("CURRENCYFUT1ST2NDLEGINR");
                                                 String currencyOptions = (object.isNull("CURRENCYOPTIONS") || object.getString("CURRENCYOPTIONS").equals("")) ? "" : object.getString("CURRENCYOPTIONS");
+                                                String adminCharges =
+                                                    (object.isNull("Admin Charges")
+                                                        || object.getString("Admin Charges")
+                                                        .equals("")) ? ""
+                                                        : object.getString("Admin Charges");
+                                                String brokingAMC =
+                                                    (object.isNull("Broking AMC(Annually)")
+                                                        || object.getString("Broking AMC(Annually)")
+                                                        .equals("")) ? ""
+                                                        : object.getString("Broking AMC(Annually)");
 
                                                 tvequSchInfoAccOpenCharge.setText(accountOpeningFee);
                                                 tvequSchInfoSoftCharge.setText(softwareCharges);
@@ -7435,6 +7462,8 @@ public class BankDetailsFormFragment extends Fragment implements TextWatcher, MO
                                                 tvequSchInfoOptions.setText(options1stLegAnd2ndLegINR);
                                                 tvequSchInfoCurrFuture.setText(currencyFut1st2ndLegINR);
                                                 tvequSchInfoCurrOption.setText(currencyOptions);
+                                                tvEqAdminCharges.setText(adminCharges);
+                                                tvEqBrokingAmc.setText(brokingAMC);
                                             }
                                         }
                                     }

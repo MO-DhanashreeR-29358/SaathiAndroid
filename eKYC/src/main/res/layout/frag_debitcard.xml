@@ -73,7 +73,9 @@
                             android:background="@drawable/edittext_border"
                             android:paddingBottom="@dimen/_10sdp"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_10sdp">
+                            android:paddingTop="@dimen/_10sdp"
+                            android:visibility="gone"
+                            >
 
                             <RadioButton
                                 android:id="@+id/rbEquityATM"
@@ -127,7 +129,9 @@
                             android:orientation="horizontal"
                             android:paddingBottom="@dimen/_10sdp"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_10sdp">
+                            android:paddingTop="@dimen/_10sdp"
+                            android:visibility="gone"
+                            >
 
                             <RadioButton
                                 android:id="@+id/rbEquityVisa"
@@ -351,7 +355,9 @@
                             android:background="@drawable/edittext_border"
                             android:paddingBottom="@dimen/_10sdp"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_10sdp">
+                            android:paddingTop="@dimen/_10sdp"
+                            android:visibility="gone"
+                            >
 
                             <RadioButton
                                 android:id="@+id/rbCommodityATM"
@@ -405,7 +411,9 @@
                             android:orientation="horizontal"
                             android:paddingBottom="@dimen/_10sdp"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:paddingTop="@dimen/_10sdp">
+                            android:paddingTop="@dimen/_10sdp"
+                            android:visibility="gone"
+                            >
 
                             <RadioButton
                                 android:id="@+id/rbCommodityVisa"
