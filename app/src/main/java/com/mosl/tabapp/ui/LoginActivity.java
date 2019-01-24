@@ -135,11 +135,19 @@ public class LoginActivity extends FragmentActivity
                                             customProgress.setVisibility(View.GONE);
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
                                             if (objDetail.getString(AUTH_STATE).equals("8")) {
-                                                AccountDetails.setOnlyEkyc(true);
-                                                AccountDetails.setEmployeeCode(empCode);
+                                                new AccountDetails("",
+                                                        "", "",
+                                                        "", "",
+                                                        "",
+                                                        "",
+                                                        "",
+                                                        empCode, "",
+                                                        "",
+                                                        "", "",
+                                                        false, true);
                                                 SharedPreferences.Editor editor = getPrefs(LoginActivity.this).edit();
                                                 editor.putString("PASSWORD", empCode);
-                                                editor.putString("EmployeeCode",password);
+                                                editor.putString("EmployeeCode", password);
                                                 editor.commit();
                                                 openMainActivity();
                                             } else {
@@ -307,7 +315,7 @@ public class LoginActivity extends FragmentActivity
                 loginData.getEmail(), loginData.getBusinessProfileId(),
                 loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(),
                 loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType(),
-                loginData.isSmtEnabled(),false);
+                loginData.isSmtEnabled(), false);
         try {
             MOSLCommonActivity.sendRegistrationToServer(LoginActivity.this, getContentResolver(),
                     false);

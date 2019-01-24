@@ -2,11 +2,11 @@ package com.mosl.tabapp.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.tabapp.R;
@@ -18,11 +18,13 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LoginResponseData;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
@@ -30,7 +32,6 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getAppVersionCode;
-import static com.mosl.tabapp.common.CRMMOSLCommon.getDeviceID;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class SplashActivity extends FragmentActivity implements MOSLConstants {
@@ -102,8 +103,16 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         if (status.equalsIgnoreCase("true")) {
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
                                             if (objDetail.getString(AUTH_STATE).equals("8")) {
-                                                AccountDetails.setOnlyEkyc(true);
-                                                AccountDetails.setEmployeeCode(empCode);
+                                                new AccountDetails("",
+                                                        "", "",
+                                                        "", "",
+                                                        "",
+                                                        "",
+                                                        "",
+                                                        empCode, "",
+                                                        "",
+                                                        "", "",
+                                                        false, true);
                                                 openMainActivity();
                                             } else {
                                             boolean smtEnabled =
