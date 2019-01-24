@@ -37,6 +37,8 @@ import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
+import com.mosl.tabapp.model.AccountDetails;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +71,7 @@ public class ForegroundService extends Service {
                             Context.LOCATION_SERVICE);
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(
                         getApplicationContext())) {
-                        LocationUpdate();
+                        if(!AccountDetails.isOnlyEkyc()) LocationUpdate();
                     }
                 }
                 refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);

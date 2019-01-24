@@ -101,57 +101,43 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         String status = response.getString(STATUS);
                                         if (status.equalsIgnoreCase("true")) {
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
+                                            if (objDetail.getString(AUTH_STATE).equals("8")) {
+                                                AccountDetails.setOnlyEkyc(true);
+                                                AccountDetails.setEmployeeCode(empCode);
+                                                openMainActivity();
+                                            } else {
                                             boolean smtEnabled =
                                                 (objDetail.getString(SMT_ENABLED).equals("1"))
                                                     ? true : false;
                                             JSONObject objDetailUser =
                                                 objDetail.getJSONObject(USER);
-                                            String userId = (objDetailUser.isNull(USER_ID)
-                                                || objDetailUser.getString(USER_ID).equals("")) ? ""
-                                                : objDetailUser.getString(USER_ID);
-                                            String employeeCode =
-                                                (objDetailUser.isNull(EMPLOYEE_CODE)
-                                                    || objDetailUser.getString(EMPLOYEE_CODE)
-                                                    .equals("")) ? ""
-                                                    : objDetailUser.getString(EMPLOYEE_CODE);
-                                            String firstName = (objDetailUser.isNull(FIRST_NAME)
-                                                || objDetailUser.getString(FIRST_NAME).equals(""))
-                                                ? "" : objDetailUser.getString(FIRST_NAME);
-                                            String lastName = (objDetailUser.isNull(LAST_NAME)
-                                                || objDetailUser.getString(LAST_NAME).equals(""))
-                                                ? "" : objDetailUser.getString(LAST_NAME);
-                                            String imageUrl = (objDetailUser.isNull(IMAGE_URL)
-                                                || objDetailUser.getString(IMAGE_URL).equals(""))
-                                                ? "" : objDetailUser.getString(IMAGE_URL);
-                                            String mobile = (objDetailUser.isNull(MOBILE)
-                                                || objDetailUser.getString(MOBILE).equals("")) ? ""
-                                                : objDetailUser.getString(MOBILE);
-                                            String email = (objDetailUser.isNull(EMAIL)
-                                                || objDetailUser.getString(EMAIL).equals("")) ? ""
-                                                : objDetailUser.getString(EMAIL);
-                                            String token = (objDetailUser.isNull(TOKEN)
-                                                || objDetailUser.getString(TOKEN).equals("")) ? ""
-                                                : objDetailUser.getString(TOKEN);
-                                            String userType = (objDetailUser.isNull(USER_TYPE_SEQ)
-                                                || objDetailUser.getString(USER_TYPE_SEQ)
-                                                .equals("")) ? ""
-                                                : objDetailUser.getString(USER_TYPE_SEQ);
-                                            // getting Branch code from DEFAULT_BUSINESS_PROFILE
+                                            String userId = objDetailUser.isNull(USER_ID) ?
+                                                    "" : objDetailUser.getString(USER_ID);
+                                            String employeeCode = objDetailUser.isNull(EMPLOYEE_CODE) ?
+                                                    "" : objDetailUser.getString(EMPLOYEE_CODE);
+                                            String firstName = objDetailUser.isNull(FIRST_NAME) ?
+                                                    "" : objDetailUser.getString(FIRST_NAME);
+                                            String lastName = objDetailUser.isNull(LAST_NAME) ?
+                                                    "" : objDetailUser.getString(LAST_NAME);
+                                            String imageUrl = objDetailUser.isNull(IMAGE_URL) ?
+                                                    "" : objDetailUser.getString(IMAGE_URL);
+                                            String mobile = objDetailUser.isNull(MOBILE) ?
+                                                    "" : objDetailUser.getString(MOBILE);
+                                            String email = objDetailUser.isNull(EMAIL) ?
+                                                    "" : objDetailUser.getString(EMAIL);
+                                            String token = objDetailUser.isNull(TOKEN) ?
+                                                    "" : objDetailUser.getString(TOKEN);
+                                            String userType = objDetailUser.isNull(USER_TYPE_SEQ) ?
+                                                    "" : objDetailUser.getString(USER_TYPE_SEQ);
                                             JSONObject objDetailDefaultBusinessProfile =
                                                 objDetailUser.getJSONObject(
                                                     DEFAULT_BUSINESS_PROFILE);
-                                            String branchCode =
-                                                (objDetailDefaultBusinessProfile.isNull(
-                                                    BRANCHCODE_DEFAULT_BUSINESS_PROFILE)
-                                                    || objDetailDefaultBusinessProfile.getString(
-                                                    BRANCHCODE_DEFAULT_BUSINESS_PROFILE).equals(""))
-                                                    ? ""
+                                            String branchCode = objDetailDefaultBusinessProfile.isNull(
+                                                    BRANCHCODE_DEFAULT_BUSINESS_PROFILE) ? ""
                                                     : objDetailDefaultBusinessProfile.getString(
                                                         BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
                                             String rmId =
-                                                (objDetailDefaultBusinessProfile.isNull(USER_ID)
-                                                    || objDetailDefaultBusinessProfile.getString(
-                                                    USER_ID).equals("")) ? ""
+                                                objDetailDefaultBusinessProfile.isNull(USER_ID) ? ""
                                                     : objDetailDefaultBusinessProfile.getString(
                                                         USER_ID);
                                             setAppLoginID(employeeCode);
@@ -162,23 +148,15 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                                 objDetailUser.getJSONObject(
                                                     CURRENT_BUSINESS_PROFILE);
                                             String businessProfileId =
-                                                (objDetailBusinessProfile.isNull(
-                                                    BUSINESS_PROFILE_ID) || objDetailBusinessProfile
-                                                    .getString(BUSINESS_PROFILE_ID)
-                                                    .equals("")) ? ""
-                                                    : objDetailBusinessProfile.getString(
+                                                objDetailBusinessProfile.isNull(BUSINESS_PROFILE_ID)?
+                                                        "" : objDetailBusinessProfile.getString(
                                                         BUSINESS_PROFILE_ID);
-                                            String businessProfileName =
-                                                (objDetailBusinessProfile.isNull(
-                                                    CURRENT_BUSINESS_PROFILE_NAME)
-                                                    || objDetailBusinessProfile.getString(
-                                                    CURRENT_BUSINESS_PROFILE_NAME).equals("")) ? ""
+                                            String businessProfileName = objDetailBusinessProfile.isNull(
+                                                    CURRENT_BUSINESS_PROFILE_NAME) ? ""
                                                     : objDetailBusinessProfile.getString(
                                                         CURRENT_BUSINESS_PROFILE_NAME);
                                             String businessUnitId =
-                                                (objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID)
-                                                    || objDetailBusinessProfile.getString(
-                                                    BUSINESS_UNIT_ID).equals("")) ? ""
+                                                objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ? ""
                                                     : objDetailBusinessProfile.getString(
                                                         BUSINESS_UNIT_ID);
                                             LoginResponseData loginData = new LoginResponseData();
@@ -195,21 +173,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                             loginData.setBusinessUnitId(businessUnitId);
                                             loginData.setBranchCode(branchCode);
                                             loginData.setUserType(userType);
-                                            SharedPreferences.Editor editor =
-                                                getPrefs(SplashActivity.this).edit();
-                                            editor.putString("EmployeeCode",
-                                                loginData.getEmployeeCode().trim());
-                                            editor.putString("token", loginData.getToken());
-                                            editor.putString("userid", loginData.getUserId());
-                                            editor.putString("ipaddress",
-                                                CRMAppUtil.getLocalIpAddress());
-                                            editor.putString("BusinessUnitId",
-                                                loginData.getBusinessUnitId());
-                                            editor.putString("macaddress",
-                                                getDeviceID(getApplicationContext(),
-                                                    getContentResolver()));
-
-                                            editor.commit();
                                             new RoleSelectionModel("", "", "", "",
                                                 employeeCode.trim(), rmId.trim(),
                                                 businessUnitId.trim(), "",/*roleId*/"");
@@ -222,10 +185,11 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                                 loginData.getEmployeeCode(), loginData.getToken(),
                                                 loginData.getBusinessUnitId(),
                                                 loginData.getBranchCode(), loginData.getUserType(),
-                                                smtEnabled);
+                                                smtEnabled,false);
                                             MOSLCommonActivity.sendRegistrationToServer(
                                                 SplashActivity.this, getContentResolver(), false);
                                             FetchReportTypes();
+                                            }
                                         } else {
 
                                             handleLoginError();
@@ -369,16 +333,10 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                                     }
                                                 }
                                             }
-                                            Intent intent = new Intent(SplashActivity.this,
-                                                MOSLCommonActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                            openMainActivity();
                                         }
                                     } else {
-                                        Intent intent = new Intent(SplashActivity.this,
-                                            MOSLCommonActivity.class);
-                                        startActivity(intent);
-                                        finish();
+                                        openMainActivity();
                                         String errorMsg =
                                             CRMMOSLCommon.getErrorMsgFromResponse(json);
                                         alertDialog(getApplicationContext(), 0,
@@ -386,20 +344,14 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                             errorMsg, "OK", true, null);
                                     }
                                 } catch (Exception ex) {
-                                    Intent intent =
-                                        new Intent(SplashActivity.this, MOSLCommonActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    openMainActivity();
                                     ex.printStackTrace();
                                     alertDialog(getApplicationContext(), 0,
                                         getResources().getString(R.string.motilal_oswal),
                                         SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
                             } else {
-                                Intent intent =
-                                    new Intent(SplashActivity.this, MOSLCommonActivity.class);
-                                startActivity(intent);
-                                finish();
+                                openMainActivity();
                                 alertDialog(getApplicationContext(), 0,
                                     getResources().getString(R.string.motilal_oswal),
                                     SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
@@ -439,10 +391,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         });
                                     return;
                                 } else {
-                                    Intent intent =
-                                        new Intent(SplashActivity.this, MOSLCommonActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    openMainActivity();
                                     String error =
                                         CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
                                     if (CRMAppUtil.isBlank(error)) {
@@ -743,5 +692,12 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 
     @Override public void onBackPressed() {
 
+    }
+
+    private void openMainActivity() {
+        Intent intent =
+                new Intent(SplashActivity.this, MOSLCommonActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

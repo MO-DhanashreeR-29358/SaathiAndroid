@@ -379,7 +379,13 @@ public class MOSLCommonActivity extends AppCompatActivity
                     loginAndInitView();
                 }
             } else {
-                loginAndInitView();
+                if (AccountDetails.isOnlyEkyc()) {
+                    initView();
+
+                } else {
+                    loginAndInitView();
+                }
+
             }
         } else {
             initView();
@@ -513,7 +519,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 
     private void clearTitles() {
         globalTitles.clear();
-        actionBar.visibleBusinessGlobalIcon();
+
     }
 
     private void openMenuDrawer() {
@@ -544,26 +550,11 @@ public class MOSLCommonActivity extends AppCompatActivity
                     .equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
                 setupFragment(new LeadCreationFragment());
             } else {
-                MOSLCommonFragment fragment = null;
-
-                switch (isProceed) {
-                    case MOSL_MENU_DASHBOARD:
-                        args.clear();
-                        args.putInt("Source", 0);
-                        setupFragment(new DashboardFragment());
-                        break;
-                }
+                setupFragment(new DashboardFragment());
             }
         } else {
-            MOSLCommonFragment fragment = null;
+            if (!AccountDetails.isOnlyEkyc()) setupFragment(new DashboardFragment());
 
-            switch (isProceed) {
-                case MOSL_MENU_DASHBOARD:
-                    args.clear();
-                    args.putInt("Source", 0);
-                    setupFragment(new DashboardFragment());
-                    break;
-            }
         }
     }
 
@@ -745,10 +736,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                     clickedPosDetails = sub.get(childPosition).getDetails();
                 }
                 menuAdapter.setChildMenuSelection(lastExpandedPosition, childPosition);
-                if (position == MOSL_MENU_DASHBOARD) {
-                    setMenuSelection[0] = true;
-                    performMenuAction(clickedPosDetails);
-                } else if (position == MOSL_MENU_EKYC) {
+                if (AccountDetails.isOnlyEkyc()) {
                     if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
                         if (AccountDetails.isNewEkyc()) {
                             Map map = new HashMap();
@@ -778,15 +766,50 @@ public class MOSLCommonActivity extends AppCompatActivity
                             ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
                         }
                     }
-                } else if (position == MOSL_MENU_MY_REPORTS) {
-                    ReportFragment reportFragment = new ReportFragment();
-                    Bundle bund = new Bundle();
-                    bund.putString(SYSTEM_NAME,
-                            SplashActivity.menuReportArrayList.get(childPosition).getSystemsName());
-                    bund.putString(NAME,
-                            SplashActivity.menuReportArrayList.get(childPosition).getMenuName());
-                    reportFragment.setArguments(bund);
-                    setupFragment(reportFragment);
+                } else {
+                    if (position == MOSL_MENU_DASHBOARD) {
+                        setMenuSelection[0] = true;
+                        performMenuAction(clickedPosDetails);
+                    } else if (position == MOSL_MENU_EKYC) {
+                        if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
+                            if (AccountDetails.isNewEkyc()) {
+                                Map map = new HashMap();
+                                map.put(NEW_USERID, "");
+                                map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+                                map.put(COMMANDTYPE, "NEW");
+                                map.put(APPLICATIONTYPE, "CRM");
+                                map.put(OSTYPE, "ANDROID");
+                                map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                                map.put(TOKENKEY, AccountDetails.getToken());
+                                newEkyc(getInputBody(map));
+                            } else {
+                                ekycVersionCheck(MOSL_MENU_FRESH_REGISTRATION, new HashMap());
+                            }
+                        } else if (childPosition == MOSL_MENU_EXISTINGS_APPLICATIONS) {
+                            if (AccountDetails.isNewEkyc()) {
+                                Map map = new HashMap();
+                                map.put(NEW_USERID, "");
+                                map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+                                map.put(COMMANDTYPE, "RESUME");
+                                map.put(APPLICATIONTYPE, "CRM");
+                                map.put(OSTYPE, "ANDROID");
+                                map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                                map.put(TOKENKEY, AccountDetails.getToken());
+                                newEkyc(getInputBody(map));
+                            } else {
+                                ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
+                            }
+                        }
+                    } else if (position == MOSL_MENU_MY_REPORTS) {
+                        ReportFragment reportFragment = new ReportFragment();
+                        Bundle bund = new Bundle();
+                        bund.putString(SYSTEM_NAME,
+                                SplashActivity.menuReportArrayList.get(childPosition).getSystemsName());
+                        bund.putString(NAME,
+                                SplashActivity.menuReportArrayList.get(childPosition).getMenuName());
+                        reportFragment.setArguments(bund);
+                        setupFragment(reportFragment);
+                    }
                 }
                 return false;
             }
@@ -799,43 +822,53 @@ public class MOSLCommonActivity extends AppCompatActivity
                 boolean clickHandled = false;
                 value = false;
                 final boolean[] setMenuSelection = {false};
-                if (position == MOSL_MENU_EKYC || position == MOSL_MENU_MY_REPORTS) {
-                    clickHandled = false;
-                } else {
-                    drawerLayout.closeDrawers();
-                    menuAdapter.setGroupMenuSelection(position);
-                    if (position == MOSL_MENU_DASHBOARD) {
-                        searchType = SEARCH_TYPE_LEAD;
-                        actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
-                        setupFragment(new DashboardFragment());
-                    } else if (position == MOSL_MENU_CALENDAR) {
-                        setupFragment(new CalendarFragment());
-                    } else if (position == MOSL_MENU_PENDING_APPROVALS) {
-                        setupFragment(new PendingApprovalFragment());
-                    } else if (position == MOSL_MENU_KNOWLEDGE_CENTRE) {
-                        WebViewFragment fragment = new WebViewFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL);
-                        fragment.setArguments(bundle);
-                        addFragment(R.id.activityFrameLayout, fragment, true, false);
-                    } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
-                        setupFragment(new BirthdayAnniversaryFragment());
-                    }
-                    if (AccountDetails.isSmtEnabled()) {
-                        if (position == MOSL_MENU_SUGGEST_ME) {
-                            getSuggestMe();
-                        } else if (position == MOSL_MENU_QUERY) {
-                            setupFragment(new QueryFragment());
-                        } else if (position == MOSL_MENU_LOGOUT) {
-                            logoutCustomer();
-                        }
+                if (AccountDetails.isOnlyEkyc()) {
+                    if (position == 0) {
+                        clickHandled = false;
                     } else {
-                        if (position == 7) {
-                            setupFragment(new QueryFragment());
-                        } else if (position == 8) {
-                            logoutCustomer();
+                        logoutCustomer();
+                    }
+                } else {
+                    if (position == MOSL_MENU_EKYC || position == MOSL_MENU_MY_REPORTS) {
+                        clickHandled = false;
+                    } else {
+                        drawerLayout.closeDrawers();
+                        menuAdapter.setGroupMenuSelection(position);
+
+                        if (position == MOSL_MENU_DASHBOARD) {
+                            searchType = SEARCH_TYPE_LEAD;
+                            actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
+                            setupFragment(new DashboardFragment());
+                        } else if (position == MOSL_MENU_CALENDAR) {
+                            setupFragment(new CalendarFragment());
+                        } else if (position == MOSL_MENU_PENDING_APPROVALS) {
+                            setupFragment(new PendingApprovalFragment());
+                        } else if (position == MOSL_MENU_KNOWLEDGE_CENTRE) {
+                            WebViewFragment fragment = new WebViewFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL);
+                            fragment.setArguments(bundle);
+                            addFragment(R.id.activityFrameLayout, fragment, true, false);
+                        } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
+                            setupFragment(new BirthdayAnniversaryFragment());
+                        }
+                        if (AccountDetails.isSmtEnabled()) {
+                            if (position == MOSL_MENU_SUGGEST_ME) {
+                                getSuggestMe();
+                            } else if (position == MOSL_MENU_QUERY) {
+                                setupFragment(new QueryFragment());
+                            } else if (position == MOSL_MENU_LOGOUT) {
+                                logoutCustomer();
+                            }
+                        } else {
+                            if (position == 7) {
+                                setupFragment(new QueryFragment());
+                            } else if (position == 8) {
+                                logoutCustomer();
+                            }
                         }
                     }
+
                 }
 
                 return clickHandled;
@@ -1439,47 +1472,32 @@ public class MOSLCommonActivity extends AppCompatActivity
                                                                 ? true : false;
                                                 JSONObject objDetailUser =
                                                         objDetail.getJSONObject(USER);
-                                                String userId = (objDetailUser.isNull(USER_ID)
-                                                        || objDetailUser.getString(USER_ID).equals("")) ? ""
-                                                        : objDetailUser.getString(USER_ID);
+                                                String userId = objDetailUser.isNull(USER_ID) ?
+                                                        "" : objDetailUser.getString(USER_ID);
                                                 String employeeCode =
-                                                        (objDetailUser.isNull(EMPLOYEE_CODE)
-                                                                || objDetailUser.getString(EMPLOYEE_CODE)
-                                                                .equals("")) ? ""
-                                                                : objDetailUser.getString(EMPLOYEE_CODE);
-                                                String firstName = (objDetailUser.isNull(FIRST_NAME)
-                                                        || objDetailUser.getString(FIRST_NAME).equals(""))
-                                                        ? "" : objDetailUser.getString(FIRST_NAME);
-                                                String lastName = (objDetailUser.isNull(LAST_NAME)
-                                                        || objDetailUser.getString(LAST_NAME).equals(""))
-                                                        ? "" : objDetailUser.getString(LAST_NAME);
-                                                String imageUrl = (objDetailUser.isNull(IMAGE_URL)
-                                                        || objDetailUser.getString(IMAGE_URL).equals(""))
-                                                        ? "" : objDetailUser.getString(IMAGE_URL);
-                                                String mobile = (objDetailUser.isNull(MOBILE)
-                                                        || objDetailUser.getString(MOBILE).equals("")) ? ""
-                                                        : objDetailUser.getString(MOBILE);
-                                                String email = (objDetailUser.isNull(EMAIL)
-                                                        || objDetailUser.getString(EMAIL).equals("")) ? ""
-                                                        : objDetailUser.getString(EMAIL);
-                                                String token = (objDetailUser.isNull(TOKEN)
-                                                        || objDetailUser.getString(TOKEN).equals("")) ? ""
-                                                        : objDetailUser.getString(TOKEN);
-                                                String userType = (objDetailUser.isNull(USER_TYPE_SEQ)
-                                                        || objDetailUser.getString(USER_TYPE_SEQ)
-                                                        .equals("")) ? ""
-                                                        : objDetailUser.getString(USER_TYPE_SEQ);
-                                                // getting Branch code from DEFAULT_BUSINESS_PROFILE
+                                                        objDetailUser.isNull(EMPLOYEE_CODE) ?
+                                                                "" : objDetailUser.getString(EMPLOYEE_CODE);
+                                                String firstName = objDetailUser.isNull(FIRST_NAME) ?
+                                                        "" : objDetailUser.getString(FIRST_NAME);
+                                                String lastName = objDetailUser.isNull(LAST_NAME) ?
+                                                        "" : objDetailUser.getString(LAST_NAME);
+                                                String imageUrl = objDetailUser.isNull(IMAGE_URL) ?
+                                                        "" : objDetailUser.getString(IMAGE_URL);
+                                                String mobile = objDetailUser.isNull(MOBILE) ?
+                                                        "" : objDetailUser.getString(MOBILE);
+                                                String email = objDetailUser.isNull(EMAIL) ?
+                                                        "" : objDetailUser.getString(EMAIL);
+                                                String token = objDetailUser.isNull(TOKEN) ?
+                                                        "" : objDetailUser.getString(TOKEN);
+                                                String userType = objDetailUser.isNull(USER_TYPE_SEQ) ?
+                                                        "" : objDetailUser.getString(USER_TYPE_SEQ);
                                                 JSONObject objDetailDefaultBusinessProfile =
                                                         objDetailUser.getJSONObject(
                                                                 DEFAULT_BUSINESS_PROFILE);
                                                 String branchCode =
-                                                        (objDetailDefaultBusinessProfile.isNull(
-                                                                BRANCHCODE_DEFAULT_BUSINESS_PROFILE)
-                                                                || objDetailDefaultBusinessProfile.getString(
-                                                                BRANCHCODE_DEFAULT_BUSINESS_PROFILE).equals(""))
-                                                                ? ""
-                                                                : objDetailDefaultBusinessProfile.getString(
+                                                        objDetailDefaultBusinessProfile.isNull(
+                                                                BRANCHCODE_DEFAULT_BUSINESS_PROFILE) ?
+                                                                "" : objDetailDefaultBusinessProfile.getString(
                                                                 BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
                                                 setAppLoginID(employeeCode);
                                                 setAppType(CRM);
@@ -1488,25 +1506,18 @@ public class MOSLCommonActivity extends AppCompatActivity
                                                         objDetailUser.getJSONObject(
                                                                 CURRENT_BUSINESS_PROFILE);
                                                 String businessProfileId =
-                                                        (objDetailBusinessProfile.isNull(
-                                                                BUSINESS_PROFILE_ID) || objDetailBusinessProfile
-                                                                .getString(BUSINESS_PROFILE_ID)
-                                                                .equals("")) ? ""
-                                                                : objDetailBusinessProfile.getString(
+                                                        objDetailBusinessProfile.isNull(
+                                                                BUSINESS_PROFILE_ID) ?
+                                                                "" : objDetailBusinessProfile.getString(
                                                                 BUSINESS_PROFILE_ID);
                                                 String businessProfileName =
-                                                        (objDetailBusinessProfile.isNull(
-                                                                CURRENT_BUSINESS_PROFILE_NAME)
-                                                                || objDetailBusinessProfile.getString(
-                                                                CURRENT_BUSINESS_PROFILE_NAME).equals("")) ? ""
-                                                                : objDetailBusinessProfile.getString(
+                                                        objDetailBusinessProfile.isNull(
+                                                                CURRENT_BUSINESS_PROFILE_NAME) ?
+                                                                "" : objDetailBusinessProfile.getString(
                                                                 CURRENT_BUSINESS_PROFILE_NAME);
-                                                String businessUnitId =
-                                                        (objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID)
-                                                                || objDetailBusinessProfile.getString(
-                                                                BUSINESS_UNIT_ID).equals("")) ? ""
-                                                                : objDetailBusinessProfile.getString(
-                                                                BUSINESS_UNIT_ID);
+                                                String businessUnitId = objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ?
+                                                        "" : objDetailBusinessProfile.getString(
+                                                        BUSINESS_UNIT_ID);
                                                 LoginResponseData loginData = new LoginResponseData();
                                                 loginData.setUserId(userId);
                                                 loginData.setEmployeeCode(employeeCode);
@@ -1531,10 +1542,8 @@ public class MOSLCommonActivity extends AppCompatActivity
                                                         loginData.getEmployeeCode(), loginData.getToken(),
                                                         loginData.getBusinessUnitId(),
                                                         loginData.getBranchCode(), loginData.getUserType(),
-                                                        smtEnabled);
-                                                MOSLCommonActivity.sendRegistrationToServer(
-                                                        MOSLCommonActivity.this, getContentResolver(),
-                                                        false);
+                                                        smtEnabled, false);
+
                                                 initView();
                                             } else {
 
@@ -1623,8 +1632,6 @@ public class MOSLCommonActivity extends AppCompatActivity
     public void navigateToFromNotification(String dataStr) {
         if (dataStr == null || dataStr.length() < 1) {
             //Noproper data goto dsh board
-            args.clear();
-            args.putInt("Source", 0);
             setupFragment(new DashboardFragment());
         }
         NotificationData data = new NotificationData(dataStr);
@@ -1656,13 +1663,8 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
         //DASHBOARD
         else if (data.getPage().equalsIgnoreCase("DASHBOARD")) {
-            //CASE OF DASH BOARD
-            args.clear();
-            args.putInt("Source", 0);
             setupFragment(new DashboardFragment());
         } else {
-            args.clear();
-            args.putInt("Source", 0);
             setupFragment(new DashboardFragment());
         }
     }

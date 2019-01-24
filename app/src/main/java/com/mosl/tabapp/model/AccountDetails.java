@@ -25,6 +25,16 @@ public class AccountDetails implements MOSLConstants,Serializable {
     private static boolean newEkyc;
     private static boolean smtEnabled;
 
+    public static boolean isOnlyEkyc() {
+        return onlyEkyc;
+    }
+
+    public static void setOnlyEkyc(boolean onlyEkyc) {
+        AccountDetails.onlyEkyc = onlyEkyc;
+    }
+
+    private static boolean onlyEkyc;
+
 
     public static boolean isFranchiseUser() {
         return userType != null && userType.equalsIgnoreCase(USER_TYPE_FRANCHISE);
@@ -49,7 +59,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
     public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
         String mobileNo, String email, String businessProfileId, String businessProfileName,
         String employeeCode, String token, String businessUnitId, String branchCode,
-        String userType, boolean smtEnabled) {
+        String userType, boolean smtEnabled,boolean onlyEkyc) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -65,6 +75,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
         this.userType = userType;
         this.profileType = profileFlag(businessUnitId);
         this.smtEnabled = smtEnabled;
+        this.onlyEkyc=onlyEkyc;
     }
 
 
