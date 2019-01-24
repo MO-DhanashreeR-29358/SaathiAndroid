@@ -1,7 +1,6 @@
 package com.mosl.tabapp.smt;
 
 import android.app.DownloadManager;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,11 +13,11 @@ import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
-import com.mosl.mobile.ekyc.ui.PostLoginActivity;
+
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.ui.MOSLCommonActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
+
 import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
@@ -70,7 +69,7 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
 
 
             webView.loadUrl(url);
-            webView.addJavascriptInterface(new SMTInterface(this), "UpperMost");
+            webView.addJavascriptInterface(new SMTInterface(this), "Saathi");
         }
 
     @Override public void openEkyc(String OAOUserId) {
