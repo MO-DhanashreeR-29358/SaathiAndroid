@@ -68,7 +68,7 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
             });
 
 
-            webView.loadUrl(url);
+            webView.loadUrl(url + "&Os=android");
             webView.addJavascriptInterface(new SMTInterface(this), "Saathi");
         }
 
