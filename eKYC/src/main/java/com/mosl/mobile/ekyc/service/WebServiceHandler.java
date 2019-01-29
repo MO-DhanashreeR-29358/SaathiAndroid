@@ -58,10 +58,10 @@ public class WebServiceHandler implements MOSLConstants {
     public static final String CRM_URL_PROD = "http://crm.motilaloswal.com/frmlogin2.aspx";
 
     //UAT
-    //public static final String CALL_URL = BASE_URL_UAT;
-    //public static final String SIGNALR_URL = SIGNALR_URL_UAT;
-    //public static final String CRM_URL = CRM_URL_UAT;
-    //public static final String COLLATERAL_URL = COLLATERAL_URL_UAT;
+//    public static final String CALL_URL = BASE_URL_UAT;
+//    public static final String SIGNALR_URL = SIGNALR_URL_UAT;
+//    public static final String CRM_URL = CRM_URL_UAT;
+//    public static final String COLLATERAL_URL = COLLATERAL_URL_UAT;
 
     //UAT New CRM
     //public static final String CALL_URL = BASE_URL_UAT_NEW_CRM;

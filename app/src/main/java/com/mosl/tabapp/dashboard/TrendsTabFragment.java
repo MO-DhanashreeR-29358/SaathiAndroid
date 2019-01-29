@@ -2,8 +2,11 @@ package com.mosl.tabapp.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder;
 import com.github.mikephil.charting.components.AxisBase;
@@ -44,6 +51,11 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,9 +63,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by raju on 2/27/2017.
@@ -108,6 +117,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
             dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
             subWidgetModelList = dashboardModel.getGroupModel(DashboardSystemModel.getMonthTrends()).getSubGroupList();
             if (subWidgetModelList.size() < 3) {
+                // for blank tab adding
                 subWidgetModelList.add(new DashboardGroupModel());
                 subWidgetModelList.add(new DashboardGroupModel());
             } else if (subWidgetModelList.size() < 4) {
@@ -611,6 +621,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 holder.tvWidgetName.setText(widgetModel.getDisplayName());
                 holder.card_view.setCardBackgroundColor(getResources().getColor(R.color.secondaryBackground));
                 widgetModelListNew = subWidgetModelList.get(position).getWidgetList();
+                setImage(widgetModelListNew.get(0).getIconUrl2().replaceAll(" ", "%20"), holder.imageView);
 
                 tableLayout.removeAllViews();
 
@@ -625,6 +636,9 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 }
                 holder.tvWidgetName.setText(widgetModel.getDisplayName());
                 holder.card_view.setCardBackgroundColor(getResources().getColor(R.color.white));
+                widgetModelListNew = subWidgetModelList.get(position).getWidgetList();
+                setImage(widgetModelListNew.get(0).getIconUrl1().replaceAll(" ", "%20"), holder.imageView);
+
             }
             holder.llWidgetList.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -632,11 +646,27 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                     if (!widgetModel.getDisplayName().isEmpty()) {
                         selectCategory(widgetModel.getSystemName());
                         holder.imageView.setImageResource(R.drawable.mhovertrend);
+                        notifyDataSetChanged();
                     }
                 }
             });
 
         }
+
+        public void setImage(String imageUrl, final ImageView imageView) {
+            Glide.with(context).load(imageUrl)
+                    //remove Chache
+                    .asBitmap().placeholder(R.drawable.ic_white).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    //circularBitmapDrawable.setCircular(true);
+                    imageView.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+        }
+
         @Override
         public int getItemCount() {
             return widgetModelList.size();

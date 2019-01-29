@@ -39,6 +39,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -83,6 +84,11 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -102,9 +108,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -1741,13 +1744,13 @@ public class DashboardFragment extends MOSLCommonFragment
                 String groupName = groupObj.getString("GroupName");
                 String groupSystemName = groupObj.getString("SystemName");
                 String imageUrl1 = groupObj.getString("ImageUrl");
-                //  String imageUrl2 = groupObj.getString("ImageUrl2");
+                String imageUrl2 = groupObj.getString("ImageUrl2");
 
                 groupModel.setId(dashBordGroupId);
                 groupModel.setDisplayName(groupName);
                 groupModel.setSystemName(groupSystemName);
                 groupModel.setIconUrl1(imageUrl1);
-                //  groupModel.setIconUrl2(imageUrl2);
+                groupModel.setIconUrl2(imageUrl2);
                 boolean selected = (liX == 0) ? true : false;
                 groupModel.setSelected(selected);
 
