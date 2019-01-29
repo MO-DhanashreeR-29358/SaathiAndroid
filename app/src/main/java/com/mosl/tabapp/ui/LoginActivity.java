@@ -146,8 +146,8 @@ public class LoginActivity extends FragmentActivity
                                                         "", "",
                                                         false, true);
                                                 SharedPreferences.Editor editor = getPrefs(LoginActivity.this).edit();
-                                                editor.putString("PASSWORD", empCode);
-                                                editor.putString("EmployeeCode", password);
+                                                editor.putString("PASSWORD", password);
+                                                editor.putString("EmployeeCode", empCode);
                                                 editor.commit();
                                                 openMainActivity();
                                             } else {
