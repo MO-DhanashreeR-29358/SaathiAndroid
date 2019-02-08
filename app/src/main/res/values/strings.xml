@@ -32,6 +32,7 @@
     <string name="BLUE">Blue</string>
     <string name="NO_DATA_FOUND">No data found</string>
     <string name="CLIENTS">Clients</string>
+    <string name="PRODUCTIVITY">Productivity</string>
     <string name="CLIENTS_TRADED">Clients Traded Y"'"day</string>
     <string name="LEADS">Leads</string>
     <string name="SNAPSHOT">Snapshot</string>

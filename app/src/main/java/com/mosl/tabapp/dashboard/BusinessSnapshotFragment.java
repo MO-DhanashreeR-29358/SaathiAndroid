@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -30,7 +31,9 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,7 +44,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -82,11 +86,11 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
     private void setUpView(View businessSnapshotView) {
 
         dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
-        table = (TableFixHeaders) businessSnapshotView.findViewById(R.id.table);
-        tvNochart = (TextView) businessSnapshotView.findViewById(R.id.tvNochart);
-        spFilter1 = (Spinner) businessSnapshotView.findViewById(R.id.spFilter1);
-        spFilter2 = (Spinner) businessSnapshotView.findViewById(R.id.spFilter2);
-        spFilter3 = (Spinner) businessSnapshotView.findViewById(R.id.spFilter3);
+        table = businessSnapshotView.findViewById(R.id.table);
+        tvNochart = businessSnapshotView.findViewById(R.id.tvNochart);
+        spFilter1 = businessSnapshotView.findViewById(R.id.spFilter1);
+        spFilter2 = businessSnapshotView.findViewById(R.id.spFilter2);
+        spFilter3 = businessSnapshotView.findViewById(R.id.spFilter3);
 
         spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -134,7 +138,15 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             if (widgetList != null && widgetList.size() > 0) {
-                model = widgetList.get(0);
+                if (!DashboardSystemModel.getProductivitySystemName().isEmpty()) {
+                    model = widgetList.get(1);
+                    widgetSystemName = model.getSystemName();
+                    spFilter1.setVisibility(View.GONE);
+                    webServiceCall();
+                } else {
+                    model = widgetList.get(0);
+                }
+
                 widgetSystemName = model.getSystemName();
 
                 //set filter data
@@ -237,10 +249,10 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                                         secondClickTableAdapter = new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
                                         table.setAdapter(secondClickTableAdapter);
                                         Map<String, Object> responseJSONObject =
-                                            (Map<String, Object>) response.get("Response");
+                                                (Map<String, Object>) response.get("Response");
                                         List<Map<String, Object>> arrayDetail =
-                                            (List<Map<String, Object>>) responseJSONObject.get(
-                                                "Table");
+                                                (List<Map<String, Object>>) responseJSONObject.get(
+                                                        "Table");
                                         ArrayList<String> columns = new ArrayList<String>();
                                         ArrayList<String> columnsHeader = new ArrayList<String>();
                                         if (arrayDetail.size() != 0) {

@@ -15,11 +15,9 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,13 +37,13 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -53,28 +51,19 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.LargeValueFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.CRMMOSLCommon;
-import com.mosl.tabapp.common.CRMValueFormatter;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.model.AdvisoryActionableInsightModel;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
-import com.mosl.tabapp.model.dashboard.AvailableWidgetModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
-import com.mosl.tabapp.model.dashboard.TeamQuarterStatusModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
@@ -83,6 +72,11 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -94,7 +88,6 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -102,9 +95,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -115,13 +105,8 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class DashboardFragment extends MOSLCommonFragment
         implements View.OnClickListener, MOSLConstants {
-    static Context mContext;
     private final int itemcount = 4;
-    //will be used to get dashboard
-    //Hierarchy Performance
-    protected HorizontalBarChart mChart;
     Bundle args = new Bundle();
-    private String TAG = DashboardFragment.class.getCanonicalName();
     private String businessProfileIdForDashboard, productId, employeeCode, dashboardId = "";
     private View dashAdvisoryView;
     private TextView txtClients, txtTarget, tvMain;
@@ -133,9 +118,8 @@ public class DashboardFragment extends MOSLCommonFragment
             ivPerformanceAndIncentivesHeader;
     //
     //Subb button
-    private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded;
+    private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded, btnProductivity;
     private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
-    private ArrayList<AdvisoryActionableInsightModel> advisoryActionableInsightModelArrayList;
     private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton leadcreation;
     private RelativeLayout llMain, rlClientLeads, rlTargetAchievementADV, rlTeamTargetAchievement,
@@ -146,19 +130,12 @@ public class DashboardFragment extends MOSLCommonFragment
 
     //Hierarchy
     private TextView txtTeamTarget;
-    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour,
-            tableTeamPerformance, tableAdvPerformance, tableCurrentQuaterStatusFirst,
+    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour, tableAdvPerformance, tableCurrentQuaterStatusFirst,
             tableCurrentQuaterStatusSecond;
-    private LinearLayout llSnapshot, mTabsLinearLayoutSnapshot;
+    private LinearLayout llSnapshot;
     private TextView tvSnapshot, txtMonthTrends;
-    private ArrayList<Fragment> pageListSnapshot = new ArrayList<>();
-    private TextView tvNameFirst, tvBranchNameFirst, tvTopRevenueFirst, tvNameSecond,
-            tvBranchNameSecond, tvTopRevenueSecond, tvNameThird, tvBranchNameThird, tvTopRevenueThird,
-            tvBottomNameFirst, tvBottomBranchNameFirst, tvBottomRevenueFirst, tvBottomNameSecond,
-            tvBottomBranchNameSecond, tvBottomRevenueSecond, tvBottomNameThird, tvBottomBranchNameThird,
-            tvBottomRevenueThird;
+
     private LinearLayout llMonthTrend, llMonthvsTrends;
-    private List<AvailableWidgetModel> widgetList;
     private List<DashboardModel> dashboardList = new ArrayList<>();
     //incentive
     private List<FloatingActionButton> dashboardBtnList = new ArrayList<>();
@@ -170,26 +147,15 @@ public class DashboardFragment extends MOSLCommonFragment
     //Adviosory Performance
     private BarChart mChartAdv;
     private ArrayList<String> yDataGraphArrAdv = new ArrayList<>();
-    private ArrayList<String> xdataYearArrAdv = new ArrayList<>();
-    //Team Performance
-    private BarChart mChartTeam;
-    private ArrayList<String> yDataGraphArrTeam = new ArrayList<>();
-    private ArrayList<String> yDataGraphBlankArrTeam = new ArrayList<>();
-    private ArrayList<String> xdataYearArrTeam = new ArrayList<>();
 
-
-    //  private CustomTabsClient mClient;
-    private TextView tvDetailIncentive, tvQuarterStatus;
-    private String widgetSystemName;
+    private TextView tvDetailIncentive;
     private ArrayList<HashMap<String, String>> arrayListIncentive =
             new ArrayList<HashMap<String, String>>();
-    private ArrayList<TeamQuarterStatusModel> arrayListCurrentStatus;
     private LinearLayout llIncentive, llCurrentQuaterStatusThree, llCurrentQuaterStatusFour,
             llCurrentQuaterStatusFirst, llCurrentQuaterStatusSecond, llCurrentQuarterStatusAdviosory,
             llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp;
     private ScrollView scrollView;
-    private List<WidgetModel> widgetModelList;
-    private LinearLayout llReplaceClientFragment;
+
     private XAxis xAxis;
     private String[] mMonths;
     ////////////////////
@@ -224,7 +190,7 @@ public class DashboardFragment extends MOSLCommonFragment
     }
 
     private void setUpView(View dashAdvisoryView) {
-        scrollView = (ScrollView) dashAdvisoryView.findViewById(R.id.scrollView);
+        scrollView = dashAdvisoryView.findViewById(R.id.scrollView);
         scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         scrollView.setFocusable(true);
         scrollView.setFocusableInTouchMode(true);
@@ -237,80 +203,76 @@ public class DashboardFragment extends MOSLCommonFragment
         });
 
 
-        tvDetailIncentive = (TextView) dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
-        tvQuarterStatus = (TextView) dashAdvisoryView.findViewById(R.id.tvQuarterStatus);
+        tvDetailIncentive = dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
         tvDetailIncentive.setOnClickListener(this);
-        llMain = (RelativeLayout) dashAdvisoryView.findViewById(R.id.llMain);
-        floatingActionsMenu =
-                (FloatingActionsMenu) dashAdvisoryView.findViewById(R.id.floatingActionsMenu);
-        leadcreation = (FloatingActionButton) dashAdvisoryView.findViewById(R.id.leadcreation);
+        llMain = dashAdvisoryView.findViewById(R.id.llMain);
+        floatingActionsMenu = dashAdvisoryView.findViewById(R.id.floatingActionsMenu);
+        leadcreation = dashAdvisoryView.findViewById(R.id.leadcreation);
 
-        ivActionableInsights = (ImageView) dashAdvisoryView.findViewById(R.id.ivActionableInsights);
-        ivClientLeads = (ImageView) dashAdvisoryView.findViewById(R.id.ivClientLeads);
-        ivTargetAchievementADV = (ImageView) dashAdvisoryView.findViewById(R.id.ivTargetAchievementADV);
-        ivTeamTargetAchievement =
-                (ImageView) dashAdvisoryView.findViewById(R.id.ivTeamTargetAchievement);
-        ivMonthOnMonth = (ImageView) dashAdvisoryView.findViewById(R.id.ivMonthOnMonth);
-        ivBusinessSnapshotHead = (ImageView) dashAdvisoryView.findViewById(R.id.ivBusinessSnapshotHead);
-        ivPerformanceAndIncentivesHeader =
-                (ImageView) dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
-        txtClients = (TextView) dashAdvisoryView.findViewById(R.id.txtClients);
-        txtTarget = (TextView) dashAdvisoryView.findViewById(R.id.txtTarget);
-        txtTeamTarget = (TextView) dashAdvisoryView.findViewById(R.id.txtTeamTarget);
+        ivActionableInsights = dashAdvisoryView.findViewById(R.id.ivActionableInsights);
+        ivClientLeads = dashAdvisoryView.findViewById(R.id.ivClientLeads);
+        ivTargetAchievementADV = dashAdvisoryView.findViewById(R.id.ivTargetAchievementADV);
+        ivTeamTargetAchievement = dashAdvisoryView.findViewById(R.id.ivTeamTargetAchievement);
+        ivMonthOnMonth = dashAdvisoryView.findViewById(R.id.ivMonthOnMonth);
+        ivBusinessSnapshotHead = dashAdvisoryView.findViewById(R.id.ivBusinessSnapshotHead);
+        ivPerformanceAndIncentivesHeader = dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
+        txtClients = dashAdvisoryView.findViewById(R.id.txtClients);
+        txtTarget = dashAdvisoryView.findViewById(R.id.txtTarget);
+        txtTeamTarget = dashAdvisoryView.findViewById(R.id.txtTeamTarget);
         tvPerformanceAndIncentivesHeader =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
-        tvMain = (TextView) dashAdvisoryView.findViewById(R.id.tvMain);
+                dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
+        tvMain = dashAdvisoryView.findViewById(R.id.tvMain);
         txtTeamTarget.setText(ADVISORY_TARGET_TITLE);
-        // tvTeamPerformance.setText(ADVISORY_TEAM_PERFORMANCE_TITLE);
-        btnLeads = (Button) dashAdvisoryView.findViewById(R.id.btnLeads);
-        btnClient = (Button) dashAdvisoryView.findViewById(R.id.btnClient);
+        btnLeads = dashAdvisoryView.findViewById(R.id.btnLeads);
+        btnProductivity = dashAdvisoryView.findViewById(R.id.btnProductivity);
+        btnClient = dashAdvisoryView.findViewById(R.id.btnClient);
 
-        llClient = (LinearLayout) dashAdvisoryView.findViewById(R.id.llClient);
-        llClientsLeads = (LinearLayout) dashAdvisoryView.findViewById(R.id.llClientsLeads);
+        llClient = dashAdvisoryView.findViewById(R.id.llClient);
+        llClientsLeads = dashAdvisoryView.findViewById(R.id.llClientsLeads);
         llTargetAchievementADV =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llTargetAchievementADV);
+                dashAdvisoryView.findViewById(R.id.llTargetAchievementADV);
         llTeamTargetAchievement =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamTargetAchievement);
+                dashAdvisoryView.findViewById(R.id.llTeamTargetAchievement);
         llPerformanceAndIncentivesHeader =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
-        rlClientLeads = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlClientLeads);
+                dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
+        rlClientLeads = dashAdvisoryView.findViewById(R.id.rlClientLeads);
         rlTargetAchievementADV =
-                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
+                dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
         rlTeamTargetAchievement =
-                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
-        rlMonthOnMonth = (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlMonthOnMonth);
+                dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
+        rlMonthOnMonth = dashAdvisoryView.findViewById(R.id.rlMonthOnMonth);
         rlBusinessSnapshotHead =
-                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
+                dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
         rlPerformanceAndIncentivesHeader =
-                (RelativeLayout) dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
+                dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
 
-        btnClientTraded = (Button) dashAdvisoryView.findViewById(R.id.btnClientTraded);
-        btnBusinessSnapshot = (Button) dashAdvisoryView.findViewById(R.id.btnBusinessSnapshot);
+        btnClientTraded = dashAdvisoryView.findViewById(R.id.btnClientTraded);
+        btnBusinessSnapshot = dashAdvisoryView.findViewById(R.id.btnBusinessSnapshot);
 
-        llTarget = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTarget);
-        llTeamTarget = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamTarget);
+        llTarget = dashAdvisoryView.findViewById(R.id.llTarget);
+        llTeamTarget = dashAdvisoryView.findViewById(R.id.llTeamTarget);
         llPerformanceAndIncentives =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentives);
-        llMonthTrend = (LinearLayout) dashAdvisoryView.findViewById(R.id.llMonthTrend);
-        llMonthvsTrends = (LinearLayout) dashAdvisoryView.findViewById(R.id.llMonthvsTrends);
+                dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentives);
+        llMonthTrend = dashAdvisoryView.findViewById(R.id.llMonthTrend);
+        llMonthvsTrends = dashAdvisoryView.findViewById(R.id.llMonthvsTrends);
         llBusinessSnapshotHead =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llBusinessSnapshotHead);
+                dashAdvisoryView.findViewById(R.id.llBusinessSnapshotHead);
 
-        llIncentive = (LinearLayout) dashAdvisoryView.findViewById(R.id.llIncentive);
+        llIncentive = dashAdvisoryView.findViewById(R.id.llIncentive);
         llCurrentQuaterStatusThree =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusThree);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusThree);
         llCurrentQuaterStatusFour =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFour);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFour);
         llCurrentQuaterStatusFirst =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFirst);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusFirst);
         llCurrentQuaterStatusSecond =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusSecond);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuaterStatusSecond);
         llCurrentQuarterStatusAdviosory =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusAdviosory);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusAdviosory);
         llCurrentQuarterStatusOneUp =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
-        llAdvPerformance = (LinearLayout) dashAdvisoryView.findViewById(R.id.llAdvPerformance);
-        llTeamPerformance = (LinearLayout) dashAdvisoryView.findViewById(R.id.llTeamPerformance);
+                dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
+        llAdvPerformance = dashAdvisoryView.findViewById(R.id.llAdvPerformance);
+        llTeamPerformance = dashAdvisoryView.findViewById(R.id.llTeamPerformance);
 
 
         rlClientLeads.setOnClickListener(this);
@@ -321,58 +283,16 @@ public class DashboardFragment extends MOSLCommonFragment
         rlPerformanceAndIncentivesHeader.setOnClickListener(this);
         //Hierarchy
 
-        llSnapshot = (LinearLayout) dashAdvisoryView.findViewById(R.id.llSnapshot);
-        tvSnapshot = (TextView) dashAdvisoryView.findViewById(R.id.tvSnapshot);
-        txtMonthTrends = (TextView) dashAdvisoryView.findViewById(R.id.txtMonthTrends);
+        llSnapshot = dashAdvisoryView.findViewById(R.id.llSnapshot);
+        tvSnapshot = dashAdvisoryView.findViewById(R.id.tvSnapshot);
+        txtMonthTrends = dashAdvisoryView.findViewById(R.id.txtMonthTrends);
         tvSnapshot.setText(BUSINESS_SNAPSHOT_TITLE);
         txtMonthTrends.setText(TRENDS_TITLE);
-
-        tvNameFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvNameFirst);
-        tvBranchNameFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBranchNameFirst);
-        tvTopRevenueFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvTopRevenueFirst);
-        tvNameSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvNameSecond);
-        tvBranchNameSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBranchNameSecond);
-        tvTopRevenueSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvTopRevenueSecond);
-        tvNameThird = (TextView) dashAdvisoryView.findViewById(R.id.tvNameThird);
-        tvBranchNameThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBranchNameThird);
-        tvTopRevenueThird = (TextView) dashAdvisoryView.findViewById(R.id.tvTopRevenueThird);
-
-        tvBottomNameFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameFirst);
-        tvBottomBranchNameFirst =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameFirst);
-        tvBottomRevenueFirst = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueFirst);
-        tvBottomNameSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameSecond);
-        tvBottomBranchNameSecond =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameSecond);
-        tvBottomRevenueSecond = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueSecond);
-        tvBottomNameThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomNameThird);
-        tvBottomBranchNameThird =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvBottomBranchNameThird);
-        tvBottomRevenueThird = (TextView) dashAdvisoryView.findViewById(R.id.tvBottomRevenueThird);
-
-        tvTopRevenueFirst.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvNameFirst.setText("Raj");
-        tvBranchNameFirst.setText("Mumbai");
-        tvTopRevenueSecond.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvNameSecond.setText("Raj");
-        tvBranchNameSecond.setText("Mumbai");
-        tvTopRevenueThird.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvNameThird.setText("Raj");
-        tvBranchNameThird.setText("Mumbai");
-
-        tvBottomRevenueFirst.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvBottomNameFirst.setText("Raj");
-        tvBottomBranchNameFirst.setText("Mumbai");
-        tvBottomRevenueSecond.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvBottomNameSecond.setText("Raj");
-        tvBottomBranchNameSecond.setText("Mumbai");
-        tvBottomRevenueThird.setText(getResources().getString(R.string.rupee_symbol) + "20,000");
-        tvBottomNameThird.setText("Raj");
-        tvBottomBranchNameThird.setText("Mumbai");
 
         btnClient.setOnClickListener(this);
         btnBusinessSnapshot.setOnClickListener(this);
         btnLeads.setOnClickListener(this);
+        btnProductivity.setOnClickListener(this);
 
         ivActionableInsights.setOnClickListener(this);
         leadcreation.setOnClickListener(this);
@@ -402,18 +322,17 @@ public class DashboardFragment extends MOSLCommonFragment
 
         //incentive
 
-        spQuarter = (Spinner) dashAdvisoryView.findViewById(R.id.spQuarter);
-        tableMData = (TableLayout) dashAdvisoryView.findViewById(R.id.tableMData);
+        spQuarter = dashAdvisoryView.findViewById(R.id.spQuarter);
+        tableMData = dashAdvisoryView.findViewById(R.id.tableMData);
         tableCurrentQuaterStatusFirst =
-                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFirst);
+                dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFirst);
         tableCurrentQuaterStatusSecond =
-                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusSecond);
+                dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusSecond);
         tableCurrentQuaterStatusThree =
-                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusThree);
+                dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusThree);
         tableCurrentQuaterStatusFour =
-                (TableLayout) dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFour);
-        tableTeamPerformance = (TableLayout) dashAdvisoryView.findViewById(R.id.tableTeamPerformance);
-        tableAdvPerformance = (TableLayout) dashAdvisoryView.findViewById(R.id.tableAdvPerformance);
+                dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFour);
+        tableAdvPerformance = dashAdvisoryView.findViewById(R.id.tableAdvPerformance);
         spQuarter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
@@ -433,21 +352,19 @@ public class DashboardFragment extends MOSLCommonFragment
                 new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
         spQuarter.setAdapter(arrAdapEventType);
-        tvIncentives = (TextView) dashAdvisoryView.findViewById(R.id.tvIncentives);
-        tvPerformance = (TextView) dashAdvisoryView.findViewById(R.id.tvPerformance);
+        tvIncentives = dashAdvisoryView.findViewById(R.id.tvIncentives);
+        tvPerformance = dashAdvisoryView.findViewById(R.id.tvPerformance);
         tvCurrentQuaterStatusFirstHeading =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFirstHeading);
+                dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFirstHeading);
         tvCurrentQuaterStatusSecondHeading =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusSecondHeading);
+                dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusSecondHeading);
         tvCurrentQuaterStatusThreeHeading =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusThreeHeading);
+                dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusThreeHeading);
         tvCurrentQuaterStatusFourHeading =
-                (TextView) dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFourHeading);
+                dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFourHeading);
 
         mChartAdv = (BarChart) dashAdvisoryView.findViewById(R.id.chart);
         mChartAdv.getDescription().setEnabled(false);
-        //        mChartAdv.setDrawBorders(true);
-        // scaling can now only be done on x- and y-axis separately
         mChartAdv.setPinchZoom(false);
         mChartAdv.setDrawBarShadow(false);
         mChartAdv.setDrawGridBackground(false);
@@ -457,7 +374,6 @@ public class DashboardFragment extends MOSLCommonFragment
         legendAdv.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         legendAdv.setOrientation(Legend.LegendOrientation.VERTICAL);
         legendAdv.setDrawInside(true);
-        //l.setTypeface(mTfLight);
         legendAdv.setYOffset(0f);
         legendAdv.setXOffset(10f);
         legendAdv.setYEntrySpace(0f);
@@ -468,7 +384,7 @@ public class DashboardFragment extends MOSLCommonFragment
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setCenterAxisLabels(true);
-        xAxis.setGranularity(1f);// this replaces setStartAtZero(true)
+        xAxis.setGranularity(1f);
 
         YAxis leftAxis = mChartAdv.getAxisLeft();
         leftAxis.setDrawGridLines(false);
@@ -488,130 +404,7 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         });
 
-        //Team Performance
 
-        mChartTeam = (BarChart) dashAdvisoryView.findViewById(R.id.chartTeam);
-
-        mChartTeam.getDescription().setEnabled(false);
-
-        //        mChartPer.setDrawBorders(true);
-
-        // scaling can now only be done on x- and y-axis separately
-        mChartTeam.setPinchZoom(false);
-
-        mChartTeam.setDrawBarShadow(false);
-
-        mChartTeam.setDrawGridBackground(false);
-
-        Legend legendPer = mChartTeam.getLegend();
-        legendPer.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        legendPer.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        legendPer.setOrientation(Legend.LegendOrientation.VERTICAL);
-        legendPer.setDrawInside(true);
-        //l.setTypeface(mTfLight);
-        legendPer.setYOffset(0f);
-        legendPer.setXOffset(10f);
-        legendPer.setYEntrySpace(0f);
-        legendPer.setTextSize(8f);
-        legendPer.setEnabled(false);
-
-        XAxis xAxisPer = mChartTeam.getXAxis();
-        xAxisPer.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxisPer.setDrawGridLines(false);
-        xAxisPer.setCenterAxisLabels(true);
-        xAxisPer.setAxisMaximum(0f);
-        xAxisPer.setGranularity(1f);
-        xAxisPer.setValueFormatter(new IAxisValueFormatter() {
-
-            private String[] mActivities = new String[]{"Q1", "Q2", "Q3", "Q4", "YTD"};
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-               /* if (value == -1) {
-                    value = 1;
-                } else {
-                }*/
-                return mActivities[(int) (value) % mActivities.length];
-            }
-        });
-        YAxis leftAxisPer = mChartTeam.getAxisLeft();
-        leftAxisPer.setDrawGridLines(false);
-        leftAxisPer.setSpaceTop(5f);
-
-        mChartTeam.getAxisRight().setEnabled(false);
-
-        //Hierarchy performance
-        mChart = (HorizontalBarChart) dashAdvisoryView.findViewById(R.id.chart1);
-        mChart.setDrawBarShadow(false);
-        mChart.setDrawValueAboveBar(true);
-        mChart.getDescription().setEnabled(false);
-        mChart.setMaxVisibleValueCount(60);
-        mChart.setPinchZoom(false);
-        mChart.setDrawGridBackground(false);
-        mChart.setHighlightFullBarEnabled(false);
-        mChart.setBackgroundColor(Color.WHITE);
-
-        XAxis xAxisTeam = mChart.getXAxis();
-        xAxisTeam.setDrawGridLines(false);
-        xAxisTeam.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxisTeam.setCenterAxisLabels(true);
-        //remove axis line
-        xAxisTeam.setDrawAxisLine(true);
-        final ArrayList<String> mActivities = new ArrayList<String>();
-        mActivities.add("mumbai");
-        mActivities.add("pune");
-        mActivities.add("banglore");
-        mActivities.add("jaipur");
-        mActivities.add("belapur");
-        mActivities.add("delhi");
-        mActivities.add("manipur");
-        mActivities.add("bihar");
-        mActivities.add("gujrat");
-        mActivities.add("maharashtra");
-        mActivities.add("kolhapur");
-        mActivities.add("goa");
-        Collections.reverse(mActivities);
-        xAxisTeam.setValueFormatter(new IAxisValueFormatter() {
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-
-                try {
-                    return mActivities.get((int) value % mActivities.size());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        });
-
-        YAxis yl = mChart.getAxisLeft();
-        yl.setDrawAxisLine(true);
-        yl.setDrawGridLines(false);
-        yl.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        //        yl.setInverted(true);
-
-        YAxis yr = mChart.getAxisRight();
-        yr.setEnabled(false);
-        yr.setDrawAxisLine(true);
-        yr.setDrawGridLines(false);
-        yr.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        //        yr.setInverted(true);
-
-        setData();
-        mChart.setFitBars(true);
-        mChart.animateY(2500);
-
-        Legend l = mChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
-        l.setFormSize(8f);
-        l.setXEntrySpace(4f);
-        l.setEnabled(false);
-        llReplaceClientFragment =
-                (LinearLayout) dashAdvisoryView.findViewById(R.id.llReplaceClientFragment);
     }
 
     private void generateAxisLabel(ChartDataModel data) {
@@ -638,14 +431,6 @@ public class DashboardFragment extends MOSLCommonFragment
 
     private BarData generateBarData(List<ChartDataModel> barDataList) {
 
-       /* List<ChartDataModel> dataList = arrayList;
-        List<ChartDataModel> barDataList = new ArrayList<>();
-
-        for (ChartDataModel model : dataList) {
-            generateAxisLabel(model);
-            barDataList.add(model);
-
-        }*/
         generateAxisLabel(barDataList.get(0));
         if (barDataList.size() == 0) return null;
 
@@ -742,76 +527,9 @@ public class DashboardFragment extends MOSLCommonFragment
         }
 
 
-
-
-
-       /*  ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals4 = new ArrayList<BarEntry>();
-
-
-        yVals1.add(new BarEntry(0, Float.valueOf(yDataGraphArrAdv.get(1))));
-        yVals1.add(new BarEntry(1, Float.valueOf(yDataGraphArrAdv.get(2))));
-        yVals1.add(new BarEntry(2, Float.valueOf(yDataGraphArrAdv.get(3))));
-        yVals1.add(new BarEntry(3, Float.valueOf(yDataGraphArrAdv.get(4))));
-
-        yVals2.add(new BarEntry(0, Float.valueOf(yDataGraphArrAdv.get(7))));
-        yVals2.add(new BarEntry(1, Float.valueOf(yDataGraphArrAdv.get(8))));
-        yVals2.add(new BarEntry(2, Float.valueOf(yDataGraphArrAdv.get(9))));
-        yVals2.add(new BarEntry(3, Float.valueOf(yDataGraphArrAdv.get(10))));
-
-        yVals3.add(new BarEntry(0, Float.valueOf(yDataGraphArrAdv.get(13))));
-        yVals3.add(new BarEntry(1, Float.valueOf(yDataGraphArrAdv.get(14))));
-        yVals3.add(new BarEntry(2, Float.valueOf(yDataGraphArrAdv.get(15))));
-        yVals3.add(new BarEntry(3, Float.valueOf(yDataGraphArrAdv.get(16))));
-
-       BarDataSet set1, set2, set3, set4;
-
-        if (mChartAdv.getData() != null && mChartAdv.getData().getDataSetCount() > 0) {
-
-            set1 = (BarDataSet) mChartAdv.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet) mChartAdv.getData().getDataSetByIndex(1);
-            set3 = (BarDataSet) mChartAdv.getData().getDataSetByIndex(2);
-            //  set4 = (BarDataSet) mChartAdv.getData().getDataSetByIndex(3);
-            set1.setValues(yVals1);
-            set2.setValues(yVals2);
-            set3.setValues(yVals3);
-            // set4.setValues(yVals4);
-            mChartAdv.getData().notifyDataChanged();
-            mChartAdv.notifyDataSetChanged();
-
-        } else {
-            // create 4 DataSets
-            set1 = new BarDataSet(yVals1, "");
-            set1.setColor(Color.rgb(255, 20, 0));
-            set2 = new BarDataSet(yVals2, "");
-            set2.setColor(Color.rgb(38, 127, 183));
-            set3 = new BarDataSet(yVals3, "");
-            set3.setColor(Color.rgb(255, 154, 0));
-            //  set4 = new BarDataSet(yVals4, "");
-            //set4.setColor(Color.rgb(255, 102, 0));
-
-            // BarData data = new BarData(set1, set2, set3, set4);
-            BarData data = new BarData(set1, set2, set3);
-            data.setValueFormatter(new LargeValueFormatter());
-            //data.setValueTypeface(mTfLight);
-
-            mChartAdv.setData(data);
-        }*/
-
-        // BarData barData = generateBarData(xAxis,dataList);
-
         if (generateBarData(dataList) != null) {
-            //   data.setData(generateBarData(arrayLists.get(i)));
             mChartAdv.setData(generateBarData(dataList));
         }
-
-        // when ytd comes then uncomment
-
-       /* float groupSpace = 0.18f;
-        float barSpace = 0.03f; // x4 DataSet
-        float barWidth = 0.25f; // x4 DataSet*/
 
         int groupCount = mMonths.length;
         int startYear = 2010;
@@ -837,8 +555,6 @@ public class DashboardFragment extends MOSLCommonFragment
         }
 
         tableAdvPerformance.addView(tableRowHeader);
-        //adding head end
-
         for (int i = 1; i < mMonths.length + 1; i++) {
             View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
             TextView tvTeamAvg = (TextView) tableRow.findViewById(R.id.tvTeamAvg);
@@ -870,275 +586,11 @@ public class DashboardFragment extends MOSLCommonFragment
         mChartAdv.groupBars(startYear, groupSpace, barSpace);
         mChartAdv.invalidate();
 
-        mChartAdv.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e == null) {
-                    return;
-                }
-                if (e.getY() == 0.0f) return;
 
-                Bundle args = new Bundle();
-                Log.d("index", Float.toString(e.getX() + 0.5f));
-                // navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-            }
-
-            private void pieChartDetail(float sliceIndex) {
-
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
         llAdvPerformance.setVisibility(View.VISIBLE);
         tvPerformance.setText("Performance");
     }
 
-    public void teamLoadChart(JSONArray jsonArray) {
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
-                        : jsonObject.getString("Name");
-                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
-                        : jsonObject.getString("Q1");
-                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
-                        : jsonObject.getString("Q2");
-                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
-                        : jsonObject.getString("Q3");
-                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
-                        : jsonObject.getString("Q4");
-                String ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
-                        : jsonObject.getString("YTD");
-                yDataGraphArrTeam.add(Name);
-                yDataGraphArrTeam.add(Q1);
-                yDataGraphArrTeam.add(Q2);
-                yDataGraphArrTeam.add(Q3);
-                yDataGraphArrTeam.add(Q4);
-                yDataGraphArrTeam.add(ytd);
-            }
-            yDataGraphBlankArrTeam.add("0");
-            yDataGraphBlankArrTeam.add("0");
-            yDataGraphBlankArrTeam.add("0");
-            yDataGraphBlankArrTeam.add("0");
-            yDataGraphBlankArrTeam.add("0");
-
-            tableTeamPerformance.removeAllViews();
-
-            //Adding head
-            LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-            View tableRowHeader = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
-            TextView tvTeamAvgHeader = (TextView) tableRowHeader.findViewById(R.id.tvTeamAvg);
-            TextView tvNationalAvgHeader = (TextView) tableRowHeader.findViewById(R.id.tvNationalAvg);
-
-            tvTeamAvgHeader.setText(yDataGraphArrTeam.get(0));
-            tvNationalAvgHeader.setText(yDataGraphArrTeam.get(6));
-
-            //Boald type face
-            tvTeamAvgHeader.setTypeface(null, Typeface.BOLD);
-            tvNationalAvgHeader.setTypeface(null, Typeface.BOLD);
-
-            tableTeamPerformance.addView(tableRowHeader);
-            //adding head end
-
-            for (int i = 1; i < 6; i++) {
-                View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
-                TextView tvTeamAvg = (TextView) tableRow.findViewById(R.id.tvTeamAvg);
-                TextView tvNationalAvg = (TextView) tableRow.findViewById(R.id.tvNationalAvg);
-
-                tvTeamAvg.setText(yDataGraphArrTeam.get(i));
-                tvNationalAvg.setText(yDataGraphArrTeam.get(6 + i));
-
-                tableTeamPerformance.addView(tableRow);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        float groupSpace = 0.18f;
-        float barSpace = 0.03f; // x4 DataSet
-        float barWidth = 0.25f; // x4 DataSet
-
-        int groupCount = 5;
-        int startYear = 2010;
-        int endYear = 2015;
-
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
-
-        yVals1.add(new BarEntry(0, Float.valueOf(yDataGraphArrTeam.get(1))));
-        yVals1.add(new BarEntry(1, Float.valueOf(yDataGraphArrTeam.get(2))));
-        yVals1.add(new BarEntry(2, Float.valueOf(yDataGraphArrTeam.get(3))));
-        yVals1.add(new BarEntry(3, Float.valueOf(yDataGraphArrTeam.get(4))));
-        yVals1.add(new BarEntry(4, Float.valueOf(yDataGraphArrTeam.get(5))));
-        // yVals1.add(new BarEntry(5,Float.valueOf(yDataGraphArr.get(10))));
-
-        yVals2.add(new BarEntry(0, Float.valueOf(yDataGraphArrTeam.get(7))));
-        yVals2.add(new BarEntry(1, Float.valueOf(yDataGraphArrTeam.get(8))));
-        yVals2.add(new BarEntry(2, Float.valueOf(yDataGraphArrTeam.get(9))));
-        yVals2.add(new BarEntry(3, Float.valueOf(yDataGraphArrTeam.get(10))));
-        yVals2.add(new BarEntry(4, Float.valueOf(yDataGraphArrTeam.get(11))));
-        // yVals2.add(new BarEntry(5,Float.valueOf(yDataGraphArr.get(11))));
-
-        try {
-            yVals3.add(new BarEntry(0, Float.valueOf(yDataGraphBlankArrTeam.get(0))));
-            yVals3.add(new BarEntry(1, Float.valueOf(yDataGraphBlankArrTeam.get(1))));
-            yVals3.add(new BarEntry(2, Float.valueOf(yDataGraphBlankArrTeam.get(2))));
-            yVals3.add(new BarEntry(3, Float.valueOf(yDataGraphBlankArrTeam.get(3))));
-            yVals3.add(new BarEntry(4, Float.valueOf(yDataGraphBlankArrTeam.get(4))));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        BarDataSet set1, set2, set3;
-
-        if (mChartTeam.getData() != null && mChartTeam.getData().getDataSetCount() > 0) {
-
-            set1 = (BarDataSet) mChartTeam.getData().getDataSetByIndex(0);
-            set2 = (BarDataSet) mChartTeam.getData().getDataSetByIndex(1);
-            set3 = (BarDataSet) mChartTeam.getData().getDataSetByIndex(2);
-            set1.setValues(yVals1);
-            set2.setValues(yVals2);
-            set3.setValues(yVals3);
-            mChartTeam.getData().notifyDataChanged();
-            mChartTeam.notifyDataSetChanged();
-        } else {
-            // create 4 DataSets
-            set1 = new BarDataSet(yVals1, "");
-            set1.setColor(Color.rgb(255, 20, 0));
-            set2 = new BarDataSet(yVals2, "");
-            set2.setColor(Color.rgb(38, 127, 183));
-            set3 = new BarDataSet(yVals3, "");
-            set3.setColor(Color.rgb(255, 255, 255));
-
-            BarData data = new BarData(set1, set2, set3);
-
-            data.setValueFormatter(new LargeValueFormatter());
-
-            mChartTeam.setData(data);
-        }
-
-        // specify the width each bar should have
-        mChartTeam.getBarData().setBarWidth(barWidth);
-
-        // restrict the x-axis range
-        mChartTeam.getXAxis().setAxisMinimum(startYear);
-
-        // barData.getGroupWith(...) is a helper that calculates the width each group needs based on the provided parameters
-        mChartTeam.getXAxis()
-                .setAxisMaximum(
-                        startYear + mChartTeam.getBarData().getGroupWidth(groupSpace, barSpace) * groupCount);
-        mChartTeam.groupBars(startYear, groupSpace, barSpace);
-        mChartTeam.invalidate();
-
-        mChartTeam.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e == null) {
-                    return;
-                }
-                pieChartDetail(e.getX());
-            }
-
-            private void pieChartDetail(float sliceIndex) {
-                Bundle args = new Bundle();
-                Log.d("index", Float.toString(sliceIndex + 0.5f));
-                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-    }
-
-    private void setData() {
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
-
-        for (int i = 0; i < itemcount; i++) {
-            float val1 = (float) (Math.random() * 150) / 2;
-
-            float val2 = (float) (Math.random() * 150) / 2;
-
-            yVals1.add(new BarEntry(i + 0.5f, val1));
-        }
-
-        BarDataSet set1;
-
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        int[] VORDIPLOM_COLORS = {
-                Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
-        };
-        for (int c : VORDIPLOM_COLORS)
-            colors.add(c);
-
-        //  colors.add(ColorTemplate.getHoloBlue());
-        set1 = new BarDataSet(yVals1, "");
-        set1.setColors(Color.rgb(255, 154, 0));
-        set1.setStackLabels(new String[]{"Self", "Assigned", "Marriages"});
-
-        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-        dataSets.add(set1);
-
-        BarData data = new BarData(dataSets);
-        data.setValueFormatter(new CRMValueFormatter());
-        data.setValueTextColor(Color.BLACK);
-        // width bar chart
-        data.setBarWidth(0.3f);
-
-        mChart.setData(data);
-        mChart.invalidate();
-        mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e == null) {
-                    return;
-                }
-                pieChartDetail(e.getX());
-            }
-
-            private void pieChartDetail(float sliceIndex) {
-                Bundle args = new Bundle();
-                Log.d("index", Float.toString(sliceIndex + 0.5f));
-                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-    }
-
-    private void setIndicatorColor(int position, String page) {
-        switch (page) {
-
-            case "Default":
-
-                for (int i = 0; i < mTabsLinearLayoutSnapshot.getChildCount(); i++) {
-                    TextView tv = (TextView) mTabsLinearLayoutSnapshot.getChildAt(i);
-                    if (i == position) {
-                        tv.setTextColor(Color.BLACK);
-                    } else {
-                        tv.setTextColor(getResources().getColor(R.color.light_black));
-                    }
-                }
-
-            case "Snapshot":
-                for (int i = 0; i < mTabsLinearLayoutSnapshot.getChildCount(); i++) {
-                    TextView tv = (TextView) mTabsLinearLayoutSnapshot.getChildAt(i);
-                    if (i == position) {
-                        tv.setTextColor(Color.BLACK);
-                    } else {
-                        tv.setTextColor(getResources().getColor(R.color.light_black));
-                    }
-                }
-                break;
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -1149,7 +601,6 @@ public class DashboardFragment extends MOSLCommonFragment
                 if (!dashboardId.isEmpty()) {
                     webServiceInceniveSlab(dashboardId);
                 }
-                //  openWebUrl(Uri.parse(CRMWebServiceHandler.INCENTIVE_PDF_URL));
             }
             if (id == R.id.ivActionableInsights) {
                 hideKeyboard(view);
@@ -1163,6 +614,9 @@ public class DashboardFragment extends MOSLCommonFragment
             } else if (id == R.id.btnLeads) {
                 hideKeyboard(view);
                 loadLead();
+            } else if (id == R.id.btnProductivity) {
+                hideKeyboard(view);
+                loadProductivity();
             } else if (id == R.id.btnClientTraded) {
                 hideKeyboard(view);
                 loadClientTraded();
@@ -1196,6 +650,8 @@ public class DashboardFragment extends MOSLCommonFragment
         Bundle args = new Bundle();
         btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
@@ -1211,12 +667,36 @@ public class DashboardFragment extends MOSLCommonFragment
                 .commit();
     }
 
+
+    private void loadProductivity() {
+        Bundle args = new Bundle();
+        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
+        btnProductivity.setTextColor(getResources().getColor(R.color.white));
+        ProductivityFragment productivityFragment = ProductivityFragment.newInstance(getContext());
+        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
+        productivityFragment.setArguments(args);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, productivityFragment)
+                .commit();
+    }
+
     private void loadClientTraded() {
         Bundle args = new Bundle();
         btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
@@ -1237,6 +717,8 @@ public class DashboardFragment extends MOSLCommonFragment
         btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.white));
         btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
@@ -1250,6 +732,27 @@ public class DashboardFragment extends MOSLCommonFragment
                 .replace(R.id.llReplaceClientFragment, leadsFragment)
                 .commit();
     }
+
+    private void loadClients() {
+        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
+        btnClient.setTextColor(getResources().getColor(R.color.white));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+        ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
+        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
+        clientsFragment.setArguments(args);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, clientsFragment)
+                .commit();
+    }
+
 
     private void loadTargetAchievement() {
         Bundle args = new Bundle();
@@ -1296,24 +799,6 @@ public class DashboardFragment extends MOSLCommonFragment
                 .commit();
     }
 
-    private void loadClients() {
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnClient.setTextColor(getResources().getColor(R.color.white));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
-        ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
-        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-        clientsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.llReplaceClientFragment, clientsFragment)
-                .commit();
-    }
-
 
     private void actionableInsightDialog() {
         if (currentDashboard == null) return;
@@ -1338,10 +823,6 @@ public class DashboardFragment extends MOSLCommonFragment
 
         lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
 
-        /*List<WidgetModel> widgetModelList = currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
-        advisoryActionableInsightAdapter = new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
-        lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
-        advisoryActionableInsightAdapter.notifyDataSetChanged();*/
 
         dialog.show();
     }
@@ -1349,21 +830,6 @@ public class DashboardFragment extends MOSLCommonFragment
     @Override
     public void onResume() {
         super.onResume();
-  /*      try {
-            if (AccountDetails.getToken() == null) {
-                Intent intent = new Intent(getMainActivity(), SplashActivity.class);
-                startActivity(intent);
-            } else {
-                for (FloatingActionButton sFab : dashboardBtnList) {
-                    floatingActionsMenu.removeButton(sFab);
-                }
-                dashboardBtnList.clear();
-                dashboardList.clear();
-                loadDahboardMetaData();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }*/
     }
 
     @Override
@@ -1572,11 +1038,6 @@ public class DashboardFragment extends MOSLCommonFragment
                                         if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                             JSONObject responseJsonObj = response.getJSONObject("Response");
                                             ArrayList<String> arrayList = new ArrayList<String>();
-                                  /*  "Table1" : -[
-                                    -{
-                                            "Count" : 0
-                                       }
-                                       ]*/
                                             String type = "";
                                             ArrayList<TypeActionableFilterModel> typeList =
                                                     new ArrayList<TypeActionableFilterModel>();
@@ -1913,9 +1374,8 @@ public class DashboardFragment extends MOSLCommonFragment
             btnLeads.setVisibility(View.VISIBLE);
             btnBusinessSnapshot.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
-            // loadLead();
+            btnProductivity.setVisibility(View.GONE);
             loadClients();
-            widgetModelList = currentDashboard.getGroupModel(MyClient_MyLead).getWidgetList();
             DashboardSystemModel.setLeadSystemName(MyClient_MyLead);
             DashboardSystemModel.setClientSystemName(MyClient_MyLead);
         } else if (currentDashboard.isGroupExists(MY_LEAD)) {
@@ -1928,15 +1388,33 @@ public class DashboardFragment extends MOSLCommonFragment
             btnClient.setVisibility(View.GONE);
             btnBusinessSnapshot.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             loadLead();
-            widgetModelList = currentDashboard.getGroupModel(MY_LEAD).getWidgetList();
             DashboardSystemModel.setLeadSystemName(MY_LEAD);
+        } else if (currentDashboard.isGroupExists(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
+            llClient.setVisibility(View.VISIBLE);
+            setIcon(llClientsLeads, ivClientLeads);
+            if (llClientsLeads.getVisibility() != View.VISIBLE) {
+                toggleSectionExpansion(llClientsLeads, ivClientLeads);
+            }
+            txtClients.setText(currentDashboard.getGroupModel(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY).getDisplayName());
+            btnClient.setVisibility(View.VISIBLE);
+            btnBusinessSnapshot.setVisibility(View.VISIBLE);
+            btnProductivity.setVisibility(View.VISIBLE);
+            btnLeads.setVisibility(View.GONE);
+            btnClientTraded.setVisibility(View.GONE);
+
+            loadClients();
+            DashboardSystemModel.setBusinessSnapshotSystemName(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
+            DashboardSystemModel.setClientSystemName(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
+            DashboardSystemModel.setProductivitySystemName(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
         }
         if (currentDashboard.isGroupExists(SYS_LEAD_SNAPSHOT)) {
             llClient.setVisibility(View.VISIBLE);
             txtClients.setText(currentDashboard.getGroupModel(SYS_LEAD_SNAPSHOT).getDisplayName());
             btnClient.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             btnBusinessSnapshot.setVisibility(View.VISIBLE);
             btnLeads.setVisibility(View.VISIBLE);
             setIcon(llClientsLeads, ivClientLeads);
@@ -1944,8 +1422,6 @@ public class DashboardFragment extends MOSLCommonFragment
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
             loadLeadBusinessSnapShot();
-            //  loadLead();
-            widgetModelList = currentDashboard.getGroupModel(SYS_LEAD_SNAPSHOT).getWidgetList();
             DashboardSystemModel.setBusinessSnapshotSystemName(SYS_LEAD_SNAPSHOT);
             DashboardSystemModel.setLeadSystemName(SYS_LEAD_SNAPSHOT);
         }
@@ -1958,6 +1434,7 @@ public class DashboardFragment extends MOSLCommonFragment
             }
             btnClientTraded.setVisibility(View.GONE);
             btnBusinessSnapshot.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             txtClients.setText(currentDashboard.getGroupModel(TEAM_LEAD).getDisplayName());
             btnClient.setVisibility(View.GONE);
             loadLead();
@@ -1971,12 +1448,11 @@ public class DashboardFragment extends MOSLCommonFragment
             }
             btnBusinessSnapshot.setVisibility(View.GONE);
             btnLeads.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             txtClients.setText(currentDashboard.getGroupModel(SYS_MY_CLIENTS_SNAPSHOOT).getDisplayName());
             btnClient.setVisibility(View.VISIBLE);
             btnClientTraded.setVisibility(View.VISIBLE);
             loadClients();
-            // loadClients();
-            //      widgetModelList = currentDashboard.getGroupModel(MyClient_MyLead).getWidgetList();
             DashboardSystemModel.setClientSystemName(SYS_MY_CLIENTS_SNAPSHOOT);
             DashboardSystemModel.setClientTradedSystemName(SYS_MY_CLIENTS_SNAPSHOOT);
         }
@@ -1991,10 +1467,10 @@ public class DashboardFragment extends MOSLCommonFragment
             btnBusinessSnapshot.setVisibility(View.VISIBLE);
             btnLeads.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             loadLeadBusinessSnapShot();
             btnBusinessSnapshot.setText("Team Snapshot");
             //  loadLead();
-            widgetModelList = currentDashboard.getGroupModel(SYS_TEAM_SNAPSHOT).getWidgetList();
             DashboardSystemModel.setBusinessSnapshotSystemName(SYS_TEAM_SNAPSHOT);
         }
         if (currentDashboard.isGroupExists(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)) {
@@ -2004,6 +1480,7 @@ public class DashboardFragment extends MOSLCommonFragment
                             .getDisplayName());
             btnClient.setVisibility(View.GONE);
             btnClientTraded.setVisibility(View.GONE);
+            btnProductivity.setVisibility(View.GONE);
             btnBusinessSnapshot.setVisibility(View.VISIBLE);
             btnLeads.setVisibility(View.VISIBLE);
             setIcon(llClientsLeads, ivClientLeads);
@@ -2011,10 +1488,6 @@ public class DashboardFragment extends MOSLCommonFragment
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
             loadLeadBusinessSnapShot();
-            //  loadLead();
-            widgetModelList =
-                    currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)
-                            .getWidgetList();
             DashboardSystemModel.setBusinessSnapshotSystemName(
                     SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
             DashboardSystemModel.setLeadSystemName(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
@@ -2077,13 +1550,10 @@ public class DashboardFragment extends MOSLCommonFragment
             DashboardSystemModel.setMonthTrends(MONTH_ON_MONTH_ACCOUNT_REVENUE);
         }
 
-        //region PerformanceIncentive
-
         if (currentDashboard.isGroupExists(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
             tvPerformanceAndIncentivesHeader.setText(
                     currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
-            // setDropdownData(PERFORMANCE_INCENTIVE_ACHIEVEMNET);
             setIncentiveVisibility(PERFORMANCE_INCENTIVE_ACHIEVEMNET);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
@@ -2093,7 +1563,6 @@ public class DashboardFragment extends MOSLCommonFragment
             tvPerformanceAndIncentivesHeader.setText(
                     currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
-            // setDropdownData(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES);
             setIncentiveVisibility(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
@@ -2103,7 +1572,6 @@ public class DashboardFragment extends MOSLCommonFragment
             tvPerformanceAndIncentivesHeader.setText(
                     currentDashboard.getGroupModel(PERFORMANCE_INCENTIVE_ACHIEVEMNET).getDisplayName());
             llPerformanceAndIncentives.setVisibility(View.VISIBLE);
-            //  setDropdownData(MY_PERFORMANCE_INCENTIVE);
             setIncentiveVisibility(MY_PERFORMANCE_INCENTIVE);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
@@ -2129,43 +1597,13 @@ public class DashboardFragment extends MOSLCommonFragment
                     llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE);
                 }
             }
-            /*if (widgetList != null && widgetList.size() > 0) {
-                WidgetModel model = widgetList.get(0);
-                widgetSystemName = model.getSystemName();
-                //set Widget Type
-                List<WidgetType> widgetTypeList = model.getWidgetTypeList();
-                for (int i = 0; i < widgetTypeList.size(); i++) {
-                    String widgetTypes = widgetTypeList.get(i).getWidgetTypes();
-                    if ((widgetTypes.equalsIgnoreCase(PERFORMANCE_PARAMETERS) && systemName.equalsIgnoreCase(PERFORMANCE_INCENTIVE_ACHIEVEMNET))
-                            || (widgetTypes.equalsIgnoreCase(PERFORMANCE_PARAMETERS) && systemName.equalsIgnoreCase(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES))) {
-                        llIncentive.setVisibility(View.VISIBLE);
-                        tvPerformanceAndIncentives.setText(widgetTypeList.get(i).getTitle());
-                    }
-                    if (widgetTypes.equalsIgnoreCase(QUARTER_STATUS) && systemName.equalsIgnoreCase(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
-                        llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE);
-                        tvQuarterStatus.setText(widgetTypeList.get(i).getTitle());
-                    }
-                    if (widgetTypes.equalsIgnoreCase(PERFORMANCE_COMPARISON) && systemName.equalsIgnoreCase(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
-                        llAdvPerformance.setVisibility(View.VISIBLE);
-                    }
-                    if (widgetTypes.equalsIgnoreCase(PERFORMANCE_COMPARISON) && systemName.equalsIgnoreCase(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)) {
-                        llTeamPerformance.setVisibility(View.VISIBLE);
-                    }
-                    if (widgetTypes.equalsIgnoreCase(QUARTER_STATUS) && systemName.equalsIgnoreCase(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)) {
-                        llCurrentQuarterStatusOneUp.setVisibility(View.VISIBLE);
-                    }
 
-                }
-            }*/
         }
     }
 
     private Map getAddtionalParameterMap() {
         Map addtionalParameterMap = new HashMap<>();
         try {
-            //  FilterRowData filter1 = (FilterRowData) spQuarter.getSelectedItem();
-            //   addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
-
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -2173,31 +1611,8 @@ public class DashboardFragment extends MOSLCommonFragment
         return addtionalParameterMap;
     }
 
-   /* private void setDropdownData(String widgetSystemName) {
-        if (currentDashboard != null) {
-            DashboardGroupModel groupModel = currentDashboard.getGroupModel(widgetSystemName);
-
-            List<WidgetModel> widgetList = groupModel.getWidgetList();
-            if (widgetList != null && widgetList.size() > 0) {
-                WidgetModel model = widgetList.get(0);
-                List<WidgetFilterModel> filterList = model.getWidgetFilterList();
-                if (filterList != null && filterList.size() == 1) {
-                    ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
-                    adapter1.setDropDownViewResource(R.layout.mdropdown);
-                    FilterRowData obj = new FilterRowData(0, "YTD", "", "");
-                    adapter1.add(obj);
-                    spQuarter.setAdapter(adapter1);
-
-                }
-            }
-        }
-    }*/
 
     private void updateActionableCount() {
-        /*if (advisoryActionableInsightAdapter != null) {
-            advisoryActionableInsightAdapter.clear();
-        }*/
-
         if (currentDashboard == null) return;
 
         if (currentDashboard.isGroupExists(ACTIONABLE)) {
@@ -2217,7 +1632,6 @@ public class DashboardFragment extends MOSLCommonFragment
     }
 
     private void incentiveWebServiceCall(final String widgetSystemName) {
-        // Timber.v(text);
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             String serviceMethod = "Dashboard/LoadWidgetAsync";
@@ -2245,29 +1659,8 @@ public class DashboardFragment extends MOSLCommonFragment
                                         hideProgress();
                                         String status = response.getString(STATUS);
 
-                             /*   "Table1":[{"Name":" My Incentive","Q1":"20000","Q2":"40000","Q3":"15000","Q4":"25000"},
-                                {"Name":" Branch Average","Q1":"23000","Q2":"12000","Q3":"30000","Q4":"25000"},
-                                {"Name":" National Average","Q1":"20000","Q2":"40000","Q3":"25000","Q4":"30000"}]*/
-
                                         if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                             JSONObject responseJsonObj = response.getJSONObject("Response");
-
-                                 /*   yDataGraphArrAdv.clear();
-                                    xdataYearArrAdv.clear();
-                                    arrayListIncentive.clear();
-                                    yDataGraphArrTeam.clear();
-                                    xdataYearArrTeam.clear();
-
-                                    xdataYearArrAdv.add("Q1");
-                                    xdataYearArrAdv.add("Q2");
-                                    xdataYearArrAdv.add("Q3");
-                                    xdataYearArrAdv.add("Q4");
-
-                                    xdataYearArrTeam.add("Q1");
-                                    xdataYearArrTeam.add("Q2");
-                                    xdataYearArrTeam.add("Q3");
-                                    xdataYearArrTeam.add("Q4");
-                                    xdataYearArrTeam.add("YTD");*/
 
                                             if (responseJsonObj.has("Table")) {
                                                 JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
@@ -2278,24 +1671,6 @@ public class DashboardFragment extends MOSLCommonFragment
                                                 // perfotmanceData(jsonArray);
                                                 advLoadChart(jsonArray);
                                             }
-                                  /*  if (responseJsonObj.has("Table2")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table2");
-                                        if (widgetSystemName.equalsIgnoreCase("PerformanceAndIncentives")) {
-                                            getAdvCurrentQuaterStatus(jsonArray);
-                                        } else if (widgetSystemName.equalsIgnoreCase("OaoSalesOneup_TeamPerformanceAndIncentives")) {
-                                            getTeamCurrentQuaterStatus(jsonArray);
-                                        }
-
-                                    }
-                                    if (responseJsonObj.has("Table1")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
-                                        if (widgetSystemName.equalsIgnoreCase("PerformanceAndIncentives")) {
-                                            advLoadChart(jsonArray);
-                                        } else if (widgetSystemName.equalsIgnoreCase("OaoSalesOneup_TeamPerformanceAndIncentives")) {
-                                            teamLoadChart(jsonArray);
-                                        }
-
-                                    }*/
                                         } else {
                                             hideProgress();
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
@@ -2391,98 +1766,6 @@ public class DashboardFragment extends MOSLCommonFragment
             }
 
 
-           /* try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new TextHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                        //     super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                Gson mGson = new Gson();
-                                Type type = new TypeToken<HashMap<String, Object>>() {
-                                }.getType();
-                                HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                                if (response.size() != 0) {
-                                    //  String status = response.getString(STATUS);
-                                    String status = response.get(STATUS).toString();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-
-                                        StringMap responseJSONObject = (StringMap) response.get("Response");
-
-
-                                        if (responseJSONObject.containsKey("Table")) {
-                                            List<StringMap> arrayDetail = (List<StringMap>) responseJSONObject.get("Table");
-                                            // JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
-                                            incentiveData(arrayDetail);
-                                        }
-                                        *//*if (responseJsonObj.has("Table1")) {
-                                            JSONArray jsonArray = responseJsonObj.getJSONArray("Table1");
-                                            // perfotmanceData(jsonArray);
-                                            advLoadChart(jsonArray);
-                                        }*//*
-
-
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    }
-                                } else {
-
-                                }
-
-                            } else {
-
-                            }
-
-                        } catch (Exception e) {
-
-                            e.printStackTrace();
-                        }
-                        hideProgress();
-                    }
-
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        try {
-                            JSONObject errorResponse = new JSONObject(responseString);
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
-
         } else {
             //            customProgress.setVisibility(View.GONE);
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
@@ -2518,10 +1801,6 @@ public class DashboardFragment extends MOSLCommonFragment
                                     if (statusCode == 200) {
                                         hideProgress();
                                         String status = response.getString(STATUS);
-
-                             /*   "Table1":[{"Name":" My Incentive","Q1":"20000","Q2":"40000","Q3":"15000","Q4":"25000"},
-                                {"Name":" Branch Average","Q1":"23000","Q2":"12000","Q3":"30000","Q4":"25000"},
-                                {"Name":" National Average","Q1":"20000","Q2":"40000","Q3":"25000","Q4":"30000"}]*/
 
                                         if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                             JSONObject responseJsonObj = response.getJSONObject("Response");
@@ -2708,198 +1987,6 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-  /*  private void WebServiceCall(final String widgetSystemName) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("WidgetSystemName", widgetSystemName);
-
-            //dashboard for
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put(PRODUCT_ID, productId);
-            inputMap.put(EMPLOYEE_CODE, employeeCode);
-
-            //for dashboard as: EmployeeCode  TODO
-            //inputMap.put("EmployeeCode", EmployeeCode);
-
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new TextHttpResponseHandler() {
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        try {
-                            JSONObject errorResponse = new JSONObject(responseString);
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                        //super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-
-                            Gson mGson = new Gson();
-                            Type type = new TypeToken<HashMap<String, Object>>() {
-                            }.getType();
-                            HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                            //org.json.JSONObject response =new JSONObject(responseS);
-                            if (statusCode == 200) {
-                                //  String status = response.getString(STATUS);
-                                String status = response.get(STATUS).toString();
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-
-                                    hideProgress();
-
-                                    ArrayList<String> columnsYAxis = new ArrayList<String>();
-                                    //  ArrayList<String> columnsYAxis = null;
-                                    String total = "";
-                                    String[] lableString = new String[]{};
-
-
-
-                                    final ArrayList<ArrayList<String>> yAxisListFirst = new ArrayList<>();
-                                    StringMap responseJsonObj = (StringMap) response.get("Response");
-                                  *//*  if (responseJsonObj.has("Table")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
-                                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                        String Table = (jsonObject.isNull("Table") || jsonObject.getString("Table").equals("")) ? "" : jsonObject.getString("Table");
-                                        if(Table.equalsIgnoreCase("3")){}}*//*
-                                    List<StringMap> arrayDetail = (List<StringMap>) responseJsonObj.get("Table");
-                                    if (arrayDetail.size() != 0) {
-                                        for (int y = 2; y < arrayDetail.size(); y++) {
-                                            StringMap objDetail = (StringMap) arrayDetail.get(y);
-                                            // String stages = objDetail.getString("stage").equals("") ? "0" : objDetail.getString("stage");
-                                            String stages = objDetail.get("stage").toString().equals("") ? "0" : objDetail.get("stage").toString();
-                                            if (stages.equalsIgnoreCase("Total")) {
-                                                //     String Total = (objDetail.isJsonNull("Total") || objDetail.get("Total").getAsString().equals("")) ? "0" : objDetail.get("Total").getAsString();
-
-                                                String Total = (objDetail.get("Total").toString().equals("")) ? "0" : objDetail.get("Total").toString();
-                                                total = Total;
-                                            }
-                                        }
-                                        try {
-                                            if (responseJsonObj.get("Table1") != null) {
-                                                List<StringMap> arrayDetailTotal = (List<StringMap>) responseJsonObj.get("Table1");
-//region gettiong colums
-                                                StringMap jobjFKey = arrayDetailTotal.get(0);
-                                                for (Object keySetE : jobjFKey.keySet()) {
-                                                    if (keySetE.toString().equalsIgnoreCase("id") | keySetE.toString().trim().equalsIgnoreCase("Total")) {
-                                                    } else {
-                                                        columnsYAxis.add(keySetE.toString());
-
-                                                    }
-                                                }
-                                                //endregion
-                                                //region new gson Impl
-                                                for (StringMap jobj : arrayDetailTotal) {
-
-                                                    final ArrayList<String> yAxisList = new ArrayList<String>();
-
-                                                    for (Object keySetE : columnsYAxis) {
-                                                        if (keySetE.toString().equalsIgnoreCase("id") || keySetE.toString().equalsIgnoreCase("Total")) {
-                                                        } else {
-                                                            yAxisList.add(jobj.get(keySetE).toString());
-                                                        }
-
-                                                    }
-                                                    // yAxisList.remove(0);
-                                                    yAxisListFirst.add(yAxisList);
-                                                }
-                                            }
-
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-
-                                        if (yAxisListFirst != null && yAxisListFirst.size() > 0) {
-                                            // lableString = new String[]{yAxisListFirst.get(0).get(0), yAxisListFirst.get(1).get(0)};
-                                            lableString = new String[]{yAxisListFirst.get(0).get(0)
-                                                    , yAxisListFirst.get(1).get(0)
-                                            };
-                                            yAxisListFirst.get(0).remove(0);
-                                            yAxisListFirst.get(1).remove(0);
-                                            tvTotal.setText(total);
-                                            stackedBarData(columnsYAxis, yAxisListFirst, lableString);
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        //  String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    }
-
-                                } else {
-                                    hideProgress();
-                                    //     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (
-                                ClassCastException ce)
-
-                        {
-                            ce.printStackTrace();
-                            hideProgress();
-                        } catch (
-                                Exception e)
-
-                        {
-                            e.printStackTrace();
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-                        }
-                    }
-
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-            }
-        } else
-
-        {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
-        }
-
-    }*/
 
     private String keyName(Set<String> keySet) {
         String key = "";
@@ -3155,18 +2242,6 @@ public class DashboardFragment extends MOSLCommonFragment
         llCurrentQuaterStatusFour.setVisibility(View.VISIBLE);
     }
 
-    private CharSequence getTableHead(CharSequence text) {
-        try {
-            if (text.charAt(0) == 'Q' || text.charAt(0) == 'q') {
-                return "Quater " + text.subSequence(1, text.length());
-            } else {
-                return text;
-            }
-        } catch (IndexOutOfBoundsException oe) {
-            return text;
-        }
-    }
-
     private void incentiveData(JSONArray jsonArray) {
         arrayListIncentive.clear();
         try {
@@ -3238,12 +2313,6 @@ public class DashboardFragment extends MOSLCommonFragment
         llIncentive.setVisibility(View.VISIBLE);
         tvIncentives.setText("Incentive");
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //   super.onSaveInstanceState(outState);
-    }
-    //incentiveData end
 
     private void createFloatingButtons() {
 
@@ -3692,11 +2761,7 @@ public class DashboardFragment extends MOSLCommonFragment
                     // writing data to file
                     output.write(data, 0, count);
                 }
-
-                // flushing output
                 output.flush();
-
-                // closing streams
                 output.close();
                 input.close();
                 return true;
@@ -3725,15 +2790,6 @@ public class DashboardFragment extends MOSLCommonFragment
             if (response) {
                 File baseFolder = new File(context.getFilesDir(), "crmdocs");
                 final File localFile = new File(baseFolder, fileName);
-
-                /* alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), FILE_DOWNLOADED + localFile.getAbsolutePath(), "Show", "Close", true, new MSFDialog.DialogListener() {
-                    @Override
-                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                        if (action == MSFDialog.Action.OK) {//showfile
-                            showDownloadFile(localFile);
-                        }
-                    }
-                });*/
                 showDownloadFile(localFile);
             } else {
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
