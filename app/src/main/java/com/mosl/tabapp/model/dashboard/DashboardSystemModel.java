@@ -14,6 +14,7 @@ public class DashboardSystemModel implements Serializable {
     private static String targetAchivementSystemName = "";
     private static String monthTrends = "";
     private static String businessSnapshotSystemName = "";
+    private static String busSnapshotAdvisorSystemName = "";
     private static String productivitySystemName = "";
     private static String clientTradedSystemName = "";
 
@@ -82,5 +83,13 @@ public class DashboardSystemModel implements Serializable {
 
     public static void setBusinessSnapshotSystemName(String businessSnapshotSystemName) {
         DashboardSystemModel.businessSnapshotSystemName = businessSnapshotSystemName;
+    }
+
+    public static String getBusSnapshotAdvisorSystemName() {
+        return busSnapshotAdvisorSystemName;
+    }
+
+    public static void setBusSnapshotAdvisorSystemName(String busSnapshotAdvisorSystemName) {
+        DashboardSystemModel.busSnapshotAdvisorSystemName = busSnapshotAdvisorSystemName;
     }
 }

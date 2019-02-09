@@ -460,6 +460,7 @@ public interface MOSLConstants extends LabelConfig {
     String Q4 = "Q4";
     String YTD = "YTD";
     String FAMILYSTATUS = "FAMILYSTATUS";
+    String PARAMETER = "Parameter";
     String WIDGETTYPE = "WidgetType";
     String DAY_CNT = "DAY_CNT";
     String DAY = "Day";

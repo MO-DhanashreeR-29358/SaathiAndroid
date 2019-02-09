@@ -138,15 +138,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             if (widgetList != null && widgetList.size() > 0) {
-                if (!DashboardSystemModel.getProductivitySystemName().isEmpty()) {
-                    model = widgetList.get(1);
-                    widgetSystemName = model.getSystemName();
-                    spFilter1.setVisibility(View.GONE);
-                    webServiceCall();
-                } else {
-                    model = widgetList.get(0);
-                }
-
+                model = widgetList.get(0);
                 widgetSystemName = model.getSystemName();
 
                 //set filter data

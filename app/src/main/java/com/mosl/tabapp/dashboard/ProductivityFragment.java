@@ -42,7 +42,7 @@ import cz.msebera.android.httpclient.Header;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class ProductivityFragment extends MOSLCommonFragment {
+public class ProductivityFragment extends MOSLCommonFragment implements View.OnClickListener {
 
     ArrayList<HashMap<String, String>> hierarchyMapList;
     private View productivityView;
@@ -50,9 +50,10 @@ public class ProductivityFragment extends MOSLCommonFragment {
     private String widgetSystemName;
     private TableFixHeaders table;
     private SecondClickTableAdapter secondClickTableAdapter;
-    private TextView tvNochart;
+    private TextView tvNochart, tvShowMore;
     private Map addtionalParameterMap = new HashMap<>();
     private LinkedHashMap lMap;
+    private LinearLayout llShowMore;
 
     public static ProductivityFragment newInstance(Context context) {
         ProductivityFragment fragment = new ProductivityFragment();
@@ -63,7 +64,7 @@ public class ProductivityFragment extends MOSLCommonFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         productivityView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_prod);
+        attachLayout(R.layout.frag_productivity);
         hideAppTitle(getClass().toString());
         setUpView(productivityView);
         setUserVisibleHint(true);
@@ -71,21 +72,25 @@ public class ProductivityFragment extends MOSLCommonFragment {
     }
 
     private void setUpView(View productivityView) {
-
+        llShowMore = productivityView.findViewById(R.id.llShowMore);
         dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
         table = productivityView.findViewById(R.id.table);
         tvNochart = productivityView.findViewById(R.id.tvNochart);
+        tvShowMore = productivityView.findViewById(R.id.tvShowMore);
+        llShowMore.setOnClickListener(this);
 
         if (dashboardModel != null) {
             DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getProductivitySystemName());
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
-            if (widgetList != null && widgetList.size() > 0) {
-                model = widgetList.get(2);
-                widgetSystemName = model.getSystemName();
+            model = widgetList.get(2);
+            widgetSystemName = model.getSystemName();
+            webServiceCall();
 
-                webServiceCall();
-            }
+        }
+
+        if (dashboardModel.getDashboardFor().equals("TEAM")) {
+            llShowMore.setVisibility(View.VISIBLE);
         }
 
     }
@@ -257,6 +262,25 @@ public class ProductivityFragment extends MOSLCommonFragment {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.llShowMore) {
+            viewMoreClick();
+        }
+    }
+
+    private void viewMoreClick() {
+
+        addtionalParameterMap.putAll(getAddtionalParameterMap());
+        Bundle args = new Bundle();
+        args.putString(SYSTEM_NAME, widgetSystemName);
+        args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
+        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+
+    }
+
     ///SDTable
     private class CommonHeader {
         private final String name;
@@ -313,10 +337,6 @@ public class ProductivityFragment extends MOSLCommonFragment {
             return commonHeaders[0].list.size();
         }
 
-        public void clear() {
-            //    hashArray.clear();
-            //    commonHeaders[0].list.clear();
-        }
 
         public void add(HashMap<String, String> row) {
             hashArray.add(row);
@@ -354,14 +374,6 @@ public class ProductivityFragment extends MOSLCommonFragment {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (dashboardModel.getDashboardFor().equals("TEAM")) {
-                                addtionalParameterMap.putAll(getAddtionalParameterMap());
-                                Bundle args = new Bundle();
-                                args.putString(SYSTEM_NAME, widgetSystemName);
-                                args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
-                                args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                            }
 
                         }
                     });
@@ -373,15 +385,6 @@ public class ProductivityFragment extends MOSLCommonFragment {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (dashboardModel.getDashboardFor().equals("TEAM")) {
-                                addtionalParameterMap.putAll(getAddtionalParameterMap());
-                                Bundle args = new Bundle();
-                                args.putString(SYSTEM_NAME, widgetSystemName);
-                                args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
-                                args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                            }
-
                         }
                     });
                     break;

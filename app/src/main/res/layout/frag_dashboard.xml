@@ -286,6 +286,16 @@
                             android:textSize="@dimen/_14sdp" />
 
                         <Button
+                            android:id="@+id/btnBusinessSnapshotAdvisor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/SNAPSHOT"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
                             android:id="@+id/btnProductivity"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
