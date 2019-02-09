@@ -193,26 +193,31 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                                         } else {
                                             table.setVisibility(View.GONE);
                                             tvNochart.setVisibility(View.VISIBLE);
+                                            llShowMore.setVisibility(View.GONE);
                                         }
                                     } else {
                                         hideProgress();
                                         String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
                                         table.setVisibility(View.GONE);
+                                        llShowMore.setVisibility(View.GONE);
                                         tvNochart.setVisibility(View.VISIBLE);
                                         alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                     }
                                 } else {
                                     table.setVisibility(View.GONE);
+                                    llShowMore.setVisibility(View.GONE);
                                     tvNochart.setVisibility(View.VISIBLE);
                                 }
 
                             } else {
                                 table.setVisibility(View.GONE);
+                                llShowMore.setVisibility(View.GONE);
                                 tvNochart.setVisibility(View.VISIBLE);
                             }
 
                         } catch (Exception e) {
                             table.setVisibility(View.GONE);
+                            llShowMore.setVisibility(View.GONE);
                             tvNochart.setVisibility(View.VISIBLE);
                             e.printStackTrace();
                         }
