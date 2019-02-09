@@ -653,18 +653,7 @@ public class DashboardFragment extends MOSLCommonFragment
 
     private void loadLead() {
         Bundle args = new Bundle();
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnLeads.setTextColor(getResources().getColor(R.color.white));
+        setTabActivre(btnLeads);
         ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
@@ -677,18 +666,7 @@ public class DashboardFragment extends MOSLCommonFragment
 
     private void loadProductivity() {
         Bundle args = new Bundle();
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnProductivity.setTextColor(getResources().getColor(R.color.white));
+        setTabActivre(btnProductivity);
         ProductivityFragment productivityFragment = ProductivityFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         productivityFragment.setArguments(args);
@@ -699,18 +677,7 @@ public class DashboardFragment extends MOSLCommonFragment
     }
 
     private void loadBusinessSnapShotAdvisor() {
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.white));
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+        setTabActivre(btnBusinessSnapshotAdvisor);
         Bundle args = new Bundle();
         BusSnapshotAdvFragment leadsFragment = BusSnapshotAdvFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
@@ -723,18 +690,7 @@ public class DashboardFragment extends MOSLCommonFragment
 
     private void loadClientTraded() {
         Bundle args = new Bundle();
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.white));
+        setTabActivre(btnClientTraded);
         ClientsTradedYesterdayFragment clientsFragment =
                 ClientsTradedYesterdayFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
@@ -747,18 +703,7 @@ public class DashboardFragment extends MOSLCommonFragment
     }
 
     private void loadLeadBusinessSnapShot() {
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.white));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+        setTabActivre(btnBusinessSnapshot);
         Bundle args = new Bundle();
         BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
@@ -770,18 +715,7 @@ public class DashboardFragment extends MOSLCommonFragment
     }
 
     private void loadClients() {
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
-        btnClient.setTextColor(getResources().getColor(R.color.white));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
-        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+        setTabActivre(btnClient);
         ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
@@ -791,6 +725,25 @@ public class DashboardFragment extends MOSLCommonFragment
                 .commit();
     }
 
+    private void setTabActivre(Button button) {
+        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
+        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
+
+        button.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
+        button.setTextColor(getResources().getColor(R.color.white));
+
+
+    }
 
     private void loadTargetAchievement() {
         Bundle args = new Bundle();
@@ -1375,6 +1328,64 @@ public class DashboardFragment extends MOSLCommonFragment
         return widgetModelList;
     }
 
+    private void setClientLayoutVisibility(String systemsName) {
+        txtClients.setText(currentDashboard.getGroupModel(systemsName).getDisplayName());
+        switch (systemsName) {
+            case MyClient_MyLead:
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                break;
+            case MY_LEAD:
+                btnClient.setVisibility(View.GONE);
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                break;
+            case MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY:
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnLeads.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                break;
+            case SYS_LEAD_SNAPSHOT:
+                btnClient.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                break;
+            case TEAM_LEAD:
+                btnClientTraded.setVisibility(View.GONE);
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                btnClient.setVisibility(View.GONE);
+                break;
+            case SYS_MY_CLIENTS_SNAPSHOOT:
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnLeads.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                break;
+            case SYS_TEAM_SNAPSHOT:
+                btnClient.setVisibility(View.GONE);
+                btnLeads.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                break;
+            case SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT:
+                btnClient.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                break;
+
+        }
+    }
+
+
     /**
      * This method will dynamically hide/show widget fragments
      */
@@ -1407,13 +1418,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            txtClients.setText(currentDashboard.getGroupModel(MyClient_MyLead).getDisplayName());
-            btnClient.setVisibility(View.VISIBLE);
-            btnLeads.setVisibility(View.VISIBLE);
-            btnBusinessSnapshot.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
+            setClientLayoutVisibility(MyClient_MyLead);
             loadClients();
             DashboardSystemModel.setLeadSystemName(MyClient_MyLead);
             DashboardSystemModel.setClientSystemName(MyClient_MyLead);
@@ -1423,12 +1428,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            txtClients.setText(currentDashboard.getGroupModel(MY_LEAD).getDisplayName());
-            btnClient.setVisibility(View.GONE);
-            btnBusinessSnapshot.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
+            setClientLayoutVisibility(MY_LEAD);
             loadLead();
             DashboardSystemModel.setLeadSystemName(MY_LEAD);
         } else if (currentDashboard.isGroupExists(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
@@ -1437,14 +1437,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            txtClients.setText(currentDashboard.getGroupModel(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY).getDisplayName());
-            btnClient.setVisibility(View.VISIBLE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.VISIBLE);
-            btnProductivity.setVisibility(View.VISIBLE);
-            btnBusinessSnapshot.setVisibility(View.GONE);
-            btnLeads.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-
+            setClientLayoutVisibility(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
             loadClients();
             DashboardSystemModel.setBusSnapshotAdvisorSystemName(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
             DashboardSystemModel.setClientSystemName(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY);
@@ -1452,13 +1445,7 @@ public class DashboardFragment extends MOSLCommonFragment
         }
         if (currentDashboard.isGroupExists(SYS_LEAD_SNAPSHOT)) {
             llClient.setVisibility(View.VISIBLE);
-            txtClients.setText(currentDashboard.getGroupModel(SYS_LEAD_SNAPSHOT).getDisplayName());
-            btnClient.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            btnBusinessSnapshot.setVisibility(View.VISIBLE);
-            btnLeads.setVisibility(View.VISIBLE);
+            setClientLayoutVisibility(SYS_LEAD_SNAPSHOT);
             setIcon(llClientsLeads, ivClientLeads);
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
@@ -1474,12 +1461,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            btnClientTraded.setVisibility(View.GONE);
-            btnBusinessSnapshot.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            txtClients.setText(currentDashboard.getGroupModel(TEAM_LEAD).getDisplayName());
-            btnClient.setVisibility(View.GONE);
+            setClientLayoutVisibility(TEAM_LEAD);
             loadLead();
             DashboardSystemModel.setLeadSystemName(TEAM_LEAD);
         }
@@ -1489,13 +1471,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            btnBusinessSnapshot.setVisibility(View.GONE);
-            btnLeads.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            txtClients.setText(currentDashboard.getGroupModel(SYS_MY_CLIENTS_SNAPSHOOT).getDisplayName());
-            btnClient.setVisibility(View.VISIBLE);
-            btnClientTraded.setVisibility(View.VISIBLE);
+            setClientLayoutVisibility(SYS_MY_CLIENTS_SNAPSHOOT);
             loadClients();
             DashboardSystemModel.setClientSystemName(SYS_MY_CLIENTS_SNAPSHOOT);
             DashboardSystemModel.setClientTradedSystemName(SYS_MY_CLIENTS_SNAPSHOOT);
@@ -1506,13 +1482,7 @@ public class DashboardFragment extends MOSLCommonFragment
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
-            txtClients.setText(currentDashboard.getGroupModel(SYS_TEAM_SNAPSHOT).getDisplayName());
-            btnClient.setVisibility(View.GONE);
-            btnBusinessSnapshot.setVisibility(View.VISIBLE);
-            btnLeads.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+            setClientLayoutVisibility(SYS_TEAM_SNAPSHOT);
             loadLeadBusinessSnapShot();
             btnBusinessSnapshot.setText("Team Snapshot");
             //  loadLead();
@@ -1520,15 +1490,7 @@ public class DashboardFragment extends MOSLCommonFragment
         }
         if (currentDashboard.isGroupExists(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)) {
             llClient.setVisibility(View.VISIBLE);
-            txtClients.setText(
-                    currentDashboard.getGroupModel(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)
-                            .getDisplayName());
-            btnClient.setVisibility(View.GONE);
-            btnClientTraded.setVisibility(View.GONE);
-            btnProductivity.setVisibility(View.GONE);
-            btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
-            btnBusinessSnapshot.setVisibility(View.VISIBLE);
-            btnLeads.setVisibility(View.VISIBLE);
+            setClientLayoutVisibility(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT);
             setIcon(llClientsLeads, ivClientLeads);
             if (llClientsLeads.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
