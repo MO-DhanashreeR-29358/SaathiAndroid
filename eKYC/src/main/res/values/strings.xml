@@ -468,6 +468,7 @@
     <string name="chequedate">Cheque Date.</string>
     <string name="makepayment">Make Payment.</string>
     <string name="skippayment">Skip Payment.</string>
+    <string name="text_hint_vpa">Virtual Payment Address(VPA)</string>
 
     <!--FTDebitCardFragment-->
     <string name="pay_using_debitcard">Pay Using Debit Card</string>
@@ -477,6 +478,7 @@
     <!--FTNetBankingFragment-->
 
     <string name="pay_using_net_banking">Pay Using Net Banking</string>
+    <string name="pay_using_upi">Pay Using UPI</string>
 
     <string name="commodity_fund_transfer">Commodity Fund Transfer</string>
     <string name="commodity_fund_transfered">Commodity Fund Transfered</string>
