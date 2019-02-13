@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    >
 
     <TextView
         android:id="@+id/tvFundTransferTitle"
@@ -87,9 +89,22 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_35sdp"
                     android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
                     android:layout_weight="1"
                     android:src="@drawable/icon_cheque_1"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
+
+                <ImageView
+                    android:id="@+id/btnUPI"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:src="@drawable/icon_upi_1"
+                    />
             </LinearLayout>
         </LinearLayout>
 

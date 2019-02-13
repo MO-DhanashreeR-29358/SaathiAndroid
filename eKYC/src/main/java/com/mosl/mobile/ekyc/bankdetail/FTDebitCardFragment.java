@@ -116,6 +116,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     String strEquBankShortName, strEquBankName, strCommBankShortName, strCommBankName, equMargin =
         "", equTotalAmount = "", strEquAccNo = "", strCommAccNo = "", commMargin = "",
         commTotalAmount = "";
+    //Boolean equPayed, commPayed, equPaySkipped, commPaySkipped;
+    CustomViewPager viewPager;
     private final AdapterView.OnItemSelectedListener equBankListener =
         new AdapterView.OnItemSelectedListener() {
             @Override
@@ -129,8 +131,6 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
             }
         };
-    //Boolean equPayed, commPayed, equPaySkipped, commPaySkipped;
-    CustomViewPager viewPager;
     TabPageIndicator tabPageIndicator;
     private boolean onlineEquFlag;
     private boolean onlineCommFlag;
