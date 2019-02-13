@@ -41,7 +41,7 @@ import java.util.Map;
  * Created by raju on 2/14/2017.
  */
 
-public class ClientsFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ClientsFragment extends MOSLCommonFragment {
     private View clientsView;
     static Context mContext;
     private Spinner spClients;
@@ -75,15 +75,14 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
     }
 
     private void setUpView(View clientsView) {
-        spClients = (Spinner) clientsView.findViewById(R.id.spClients);
-        tableLayout = (TableLayout) clientsView.findViewById(R.id.tableLayout);
+        spClients = clientsView.findViewById(R.id.spClients);
+        tableLayout = clientsView.findViewById(R.id.tableLayout);
         pBar = clientsView.findViewById(R.id.pBar);
-        tvNochart = (TextView) clientsView.findViewById(R.id.tvNochart);
+        tvNochart = clientsView.findViewById(R.id.tvNochart);
         spClients.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 FilterRowData filter1 = (FilterRowData) spClients.getSelectedItem();
-                //  data(filter1.getText());
                 if (dataFoundFlag) {
                     incentiveDynamicView(filter1.getText(), filter1.getValue());
                 }
@@ -105,7 +104,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
                 WidgetModel model = widgetList.get(0);
                 widgetSystemName = model.getSystemName();
 
-                //set filter data
                 List<WidgetFilterModel> filterList = model.getWidgetFilterList();
                 if (filterList != null && filterList.size() == 1) {
                     ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
@@ -124,9 +122,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
             FilterRowData filter1 = (FilterRowData) spClients.getSelectedItem();
             addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
             addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
-           /* if(dashboardModel.getName().toLowerCase().endsWith("self")){
-                addtionalParameterMap.put(SELF_KEY,"SELF");
-            }*/
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -134,15 +129,9 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
         return addtionalParameterMap;
     }
 
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-
-    }
 
     private void webServiceCall() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            // showProgress();
             clientShowProgress();
             String serviceMethod = "Dashboard/LoadWidgetAsync";
             Map inputMap = new HashMap<>();
@@ -150,7 +139,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
             inputMap.put("AddtionalParameters", getAddtionalParameterMap());
             inputMap.put("WidgetSystemName", widgetSystemName);
 
-            //dashboard for
             inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
             inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
             inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
@@ -167,9 +155,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
                                 clientHideProgress();
                                 String status = response.getString(STATUS);
                                 arrayListClient.clear();
-                             /*   "Table":[{"FAMILYSTATUS":"ACTIVE","DAY_CNT":0,"DAY_PER":0,"MTD_CNT":0,"MTD_PER":0,"YTD_CNT":31786,"YTD_PER":0}*/
-
-
                                 if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                     JSONObject responseJsonObj = response.getJSONObject("Response");
 
@@ -320,10 +305,9 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
         try {
             LayoutInflater inFla = getActivity().getLayoutInflater();
             View tableRowH = inFla.inflate(R.layout.frag_client_top, null);
-            TextView tvMTDCOUNT = (TextView) tableRowH.findViewById(R.id.tvMTDCOUNT);
-            TextView tvYTDCOUNT = (TextView) tableRowH.findViewById(R.id.tvYTDCOUNT);
-            TextView tvFamilyCount = (TextView) tableRowH.findViewById(R.id.tvFamiMappedCount);
-            LinearLayout llFamiMappedCount = (LinearLayout) tableRowH.findViewById(R.id.llFamiMappedCount);
+            TextView tvMTDCOUNT = tableRowH.findViewById(R.id.tvMTDCOUNT);
+            TextView tvFamilyCount = tableRowH.findViewById(R.id.tvFamiMappedCount);
+            LinearLayout llFamiMappedCount = tableRowH.findViewById(R.id.llFamiMappedCount);
             tvFamilyCount.setText(familyCount.toString());
             llFamiMappedCount.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -339,7 +323,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
             });
 
             tvMTDCOUNT.setText(getTableHead(text));
-            //Boald type face
 
             tableLayout.addView(tableRowH);
             if (arrayListClient.size() > 0) {
@@ -349,10 +332,9 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
                     String ytdCount = arrayListClient.get(i).get(YTD_CNT);
                     String famillyStatus = arrayListClient.get(i).get(FAMILYSTATUS);
                     View tableRow = inFla.inflate(R.layout.frag_client_bottom, null);
-                    LinearLayout llMet = (LinearLayout) tableRow.findViewById(R.id.llMet);
-                    final TextView tvFamilyStatus = (TextView) tableRow.findViewById(R.id.tvFamilyStatus);
-                    final TextView tvMetMTD = (TextView) tableRow.findViewById(R.id.tvMetMTD);
-                    final TextView tvMetYTD = (TextView) tableRow.findViewById(R.id.tvMetYTD);
+                    final TextView tvFamilyStatus = tableRow.findViewById(R.id.tvFamilyStatus);
+                    final TextView tvMetMTD = tableRow.findViewById(R.id.tvMetMTD);
+                    final TextView tvMetYTD = tableRow.findViewById(R.id.tvMetYTD);
 
                     tvFamilyStatus.setText(famillyStatus);
                     tvMetMTD.setText(filterCount);
@@ -410,8 +392,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
             }
         } catch (Exception e) {
             e.printStackTrace();
-        /*    Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-            Crashlytics.logException(e);*/
         }
     }
 
@@ -422,4 +402,6 @@ public class ClientsFragment extends MOSLCommonFragment implements View.OnClickL
     private void clientHideProgress() {
         pBar.setVisibility(View.GONE);
     }
+
+
 }
