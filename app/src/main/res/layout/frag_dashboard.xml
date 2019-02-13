@@ -267,6 +267,15 @@
                         android:orientation="horizontal">
 
                         <Button
+                            android:id="@+id/btnClient"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/CLIENTS"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+                        <Button
                             android:id="@+id/btnBusinessSnapshot"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -277,12 +286,22 @@
                             android:textSize="@dimen/_14sdp" />
 
                         <Button
-                            android:id="@+id/btnClient"
+                            android:id="@+id/btnBusinessSnapshotAdvisor"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/orange"
-                            android:text="@string/CLIENTS"
+                            android:text="@string/SNAPSHOT"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_14sdp" />
+
+                        <Button
+                            android:id="@+id/btnProductivity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@drawable/orange"
+                            android:text="@string/PRODUCTIVITY"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp" />
 
@@ -580,409 +599,6 @@
 
 
                         </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llTopBottomPerformerHead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#FAFAFA"
-                            android:padding="10dp"
-                            android:text="Top &amp; Bottom Performer"
-                            android:textAlignment="center"
-                            android:textColor="@color/flush_orange"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_5sdp"
-                            android:background="@color/white"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:orientation="vertical">
-
-                                <!--  <Spinner
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:layout_marginBottom="@dimen/_3sdp"
-                                      android:layout_marginTop="@dimen/_3sdp"
-                                      android:entries="@array/SelectProduct" />-->
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/dark_green"
-                                    android:padding="@dimen/_5sdp"
-                                    android:text="Top 3 Performing Advisors"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_14sdp"
-                                    android:textStyle="bold" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_40sdp"
-                                    android:background="@color/light_green"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvName"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Name"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <View
-                                        android:layout_width="@dimen/_1sdp"
-                                        android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
-                                        android:background="@color/white"></View>
-
-                                    <TextView
-                                        android:id="@+id/tvBranchName"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Branch Name"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <View
-                                        android:layout_width="@dimen/_1sdp"
-                                        android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
-                                        android:background="@color/white"></View>
-
-                                    <TextView
-                                        android:id="@+id/tvRevenue"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Revenue Generated"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/greyscale"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvNameFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBranchNameFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvTopRevenueFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/white"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvNameSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBranchNameSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvTopRevenueSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/greyscale"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvNameThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBranchNameThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvTopRevenueThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_5sdp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/dark_red"
-                                    android:padding="@dimen/_5sdp"
-                                    android:text="Bottom 3 Performing Advisors"
-                                    android:textAlignment="center"
-                                    android:textColor="@color/white"
-                                    android:textSize="@dimen/_14sdp"
-                                    android:textStyle="bold" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_40sdp"
-                                    android:background="@color/light_red"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvBottomName"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Name"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <View
-                                        android:layout_width="@dimen/_1sdp"
-                                        android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
-                                        android:background="@color/white"></View>
-
-                                    <TextView
-                                        android:id="@+id/tvBottomBranchName"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Branch Name"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <View
-                                        android:layout_width="@dimen/_1sdp"
-                                        android:layout_height="@dimen/_30sdp"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:layout_marginBottom="@dimen/_5sdp"
-                                        android:background="@color/white"></View>
-
-                                    <TextView
-                                        android:id="@+id/tvBottomRevenue"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:text="Revenue Generated"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/misty_rose"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvBottomNameFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomBranchNameFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomRevenueFirst"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/white"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvBottomNameSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomBranchNameSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomRevenueSecond"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:background="@color/misty_rose"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/tvBottomNameThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomBranchNameThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-
-                                    <TextView
-                                        android:id="@+id/tvBottomRevenueThird"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_weight="1"
-                                        android:gravity="center"
-                                        android:textColor="@color/light_black"
-                                        android:textSize="@dimen/_14sdp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                        </LinearLayout>
-
 
                     </LinearLayout>
 

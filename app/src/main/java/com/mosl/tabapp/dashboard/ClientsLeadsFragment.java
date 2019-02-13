@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -44,7 +44,9 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -52,7 +54,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
 
@@ -91,7 +94,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
   }
 
   private void setUpView(View leadsView) {
-    spFilter1 = (Spinner) leadsView.findViewById(R.id.spFilter1);
+    spFilter1 = leadsView.findViewById(R.id.spFilter1);
     spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
@@ -105,7 +108,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
       }
     });
 
-    spFilter2 = (Spinner) leadsView.findViewById(R.id.spFilter2);
+    spFilter2 = leadsView.findViewById(R.id.spFilter2);
     spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
@@ -119,7 +122,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
       }
     });
 
-    spFilter3 = (Spinner) leadsView.findViewById(R.id.spFilter3);
+    spFilter3 = leadsView.findViewById(R.id.spFilter3);
     spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
@@ -141,18 +144,18 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
       e.printStackTrace();
     }
 
-    mChart = (HorizontalBarChart) leadsView.findViewById(R.id.chart1);
+    mChart = leadsView.findViewById(R.id.chart1);
     mChart.getDescription().setEnabled(false);
     mChart.setBackgroundColor(Color.WHITE);
     mChart.setDrawGridBackground(false);
     mChart.setDrawBarShadow(false);
     mChart.setHighlightFullBarEnabled(false);
 
-    llShowMore = (LinearLayout) leadsView.findViewById(R.id.llShowMore);
-    tvTotal = (TextView) leadsView.findViewById(R.id.tvTotal);
-    tvShowMore = (TextView) leadsView.findViewById(R.id.tvShowMore);
+    llShowMore = leadsView.findViewById(R.id.llShowMore);
+    tvTotal = leadsView.findViewById(R.id.tvTotal);
+    tvShowMore = leadsView.findViewById(R.id.tvShowMore);
     tvShowMore.setPaintFlags(tvShowMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-    tv = (TextView) leadsView.findViewById(R.id.tv);
+    tv = leadsView.findViewById(R.id.tv);
 
     llShowMore.setOnClickListener(this);
 
@@ -562,8 +565,6 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
         mChart.highlightValues(null);
         addtionalParameterMap.clear();
         pieChartDetail(e.getX());
-        Log.d("Highlited", String.valueOf(h.getStackIndex()));
-        Log.d("xValue", xAxisValue.get((int) (e.getX())));
         addtionalParameterMap.put(COL_FILTER, xAxisValue.get((int) (e.getX())));
         addtionalParameterMap.put(ROW_FILTER, lableString[h.getStackIndex()]);
         addtionalParameterMap.putAll(getAddtionalParameterMap());
