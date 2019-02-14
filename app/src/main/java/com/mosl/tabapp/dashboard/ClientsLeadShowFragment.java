@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -27,7 +28,9 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,7 +39,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 
@@ -465,18 +469,6 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
             return convertView;
         }
 
-        private String getItem(int row, int pos) {
-            if (pos == -1) {
-                return hashArray.get(row).get(MOSLConstants.STAGE).toString();
-            } else if (pos == 0) {
-                return hashArray.get(row).get(MOSLConstants.LEAD_ALLOCATION).toString();
-            } else if (pos == 1) {
-                return hashArray.get(row).get(MOSLConstants.LEAD_FILTER).toString();
-            } else if (pos == 2) {
-                return hashArray.get(row).get(MOSLConstants.REJECTED).toString();
-            }
-            return "N/A";
-        }
 
         private View getBody(final int row, int column, View convertView, ViewGroup parent) {
             if (convertView == null) {

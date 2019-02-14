@@ -86,8 +86,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strCommBankShortName = ((RowData) arrCommodityBankName.get(position)).getKey();
-                strCommBankName = ((RowData) arrCommodityBankName.get(position)).getValue();
+                strCommBankShortName = (arrCommodityBankName.get(position)).getKey();
+                strCommBankName = (arrCommodityBankName.get(position)).getValue();
                 etCommDebitBankNameError.setVisibility(View.GONE);
             }
 
@@ -116,8 +116,21 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     String strEquBankShortName, strEquBankName, strCommBankShortName, strCommBankName, equMargin =
         "", equTotalAmount = "", strEquAccNo = "", strCommAccNo = "", commMargin = "",
         commTotalAmount = "";
-    Boolean equPayed, commPayed, equPaySkipped, commPaySkipped;
+    //Boolean equPayed, commPayed, equPaySkipped, commPaySkipped;
     CustomViewPager viewPager;
+    private final AdapterView.OnItemSelectedListener equBankListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                strEquBankShortName = (arrEquityBankName.get(position)).getKey();
+                strEquBankName = (arrEquityBankName.get(position)).getValue();
+                etEquDebitBankNameError.setVisibility(View.GONE);
+            }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
     TabPageIndicator tabPageIndicator;
     private boolean onlineEquFlag;
     private boolean onlineCommFlag;
@@ -127,19 +140,12 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     int hideProgressCounter = 0;
     String eqPaymentMode, commPaymentMode;
     int eqPaymentId, commPaymentId;
-    private final AdapterView.OnItemSelectedListener equBankListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strEquBankShortName = ((RowData) arrEquityBankName.get(position)).getKey();
-                strEquBankName = ((RowData) arrEquityBankName.get(position)).getValue();
-                etEquDebitBankNameError.setVisibility(View.GONE);
-            }
+    private View layoutMergeNote;
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+    public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
+        this.tabPageIndicator = tabPageIndicator;
+    }
 
-            }
-        };
     /* ,equMargin="10000",equTotalAmount="10000",
      commMargin="10000",commTotalAmount="10000";*/ EditText etEquFundTransferred,
         etCommFundTransferred;
@@ -154,10 +160,6 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         mCommStatus = commodityStatus;
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
-        this.tabPageIndicator = tabPageIndicator;
     }
 
     @Nullable @Override
@@ -185,13 +187,11 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
     public void getPaymentStatus() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
 
-            String flag = GETPAYMENTSTATUS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETPAYMENTSTATUS, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -326,13 +326,11 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             return;
         }
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
 
-            String flag = GETUSERPAYMENTDETAILS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETUSERPAYMENTDETAILS, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -368,7 +366,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                 if (response.has("FUNDTRANSFER")) {
                                     JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
                                     if (jsonArray.length() != 0) {
-
+                                        String dcStatus = "", dcMessage = "";
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject object = jsonArray.getJSONObject(i);
 
@@ -416,6 +414,16 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                                     || object.getString("FUNDTRANSFERTHROUGHID")
                                                     .equals("")) ? ""
                                                     : object.getString("FUNDTRANSFERTHROUGHID");
+                                            dcStatus =
+                                                (object.isNull("DC_STATUS")
+                                                    || object.getString("DC_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("DC_STATUS");
+                                            dcMessage =
+                                                (object.isNull("DC_MESSAGE")
+                                                    || object.getString("DC_MESSAGE")
+                                                    .equals("")) ? ""
+                                                    : object.getString("DC_MESSAGE");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -493,7 +501,15 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                                 }
                                             }
                                         }
-                                        showView(eqPaymentStatus, commPaymentStatus);
+                                        if (Integer.parseInt(dcStatus) == 1) {
+                                            showView(eqPaymentStatus, commPaymentStatus);
+                                        } else {
+                                            llEquFundOption.setVisibility(View.GONE);
+                                            llEquPaymentButton.setVisibility(View.GONE);
+                                            //layoutMergeNote.setVisibility(View.GONE);
+                                            tvEquFundTransfered.setVisibility(View.VISIBLE);
+                                            tvEquFundTransfered.setText(dcMessage);
+                                        }
                                         hideProgress();
                                     }
                                 }
@@ -715,31 +731,32 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 return false;
             }
         });
-        viewPager = (CustomViewPager) getActivity().findViewById(R.id.vpApply);
-        btnEquPayment = (Button) debitCardView.findViewById(R.id.btnEquPayment);
-        btnCommPayment = (Button) debitCardView.findViewById(R.id.btnCommPayment);
-        btnEquSkipPayment = (Button) debitCardView.findViewById(R.id.btnEquSkipPayment);
-        btnCommSkipPayment = (Button) debitCardView.findViewById(R.id.btnCommSkipPayment);
-        btnEquNext = (Button) debitCardView.findViewById(R.id.btnEquNext);
-        btnCommNext = (Button) debitCardView.findViewById(R.id.btnCommNext);
+        viewPager = getActivity().findViewById(R.id.vpApply);
+        layoutMergeNote = debitCardView.findViewById(R.id.layout_merge_note);
+        btnEquPayment = debitCardView.findViewById(R.id.btnEquPayment);
+        btnCommPayment = debitCardView.findViewById(R.id.btnCommPayment);
+        btnEquSkipPayment = debitCardView.findViewById(R.id.btnEquSkipPayment);
+        btnCommSkipPayment = debitCardView.findViewById(R.id.btnCommSkipPayment);
+        btnEquNext = debitCardView.findViewById(R.id.btnEquNext);
+        btnCommNext = debitCardView.findViewById(R.id.btnCommNext);
 
-        rbEquityATM = (RadioButton) debitCardView.findViewById(R.id.rbEquityATM);
-        rbCommodityATM = (RadioButton) debitCardView.findViewById(R.id.rbCommodityATM);
-        rbEquityVisa = (RadioButton) debitCardView.findViewById(R.id.rbEquityVisa);
-        rbCommodityVisa = (RadioButton) debitCardView.findViewById(R.id.rbCommodityVisa);
+        rbEquityATM = debitCardView.findViewById(R.id.rbEquityATM);
+        rbCommodityATM = debitCardView.findViewById(R.id.rbCommodityATM);
+        rbEquityVisa = debitCardView.findViewById(R.id.rbEquityVisa);
+        rbCommodityVisa = debitCardView.findViewById(R.id.rbCommodityVisa);
 
-        llEquDebitBankName = (LinearLayout) debitCardView.findViewById(R.id.llEquDebitBankName);
-        llEquityVisa = (LinearLayout) debitCardView.findViewById(R.id.llEquityVisa);
-        llCommodityVisa = (LinearLayout) debitCardView.findViewById(R.id.llCommodityVisa);
-        llCommDebitBankName = (LinearLayout) debitCardView.findViewById(R.id.llCommDebitBankName);
-        llEquityFundTransfer = (LinearLayout) debitCardView.findViewById(R.id.llEquityFundTransfer);
+        llEquDebitBankName = debitCardView.findViewById(R.id.llEquDebitBankName);
+        llEquityVisa = debitCardView.findViewById(R.id.llEquityVisa);
+        llCommodityVisa = debitCardView.findViewById(R.id.llCommodityVisa);
+        llCommDebitBankName = debitCardView.findViewById(R.id.llCommDebitBankName);
+        llEquityFundTransfer = debitCardView.findViewById(R.id.llEquityFundTransfer);
         llCommodityFundTransfer =
-            (LinearLayout) debitCardView.findViewById(R.id.llCommodityFundTransfer);
-        // customProgress = (LinearLayout) debitCardView.findViewById(R.id.customProgress);
-        llEquFundOption = (LinearLayout) debitCardView.findViewById(R.id.llEquFundOption);
-        llCommFundOption = (LinearLayout) debitCardView.findViewById(R.id.llCommFundOption);
-        llEquPaymentButton = (LinearLayout) debitCardView.findViewById(R.id.llEquPaymentButton);
-        llCommPaymentButton = (LinearLayout) debitCardView.findViewById(R.id.llCommPaymentButton);
+            debitCardView.findViewById(R.id.llCommodityFundTransfer);
+        // customProgress = debitCardView.findViewById(R.id.customProgress);
+        llEquFundOption = debitCardView.findViewById(R.id.llEquFundOption);
+        llCommFundOption = debitCardView.findViewById(R.id.llCommFundOption);
+        llEquPaymentButton = debitCardView.findViewById(R.id.llEquPaymentButton);
+        llCommPaymentButton = debitCardView.findViewById(R.id.llCommPaymentButton);
 
         rbEquityATM.setOnClickListener(this);
         llEquityVisa.setOnClickListener(this);
@@ -748,28 +765,28 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         llCommodityVisa.setOnClickListener(this);
         rbCommodityVisa.setOnClickListener(this);
 
-        spEquDebitBankName = (Spinner) debitCardView.findViewById(R.id.spEquDebitBankName);
-        spCommDebitBankName = (Spinner) debitCardView.findViewById(R.id.spCommDebitBankName);
+        spEquDebitBankName = debitCardView.findViewById(R.id.spEquDebitBankName);
+        spCommDebitBankName = debitCardView.findViewById(R.id.spCommDebitBankName);
 
-        etEquFundTransferred = (EditText) debitCardView.findViewById(R.id.etEquFundTransferred);
-        etCommFundTransferred = (EditText) debitCardView.findViewById(R.id.etCommFundTransferred);
+        etEquFundTransferred = debitCardView.findViewById(R.id.etEquFundTransferred);
+        etCommFundTransferred = debitCardView.findViewById(R.id.etCommFundTransferred);
         etEquDebitBankNameError =
-            (TextView) debitCardView.findViewById(R.id.etEquDebitBankNameError);
+            debitCardView.findViewById(R.id.etEquDebitBankNameError);
         etCommDebitBankNameError =
-            (TextView) debitCardView.findViewById(R.id.etCommDebitBankNameError);
+            debitCardView.findViewById(R.id.etCommDebitBankNameError);
         etEquFundTransferredError =
-            (TextView) debitCardView.findViewById(R.id.etEquFundTransferredError);
+            debitCardView.findViewById(R.id.etEquFundTransferredError);
         etCommFundTransferredError =
-            (TextView) debitCardView.findViewById(R.id.etCommFundTransferredError);
+            debitCardView.findViewById(R.id.etCommFundTransferredError);
 
-        tvCommFundTransfered = (TextView) debitCardView.findViewById(R.id.tvCommFundTransfered);
-        tvEquFundTransfered = (TextView) debitCardView.findViewById(R.id.tvEquFundTransfered);
-        rlEquSkipPayment = (RelativeLayout) debitCardView.findViewById(R.id.rlEquSkipPayment);
-        rlCommSkipPayment = (RelativeLayout) debitCardView.findViewById(R.id.rlCommSkipPayment);
+        tvCommFundTransfered = debitCardView.findViewById(R.id.tvCommFundTransfered);
+        tvEquFundTransfered = debitCardView.findViewById(R.id.tvEquFundTransfered);
+        rlEquSkipPayment = debitCardView.findViewById(R.id.rlEquSkipPayment);
+        rlCommSkipPayment = debitCardView.findViewById(R.id.rlCommSkipPayment);
         input_layout_equFundTransferred =
-            (TextInputLayout) debitCardView.findViewById(R.id.input_layout_equFundTransferred);
+            debitCardView.findViewById(R.id.input_layout_equFundTransferred);
         input_layout_commFundTransferred =
-            (TextInputLayout) debitCardView.findViewById(R.id.input_layout_commFundTransferred);
+            debitCardView.findViewById(R.id.input_layout_commFundTransferred);
         if (getIsEquitySelected() && getIsCommoditySelected()) {
             llEquityFundTransfer.setVisibility(View.VISIBLE);
             //            llCommodityFundTransfer.setVisibility(View.VISIBLE);
@@ -1066,8 +1083,10 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     }
 
     private void equATMSelected() {
-        rbEquityATM.setChecked(true);
-        llEquDebitBankName.setVisibility(View.VISIBLE);
+        //region Radio button visibility changes 10-01-2019
+        //rbEquityATM.setChecked(true);
+        //llEquDebitBankName.setVisibility(View.VISIBLE);
+        //endregion
         etEquFundTransferred.setText(equMargin);
     }
 
@@ -1080,8 +1099,10 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     }
 
     private void commATMSelected() {
-        rbCommodityATM.setChecked(true);
-        llCommDebitBankName.setVisibility(View.VISIBLE);
+        //region Radio button visibility changes 10-01-2019
+        //rbCommodityATM.setChecked(true);
+        //llCommDebitBankName.setVisibility(View.VISIBLE);
+        //endregion
         etCommFundTransferred.setText(commMargin);
     }
 
@@ -1163,13 +1184,11 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
     private void getEquDebitCardBank() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("", "");
 
-            String flag = GETDCBANK;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETDCBANK, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -1313,16 +1332,14 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 etCommFundTransferred.requestFocus();
             } else {
                 etCommDebitBankNameError.setVisibility(View.GONE);
-                Map inputMap = new HashMap();
-                String debitCardBankValue = "", debitCardBankName = "", cardType = "";
+                Map<String, String> inputMap = new HashMap<>();
+                String debitCardBankValue = "", debitCardBankName = "", cardType;
 
                 if (rbCommodityATM.isChecked()) {
                     debitCardBankValue = strCommBankShortName;
                     debitCardBankName = strCommBankName;
                     cardType = ATM;
                 } else {
-                    debitCardBankValue = "";
-                    debitCardBankName = "";
                     cardType = VISA;
                 }
 
@@ -1337,10 +1354,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 inputMap.put("_debitCardBankName", debitCardBankName);
                 inputMap.put("_cardType", cardType);
 
-                String flag = UPDATEDCPAYMENT;
-                String category = FUNDTRANSFER;
                 customProgress.setVisibility(View.VISIBLE);
-                WebServiceHandler.post(mContext, flag, category, inputMap,
+                WebServiceHandler.post(mContext, UPDATEDCPAYMENT, FUNDTRANSFER, inputMap,
                     new JsonHttpResponseHandler() {
                         @Override public void onSuccess(int statusCode, Header[] headers,
                             JSONObject response) {
@@ -1472,16 +1487,14 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 etEquFundTransferred.requestFocus();
             } else {
                 etEquDebitBankNameError.setVisibility(View.GONE);
-                Map inputMap = new HashMap();
-                String debitCardBankValue = "", debitCardBankName = "", cardType = "";
+                Map<String, String> inputMap = new HashMap<>();
+                String debitCardBankValue = "", debitCardBankName = "", cardType;
 
                 if (rbEquityATM.isChecked()) {
                     debitCardBankValue = strEquBankShortName;
                     debitCardBankName = strEquBankName;
                     cardType = ATM;
                 } else {
-                    debitCardBankValue = "";
-                    debitCardBankName = "";
                     cardType = VISA;
                 }
 
@@ -1496,10 +1509,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 inputMap.put("_debitCardBankName", debitCardBankName);
                 inputMap.put("_cardType", cardType);
 
-                String flag = UPDATEDCPAYMENT;
-                String category = FUNDTRANSFER;
                 customProgress.setVisibility(View.VISIBLE);
-                WebServiceHandler.post(mContext, flag, category, inputMap,
+                WebServiceHandler.post(mContext, UPDATEDCPAYMENT, FUNDTRANSFER, inputMap,
                     new JsonHttpResponseHandler() {
                         @Override public void onSuccess(int statusCode, Header[] headers,
                             JSONObject response) {
@@ -1644,14 +1655,12 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     private void skipEquPayment() {
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
             inputMap.put("_segmentType", "Equity");
 
-            String flag = UPDATESKIPPAYMENT;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, UPDATESKIPPAYMENT, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -1730,14 +1739,12 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     private void skipCommPayment() {
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
             inputMap.put("_segmentType", "Commodity");
 
-            String flag = UPDATESKIPPAYMENT;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, UPDATESKIPPAYMENT, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -1823,8 +1830,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
         dialog.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        TextView tvMsg = (TextView) dialog.findViewById(R.id.tvMsg);
-        Button btnOK = (Button) dialog.findViewById(R.id.btnOK);
+        TextView tvMsg = dialog.findViewById(R.id.tvMsg);
+        Button btnOK = dialog.findViewById(R.id.btnOK);
         ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
 
         tvMsg.setText(msg);
@@ -1860,7 +1867,8 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     }
 
     /**
-     * this method will hide progress when received the response of GETPAYMENTSTATUS & GETUSERPAYMENTDETAILS
+     * this method will hide progress when received the response of GETPAYMENTSTATUS &
+     * GETUSERPAYMENTDETAILS
      */
     private void hideProgress() {
         hideProgressCounter++;

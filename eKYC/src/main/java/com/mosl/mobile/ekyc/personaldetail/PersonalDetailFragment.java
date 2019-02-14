@@ -3960,6 +3960,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                         map = new HashMap<String, String>();
                                         String selectedSegment = (object.isNull("SELECTEDSEGMENT") || object.getString("SELECTEDSEGMENT").equals("")) ? "" : object.getString("SELECTEDSEGMENT");
                                         map.put("SELECTEDSEGMENT", selectedSegment);
+
                                         if (isCommoditySegmentExist() || isCommodityOriginal() || selectedSegment.equalsIgnoreCase(COMMODITY)) {
                                             cbCommodity.setImageResource(R.drawable.ic_commodity_select);
                                             setIsCommoditySelected(true);

@@ -8,14 +8,24 @@ import java.io.Serializable;
 
 public class DashboardSystemModel implements Serializable {
 
-    private static String leadSystemName;
-    private static String groupSystemName;
-    private static String clientSystemName;
-    private static String targetAchivementSystemName;
-    private static String monthTrends;
-    private static String businessSnapshotSystemName;
-	
-    private static String clientTradedSystemName;
+    private static String leadSystemName = "";
+    private static String groupSystemName = "";
+    private static String clientSystemName = "";
+    private static String targetAchivementSystemName = "";
+    private static String monthTrends = "";
+    private static String businessSnapshotSystemName = "";
+    private static String busSnapshotAdvisorSystemName = "";
+    private static String productivitySystemName = "";
+    private static String clientTradedSystemName = "";
+
+    public static String getProductivitySystemName() {
+        return productivitySystemName;
+    }
+
+    public static void setProductivitySystemName(String productivitySystemName) {
+        DashboardSystemModel.productivitySystemName = productivitySystemName;
+    }
+
 
     public static String getClientTradedSystemName() {
         return clientTradedSystemName;
@@ -73,5 +83,13 @@ public class DashboardSystemModel implements Serializable {
 
     public static void setBusinessSnapshotSystemName(String businessSnapshotSystemName) {
         DashboardSystemModel.businessSnapshotSystemName = businessSnapshotSystemName;
+    }
+
+    public static String getBusSnapshotAdvisorSystemName() {
+        return busSnapshotAdvisorSystemName;
+    }
+
+    public static void setBusSnapshotAdvisorSystemName(String busSnapshotAdvisorSystemName) {
+        DashboardSystemModel.busSnapshotAdvisorSystemName = busSnapshotAdvisorSystemName;
     }
 }

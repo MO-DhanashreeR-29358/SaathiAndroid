@@ -29,6 +29,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 
+import com.mosl.tabapp.smt.SMTFragment;
 import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -165,7 +166,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_WEB_VIEW:
-                fragment = new WebViewFragment();
+                fragment = new SMTFragment();
                 fragment.setArguments(bundle);
                 break;
         }

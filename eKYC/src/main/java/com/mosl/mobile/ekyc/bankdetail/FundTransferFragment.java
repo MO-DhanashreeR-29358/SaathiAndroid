@@ -7,23 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomViewPager;
-import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.viewpagerindicator.TabPageIndicator;
-
 import java.util.ArrayList;
 
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
 
 /**
  * Created by Owner on 7/8/2016.
@@ -34,7 +27,7 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
     ArrayList<Fragment> arrFrag = new ArrayList<>();
     View fundTransferView;
     ImageButton btnBankBack;
-    ImageView btnNetBank, btnDebitCard, btnCheque;
+    ImageView btnNetBank, btnDebitCard, btnCheque, btnUPI;
     LinearLayout llReplaceFragment, customProgress;
     boolean loadedAPIOnStartFund;
 
@@ -78,14 +71,16 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
         llReplaceFragment = (LinearLayout) fundTransferView.findViewById(R.id.llReplaceFragment);
         customProgress = (LinearLayout) fundTransferView.findViewById(R.id.customProgress);
 
-        btnNetBank = (ImageView) fundTransferView.findViewById(R.id.btnNetBank);
-        btnDebitCard = (ImageView) fundTransferView.findViewById(R.id.btnDebitCard);
-        btnCheque = (ImageView) fundTransferView.findViewById(R.id.btnCheque);
+        btnNetBank = fundTransferView.findViewById(R.id.btnNetBank);
+        btnDebitCard = fundTransferView.findViewById(R.id.btnDebitCard);
+        btnCheque = fundTransferView.findViewById(R.id.btnCheque);
+        btnUPI = fundTransferView.findViewById(R.id.btnUPI);
         //  btnBankBack = (Button) fundTransferView.findViewById(R.id.btnBankBack);
 
         btnNetBank.setOnClickListener(this);
         btnDebitCard.setOnClickListener(this);
         btnCheque.setOnClickListener(this);
+        btnUPI.setOnClickListener(this);
         //  btnBankBack.setOnClickListener(this);
 
         if (getAppType().equalsIgnoreCase(DIRECT)) {
@@ -121,6 +116,7 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
             btnDebitCard.setImageResource(R.drawable.icon_debit);
             btnNetBank.setImageResource(R.drawable.icon_net_1);
             btnCheque.setImageResource(R.drawable.icon_cheque_1);
+            btnUPI.setImageResource(R.drawable.icon_upi_1);
         }
         if (id == R.id.btnCheque) {
             FTChequeFragment ftChequeFragment = FTChequeFragment.newInstance(getContext(), mEquStatus, mCommStatus);
@@ -130,6 +126,22 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
             btnDebitCard.setImageResource(R.drawable.icon_debit_1);
             btnNetBank.setImageResource(R.drawable.icon_net_1);
             btnCheque.setImageResource(R.drawable.icon_cheque);
+            btnUPI.setImageResource(R.drawable.icon_upi_1);
+        }
+
+        if (id == R.id.btnUPI) {
+            FTUpiFragment ftUpiFragment =
+                FTUpiFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+            ftUpiFragment.setTabPageIndicator(tabPageIndicator);
+            getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceFragment, ftUpiFragment)
+                .commit();
+
+            btnDebitCard.setImageResource(R.drawable.icon_debit_1);
+            btnNetBank.setImageResource(R.drawable.icon_net_1);
+            btnCheque.setImageResource(R.drawable.icon_cheque_1);
+            btnUPI.setImageResource(R.drawable.icon_upi);
         }
 
     }
@@ -142,6 +154,7 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
             btnDebitCard.setImageResource(R.drawable.icon_debit_1);
             btnNetBank.setImageResource(R.drawable.icon_net);
             btnCheque.setImageResource(R.drawable.icon_cheque_1);
+            btnUPI.setImageResource(R.drawable.icon_upi_1);
         }
     }
 }

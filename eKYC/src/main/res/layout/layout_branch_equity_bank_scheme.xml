@@ -465,6 +465,70 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/llAdminCharges"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f3eff0"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="0.6"
+                        android:text="Admin Charges"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvEqAdminCharges"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_weight="0.4"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llBrokingAmc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f8f6f7"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/_5sdp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="0.6"
+                        android:text="Broking AMC(Annually)"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvEqBrokingAmc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_weight="0.4"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_13sdp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#f3eff0"

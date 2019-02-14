@@ -62,7 +62,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.actionbar.CRMAppActionBar;
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
 import com.mosl.tabapp.calendar.CalendarFragment;
-import com.mosl.tabapp.collateral.WebActivity;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.CRMSecurityUtil;
@@ -86,6 +85,7 @@ import com.mosl.tabapp.notification.NotificationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.service.DataSyncWorker;
 import com.mosl.tabapp.service.ForegroundService;
+import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
@@ -2031,16 +2031,16 @@ public class MOSLCommonActivity extends AppCompatActivity
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
                                             String encryptedUrl = (objDetail.isNull(ENCRYPTED_URL)) ? ""
                                                     : objDetail.getString(ENCRYPTED_URL);
-                                            WebViewFragment fragment = new WebViewFragment();
+                                            SMTFragment fragment = new SMTFragment();
                                             Bundle bundle = new Bundle();
                                             bundle.putString(URL_PATH, encryptedUrl);
 
                                             fragment.setArguments(bundle);
-//                                            addFragment(R.id.activityFrameLayout, fragment, true, false);
-                                            Intent intent =
-                                                    new Intent(MOSLCommonActivity.this, WebActivity.class);
-                                            intent.putExtra(URL_PATH, encryptedUrl);
-                                            startActivity(intent);
+                                            addFragment(R.id.activityFrameLayout, fragment, true, false);
+//                                            Intent intent =
+//                                                    new Intent(MOSLCommonActivity.this, WebActivity.class);
+//                                            intent.putExtra(URL_PATH, encryptedUrl);
+//                                            startActivity(intent);
                                         } else {
                                             hideProgress();
                                             String errorMsg =

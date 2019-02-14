@@ -165,6 +165,7 @@ public interface MOSLConstants extends LabelConfig {
     String SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT =
         "ProductSalesDirect1UP_BusinessSnapshot";
     String SYS_TEAM_SNAPSHOT = "Team_Snapshot";
+    String MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY = "MyClients_MySnapshot_Productivity";
 
     //Incentive performance
     String PERFORMANCE_PARAMETERS = "PerformanceParameters";
@@ -460,6 +461,7 @@ public interface MOSLConstants extends LabelConfig {
     String Q4 = "Q4";
     String YTD = "YTD";
     String FAMILYSTATUS = "FAMILYSTATUS";
+    String PARAMETER = "Parameter";
     String WIDGETTYPE = "WidgetType";
     String DAY_CNT = "DAY_CNT";
     String DAY = "Day";
