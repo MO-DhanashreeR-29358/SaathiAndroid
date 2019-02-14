@@ -134,26 +134,8 @@ public class LoginActivity extends FragmentActivity
                                         if (status.equalsIgnoreCase("true")) {
                                             customProgress.setVisibility(View.GONE);
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                            if (objDetail.getString(AUTH_STATE).equals("8")) {
-                                                new AccountDetails("",
-                                                        "", "",
-                                                        "", "",
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        empCode, "",
-                                                        "",
-                                                        "", "",
-                                                        false, true);
-                                                SharedPreferences.Editor editor = getPrefs(LoginActivity.this).edit();
-                                                editor.putString("PASSWORD", password);
-                                                editor.putString("EmployeeCode", empCode);
-                                                editor.commit();
-                                                openMainActivity();
-                                            } else {
                                                 boolean smtEnabled =
-                                                        (objDetail.getString(SMT_ENABLED).equals("1")) ? true
-                                                                : false;
+                                                        objDetail.getString(SMT_ENABLED).equals("1");
                                                 JSONObject objDetailUser = objDetail.getJSONObject(USER);
                                                 String userId = objDetailUser.isNull(USER_ID) ? ""
                                                         : objDetailUser.getString(USER_ID);
@@ -205,6 +187,8 @@ public class LoginActivity extends FragmentActivity
                                                 setAppLoginID(employeeCode);
                                                 setAppType(CRM);
 
+                                            boolean aufsb = userType.equals("9");
+
                                                 LoginResponseData loginData = new LoginResponseData();
                                                 loginData.setUserId(userId);
                                                 loginData.setEmployeeCode(employeeCode.trim());
@@ -222,12 +206,12 @@ public class LoginActivity extends FragmentActivity
                                                 loginData.setUserType(userType.trim());
                                                 loginData.setUserType(userType.trim());
                                                 loginData.setSmtEnabled(smtEnabled);
+                                            loginData.setAufsb(aufsb);
 
                                                 new RoleSelectionModel("", "", "", "", employeeCode.trim(),
                                                         rmId.trim(), businessUnitId.trim(), "",/*roleId*/"");
 
                                                 storeLoginPrefData(loginData);
-                                            }
                                         } else {
                                             customProgress.setVisibility(View.GONE);
                                             String error =
@@ -315,7 +299,7 @@ public class LoginActivity extends FragmentActivity
                 loginData.getEmail(), loginData.getBusinessProfileId(),
                 loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(),
                 loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType(),
-                loginData.isSmtEnabled(), false);
+                loginData.isSmtEnabled(), loginData.isAufsb());
         try {
             MOSLCommonActivity.sendRegistrationToServer(LoginActivity.this, getContentResolver(),
                     false);
@@ -324,7 +308,11 @@ public class LoginActivity extends FragmentActivity
         }
 
         editor.apply();
-        FetchReportTypes();
+        if (loginData.isAufsb()) {
+            openMainActivity();
+        } else {
+            FetchReportTypes();
+        }
     }
 
     public void FetchReportTypes() {

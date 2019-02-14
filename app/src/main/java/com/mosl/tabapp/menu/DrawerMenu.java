@@ -17,7 +17,10 @@ import java.util.Vector;
 public class DrawerMenu implements MOSLConstants {
     public static List<ScreenDetails> createGroupList(Context context) {
         List<ScreenDetails> groupList = new ArrayList<>();
-        if (AccountDetails.isOnlyEkyc()) {
+        if (AccountDetails.isAufsb()) {
+            groupList.add(new ScreenDetails(R.drawable.ic_menu_dashboard,
+                    context.getString(R.string.MOSL_MENU_My_DASHBOARD_TXT), MOSL_MENU_My_DASHBOARD_TXT,
+                    false));
             groupList.add(new ScreenDetails(R.drawable.ic_update_ekyc,
                     context.getString(R.string.MOSL_MENU_EKYC_TXT), MOSL_MENU_EKYC_TXT, true));
             groupList.add(new ScreenDetails(R.drawable.ic_new_logout,

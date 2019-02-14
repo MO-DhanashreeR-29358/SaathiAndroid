@@ -80,7 +80,6 @@ import com.mosl.tabapp.menu.MenuGetter;
 import com.mosl.tabapp.menu.ScreenDetails;
 import com.mosl.tabapp.menu.SubMenu;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.model.LoginResponseData;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.notification.NotificationFragment;
@@ -379,13 +378,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                     loginAndInitView();
                 }
             } else {
-                if (AccountDetails.isOnlyEkyc()) {
-                    initView();
-
-                } else {
-                    loginAndInitView();
-                }
-
+                loginAndInitView();
             }
         } else {
             initView();
@@ -553,7 +546,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                 setupFragment(new DashboardFragment());
             }
         } else {
-            if (!AccountDetails.isOnlyEkyc()) setupFragment(new DashboardFragment());
+            setupFragment(new DashboardFragment());
 
         }
     }
@@ -736,38 +729,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                     clickedPosDetails = sub.get(childPosition).getDetails();
                 }
                 menuAdapter.setChildMenuSelection(lastExpandedPosition, childPosition);
-                if (AccountDetails.isOnlyEkyc()) {
-                    if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
-                        if (AccountDetails.isNewEkyc()) {
-                            Map map = new HashMap();
-                            map.put(NEW_USERID, "");
-                            map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-                            map.put(COMMANDTYPE, "NEW");
-                            map.put(APPLICATIONTYPE, "CRM");
-                            map.put(OSTYPE, "ANDROID");
-                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-                            map.put(TOKENKEY, AccountDetails.getToken());
-                            newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(MOSL_MENU_FRESH_REGISTRATION, new HashMap());
-                        }
-                    } else if (childPosition == MOSL_MENU_EXISTINGS_APPLICATIONS) {
-                        if (AccountDetails.isNewEkyc()) {
-                            Map map = new HashMap();
-                            map.put(NEW_USERID, "");
-                            map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-                            map.put(COMMANDTYPE, "RESUME");
-                            map.put(APPLICATIONTYPE, "CRM");
-                            map.put(OSTYPE, "ANDROID");
-                            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-                            map.put(TOKENKEY, AccountDetails.getToken());
-                            newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
-                        }
-                    }
-                } else {
-                    if (position == MOSL_MENU_DASHBOARD) {
+                if (position == MOSL_MENU_DASHBOARD) {
                         setMenuSelection[0] = true;
                         performMenuAction(clickedPosDetails);
                     } else if (position == MOSL_MENU_EKYC) {
@@ -800,7 +762,10 @@ public class MOSLCommonActivity extends AppCompatActivity
                                 ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
                             }
                         }
-                    } else if (position == MOSL_MENU_MY_REPORTS) {
+                }
+
+                if (!AccountDetails.isAufsb()) {
+                    if (position == MOSL_MENU_MY_REPORTS) {
                         ReportFragment reportFragment = new ReportFragment();
                         Bundle bund = new Bundle();
                         bund.putString(SYSTEM_NAME,
@@ -811,6 +776,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                         setupFragment(reportFragment);
                     }
                 }
+
                 return false;
             }
         });
@@ -822,11 +788,18 @@ public class MOSLCommonActivity extends AppCompatActivity
                 boolean clickHandled = false;
                 value = false;
                 final boolean[] setMenuSelection = {false};
-                if (AccountDetails.isOnlyEkyc()) {
-                    if (position == 0) {
+                if (AccountDetails.isAufsb()) {
+                    if (position == MOSL_MENU_EKYC) {
                         clickHandled = false;
                     } else {
-                        logoutCustomer();
+                        if (position == MOSL_MENU_DASHBOARD) {
+                            searchType = SEARCH_TYPE_LEAD;
+                            actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
+                            setupFragment(new DashboardFragment());
+                        } else if (position == 2) {
+                            logoutCustomer();
+                        }
+
                     }
                 } else {
                     if (position == MOSL_MENU_EKYC || position == MOSL_MENU_MY_REPORTS) {
@@ -1468,8 +1441,7 @@ public class MOSLCommonActivity extends AppCompatActivity
                                             if (status.equalsIgnoreCase("true")) {
                                                 JSONObject objDetail = response.getJSONObject(RESPONSE);
                                                 boolean smtEnabled =
-                                                        (objDetail.getString(SMT_ENABLED).equals("1"))
-                                                                ? true : false;
+                                                        objDetail.getString(SMT_ENABLED).equals("1");
                                                 JSONObject objDetailUser =
                                                         objDetail.getJSONObject(USER);
                                                 String userId = objDetailUser.isNull(USER_ID) ?
@@ -1518,31 +1490,18 @@ public class MOSLCommonActivity extends AppCompatActivity
                                                 String businessUnitId = objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ?
                                                         "" : objDetailBusinessProfile.getString(
                                                         BUSINESS_UNIT_ID);
-                                                LoginResponseData loginData = new LoginResponseData();
-                                                loginData.setUserId(userId);
-                                                loginData.setEmployeeCode(employeeCode);
-                                                loginData.setFirstName(firstName);
-                                                loginData.setLastName(lastName);
-                                                loginData.setImageUrl(imageUrl);
-                                                loginData.setMobileNo(mobile);
-                                                loginData.setEmail(email);
-                                                loginData.setToken(token);
-                                                loginData.setBusinessProfileId(businessProfileId);
-                                                loginData.setBusinessProfileName(businessProfileName);
-                                                loginData.setBusinessUnitId(businessUnitId);
-                                                loginData.setBranchCode(branchCode);
-                                                loginData.setUserType(userType);
+                                                boolean aufsb = userType.equals("9");
 
-                                                new AccountDetails(loginData.getUserId(),
-                                                        loginData.getFirstName(), loginData.getLastName(),
-                                                        loginData.getImageUrl().replaceAll(" ", "%20"),
-                                                        loginData.getMobileNo(), loginData.getEmail(),
-                                                        loginData.getBusinessProfileId(),
-                                                        loginData.getBusinessProfileName(),
-                                                        loginData.getEmployeeCode(), loginData.getToken(),
-                                                        loginData.getBusinessUnitId(),
-                                                        loginData.getBranchCode(), loginData.getUserType(),
-                                                        smtEnabled, false);
+                                                new AccountDetails(userId,
+                                                        firstName, lastName,
+                                                        imageUrl.replaceAll(" ", "%20"),
+                                                        mobile, email,
+                                                        businessProfileId,
+                                                        businessProfileName,
+                                                        employeeCode, token,
+                                                        businessUnitId,
+                                                        branchCode, userType,
+                                                        smtEnabled, aufsb);
 
                                                 initView();
                                             } else {

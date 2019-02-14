@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -37,7 +38,6 @@ import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
-import com.mosl.tabapp.model.AccountDetails;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,7 +71,7 @@ public class ForegroundService extends Service {
                             Context.LOCATION_SERVICE);
                     if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(
                         getApplicationContext())) {
-                        if(!AccountDetails.isOnlyEkyc()) LocationUpdate();
+                        LocationUpdate();
                     }
                 }
                 refreshHandler.postDelayed(runnableCode, 5 * 60 * 1000);

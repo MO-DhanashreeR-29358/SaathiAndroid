@@ -3,7 +3,6 @@ package com.mosl.tabapp.actionbar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.ui.MOSLCommonActivity.AutoCompleteAdapter;
 
 import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH;
@@ -61,10 +59,7 @@ public class CRMAppActionBar extends RelativeLayout implements TextView.OnEditor
         searchBoxView.setDropDownBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ivIcon = (ImageView) mBarView.findViewById(R.id.ivIcon);
         llSearch=mBarView.findViewById(R.id.llSearch);
-        if(AccountDetails.isOnlyEkyc()){
-            llSearch.setVisibility(GONE);
-            btnNotification.setVisibility(GONE);
-        }
+
     }
 
 

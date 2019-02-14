@@ -15,7 +15,6 @@ import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.MyExceptionHandler;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.model.LoginResponseData;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 
@@ -102,22 +101,8 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                         String status = response.getString(STATUS);
                                         if (status.equalsIgnoreCase("true")) {
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                            if (objDetail.getString(AUTH_STATE).equals("8")) {
-                                                new AccountDetails("",
-                                                        "", "",
-                                                        "", "",
-                                                        "",
-                                                        "",
-                                                        "",
-                                                        empCode, "",
-                                                        "",
-                                                        "", "",
-                                                        false, true);
-                                                openMainActivity();
-                                            } else {
                                             boolean smtEnabled =
-                                                (objDetail.getString(SMT_ENABLED).equals("1"))
-                                                    ? true : false;
+                                                    objDetail.getString(SMT_ENABLED).equals("1");
                                             JSONObject objDetailUser =
                                                 objDetail.getJSONObject(USER);
                                             String userId = objDetailUser.isNull(USER_ID) ?
@@ -152,7 +137,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                             setAppLoginID(employeeCode);
                                             setAppType(CRM);
                                             setUserType("");
-
                                             JSONObject objDetailBusinessProfile =
                                                 objDetailUser.getJSONObject(
                                                     CURRENT_BUSINESS_PROFILE);
@@ -168,36 +152,28 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
                                                 objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ? ""
                                                     : objDetailBusinessProfile.getString(
                                                         BUSINESS_UNIT_ID);
-                                            LoginResponseData loginData = new LoginResponseData();
-                                            loginData.setUserId(userId);
-                                            loginData.setEmployeeCode(employeeCode);
-                                            loginData.setFirstName(firstName);
-                                            loginData.setLastName(lastName);
-                                            loginData.setImageUrl(imageUrl.replaceAll(" ", "%20"));
-                                            loginData.setMobileNo(mobile);
-                                            loginData.setEmail(email);
-                                            loginData.setToken(token);
-                                            loginData.setBusinessProfileId(businessProfileId);
-                                            loginData.setBusinessProfileName(businessProfileName);
-                                            loginData.setBusinessUnitId(businessUnitId);
-                                            loginData.setBranchCode(branchCode);
-                                            loginData.setUserType(userType);
+
+                                            boolean aufsb = userType.equals("9");
+
                                             new RoleSelectionModel("", "", "", "",
                                                 employeeCode.trim(), rmId.trim(),
                                                 businessUnitId.trim(), "",/*roleId*/"");
-                                            new AccountDetails(loginData.getUserId(),
-                                                loginData.getFirstName(), loginData.getLastName(),
-                                                loginData.getImageUrl(), loginData.getMobileNo(),
-                                                loginData.getEmail(),
-                                                loginData.getBusinessProfileId(),
-                                                loginData.getBusinessProfileName(),
-                                                loginData.getEmployeeCode(), loginData.getToken(),
-                                                loginData.getBusinessUnitId(),
-                                                loginData.getBranchCode(), loginData.getUserType(),
-                                                smtEnabled,false);
+                                            new AccountDetails(userId,
+                                                    firstName, lastName,
+                                                    imageUrl.replaceAll(" ", "%20"), mobile,
+                                                    email,
+                                                    businessProfileId,
+                                                    businessProfileName,
+                                                    employeeCode, token,
+                                                    businessUnitId,
+                                                    branchCode, userType,
+                                                    smtEnabled, aufsb);
                                             MOSLCommonActivity.sendRegistrationToServer(
                                                 SplashActivity.this, getContentResolver(), false);
-                                            FetchReportTypes();
+                                            if (aufsb) {
+                                                openMainActivity();
+                                            } else {
+                                                FetchReportTypes();
                                             }
                                         } else {
 

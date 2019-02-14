@@ -1,6 +1,7 @@
 package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.constants.MOSLConstants;
+
 import java.io.Serializable;
 
 /**
@@ -24,16 +25,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
     private static String profileType="";
     private static boolean newEkyc;
     private static boolean smtEnabled;
-
-    public static boolean isOnlyEkyc() {
-        return onlyEkyc;
-    }
-
-    public static void setOnlyEkyc(boolean onlyEkyc) {
-        AccountDetails.onlyEkyc = onlyEkyc;
-    }
-
-    private static boolean onlyEkyc;
+    private static boolean aufsb;
 
 
     public static boolean isFranchiseUser() {
@@ -57,9 +49,9 @@ public class AccountDetails implements MOSLConstants,Serializable {
     }
 
     public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
-        String mobileNo, String email, String businessProfileId, String businessProfileName,
-        String employeeCode, String token, String businessUnitId, String branchCode,
-        String userType, boolean smtEnabled,boolean onlyEkyc) {
+                          String mobileNo, String email, String businessProfileId, String businessProfileName,
+                          String employeeCode, String token, String businessUnitId, String branchCode,
+                          String userType, boolean smtEnabled, boolean aufsb) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -75,7 +67,7 @@ public class AccountDetails implements MOSLConstants,Serializable {
         this.userType = userType;
         this.profileType = profileFlag(businessUnitId);
         this.smtEnabled = smtEnabled;
-        this.onlyEkyc=onlyEkyc;
+        this.aufsb = aufsb;
     }
 
 
@@ -205,5 +197,13 @@ public class AccountDetails implements MOSLConstants,Serializable {
 
     public static void setSmtEnabled(boolean smtEnabled) {
         AccountDetails.smtEnabled = smtEnabled;
+    }
+
+    public static boolean isAufsb() {
+        return aufsb;
+    }
+
+    public static void setAufsb(boolean aufsb) {
+        AccountDetails.aufsb = aufsb;
     }
 }
