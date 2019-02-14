@@ -249,6 +249,7 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             addtionalParameterMap.put(COL_FILTER, MTD_CNT);
                             addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
+                            addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
                             args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
@@ -265,6 +266,7 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             addtionalParameterMap.put(COL_FILTER, YTD_CNT);
                             addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
+                            addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
                             args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
