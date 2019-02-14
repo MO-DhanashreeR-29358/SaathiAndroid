@@ -301,6 +301,8 @@ public class DashboardFragment extends MOSLCommonFragment
 
         btnClientTraded.setOnClickListener(this);
 
+        if (AccountDetails.isAufsb()) floatingActionsMenu.setVisibility(View.GONE);
+
         floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(
                 new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
                     @Override
