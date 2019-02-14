@@ -787,11 +787,12 @@ public class MOSLCommonActivity extends AppCompatActivity
                                         int position, long l) {
                 boolean clickHandled = false;
                 value = false;
-                final boolean[] setMenuSelection = {false};
                 if (AccountDetails.isAufsb()) {
                     if (position == MOSL_MENU_EKYC) {
                         clickHandled = false;
                     } else {
+                        drawerLayout.closeDrawers();
+                        menuAdapter.setGroupMenuSelection(position);
                         if (position == MOSL_MENU_DASHBOARD) {
                             searchType = SEARCH_TYPE_LEAD;
                             actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
