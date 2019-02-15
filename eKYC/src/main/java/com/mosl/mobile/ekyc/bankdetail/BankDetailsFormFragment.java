@@ -5508,16 +5508,14 @@ public class BankDetailsFormFragment extends Fragment
 
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put(APPLICATION_TYPE, getAppType());
             //            inputMap.put("_USERID", "2233");
             inputMap.put("_USERID", userID);
 
-            String flag = BANKLISTDD;
-            String category = BANKDETAILS;
             customProgress.setVisibility(View.VISIBLE);
 
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, BANKLISTDD, BANKDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -5715,13 +5713,11 @@ public class BankDetailsFormFragment extends Fragment
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
 
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put(APPLICATION_TYPE, getAppType());
             inputMap.put("_USERID", userID);
 
-            String flag = BANKLISTDD;
-            String category = BANKDETAILS;
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, BANKLISTDD, BANKDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -5812,15 +5808,11 @@ public class BankDetailsFormFragment extends Fragment
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put(APPLICATION_TYPE, getAppType());
-            //            inputMap.put("_USERID", "2233");
             inputMap.put("_USERID", userID);
 
-            String flag = BANKLISTDD;
-            String category = BANKDETAILS;
-
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, BANKLISTDD, BANKDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -5968,19 +5960,13 @@ public class BankDetailsFormFragment extends Fragment
     }
 
     private void fillCommodityBankDropDown() {
-
-
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put(APPLICATION_TYPE, getAppType());
-            //            inputMap.put("_USERID", "2233");
             inputMap.put("_USERID", userID);
 
-            String flag = BANKLISTDD;
-            String category = BANKDETAILS;
-
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, BANKLISTDD, BANKDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -6134,19 +6120,14 @@ public class BankDetailsFormFragment extends Fragment
     }
 
     private void getBankDataByID() {
-
-
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put(APPLICATION_TYPE, getAppType());
             //            inputMap.put("UserID", BANK_DATA_BY_ID);
             inputMap.put("UserID", userID);
 
-            String flag = FILLBANKDETAILS;
-            String category = BANKDETAILS;
-
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, FILLBANKDETAILS, BANKDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -6609,10 +6590,11 @@ public class BankDetailsFormFragment extends Fragment
         ImageView btnClose = (ImageView) dialog.findViewById(R.id.btnClose);
 
 
-        Map inputMap = new HashMap();
+        Map<String, String> inputMap = new HashMap<>();
         String flag = BANKSEARCH;
         String category = BANKDETAILS;
 
+        inputMap.put("_USERID", userID);
         if (type.equalsIgnoreCase(EQUITY)) {
             if (spEquSelectBank.getSelectedItem().toString().equalsIgnoreCase(SELECT)) {
                 inputMap.put(BANK_NAME, "");
