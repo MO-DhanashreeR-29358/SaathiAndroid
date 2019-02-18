@@ -65,6 +65,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
 import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
 import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityOriginal;
 import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.isEquityOriginal;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityFundTransfered;
 import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityFundTransfered;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
@@ -249,10 +250,16 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
 
         btnSkipPayment.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                //skipEquPayment();
-                equMakePaymentButton = true;
-                if (isCommodityOriginal()) {
-                    //skipCommPayment();
+                if (isEquityOriginal() && isCommodityOriginal()) {
+                    skipEquPayment();
+                    equMakePaymentButton = true;
+                    skipCommPayment();
+                    commMakePaymentButton = true;
+                } else if (isEquityOriginal()) {
+                    skipEquPayment();
+                    equMakePaymentButton = true;
+                } else if (isCommodityOriginal()) {
+                    skipCommPayment();
                     commMakePaymentButton = true;
                 }
             }
@@ -400,7 +407,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                 if (response.has("FUNDTRANSFER")) {
                                     JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
                                     if (jsonArray.length() != 0) {
-
+                                        String upiStatus = "", upiMessage = "";
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject object = jsonArray.getJSONObject(i);
 
@@ -436,6 +443,16 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                                     || object.getString("FUNDTRANSFERTHROUGHID")
                                                     .equals("")) ? ""
                                                     : object.getString("FUNDTRANSFERTHROUGHID");
+                                            upiStatus =
+                                                (object.isNull("UPI_STATUS")
+                                                    || object.getString("UPI_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("UPI_STATUS");
+                                            upiMessage =
+                                                (object.isNull("UPI_MESSAGE")
+                                                    || object.getString("UPI_MESSAGE")
+                                                    .equals("")) ? ""
+                                                    : object.getString("UPI_MESSAGE");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -492,8 +509,15 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                                     etFundTransferred.setEnabled(false);
                                                 }
                                             }
+                                            if (Integer.parseInt(upiStatus) == 1) {
+                                                showView(eqPaymentStatus, commPaymentStatus);
+                                            } else {
+                                                llFundOption.setVisibility(View.GONE);
+                                                llPaymentButton.setVisibility(View.GONE);
+                                                tvFundTransfered.setVisibility(View.VISIBLE);
+                                                tvFundTransfered.setText(upiMessage);
+                                            }
                                         }
-                                        showView(eqPaymentStatus, commPaymentStatus);
                                         hideProgress();
                                     }
                                 }
@@ -656,6 +680,174 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
         }
     }
 
+    private void skipEquPayment() {
+
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map<String, String> inputMap = new HashMap<>();
+            inputMap.put("_userId", userID);
+            inputMap.put("_segmentType", "Equity");
+
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, UPDATESKIPPAYMENT, FUNDTRANSFER, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                if (jsonArray.length() != 0) {
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
+
+                                        String status =
+                                            (object.isNull("STATUS") || object.getString("STATUS")
+                                                .equals("")) ? "" : object.getString("STATUS");
+                                        if (Integer.valueOf(status) == 1) {
+                                            //                                        EkycMainActivity.vpApply.setCurrentItem(2);
+                                            getPaymentStatus();
+                                        } else {
+                                            informationDialog(COULD_NOT_SKIP_PAY);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
+                            }
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
+                        }
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
+    private void skipCommPayment() {
+
+        if (MOSLCommon.isNetworkEnabled(mContext)) {
+            Map<String, String> inputMap = new HashMap<>();
+            inputMap.put("_userId", userID);
+            inputMap.put("_segmentType", "Commodity");
+
+            customProgress.setVisibility(View.VISIBLE);
+            WebServiceHandler.post(mContext, UPDATESKIPPAYMENT, FUNDTRANSFER, inputMap,
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        if (response != null && response.length() != 0) {
+
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
+                                if (jsonArray.length() != 0) {
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
+
+                                        String status =
+                                            (object.isNull("STATUS") || object.getString("STATUS")
+                                                .equals("")) ? "" : object.getString("STATUS");
+                                        if (Integer.valueOf(status) == 1) {
+                                            //                                        EkycMainActivity.vpApply.setCurrentItem(2);
+                                            getPaymentStatus();
+                                        } else {
+                                            informationDialog(COULD_NOT_SKIP_PAY);
+                                        }
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(getActivity(), SOME_ERROR_OCCURED_PLEASE_RETRY,
+                                    false, "");
+                            }
+                        } else {
+                            commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                            customProgress.setVisibility(View.GONE);
+                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
+                        }
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                        customProgress.setVisibility(View.GONE);
+                    }
+                });
+        } else {
+            MOSLCommon.alertDInternet(mContext);
+            customProgress.setVisibility(View.GONE);
+        }
+    }
+
     private void showView(int mEquStatus, int mCommStatus) {
         if (getIsEquitySelected() && getIsCommoditySelected()) {
             if (mEquStatus != 0 && mCommStatus != 0) {
@@ -798,6 +990,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
          */
         if (eqPaymentId == 5) {
             disableField(llFundOption);
+            llFundOption.setVisibility(View.GONE);
             llPaymentButton.setVisibility(View.GONE);
             if (getIsEquitySelected() && getIsCommoditySelected()) {
                 if (isEquityFundTransfered() && isCommodityFundTransfered()) {
@@ -837,6 +1030,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
          */
         if (commPaymentId == 5) {
             disableField(llFundOption);
+            llFundOption.setVisibility(View.GONE);
             llPaymentButton.setVisibility(View.GONE);
             if (getIsEquitySelected() && getIsCommoditySelected()) {
                 if (isEquityFundTransfered() && isCommodityFundTransfered()) {
