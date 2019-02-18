@@ -504,11 +504,19 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                         if (Integer.parseInt(dcStatus) == 1) {
                                             showView(eqPaymentStatus, commPaymentStatus);
                                         } else {
-                                            llEquFundOption.setVisibility(View.GONE);
-                                            llEquPaymentButton.setVisibility(View.GONE);
-                                            //layoutMergeNote.setVisibility(View.GONE);
-                                            tvEquFundTransfered.setVisibility(View.VISIBLE);
-                                            tvEquFundTransfered.setText(dcMessage);
+                                            if (getIsCommoditySelected()
+                                                && !getIsEquitySelected()) {
+                                                llCommFundOption.setVisibility(View.GONE);
+                                                llCommPaymentButton.setVisibility(View.GONE);
+                                                tvCommFundTransfered.setVisibility(View.VISIBLE);
+                                                tvCommFundTransfered.setText(dcMessage);
+                                            } else {
+                                                llEquFundOption.setVisibility(View.GONE);
+                                                llEquPaymentButton.setVisibility(View.GONE);
+                                                tvEquFundTransfered.setVisibility(View.VISIBLE);
+                                                tvEquFundTransfered.setText(dcMessage);
+                                            }
+
                                         }
                                         hideProgress();
                                     }
