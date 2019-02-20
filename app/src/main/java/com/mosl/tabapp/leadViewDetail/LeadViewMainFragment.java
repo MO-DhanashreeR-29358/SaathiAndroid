@@ -99,22 +99,22 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
 
     private void setUpView(View leadViewDetailView) {
 
-        vpLeadView = (LockedViewPager) leadViewDetailView.findViewById(R.id.vpLeadView);
+        vpLeadView =  leadViewDetailView.findViewById(R.id.vpLeadView);
         vpLeadView.setPagingEnabled(false);
-        indicatorLeadView = (TabLayout) leadViewDetailView.findViewById(R.id.indicatorLeadView);
+        indicatorLeadView =  leadViewDetailView.findViewById(R.id.indicatorLeadView);
 
-        ivLead = (ImageView) leadViewDetailView.findViewById(R.id.ivLead);
+        ivLead =  leadViewDetailView.findViewById(R.id.ivLead);
         if (!leadId.equalsIgnoreCase("0")) {
             CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
         }
-        ivLeadViewArrow = (ImageView) leadViewDetailView.findViewById(R.id.ivLeadViewArrow);
+        ivLeadViewArrow = leadViewDetailView.findViewById(R.id.ivLeadViewArrow);
         ivLeadViewArrow.setVisibility(View.VISIBLE);
-        tvClientCode = (TextView) leadViewDetailView.findViewById(R.id.tvClientCode);
-        tvName = (TextView) leadViewDetailView.findViewById(R.id.tvName);
-        tvLeadId = (TextView) leadViewDetailView.findViewById(R.id.tvLeadId);
-        tvBranchCode = (TextView) leadViewDetailView.findViewById(R.id.tvBranchCode);
-        tvCurrentStage = (TextView) leadViewDetailView.findViewById(R.id.tvCurrentStage);
-        tvCurrentStageSince = (TextView) leadViewDetailView.findViewById(R.id.tvCurrentStageSince);
+        tvClientCode =leadViewDetailView.findViewById(R.id.tvClientCode);
+        tvName = leadViewDetailView.findViewById(R.id.tvName);
+        tvLeadId =leadViewDetailView.findViewById(R.id.tvLeadId);
+        tvBranchCode =  leadViewDetailView.findViewById(R.id.tvBranchCode);
+        tvCurrentStage =  leadViewDetailView.findViewById(R.id.tvCurrentStage);
+        tvCurrentStageSince = leadViewDetailView.findViewById(R.id.tvCurrentStageSince);
 
         ivLeadViewArrow.setOnClickListener(this);
         String[] headingClient = new String[5];
@@ -351,8 +351,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             showProgress();
             Map inputMap = new HashMap<>();
             inputMap.put(UCID, ucid);
-            //            inputMap.put("Id", this.getArguments().getString(LEAD_ID));
-
             String serviceMethod = "Client/GetClientViewByCommand/";
             try {
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
