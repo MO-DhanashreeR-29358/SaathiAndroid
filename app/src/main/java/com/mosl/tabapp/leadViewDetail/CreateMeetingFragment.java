@@ -41,7 +41,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -101,12 +100,12 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 public class CreateMeetingFragment extends MOSLCommonFragment
     implements View.OnClickListener, TextView.OnEditorActionListener {
     View createMeetingView;
-    private ImageView ivLead, ivDatePicker;
+    private ImageView ivLead;
     EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory, etClientCode,
         etClientName, etAmount, etLocation, etPinCode;
     Location mCurrentLocation; // location
     private TextView tvCurrentStageSince, tvCurrentStage, tvBranchCode, tvLeadId, tvClientCode,
-        tvName, tvSplAttendeeCount, tvSplAttendee, tvAttendeeCount, tvAttendee, tvStartDate,
+        tvName, tvSplAttendeeCount, tvAttendeeCount, tvStartDate,
         tvLocationError, tvPinCodeError, tvMeetingLocationError, tvTravellingModeError;
     View llSubcategory;
     private Button btnSave, btnReset;
@@ -115,18 +114,15 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private SplAttendeeAdapter splAttendeeAdapter;
     private AddedAttendeeAdapter addedAttendeeAdapter;
     private AddedSplAttendeeAdapter addedSplAttendeeAdapter;
-    ArrayList<EmployeeModel> employeeModelList;
-    ArrayList<SplAttendeeModel> SplAttendeeModelList;
     ArrayList<AddedAttendeeModel> addedAttendeeModelList = new ArrayList<>();
     ArrayList<AddedSplAttendeeModel> addedSplAttendeeModelList = new ArrayList<>();
     int addedAttendeeCount;
     int addedSplAttendeeCount;
     private String mainFromDate, mainToDate, fromPostingDate, productCodeStr, productNameStr,
-        meetingDurationCodeStr, meetingDurationNameStr, activityTypeCodeStr, activityTypeNameStr,
-        meetingReasonCodeStr, meetingReasonNameStr, actionablesCodeStr, actionablesNameStr,
-        categoryCodeStr, categoryNameStr, subCategoryCodestr, subCategoryNameStr,
-        outStaitionNameStr, outStaitionCodeStr, baClientCodeStr, baClientNameStr;
-    private Date fromDat, toDate;
+        meetingDurationCodeStr, activityTypeCodeStr,
+        meetingReasonCodeStr, meetingReasonNameStr, actionablesCodeStr,
+        categoryCodeStr, subCategoryCodestr, outStaitionCodeStr, baClientCodeStr;
+    private Date fromDat;
     private Dialog dialog;
     private Calendar today;
     private DatePicker dpFromDate;
@@ -151,7 +147,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private boolean profileType;
     private String mUCID = "0";
     private String meetingObjectiveIdStr = "0";
-    private boolean mandatory = true;
+    private boolean mandatory = true, isPotentialPMSProduct, isOnlyClient;
     private CreateMeetingProductAdapter productAdapter;
     private CreateMeetingTravellingModeAdapter travellingAdapter;
     private RecyclerView rvProductList, rvTravellingList;
@@ -184,7 +180,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -194,14 +191,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     subCategoryCodestr = ((RowData) spSubCategory.getSelectedItem()).getKey();
-                    subCategoryNameStr = ((RowData) spSubCategory.getSelectedItem()).getValue();
                     tvSubCategoryError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -211,7 +208,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
-                    categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
                     tvCategoryError.setVisibility(View.GONE);
                     subCategory();
                 } catch (Exception ex) {
@@ -219,7 +215,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -240,7 +237,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -263,7 +261,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -274,15 +273,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 try {
                     meetingDurationCodeStr =
                         ((RowData) spMeetingDuration.getSelectedItem()).getKey();
-                    meetingDurationNameStr =
-                        ((RowData) spMeetingDuration.getSelectedItem()).getValue();
                     tvMeetingDurationError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -304,7 +302,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -314,14 +313,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     actionablesCodeStr = ((RowData) spActionables.getSelectedItem()).getKey();
-                    actionablesNameStr = ((RowData) spActionables.getSelectedItem()).getValue();
                     tvActionablesError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -331,14 +330,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     baClientCodeStr = ((RowData) spBAClient.getSelectedItem()).getKey();
-                    baClientNameStr = ((RowData) spBAClient.getSelectedItem()).getValue();
                     tvBAClientError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -348,14 +347,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     outStaitionCodeStr = ((RowData) spOutStaition.getSelectedItem()).getKey();
-                    outStaitionNameStr = ((RowData) spOutStaition.getSelectedItem()).getValue();
                     tvOutStaitionError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -365,7 +364,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                    activityTypeNameStr = ((RowData) spActivityType.getSelectedItem()).getValue();
                     tvActivityTypeError.setVisibility(View.GONE);
                     if (!spActivityType.getSelectedItem()
                         .toString()
@@ -400,7 +398,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -416,7 +415,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -450,105 +450,102 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
     private void setUpView(View createMeetingView) {
 
-        scrollView = (ScrollView) createMeetingView.findViewById(R.id.scrollView);
+        scrollView = createMeetingView.findViewById(R.id.scrollView);
         scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         scrollView.setFocusable(true);
         scrollView.setFocusableInTouchMode(true);
         scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override public boolean onTouch(View v, MotionEvent event) {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 v.requestFocusFromTouch();
                 return false;
             }
         });
-        rlDate = (RelativeLayout) createMeetingView.findViewById(R.id.rlDate);
-        tvStartDate = (TextView) createMeetingView.findViewById(R.id.tvDate);
+        rlDate = createMeetingView.findViewById(R.id.rlDate);
+        tvStartDate = createMeetingView.findViewById(R.id.tvDate);
         mainToDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
         mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
-        toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
         tvStartDate.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
-        ivDatePicker = (ImageView) createMeetingView.findViewById(R.id.ivDatePicker);
         rlDate.setOnClickListener(this);
-        ivLead = (ImageView) createMeetingView.findViewById(R.id.ivLead);
-        tvName = (TextView) createMeetingView.findViewById(R.id.tvName);
-        tvClientCode = (TextView) createMeetingView.findViewById(R.id.tvClientCode);
-        tvLeadId = (TextView) createMeetingView.findViewById(R.id.tvLeadId);
-        tvBranchCode = (TextView) createMeetingView.findViewById(R.id.tvBranchCode);
-        tvCurrentStage = (TextView) createMeetingView.findViewById(R.id.tvCurrentStage);
-        tvCurrentStageSince = (TextView) createMeetingView.findViewById(R.id.tvCurrentStageSince);
+        ivLead = createMeetingView.findViewById(R.id.ivLead);
+        tvName = createMeetingView.findViewById(R.id.tvName);
+        tvClientCode = createMeetingView.findViewById(R.id.tvClientCode);
+        tvLeadId = createMeetingView.findViewById(R.id.tvLeadId);
+        tvBranchCode = createMeetingView.findViewById(R.id.tvBranchCode);
+        tvCurrentStage = createMeetingView.findViewById(R.id.tvCurrentStage);
+        tvCurrentStageSince = createMeetingView.findViewById(R.id.tvCurrentStageSince);
 
-        tvSplAttendeeCount = (TextView) createMeetingView.findViewById(R.id.tvSplAttendeeCount);
-        tvSplAttendee = (TextView) createMeetingView.findViewById(R.id.tvSplAttendee);
-        tvAttendeeCount = (TextView) createMeetingView.findViewById(R.id.tvAttendeeCount);
-        tvAttendee = (TextView) createMeetingView.findViewById(R.id.tvAttendee);
-        tvProductError = (TextView) createMeetingView.findViewById(R.id.tvProductError);
+        tvSplAttendeeCount = createMeetingView.findViewById(R.id.tvSplAttendeeCount);
+        tvAttendeeCount = createMeetingView.findViewById(R.id.tvAttendeeCount);
+        tvProductError = createMeetingView.findViewById(R.id.tvProductError);
         tvMeetingDurationError =
-            (TextView) createMeetingView.findViewById(R.id.tvMeetingDurationError);
+            createMeetingView.findViewById(R.id.tvMeetingDurationError);
         tvMeetingObjectiveError =
-            (TextView) createMeetingView.findViewById(R.id.tvMeetingObjectiveError);
-        tvMeetingReasonError = (TextView) createMeetingView.findViewById(R.id.tvMeetingReasonError);
-        tvActivityTypeError = (TextView) createMeetingView.findViewById(R.id.tvActivityTypeError);
-        tvActionablesError = (TextView) createMeetingView.findViewById(R.id.tvActionablesError);
-        tvCategoryError = (TextView) createMeetingView.findViewById(R.id.tvCategoryError);
-        tvSubCategoryError = (TextView) createMeetingView.findViewById(R.id.tvSubCategoryError);
+            createMeetingView.findViewById(R.id.tvMeetingObjectiveError);
+        tvMeetingReasonError = createMeetingView.findViewById(R.id.tvMeetingReasonError);
+        tvActivityTypeError = createMeetingView.findViewById(R.id.tvActivityTypeError);
+        tvActionablesError = createMeetingView.findViewById(R.id.tvActionablesError);
+        tvCategoryError = createMeetingView.findViewById(R.id.tvCategoryError);
+        tvSubCategoryError = createMeetingView.findViewById(R.id.tvSubCategoryError);
         tvMeetingDescriptionError =
-            (TextView) createMeetingView.findViewById(R.id.tvMeetingDescriptionError);
+            createMeetingView.findViewById(R.id.tvMeetingDescriptionError);
         tvSubCategoryCommentsError =
-            (TextView) createMeetingView.findViewById(R.id.tvSubCategoryCommentsError);
+            createMeetingView.findViewById(R.id.tvSubCategoryCommentsError);
         tvCategoryCommentsError =
-            (TextView) createMeetingView.findViewById(R.id.tvCategoryCommentsError);
-        tvLocationError = (TextView) createMeetingView.findViewById(R.id.tvLocationError);
-        tvPinCodeError = (TextView) createMeetingView.findViewById(R.id.tvPinCodeError);
+            createMeetingView.findViewById(R.id.tvCategoryCommentsError);
+        tvLocationError = createMeetingView.findViewById(R.id.tvLocationError);
+        tvPinCodeError = createMeetingView.findViewById(R.id.tvPinCodeError);
         tvMeetingLocationError =
-            (TextView) createMeetingView.findViewById(R.id.tvMeetingLocationError);
+            createMeetingView.findViewById(R.id.tvMeetingLocationError);
         tvTravellingModeError =
-            (TextView) createMeetingView.findViewById(R.id.tvTravellingModeError);
+            createMeetingView.findViewById(R.id.tvTravellingModeError);
 
-        tvBAClientError = (TextView) createMeetingView.findViewById(R.id.tvBAClientError);
-        tvOutStaitionError = (TextView) createMeetingView.findViewById(R.id.tvOutStaitionError);
-        tvClientCodeError = (TextView) createMeetingView.findViewById(R.id.tvClientCodeError);
-        tvClientNameError = (TextView) createMeetingView.findViewById(R.id.tvClientNameError);
+        tvBAClientError = createMeetingView.findViewById(R.id.tvBAClientError);
+        tvOutStaitionError = createMeetingView.findViewById(R.id.tvOutStaitionError);
+        tvClientCodeError = createMeetingView.findViewById(R.id.tvClientCodeError);
+        tvClientNameError = createMeetingView.findViewById(R.id.tvClientNameError);
 
-        tvActionables = (TextView) createMeetingView.findViewById(R.id.tvActionables);
-        llActionables = (LinearLayout) createMeetingView.findViewById(R.id.llActionables);
-        linaerLayoutNew = (LinearLayout) createMeetingView.findViewById(R.id.linaerLayoutNew);
-        llLocationGroup = (LinearLayout) createMeetingView.findViewById(R.id.llLocationGroup);
+        tvActionables = createMeetingView.findViewById(R.id.tvActionables);
+        llActionables = createMeetingView.findViewById(R.id.llActionables);
+        linaerLayoutNew = createMeetingView.findViewById(R.id.linaerLayoutNew);
+        llLocationGroup = createMeetingView.findViewById(R.id.llLocationGroup);
         setIcon(llActionables, tvActionables);
         tvActionables.setOnClickListener(this);
-        btnSave = (Button) createMeetingView.findViewById(R.id.btnSave);
-        btnReset = (Button) createMeetingView.findViewById(R.id.btnReset);
-        ibSplAttendee = (ImageButton) createMeetingView.findViewById(R.id.ibSplAttendee);
-        ibAttendee = (ImageButton) createMeetingView.findViewById(R.id.ibAttendee);
+        btnSave = createMeetingView.findViewById(R.id.btnSave);
+        btnReset = createMeetingView.findViewById(R.id.btnReset);
+        ibSplAttendee = createMeetingView.findViewById(R.id.ibSplAttendee);
+        ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
 
-        etCustomerComment = (EditText) createMeetingView.findViewById(R.id.etCustomerComment);
+        etCustomerComment = createMeetingView.findViewById(R.id.etCustomerComment);
         etCustomerComment.setFilters(
             new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
-        etMeetingDescription = (EditText) createMeetingView.findViewById(R.id.etMeetingDescription);
+        etMeetingDescription = createMeetingView.findViewById(R.id.etMeetingDescription);
         etMeetingDescription.setFilters(
             new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
-        etCategory = (EditText) createMeetingView.findViewById(R.id.etCategory);
+        etCategory = createMeetingView.findViewById(R.id.etCategory);
         etCategory.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
-        etSubCategory = (EditText) createMeetingView.findViewById(R.id.etSubCategory);
+        etSubCategory = createMeetingView.findViewById(R.id.etSubCategory);
         etSubCategory.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
-        etClientCode = (EditText) createMeetingView.findViewById(R.id.etClientCode);
-        etClientName = (EditText) createMeetingView.findViewById(R.id.etClientName);
-        etAmount = (EditText) createMeetingView.findViewById(R.id.etAmount);
-        etLocation = (EditText) createMeetingView.findViewById(R.id.etLocation);
-        etPinCode = (EditText) createMeetingView.findViewById(R.id.etPinCode);
+        etClientCode = createMeetingView.findViewById(R.id.etClientCode);
+        etClientName = createMeetingView.findViewById(R.id.etClientName);
+        etAmount = createMeetingView.findViewById(R.id.etAmount);
+        etLocation = createMeetingView.findViewById(R.id.etLocation);
+        etPinCode = createMeetingView.findViewById(R.id.etPinCode);
         etLocation.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
         llSubcategory = createMeetingView.findViewById(R.id.llSubcategory);
 
-        spCategory = (Spinner) createMeetingView.findViewById(R.id.spCategory);
-        spSubCategory = (Spinner) createMeetingView.findViewById(R.id.spSubCategory);
-        spProduct = (Spinner) createMeetingView.findViewById(R.id.spProduct);
-        spMeetingObjective = (Spinner) createMeetingView.findViewById(R.id.spMeetingObjective);
-        spMeetingDuration = (Spinner) createMeetingView.findViewById(R.id.spMeetingDuration);
-        spActivityType = (Spinner) createMeetingView.findViewById(R.id.spActivityType);
-        spMeetingReason = (Spinner) createMeetingView.findViewById(R.id.spMeetingReason);
-        spActionables = (Spinner) createMeetingView.findViewById(R.id.spActionables);
-        spBAClient = (Spinner) createMeetingView.findViewById(R.id.spBAClient);
-        spOutStaition = (Spinner) createMeetingView.findViewById(R.id.spOutStaition);
-        spMeetingLocation = (Spinner) createMeetingView.findViewById(R.id.spMeetingLocation);
-        spTravellingMode = (Spinner) createMeetingView.findViewById(R.id.spTravellingMode);
+        spCategory = createMeetingView.findViewById(R.id.spCategory);
+        spSubCategory = createMeetingView.findViewById(R.id.spSubCategory);
+        spProduct = createMeetingView.findViewById(R.id.spProduct);
+        spMeetingObjective = createMeetingView.findViewById(R.id.spMeetingObjective);
+        spMeetingDuration = createMeetingView.findViewById(R.id.spMeetingDuration);
+        spActivityType = createMeetingView.findViewById(R.id.spActivityType);
+        spMeetingReason = createMeetingView.findViewById(R.id.spMeetingReason);
+        spActionables = createMeetingView.findViewById(R.id.spActionables);
+        spBAClient = createMeetingView.findViewById(R.id.spBAClient);
+        spOutStaition = createMeetingView.findViewById(R.id.spOutStaition);
+        spMeetingLocation = createMeetingView.findViewById(R.id.spMeetingLocation);
+        spTravellingMode = createMeetingView.findViewById(R.id.spTravellingMode);
         rvProductList = (RecyclerView) createMeetingView.findViewById(R.id.rvProductList);
         rvTravellingList = (RecyclerView) createMeetingView.findViewById(R.id.rvTravellingList);
         productList = new ArrayList<>();
@@ -585,10 +582,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etClientName.getText().toString().trim())) {
                     tvClientNameError.setVisibility(View.GONE);
                 } else {
@@ -603,10 +602,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etClientCode.getText().toString().trim())) {
                     tvClientCodeError.setVisibility(View.GONE);
                 } else {
@@ -621,10 +622,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etSubCategory.getText().toString().trim())
                     && etSubCategory.getText().length() >= 10) {
                     tvSubCategoryCommentsError.setVisibility(View.GONE);
@@ -640,10 +643,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etLocation.getText().toString().trim())
                     && etLocation.getText().length() >= 20) {
                     tvLocationError.setVisibility(View.GONE);
@@ -659,10 +664,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etPinCode.getText().toString().trim())
                     && etPinCode.getText().length() >= 6) {
                     tvPinCodeError.setVisibility(View.GONE);
@@ -678,10 +685,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etMeetingDescription.getText().toString().trim())
                     && etMeetingDescription.getText().length() >= 50) {
                     tvMeetingDescriptionError.setVisibility(View.GONE);
@@ -697,10 +706,12 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etCategory.getText().toString().trim())
                     && etCategory.getText().length() >= 10) {
                     tvCategoryCommentsError.setVisibility(View.GONE);
@@ -712,7 +723,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         });
     }
 
-    @Override public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         int id = view.getId();
         try {
             if (id == R.id.ibAttendee) {
@@ -806,7 +818,27 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                     }
                 });
         } else {
-            createMeetingSave(meetingApptModel);
+            if (isPotentialPMSProduct && !isOnlyClient) {
+                MSFDialog.alertDialog(getActivity(), 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
+                    new MSFDialog.DialogListener() {
+                        @Override
+                        public void alertDialogAction(MSFDialog.Action action,
+                            Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                meetingApptModel.setIsPotentialPMSProduct(YES);
+                                createMeetingSave(meetingApptModel);
+                            } else {
+                                meetingApptModel.setIsPotentialPMSProduct(NO);
+                                createMeetingSave(meetingApptModel);
+                            }
+                        }
+                    });
+            } else {
+                meetingApptModel.setIsPotentialPMSProduct("");
+                createMeetingSave(meetingApptModel);
+            }
         }
     }
 
@@ -821,7 +853,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void getLatLong(MeetingApptModel meetingApptModel) {
         Handler mainHandler = new Handler(getMainActivity().getMainLooper());
         Runnable myRunnable = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (ActivityCompat.checkSelfPermission(getMainActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getMainActivity(),
@@ -831,7 +864,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 }
                 getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
                     getmLocationRequest(), new LocationCallback() {
-                        @Override public void onLocationResult(LocationResult locationResult) {
+                        @Override
+                        public void onLocationResult(LocationResult locationResult) {
                             mCurrentLocation = locationResult.getLastLocation();
                         }
                     }, Looper.myLooper());
@@ -1076,7 +1110,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -1112,19 +1147,22 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                             hideProgress();
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1166,7 +1204,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1176,7 +1215,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -1211,7 +1251,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -1231,6 +1272,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         tvName.setText(ClientDetail.getName());
                                         tvClientCode.setText(ClientDetail.getClientCode());
                                         tvBranchCode.setText(ClientDetail.getBranchCode());
+                                        String IsPotentialPMSProduct =
+                                            objDetail.isNull(ISPOTENTIALPMSPRODUCT)
+                                                ? "" : objDetail.getString(ISPOTENTIALPMSPRODUCT);
+                                        isPotentialPMSProduct = IsPotentialPMSProduct.isEmpty();
+                                        isOnlyClient = objDetail.getBoolean(ISONLYCLIENT);
                                     } else {
                                         hideProgress();
                                         String errorMsg =
@@ -1251,19 +1297,22 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                             hideProgress();
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1305,7 +1354,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1315,7 +1365,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -1350,7 +1401,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -1360,17 +1412,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                     if (status.equalsIgnoreCase("true")) {
                                         JSONObject Response_obj = response.getJSONObject(RESPONSE);
                                         String leadID =
-                                            (Response_obj.isNull(LEADID) || Response_obj.getString(
-                                                LEADID).equals("")) ? ""
+                                            Response_obj.isNull(LEADID) ? "0"
                                                 : Response_obj.getString(LEADID);
-                                        String branchcode = (Response_obj.isNull(BRANCHCODE)
-                                            || Response_obj.getString(BRANCHCODE).equals("")) ? ""
-                                            : Response_obj.getString(BRANCHCODE);
+                                        String branchcode = Response_obj.isNull(BRANCHCODE)
+                                            ? "" : Response_obj.getString(BRANCHCODE);
                                         JSONObject contact_obj =
                                             Response_obj.getJSONObject(CONTACT);
-                                        String Name =
-                                            (contact_obj.isNull(NAME) || contact_obj.getString(NAME)
-                                                .equals("")) ? "" : contact_obj.getString(NAME);
+                                        String Name = contact_obj.isNull(NAME) ?
+                                            "" : contact_obj.getString(NAME);
+                                        String IsPotentialPMSProduct =
+                                            Response_obj.isNull(ISPOTENTIALPMSPRODUCT)
+                                                ? ""
+                                                : Response_obj.getString(ISPOTENTIALPMSPRODUCT);
+                                        isPotentialPMSProduct = IsPotentialPMSProduct.isEmpty();
                                         JSONArray leadProductMapping =
                                             Response_obj.getJSONArray(LEADPRODUCTMAPPING);
                                         for (int leadProductMapping_i = 0;
@@ -1380,24 +1434,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                                 leadProductMapping.getJSONObject(
                                                     leadProductMapping_i);
                                             String clientCode =
-                                                (leadProductMappingObj.isNull(CLIENTCODE)
-                                                    || leadProductMappingObj.getString(CLIENTCODE)
-                                                    .equals("")) ? ""
+                                                leadProductMappingObj.isNull(CLIENTCODE)
+                                                    ? ""
                                                     : leadProductMappingObj.getString(CLIENTCODE);
                                             String StageName =
-                                                (leadProductMappingObj.isNull(STAGENAME)
-                                                    || leadProductMappingObj.getString(STAGENAME)
-                                                    .equals("")) ? ""
+                                                leadProductMappingObj.isNull(STAGENAME) ? ""
                                                     : leadProductMappingObj.getString(STAGENAME);
                                             String isDefault =
-                                                (leadProductMappingObj.isNull(IS_DEFAULT)
-                                                    || leadProductMappingObj.getString(IS_DEFAULT)
-                                                    .equals("")) ? ""
+                                                leadProductMappingObj.isNull(IS_DEFAULT)
+                                                    ? ""
                                                     : leadProductMappingObj.getString(IS_DEFAULT);
                                             String pendingDays =
-                                                (leadProductMappingObj.isNull(PENDING_DAYS)
-                                                    || leadProductMappingObj.getString(PENDING_DAYS)
-                                                    .equals("")) ? ""
+                                                leadProductMappingObj.isNull(PENDING_DAYS)
+                                                    ? ""
                                                     : leadProductMappingObj.getString(PENDING_DAYS);
                                             if (isDefault.equalsIgnoreCase("true")) {
                                                 tvClientCode.setText(clientCode);
@@ -1430,18 +1479,21 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1483,7 +1535,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1493,7 +1546,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -1531,7 +1585,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrCategory = new ArrayList<>();
@@ -1546,38 +1601,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
                                             String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
+                                                objDetail.isNull(LOOKUPID) ? ""
                                                     : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrCategory.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -1608,17 +1635,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1660,7 +1690,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1670,7 +1701,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -1707,7 +1739,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrMeetingObjective = new ArrayList<>();
@@ -1723,12 +1756,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
                                             String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
+                                                objDetail.isNull(LOOKUPID) ? ""
                                                     : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrMeetingObjective.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -1761,17 +1792,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1813,7 +1847,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1823,7 +1858,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -1861,7 +1897,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrSubCategory = new ArrayList<>();
@@ -1883,39 +1920,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrSubCategory.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -1947,17 +1955,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -1999,7 +2010,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2009,7 +2021,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2047,7 +2060,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrSelectProduct = new ArrayList<>();
@@ -2062,39 +2076,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrSelectProduct.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -2125,17 +2110,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2177,7 +2165,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2187,7 +2176,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2225,7 +2215,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrMeetingDuration = new ArrayList<>();
@@ -2240,39 +2231,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrMeetingDuration.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -2305,17 +2267,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2357,7 +2322,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2367,7 +2333,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2404,7 +2371,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrActivityType = new ArrayList<>();
@@ -2418,39 +2386,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrActivityType.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -2480,17 +2419,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2532,7 +2474,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2541,7 +2484,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2578,7 +2522,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -2589,39 +2534,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         JSONArray jsonArray = response.getJSONArray(RESPONSE);
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrMeetingReason.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -2653,17 +2569,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2705,7 +2624,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2715,7 +2635,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2753,7 +2674,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrBAClient = new ArrayList<>();
@@ -2768,39 +2690,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrBAClient.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -2831,17 +2724,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2883,7 +2779,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -2893,7 +2790,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -2931,7 +2829,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrOutStation = new ArrayList<>();
@@ -2947,38 +2846,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
                                             String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
+                                                objDetail.isNull(LOOKUPID) ? ""
                                                     : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
+
                                             arrOutStation.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -3010,17 +2882,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3062,7 +2937,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3072,7 +2948,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -3110,7 +2987,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrActionables = new ArrayList<>();
@@ -3126,38 +3004,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
                                             String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
+                                                objDetail.isNull(LOOKUPID) ? ""
                                                     : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            String parentId =
-                                                (objDetail.isNull(PARENTID) || objDetail.getString(
-                                                    PARENTID).equals("")) ? ""
-                                                    : objDetail.getString(PARENTID);
-                                            String lookUpTypeId = (objDetail.isNull(LOOKUPTYPEID)
-                                                || objDetail.getString(LOOKUPTYPEID).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPTYPEID);
-                                            String lookUpType = (objDetail.isNull(LOOKUPTYPE)
-                                                || objDetail.getString(LOOKUPTYPE).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPTYPE);
-                                            String businessUnitId =
-                                                (objDetail.isNull(BUSINESSUNITID)
-                                                    || objDetail.getString(BUSINESSUNITID)
-                                                    .equals("")) ? ""
-                                                    : objDetail.getString(BUSINESSUNITID);
-                                            String sequence =
-                                                (objDetail.isNull(SEQUENCE) || objDetail.getString(
-                                                    SEQUENCE).equals("")) ? ""
-                                                    : objDetail.getString(SEQUENCE);
-                                            String lookUpStatus = (objDetail.isNull(LOOKUPSTATUS)
-                                                || objDetail.getString(LOOKUPSTATUS).equals(""))
-                                                ? "" : objDetail.getString(LOOKUPSTATUS);
-                                            String active =
-                                                (objDetail.isNull(ACTIVE) || objDetail.getString(
-                                                    ACTIVE).equals("")) ? ""
-                                                    : objDetail.getString(ACTIVE);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
+
                                             arrActionables.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -3189,17 +3040,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3241,7 +3095,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3251,7 +3106,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -3281,7 +3137,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             Map inputMap = new HashMap<>();
             inputMap.put("LookupTypeId", MEETINGADDRESSID);
-            // as per mail 0 add default
             inputMap.put("BusinessUnitId", 0);
             inputMap.put("IgnoreBusinessUnit", true);
 
@@ -3291,7 +3146,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrMeetingLocation = new ArrayList<>();
@@ -3306,13 +3162,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrMeetingLocation.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -3345,17 +3198,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3397,7 +3253,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3407,7 +3264,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -3444,7 +3302,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -3476,17 +3335,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3528,7 +3390,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3538,7 +3401,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -3567,7 +3431,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             Map inputMap = new HashMap<>();
             inputMap.put("LookupTypeId", TRAVELLINGMODEID);
-            // as per mail 0 add default
             inputMap.put("BusinessUnitId", 0);
             inputMap.put("IgnoreBusinessUnit", true);
 
@@ -3577,7 +3440,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
                     new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             arrTravellingMode = new ArrayList<>();
@@ -3592,13 +3456,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
+                                            String lookUpId = objDetail.isNull(LOOKUPID) ? ""
+                                                : objDetail.getString(LOOKUPID);
+                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
+                                                ? "" : objDetail.getString(LOOKUPNAME);
                                             arrTravellingMode.add(
                                                 new RowData(i + 1, lookUpId, lookUpName));
                                         }
@@ -3631,17 +3492,20 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3683,7 +3547,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -3693,7 +3558,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -3727,10 +3593,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         dialog.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        dpFromDate = (DatePicker) dialog.findViewById(R.id.datePickerFromDate);
+        dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
         dpFromDate.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
-        close = (ImageView) dialog.findViewById(R.id.ibtnClose);
-        btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        close = dialog.findViewById(R.id.ibtnClose);
+        btnSubmit = dialog.findViewById(R.id.btnSubmit);
         final TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
         timePicker.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
 
@@ -3743,7 +3609,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             String[] dateSplit = mainFromDate.split("-");
             dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
                 Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                    @Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
                         int dayOfMonth) {
                         mainFromDate =
                             year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
@@ -3755,7 +3622,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                 today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
-                    @Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
                         int dayOfMonth) {
                         mainFromDate =
                             year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
@@ -3775,23 +3643,25 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         }
 
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override public void onTimeChanged(TimePicker arg0, int arg1, int arg2) {
+            @Override
+            public void onTimeChanged(TimePicker arg0, int arg1, int arg2) {
                 hour = arg1;
                 minute = arg2;
             }
         });
 
         close.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 try {
                     fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
-                    toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
                     if (mainFromDate != null) {
                         fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
                         fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy");
@@ -3836,7 +3706,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         dialogAddedSplAttendee.getWindow()
             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedSplAttendee.setContentView(R.layout.dialog_addedd_spl_attendee_list);
-        TextView tvEmpty = (TextView) dialogAddedSplAttendee.findViewById(R.id.tvEmpty);
+        TextView tvEmpty = dialogAddedSplAttendee.findViewById(R.id.tvEmpty);
         dialogAddedSplAttendee.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAddedSplAttendee.setCanceledOnTouchOutside(true);
@@ -3854,7 +3724,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAddedAttendee.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedAttendee.setContentView(R.layout.dialog_addedd_attendee_list);
-        TextView tvEmpty = (TextView) dialogAddedAttendee.findViewById(R.id.tvEmpty);
+        TextView tvEmpty = dialogAddedAttendee.findViewById(R.id.tvEmpty);
         dialogAddedAttendee.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAddedAttendee.setCanceledOnTouchOutside(true);
@@ -3874,16 +3744,15 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         dialogAttendeeList.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAttendeeList.setCanceledOnTouchOutside(true);
-        ListView lvAttendee = (ListView) dialogAttendeeList.findViewById(R.id.lvAttendee);
         final DelayAutoCompleteTextView etSearchAttendee =
-            (DelayAutoCompleteTextView) dialogAttendeeList.findViewById(R.id.etSearchAttendee);
+            dialogAttendeeList.findViewById(R.id.etSearchAttendee);
         etSearchAttendee.setImeOptions(EditorInfo.IME_ACTION_DONE);
         etSearchAttendee.setOnEditorActionListener(this);
         etSearchAttendee.setThreshold(3);
         attendeeAdapter = new AttendeeAdapter(getContext());
         etSearchAttendee.setAdapter(attendeeAdapter);
         etSearchAttendee.setLoadingIndicator(
-            (ProgressBar) dialogAttendeeList.findViewById(R.id.pbLoadingIndicator));
+            dialogAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -3922,17 +3791,15 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         dialogSplAttendeeList.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogSplAttendeeList.setCanceledOnTouchOutside(true);
-        ListView lvAttendee = (ListView) dialogSplAttendeeList.findViewById(R.id.lvAttendee);
-
         final DelayAutoCompleteTextView etSearchAttendee =
-            (DelayAutoCompleteTextView) dialogSplAttendeeList.findViewById(R.id.etSearchAttendee);
+            dialogSplAttendeeList.findViewById(R.id.etSearchAttendee);
         etSearchAttendee.setImeOptions(EditorInfo.IME_ACTION_DONE);
         etSearchAttendee.setOnEditorActionListener(this);
         etSearchAttendee.setThreshold(3);
         splAttendeeAdapter = new SplAttendeeAdapter(getContext());
         etSearchAttendee.setAdapter(splAttendeeAdapter);
         etSearchAttendee.setLoadingIndicator(
-            (ProgressBar) dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
+            dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -3972,7 +3839,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(),
                     requestJson, new JsonHttpResponseHandler() {
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
@@ -3984,7 +3852,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                             getResources().getString(R.string.motilal_oswal),
                                             CREATE_MEETING, "OK", true,
                                             new MSFDialog.DialogListener() {
-                                                @Override public void alertDialogAction(
+                                                @Override
+                                                public void alertDialogAction(
                                                     MSFDialog.Action action, Object... data) {
                                                     if (action == MSFDialog.Action.OK) {
                                                         Bundle bundle = new Bundle();
@@ -4011,19 +3880,22 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
                             hideProgress();
                         }
 
-                        @Override public void onSuccess(int statusCode,
+                        @Override
+                        public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
                             hideProgress();
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -4065,7 +3937,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                             }
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
                             JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
@@ -4075,7 +3948,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                 SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
 
-                        @Override public void onFailure(int statusCode,
+                        @Override
+                        public void onFailure(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, String responseString,
                             Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
@@ -4095,7 +3969,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    @Override public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         hideKeyboard(textView);
         return false;
     }
@@ -4104,7 +3979,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         Handler mainHandler = new Handler(getMainActivity().getMainLooper());
 
         Runnable myRunnable = new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (ActivityCompat.checkSelfPermission(getMainActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getMainActivity(),
@@ -4114,7 +3990,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 } else {
                     getFusedLocationProviderClient(getMainActivity()).requestLocationUpdates(
                         getmLocationRequest(), new LocationCallback() {
-                            @Override public void onLocationResult(LocationResult locationResult) {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
                                 mCurrentLocation = locationResult.getLastLocation();
                             }
                         }, Looper.myLooper());
@@ -4139,19 +4016,23 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             notifyDataSetChanged();
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return resultList.size();
         }
 
-        @Override public EmployeeModel getItem(int index) {
+        @Override
+        public EmployeeModel getItem(int index) {
             return resultList.get(index);
         }
 
-        @Override public long getItemId(int position) {
+        @Override
+        public long getItemId(int position) {
             return position;
         }
 
-        @Override public View getView(int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
             final HolderView holderView;
             final EmployeeModel clientModel = resultList.get(position);
             if (convertView == null) {
@@ -4178,9 +4059,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             return convertView;
         }
 
-        @Override public Filter getFilter() {
+        @Override
+        public Filter getFilter() {
             return new Filter() {
-                @Override protected FilterResults performFiltering(CharSequence constraint) {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
                     final FilterResults filterResults = new FilterResults();
                     ArrayList<EmployeeModel> modelList = new ArrayList<>();
                     try {
@@ -4273,8 +4156,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             LinearLayout linaerLayout;
 
             public HolderView(View parent) {
-                tvAttendeeName = (TextView) parent.findViewById(R.id.tvAttendeeName);
-                linaerLayout = (LinearLayout) parent.findViewById(R.id.linaerLayout);
+                tvAttendeeName = parent.findViewById(R.id.tvAttendeeName);
+                linaerLayout = parent.findViewById(R.id.linaerLayout);
             }
         }
     }
@@ -4289,19 +4172,23 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             mContext = c;
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return attendeeModelList.size();
         }
 
-        @Override public SplAttendeeModel getItem(int position) {
+        @Override
+        public SplAttendeeModel getItem(int position) {
             return attendeeModelList.get(position);
         }
 
-        @Override public long getItemId(int position) {
+        @Override
+        public long getItemId(int position) {
             return position;
         }
 
-        @Override public View getView(final int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
             final SplAttendeeAdapter.HolderView holderView;
             final SplAttendeeModel clientModel = attendeeModelList.get(position);
             if (convertView == null) {
@@ -4328,9 +4215,11 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             return convertView;
         }
 
-        @Override public Filter getFilter() {
+        @Override
+        public Filter getFilter() {
             return new Filter() {
-                @Override protected FilterResults performFiltering(CharSequence constraint) {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
                     final FilterResults filterResults = new FilterResults();
                     ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
                     try {
@@ -4418,8 +4307,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             LinearLayout linaerLayout;
 
             public HolderView(View parent) {
-                tvAttendeeName = (TextView) parent.findViewById(R.id.tvAttendeeName);
-                linaerLayout = (LinearLayout) parent.findViewById(R.id.linaerLayout);
+                tvAttendeeName = parent.findViewById(R.id.tvAttendeeName);
+                linaerLayout = parent.findViewById(R.id.linaerLayout);
             }
         }
     }
@@ -4436,30 +4325,35 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             this.attendeeModelList = attendeeModelList;
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return attendeeModelList.size();
         }
 
-        @Override public Object getItem(int position) {
+        @Override
+        public Object getItem(int position) {
             return attendeeModelList.get(position);
         }
 
-        @Override public long getItemId(int position) {
+        @Override
+        public long getItemId(int position) {
             return position;
         }
 
-        @Override public View getView(final int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
             Holder holder = new Holder();
             view = inflater.inflate(R.layout.item_list_added_attendee, parent, false);
             AddedAttendeeModel attendeeModel = attendeeModelList.get(position);
-            holder.tvAttendeeName = (TextView) view.findViewById(R.id.tvAttendeeName);
-            holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+            holder.tvAttendeeName = view.findViewById(R.id.tvAttendeeName);
+            holder.ivDelete = view.findViewById(R.id.ivDelete);
 
             holder.tvAttendeeName.setText(
                 attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
             holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     addedAttendeeCount--;
                     setCount(addedAttendeeCount);
                     attendeeModelList.remove(position);
@@ -4503,32 +4397,37 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             this.attendeeModelList = attendeeModelList;
         }
 
-        @Override public int getCount() {
+        @Override
+        public int getCount() {
             return attendeeModelList.size();
         }
 
-        @Override public Object getItem(int position) {
+        @Override
+        public Object getItem(int position) {
             return attendeeModelList.get(position);
         }
 
-        @Override public long getItemId(int position) {
+        @Override
+        public long getItemId(int position) {
             return position;
         }
 
-        @Override public View getView(final int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
             Holder holder = new Holder();
             view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false);
 
             AddedSplAttendeeModel attendeeModel = attendeeModelList.get(position);
 
-            holder.tvAttendeeName = (TextView) view.findViewById(R.id.tvAttendeeName);
-            holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
+            holder.tvAttendeeName = view.findViewById(R.id.tvAttendeeName);
+            holder.ivDelete = view.findViewById(R.id.ivDelete);
 
             holder.tvAttendeeName.setText(
                 attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
             holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
+                @Override
+                public void onClick(View view) {
                     addedSplAttendeeCount--;
                     setCountForSpecial(addedSplAttendeeCount);
                     attendeeModelList.remove(position);

@@ -22,7 +22,9 @@ public interface MOSLConstants extends LabelConfig {
     int LEAD_DETAIL = 0;
     int LEAD_ACTIVITY = 1;
     int LEAD_PROFILING = 2;
-
+    String YES = "YES";
+    String NO = "NO";
+    String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in IP product?";
     String SOURCE = "Source";
     //DRAWER MENU
     int MOSL_MENU_DASHBOARD = 0;
@@ -330,7 +332,8 @@ public interface MOSLConstants extends LabelConfig {
     String REFEREEMOBILE = "RefereeMobile";
 
     String COMMENTS = "Comments";
-
+    String ISPOTENTIALPMSPRODUCT = "IsPotentialPMSProduct";
+    String ISONLYCLIENT = "IsOnlyClient";
     //Search
     String DATA = "Data";
     String METADATA = "MetaData";

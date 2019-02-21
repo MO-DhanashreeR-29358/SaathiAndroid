@@ -2,7 +2,6 @@ package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -86,6 +85,7 @@ public class MeetingApptModel implements Serializable {
     private String geoLongitude;
     private String geoLatitude;
     private String pincode;
+    private String isPotentialPMSProduct;
 
     public MeetingApptModel setProductList(List<CreateMeetingProductModel> productList) {
         this.productList = productList;
@@ -220,6 +220,13 @@ public class MeetingApptModel implements Serializable {
         this.leadId = leadId;
     }
 
+    public String getIsPotentialPMSProduct() {
+        return isPotentialPMSProduct;
+    }
+
+    public void setIsPotentialPMSProduct(String isPotentialPMSProduct) {
+        this.isPotentialPMSProduct = isPotentialPMSProduct;
+    }
 
     public List<AddedSplAttendeeModel> getSplMeetingAttendee() {
         return splMeetingAttendee;
@@ -396,17 +403,7 @@ public class MeetingApptModel implements Serializable {
      * @return
      */
     public String getJson() {
-         /*    inputMap.put("LeadId", leadId);
-            inputMap.put("MeetingDate", fromPostingDate);
-            inputMap.put("ActivityTypeID", activityTypeCodeStr);
-            inputMap.put("ProductTypeID", productCodeStr);
-            inputMap.put("MeetingReasonID", meetingDurationCodeStr);
-            inputMap.put("MeetingDurationID", meetingDurationCodeStr);
-            inputMap.put("ActionableID", actionablesCodeStr);
-            inputMap.put("MeetingDescription", etMeetingDescription.getText().toString().trim());
-            inputMap.put("CustomerRemark", etCustomerComment.getText().toString().trim());
-            inputMap.put("CategoryDescription", etCategory.getText().toString().trim());
-            inputMap.put("SubCategoryDescription", etSubCategory.getText().toString().trim());*/
+
         String json = "{";
 
         if (meetingType.equalsIgnoreCase(MEETING_TYPE_MEETING)) {
@@ -454,6 +451,7 @@ public class MeetingApptModel implements Serializable {
             json += ",\"GeoArea\":\"" + getGeoArea() + "\"";
             json += ",\"GeoLongitude\":\"" + getGeoLatitude() + "\"";
             json += ",\"GeoLatitude\":\"" + getGeoLatitude() + "\"";
+            json += ",\"IsPotentialPMSProduct\":\"" + getIsPotentialPMSProduct() + "\"";
             json += ",\"Pincode\":\"" + getPincode() + "\"";
         }
         //common part
@@ -481,15 +479,15 @@ public class MeetingApptModel implements Serializable {
     }
 
     private String getTravellingJson() {
-//        String json = "[";
         String json = "";
         for (CreateMeetingTravellingModel model : travellingList) {
             String meetingJson = model.getTravellingId();
             json += meetingJson + ",";
         }
 
-        json = json.substring(0, json.length() - 1); //remove lash comma
-//        json += "]";
+        if (!json.isEmpty()) {
+            json = json.substring(0, json.length() - 1); //remove lash comma
+        }
         json += "";
         return json;
     }
