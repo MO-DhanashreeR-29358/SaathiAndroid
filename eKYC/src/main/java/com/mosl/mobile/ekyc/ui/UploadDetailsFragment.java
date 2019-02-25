@@ -2,7 +2,6 @@ package com.mosl.mobile.ekyc.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,9 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -39,19 +35,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Base64OutputStream;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.webkit.ConsoleMessage;
-import android.webkit.PermissionRequest;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -62,7 +52,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.ChatAdapter;
@@ -81,10 +70,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.utils.DiskCacheUtils;
 import com.nostra13.universalimageloader.utils.MemoryCacheUtils;
 import com.viewpagerindicator.TabPageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
+import id.zelory.compressor.Compressor;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,13 +87,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
-import id.zelory.compressor.Compressor;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static android.app.Activity.RESULT_OK;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.downloadPDF;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.getDeviceID;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isNomineeTabApplicable;
@@ -116,8 +101,33 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.setListViewHeightBasedOnChi
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAadharNo;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBaFranchiseeCode;
+import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDematTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getDownloadPdfUrl;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEsignTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsCVLVerified;
+import static com.mosl.mobile.ekyc.model.CommonModel.getIsEquitySelected;
 import static com.mosl.mobile.ekyc.model.CommonModel.getPANName;
-import static com.mosl.mobile.ekyc.model.CommonModel.*;
+import static com.mosl.mobile.ekyc.model.CommonModel.getPersonalTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getTokenKey;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getUserType;
+import static com.mosl.mobile.ekyc.model.CommonModel.isDirectProspect;
+import static com.mosl.mobile.ekyc.model.CommonModel.isIPVDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineCliencodeGenrated;
+import static com.mosl.mobile.ekyc.model.CommonModel.setDownloadPdfUrl;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsMfIpvDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsOffline;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setIsVerificationDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.setTokenKey;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
 /**
@@ -1431,6 +1441,7 @@ public class UploadDetailsFragment extends UploadFragment implements MOSLConstan
     public void initSignalR() {
         if (MOSLCommon.isNetworkEnabled(uploadDetailContext)) {
             customProgress.setVisibility(View.VISIBLE);
+            rlVerifyProof.setVisibility(View.GONE);
             Map inputMap = new HashMap<>();
             inputMap.put("UserID", getUserID());
             final String requestFrom = getAppType().equals(CRM) || (getAppType().equals(PP) && !getUserType().equalsIgnoreCase(IFAUSER)) ? "PARTNER" : "DIRECT";
@@ -1464,6 +1475,7 @@ public class UploadDetailsFragment extends UploadFragment implements MOSLConstan
                         customProgress.setVisibility(View.GONE);
                         if (!isBlank(stataus) && stataus.equals("0")) {
                             commonMsgDialog(mContext, message, false, "");
+                            rlVerifyProof.setVisibility(View.VISIBLE);
                         } else if (stataus.equals("1")) {
                             verifierName = userName;
                             MOSLCommon.showToastMsg(mContext, userName + " is available. Connecting to verifier, please wait.....");
@@ -1498,7 +1510,7 @@ public class UploadDetailsFragment extends UploadFragment implements MOSLConstan
                                         }
                                     });
                             customDialog.show();
-//                            commonMsgDialog(mContext, getResources().getString(R.string.offline_verification_msg), false, "");
+                            rlVerifyProof.setVisibility(View.VISIBLE);
                         }
                         /*if (isBlank(adminId)) {
                             customProgress.setVisibility(View.GONE);
@@ -1526,7 +1538,7 @@ public class UploadDetailsFragment extends UploadFragment implements MOSLConstan
                         customProgress.setVisibility(View.GONE);
                         ex.printStackTrace();
                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                        MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", "Some error occurred, please retry", "OK", true, null);
+                        rlVerifyProof.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -1535,6 +1547,7 @@ public class UploadDetailsFragment extends UploadFragment implements MOSLConstan
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     customProgress.setVisibility(View.GONE);
                     commonMsgDialog(getActivity(), SOME_SERVER_ERROR_OCCURRED, false, "");
+                    rlVerifyProof.setVisibility(View.VISIBLE);
                 }
 
                 @Override
