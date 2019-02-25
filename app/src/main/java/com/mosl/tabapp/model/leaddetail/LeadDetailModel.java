@@ -2,7 +2,6 @@ package com.mosl.tabapp.model.leaddetail;
 
 import com.mosl.tabapp.model.AddressDetailModel;
 import com.mosl.tabapp.model.ContactDetailModel;
-
 import java.util.List;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -52,6 +51,7 @@ public class LeadDetailModel {
     private String alternateMobileNo;
     private String leadSourceDetails;
     private boolean sameAsAbove;
+    private String isPotentialPMSProduct;
 
     public String getAlternateMobileNo() {
         return alternateMobileNo;
@@ -318,10 +318,19 @@ public class LeadDetailModel {
         return this;
     }
 
+    public String getIsPotentialPMSProduct() {
+        return isPotentialPMSProduct;
+    }
+
+    public void setIsPotentialPMSProduct(String isPotentialPMSProduct) {
+        this.isPotentialPMSProduct = isPotentialPMSProduct;
+    }
+
     public String getJson() {
         String json = "{";
         json += "\"LeadID\":" + getLeadID();
         json += ",\"BusinessUnitID\":" + getBusinessUnitID();
+        json += ",\"IsPotentialPMSProduct\":\"" + getIsPotentialPMSProduct() + "\"";
         if (!isBlank(getLeadCategoryID())) {
             json += ",\"LeadCategoryID\":" + getLeadCategoryID();
         }

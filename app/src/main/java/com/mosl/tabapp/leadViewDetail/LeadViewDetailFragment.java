@@ -149,7 +149,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private ArrayList<ContactDetailModel> contactDetailList = new ArrayList<>();
     private ArrayList<AddressDetailModel> addressDetailList = new ArrayList<>();
     private ListView lvAddProduct;
-    private ArrayList<LeadDetailAddProductModel> leadDetailAddProductList;
+    private ArrayList<LeadDetailAddProductModel> leadDetailAddProductList = new ArrayList<>();
     private LeadDetailAddProductAdapter leadDetailAddProductAdapter;
     private String specialistAdd = "";
     private String specialistEdit = "";
@@ -430,29 +430,30 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    private void setEnableDisable(boolean flag) {
-        etLeadName.setEnabled(flag);
-        etPanNumber.setEnabled(flag);
-        etAadharNumber.setEnabled(flag);
-        etContactPerson.setEnabled(flag);
-        etLandlineNumber.setEnabled(flag);
-        etRefereeCode.setEnabled(flag);
-        etRefereeName.setEnabled(flag);
-        etLandlineNumber.setEnabled(flag);
-        etDob.setEnabled(flag);
-        etAnniversary.setEnabled(flag);
-        etAlternateMobileNumber.setEnabled(flag);
-        etAlternateEmail.setEnabled(flag);
-        etEmail.setEnabled(flag);
-        etContactPerson.setEnabled(flag);
-        etComments.setEnabled(flag);
-        btnSubmit.setEnabled(flag);
-        spProfile.setEnabled(flag);
-        spProfession.setEnabled(flag);
-        cbSameAs.setEnabled(flag);
-        cbPrimaryAddress.setEnabled(flag);
-        cbOffPrimaryAddress.setEnabled(flag);
-        if (flag) {
+    private void setEnableDisable(boolean status) {
+        etLeadName.setEnabled(status);
+        etPanNumber.setEnabled(status);
+        etAadharNumber.setEnabled(status);
+        etContactPerson.setEnabled(status);
+        etLandlineNumber.setEnabled(status);
+        etRefereeCode.setEnabled(status);
+        etRefereeName.setEnabled(status);
+        etLandlineNumber.setEnabled(status);
+        etDob.setEnabled(status);
+        etAnniversary.setEnabled(status);
+        etAlternateMobileNumber.setEnabled(status);
+        etAlternateEmail.setEnabled(status);
+        etEmail.setEnabled(status);
+        etContactPerson.setEnabled(status);
+        etComments.setEnabled(status);
+        btnSubmit.setEnabled(status);
+        spProfile.setEnabled(status);
+        spProfession.setEnabled(status);
+        cbSameAs.setEnabled(status);
+        cbPrimaryAddress.setEnabled(status);
+        cbOffPrimaryAddress.setEnabled(status);
+        etPmsProduct.setEnabled(status);
+        if (status) {
             if (cbPrimaryAddress.isChecked()) {
                 enableField(llResAdd);
                 enableField(llOffAdd);
@@ -473,9 +474,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         Object cObj = modal.getControlObject();
                         if (cObj != null) {
                             if (cObj instanceof EditText) {
-                                ((EditText) cObj).setEnabled(flag);
+                                ((EditText) cObj).setEnabled(status);
                             } else if (cObj instanceof Spinner) {
-                                ((Spinner) cObj).setEnabled(flag);
+                                ((Spinner) cObj).setEnabled(status);
                             }
                         }
                     }
@@ -2403,9 +2404,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             try {
 
                                 if (statusCode == 200) {
-                                    leadDetailAddProductList = new ArrayList<>();
                                     String status = response.getString(STATUS);
                                     if (status.equalsIgnoreCase("true")) {
+                                        leadDetailAddProductList.clear();
                                         hideProgress();
                                         JSONObject objDetail = response.getJSONObject(RESPONSE);
 
@@ -4070,7 +4071,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     leadDetailAddProductAdapter = new LeadDetailAddProductAdapter(getMainActivity(),
                         leadDetailAddProductList);
                 }
-                if (leadDetailAddProductAdapter.getAvailableAddnDoc(interestedInKey)) {
+                if (leadDetailAddProductAdapter.checkProduct(interestedInKey)) {
                     alertDialog(getMainActivity(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         interestedInDisplayText + " is already selected", "OK", true, null);
@@ -4147,7 +4148,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             cz.msebera.android.httpclient.Header[] headers,
                             JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
                             try {
                                 if (statusCode == 200) {
                                     String status = response.getString(STATUS);
@@ -4155,8 +4155,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                         hideProgress();
 
                                         if (mLeadId.equalsIgnoreCase("0")) {
+                                            JSONArray jsonArray =
+                                                response.getJSONArray(RESPONSE);
+
                                             JSONObject Response_obj =
-                                                response.getJSONObject(RESPONSE);
+                                                jsonArray.getJSONObject(0);
                                             final String LeadId =
                                                 (Response_obj.isNull(LEADID)
                                                     || Response_obj.getString(LEADID)
@@ -4194,6 +4197,152 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                     }
                                                 });
                                         } else {
+                                            JSONArray jsonArray =
+                                                response.getJSONArray(RESPONSE);
+                                            if (jsonArray.length() != 0) {
+                                                for (int i = 0; i < jsonArray.length(); i++) {
+                                                    JSONObject objDetail1 =
+                                                        jsonArray.getJSONObject(i);
+                                                    String leadProductMappingId =
+                                                        objDetail1.isNull("LeadProductMappingID")
+                                                            ? "" : objDetail1.getString(
+                                                            "LeadProductMappingID");
+                                                    String interestedIn =
+                                                        objDetail1.isNull("InterestedIn")
+                                                            ? ""
+                                                            : objDetail1.getString("InterestedIn");
+                                                    String productName =
+                                                        objDetail1.isNull("ProductName")
+                                                            ? ""
+                                                            : objDetail1.getString("ProductName");
+
+                                                    String primaryRm =
+                                                        objDetail1.isNull("PrimaryRM_Name")
+                                                            ? ""
+                                                            : objDetail1.getString(
+                                                                "PrimaryRM_Name");
+
+                                                    String clientCode =
+                                                        objDetail1.isNull("ClientCode")
+                                                            ? ""
+                                                            : objDetail1.getString("ClientCode");
+                                                    String assignedBy =
+                                                        objDetail1.isNull("AssignedBy")
+                                                            ? ""
+                                                            : objDetail1.getString("AssignedBy");
+                                                    String assignedByDate =
+                                                        objDetail1.isNull("AssignedByDate")
+                                                            ? "" : objDetail1.getString(
+                                                            "AssignedByDate");
+                                                    String stageId = objDetail1.isNull("StageID")
+                                                        ? "" : objDetail1.getString("StageID");
+                                                    String stageName =
+                                                        objDetail1.isNull("StageName")
+                                                            ? ""
+                                                            : objDetail1.getString("StageName");
+                                                    String statusId =
+                                                        objDetail1.isNull("StatusID") ? ""
+                                                            : objDetail1.getString("StatusID");
+                                                    String statusName =
+                                                        objDetail1.isNull("StatusName")
+                                                            ? ""
+                                                            : objDetail1.getString("StatusName");
+
+                                                    String productSpecialist =
+                                                        objDetail1.isNull("ProductSpecialist_Name")
+                                                            ? "" : objDetail1.getString(
+                                                            "ProductSpecialist_Name");
+                                                    boolean isDefault =
+                                                        objDetail1.getBoolean("IsDefault");
+                                                    boolean IsCrossSellingProduct =
+                                                        objDetail1.getBoolean(
+                                                            "IsCrossSellingProduct");
+                                                    String IsPotentialPMSProduct =
+                                                        objDetail1.isNull(ISPOTENTIALPMSPRODUCT)
+                                                            ? "" : objDetail1.getString(
+                                                            ISPOTENTIALPMSPRODUCT);
+                                                    isPotentialPMSProduct =
+                                                        IsPotentialPMSProduct.isEmpty();
+                                                    etPmsProduct.setText(IsPotentialPMSProduct);
+                                                    List<CrossSellingProductsModel>
+                                                        crossSellingProductsModelList =
+                                                        new ArrayList<CrossSellingProductsModel>();
+                                                    JSONArray jsonArrayCrossSellingProducts =
+                                                        objDetail1.getJSONArray(
+                                                            "CrossSellingProducts");
+                                                    if (jsonArrayCrossSellingProducts.length()
+                                                        != 0) {
+                                                        for (int k = 0; k
+                                                            < jsonArrayCrossSellingProducts.length();
+                                                            k++) {
+                                                            JSONObject
+                                                                objDetail1CrossSellingProducts =
+                                                                jsonArrayCrossSellingProducts.getJSONObject(
+                                                                    k);
+                                                            String LeadCrossSellingProductId =
+                                                                objDetail1CrossSellingProducts.isNull(
+                                                                    "LeadCrossSellingProductId")
+                                                                    ? ""
+                                                                    : objDetail1CrossSellingProducts
+                                                                        .getString(
+                                                                            "LeadCrossSellingProductId");
+                                                            String CrossSellingProductId =
+                                                                objDetail1CrossSellingProducts.isNull(
+                                                                    "CrossSellingProductId") ? ""
+                                                                    : objDetail1CrossSellingProducts
+                                                                        .getString(
+                                                                            "CrossSellingProductId");
+                                                            String CrossSellingStatusId =
+                                                                objDetail1CrossSellingProducts.isNull(
+                                                                    "CrossSellingStatusId") ? ""
+                                                                    : objDetail1CrossSellingProducts
+                                                                        .getString(
+                                                                            "CrossSellingStatusId");
+                                                            String CrossSellingProductName =
+                                                                objDetail1CrossSellingProducts.isNull(
+                                                                    "CrossSellingProductName")
+                                                                    ? ""
+                                                                    : objDetail1CrossSellingProducts
+                                                                        .getString(
+                                                                            "CrossSellingProductName");
+                                                            String CrossSellingStatusName =
+                                                                objDetail1CrossSellingProducts.isNull(
+                                                                    "CrossSellingStatusName")
+                                                                    ? ""
+                                                                    : objDetail1CrossSellingProducts
+                                                                        .getString(
+                                                                            "CrossSellingStatusName");
+                                                            crossSellingProductsModelList.add(
+                                                                new CrossSellingProductsModel(
+                                                                    LeadCrossSellingProductId,
+                                                                    CrossSellingProductId,
+                                                                    CrossSellingStatusId,
+                                                                    CrossSellingProductName,
+                                                                    CrossSellingStatusName));
+                                                        }
+                                                    }
+
+                                                    leadDetailAddProductList.add(
+                                                        new LeadDetailAddProductModel(
+                                                            stageId,
+                                                            stageName, statusId, statusName,
+                                                            interestedIn, productName, primaryRm,
+                                                            productSpecialist, assignedBy,
+                                                            assignedByDate, clientCode,
+                                                            leadProductMappingId, isDefault,
+                                                            crossSellingProductsModelList,
+                                                            IsCrossSellingProduct
+                                                        ));
+                                                }
+                                                leadDetailAddProductAdapter =
+                                                    new LeadDetailAddProductAdapter(
+                                                        getMainActivity(),
+                                                        leadDetailAddProductList);
+                                                lvAddProduct.setAdapter(
+                                                    leadDetailAddProductAdapter);
+                                                setListViewHeightBasedOnChildrenDetail(
+                                                    lvAddProduct);
+                                            }
                                             alertDialog(getActivity(), 0,
                                                 getResources().getString(
                                                     R.string.motilal_oswal),
@@ -4205,7 +4354,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                         Object... data) {
                                                         if (action
                                                             == MSFDialog.Action.OK) {
-                                                            leadSection();
+
                                                         }
                                                     }
                                                 });
@@ -4718,6 +4867,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         leadDetailModel.setLandLineNo(etLandlineNumber.getText().toString().trim());
         leadDetailModel.setAadharNum(etAadharNumber.getText().toString().trim());
         leadDetailModel.setPanNum(etPanNumber.getText().toString().trim());
+        leadDetailModel.setIsPotentialPMSProduct(
+            etPmsProduct.getText().toString().trim().toUpperCase());
         try {
             if (!isBlank(etDob.getText().toString())) {
                 String strDob = etDob.getText().toString().trim();
@@ -5024,7 +5175,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             try {
 
                                 if (statusCode == 200) {
-                                    leadDetailAddProductList = new ArrayList<>();
                                     String status = response.getString(STATUS);
                                     if (status.equalsIgnoreCase("true")) {
                                         JSONObject objDetail = response.getJSONObject(RESPONSE);
@@ -6003,6 +6153,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return i;
         }
 
+        public void addProduct(LeadDetailAddProductModel addProduct) {
+            if (this.leadDetailAddProductModelList == null) {
+                this.leadDetailAddProductModelList = new ArrayList<>();
+            }
+
+            this.leadDetailAddProductModelList.add(addProduct);
+            notifyDataSetChanged();
+            setListViewHeightBasedOnChildrenDetail(
+                lvAddProduct);
+        }
+
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             final LeadDetailAddProductModel leadDetailAddProductModel =
@@ -6834,7 +6995,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return null;
         }
 
-        public boolean getAvailableAddnDoc(String productName) {
+        public boolean checkProduct(String productName) {
             for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
                 if (model.getInterestedIn().equalsIgnoreCase(productName)) {
                     return true;
@@ -8327,6 +8488,166 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                             if (isLowMargin) {
                                                 dashbordFragment();
                                             } else {
+                                                JSONArray jsonArray =
+                                                    response.getJSONArray(RESPONSE);
+                                                if (jsonArray.length() != 0) {
+                                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                                        JSONObject objDetail1 =
+                                                            jsonArray.getJSONObject(i);
+                                                        String leadProductMappingId =
+                                                            objDetail1.isNull(
+                                                                "LeadProductMappingID")
+                                                                ? "" : objDetail1.getString(
+                                                                "LeadProductMappingID");
+                                                        String interestedIn =
+                                                            objDetail1.isNull("InterestedIn")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "InterestedIn");
+                                                        String productName =
+                                                            objDetail1.isNull("ProductName")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "ProductName");
+
+                                                        String primaryRm =
+                                                            objDetail1.isNull("PrimaryRM_Name")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "PrimaryRM_Name");
+
+                                                        String clientCode =
+                                                            objDetail1.isNull("ClientCode")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "ClientCode");
+                                                        String assignedBy =
+                                                            objDetail1.isNull("AssignedBy")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "AssignedBy");
+                                                        String assignedByDate =
+                                                            objDetail1.isNull("AssignedByDate")
+                                                                ? "" : objDetail1.getString(
+                                                                "AssignedByDate");
+                                                        String stageId =
+                                                            objDetail1.isNull("StageID")
+                                                                ? ""
+                                                                : objDetail1.getString("StageID");
+                                                        String stageName =
+                                                            objDetail1.isNull("StageName")
+                                                                ? ""
+                                                                : objDetail1.getString("StageName");
+                                                        String statusId =
+                                                            objDetail1.isNull("StatusID") ? ""
+                                                                : objDetail1.getString("StatusID");
+                                                        String statusName =
+                                                            objDetail1.isNull("StatusName")
+                                                                ? ""
+                                                                : objDetail1.getString(
+                                                                    "StatusName");
+
+                                                        String productSpecialist =
+                                                            objDetail1.isNull(
+                                                                "ProductSpecialist_Name")
+                                                                ? "" : objDetail1.getString(
+                                                                "ProductSpecialist_Name");
+                                                        boolean isDefault =
+                                                            objDetail1.getBoolean("IsDefault");
+                                                        boolean IsCrossSellingProduct =
+                                                            objDetail1.getBoolean(
+                                                                "IsCrossSellingProduct");
+                                                        String IsPotentialPMSProduct =
+                                                            objDetail1.isNull(ISPOTENTIALPMSPRODUCT)
+                                                                ? "" : objDetail1.getString(
+                                                                ISPOTENTIALPMSPRODUCT);
+                                                        isPotentialPMSProduct =
+                                                            IsPotentialPMSProduct.isEmpty();
+                                                        etPmsProduct.setText(IsPotentialPMSProduct);
+                                                        List<CrossSellingProductsModel>
+                                                            crossSellingProductsModelList =
+                                                            new ArrayList<CrossSellingProductsModel>();
+                                                        JSONArray jsonArrayCrossSellingProducts =
+                                                            objDetail1.getJSONArray(
+                                                                "CrossSellingProducts");
+                                                        if (jsonArrayCrossSellingProducts.length()
+                                                            != 0) {
+                                                            for (int k = 0; k
+                                                                < jsonArrayCrossSellingProducts.length();
+                                                                k++) {
+                                                                JSONObject
+                                                                    objDetail1CrossSellingProducts =
+                                                                    jsonArrayCrossSellingProducts.getJSONObject(
+                                                                        k);
+                                                                String LeadCrossSellingProductId =
+                                                                    objDetail1CrossSellingProducts.isNull(
+                                                                        "LeadCrossSellingProductId")
+                                                                        ? ""
+                                                                        : objDetail1CrossSellingProducts
+                                                                            .getString(
+                                                                                "LeadCrossSellingProductId");
+                                                                String CrossSellingProductId =
+                                                                    objDetail1CrossSellingProducts.isNull(
+                                                                        "CrossSellingProductId")
+                                                                        ? ""
+                                                                        : objDetail1CrossSellingProducts
+                                                                            .getString(
+                                                                                "CrossSellingProductId");
+                                                                String CrossSellingStatusId =
+                                                                    objDetail1CrossSellingProducts.isNull(
+                                                                        "CrossSellingStatusId") ? ""
+                                                                        : objDetail1CrossSellingProducts
+                                                                            .getString(
+                                                                                "CrossSellingStatusId");
+                                                                String CrossSellingProductName =
+                                                                    objDetail1CrossSellingProducts.isNull(
+                                                                        "CrossSellingProductName")
+                                                                        ? ""
+                                                                        : objDetail1CrossSellingProducts
+                                                                            .getString(
+                                                                                "CrossSellingProductName");
+                                                                String CrossSellingStatusName =
+                                                                    objDetail1CrossSellingProducts.isNull(
+                                                                        "CrossSellingStatusName")
+                                                                        ? ""
+                                                                        : objDetail1CrossSellingProducts
+                                                                            .getString(
+                                                                                "CrossSellingStatusName");
+                                                                crossSellingProductsModelList.add(
+                                                                    new CrossSellingProductsModel(
+                                                                        LeadCrossSellingProductId,
+                                                                        CrossSellingProductId,
+                                                                        CrossSellingStatusId,
+                                                                        CrossSellingProductName,
+                                                                        CrossSellingStatusName));
+                                                            }
+                                                        }
+                                                        if (interestedIn.equals(interestIn)) {
+                                                            updateProductData(
+                                                                interestIn,
+                                                                newStageCodeStr,
+                                                                newStageNameStr,
+                                                                statusID,
+                                                                statusValue,
+                                                                specialistEdit,
+                                                                actAssignTo
+                                                            );
+                                                        } else {
+                                                            leadDetailAddProductAdapter.addProduct(
+                                                                new LeadDetailAddProductModel(
+                                                                    stageId,
+                                                                    stageName, statusId, statusName,
+                                                                    interestedIn, productName,
+                                                                    primaryRm,
+                                                                    productSpecialist, assignedBy,
+                                                                    assignedByDate, clientCode,
+                                                                    leadProductMappingId, isDefault,
+                                                                    crossSellingProductsModelList,
+                                                                    IsCrossSellingProduct
+                                                                ));
+                                                        }
+                                                    }
+                                                }
                                                 alertDialog(getMainActivity(), 0,
                                                     getResources().getString(
                                                         R.string.motilal_oswal),
@@ -8339,20 +8660,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             if (action
                                                                 == MSFDialog.Action.OK) {
 
-                                                                if (isPotentialPMSProduct) {
-
-                                                                    getLeadDetail();
-                                                                } else {
-                                                                    updateProductData(
-                                                                        interestIn,
-                                                                        newStageCodeStr,
-                                                                        newStageNameStr,
-                                                                        statusID,
-                                                                        statusValue,
-                                                                        specialistEdit,
-                                                                        actAssignTo
-                                                                    );
-                                                                }
                                                             }
                                                         }
                                                     });
