@@ -330,7 +330,7 @@ public class LeadDetailModel {
         String json = "{";
         json += "\"LeadID\":" + getLeadID();
         json += ",\"BusinessUnitID\":" + getBusinessUnitID();
-        json += ",\"IsPotentialPMSProduct\":\"" + getIsPotentialPMSProduct() + "\"";
+        json += ",\"IsPotentialPMSProductValue\":\"" + getIsPotentialPMSProduct() + "\"";
         if (!isBlank(getLeadCategoryID())) {
             json += ",\"LeadCategoryID\":" + getLeadCategoryID();
         }

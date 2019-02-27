@@ -71,6 +71,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -96,9 +97,7 @@ import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-/**
- * Created by Vijay on 10/03/2017.
- */
+
 
 public class LeadViewDetailFragment extends MOSLCommonFragment
     implements View.OnClickListener, MOSLConstants {
@@ -118,13 +117,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private TextView tvClientCode, tvClientName, tvClientAddress, tvChannel, tvDefaultBank,
         tvPanCard, tvAccountType, tvUCID, tvFamilyUCID, tvBranchCode, tvAdvisoryType,
         tvAccountNumber, tvAadharCard, tvProfile;
-    private EditText etLeadID, etLeadCategory, etLastModifiedBy, etPmsProduct, etEkycMobileNumber,
+    private EditText etLeadID, etLeadCategory, etLastModifiedBy, etEkycMobileNumber,
         etPanNumber,
         etAadharNumber, etLeadName, etCreationDate, etCreatedBy, etSource, etProspectSource,
         etProspectSourceDetail, etCreatedThrough, etMobileNumber, etLastModifiedDate,
         etLandlineNumber, etEmail, etRefereeCode, etRefereeName, etRefereeEmail, etRefereeMobile,
         etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments;
-    private Spinner spProfile, spCountry, spOffCountry, spProfession;
+    private Spinner spProfile, spCountry, spOffCountry, spProfession, spPmsProduct;
     private org.droidparts.widget.ClearableEditText etDob, etAnniversary;
     private TextView tvAnniversaryError;
     private TextView tvspIntrestError, tvspStatusError, tvCrossSellingProductIdError,
@@ -194,6 +193,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private ProgressBar pbLoadingIndicatorRefreeCode, pbLoadingIndicatorRefreeName;
     private boolean stateFlag, officeStateFlag;
     private String leadOwner = "";
+    private ArrayList<String> arrPmsProduct;
+
+
 
     private boolean leadEditable = true, isPotentialPMSProduct = false;
 
@@ -452,7 +454,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         cbSameAs.setEnabled(status);
         cbPrimaryAddress.setEnabled(status);
         cbOffPrimaryAddress.setEnabled(status);
-        etPmsProduct.setEnabled(status);
+        spPmsProduct.setEnabled(status);
         if (status) {
             if (cbPrimaryAddress.isChecked()) {
                 enableField(llResAdd);
@@ -562,7 +564,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etPanNumber = leadViewDetailView.findViewById(R.id.etPanNumber);
         etAadharNumber = leadViewDetailView.findViewById(R.id.etAadharNumber);
         etLeadName = leadViewDetailView.findViewById(R.id.etLeadName);
-        etPmsProduct = leadViewDetailView.findViewById(R.id.etPmsProduct);
         etCreationDate = leadViewDetailView.findViewById(R.id.etCreationDate);
         etCreatedBy = leadViewDetailView.findViewById(R.id.etCreatedBy);
         etSource = leadViewDetailView.findViewById(R.id.etSource);
@@ -571,6 +572,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             leadViewDetailView.findViewById(R.id.etProspectSourceDetail);
         etCreatedThrough = leadViewDetailView.findViewById(R.id.etCreatedThrough);
         spProfile = leadViewDetailView.findViewById(R.id.spProfile);
+        spPmsProduct = leadViewDetailView.findViewById(R.id.spPmsProduct);
+        String[] arrayPmsProduct =
+            getActivity().getResources().getStringArray(R.array.selectPmsProduct);
+        arrPmsProduct = new ArrayList<>(Arrays.asList(arrayPmsProduct));
         spProfession = leadViewDetailView.findViewById(R.id.spProfession);
         etMobileNumber = leadViewDetailView.findViewById(R.id.etMobileNumber);
         etLandlineNumber = leadViewDetailView.findViewById(R.id.etLandlineNumber);
@@ -2486,7 +2491,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                             objDetail.isNull(ISPOTENTIALPMSPRODUCT)
                                                 ? "" : objDetail.getString(ISPOTENTIALPMSPRODUCT);
                                         isPotentialPMSProduct = IsPotentialPMSProduct.isEmpty();
-                                        etPmsProduct.setText(IsPotentialPMSProduct);
+                                        spPmsProduct.setSelection(
+                                            getSpinnerPosition(IsPotentialPMSProduct,
+                                                arrPmsProduct));
                                         etRefereeCode.setText(refereeCode);
                                         etRefereeName.setText(refereeName);
                                         if (!refereeCode.isEmpty() || !refereeName.isEmpty()) {
@@ -3119,6 +3126,16 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
         }
+    }
+
+    public int getSpinnerPosition(String value, ArrayList<String> arrayList) {
+
+        for (int i = 0; i < arrayList.size(); i++) {
+            if (arrayList.get(i).equalsIgnoreCase(value)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     private void updateLead(LeadDetailModel leadDetailModel) {
@@ -4263,7 +4280,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             ISPOTENTIALPMSPRODUCT);
                                                     isPotentialPMSProduct =
                                                         IsPotentialPMSProduct.isEmpty();
-                                                    etPmsProduct.setText(IsPotentialPMSProduct);
+                                                    spPmsProduct.setSelection(
+                                                        getSpinnerPosition(IsPotentialPMSProduct,
+                                                            arrPmsProduct));
                                                     List<CrossSellingProductsModel>
                                                         crossSellingProductsModelList =
                                                         new ArrayList<CrossSellingProductsModel>();
@@ -4867,8 +4886,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         leadDetailModel.setLandLineNo(etLandlineNumber.getText().toString().trim());
         leadDetailModel.setAadharNum(etAadharNumber.getText().toString().trim());
         leadDetailModel.setPanNum(etPanNumber.getText().toString().trim());
-        leadDetailModel.setIsPotentialPMSProduct(
-            etPmsProduct.getText().toString().trim().toUpperCase());
+        leadDetailModel.setIsPotentialPMSProduct(spPmsProduct.getSelectedItem().toString());
         try {
             if (!isBlank(etDob.getText().toString())) {
                 String strDob = etDob.getText().toString().trim();
@@ -8563,7 +8581,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                 ISPOTENTIALPMSPRODUCT);
                                                         isPotentialPMSProduct =
                                                             IsPotentialPMSProduct.isEmpty();
-                                                        etPmsProduct.setText(IsPotentialPMSProduct);
+                                                        spPmsProduct.setSelection(
+                                                            getSpinnerPosition(
+                                                                IsPotentialPMSProduct,
+                                                                arrPmsProduct));
                                                         List<CrossSellingProductsModel>
                                                             crossSellingProductsModelList =
                                                             new ArrayList<CrossSellingProductsModel>();
