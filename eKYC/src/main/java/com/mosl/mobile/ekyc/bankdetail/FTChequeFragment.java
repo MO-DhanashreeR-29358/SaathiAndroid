@@ -100,6 +100,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
     int eqPaymentId, commPaymentId;
     boolean showDefalutDate;
     String date = "";
+    private boolean auSmall;
 
     public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
         this.tabPageIndicator = tabPageIndicator;
@@ -237,7 +238,9 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etEquFundTransferred.getText().toString())) {
                     input_layout_equFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
+                    if (!getAppType().equalsIgnoreCase(PP)
+                        && !auSmall
+                        && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etEquFundTransferred.requestFocus();
@@ -271,7 +274,9 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etCommFundTransferred.getText().toString())) {
                     input_layout_commFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
+                    if (!getAppType().equalsIgnoreCase(PP)
+                        && !auSmall
+                        && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etCommFundTransferred.requestFocus();
@@ -696,48 +701,20 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             return;
         }
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
 
-            String flag = GETUSERPAYMENTDETAILS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
+            WebServiceHandler.post(mContext, GETUSERPAYMENTDETAILS, FUNDTRANSFER, inputMap,
+                new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     if (response != null && response.length() != 0) {
-
                         try {
-
-
-                             /*{
-                                "FUNDTRANSFER":[
-                                {
-                                    "BANK_NAME":"ICICI BANK LTD",
-                                        "BANK_ACC_NO":"112211111111",
-                                        "CHEQUENO":"",
-                                        "CHEQUEDATE":"28 Oct 2016",
-                                        "MARGIN_DEPOSIT":"50000",
-                                        "SCHEME_NAME":"Margin 50,000",
-                                        "AMOUNTREQUESTED":0,
-                                        "PRODUCT":"EQUITY"
-                                },
-                                {
-                                    "BANK_NAME":"ICICI BANK LTD",
-                                        "BANK_ACC_NO":"2222222222222",
-                                        "CHEQUENO":"",
-                                        "CHEQUEDATE":"28 Oct 2016",
-                                        "MARGIN_DEPOSIT":"",
-                                        "SCHEME_NAME":"",
-                                        "AMOUNTREQUESTED":0,
-                                        "PRODUCT":"COMMODITY"
-                                }
-                                ]
-                            }*/
                             if (response.has("FUNDTRANSFER")) {
                                 JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
                                 if (jsonArray.length() != 0) {
-
+                                    String chequeStatus = "", chequeMessage = "";
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
 
@@ -750,6 +727,23 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                                         String amtRequested = (object.isNull("AMOUNTREQUESTED") || object.getString("AMOUNTREQUESTED").equals("")) ? "" : object.getString("AMOUNTREQUESTED");
                                         String fundTransferThrough = (object.isNull("FUNDTRANSFERTHROUGH") || object.getString("FUNDTRANSFERTHROUGH").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGH");
                                         String fundTransferThroughId = (object.isNull("FUNDTRANSFERTHROUGHID") || object.getString("FUNDTRANSFERTHROUGHID").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGHID");
+                                        chequeStatus =
+                                            (object.isNull("CHEQUE_STATUS")
+                                                || object.getString("CHEQUE_STATUS")
+                                                .equals("")) ? ""
+                                                : object.getString("CHEQUE_STATUS");
+                                        chequeMessage =
+                                            (object.isNull("CHEQUE_MESSAGE")
+                                                || object.getString("CHEQUE_MESSAGE")
+                                                .equals("")) ? ""
+                                                : object.getString("CHEQUE_MESSAGE");
+                                        String auStatus =
+                                            (object.isNull("AU_STATUS")
+                                                || object.getString("AU_STATUS")
+                                                .equals("")) ? ""
+                                                : object.getString("AU_STATUS");
+
+                                        auSmall = auStatus.equals("1");
                                         /*
                                         *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                         *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -794,7 +788,22 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                                             etCommodityChequeDate.setText(EkycAppUtil.getDate(date, "dd/MM/yyyy"));
                                         }
                                     }
-                                    showView(eqPaymentStatus, commPaymentStatus);
+                                    if (Integer.parseInt(chequeStatus) == 1) {
+                                        showView(eqPaymentStatus, commPaymentStatus);
+                                    } else {
+                                        if (getIsCommoditySelected()
+                                            && !getIsEquitySelected()) {
+                                            llCommFundOption.setVisibility(View.GONE);
+                                            llCommPaymentButton.setVisibility(View.GONE);
+                                            tvCommFundTransfered.setVisibility(View.VISIBLE);
+                                            tvCommFundTransfered.setText(chequeMessage);
+                                        } else {
+                                            llEquFundOption.setVisibility(View.GONE);
+                                            llEquPaymentButton.setVisibility(View.GONE);
+                                            tvEquFundTransfered.setVisibility(View.VISIBLE);
+                                            tvEquFundTransfered.setText(chequeMessage);
+                                        }
+                                    }
                                     hideProgress();
                                 }
                             }
@@ -1239,7 +1248,9 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 etEquCheqNoError.setVisibility(View.GONE);
                 etEquFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
+            } else if (!getAppType().equalsIgnoreCase(PP)
+                && !auSmall
+                && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
                 etEquFundTransferred.requestFocus();
@@ -1377,7 +1388,9 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 etCommCheqNoError.setVisibility(View.GONE);
                 etCommFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
+            } else if (!getAppType().equalsIgnoreCase(PP)
+                && !auSmall
+                && etCommFundTransferred.length() < 5) {
                 etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
                 etCommFundTransferred.requestFocus();

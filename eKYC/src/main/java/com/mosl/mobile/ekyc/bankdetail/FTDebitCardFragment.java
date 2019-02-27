@@ -141,6 +141,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
     String eqPaymentMode, commPaymentMode;
     int eqPaymentId, commPaymentId;
     private View layoutMergeNote;
+    private boolean auSmall;
 
     public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
         this.tabPageIndicator = tabPageIndicator;
@@ -424,6 +425,13 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                                     || object.getString("DC_MESSAGE")
                                                     .equals("")) ? ""
                                                     : object.getString("DC_MESSAGE");
+                                            String auStatus =
+                                                (object.isNull("AU_STATUS")
+                                                    || object.getString("AU_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("AU_STATUS");
+
+                                            auSmall = auStatus.equals("1");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -892,7 +900,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                     input_layout_equFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etEquFundTransferred.length() < 5) {
+                        && !auSmall && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -935,7 +943,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                     input_layout_commFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etCommFundTransferred.length() < 5) {
+                        && !auSmall && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -1027,13 +1035,13 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
 
         if (mEquStatus == 0) {
             showEquitypending();
-            getEquDebitCardBank();
+            //getEquDebitCardBank(); //Not calling as per New debit requirement 18/Feb/2019
         } else {
             equityPaid();
         }
         if (mCommStatus == 0) {
             showCommPending();
-            getEquDebitCardBank();
+            //getEquDebitCardBank();  //Not calling as per New debit requirement 18/Feb/2019
         } else {
             commodityPaid();
         }
@@ -1327,7 +1335,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etCommFundTransferred.length() < 5) {
+                && !auSmall && etCommFundTransferred.length() < 5) {
                 etCommFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
@@ -1483,7 +1491,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etEquFundTransferred.length() < 5) {
+                && !auSmall && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);

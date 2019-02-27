@@ -101,6 +101,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
     int hideProgressCounter = 0;
     String eqPaymentMode, commPaymentMode;
     int eqPaymentId, commPaymentId;
+    private boolean auSmall;
 
     public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
         this.tabPageIndicator = tabPageIndicator;
@@ -276,7 +277,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                     input_layout_equFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etEquFundTransferred.length() < 5) {
+                        && !auSmall && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -319,7 +320,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                     input_layout_commFundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etCommFundTransferred.length() < 5) {
+                        && !auSmall && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -514,7 +515,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etCommFundTransferred.length() < 5) {
+                && !auSmall && etCommFundTransferred.length() < 5) {
                 etCommFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
@@ -739,7 +740,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etEquFundTransferred.length() < 5) {
+                && !auSmall && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
@@ -1050,49 +1051,20 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
         }
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
 
-            String flag = GETUSERPAYMENTDETAILS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETUSERPAYMENTDETAILS, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         if (response != null && response.length() != 0) {
-
                             try {
-
-
-                             /*{
-                                "FUNDTRANSFER":[
-                                {
-                                    "BANK_NAME":"ICICI BANK LTD",
-                                        "BANK_ACC_NO":"112211111111",
-                                        "CHEQUENO":"",
-                                        "CHEQUEDATE":"28 Oct 2016",
-                                        "MARGIN_DEPOSIT":"50000",
-                                        "SCHEME_NAME":"Margin 50,000",
-                                        "AMOUNTREQUESTED":0,
-                                        "PRODUCT":"EQUITY"
-                                },
-                                {
-                                    "BANK_NAME":"ICICI BANK LTD",
-                                        "BANK_ACC_NO":"2222222222222",
-                                        "CHEQUENO":"",
-                                        "CHEQUEDATE":"28 Oct 2016",
-                                        "MARGIN_DEPOSIT":"",
-                                        "SCHEME_NAME":"",
-                                        "AMOUNTREQUESTED":0,
-                                        "PRODUCT":"COMMODITY"
-                                }
-                                ]
-                            }*/
                                 if (response.has("FUNDTRANSFER")) {
                                     JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
                                     if (jsonArray.length() != 0) {
-
+                                        String nbStatus = "", nbMessage = "";
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject object = jsonArray.getJSONObject(i);
 
@@ -1136,11 +1108,29 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                                                     || object.getString("FUNDTRANSFERTHROUGHID")
                                                     .equals("")) ? ""
                                                     : object.getString("FUNDTRANSFERTHROUGHID");
+                                            nbStatus =
+                                                (object.isNull("NB_STATUS")
+                                                    || object.getString("NB_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("NB_STATUS");
+                                            nbMessage =
+                                                (object.isNull("NB_MESSAGE")
+                                                    || object.getString("NB_MESSAGE")
+                                                    .equals("")) ? ""
+                                                    : object.getString("NB_MESSAGE");
+                                            String auStatus =
+                                                (object.isNull("AU_STATUS")
+                                                    || object.getString("AU_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("AU_STATUS");
+
+                                            auSmall = auStatus.equals("1");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
                                              *  fundTransferThroughId 3 fundTransferThrough Cheque
                                              *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+                                             *  fundTransferThroughId 5 fundTransferThrough UPI Payment
                                              *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                              */
                                             if (product.equalsIgnoreCase(EQUITY)) {
@@ -1193,7 +1183,22 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                                                 }
                                             }
                                         }
-                                        showView(eqPaymentStatus, commPaymentStatus);
+                                        if (Integer.parseInt(nbStatus) == 1) {
+                                            showView(eqPaymentStatus, commPaymentStatus);
+                                        } else {
+                                            if (getIsCommoditySelected()
+                                                && !getIsEquitySelected()) {
+                                                llCommFundOption.setVisibility(View.GONE);
+                                                llCommPaymentButton.setVisibility(View.GONE);
+                                                tvCommFundTransfered.setVisibility(View.VISIBLE);
+                                                tvCommFundTransfered.setText(nbMessage);
+                                            } else {
+                                                llEquFundOption.setVisibility(View.GONE);
+                                                llEquPaymentButton.setVisibility(View.GONE);
+                                                tvEquFundTransfered.setVisibility(View.VISIBLE);
+                                                tvEquFundTransfered.setText(nbMessage);
+                                            }
+                                        }
                                         hideProgress();
                                     }
                                 }
@@ -1244,9 +1249,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                 }
 
             );
-        } else
-
-        {
+        } else {
             MOSLCommon.alertDInternet(mContext);
             customProgress.setVisibility(View.GONE);
         }
@@ -1558,7 +1561,8 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
     }
 
     /**
-     * this method will hide progress when received the response of GETPAYMENTSTATUS & GETUSERPAYMENTDETAILS
+     * this method will hide progress when received the response of GETPAYMENTSTATUS &
+     * GETUSERPAYMENTDETAILS
      */
     private void hideProgress() {
         hideProgressCounter++;
