@@ -90,6 +90,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
     String strEquBankName = "", strEquAccNo = "";
     private CustomTabsClient mClient;
     private boolean onlineEquFlag, onlineCommFlag;
+    private boolean auSmall;
 
     public static FTUpiFragment newInstance(Context context, int equityStatus,
         int commodityStatus) {
@@ -202,7 +203,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                     input_layout_FundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etFundTransferred.length() < 5) {
+                        && !auSmall && etFundTransferred.length() < 5) {
                         etFundTransferredError.setVisibility(View.VISIBLE);
                         etFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -453,6 +454,13 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                                     || object.getString("UPI_MESSAGE")
                                                     .equals("")) ? ""
                                                     : object.getString("UPI_MESSAGE");
+                                            String auStatus =
+                                                (object.isNull("AU_STATUS")
+                                                    || object.getString("AU_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("AU_STATUS");
+
+                                            auSmall = auStatus.equals("1");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -563,7 +571,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etFundTransferred.length() < 5) {
+                && !auSmall && etFundTransferred.length() < 5) {
                 etFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etFundTransferredError.setVisibility(View.VISIBLE);
