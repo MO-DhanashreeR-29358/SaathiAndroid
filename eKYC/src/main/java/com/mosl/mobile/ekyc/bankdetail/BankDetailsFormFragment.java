@@ -2462,9 +2462,9 @@ public class BankDetailsFormFragment extends Fragment
                                         BigDecimal bdIntradayFutures1stLegMAX =
                                             new BigDecimal(intradayFutures1stLegMAX);
                                         String intradayFutures2ndLegMAX =
-                                            (object.isNull("Intraday2ndLeg") || object.getString(
-                                                "Intraday2ndLeg").equals("")) ? ""
-                                                : object.getString("Intraday2ndLeg");
+                                            (object.isNull("Futures2ndLeg") || object.getString(
+                                                "Futures2ndLeg").equals("")) ? ""
+                                                : object.getString("Futures2ndLeg");
                                         BigDecimal bdIntradayFutures2ndLegMAX =
                                             new BigDecimal(intradayFutures2ndLegMAX);
                                         String options1stLegAnd2ndLegINR =
@@ -2488,6 +2488,16 @@ public class BankDetailsFormFragment extends Fragment
                                         String dpAmc =
                                             (object.isNull("DPAMC") || object.getString("DPAMC")
                                                 .equals("")) ? "" : object.getString("DPAMC");
+                                        String adminCharges =
+                                            (object.isNull("Admin Charges")
+                                                || object.getString("Admin Charges")
+                                                .equals("")) ? ""
+                                                : object.getString("Admin Charges");
+                                        String brokingAMC =
+                                            (object.isNull("Broking AMC(Annually)")
+                                                || object.getString("Broking AMC(Annually)")
+                                                .equals("")) ? ""
+                                                : object.getString("Broking AMC(Annually)");
 
                                         //                                    tvequSchInfoAccOpenCharge.setText(String.valueOf(bdAccountOpeningFee));
                                         //                                    tvequSchInfoSoftCharge.setText(String.valueOf(bdSoftwareCharges));
@@ -2510,6 +2520,8 @@ public class BankDetailsFormFragment extends Fragment
                                         tvequSchInfoCurrOption.setText(
                                             String.valueOf(bdCurrencyOptions));
                                         tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
+                                        tvEqAdminCharges.setText(adminCharges);
+                                        tvEqBrokingAmc.setText(brokingAMC);
 
                                     }
                                     disableEnableField();
@@ -3766,7 +3778,18 @@ public class BankDetailsFormFragment extends Fragment
                                                         (object.isNull("DPAMC") || object.getString(
                                                             "DPAMC").equals("")) ? ""
                                                             : object.getString("DPAMC");
-
+                                                    String adminCharges =
+                                                        (object.isNull("Admin Charges")
+                                                            || object.getString("Admin Charges")
+                                                            .equals("")) ? ""
+                                                            : object.getString("Admin Charges");
+                                                    String brokingAMC =
+                                                        (object.isNull("Broking AMC(Annually)")
+                                                            || object.getString(
+                                                            "Broking AMC(Annually)")
+                                                            .equals("")) ? ""
+                                                            : object.getString(
+                                                                "Broking AMC(Annually)");
                                                     tvequSchInfoIntraday1stLeg.setText(
                                                         intradayCashSegment1stLegMAX);
                                                     tvequSchInfoIntraday2ndLeg.setText(
@@ -3786,6 +3809,8 @@ public class BankDetailsFormFragment extends Fragment
                                                         accountOpeningFee);
                                                     tvequSchInfoSoftCharge.setText(softwareCharges);
                                                     tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
+                                                    tvEqAdminCharges.setText(adminCharges);
+                                                    tvEqBrokingAmc.setText(brokingAMC);
                                                 } else if (rbValuePacAcc.isChecked()) {
                                                     String Validitydays =
                                                         (object.isNull("ValidityDays")
@@ -3880,6 +3905,18 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("SoftwareCharges")
                                                             .equals("")) ? ""
                                                             : object.getString("SoftwareCharges");
+                                                    String adminCharges =
+                                                        (object.isNull("Admin Charges")
+                                                            || object.getString("Admin Charges")
+                                                            .equals("")) ? ""
+                                                            : object.getString("Admin Charges");
+                                                    String brokingAMC =
+                                                        (object.isNull("Broking AMC(Annually)")
+                                                            || object.getString(
+                                                            "Broking AMC(Annually)")
+                                                            .equals("")) ? ""
+                                                            : object.getString(
+                                                                "Broking AMC(Annually)");
 
                                                     tvequSchInfoIntraday1stLeg.setText(
                                                         intradayCashSegment1stLegMAX);
@@ -3899,6 +3936,8 @@ public class BankDetailsFormFragment extends Fragment
                                                     tvequSchInfoAccOpenCharge.setText(
                                                         accountOpeningFee);
                                                     tvequSchInfoSoftCharge.setText(softwareCharges);
+                                                    tvEqAdminCharges.setText(adminCharges);
+                                                    tvEqBrokingAmc.setText(brokingAMC);
                                                 }
                                             }
                                             customProgress.setVisibility(View.GONE);
@@ -3914,6 +3953,8 @@ public class BankDetailsFormFragment extends Fragment
                                             tvequSchValidity.setText("");
                                             tvequSchDpAmc.setText("");
                                             tvequSchUpfrontFees.setText("");
+                                            tvEqAdminCharges.setText("");
+                                            tvEqBrokingAmc.setText("");
                                         }
 
                                         if (response.has("CurrencyFuture")) {
