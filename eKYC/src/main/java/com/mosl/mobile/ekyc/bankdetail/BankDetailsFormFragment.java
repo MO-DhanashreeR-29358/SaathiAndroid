@@ -7504,8 +7504,8 @@ public class BankDetailsFormFragment extends Fragment
                 etEquSchemeError.requestFocus();
                 //   informationDialog("Equity Scheme." + CANNOT_BE_LEFT_BLANK);
                 return false;
-            } else if (getAppType().equals(CRM) && spDpScheme.getSelectedItem()
-                .toString()
+            } else if (!equAuSmall && getAppType().equals(CRM)
+                && spDpScheme.getSelectedItem().toString()
                 .equalsIgnoreCase(SELECT)) {
                 etDpSchemeError.setVisibility(View.VISIBLE);
                 etDpSchemeError.setText("Select DP scheme");
