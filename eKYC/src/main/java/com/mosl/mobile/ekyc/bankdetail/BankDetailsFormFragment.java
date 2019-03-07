@@ -824,12 +824,14 @@ public class BankDetailsFormFragment extends Fragment
         new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strEquSchMarDep = ((RowData) arrEquScheme.get(position)).getMarDep();
-                strEquSchID = ((RowData) arrEquScheme.get(position)).getSchmeID();
-                strEquSchSelID = ((RowData) arrEquScheme.get(position)).getSchemeSelID();
-                strEquSchKey = ((RowData) arrEquScheme.get(position)).getKey();
+                strEquSchMarDep = (arrEquScheme.get(position)).getMarDep();
+                strEquSchID = (arrEquScheme.get(position)).getSchmeID();
+                strEquSchSelID = (arrEquScheme.get(position)).getSchemeSelID();
+                strEquSchKey = (arrEquScheme.get(position)).getKey();
                 customProgress.setVisibility(View.GONE);
                 etEquSchemeError.setVisibility(View.GONE);
+                input_layout_equMarginDeposit.setErrorEnabled(false);
+                etEquMarginDepositError.setVisibility(View.GONE);
 
                 if (isCommodityOriginal()) {
                     for (RowData i : arrCommScheme) {
@@ -841,7 +843,7 @@ public class BankDetailsFormFragment extends Fragment
                             strCommSchKey = i.getKey();
                             etCommSchemeError.setVisibility(View.GONE);
                         } else if (i.getMarDep()
-                            .equals(((RowData) arrEquScheme.get(position)).getMarDep())) {
+                            .equals((arrEquScheme.get(position)).getMarDep())) {
                             commSchMarDep = i.getMarDep();
                             strComSchID = i.getSchmeID();
                             strCommSchSelID = i.getSchemeSelID();
