@@ -2,18 +2,15 @@ package com.mosl.mobile.ekyc.service;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.mosl.mobile.ekyc.common.EkycUtil;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
-
+import cz.msebera.android.httpclient.Header;
 import java.util.Map;
 import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 
@@ -64,16 +61,16 @@ public class WebServiceHandler implements MOSLConstants {
 //    public static final String COLLATERAL_URL = COLLATERAL_URL_UAT;
 
     //UAT New CRM
-    //public static final String CALL_URL = BASE_URL_UAT_NEW_CRM;
-    //public static final String SIGNALR_URL = SIGNALR_URL_UAT_NEW_CRM;
-    //public static final String CRM_URL = CRM_URL_UAT;
-    //public static final String COLLATERAL_URL = COLLATERAL_URL_UAT;
+    public static final String CALL_URL = BASE_URL_UAT_NEW_CRM;
+    public static final String SIGNALR_URL = SIGNALR_URL_UAT_NEW_CRM;
+    public static final String CRM_URL = CRM_URL_UAT;
+    public static final String COLLATERAL_URL = COLLATERAL_URL_UAT;
 
     //PROD
-    public static final String CALL_URL = BASE_URL_PROD;
-    public static final String SIGNALR_URL = SIGNALR_URL_PROD;
-    public static final String CRM_URL = CRM_URL_PROD;
-    public static final String COLLATERAL_URL = COLLATERAL_URL_PROD;
+    //public static final String CALL_URL = BASE_URL_PROD;
+    //public static final String SIGNALR_URL = SIGNALR_URL_PROD;
+    //public static final String CRM_URL = CRM_URL_PROD;
+    //public static final String COLLATERAL_URL = COLLATERAL_URL_PROD;
 
     ////////////////////// WEB-RTC \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     private static String MEDIA_SERVER_UAT = "https://www.motilaloswal.com/webrtc/remotemobile.aspx";

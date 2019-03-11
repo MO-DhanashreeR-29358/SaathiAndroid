@@ -97,8 +97,6 @@ import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-
-
 public class LeadViewDetailFragment extends MOSLCommonFragment
     implements View.OnClickListener, MOSLConstants {
 
@@ -194,8 +192,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private boolean stateFlag, officeStateFlag;
     private String leadOwner = "";
     private ArrayList<String> arrPmsProduct;
-
-
 
     private boolean leadEditable = true, isPotentialPMSProduct = false;
 
@@ -2600,6 +2596,21 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                     boolean IsCrossSellingProduct =
                                                         objDetail1.getBoolean(
                                                             "IsCrossSellingProduct");
+                                                    String isProductSpecialistEditDisabled =
+                                                        objDetail1.isNull(
+                                                            "IsProductSpecialistEditDisabled")
+                                                            ? ""
+                                                            : objDetail1
+                                                                .getString(
+                                                                    "IsProductSpecialistEditDisabled");
+
+                                                    String isProductDisabled =
+                                                        objDetail1.isNull(
+                                                            "IsProductDisabled")
+                                                            ? ""
+                                                            : objDetail1
+                                                                .getString(
+                                                                    "IsProductDisabled");
                                                     tvClientCode.setText(clientCode);
                                                     List<CrossSellingProductsModel>
                                                         crossSellingProductsModelList =
@@ -2649,6 +2660,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                     : objDetail1CrossSellingProducts
                                                                         .getString(
                                                                             "CrossSellingStatusName");
+
                                                             crossSellingProductsModelList.add(
                                                                 new CrossSellingProductsModel(
                                                                     LeadCrossSellingProductId,
@@ -2667,7 +2679,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             assignedByDate, clientCode,
                                                             leadProductMappingId, isDefault,
                                                             crossSellingProductsModelList,
-                                                            IsCrossSellingProduct));
+                                                            IsCrossSellingProduct,
+                                                            isProductSpecialistEditDisabled,
+                                                            isProductDisabled));
                                                 }
                                                 leadDetailAddProductAdapter =
                                                     new LeadDetailAddProductAdapter(
@@ -4274,6 +4288,21 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                     boolean IsCrossSellingProduct =
                                                         objDetail1.getBoolean(
                                                             "IsCrossSellingProduct");
+                                                    String isProductSpecialistEditDisabled =
+                                                        objDetail1.isNull(
+                                                            "IsProductSpecialistEditDisabled")
+                                                            ? ""
+                                                            : objDetail1
+                                                                .getString(
+                                                                    "IsProductSpecialistEditDisabled");
+
+                                                    String isProductDisabled =
+                                                        objDetail1.isNull(
+                                                            "IsProductDisabled")
+                                                            ? ""
+                                                            : objDetail1
+                                                                .getString(
+                                                                    "IsProductDisabled");
                                                     String IsPotentialPMSProduct =
                                                         objDetail1.isNull(ISPOTENTIALPMSPRODUCT)
                                                             ? "" : objDetail1.getString(
@@ -4350,7 +4379,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             assignedByDate, clientCode,
                                                             leadProductMappingId, isDefault,
                                                             crossSellingProductsModelList,
-                                                            IsCrossSellingProduct
+                                                            IsCrossSellingProduct,
+                                                            isProductSpecialistEditDisabled,
+                                                            isProductDisabled
                                                         ));
                                                 }
                                                 leadDetailAddProductAdapter =
@@ -6488,114 +6519,184 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.tvAddInvestmentProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Dialog dialog = new Dialog(getMainActivity());
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setContentView(R.layout.dialog_leadview_add_cross_selling_product);
-                    dialog.getWindow()
-                        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT);
-                    dialog.getWindow()
-                        .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                    final Spinner spProductIdDialog =
-                        dialog.findViewById(R.id.spProductId);
-                    final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-                    final LinearLayout progressLayout =
-                        dialog.findViewById(R.id.customProgress);
-                    //Text errors
-                    tvCrossSellingProductIdError =
-                        dialog.findViewById(R.id.tvspProductIdError);
-                    tvCrossSellingStatusError =
-                        dialog.findViewById(R.id.tvspStatusError);
+                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                        .equals("1")) {
+                        final Dialog dialog = new Dialog(getMainActivity());
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.getWindow()
+                            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setContentView(R.layout.dialog_leadview_add_cross_selling_product);
+                        dialog.getWindow()
+                            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow()
+                            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        final Spinner spProductIdDialog =
+                            dialog.findViewById(R.id.spProductId);
+                        final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
+                        final LinearLayout progressLayout =
+                            dialog.findViewById(R.id.customProgress);
+                        //Text errors
+                        tvCrossSellingProductIdError =
+                            dialog.findViewById(R.id.tvspProductIdError);
+                        tvCrossSellingStatusError =
+                            dialog.findViewById(R.id.tvspStatusError);
 
-                    Button btnSave = dialog.findViewById(R.id.btnSave);
-                    Button btnClose = dialog.findViewById(R.id.btnClose);
+                        Button btnSave = dialog.findViewById(R.id.btnSave);
+                        Button btnClose = dialog.findViewById(R.id.btnClose);
 
-                    newGetCrossSellingStatus(spStatusDialog, "", progressLayout);
-                    newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
-                        spProductIdDialog, "", progressLayout);
+                        newGetCrossSellingStatus(spStatusDialog, "", progressLayout);
+                        newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
+                            spProductIdDialog, "", progressLayout);
 
-                    spProductIdDialog.setOnItemSelectedListener(
-                        new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view,
-                                int position, long id) {
-                                if (position > 0) {
-                                    tvCrossSellingProductIdError.setVisibility(View.GONE);
+                        spProductIdDialog.setOnItemSelectedListener(
+                            new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                                    if (position > 0) {
+                                        tvCrossSellingProductIdError.setVisibility(View.GONE);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
 
-                            }
-                        });
-                    spStatusDialog.setOnItemSelectedListener(
-                        new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view,
-                                int position, long id) {
-                                if (position > 0) {
-                                    tvCrossSellingStatusError.setVisibility(View.GONE);
                                 }
-                            }
+                            });
+                        spStatusDialog.setOnItemSelectedListener(
+                            new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                                    if (position > 0) {
+                                        tvCrossSellingStatusError.setVisibility(View.GONE);
+                                    }
+                                }
 
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+
+                        btnSave.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
+                            public void onClick(View view) {
+                                if (spProductIdDialog.getSelectedItemPosition() < 1) {
+                                    //TODO Show Error
+                                    tvCrossSellingProductIdError.setVisibility(View.VISIBLE);
+                                    tvCrossSellingProductIdError.setText("Select Product Id");
+                                    return;
+                                } else if (spStatusDialog.getSelectedItemPosition() < 1) {
+                                    //TODO Show Error
+                                    tvCrossSellingStatusError.setVisibility(View.VISIBLE);
+                                    tvCrossSellingStatusError.setText("Select Status");
+                                    return;
+                                }
 
-                            }
-                        });
+                                if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                    showProgress();
+                                    Map inputMap = new HashMap<>();
+                                    inputMap.put("LeadId", etLeadID.getText().toString().trim());
+                                    inputMap.put("InterestedInId",
+                                        leadDetailAddProductModel.getInterestedIn());
 
-                    btnSave.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (spProductIdDialog.getSelectedItemPosition() < 1) {
-                                //TODO Show Error
-                                tvCrossSellingProductIdError.setVisibility(View.VISIBLE);
-                                tvCrossSellingProductIdError.setText("Select Product Id");
-                                return;
-                            } else if (spStatusDialog.getSelectedItemPosition() < 1) {
-                                //TODO Show Error
-                                tvCrossSellingStatusError.setVisibility(View.VISIBLE);
-                                tvCrossSellingStatusError.setText("Select Status");
-                                return;
-                            }
+                                    inputMap.put("CrossSellingStatusId",
+                                        ((RowData) spStatusDialog.getSelectedItem()).getKey());
+                                    inputMap.put("CrossSellingProductId",
+                                        ((RowData) spProductIdDialog.getSelectedItem()).getKey());
 
-                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                                showProgress();
-                                Map inputMap = new HashMap<>();
-                                inputMap.put("LeadId", etLeadID.getText().toString().trim());
-                                inputMap.put("InterestedInId",
-                                    leadDetailAddProductModel.getInterestedIn());
+                                    String serviceMethod = "Lead/SaveLeadCrossSellingProduct";
+                                    hideKeyboard(leadViewDetailView);
+                                    try {
+                                        CRMWebServiceHandler.post(getMainActivity(), serviceMethod,
+                                            getHeader(), inputMap, new JsonHttpResponseHandler() {
 
-                                inputMap.put("CrossSellingStatusId",
-                                    ((RowData) spStatusDialog.getSelectedItem()).getKey());
-                                inputMap.put("CrossSellingProductId",
-                                    ((RowData) spProductIdDialog.getSelectedItem()).getKey());
-
-                                String serviceMethod = "Lead/SaveLeadCrossSellingProduct";
-                                hideKeyboard(leadViewDetailView);
-                                try {
-                                    CRMWebServiceHandler.post(getMainActivity(), serviceMethod,
-                                        getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                                            @Override
-                                            public void onSuccess(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                JSONObject response) {
-                                                super.onSuccess(statusCode, headers, response);
-                                                //after success code goes here
-                                                try {
-                                                    if (statusCode == 200) {
-                                                        String status = response.getString(STATUS);
-                                                        if (status.equalsIgnoreCase("true")) {
+                                                @Override
+                                                public void onSuccess(int statusCode,
+                                                    Header[] headers,
+                                                    JSONObject response) {
+                                                    super.onSuccess(statusCode, headers, response);
+                                                    //after success code goes here
+                                                    try {
+                                                        if (statusCode == 200) {
+                                                            String status =
+                                                                response.getString(STATUS);
+                                                            if (status.equalsIgnoreCase("true")) {
+                                                                hideProgress();
+                                                                alertDialog(getMainActivity(), 0,
+                                                                    getResources().getString(
+                                                                        R.string.motilal_oswal),
+                                                                    "Cross Selling Product Saved Successfully",
+                                                                    "Ok", true,
+                                                                    new MSFDialog.DialogListener() {
+                                                                        @Override
+                                                                        public void alertDialogAction(
+                                                                            MSFDialog.Action action,
+                                                                            Object... data) {
+                                                                            if (action
+                                                                                == MSFDialog.Action.OK) {
+                                                                                leadSection();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                            } else {
+                                                                hideProgress();
+                                                                String errorMsg =
+                                                                    CRMMOSLCommon.getErrorMsgFromResponse(
+                                                                        response);
+                                                                alertDialog(getMainActivity(), 0,
+                                                                    getResources().getString(
+                                                                        R.string.motilal_oswal),
+                                                                    errorMsg, "OK", true, null);
+                                                            }
+                                                        } else {
                                                             hideProgress();
+                                                        }
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                        hideProgress();
+                                                        alertDialog(getMainActivity(), 0,
+                                                            getResources().getString(
+                                                                R.string.motilal_oswal),
+                                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
+                                                            true,
+                                                            null);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onSuccess(int statusCode,
+                                                    Header[] headers,
+                                                    JSONArray response) {
+                                                    super.onSuccess(statusCode, headers, response);
+                                                    hideProgress();
+                                                }
+
+                                                @Override
+                                                public void onSuccess(int statusCode,
+                                                    Header[] headers,
+                                                    String responseString) {
+                                                    super.onSuccess(statusCode, headers,
+                                                        responseString);
+                                                    hideProgress();
+                                                }
+
+                                                @Override
+                                                public void onFailure(int statusCode,
+                                                    Header[] headers,
+                                                    Throwable throwable, JSONObject errorResponse) {
+                                                    super.onFailure(statusCode, headers, throwable,
+                                                        errorResponse);
+                                                    try {
+                                                        hideProgress();
+                                                        if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                                             alertDialog(getMainActivity(), 0,
                                                                 getResources().getString(
                                                                     R.string.motilal_oswal),
-                                                                "Cross Selling Product Saved Successfully",
-                                                                "Ok", true,
+                                                                UNAUTHORIZE_USER, "OK", false,
                                                                 new MSFDialog.DialogListener() {
                                                                     @Override
                                                                     public void alertDialogAction(
@@ -6603,155 +6704,95 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                         Object... data) {
                                                                         if (action
                                                                             == MSFDialog.Action.OK) {
-                                                                            leadSection();
+                                                                            Intent i = new Intent(
+                                                                                getMainActivity(),
+                                                                                LoginActivity.class);
+                                                                            startActivity(i);
+                                                                            getActivity().finish();
                                                                         }
                                                                     }
                                                                 });
+                                                            return;
                                                         } else {
-                                                            hideProgress();
-                                                            String errorMsg =
+                                                            String error =
                                                                 CRMMOSLCommon.getErrorMsgFromResponse(
-                                                                    response);
-                                                            alertDialog(getMainActivity(), 0,
+                                                                    errorResponse);
+                                                            if (CRMAppUtil.isBlank(error)) {
+                                                                error = SOME_SERVER_ERROR_OCCURRED;
+                                                            }
+                                                            MSFDialog.alertDialog(getMainActivity(),
+                                                                0,
                                                                 getResources().getString(
-                                                                    R.string.motilal_oswal),
-                                                                errorMsg, "OK", true, null);
+                                                                    R.string.motilal_oswal), error,
+                                                                "OK", true, null);
+                                                            return;
                                                         }
-                                                    } else {
-                                                        hideProgress();
-                                                    }
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                    hideProgress();
-                                                    alertDialog(getMainActivity(), 0,
-                                                        getResources().getString(
-                                                            R.string.motilal_oswal),
-                                                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true,
-                                                        null);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onSuccess(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                JSONArray response) {
-                                                super.onSuccess(statusCode, headers, response);
-                                                hideProgress();
-                                            }
-
-                                            @Override
-                                            public void onSuccess(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                String responseString) {
-                                                super.onSuccess(statusCode, headers,
-                                                    responseString);
-                                                hideProgress();
-                                            }
-
-                                            @Override
-                                            public void onFailure(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                Throwable throwable, JSONObject errorResponse) {
-                                                super.onFailure(statusCode, headers, throwable,
-                                                    errorResponse);
-                                                try {
-                                                    hideProgress();
-                                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                                        alertDialog(getMainActivity(), 0,
-                                                            getResources().getString(
-                                                                R.string.motilal_oswal),
-                                                            UNAUTHORIZE_USER, "OK", false,
-                                                            new MSFDialog.DialogListener() {
-                                                                @Override
-                                                                public void alertDialogAction(
-                                                                    MSFDialog.Action action,
-                                                                    Object... data) {
-                                                                    if (action
-                                                                        == MSFDialog.Action.OK) {
-                                                                        Intent i = new Intent(
-                                                                            getMainActivity(),
-                                                                            LoginActivity.class);
-                                                                        startActivity(i);
-                                                                        getActivity().finish();
-                                                                    }
-                                                                }
-                                                            });
-                                                        return;
-                                                    } else {
-                                                        String error =
-                                                            CRMMOSLCommon.getErrorMsgFromResponse(
-                                                                errorResponse);
-                                                        if (CRMAppUtil.isBlank(error)) {
-                                                            error = SOME_SERVER_ERROR_OCCURRED;
-                                                        }
+                                                    } catch (Exception ex) {
+                                                        ex.printStackTrace();
                                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                             getResources().getString(
-                                                                R.string.motilal_oswal), error,
-                                                            "OK", true, null);
-                                                        return;
+                                                                R.string.motilal_oswal),
+                                                            SOME_SERVER_ERROR_OCCURRED, "OK", true,
+                                                            null);
                                                     }
-                                                } catch (Exception ex) {
-                                                    ex.printStackTrace();
-                                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                                }
+
+                                                @Override
+                                                public void onFailure(int statusCode,
+                                                    Header[] headers,
+                                                    Throwable throwable, JSONArray errorResponse) {
+                                                    super.onFailure(statusCode, headers, throwable,
+                                                        errorResponse);
+                                                    hideProgress();
+                                                    alertDialog(getMainActivity(), 0,
                                                         getResources().getString(
                                                             R.string.motilal_oswal),
                                                         SOME_SERVER_ERROR_OCCURRED, "OK", true,
                                                         null);
                                                 }
-                                            }
 
-                                            @Override
-                                            public void onFailure(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                Throwable throwable, JSONArray errorResponse) {
-                                                super.onFailure(statusCode, headers, throwable,
-                                                    errorResponse);
-                                                hideProgress();
-                                                alertDialog(getMainActivity(), 0,
-                                                    getResources().getString(
-                                                        R.string.motilal_oswal),
-                                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                            }
-
-                                            @Override
-                                            public void onFailure(int statusCode,
-                                                cz.msebera.android.httpclient.Header[] headers,
-                                                String responseString, Throwable throwable) {
-                                                super.onFailure(statusCode, headers, responseString,
-                                                    throwable);
-                                                hideProgress();
-                                                alertDialog(getMainActivity(), 0,
-                                                    getResources().getString(
-                                                        R.string.motilal_oswal),
-                                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                            }
-                                        });
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                                @Override
+                                                public void onFailure(int statusCode,
+                                                    Header[] headers,
+                                                    String responseString, Throwable throwable) {
+                                                    super.onFailure(statusCode, headers,
+                                                        responseString,
+                                                        throwable);
+                                                    hideProgress();
+                                                    alertDialog(getMainActivity(), 0,
+                                                        getResources().getString(
+                                                            R.string.motilal_oswal),
+                                                        SOME_SERVER_ERROR_OCCURRED, "OK", true,
+                                                        null);
+                                                }
+                                            });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        hideProgress();
+                                        alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                                    }
+                                } else {
                                     hideProgress();
                                     alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                                        INTERNET_CONNECTION, "OK", true, null);
                                 }
-                            } else {
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+
+                                dialog.dismiss();
                             }
+                        });
 
-                            dialog.dismiss();
-                        }
-                    });
-
-                    btnClose.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            hideKeyboard(leadViewDetailView);
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.show();
+                        btnClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                hideKeyboard(leadViewDetailView);
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
                 }
             });
             if (leadDetailAddProductModel.isDefault()
@@ -6763,7 +6804,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.llDeleteLeadDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLeadEditable()) {
+                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                        .equals("1")) {
                         if (!leadDetailAddProductModel.isDefault()) {
                             alertDialog(getMainActivity(), 0, "Delete Confirmation",
                                 "Are you sure you want to delete the product", "Yes", "No", true,
@@ -6990,14 +7032,16 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.llAddProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLeadEditable()) {
+                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                        .equals("1")) {
                         editProduct(leadDetailAddProductModel.getInterestedIn(),
                             leadDetailAddProductModel.getStageId(),
                             leadDetailAddProductModel.getStatusId(),
                             leadDetailAddProductModel.getProductSpecialist(),
                             leadDetailAddProductModel.getLeadMappingProductId(),
                             leadDetailAddProductModel.getPrimaryRM(),
-                            leadDetailAddProductModel.isDefault());
+                            leadDetailAddProductModel.isDefault(),
+                            leadDetailAddProductModel.getIsProSpeEditDisabled());
                     }
                 }
             });
@@ -7730,7 +7774,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
         private void editProduct(final String interestIn, final String stageId,
             final String statusId, String productSpecialist, final String leadMappingId,
-            final String asignedTo, final boolean isDefault) {
+            final String asignedTo, final boolean isDefault, String isProductSpecEnabled) {
             final Dialog dialog = new Dialog(getMainActivity());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -7757,6 +7801,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             productSpecialistEdit.setText(productSpecialist);
             productSpecialistEdit.setClearIconVisible(true);
             productSpecialistEdit.setHint(getResources().getString(R.string.str_prod_spl));
+            if (isProductSpecEnabled.equals("1")) {
+                productSpecialistEdit.setEnabled(false);
+            } else {
+                productSpecialistEdit.setEnabled(true);
+            }
             productSpecialistEdit.setListener(new ClearableEditText.Listener() {
                 @Override
                 public void didClearText() {
@@ -7766,6 +7815,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             productSpecialistEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     getActivity().getWindow()
                         .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                             | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -7797,15 +7847,19 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 try {
                                     if (constraint != null) {
                                         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                                            searchListProductSpecialist.showProgress(View.VISIBLE);
+                                            searchListProductSpecialist.showProgress(
+                                                View.VISIBLE);
                                             Map requestMap = new HashMap();
                                             requestMap.put("EmployeeName",
-                                                URLEncoder.encode(constraint.toString(), "utf-8"));
+                                                URLEncoder.encode(constraint.toString(),
+                                                    "utf-8"));
                                             requestMap.put("EmployeeCode",
-                                                URLEncoder.encode(constraint.toString(), "utf-8"));
+                                                URLEncoder.encode(constraint.toString(),
+                                                    "utf-8"));
 
                                             primaryRMAdd =
-                                                CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode
+                                                CRMAppUtil.isBlank(leadOwner.trim())
+                                                    ? advisorCode
                                                     : leadOwner.trim();
                                             requestMap.put("PrimaryRM", primaryRMAdd);
                                             String serviceMethod =
@@ -7818,7 +7872,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                                         @Override
                                                         public void onSuccess(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             JSONObject response) {
                                                             super.onSuccess(statusCode, headers,
                                                                 response);
@@ -7827,37 +7881,45 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                     View.GONE);
                                                                 if (statusCode == 200) {
                                                                     String status =
-                                                                        response.getString(STATUS);
+                                                                        response.getString(
+                                                                            STATUS);
                                                                     if (status.equalsIgnoreCase(
                                                                         "true")) {
                                                                         JSONArray jsonArray =
                                                                             response.getJSONArray(
                                                                                 RESPONSE);
                                                                         for (int i = 0;
-                                                                            i < jsonArray.length();
+                                                                            i
+                                                                                < jsonArray.length();
                                                                             i++) {
-                                                                            JSONObject jsonObject =
+                                                                            JSONObject
+                                                                                jsonObject =
                                                                                 jsonArray.getJSONObject(
                                                                                     i);
 
-                                                                            String employeeName =
+                                                                            String
+                                                                                employeeName =
                                                                                 jsonObject.getString(
                                                                                     EMPLOYEE_NAME)
                                                                                     == null ? ""
-                                                                                    : jsonObject.getString(
-                                                                                        EMPLOYEE_NAME);
-                                                                            String employeeCode =
+                                                                                    : jsonObject
+                                                                                        .getString(
+                                                                                            EMPLOYEE_NAME);
+                                                                            String
+                                                                                employeeCode =
                                                                                 jsonObject.getString(
                                                                                     EMPLOYEE_CODE)
                                                                                     == null ? ""
-                                                                                    : jsonObject.getString(
-                                                                                        EMPLOYEE_CODE);
+                                                                                    : jsonObject
+                                                                                        .getString(
+                                                                                            EMPLOYEE_CODE);
                                                                             String BranchCode =
                                                                                 jsonObject.getString(
                                                                                     BRANCH_Code)
                                                                                     == null ? ""
-                                                                                    : jsonObject.getString(
-                                                                                        BRANCH_Code);//region Check self Empcode and don't add to list
+                                                                                    : jsonObject
+                                                                                        .getString(
+                                                                                            BRANCH_Code);//region Check self Empcode and don't add to list
                                                                             if (employeeCode.equalsIgnoreCase(
                                                                                 AccountDetails.getEmployeeCode())) {
                                                                                 continue;
@@ -7870,8 +7932,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                                     false));
                                                                         }
                                                                     } else {
-                                                                        searchListProductSpecialist.showProgress(
-                                                                            View.GONE);
+                                                                        searchListProductSpecialist
+                                                                            .showProgress(
+                                                                                View.GONE);
                                                                         modelList.add(
                                                                             EmployeeModel.getNoData(
                                                                                 CRMMOSLCommon.getErrorMsgFromResponse(
@@ -7905,7 +7968,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                 e.printStackTrace();
                                                                 searchListProductSpecialist.showProgress(
                                                                     View.GONE);
-                                                                alertDialog(getMainActivity(), 0,
+                                                                alertDialog(getMainActivity(),
+                                                                    0,
                                                                     getResources().getString(
                                                                         R.string.motilal_oswal),
                                                                     SOME_ERROR_OCCURED_PLEASE_RETRY,
@@ -7915,7 +7979,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                                         @Override
                                                         public void onSuccess(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             JSONArray response) {
                                                             super.onSuccess(statusCode, headers,
                                                                 response);
@@ -7925,7 +7989,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                                         @Override
                                                         public void onSuccess(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             String responseString) {
                                                             super.onSuccess(statusCode, headers,
                                                                 responseString);
@@ -7935,7 +7999,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                                         @Override
                                                         public void onFailure(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             Throwable throwable,
                                                             JSONObject errorResponse) {
                                                             super.onFailure(statusCode, headers,
@@ -7945,8 +8009,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                     View.GONE);
                                                                 if (statusCode
                                                                     == UNAUTHORIZE_STATUS_CODE) {
-                                                                    alertDialog(getMainActivity(),
-                                                                        0, getResources().getString(
+                                                                    alertDialog(
+                                                                        getMainActivity(),
+                                                                        0,
+                                                                        getResources().getString(
                                                                             R.string.motilal_oswal),
                                                                         UNAUTHORIZE_USER, "OK",
                                                                         false,
@@ -7963,7 +8029,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                                             LoginActivity.class);
                                                                                     startActivity(
                                                                                         i);
-                                                                                    getActivity().finish();
+                                                                                    getActivity()
+                                                                                        .finish();
                                                                                 }
                                                                             }
                                                                         });
@@ -7972,7 +8039,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                     String error =
                                                                         CRMMOSLCommon.getErrorMsgFromResponse(
                                                                             errorResponse);
-                                                                    if (CRMAppUtil.isBlank(error)) {
+                                                                    if (CRMAppUtil.isBlank(
+                                                                        error)) {
                                                                         error =
                                                                             SOME_SERVER_ERROR_OCCURRED;
                                                                     }
@@ -7980,7 +8048,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                         getMainActivity(), 0,
                                                                         getResources().getString(
                                                                             R.string.motilal_oswal),
-                                                                        error, "OK", true, null);
+                                                                        error, "OK", true,
+                                                                        null);
                                                                     return;
                                                                 }
                                                             } catch (Exception ex) {
@@ -7996,7 +8065,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                                         @Override
                                                         public void onFailure(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             Throwable throwable,
                                                             JSONArray errorResponse) {
                                                             super.onFailure(statusCode, headers,
@@ -8006,13 +8075,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             alertDialog(getMainActivity(), 0,
                                                                 getResources().getString(
                                                                     R.string.motilal_oswal),
-                                                                SOME_SERVER_ERROR_OCCURRED, "OK",
+                                                                SOME_SERVER_ERROR_OCCURRED,
+                                                                "OK",
                                                                 true, null);
                                                         }
 
                                                         @Override
                                                         public void onFailure(int statusCode,
-                                                            cz.msebera.android.httpclient.Header[] headers,
+                                                            Header[] headers,
                                                             String responseString,
                                                             Throwable throwable) {
                                                             super.onFailure(statusCode, headers,
@@ -8022,13 +8092,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             alertDialog(getMainActivity(), 0,
                                                                 getResources().getString(
                                                                     R.string.motilal_oswal),
-                                                                SOME_SERVER_ERROR_OCCURRED, "OK",
+                                                                SOME_SERVER_ERROR_OCCURRED,
+                                                                "OK",
                                                                 true, null);
                                                         }
                                                     });
                                             } catch (Exception e) {
                                                 e.printStackTrace();
-                                                searchListProductSpecialist.showProgress(View.GONE);
+                                                searchListProductSpecialist.showProgress(
+                                                    View.GONE);
                                                 alertDialog(getMainActivity(), 0,
                                                     getResources().getString(
                                                         R.string.motilal_oswal),
@@ -8038,7 +8110,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                         } else {
                                             searchListProductSpecialist.showProgress(View.GONE);
                                             alertDialog(getMainActivity(), 0,
-                                                getResources().getString(R.string.motilal_oswal),
+                                                getResources().getString(
+                                                    R.string.motilal_oswal),
                                                 INTERNET_CONNECTION, "OK", true, null);
                                         }
                                     }
@@ -8056,6 +8129,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             actAssignTo.setText(asignedTo);
             actAssignTo.setClearIconVisible(true);
             actAssignTo.setHint(getResources().getString(R.string.str_assing));
+
             actAssignTo.setListener(new ClearableEditText.Listener() {
                 @Override
                 public void didClearText() {
@@ -8575,6 +8649,21 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                         boolean IsCrossSellingProduct =
                                                             objDetail1.getBoolean(
                                                                 "IsCrossSellingProduct");
+                                                        String isProductSpecialistEditDisabled =
+                                                            objDetail1.isNull(
+                                                                "IsProductSpecialistEditDisabled")
+                                                                ? ""
+                                                                : objDetail1
+                                                                    .getString(
+                                                                        "IsProductSpecialistEditDisabled");
+
+                                                        String isProductDisabled =
+                                                            objDetail1.isNull(
+                                                                "IsProductDisabled")
+                                                                ? ""
+                                                                : objDetail1
+                                                                    .getString(
+                                                                        "IsProductDisabled");
                                                         String IsPotentialPMSProduct =
                                                             objDetail1.isNull(ISPOTENTIALPMSPRODUCT)
                                                                 ? "" : objDetail1.getString(
@@ -8664,7 +8753,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                                     assignedByDate, clientCode,
                                                                     leadProductMappingId, isDefault,
                                                                     crossSellingProductsModelList,
-                                                                    IsCrossSellingProduct
+                                                                    IsCrossSellingProduct,
+                                                                    isProductSpecialistEditDisabled,
+                                                                    isProductDisabled
                                                                 ));
                                                         }
                                                     }

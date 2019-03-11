@@ -5,9 +5,6 @@ import java.util.List;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 
-/**
- * Created by Vijay on 08/04/2017.
- */
 
 public class LeadDetailAddProductModel {
 
@@ -25,6 +22,8 @@ public class LeadDetailAddProductModel {
     private String leadMappingProductId;
     private boolean isDefault;
     private boolean isCrossSellingProduct;
+    private String isProSpeEditDisabled;
+    private String isProductDisabled;
     private List<CrossSellingProductsModel> CrossSellingProductsModelList = new ArrayList<>();
 
     public List<CrossSellingProductsModel> getCrossSellingProductsModelList() {
@@ -36,8 +35,13 @@ public class LeadDetailAddProductModel {
         return this;
     }
 
-    public LeadDetailAddProductModel(String stageId, String stageValue, String statusId, String statusValue, String interestedIn, String interestedInValue, String primaryRM, String productSpecialist,
-                                     String assignedBy, String assignedByDate, String clientCode, String leadMappingProductId, boolean isDefault, List<CrossSellingProductsModel> CrossSellingProductsModelList, boolean IsCrossSellingProduct) {
+    public LeadDetailAddProductModel(String stageId, String stageValue, String statusId,
+        String statusValue, String interestedIn,
+        String interestedInValue, String primaryRM, String productSpecialist, String assignedBy,
+        String assignedByDate,
+        String clientCode, String leadMappingProductId, boolean isDefault,
+        List<CrossSellingProductsModel> CrossSellingProductsModelList,
+        boolean IsCrossSellingProduct, String isProSpeEditDisabled, String isProductDisabled) {
         this.stageId = stageId;
         this.stageValue = stageValue;
         this.statusId = statusId;
@@ -53,6 +57,8 @@ public class LeadDetailAddProductModel {
         this.isDefault = isDefault;
         this.isCrossSellingProduct = IsCrossSellingProduct;
         this.CrossSellingProductsModelList = CrossSellingProductsModelList;
+        this.isProductDisabled = isProductDisabled;
+        this.isProSpeEditDisabled = isProSpeEditDisabled;
     }
 
     public boolean isDefault() {
@@ -166,6 +172,21 @@ public class LeadDetailAddProductModel {
         this.leadMappingProductId = leadMappingProductId;
     }
 
+    public String getIsProSpeEditDisabled() {
+        return isProSpeEditDisabled;
+    }
+
+    public void setIsProSpeEditDisabled(String isProSpeEditDisabled) {
+        this.isProSpeEditDisabled = isProSpeEditDisabled;
+    }
+
+    public String getIsProductDisabled() {
+        return isProductDisabled;
+    }
+
+    public void setIsProductDisabled(String isProductDisabled) {
+        this.isProductDisabled = isProductDisabled;
+    }
 
     public String getJson() {
         String json = "{";
