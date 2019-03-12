@@ -6519,7 +6519,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.tvAddInvestmentProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                    if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
                         .equals("1")) {
                         final Dialog dialog = new Dialog(getMainActivity());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -6804,7 +6804,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.llDeleteLeadDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                    if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
                         .equals("1")) {
                         if (!leadDetailAddProductModel.isDefault()) {
                             alertDialog(getMainActivity(), 0, "Delete Confirmation",
@@ -7032,7 +7032,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.llAddProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (isLeadEditable() || !leadDetailAddProductModel.getIsProductDisabled()
+                    if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
                         .equals("1")) {
                         editProduct(leadDetailAddProductModel.getInterestedIn(),
                             leadDetailAddProductModel.getStageId(),
