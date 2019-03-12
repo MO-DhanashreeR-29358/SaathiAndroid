@@ -24,7 +24,7 @@ public interface MOSLConstants extends LabelConfig {
     int LEAD_PROFILING = 2;
     String YES = "YES";
     String NO = "NO";
-    String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in IP product?";
+    String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in PMS product?";
     String SOURCE = "Source";
     //DRAWER MENU
     int MOSL_MENU_DASHBOARD = 0;

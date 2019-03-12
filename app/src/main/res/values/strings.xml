@@ -134,7 +134,7 @@
     </string-array>
 
     <string-array name="selectPmsProduct">
-        <item>Select</item>
+        <item>Select Potential Product</item>
         <item>YES</item>
         <item>NO</item>
     </string-array>
