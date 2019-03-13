@@ -7799,6 +7799,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             final ClearableEditText productSpecialistEdit =
                 dialog.findViewById(R.id.dacProductSpecialist);
             productSpecialistEdit.setText(productSpecialist);
+            specialistEdit = productSpecialist;
             productSpecialistEdit.setClearIconVisible(true);
             productSpecialistEdit.setHint(getResources().getString(R.string.str_prod_spl));
             if (isProductSpecEnabled.equals("1")) {
