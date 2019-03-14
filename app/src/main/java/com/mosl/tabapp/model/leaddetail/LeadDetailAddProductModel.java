@@ -24,6 +24,7 @@ public class LeadDetailAddProductModel {
     private boolean isCrossSellingProduct;
     private String isProSpeEditDisabled;
     private String isProductDisabled;
+	private String productSpecialistId;
     private List<CrossSellingProductsModel> CrossSellingProductsModelList = new ArrayList<>();
 
     public List<CrossSellingProductsModel> getCrossSellingProductsModelList() {
@@ -41,7 +42,8 @@ public class LeadDetailAddProductModel {
         String assignedByDate,
         String clientCode, String leadMappingProductId, boolean isDefault,
         List<CrossSellingProductsModel> CrossSellingProductsModelList,
-        boolean IsCrossSellingProduct, String isProSpeEditDisabled, String isProductDisabled) {
+		boolean IsCrossSellingProduct, String isProSpeEditDisabled, String isProductDisabled,
+		String productSpecialistId) {
         this.stageId = stageId;
         this.stageValue = stageValue;
         this.statusId = statusId;
@@ -59,6 +61,7 @@ public class LeadDetailAddProductModel {
         this.CrossSellingProductsModelList = CrossSellingProductsModelList;
         this.isProductDisabled = isProductDisabled;
         this.isProSpeEditDisabled = isProSpeEditDisabled;
+		this.productSpecialistId = productSpecialistId;
     }
 
     public boolean isDefault() {
@@ -188,6 +191,14 @@ public class LeadDetailAddProductModel {
         this.isProductDisabled = isProductDisabled;
     }
 
+	public String getProductSpecialistId() {
+		return productSpecialistId;
+	}
+
+	public void setProductSpecialistId(String productSpecialistId) {
+		this.productSpecialistId = productSpecialistId;
+	}
+
     public String getJson() {
         String json = "{";
         json += "\"InterestedIn\":" + getInterestedIn();
@@ -195,7 +206,7 @@ public class LeadDetailAddProductModel {
             json += ",\"ProductID\":" + getInterestedIn();
         }
         json += ",\"PrimaryRM\":\"" + getPrimaryRM() + "\"";
-        json += ",\"ProductSpecialist\":\"" + getProductSpecialist() + "\"";
+		json += ",\"ProductSpecialist\":\"" + getProductSpecialistId() + "\"";
 //        json += ",\"SecondaryRM\":\"" + getSecondaryRM() + "\"";
 
         if (!isBlank(getClientCode())) {
