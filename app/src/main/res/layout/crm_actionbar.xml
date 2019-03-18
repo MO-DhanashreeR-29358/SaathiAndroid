@@ -4,12 +4,14 @@
     android:id="@+id/actionBarNew"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/secondaryBackground">
+    android:background="@color/secondaryBackground"
+    >
 
     <RelativeLayout
         android:id="@+id/rl_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
+        android:layout_height="?actionBarSize"
+        >
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/btnMenu"
@@ -22,13 +24,15 @@
             android:layout_centerVertical="true"
             android:background="@null"
             android:padding="@dimen/_6sdp"
-            app:srcCompat="@drawable/ic_updated_menu" />
+            app:srcCompat="@drawable/ic_updated_menu"
+            />
 
         <LinearLayout
             android:layout_width="0px"
             android:layout_height="0px"
             android:focusable="true"
-            android:focusableInTouchMode="true" />
+            android:focusableInTouchMode="true"
+            />
 
         <LinearLayout
             android:id="@+id/llSearch"
@@ -41,24 +45,12 @@
             android:layout_toLeftOf="@+id/btnNotification"
             android:layout_toRightOf="@+id/btnMenu"
             android:background="@drawable/textborder"
-            android:orientation="horizontal">
-            <!--
-                        <android.support.v7.widget.AppCompatImageView
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/_3sdp"
-                            android:layout_marginLeft="5dp"
-                            android:background="@android:color/transparent"
-                            app:srcCompat="@drawable/ic_new_search" />-->
-            <!-- app:srcCompat="@drawable/ic_new_search"-->
-            <!--  <FrameLayout
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content">-->
+            android:orientation="horizontal"
+            >
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
                 <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
                     android:id="@+id/searchText"
@@ -74,22 +66,25 @@
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:maxLength="90"
                     android:paddingLeft="5dp"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
                     <ProgressBar
                         android:id="@+id/pbLoadingIndicator"
-                        style="?android:attr/progressBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        style="?android:attr/progressBarStyleSmall"
+                        />
 
                     <android.support.v7.widget.AppCompatImageView
                         android:id="@+id/srchImg"
@@ -97,21 +92,12 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_3sdp"
                         android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/ic_arrow_down_black" />
+                        app:srcCompat="@drawable/ic_arrow_down_black"
+                        />
 
-                 <!--   <TextView
-                        android:id="@+id/tvMsgCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:text="0"/>
-                        -->
+
                 </LinearLayout>
 
-                <!-- app:srcCompat="@drawable/ic_new_search"-->
             </FrameLayout>
 
         </LinearLayout>
@@ -125,39 +111,44 @@
             android:layout_marginLeft="@dimen/_2sdp"
             android:layout_marginRight="@dimen/_10sdp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_new_notification_icon" />
+            app:srcCompat="@drawable/ic_new_notification_icon"
+            />
 
         <FrameLayout
             android:id="@+id/flLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/_4sdp">
+            android:layout_marginRight="@dimen/_4sdp"
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
 
                 <view
-                    android:id="@+id/ivIcon"
                     class="android.support.v7.widget.AppCompatImageView"
+                    android:id="@+id/ivIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/notification_icon"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/ic_bubble" />
+                    app:srcCompat="@drawable/ic_bubble"
+                    />
 
                 <TextView
                     android:id="@+id/tvMsgCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
 
                     android:textSize="@dimen/_10sdp"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    />
             </RelativeLayout>
 
         </FrameLayout>
@@ -181,7 +172,8 @@
         android:textColor="@color/alternateTextColor"
         android:textSize="@dimen/appTitleTextSize"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:visibility="gone"
+        />
 
 
 </RelativeLayout>

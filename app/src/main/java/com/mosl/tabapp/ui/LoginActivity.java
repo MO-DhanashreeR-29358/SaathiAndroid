@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.tabapp.R;
@@ -25,13 +24,11 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LoginResponseData;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
@@ -88,11 +85,11 @@ public class LoginActivity extends FragmentActivity
     private boolean validateForm() {
         if (etEmpCode.getText().toString().equalsIgnoreCase("")) {
             alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
-                    "Employee code cannot be left blank", "OK", true, null);
+                "Employee code cannot be left blank", OK, true, null);
             return false;
         } else if (etPassword.getText().toString().equalsIgnoreCase("")) {
             alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
-                    "Password cannot be left blank", "OK", true, null);
+                "Password cannot be left blank", OK, true, null);
             return false;
         } else {
             return true;
@@ -218,7 +215,7 @@ public class LoginActivity extends FragmentActivity
                                                     CRMMOSLCommon.getErrorMsgFromResponse(response);
                                             alertDialog(LoginActivity.this, 0,
                                                     getResources().getString(R.string.motilal_oswal), error,
-                                                    "Ok", true, null);
+                                                OK, true, null);
                                         }
                                     } else {
                                         customProgress.setVisibility(View.GONE);
@@ -249,7 +246,7 @@ public class LoginActivity extends FragmentActivity
                                 super.onFailure(statusCode, headers, throwable, errorResponse);
                                 customProgress.setVisibility(View.GONE);
                                 alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-                                        "Ok", true, null);
+                                    OK, true, null);
                             }
 
                             @Override
@@ -259,7 +256,7 @@ public class LoginActivity extends FragmentActivity
                                 super.onFailure(statusCode, headers, throwable, errorResponse);
                                 customProgress.setVisibility(View.GONE);
                                 alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-                                        "Ok", true, null);
+                                    OK, true, null);
                             }
 
                             @Override
@@ -269,7 +266,7 @@ public class LoginActivity extends FragmentActivity
                                 super.onFailure(statusCode, headers, responseString, throwable);
                                 customProgress.setVisibility(View.GONE);
                                 alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-                                        "Ok", true, null);
+                                    OK, true, null);
                             }
                         });
             } catch (Exception e) {
@@ -278,7 +275,7 @@ public class LoginActivity extends FragmentActivity
         } else {
             customProgress.setVisibility(View.GONE);
             MSFDialog.alertDialog(LoginActivity.this, 0,
-                    getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
                     null);
         }
     }
@@ -410,7 +407,7 @@ public class LoginActivity extends FragmentActivity
                                                     CRMMOSLCommon.getErrorMsgFromResponse(json);
                                             alertDialog(getApplicationContext(), 0,
                                                     getResources().getString(R.string.motilal_oswal),
-                                                    errorMsg, "OK", true, null);
+                                                errorMsg, OK, true, null);
                                         }
                                     } catch (Exception ex) {
                                         openMainActivity();
@@ -418,14 +415,14 @@ public class LoginActivity extends FragmentActivity
                                         ex.printStackTrace();
                                         alertDialog(getApplicationContext(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                                            SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                                     }
                                 } else {
                                     openMainActivity();
 
                                     alertDialog(getApplicationContext(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                        SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -450,7 +447,7 @@ public class LoginActivity extends FragmentActivity
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getApplicationContext(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                UNAUTHORIZE_USER, "OK", false,
+                                            UNAUTHORIZE_USER, OK, false,
                                                 new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action,
@@ -473,14 +470,14 @@ public class LoginActivity extends FragmentActivity
                                         }
                                         MSFDialog.alertDialog(getApplicationContext(), 0,
                                                 getResources().getString(R.string.motilal_oswal), error,
-                                                "OK", true, null);
+                                            OK, true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     MSFDialog.alertDialog(getApplicationContext(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                        SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -491,7 +488,7 @@ public class LoginActivity extends FragmentActivity
                                 super.onFailure(statusCode, headers, throwable, errorResponse);
                                 alertDialog(getApplicationContext(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                    SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
 
                             @Override
@@ -501,18 +498,18 @@ public class LoginActivity extends FragmentActivity
                                 super.onFailure(statusCode, headers, responseString, throwable);
                                 alertDialog(getApplicationContext(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                    SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
                 alertDialog(getApplicationContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
             }
         } else {
             MSFDialog.alertDialog(getApplicationContext(), 0,
-                    getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
                     null);
         }
     }

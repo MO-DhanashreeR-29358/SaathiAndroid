@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -44,9 +43,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -54,8 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
 
@@ -554,6 +550,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     data.setBarWidth(0.6f);
 
     mChart.setData(data);
+    mChart.getLegend().setEnabled(false);
     mChart.invalidate();
     mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
       @Override

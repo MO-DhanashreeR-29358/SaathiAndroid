@@ -16,7 +16,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -29,13 +28,11 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -235,7 +232,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                                     CRMMOSLCommon.getErrorMsgFromResponse(response);
                                             alertDialog(getMainActivity(), 0,
                                                     getResources().getString(R.string.motilal_oswal),
-                                                    errorMsg, "OK", true, null);
+												errorMsg, OK, true, null);
                                             CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
                                         }
                                     } else {
@@ -248,7 +245,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     hideProgress();
                                     alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+										SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                                 }
                             }
 
@@ -276,7 +273,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                UNAUTHORIZE_USER, "OK", false,
+											UNAUTHORIZE_USER, OK, false,
                                                 new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action,
@@ -299,14 +296,14 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                         }
                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal), error,
-                                                "OK", true, null);
+											OK, true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     MSFDialog.alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+										SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -318,7 +315,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
 
                             @Override
@@ -329,19 +326,19 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
             }
         } else {
             hideProgress();
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+				INTERNET_CONNECTION, OK, true, null);
         }
     }
 
@@ -391,7 +388,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                                     CRMMOSLCommon.getErrorMsgFromResponse(response);
                                             alertDialog(getMainActivity(), 0,
                                                     getResources().getString(R.string.motilal_oswal),
-                                                    errorMsg, "OK", true, null);
+												errorMsg, OK, true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -401,7 +398,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     hideProgress();
                                     alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+										SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                                 }
                             }
 
@@ -429,7 +426,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                UNAUTHORIZE_USER, "OK", false,
+											UNAUTHORIZE_USER, OK, false,
                                                 new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action,
@@ -451,14 +448,14 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                         }
                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal), error,
-                                                "OK", true, null);
+											OK, true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     MSFDialog.alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+										SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -470,7 +467,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
 
                             @Override
@@ -481,19 +478,19 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
             }
         } else {
             hideProgress();
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+				INTERNET_CONNECTION, OK, true, null);
         }
     }
 
@@ -624,7 +621,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                                     CRMMOSLCommon.getErrorMsgFromResponse(response);
                                             MSFDialog.alertDialog(getMainActivity(), 0,
                                                     getResources().getString(R.string.motilal_oswal),
-                                                    errorMsg, "OK", true, null);
+												errorMsg, OK, true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -634,7 +631,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     hideProgress();
                                     MSFDialog.alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+										SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                                 }
                             }
 
@@ -661,7 +658,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                UNAUTHORIZE_USER, "OK", false,
+											UNAUTHORIZE_USER, OK, false,
                                                 new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action,
@@ -683,14 +680,14 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                         }
                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal), error,
-                                                "OK", true, null);
+											OK, true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     MSFDialog.alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+										SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -702,7 +699,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
 
                             @Override
@@ -713,7 +710,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
                         });
             } catch (Exception e) {
@@ -721,13 +718,13 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 // Log.e(TAG, e.toString());
                 MSFDialog.alertDialog(getMainActivity(), 0,
                         getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                 hideProgress();
             }
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
                     null);
         }
     }
@@ -942,7 +939,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                                     CRMMOSLCommon.getErrorMsgFromResponse(response);
                                             alertDialog(getMainActivity(), 0,
                                                     getResources().getString(R.string.motilal_oswal),
-                                                    errorMsg, "OK", true, null);
+												errorMsg, OK, true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -952,7 +949,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     hideProgress();
                                     alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+										SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
                                 }
                             }
 
@@ -980,7 +977,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal),
-                                                UNAUTHORIZE_USER, "OK", false,
+											UNAUTHORIZE_USER, OK, false,
                                                 new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action,
@@ -1002,14 +999,14 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                         }
                                         MSFDialog.alertDialog(getMainActivity(), 0,
                                                 getResources().getString(R.string.motilal_oswal), error,
-                                                "OK", true, null);
+											OK, true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                     MSFDialog.alertDialog(getMainActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
-                                            SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+										SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                                 }
                             }
 
@@ -1021,7 +1018,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
 
                             @Override
@@ -1032,19 +1029,19 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                 hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
                             }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
                 hideProgress();
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
             }
         } else {
             hideProgress();
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+				INTERNET_CONNECTION, OK, true, null);
         }
     }
 

@@ -4,12 +4,9 @@ package com.mosl.tabapp.constants;
 public interface MOSLConstants extends LabelConfig {
     String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp";
     String URL = "URL";
-    String USER_TYPE_DIRECT = "1";
 
     String USER_TYPE_FRANCHISE = "2";
 
-    int SUCCESS = 1;
-    int FAILED = 2;
     int SEARCH_LENTH = 3;
 
     //Firebase notification constants
@@ -20,8 +17,6 @@ public interface MOSLConstants extends LabelConfig {
 
     //Tab Constant
     int LEAD_DETAIL = 0;
-    int LEAD_ACTIVITY = 1;
-    int LEAD_PROFILING = 2;
 
     String SOURCE = "Source";
     //DRAWER MENU
@@ -89,13 +84,6 @@ public interface MOSLConstants extends LabelConfig {
     int PROFESSIONID = 116;
     int MEETINGADDRESSID = 117;
     int TRAVELLINGMODEID = 118;
-    //Contact Type Id
-    int EMAILID = 1;
-    int ALTERNATEEMAILID = 2;
-    int MOBILENO = 3;
-    int LANDLINENO = 4;
-    int ALTERNATEMOBILENO = 5;
-    int EKYCMOBILENO = 6;
 
     //Address Type Id
     int RESIDENCEADDRESS = 1;
@@ -194,34 +182,11 @@ public interface MOSLConstants extends LabelConfig {
 
     //Target tab
     String MEETING = "Meeting";
-    String TALKTIME = "Talktime";
-    String NEW_ACCOUNTS = "New Accounts";
-    String REVENUE = "Revenue";
-    String ONLINE_REVENUE = "Online Revenue";
-    String IP_SALES = "IP Sales";
-    String SIP_SALES = "SIP Sales";
-    String BUSINESS = "Business On House Call";
-    String TAB_POSITION = "Tab Position";
-
     //BusinessSnapshot tab
-    String MAN_POWER = "Man Power";
-    String MARGIN = "Margin";
-
-    String LEADS_SEVEN = "Leads> 7Days";
-    String LEADS_FIFTEEN = "Leads> 15Days";
-    String FAMILY_SEVEN = "Family> 7Days";
     String DATE = "Date";
     String NAME = "Name";
     String TIME = "Time";
     String ENTITY_FIELD = "entity Field";
-
-    String MONTH_NAME = "Month Name";
-    String MONTH_DATE = "Month Date";
-    String TYPE_MANAGEMENT = "Type of Mngnt";
-    String TIME_RANGE = "Time Range";
-    String ATTENDEE_FIRST_NAME = "Attendee First Name";
-    String ATTENDEE_SECOND_NAME = "Attendee Second Name";
-    String ATTENDEE_THIRD_NAME = "Attendee Third Name";
 
     String EMAIL_MESSAGE_CLIENT = "Do you want to send email to your client ?";
     String EMAIL_ALL_MESSAGE = "Do you want to send email to all clients ?";
@@ -232,20 +197,12 @@ public interface MOSLConstants extends LabelConfig {
     String MODULE_NAME = "Module Name";
     String CLIENT_CODE = "Client Code";
     String PRODUCT = "Product";
+    String DASHBOARD = "Dashboard";
+    String ISSAATHIAUFSB = "isSaathiAufsb";
 
     String TRADING_CODE = "Trading Code";
     String UCID = "UCID";
     String ZERO = "0";
-    String AMC_NAME = "AMC Name";
-    String SCHEME_NAME = "Scheme Name";
-    String FOLIO_NUMBER = "Folio Number";
-    String SIP_AMOUNT = "Sip Amount";
-    String START_DATE = "Start Date";
-    String LST_INSTALLMENT_DATE = "Last Installment Date";
-    String NO_OF_INSTALLMENT = "No Of Installment";
-    String BRANCH_CODE = "Branch Code";
-    String MARKET_VALUE = "Market Value";
-    String SUB_BROKER_CODE = "Sub Broker Code";
     String STATUS = "Status";
     String MESSAGE = "Message";
     String Erros = "";
@@ -331,6 +288,9 @@ public interface MOSLConstants extends LabelConfig {
     String REFEREEMOBILE = "RefereeMobile";
 
     String COMMENTS = "Comments";
+    String OPERATIONAL = "Operational";
+    String BUSINESS = "Business";
+    String OK = "OK";
 
     //Search
     String DATA = "Data";
