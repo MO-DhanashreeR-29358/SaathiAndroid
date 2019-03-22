@@ -42,25 +42,25 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by raju on 2/1/2017.
  */
 public class LoginActivity extends FragmentActivity
-        implements MOSLConstants, TextView.OnEditorActionListener, View.OnClickListener {
-    Button btnLogin;
-    EditText etEmpCode, etPassword;
-    LinearLayout customProgress;
+	implements MOSLConstants, TextView.OnEditorActionListener, View.OnClickListener {
+	Button btnLogin;
+	EditText etEmpCode, etPassword;
+	LinearLayout customProgress;
 
-    public static Map getHeader(Context context) {
-        Map headerMap = new HashMap<>();
-        headerMap.put("Content-Type", "application/json; charset=UTF-8");
-        headerMap.put("token", AccountDetails.getToken());
-        headerMap.put("userid", AccountDetails.getUserId());
-        headerMap.put("clientinfo", "android");
-        headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
-        headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-        headerMap.put("macaddress",
-                CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
-        headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-        headerMap.put("AppId", "2");
-        return headerMap;
-    }
+	public static Map getHeader(Context context) {
+		Map headerMap = new HashMap<>();
+		headerMap.put("Content-Type", "application/json; charset=UTF-8");
+		headerMap.put("token", AccountDetails.getToken());
+		headerMap.put("userid", AccountDetails.getUserId());
+		headerMap.put("clientinfo", "android");
+		headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
+		headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
+		headerMap.put("macaddress",
+			CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
+		headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
+		headerMap.put("AppId", "2");
+		return headerMap;
+	}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,207 +312,211 @@ public class LoginActivity extends FragmentActivity
         }
     }
 
-    public void FetchReportTypes() {
+	public void FetchReportTypes() {
 
-        if (CRMAppUtil.isNetworkEnabled(getApplicationContext())) {
-            Map inputMap = new HashMap();
-            String serviceMethod = "Report/FetchReportTypes";
+		if (CRMAppUtil.isNetworkEnabled(getApplicationContext())) {
+			Map inputMap = new HashMap();
+			String serviceMethod = "Report/FetchReportTypes";
 
-            SplashActivity.menuReportArrayList.clear();
-            try {
-                CRMWebServiceHandler.post(getApplicationContext(), serviceMethod,
-                        getHeader(getApplicationContext()), inputMap, new JsonHttpResponseHandler() {
+			SplashActivity.menuReportArrayList.clear();
+			try {
+				CRMWebServiceHandler.post(getApplicationContext(), serviceMethod,
+					getHeader(getApplicationContext()), inputMap, new JsonHttpResponseHandler() {
 
-                            @Override
-                            public void onSuccess(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
-                                super.onSuccess(statusCode, headers, json);
+						@Override public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
+							super.onSuccess(statusCode, headers, json);
 
-                                if (statusCode == 200) {
-                                    try {
-                                        String status = json.getString(STATUS);
-                                        if (status.equalsIgnoreCase("true")) {
+							if (statusCode == 200) {
+								try {
+									String status = json.getString(STATUS);
+									if (status.equalsIgnoreCase("true")) {
 
-                                            // JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                            JSONArray dataArray = json.getJSONArray(RESPONSE);
-                                            String childSystemName = null;
-                                            JSONObject ChildMenuListObj = null;
+										// JSONObject jsonObject = response.getJSONObject(RESPONSE);
+										JSONArray dataArray = json.getJSONArray(RESPONSE);
+										if (dataArray.length() > 0) {
+											for (int i = 0; i < dataArray.length(); i++) {
+												String childSystemName = "";
+												JSONObject ChildMenuListObj = null;
+												JSONObject objDetail = dataArray.getJSONObject(i);
+												String Name = (objDetail.isNull("Name")
+													|| objDetail.getString("Name").equals("")) ? ""
+													: objDetail.getString("Name");
+												String SystemName = (objDetail.isNull("SystemName")
+													|| objDetail.getString("SystemName").equals(""))
+													? "" : objDetail.getString("SystemName");
+												if (SystemName.equalsIgnoreCase(
+													"PRE-DEFINED_REPORTS")) {
+													JSONArray ChildMenuListArray =
+														objDetail.getJSONArray("ChildMenuList");
+													for (int j = 0; j < ChildMenuListArray.length();
+														j++) {
+														ChildMenuListObj =
+															ChildMenuListArray.getJSONObject(j);
+														String childName =
+															(ChildMenuListObj.isNull("Name")
+																|| ChildMenuListObj.getString(
+																"Name").equals("")) ? ""
+																: ChildMenuListObj.getString(
+																	"Name");
+														childSystemName =
+															(ChildMenuListObj.isNull("SystemName")
+																|| ChildMenuListObj.getString(
+																"SystemName").equals("")) ? ""
+																: ChildMenuListObj.getString(
+																	"SystemName");
+													}
+												}
+												if (childSystemName.equalsIgnoreCase(
+													"BASIC_REPORTS")) {
+													JSONArray subChildMenuListArray =
+														ChildMenuListObj.getJSONArray(
+															"ChildMenuList");
+													for (int k = 0;
+														k < subChildMenuListArray.length(); k++) {
+														JSONObject subChildMenuListObj =
+															subChildMenuListArray.getJSONObject(k);
+														String subChildName =
+															(subChildMenuListObj.isNull("Name")
+																|| subChildMenuListObj.getString(
+																"Name").equals("")) ? ""
+																: subChildMenuListObj.getString(
+																	"Name");
+														String subChildSystemName =
+															(subChildMenuListObj.isNull(
+																"SystemName") || subChildMenuListObj
+																.getString("SystemName")
+																.equals("")) ? ""
+																: subChildMenuListObj.getString(
+																	"SystemName");
+														SplashActivity.menuReportArrayList.add(
+															new MenuReport(subChildName,
+																subChildSystemName));
+													}
+												}
+											}
+											Intent intent = new Intent(LoginActivity.this,
+												MOSLCommonActivity.class);
+											startActivity(intent);
+											finish();
+										}
+									} else {
+										Intent intent = new Intent(LoginActivity.this,
+											MOSLCommonActivity.class);
+										startActivity(intent);
+										finish();
+										String errorMsg =
+											CRMMOSLCommon.getErrorMsgFromResponse(json);
+										alertDialog(getApplicationContext(), 0,
+											getResources().getString(R.string.motilal_oswal),
+											errorMsg, "OK", true, null);
+									}
+								} catch (Exception ex) {
+									Intent intent =
+										new Intent(LoginActivity.this, MOSLCommonActivity.class);
+									startActivity(intent);
+									finish();
+									ex.printStackTrace();
+									alertDialog(getApplicationContext(), 0,
+										getResources().getString(R.string.motilal_oswal),
+										SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+								}
+							} else {
+								Intent intent =
+									new Intent(LoginActivity.this, MOSLCommonActivity.class);
+								startActivity(intent);
+								finish();
+								alertDialog(getApplicationContext(), 0,
+									getResources().getString(R.string.motilal_oswal),
+									SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+							}
+						}
 
-                                            if (dataArray.length() > 0) {
-                                                for (int i = 0; i < dataArray.length(); i++) {
-                                                    JSONObject objDetail = dataArray.getJSONObject(i);
-                                                    String Name = (objDetail.isNull("Name")
-                                                            || objDetail.getString("Name").equals("")) ? ""
-                                                            : objDetail.getString("Name");
-                                                    String SystemName = (objDetail.isNull("SystemName")
-                                                            || objDetail.getString("SystemName").equals(""))
-                                                            ? "" : objDetail.getString("SystemName");
-                                                    if (SystemName.equalsIgnoreCase(
-                                                            "PRE-DEFINED_REPORTS")) {
-                                                        JSONArray ChildMenuListArray =
-                                                                objDetail.getJSONArray("ChildMenuList");
-                                                        for (int j = 0; j < ChildMenuListArray.length();
-                                                             j++) {
-                                                            ChildMenuListObj =
-                                                                    ChildMenuListArray.getJSONObject(j);
-                                                            String childName =
-                                                                    (ChildMenuListObj.isNull("Name")
-                                                                            || ChildMenuListObj.getString(
-                                                                            "Name").equals("")) ? ""
-                                                                            : ChildMenuListObj.getString(
-                                                                            "Name");
-                                                            childSystemName =
-                                                                    (ChildMenuListObj.isNull("SystemName")
-                                                                            || ChildMenuListObj.getString(
-                                                                            "SystemName").equals("")) ? ""
-                                                                            : ChildMenuListObj.getString(
-                                                                            "SystemName");
-                                                        }
-                                                    }
-                                                    if (childSystemName.equalsIgnoreCase(
-                                                            "BASIC_REPORTS")) {
-                                                        JSONArray subChildMenuListArray =
-                                                                ChildMenuListObj.getJSONArray(
-                                                                        "ChildMenuList");
-                                                        for (int k = 0;
-                                                             k < subChildMenuListArray.length(); k++) {
-                                                            JSONObject subChildMenuListObj =
-                                                                    subChildMenuListArray.getJSONObject(k);
-                                                            String subChildName =
-                                                                    (subChildMenuListObj.isNull("Name")
-                                                                            || subChildMenuListObj.getString(
-                                                                            "Name").equals("")) ? ""
-                                                                            : subChildMenuListObj.getString(
-                                                                            "Name");
-                                                            String subChildSystemName =
-                                                                    (subChildMenuListObj.isNull(
-                                                                            "SystemName") || subChildMenuListObj
-                                                                            .getString("SystemName")
-                                                                            .equals("")) ? ""
-                                                                            : subChildMenuListObj.getString(
-                                                                            "SystemName");
-                                                            SplashActivity.menuReportArrayList.add(
-                                                                    new MenuReport(subChildName,
-                                                                            subChildSystemName));
-                                                        }
-                                                    }
-                                                }
-                                                openMainActivity();
+						@Override public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+							super.onSuccess(statusCode, headers, response);
+						}
 
-                                            }
-                                        } else {
-                                            openMainActivity();
+						@Override public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, String responseString) {
+							super.onSuccess(statusCode, headers, responseString);
+						}
 
-                                            String errorMsg =
-                                                    CRMMOSLCommon.getErrorMsgFromResponse(json);
-                                            alertDialog(getApplicationContext(), 0,
-                                                    getResources().getString(R.string.motilal_oswal),
-                                                errorMsg, OK, true, null);
-                                        }
-                                    } catch (Exception ex) {
-                                        openMainActivity();
+						@Override public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+							JSONObject errorResponse) {
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+							try {
+								if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+									MSFDialog.alertDialog(getApplicationContext(), 0,
+										getResources().getString(R.string.motilal_oswal),
+										UNAUTHORIZE_USER, "OK", false,
+										new MSFDialog.DialogListener() {
+											@Override
+											public void alertDialogAction(MSFDialog.Action action,
+												Object... data) {
+												if (action == MSFDialog.Action.OK) {
+													Intent i = new Intent(getApplicationContext(),
+														LoginActivity.class);
+													startActivity(i);
+													finish();
+												}
+											}
+										});
+									return;
+								} else {
+									Intent intent =
+										new Intent(LoginActivity.this, MOSLCommonActivity.class);
+									startActivity(intent);
+									finish();
+									String error =
+										CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+									if (CRMAppUtil.isBlank(error)) {
+										error = SOME_SERVER_ERROR_OCCURRED;
+									}
+									MSFDialog.alertDialog(getApplicationContext(), 0,
+										getResources().getString(R.string.motilal_oswal), error,
+										"OK", true, null);
+									return;
+								}
+							} catch (Exception ex) {
+								ex.printStackTrace();
+								MSFDialog.alertDialog(getApplicationContext(), 0,
+									getResources().getString(R.string.motilal_oswal),
+									SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+							}
+						}
 
-                                        ex.printStackTrace();
-                                        alertDialog(getApplicationContext(), 0,
-                                                getResources().getString(R.string.motilal_oswal),
-                                            SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                                    }
-                                } else {
-                                    openMainActivity();
+						@Override public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+							JSONArray errorResponse) {
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+							alertDialog(getApplicationContext(), 0,
+								getResources().getString(R.string.motilal_oswal),
+								SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+						}
 
-                                    alertDialog(getApplicationContext(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                                }
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                                super.onSuccess(statusCode, headers, response);
-                            }
-
-                            @Override
-                            public void onSuccess(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                                super.onSuccess(statusCode, headers, responseString);
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                                                  JSONObject errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                try {
-                                    if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                        MSFDialog.alertDialog(getApplicationContext(), 0,
-                                                getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK, false,
-                                                new MSFDialog.DialogListener() {
-                                                    @Override
-                                                    public void alertDialogAction(MSFDialog.Action action,
-                                                                                  Object... data) {
-                                                        if (action == MSFDialog.Action.OK) {
-                                                            Intent i = new Intent(getApplicationContext(),
-                                                                    LoginActivity.class);
-                                                            startActivity(i);
-                                                            finish();
-                                                        }
-                                                    }
-                                                });
-                                        return;
-                                    } else {
-                                        openMainActivity();
-                                        String error =
-                                                CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                        if (CRMAppUtil.isBlank(error)) {
-                                            error = SOME_SERVER_ERROR_OCCURRED;
-                                        }
-                                        MSFDialog.alertDialog(getApplicationContext(), 0,
-                                                getResources().getString(R.string.motilal_oswal), error,
-                                            OK, true, null);
-                                        return;
-                                    }
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                    MSFDialog.alertDialog(getApplicationContext(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                                                  JSONArray errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                alertDialog(getApplicationContext(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode,
-                                                  cz.msebera.android.httpclient.Header[] headers, String responseString,
-                                                  Throwable throwable) {
-                                super.onFailure(statusCode, headers, responseString, throwable);
-                                alertDialog(getApplicationContext(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getApplicationContext(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-            }
-        } else {
-            MSFDialog.alertDialog(getApplicationContext(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-                    null);
-        }
-    }
+						@Override public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, String responseString,
+							Throwable throwable) {
+							super.onFailure(statusCode, headers, responseString, throwable);
+							alertDialog(getApplicationContext(), 0,
+								getResources().getString(R.string.motilal_oswal),
+								SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+						}
+					});
+			} catch (Exception e) {
+				e.printStackTrace();
+				alertDialog(getApplicationContext(), 0,
+					getResources().getString(R.string.motilal_oswal),
+					SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+			}
+		} else {
+			MSFDialog.alertDialog(getApplicationContext(), 0,
+				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+				null);
+		}
+	}
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {

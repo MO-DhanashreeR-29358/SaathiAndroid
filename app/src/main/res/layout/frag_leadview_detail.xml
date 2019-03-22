@@ -748,6 +748,25 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@string/LEAD_HAVING_THE_POTENTIAL_OF_PMS_PRODUCT"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        />
+
+
+                    <Spinner
+                        android:id="@+id/spPmsProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:entries="@array/selectPmsProduct"
+                        style="@style/CRMSpinnerSelector_leadView"
+                        />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="Profile"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />

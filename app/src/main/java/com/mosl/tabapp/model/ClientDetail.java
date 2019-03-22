@@ -1,7 +1,6 @@
 package com.mosl.tabapp.model;
 
 import com.mosl.tabapp.constants.MOSLConstants;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,11 +39,9 @@ public class ClientDetail implements MOSLConstants {
 
 
         try {
-            //String strFamilyUCID = objDetail.getString(FAMILYUCID);
-            String strFamilyUCID = objDetail.getString(FAMILYUCID) == null ? "" : objDetail.getString(FAMILYUCID);
+
             JSONArray productsArray = objDetail.getJSONArray(PRODUCTS);
             for (int productsI = 0; productsI < productsArray.length(); productsI++) {
-                //getting out only iterate first element
                 if (productsI > 0) {
                     break;
                 }
