@@ -2,7 +2,6 @@
     <string name="app_name">Saathi</string>
     <string name="SS_SEARCH_HINT_TXT">Search Lead</string>
     <string name="SS_SEARCH">Search</string>
-    <!--<string name="SS_SEARCH_HINT_TXT"><font size="14">Search Lead/Client/UCID/Name/MOBILE</font></string>-->
     <string name="ATTENDEE_SEARCH_HINT_TXT"><font size="14">Select Employee Name/Code</font></string>
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
     <string name="MOSL_MENU_EKYC_TXT">EKYC (Open an Account)</string>
@@ -43,6 +42,9 @@
     <string name="BA_SNAPSHOT">BA Snapshot</string>
     <string name="BA_CATEGORY">BA Category</string>
     <string name="LEAD_HAVING_THE_POTENTIAL_OF_PMS_PRODUCT">Lead having the potential of PMS product</string>
+    <string name="PROSPECT_REFERRER_NAME_HINT_TXT">Prospect Referrer Name</string>
+    <string name="PROSPECT_REFERRER_MOBILE_HINT_TXT">Prospect Referrer Mobile</string>
+    <string name="PROSPECT_REFERRER_EMAIL_HINT_TXT">Prospect Referrer Email</string>
 
 
     <string-array name="meetingDuration">

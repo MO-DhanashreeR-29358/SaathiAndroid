@@ -912,6 +912,106 @@
                         android:visibility="gone"
                         />
 
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
+
+                        <EditText
+                            android:id="@+id/etProspectRefereeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/PROSPECT_REFERRER_NAME_HINT_TXT"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+
+
+                            />
+
+                    </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tvProspectRefereeNameError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
+
+                        <EditText
+                            android:id="@+id/etProspectRefereerMobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/PROSPECT_REFERRER_MOBILE_HINT_TXT"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvProspectRefereerMobileError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout"
+                        >
+
+                        <EditText
+                            android:id="@+id/etProspectRefereerEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/PROSPECT_REFERRER_EMAIL_HINT_TXT"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="100"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvProspectRefereerEmailError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"

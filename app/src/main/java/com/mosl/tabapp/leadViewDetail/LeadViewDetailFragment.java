@@ -116,11 +116,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		tvPanCard, tvAccountType, tvUCID, tvFamilyUCID, tvBranchCode, tvAdvisoryType,
 		tvAccountNumber, tvAadharCard, tvProfile;
 	private EditText etLeadID, etLeadCategory, etLastModifiedBy, etEkycMobileNumber,
-		etPanNumber,
-		etAadharNumber, etLeadName, etCreationDate, etCreatedBy, etSource, etProspectSource,
+		etPanNumber, etAadharNumber, etLeadName, etCreationDate, etCreatedBy, etSource,
+		etProspectSource,
 		etProspectSourceDetail, etCreatedThrough, etMobileNumber, etLastModifiedDate,
 		etLandlineNumber, etEmail, etRefereeCode, etRefereeName, etRefereeEmail, etRefereeMobile,
-		etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments;
+		etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments,
+		etProspectRefereeName, etProspectRefereerMobile, etProspectRefereerEmail;
 	private Spinner spProfile, spCountry, spOffCountry, spProfession, spPmsProduct;
 	private org.droidparts.widget.ClearableEditText etDob, etAnniversary;
 	private TextView tvAnniversaryError;
@@ -154,7 +155,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 	private String primaryRMEdit = "", advisorCode = "";
 	private TextView tvLandLineError, tvAlternateMobileNumberError, tvEmailIdError,
 		tvAlternateEmailIdError, tvPincodeError, tvOffPincodeError, tvNameError,
-		tvContactPersonError, tvPanNumError, tvAadharNumError;
+		tvContactPersonError, tvPanNumError, tvAadharNumError,
+		tvProspectRefereeNameError, tvProspectRefereerMobileError, tvProspectRefereerEmailError;
 	private NestedScrollView nestedScrollView;
 	private List<LeadFieldSectionModel> mLeadFieldSectionModelList;
 	private Map<String, View> newSectionMap;
@@ -432,6 +434,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		etLandlineNumber.setEnabled(status);
 		etRefereeCode.setEnabled(status);
 		etRefereeName.setEnabled(status);
+		etProspectRefereeName.setEnabled(status);
+		etProspectRefereerMobile.setEnabled(status);
+		etProspectRefereerEmail.setEnabled(status);
 		etLandlineNumber.setEnabled(status);
 		etDob.setEnabled(status);
 		etAnniversary.setEnabled(status);
@@ -583,6 +588,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		etRefereeName = leadViewDetailView.findViewById(R.id.etRefereeName);
 		etRefereeEmail = leadViewDetailView.findViewById(R.id.etRefereeEmail);
 		etRefereeMobile = leadViewDetailView.findViewById(R.id.etRefereeNumber);
+		etProspectRefereeName = leadViewDetailView.findViewById(R.id.etProspectRefereeName);
+		etProspectRefereerEmail = leadViewDetailView.findViewById(R.id.etProspectRefereerEmail);
+		etRefereeMobile = leadViewDetailView.findViewById(R.id.etRefereeNumber);
 		etDob = leadViewDetailView.findViewById(R.id.etDob);
 		etAnniversary = leadViewDetailView.findViewById(R.id.etAnniversary);
 		etLastModifiedDate = leadViewDetailView.findViewById(R.id.etLastModifiedDate);
@@ -590,9 +598,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 			leadViewDetailView.findViewById(R.id.etAlternateMobileNumber);
 		etAlternateEmail = leadViewDetailView.findViewById(R.id.etAlternateEmail);
 		etContactPerson = leadViewDetailView.findViewById(R.id.etContactPerson);
-
+		etProspectRefereeName = leadViewDetailView.findViewById(R.id.etProspectRefereeName);
+		etProspectRefereerMobile = leadViewDetailView.findViewById(R.id.etProspectRefereerMobile);
+		etProspectRefereerEmail = leadViewDetailView.findViewById(R.id.etProspectRefereerEmail);
 		etContactPerson.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
 		etRefereeName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
+		etProspectRefereeName.setFilters(
+			new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
 		etLeadName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
 
 		ilLeadName = leadViewDetailView.findViewById(R.id.ilLeadName);
@@ -653,6 +665,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 			leadViewDetailView.findViewById(R.id.tvContactPersonError);
 		tvPanNumError = leadViewDetailView.findViewById(R.id.tvPanNumError);
 		tvAadharNumError = leadViewDetailView.findViewById(R.id.tvAadharNumError);
+		tvProspectRefereeNameError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
+		tvProspectRefereerMobileError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
+		tvProspectRefereerEmailError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
 		tvAlternateMobileNumberError =
 			leadViewDetailView.findViewById(R.id.tvAlternateMobileNumberError);
 		tvAlternateEmailIdError =
@@ -660,7 +678,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		tvEmailIdError = leadViewDetailView.findViewById(R.id.tvEmailIdError);
 		tvPincodeError = leadViewDetailView.findViewById(R.id.tvPincodeError);
 		tvOffPincodeError = leadViewDetailView.findViewById(R.id.tvOffPincodeError);
-
+		tvProspectRefereeNameError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
+		tvProspectRefereerMobileError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
+		tvProspectRefereerEmailError =
+			leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
 		etRefereeCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View view, boolean b) {
@@ -712,6 +735,83 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 				}
 			}
 		});
+		etProspectRefereeName.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+
+			@Override public void afterTextChanged(Editable s) {
+				if (!isBlank(etProspectRefereeName.getText().toString().trim())) {
+					tvProspectRefereeNameError.setVisibility(View.GONE);
+
+					//format check
+					if (!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+						etProspectRefereeName.getText().toString().trim())) {
+						tvProspectRefereeNameError.setText(ErrorMsgName);
+						tvProspectRefereeNameError.setVisibility(View.VISIBLE);
+					} else {
+						tvProspectRefereeNameError.setVisibility(View.GONE);
+					}
+				} else {
+					tvProspectRefereeNameError.setVisibility(View.GONE);
+				}
+			}
+		});
+
+		etProspectRefereerMobile.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (!isBlank(etProspectRefereerMobile.getText().toString())) {
+					if (!CRMValidationRule.validateMobile(
+						etProspectRefereerMobile.getText().toString())) {
+						tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
+						tvProspectRefereerMobileError.setText(INVALID_MOBILE_NO);
+						etProspectRefereerMobile.requestFocus();
+					} else {
+						tvProspectRefereerMobileError.setVisibility(View.GONE);
+					}
+				} else {
+					tvProspectRefereerMobileError.setVisibility(View.GONE);
+				}
+			}
+
+			@Override public void afterTextChanged(Editable s) {
+
+			}
+		});
+
+		etProspectRefereerEmail.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (!isBlank(etProspectRefereerEmail.getText().toString().trim())) {
+					if (!isValidEmail(etProspectRefereerEmail.getText())) {
+						tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
+						tvProspectRefereerEmailError.setText(INVALID_EMAIL_ID);
+						etProspectRefereerEmail.requestFocus();
+					} else {
+						tvProspectRefereerEmailError.setVisibility(View.GONE);
+					}
+				} else {
+					tvProspectRefereerEmailError.setVisibility(View.GONE);
+				}
+			}
+
+			@Override public void afterTextChanged(Editable s) {
+
+			}
+		});
+
 		etContactPerson.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -779,7 +879,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 						if (!CRMValidationRule.validateMobile(
 							etAlternateMobileNumber.getText().toString())) {
 							tvAlternateMobileNumberError.setVisibility(View.VISIBLE);
-							tvAlternateMobileNumberError.setText("Invalid mobile no.");
+							tvAlternateMobileNumberError.setText(INVALID_MOBILE_NO);
 							etAlternateMobileNumber.requestFocus();
 						} else {
 							tvAlternateMobileNumberError.setVisibility(View.GONE);
@@ -808,7 +908,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 					if (!isBlank(etAlternateEmail.getText().toString().trim())) {
 						if (!isValidEmail(etAlternateEmail.getText())) {
 							tvAlternateEmailIdError.setVisibility(View.VISIBLE);
-							tvAlternateEmailIdError.setText("Invalid email id");
+							tvAlternateEmailIdError.setText(INVALID_EMAIL_ID);
 							etAlternateEmail.requestFocus();
 						} else {
 							tvAlternateEmailIdError.setVisibility(View.GONE);
@@ -836,7 +936,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 					if (!isBlank(etEmail.getText().toString().trim())) {
 						if (!isValidEmail(etEmail.getText())) {
 							tvEmailIdError.setVisibility(View.VISIBLE);
-							tvEmailIdError.setText("Invalid email id");
+							tvEmailIdError.setText(INVALID_EMAIL_ID);
 							etEmail.requestFocus();
 						} else {
 							tvEmailIdError.setVisibility(View.GONE);
@@ -2482,10 +2582,22 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 										String IsPotentialPMSProduct =
 											objDetail.isNull(ISPOTENTIALPMSPRODUCT)
 												? "" : objDetail.getString(ISPOTENTIALPMSPRODUCT);
+										String prospectRefereName =
+											objDetail.isNull(PROSPECTREFERENAME)
+												? "" : objDetail.getString(PROSPECTREFERENAME);
+										String prospectRefereMobile =
+											objDetail.isNull(PROSPECTREFEREMOBILE)
+												? "" : objDetail.getString(PROSPECTREFEREMOBILE);
+										String prospectRefereEmail =
+											objDetail.isNull(PROSPECTREFEREEMAIL)
+												? "" : objDetail.getString(PROSPECTREFEREEMAIL);
 										isPotentialPMSProduct = IsPotentialPMSProduct.isEmpty();
 										spPmsProduct.setSelection(
 											getSpinnerPosition(IsPotentialPMSProduct,
 												arrPmsProduct));
+										etProspectRefereerEmail.setText(prospectRefereEmail);
+										etProspectRefereerMobile.setText(prospectRefereMobile);
+										etProspectRefereeName.setText(prospectRefereName);
 										etRefereeCode.setText(refereeCode);
 										etRefereeName.setText(refereeName);
 										if (!refereeCode.isEmpty() || !refereeName.isEmpty()) {
@@ -4620,13 +4732,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 				return false;
 			} else if (!isBlank(etEmail.getText().toString()) && !isValidEmail(
 				etEmail.getText().toString().trim())) {
-				tvEmailIdError.setText("Invalid email id");
+				tvEmailIdError.setText(INVALID_EMAIL_ID);
 				tvEmailIdError.setVisibility(View.VISIBLE);
 				etEmail.requestFocus();
 				return false;
 			} else if (!isBlank(etAlternateEmail.getText().toString()) && !isValidEmail(
 				etAlternateEmail.getText().toString().trim())) {
-				tvAlternateEmailIdError.setText("Invalid email id");
+				tvAlternateEmailIdError.setText(INVALID_EMAIL_ID);
 				tvAlternateEmailIdError.setVisibility(View.VISIBLE);
 				etAlternateEmail.requestFocus();
 				return false;
@@ -4648,6 +4760,43 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 				tvAadharNumError.setText("Invalid Aadhar number");
 				etAadharNumber.requestFocus();
 				tvAadharNumError.setVisibility(View.VISIBLE);
+				return false;
+			} else if (!isBlank(etProspectRefereeName.getText().toString().trim()) &&
+				!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+					etProspectRefereeName.getText().toString().trim())) {
+				tvProspectRefereeNameError.setText(ErrorMsgName);
+				tvProspectRefereeNameError.setVisibility(View.VISIBLE);
+				return false;
+			} else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
+				&& isBlank(etProspectRefereeName.getText().toString().trim())) {
+				tvProspectRefereeNameError.setText(ENTER_PROSPECT_REFERRER_NAME);
+				tvProspectRefereeNameError.setVisibility(View.VISIBLE);
+				etProspectRefereeName.requestFocus();
+				return false;
+			} else if (!isBlank(etProspectRefereerMobile.getText().toString())
+				&& !CRMValidationRule.validateMobile(
+				etProspectRefereerMobile.getText().toString().trim())) {
+				tvProspectRefereerMobileError.setText(INVALID_MOBILE_NO);
+				tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
+				etProspectRefereerMobile.requestFocus();
+				return false;
+			} else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
+				&& isBlank(etProspectRefereerMobile.getText().toString())) {
+				tvProspectRefereerMobileError.setText(ENTER_MOBILE_NUMBER);
+				tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
+				etProspectRefereerMobile.requestFocus();
+				return false;
+			} else if (!isBlank(etProspectRefereerEmail.getText().toString()) && !isValidEmail(
+				etProspectRefereerEmail.getText().toString().trim())) {
+				tvProspectRefereerEmailError.setText(INVALID_EMAIL_ID);
+				tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
+				etProspectRefereerEmail.requestFocus();
+				return false;
+			} else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
+				&& isBlank(etProspectRefereerEmail.getText().toString())) {
+				tvProspectRefereerEmailError.setText(ENTER_EMAIL_ID);
+				tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
+				etProspectRefereerEmail.requestFocus();
 				return false;
 			} else if (cbPrimaryAddress.isChecked()
 				&& !isBlank(etPincode.getText().toString())
@@ -4929,6 +5078,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		leadDetailModel.setAadharNum(etAadharNumber.getText().toString().trim());
 		leadDetailModel.setPanNum(etPanNumber.getText().toString().trim());
 		leadDetailModel.setIsPotentialPMSProduct(spPmsProduct.getSelectedItem().toString());
+		leadDetailModel.setProspectRefereName(etProspectRefereeName.getText().toString().trim());
+		leadDetailModel.setProspectRefereMobile(
+			etProspectRefereerMobile.getText().toString().trim());
+		leadDetailModel.setProspectRefereEmail(etProspectRefereerEmail.getText().toString().trim());
 		try {
 			if (!isBlank(etDob.getText().toString())) {
 				String strDob = etDob.getText().toString().trim();
