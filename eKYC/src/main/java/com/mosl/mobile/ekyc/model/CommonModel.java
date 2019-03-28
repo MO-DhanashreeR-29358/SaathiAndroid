@@ -11,6 +11,7 @@ import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
  */
 
 public class CommonModel implements Serializable {
+    private static boolean saathiAufsb = false;
     private static String appLoginID;
     private static String userID;
     private static String PANno;
@@ -121,6 +122,14 @@ public class CommonModel implements Serializable {
     private static boolean isNomineeMandatory = false;
     private static boolean aadhaarByPass;
     private static String onlineOfflineFlag;
+
+    public static boolean isSaathiAufsb() {
+        return saathiAufsb;
+    }
+
+    public static void setSaathiAufsb(boolean saathiAufsb) {
+        CommonModel.saathiAufsb = saathiAufsb;
+    }
 
     public static String getOnlineOfflineFlag() {
         return onlineOfflineFlag;

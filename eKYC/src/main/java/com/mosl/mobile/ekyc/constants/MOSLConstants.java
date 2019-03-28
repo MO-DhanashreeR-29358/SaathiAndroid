@@ -924,5 +924,8 @@ public interface MOSLConstants {
     String KEY = "0756C05CF8C0AB3C17B0D847549320EB262EA653051E0D0C1ABF4C95D22CC39C2507769AE2BE2DC92819426119EF0ED90D76EB0BF5D54E621D5900456D6835AC";
     String UIDAI_URL="https://resident.uidai.gov.in/web/resident/vidgeneration";
     String VERIFY_MOBILE_URL = "https://resident.uidai.gov.in/verify-email-mobile";
-
+    String UPI = "UPI";
+    String CHEQUE = "CHEQUE";
+    String NETBANKING = "NETBANKING";
+    String DEBITCARD = "DEBITCARD";
 }

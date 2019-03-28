@@ -184,13 +184,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
         btnSkipPayment = netBankView.findViewById(R.id.btnSkipPayment);
         btnNext = netBankView.findViewById(R.id.btnNext);
 
-        if (getAppType().equals(PP)) {
-            rlSkipPayment.setVisibility(View.VISIBLE);
-            etFundTransferred.setEnabled(true);
-        } else {
-            rlSkipPayment.setVisibility(View.GONE);
-            etFundTransferred.setEnabled(false);
-        }
+        showSkipPaymentButton();
 
         etFundTransferred.addTextChangedListener(new TextWatcher() {
             @Override
@@ -282,6 +276,16 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
             showCommPending();
         } else {
             commodityPaid();
+        }
+    }
+
+    private void showSkipPaymentButton() {
+        if (getAppType().equals(PP) || auSmall) {
+            rlSkipPayment.setVisibility(View.VISIBLE);
+            etFundTransferred.setEnabled(true);
+        } else {
+            rlSkipPayment.setVisibility(View.GONE);
+            etFundTransferred.setEnabled(false);
         }
     }
 
@@ -469,6 +473,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                              *  fundTransferThroughId 5 fundTransferThrough UPI Payment
                                              *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                              */
+                                            showSkipPaymentButton();
                                             if (product.equalsIgnoreCase(EQUITY)) {
                                                 eqPaymentMode = fundTransferThrough;
                                                 eqPaymentId =

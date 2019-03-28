@@ -439,6 +439,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
                                              *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
                                              *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                              */
+                                            showSkipPaymentButton();
                                             if (product.equalsIgnoreCase(EQUITY)) {
                                                 eqPaymentMode = fundTransferThrough;
                                                 eqPaymentId =
@@ -817,18 +818,7 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             llCommodityFundTransfer.setVisibility(View.VISIBLE);
             commATMSelected();
         }
-        if (getAppType().equals(PP)) {
-            rlEquSkipPayment.setVisibility(View.VISIBLE);
-            rlCommSkipPayment.setVisibility(View.VISIBLE);
-            etEquFundTransferred.setEnabled(true);
-            etCommFundTransferred.setEnabled(true);
-        } else {
-            rlEquSkipPayment.setVisibility(View.GONE);
-            rlCommSkipPayment.setVisibility(View.GONE);
-            etEquFundTransferred.setEnabled(false);
-            etCommFundTransferred.setEnabled(false);
-        }
-
+        showSkipPaymentButton();
         /*rbEquityATM.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -1044,6 +1034,20 @@ public class FTDebitCardFragment extends Fragment implements MOSLConstants, View
             //getEquDebitCardBank();  //Not calling as per New debit requirement 18/Feb/2019
         } else {
             commodityPaid();
+        }
+    }
+
+    private void showSkipPaymentButton() {
+        if (getAppType().equals(PP) || auSmall) {
+            rlEquSkipPayment.setVisibility(View.VISIBLE);
+            rlCommSkipPayment.setVisibility(View.VISIBLE);
+            etEquFundTransferred.setEnabled(true);
+            etCommFundTransferred.setEnabled(true);
+        } else {
+            rlEquSkipPayment.setVisibility(View.GONE);
+            rlCommSkipPayment.setVisibility(View.GONE);
+            etEquFundTransferred.setEnabled(false);
+            etCommFundTransferred.setEnabled(false);
         }
     }
 

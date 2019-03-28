@@ -240,17 +240,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
             llCommodityNetBanking.setVisibility(View.VISIBLE);
         }
 
-        if (getAppType().equals(PP)) {
-            rlEquSkipPayment.setVisibility(View.VISIBLE);
-            rlCommSkipPayment.setVisibility(View.VISIBLE);
-            etEquFundTransferred.setEnabled(true);
-            etCommFundTransferred.setEnabled(true);
-        } else {
-            rlEquSkipPayment.setVisibility(View.GONE);
-            rlCommSkipPayment.setVisibility(View.GONE);
-            etEquFundTransferred.setEnabled(false);
-            etCommFundTransferred.setEnabled(false);
-        }
+        showSkipPaymentButton();
         btnEquPayment.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (onlineEquFlag) {
@@ -403,6 +393,20 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
             showCommPending();
         } else {
             commodityPaid();
+        }
+    }
+
+    private void showSkipPaymentButton() {
+        if (getAppType().equals(PP) || auSmall) {
+            rlEquSkipPayment.setVisibility(View.VISIBLE);
+            rlCommSkipPayment.setVisibility(View.VISIBLE);
+            etEquFundTransferred.setEnabled(true);
+            etCommFundTransferred.setEnabled(true);
+        } else {
+            rlEquSkipPayment.setVisibility(View.GONE);
+            rlCommSkipPayment.setVisibility(View.GONE);
+            etEquFundTransferred.setEnabled(false);
+            etCommFundTransferred.setEnabled(false);
         }
     }
 
@@ -1133,6 +1137,7 @@ public class FTNetBankingFragment extends Fragment implements MOSLConstants {
                                              *  fundTransferThroughId 5 fundTransferThrough UPI Payment
                                              *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                              */
+                                            showSkipPaymentButton();
                                             if (product.equalsIgnoreCase(EQUITY)) {
                                                 eqPaymentMode = fundTransferThrough;
                                                 eqPaymentId =

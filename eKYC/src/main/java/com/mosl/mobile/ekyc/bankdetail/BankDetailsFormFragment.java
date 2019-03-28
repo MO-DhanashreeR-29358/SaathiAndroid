@@ -14041,14 +14041,12 @@ public class BankDetailsFormFragment extends Fragment
 
     public void getPaymentStatus() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
             //            inputMap.put("_segmentType", userID);
 
-            String flag = GETPAYMENTSTATUS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETPAYMENTSTATUS, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -14058,8 +14056,8 @@ public class BankDetailsFormFragment extends Fragment
                                 //                             {"FUNDTRANSFER":[{"EQPAYMENTSTATUS":3.0,"COMMPAYMENTSTATUS":3.0}]}
                                 if (response.has("FUNDTRANSFER")) {
                                     JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                    BigDecimal bdEqPaymentStatus = null, bdCommPaymentStatus = null;
-                                    String eqPaymentStatus = "", commPaymentStatus = "";
+                                    BigDecimal bdEqPaymentStatus, bdCommPaymentStatus;
+                                    String eqPaymentStatus, commPaymentStatus, defaultPaymentMode;
                                     if (jsonArray.length() != 0) {
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -14076,6 +14074,11 @@ public class BankDetailsFormFragment extends Fragment
                                                         || object.getString("COMMPAYMENTSTATUS")
                                                         .equals("")) ? ""
                                                         : object.getString("COMMPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!eqPaymentStatus.equals("")
                                                     && !commPaymentStatus.equals("")) {
                                                     bdEqPaymentStatus =
@@ -14085,7 +14088,8 @@ public class BankDetailsFormFragment extends Fragment
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(
                                                         (int) bdEqPaymentStatus.longValue(),
-                                                        (int) bdCommPaymentStatus.longValue());
+                                                        (int) bdCommPaymentStatus.longValue(),
+                                                        defaultPaymentMode);
                                                 } else {
                                                     //                                                MOSLCommon.showToastMsg(mContext, "Status is null");
                                                 }
@@ -14095,12 +14099,18 @@ public class BankDetailsFormFragment extends Fragment
                                                     || object.getString("EQPAYMENTSTATUS")
                                                     .equals("")) ? ""
                                                     : object.getString("EQPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!eqPaymentStatus.equals("")) {
                                                     bdEqPaymentStatus =
                                                         new BigDecimal(eqPaymentStatus);
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(
-                                                        (int) bdEqPaymentStatus.longValue(), 4);
+                                                        (int) bdEqPaymentStatus.longValue(), 4,
+                                                        defaultPaymentMode);
                                                 }
                                             } else if (object.has("COMMPAYMENTSTATUS")) {
                                                 commPaymentStatus =
@@ -14108,12 +14118,18 @@ public class BankDetailsFormFragment extends Fragment
                                                         || object.getString("COMMPAYMENTSTATUS")
                                                         .equals("")) ? ""
                                                         : object.getString("COMMPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!commPaymentStatus.equals("")) {
                                                     bdCommPaymentStatus =
                                                         new BigDecimal(commPaymentStatus);
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(4,
-                                                        (int) bdCommPaymentStatus.longValue());
+                                                        (int) bdCommPaymentStatus.longValue(),
+                                                        defaultPaymentMode);
                                                 }
                                             }
 
@@ -14174,16 +14190,15 @@ public class BankDetailsFormFragment extends Fragment
         }
     }
 
-    private void navigateToFundTransfer(int equityStatus, int commodityStatus) {
+    private void navigateToFundTransfer(int equityStatus, int commodityStatus,
+        String defaultPaymentMode) {
         llFundTransfer.setVisibility(View.VISIBLE);
         llBankDetailForm.setVisibility(View.GONE);
         customProgress.setVisibility(View.GONE);
         fragFundTransfer = (FundTransferFragment) getChildFragmentManager().findFragmentById(
             R.id.fragFundTransfer);
         fragFundTransfer.setTabPageIndicator(tabPageIndicator);
-        fragFundTransfer.replaceNetBankingFragment();
-
-
+        fragFundTransfer.replaceDefaultFragment(defaultPaymentMode);
     }
 
     //set Equity bank info Review and edit
@@ -14902,12 +14917,21 @@ public class BankDetailsFormFragment extends Fragment
      * */
     private int minMarginValueForOtherAmount() {
         //return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
-        return (getAppType().equalsIgnoreCase(DIRECT) || equAuSmall || commAuSmall) ? 1000 : 50000;
+        if (getAppType().equalsIgnoreCase(DIRECT)) {
+            return 1000;
+        } else if (equAuSmall || commAuSmall) {
+            return 0;
+        } else {
+            return 50000;
+        }
     }
 
     private String otherAmountValidationMessage() {
-        if (getAppType().equalsIgnoreCase(DIRECT) || equAuSmall || commAuSmall) {
+        //if (getAppType().equalsIgnoreCase(DIRECT) || equAuSmall || commAuSmall) {
+        if (getAppType().equalsIgnoreCase(DIRECT)) {
             return getResources().getString(R.string.margin_25000);
+        } else if (equAuSmall || commAuSmall) {
+            return getResources().getString(R.string.margin_0);
         } else {
             return getResources().getString(R.string.margin_50000);
         }

@@ -54,6 +54,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
+import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.mobile.ekyc.model.RowData;
 import com.mosl.mobile.ekyc.register.RegisterActivity;
@@ -1927,6 +1928,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	public void gotoEkycPage(int xyz, Map hashMap) {
+        CommonModel.setSaathiAufsb(isAufsb());
 		switch (xyz) {
 			case MOSL_MENU_FRESH_REGISTRATION:
 				Intent registerIntent = new Intent(MOSLCommonActivity.this, RegisterActivity.class);

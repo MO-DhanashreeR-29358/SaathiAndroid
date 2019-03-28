@@ -313,17 +313,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             llCommodityCheque.setVisibility(View.VISIBLE);
             etCommFundTransferred.setText(commMargin);
         }
-        if (getAppType().equals(PP)) {
-            rlEquSkipPayment.setVisibility(View.VISIBLE);
-            rlCommSkipPayment.setVisibility(View.VISIBLE);
-            etEquFundTransferred.setEnabled(true);
-            etCommFundTransferred.setEnabled(true);
-        } else {
-            rlEquSkipPayment.setVisibility(View.GONE);
-            rlCommSkipPayment.setVisibility(View.GONE);
-            etEquFundTransferred.setEnabled(false);
-            etCommFundTransferred.setEnabled(false);
-        }
+        showSkipPaymentButton();
 
         if (mEquStatus == 0) {
             showEquitypending();
@@ -573,6 +563,19 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
         });
     }
 
+    private void showSkipPaymentButton() {
+        if (getAppType().equals(PP) || auSmall) {
+            rlEquSkipPayment.setVisibility(View.VISIBLE);
+            rlCommSkipPayment.setVisibility(View.VISIBLE);
+            etEquFundTransferred.setEnabled(true);
+            etCommFundTransferred.setEnabled(true);
+        } else {
+            rlEquSkipPayment.setVisibility(View.GONE);
+            rlCommSkipPayment.setVisibility(View.GONE);
+            etEquFundTransferred.setEnabled(false);
+            etCommFundTransferred.setEnabled(false);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -751,6 +754,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                                         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
                                         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                         */
+                                        showSkipPaymentButton();
                                         if (product.equalsIgnoreCase(EQUITY)) {
                                             eqPaymentMode = fundTransferThrough;
                                             eqPaymentId = Integer.parseInt(fundTransferThroughId);
