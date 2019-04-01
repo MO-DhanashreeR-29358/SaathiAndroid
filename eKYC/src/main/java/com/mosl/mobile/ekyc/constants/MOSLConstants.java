@@ -760,7 +760,7 @@ public interface MOSLConstants {
     String ResidentialStatusSJ = "ResidentialStatusSJ";
     String PermteleNoSJ = "PermteleNoSJ";
     String OtherCitySJ = "OtherCitySJ";
-
+    String SEARCH_BRANCH = "Search Branch";
     String NOMINEE_FNAME = "NOMINEE_FNAME";//Nominee detail
     String NOMINEE_MNAME = "NOMINEE_MNAME";
     String NOMINEE_LNAME = "NOMINEE_LNAME";

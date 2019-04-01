@@ -129,6 +129,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.isGotoFundTransfer;
 import static com.mosl.mobile.ekyc.model.CommonModel.isGotoReviewEdit;
 import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isSaathiAufsb;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrFutSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrOptSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquDPSchSelID;
@@ -1665,6 +1666,11 @@ public class BankDetailsFormFragment extends Fragment
             arrListBrokerage.add(new RowData(1, "D", DEFAULT));
             arrListBrokerage.add(new RowData(2, "MR", MAX_RATE));
         }
+
+        if (isSaathiAufsb()) {
+            btnEquityBankDetails.setText(SEARCH_BRANCH);
+        }
+
         arrAdapBrokerage =
             new ArrayAdapter<RowData>(mContext, R.layout.simple_spinner_item, arrListBrokerage);
         arrAdapBrokerage.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
