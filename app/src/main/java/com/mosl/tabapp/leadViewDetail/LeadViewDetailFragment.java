@@ -4769,7 +4769,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 				return false;
 			} else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
 				&& isBlank(etProspectRefereeName.getText().toString().trim())) {
-				tvProspectRefereeNameError.setText(ENTER_PROSPECT_REFERRER_NAME);
+				tvProspectRefereeNameError.setText(ENTER_PROSPECT_REFEREE_NAME);
 				tvProspectRefereeNameError.setVisibility(View.VISIBLE);
 				etProspectRefereeName.requestFocus();
 				return false;

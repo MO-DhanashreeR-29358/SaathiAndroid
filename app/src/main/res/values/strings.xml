@@ -42,9 +42,9 @@
     <string name="BA_SNAPSHOT">BA Snapshot</string>
     <string name="BA_CATEGORY">BA Category</string>
     <string name="LEAD_HAVING_THE_POTENTIAL_OF_PMS_PRODUCT">Lead having the potential of PMS product</string>
-    <string name="PROSPECT_REFERRER_NAME_HINT_TXT">Prospect Referrer Name</string>
-    <string name="PROSPECT_REFERRER_MOBILE_HINT_TXT">Prospect Referrer Mobile</string>
-    <string name="PROSPECT_REFERRER_EMAIL_HINT_TXT">Prospect Referrer Email</string>
+    <string name="PROSPECT_REFEREE_NAME_HINT_TXT">Prospect Referee Name</string>
+    <string name="PROSPECT_REFEREE_MOBILE_HINT_TXT">Prospect Referee Mobile</string>
+    <string name="PROSPECT_REFEREE_EMAIL_HINT_TXT">Prospect Referee Email</string>
 
 
     <string-array name="meetingDuration">

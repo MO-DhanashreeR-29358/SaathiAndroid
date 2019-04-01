@@ -611,7 +611,7 @@ public interface MOSLConstants extends LabelConfig {
 	String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
 
 	// Prospect Reffer changes
-	String ENTER_PROSPECT_REFERRER_NAME = "Enter Prospect Referrer Name";
+	String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
 	String INVALID_MOBILE_NO = "Invalid mobile number.";
 	String INVALID_EMAIL_ID = "Invalid email id.";
 	String ENTER_EMAIL_ID = "Enter email id.";
