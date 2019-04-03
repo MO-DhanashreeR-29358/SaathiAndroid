@@ -156,6 +156,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 														BUSINESS_UNIT_ID);
 
 											boolean aufsb = userType.equals("9");
+											AccountDetails.setNewEkyc(aufsb);
 
 											new RoleSelectionModel("", "", "", "",
 												employeeCode.trim(), rmId.trim(),

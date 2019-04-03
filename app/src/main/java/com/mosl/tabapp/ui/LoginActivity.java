@@ -186,7 +186,7 @@ public class LoginActivity extends FragmentActivity
 										setAppType(CRM);
 
 										boolean aufsb = userType.equals("9");
-
+										AccountDetails.setNewEkyc(aufsb);
 										LoginResponseData loginData = new LoginResponseData();
 										loginData.setUserId(userId);
 										loginData.setEmployeeCode(employeeCode.trim());
