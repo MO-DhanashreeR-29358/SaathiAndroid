@@ -218,6 +218,7 @@ public interface MOSLConstants extends LabelConfig {
     //Login
     String USER = "User";
     String SMT_ENABLED = "SMTEnabled";
+    String ISEKYCREVAMP = "IsEKYCRevamp";
     String AUTH_STATE = "AuthState";
     String USER_ID = "Id";
     String BUSINESS_PROFILE_ID = "BusinessProfileId";

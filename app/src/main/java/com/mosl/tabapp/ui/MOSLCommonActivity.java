@@ -1439,6 +1439,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 											JSONObject objDetail = response.getJSONObject(RESPONSE);
 											boolean smtEnabled =
 												objDetail.getString(SMT_ENABLED).equals("1");
+											boolean isEkycRevemp =
+												objDetail.getString(ISEKYCREVAMP).equals("1");
 											JSONObject objDetailUser =
 												objDetail.getJSONObject(USER);
 											String userId = objDetailUser.isNull(USER_ID) ?
@@ -1499,7 +1501,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 												employeeCode, token,
 												businessUnitId,
 												branchCode, userType,
-												smtEnabled, aufsb);
+												smtEnabled, aufsb, isEkycRevemp);
 
 											initView();
 										} else {
