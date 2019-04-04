@@ -306,6 +306,7 @@ public interface MOSLConstants extends LabelConfig {
     String STAGEID = "StageID";//Stage
     String STAGECODE = "StageCode";
     String STAGENAME = "StageName";
+    String SHOWPOTENTIALPOPUP = "ShowPotentialPopup";
     String STATUSID = "StatusID";//Status
     String STATUSNAME = "StatusName";
     String COUNTRYID = "CountryId";//Country
@@ -609,5 +610,7 @@ public interface MOSLConstants extends LabelConfig {
     String EKYC_APP_NOT_AVAILABLE = "Ekyc app not available";
     String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao";
     String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
+    String GETSTAGEMOBILESELECTLIST = "Stage/GetStageMobileSelectList";
+
 }
 
