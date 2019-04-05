@@ -100,6 +100,8 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 											JSONObject objDetail = response.getJSONObject(RESPONSE);
 											boolean smtEnabled =
 												objDetail.getString(SMT_ENABLED).equals("1");
+											boolean isEkycRevemp =
+												objDetail.getString(ISEKYCREVAMP).equals("1");
 											JSONObject objDetailUser =
 												objDetail.getJSONObject(USER);
 											String userId = objDetailUser.isNull(USER_ID) ?
@@ -156,6 +158,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 														BUSINESS_UNIT_ID);
 
 											boolean aufsb = userType.equals("9");
+											AccountDetails.setNewEkyc(aufsb);
 
 											new RoleSelectionModel("", "", "", "",
 												employeeCode.trim(), rmId.trim(),
@@ -169,7 +172,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 												employeeCode, token,
 												businessUnitId,
 												branchCode, userType,
-												smtEnabled, aufsb);
+												smtEnabled, aufsb, isEkycRevemp);
 											MOSLCommonActivity.sendRegistrationToServer(
 												SplashActivity.this, getContentResolver(), false);
 											if (aufsb) {

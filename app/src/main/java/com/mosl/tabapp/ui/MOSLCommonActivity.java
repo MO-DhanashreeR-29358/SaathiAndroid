@@ -736,6 +736,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							map.put(OSTYPE, "ANDROID");
 							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
 							map.put(TOKENKEY, AccountDetails.getToken());
+							map.put(ISAUFSB, AccountDetails.isAufsb());
 							newEkyc(getInputBody(map));
 						} else {
 							ekycVersionCheck(MOSL_MENU_FRESH_REGISTRATION, new HashMap());
@@ -750,6 +751,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							map.put(OSTYPE, "ANDROID");
 							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
 							map.put(TOKENKEY, AccountDetails.getToken());
+							map.put(ISAUFSB, AccountDetails.isAufsb());
 							newEkyc(getInputBody(map));
 						} else {
 							ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
@@ -1043,7 +1045,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 												|| jsonObject.getString("eKYC_UserID").equals(""))
 												? "0" : jsonObject.getString("eKYC_UserID");
 											if (AccountDetails.isNewEkyc()) {
-												HashMap<String, String> map = new HashMap();
+												HashMap map = new HashMap();
 												map.put(NEW_USERID, eKYC_UserID);
 												map.put(BRANCHEMPCODE,
 													AccountDetails.getEmployeeCode());
@@ -1053,6 +1055,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 												map.put(APPLOGINID,
 													AccountDetails.getEmployeeCode());
 												map.put(TOKENKEY, AccountDetails.getToken());
+												map.put(ISAUFSB, AccountDetails.isAufsb());
 												newEkyc(getInputBody(map));
 											} else {
 												HashMap<String, String> hashMap = new HashMap();
@@ -1437,6 +1440,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 											JSONObject objDetail = response.getJSONObject(RESPONSE);
 											boolean smtEnabled =
 												objDetail.getString(SMT_ENABLED).equals("1");
+											boolean isEkycRevemp =
+												objDetail.getString(ISEKYCREVAMP).equals("1");
 											JSONObject objDetailUser =
 												objDetail.getJSONObject(USER);
 											String userId = objDetailUser.isNull(USER_ID) ?
@@ -1497,7 +1502,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 												employeeCode, token,
 												businessUnitId,
 												branchCode, userType,
-												smtEnabled, aufsb);
+												smtEnabled, aufsb, isEkycRevemp);
 
 											initView();
 										} else {
@@ -2341,7 +2346,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 						Map hashMap = new HashMap();
 						hashMap.put(USERID, searchResultModel.getOaoUserId().toString());
 						if (AccountDetails.isNewEkyc()) {
-							HashMap<String, String> map = new HashMap();
+							HashMap map = new HashMap();
 							map.put(NEW_USERID, searchResultModel.getOaoUserId().toString());
 							map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
 							map.put(COMMANDTYPE, "RESUME");
@@ -2349,6 +2354,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							map.put(OSTYPE, "ANDROID");
 							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
 							map.put(TOKENKEY, AccountDetails.getToken());
+							map.put(ISAUFSB, AccountDetails.isAufsb());
 							newEkyc(getInputBody(map));
 						} else {
 							ekycVersionCheck(CALL_PROSPECT_DETAILS, hashMap);

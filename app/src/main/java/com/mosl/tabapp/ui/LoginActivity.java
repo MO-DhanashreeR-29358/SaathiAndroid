@@ -133,6 +133,8 @@ public class LoginActivity extends FragmentActivity
 										JSONObject objDetail = response.getJSONObject(RESPONSE);
 										boolean smtEnabled =
 											objDetail.getString(SMT_ENABLED).equals("1");
+										boolean isEkycRevemp =
+											objDetail.getString(ISEKYCREVAMP).equals("1");
 										JSONObject objDetailUser = objDetail.getJSONObject(USER);
 										String userId = objDetailUser.isNull(USER_ID) ? ""
 											: objDetailUser.getString(USER_ID);
@@ -186,7 +188,6 @@ public class LoginActivity extends FragmentActivity
 										setAppType(CRM);
 
 										boolean aufsb = userType.equals("9");
-
 										LoginResponseData loginData = new LoginResponseData();
 										loginData.setUserId(userId);
 										loginData.setEmployeeCode(employeeCode.trim());
@@ -205,7 +206,7 @@ public class LoginActivity extends FragmentActivity
 										loginData.setUserType(userType.trim());
 										loginData.setSmtEnabled(smtEnabled);
 										loginData.setAufsb(aufsb);
-
+										loginData.setEkycRevemp(isEkycRevemp);
 										new RoleSelectionModel("", "", "", "", employeeCode.trim(),
 											rmId.trim(), businessUnitId.trim(), "",/*roleId*/"");
 
@@ -297,7 +298,7 @@ public class LoginActivity extends FragmentActivity
 			loginData.getEmail(), loginData.getBusinessProfileId(),
 			loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(),
 			loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType(),
-			loginData.isSmtEnabled(), loginData.isAufsb());
+			loginData.isSmtEnabled(), loginData.isAufsb(), loginData.isEkycRevemp());
 		try {
 			MOSLCommonActivity.sendRegistrationToServer(LoginActivity.this, getContentResolver(),
 				false);

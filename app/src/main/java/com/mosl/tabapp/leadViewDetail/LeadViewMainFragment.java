@@ -775,7 +775,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 Map inpuMap = new HashMap();
                 inpuMap.put(USERID, oaoUserId.toString());
                 if (AccountDetails.isNewEkyc()) {
-                    HashMap<String, String> map = new HashMap();
+                    HashMap map = new HashMap();
                     map.put(NEW_USERID, oaoUserId.toString());
                     map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
                     map.put(COMMANDTYPE, "RESUME");
@@ -783,6 +783,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                     map.put(OSTYPE, "ANDROID");
                     map.put(APPLOGINID, AccountDetails.getEmployeeCode());
                     map.put(TOKENKEY, AccountDetails.getToken());
+                    map.put(ISAUFSB, AccountDetails.isAufsb());
                     gotoNewEkyc(getInputBody(map));
                 } else {
                     gotoEkycVersionCheck(CALL_PROSPECT_DETAILS, inpuMap);
@@ -801,6 +802,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 inpuMap.put(PROSPECT_SOURCENAME, prospectSourceName);
                 inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
                 inpuMap.put(INTRESTEDIN, intrestedIn);
+                inpuMap.put(ISAUFSB, AccountDetails.isAufsb());
                 if (AccountDetails.isNewEkyc()) {
                     gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
                 } else {

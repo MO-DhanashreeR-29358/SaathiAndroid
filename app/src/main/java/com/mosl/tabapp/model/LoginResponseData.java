@@ -20,6 +20,15 @@ public class LoginResponseData implements Serializable {
     String userType = "";
     boolean smtEnabled;
     boolean aufsb;
+    boolean ekycRevemp;
+
+    public boolean isEkycRevemp() {
+        return ekycRevemp;
+    }
+
+    public void setEkycRevemp(boolean ekycRevemp) {
+        this.ekycRevemp = ekycRevemp;
+    }
 
     public String getUserType() {
         return userType;

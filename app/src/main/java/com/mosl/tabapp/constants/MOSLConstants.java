@@ -218,6 +218,7 @@ public interface MOSLConstants extends LabelConfig {
     //Login
     String USER = "User";
     String SMT_ENABLED = "SMTEnabled";
+    String ISEKYCREVAMP = "IsEKYCRevamp";
     String AUTH_STATE = "AuthState";
     String USER_ID = "Id";
     String BUSINESS_PROFILE_ID = "BusinessProfileId";
@@ -570,6 +571,7 @@ public interface MOSLConstants extends LabelConfig {
     String OSTYPE = "OSTYPE";
     String APPLOGINID = "APPLOGINID";
     String OUTPUT = "output";
+	String ISAUFSB = "isAufsb";
     String TOKENKEY = "TOKENKEY";
     String EKYC_APP_NOT_AVAILABLE = "Ekyc app not available";
     String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao";
