@@ -157,8 +157,8 @@ public class BankDetailsFormFragment extends Fragment
 
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                strDpSchName = ((RowData) arrDpScheme.get(i)).getValue();
-                strDpSchID = ((RowData) arrDpScheme.get(i)).getKey();
+                strDpSchName = arrDpScheme.get(i).getValue();
+                strDpSchID = arrDpScheme.get(i).getKey();
                 etDpSchemeError.setVisibility(View.GONE);
                 if (!strDpSchID.equalsIgnoreCase("-1")) {
                     tvEquAccOpenNote.setText("DP-AMC " + strDpSchName);
@@ -3702,6 +3702,7 @@ public class BankDetailsFormFragment extends Fragment
                             public void onSuccess(int statusCode, Header[] headers,
                                 JSONObject response) {
                                 if (response != null && response.length() != 0) {
+                                    String accountOpeningFee = "";
                                     try {
                                         JSONArray jsonArray =
                                             response.getJSONArray("SchemeDetails");
@@ -3772,7 +3773,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("CURRENCYOPTIONS")
                                                             .equals("")) ? ""
                                                             : object.getString("CURRENCYOPTIONS");
-                                                    String accountOpeningFee =
+                                                    accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -3830,7 +3831,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("ValuePackFee")
                                                             .equals("")) ? ""
                                                             : object.getString("ValuePackFee");
-                                                    String accountOpeningFee =
+                                                    accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -3903,7 +3904,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("CURRENCYOPTIONS")
                                                             .equals("")) ? ""
                                                             : object.getString("CURRENCYOPTIONS");
-                                                    String accountOpeningFee =
+                                                    accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -4070,6 +4071,9 @@ public class BankDetailsFormFragment extends Fragment
                                             currencyoptionRadiogroup.setVisibility(View.GONE);
                                         }
                                         customProgress.setVisibility(View.GONE);
+                                        if (getAppType().equals(CRM)) {
+                                            getDpSchemeDetails(accountOpeningFee, schemeID);
+                                        }
                                     } catch (Exception e) {
                                         Timber.e(e.toString());
                                         System.out.println("ArrayoutofBondError" + e.toString());
@@ -9046,7 +9050,8 @@ public class BankDetailsFormFragment extends Fragment
                             try {
                                 if (response.has("SchemeEQ")) {
                                     JSONArray jsonArrScheme = response.getJSONArray("SchemeEQ");
-                                    String schemeSelectedID = null, productID = null;
+                                    String schemeSelectedID = null, productID = null,
+                                        accountOpeningFee = null;
                                     if (jsonArrScheme.length() != 0) {
                                         arrEquScheme.add(
                                             new RowData(0, "-1", "Select", "", "Select", "", ""));
@@ -9075,7 +9080,7 @@ public class BankDetailsFormFragment extends Fragment
                                                 ? "" : object.getString("Margin_Deposit");
                                             BigDecimal bdMarginDeposit =
                                                 new BigDecimal(marginDeposit);
-                                            String accountOpeningFee =
+                                            accountOpeningFee =
                                                 (object.isNull("Account_Opening_Fee")
                                                     || object.getString("Account_Opening_Fee")
                                                     .equals("")) ? ""
@@ -9091,7 +9096,6 @@ public class BankDetailsFormFragment extends Fragment
                                             schemeSelectedID = (object.isNull("SchemeSelectedID")
                                                 || object.getString("SchemeSelectedID").equals(""))
                                                 ? "" : object.getString("SchemeSelectedID");
-                                            getDpSchemeDetails(accountOpeningFee);
 
                                             if (object.has("AU_SMALL")) {
                                                 String auSmall = (object.isNull("AU_SMALL")
@@ -9188,7 +9192,8 @@ public class BankDetailsFormFragment extends Fragment
                                             }
                                         }
                                     }
-                                    arrAdapEquScheme = new ArrayAdapter<RowData>(mContext,
+                                    getDpSchemeDetails(accountOpeningFee, schemeSelectedID);
+                                    arrAdapEquScheme = new ArrayAdapter<>(mContext,
                                         R.layout.simple_spinner_item, arrEquScheme);
                                     arrAdapEquScheme.setDropDownViewResource(
                                         android.R.layout.simple_spinner_dropdown_item);
@@ -14519,10 +14524,11 @@ public class BankDetailsFormFragment extends Fragment
         }
     }
 
-    public void getDpSchemeDetails(final String accountOpeningFee) {
+    public void getDpSchemeDetails(final String accountOpeningFee, String schemeSelectedID) {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             Map inputMap = new HashMap();
             inputMap.put("_userId", getUserID());
+            inputMap.put("_SchemeID", schemeSelectedID);
 
             String flag = GETDPSCHEMEDETAILS;
             String category = SCHEMEDETAILS;
@@ -14549,7 +14555,7 @@ public class BankDetailsFormFragment extends Fragment
                                                 : object.getString("PROFILE_NAME");
                                         arrDpScheme.add(new RowData((i + 1), id, name));
                                     }
-                                    arrAdapDpScheme = new ArrayAdapter<RowData>(mContext,
+                                    arrAdapDpScheme = new ArrayAdapter<>(mContext,
                                         R.layout.simple_spinner_item, arrDpScheme);
                                     arrAdapDpScheme.setDropDownViewResource(
                                         android.R.layout.simple_spinner_dropdown_item);

@@ -506,7 +506,8 @@
     <string name="number_registered_with_us">Enter Your Mobile Number Registered with us</string>
     <string name="forgot_password">Forgot Password ?</string>
 
-    <string name="fund_transfer_error_msg">Please enter minimum 5 digit value</string>
+    <!--<string name="fund_transfer_error_msg">Please enter minimum 5 digit value</string>-->
+    <string name="fund_transfer_error_msg">Please enter minimum 4 digit value</string>
     <string name="fund_transfer_error_msg_3digits">Please enter minimum 3 digit value</string>
     <string name="fund_transfer_error_msg_PP">Amount should be greater than zero</string>
     <string name="confirm_bank_ac_no">Re-Enter Bank A/C No</string>

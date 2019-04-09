@@ -197,7 +197,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                     input_layout_FundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && !auSmall && etFundTransferred.length() < 5) {
+                        && !auSmall && etFundTransferred.length() < 4) {
                         etFundTransferredError.setVisibility(View.VISIBLE);
                         etFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -576,7 +576,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && !auSmall && etFundTransferred.length() < 5) {
+                && !auSmall && etFundTransferred.length() < 4) {
                 etFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etFundTransferredError.setVisibility(View.VISIBLE);
