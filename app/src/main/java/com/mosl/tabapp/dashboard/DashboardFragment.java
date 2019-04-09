@@ -37,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -71,6 +72,11 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -89,12 +95,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
-import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -299,8 +301,6 @@ public class DashboardFragment extends MOSLCommonFragment
 
         btnClientTraded.setOnClickListener(this);
 
-        if (isAufsb()) floatingActionsMenu.setVisibility(View.GONE);
-
         floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(
                 new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
                     @Override
@@ -406,10 +406,6 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         });
 
-        if (isAufsb()) {
-            rlClientLeads.setVisibility(View.GONE);
-            btnLeads.setText(DASHBOARD);
-        }
 
     }
 
@@ -891,18 +887,18 @@ public class DashboardFragment extends MOSLCommonFragment
                                         } else {
                                             hideProgress();
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                             hideProgress();
                                             return;
                                         }
                                     } else {
-                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "Ok", true, null);
                                         hideProgress();
                                         return;
                                     }
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "Ok", true, null);
                                     hideProgress();
                                     return;
                                 }
@@ -930,8 +926,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                     hideProgress();
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
                                                 false, new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
@@ -948,12 +943,12 @@ public class DashboardFragment extends MOSLCommonFragment
                                         if (CRMAppUtil.isBlank(error)) {
                                             error = SOME_SERVER_ERROR_OCCURRED;
                                         }
-                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
                             }
 
@@ -964,7 +959,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 hideProgress();
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                                 return;
                             }
@@ -976,7 +971,7 @@ public class DashboardFragment extends MOSLCommonFragment
 
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                                 return;
                             }
@@ -984,8 +979,7 @@ public class DashboardFragment extends MOSLCommonFragment
             } catch (Exception e) {
                 e.printStackTrace();
                 MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
                         true, null);
                 hideProgress();
                 return;
@@ -993,7 +987,7 @@ public class DashboardFragment extends MOSLCommonFragment
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                    INTERNET_CONNECTION, "OK", true, null);
             return;
         }
     }
@@ -1072,7 +1066,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                         } else {
                                             hideProgress();
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -1081,7 +1075,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     hideProgress();
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
                             }
 
@@ -1107,8 +1101,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                     hideProgress();
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
                                                 false, new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
@@ -1121,7 +1114,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                                 });
                                         return;
                                     } else {
-                                        //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                        //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
@@ -1136,7 +1129,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
 
@@ -1147,7 +1140,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
                         });
@@ -1155,14 +1148,13 @@ public class DashboardFragment extends MOSLCommonFragment
                 hideProgress();
                 e.printStackTrace();
                 MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
                         true, null);
             }
         } else {
             //            customProgress.setVisibility(View.GONE);
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
@@ -1690,7 +1682,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                         } else {
                                             hideProgress();
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -1699,7 +1691,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     hideProgress();
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
                             }
 
@@ -1725,8 +1717,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                     hideProgress();
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
                                                 false, new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
@@ -1743,12 +1734,12 @@ public class DashboardFragment extends MOSLCommonFragment
                                         if (CRMAppUtil.isBlank(error)) {
                                             error = SOME_SERVER_ERROR_OCCURRED;
                                         }
-                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
                             }
 
@@ -1759,7 +1750,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
 
@@ -1770,7 +1761,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
                         });
@@ -1778,8 +1769,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 hideProgress();
                 e.printStackTrace();
                 MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
                         true, null);
             }
 
@@ -1787,7 +1777,7 @@ public class DashboardFragment extends MOSLCommonFragment
         } else {
             //            customProgress.setVisibility(View.GONE);
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
@@ -1908,7 +1898,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                         } else {
                                             hideProgress();
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
+                                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
                                     } else {
                                         hideProgress();
@@ -1917,7 +1907,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     hideProgress();
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                 }
                             }
 
@@ -1943,8 +1933,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                     hideProgress();
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
                                                 false, new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
@@ -1961,12 +1950,12 @@ public class DashboardFragment extends MOSLCommonFragment
                                         if (CRMAppUtil.isBlank(error)) {
                                             error = SOME_SERVER_ERROR_OCCURRED;
                                         }
-                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
+                                        // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
                             }
 
@@ -1977,7 +1966,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
 
@@ -1988,7 +1977,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                 //                        customProgress.setVisibility(View.GONE);
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                         getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED,
-                                    OK, true, null);
+                                        "OK", true, null);
                                 hideProgress();
                             }
                         });
@@ -1996,14 +1985,13 @@ public class DashboardFragment extends MOSLCommonFragment
                 hideProgress();
                 e.printStackTrace();
                 MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
+                        getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK",
                         true, null);
             }
         } else {
             //            customProgress.setVisibility(View.GONE);
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
@@ -2427,14 +2415,13 @@ public class DashboardFragment extends MOSLCommonFragment
                                                             : obj.getString("FilePath");
                                             if (filePath.isEmpty()) {
                                                 alertDialog(getMainActivity(), 0,
-                                                    getResources().getString(
-                                                        R.string.motilal_oswal), MISSING_FILE, OK,
+                                                        getResources().getString(R.string.motilal_oswal), MISSING_FILE, "OK",
                                                         true, null);
                                             } else {
                                                 new DownloadFileFromURL().execute(filePath.replaceAll(" ", "%20"));
                                             }
 
-                                   /* alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), DOCUMENT_DELETED, OK, true, new MSFDialog.DialogListener() {
+                                   /* alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), DOCUMENT_DELETED, "OK", true, new MSFDialog.DialogListener() {
                                         @Override
                                         public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                             if (action == MSFDialog.Action.OK) {
@@ -2445,16 +2432,16 @@ public class DashboardFragment extends MOSLCommonFragment
 
                                         } else {
                                             String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                            //   alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
+                                            //   alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
                                         }
                                     } catch (Exception ex) {
                                         hideProgress();
                                         ex.printStackTrace();
-                                        //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                                        //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                                     }
                                 } else {
                                     hideProgress();
-                                    //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                    //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
                             }
 
@@ -2478,8 +2465,7 @@ public class DashboardFragment extends MOSLCommonFragment
                                     hideProgress();
                                     if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                                         MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            UNAUTHORIZE_USER, OK,
+                                                getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
                                                 false, new MSFDialog.DialogListener() {
                                                     @Override
                                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
@@ -2496,12 +2482,12 @@ public class DashboardFragment extends MOSLCommonFragment
                                         if (CRMAppUtil.isBlank(error)) {
                                             error = SOME_SERVER_ERROR_OCCURRED;
                                         }
-                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
+                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
                                         return;
                                     }
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 }
                             }
 
@@ -2509,26 +2495,26 @@ public class DashboardFragment extends MOSLCommonFragment
                             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
                                                   Throwable throwable, JSONArray errorResponse) {
                                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                                //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
 
                             @Override
                             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
                                                   String responseString, Throwable throwable) {
                                 super.onFailure(statusCode, headers, responseString, throwable);
-                                // alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                                // alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             }
                         });
             } catch (Exception e) {
                 e.printStackTrace();
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
             }
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                    INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
@@ -2550,10 +2536,10 @@ public class DashboardFragment extends MOSLCommonFragment
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), OK, true, null);
+                    MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), "OK", true, null);
         } catch (Exception ex) {
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
         }
     }
 
@@ -2815,7 +2801,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 showDownloadFile(localFile);
             } else {
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
             }
         }
     }

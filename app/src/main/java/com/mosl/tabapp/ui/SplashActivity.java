@@ -33,7 +33,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	public static ArrayList<MenuReport> menuReportArrayList = new ArrayList<>();
 	// Splash screen timer
-	private static int SPLASH_TIME_OUT = 300;
+	private static int SPLASH_TIME_OUT = 3000;
 
 	public static Map getHeader(Context context) {
 		Map headerMap = new HashMap<>();

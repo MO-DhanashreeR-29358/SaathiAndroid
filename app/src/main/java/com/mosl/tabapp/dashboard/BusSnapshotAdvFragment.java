@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -19,13 +20,15 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class BusSnapshotAdvFragment extends MOSLCommonFragment {
 
@@ -172,9 +175,7 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
                             arrayListClient.clear();
                             tvNochart.setVisibility(View.VISIBLE);
                             if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-								MSFDialog.alertDialog(getMainActivity(), 0,
-									getResources().getString(R.string.motilal_oswal),
-									UNAUTHORIZE_USER, OK, false, new MSFDialog.DialogListener() {
+                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
                                     @Override
                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                         if (action == MSFDialog.Action.OK) {
@@ -196,18 +197,14 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-						MSFDialog.alertDialog(getMainActivity(), 0,
-							getResources().getString(R.string.motilal_oswal),
-							SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         clientHideProgress();
                     }
 
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
-						MSFDialog.alertDialog(getMainActivity(), 0,
-							getResources().getString(R.string.motilal_oswal),
-							SOME_SERVER_ERROR_OCCURRED, OK, true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         clientHideProgress();
                     }
 
@@ -215,14 +212,10 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
             } catch (Exception e) {
                 clientHideProgress();
                 e.printStackTrace();
-				MSFDialog.alertDialog(getMainActivity(), 0,
-					getResources().getString(R.string.motilal_oswal),
-					ERROR_LOADING_DATA_FOR + widgetSystemName, OK, true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
             }
         } else {
-			MSFDialog.alertDialog(getMainActivity(), 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
+            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
 
         }
 

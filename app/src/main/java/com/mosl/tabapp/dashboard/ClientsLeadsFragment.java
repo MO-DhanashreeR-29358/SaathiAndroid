@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -43,7 +44,9 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -51,7 +54,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
 
@@ -60,592 +64,551 @@ import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
  */
 
 public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnClickListener {
-	static Context mContext;
-	private View leadsView;
-	private HorizontalBarChart mChart;
-	private TextView tvTotal, tv, tvShowMore;
-	private LinearLayout llShowMore;
-	private Spinner spFilter1, spFilter2, spFilter3;
-	private DashboardModel dashboardModel;
-	private String widgetSystemName;
-	private Map addtionalParameterMap = new HashMap<>();
-	private String filterFirst = "", filterSecond = "", filterThird = "";
+  static Context mContext;
+  private View leadsView;
+  private HorizontalBarChart mChart;
+  private TextView tvTotal, tv, tvShowMore;
+  private LinearLayout llShowMore;
+  private Spinner spFilter1, spFilter2, spFilter3;
+  private DashboardModel dashboardModel;
+  private String widgetSystemName;
+  private Map addtionalParameterMap = new HashMap<>();
+  private String filterFirst = "", filterSecond = "", filterThird = "";
 
-	public static ClientsLeadsFragment newInstance(Context context) {
-		ClientsLeadsFragment fragment = new ClientsLeadsFragment();
-		Bundle args = new Bundle();
-		mContext = context;
-		fragment.setArguments(args);
-		return fragment;
-	}
+  public static ClientsLeadsFragment newInstance(Context context) {
+    ClientsLeadsFragment fragment = new ClientsLeadsFragment();
+    Bundle args = new Bundle();
+    mContext = context;
+    fragment.setArguments(args);
+    return fragment;
+  }
 
-	@Override
-	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-		Bundle savedInstanceState) {
-		leadsView = super.onCreateView(inflater, container, savedInstanceState);
-		attachLayout(R.layout.frag_lead);
-		setUpView(leadsView);
-		hideAppTitle(getClass().toString());
-		return leadsView;
-	}
+  @Override
+  public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    leadsView = super.onCreateView(inflater, container, savedInstanceState);
+    attachLayout(R.layout.frag_lead);
+    setUpView(leadsView);
+    hideAppTitle(getClass().toString());
+    return leadsView;
+  }
 
-	private void setUpView(View leadsView) {
-		spFilter1 = leadsView.findViewById(R.id.spFilter1);
-		spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-				int position,
-				long id) {
-				filterFirst = ((FilterRowData) spFilter1.getSelectedItem()).getValue();
-				webServiceCall();
-			}
+  private void setUpView(View leadsView) {
+    spFilter1 = leadsView.findViewById(R.id.spFilter1);
+    spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+          long id) {
+        filterFirst = ((FilterRowData) spFilter1.getSelectedItem()).getValue();
+        webServiceCall();
+      }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
-			}
-		});
+      @Override
+      public void onNothingSelected(AdapterView<?> parentView) {
+      }
+    });
 
-		spFilter2 = leadsView.findViewById(R.id.spFilter2);
-		spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-				int position,
-				long id) {
-				filterSecond = ((FilterRowData) spFilter2.getSelectedItem()).getValue();
-				webServiceCall();
-			}
+    spFilter2 = leadsView.findViewById(R.id.spFilter2);
+    spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+          long id) {
+        filterSecond = ((FilterRowData) spFilter2.getSelectedItem()).getValue();
+        webServiceCall();
+      }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
-			}
-		});
+      @Override
+      public void onNothingSelected(AdapterView<?> parentView) {
+      }
+    });
 
-		spFilter3 = leadsView.findViewById(R.id.spFilter3);
-		spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-				int position,
-				long id) {
-				filterThird = ((FilterRowData) spFilter3.getSelectedItem()).getValue();
-				webServiceCall();
-			}
+    spFilter3 = leadsView.findViewById(R.id.spFilter3);
+    spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+          long id) {
+        filterThird = ((FilterRowData) spFilter3.getSelectedItem()).getValue();
+        webServiceCall();
+      }
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parentView) {
-			}
-		});
+      @Override
+      public void onNothingSelected(AdapterView<?> parentView) {
+      }
+    });
 
-		try {
-			filterFirst = this.getArguments().getString(FILTERFIRST);
-			filterSecond = this.getArguments().getString(FILTERSECOND);
-			filterThird = this.getArguments().getString(FILTERTHIRD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    try {
+      filterFirst = this.getArguments().getString(FILTERFIRST);
+      filterSecond = this.getArguments().getString(FILTERSECOND);
+      filterThird = this.getArguments().getString(FILTERTHIRD);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
-		mChart = leadsView.findViewById(R.id.chart1);
-		mChart.getDescription().setEnabled(false);
-		mChart.setBackgroundColor(Color.WHITE);
-		mChart.setDrawGridBackground(false);
-		mChart.setDrawBarShadow(false);
-		mChart.setHighlightFullBarEnabled(false);
+    mChart = leadsView.findViewById(R.id.chart1);
+    mChart.getDescription().setEnabled(false);
+    mChart.setBackgroundColor(Color.WHITE);
+    mChart.setDrawGridBackground(false);
+    mChart.setDrawBarShadow(false);
+    mChart.setHighlightFullBarEnabled(false);
 
-		llShowMore = leadsView.findViewById(R.id.llShowMore);
-		tvTotal = leadsView.findViewById(R.id.tvTotal);
-		tvShowMore = leadsView.findViewById(R.id.tvShowMore);
-		tvShowMore.setPaintFlags(tvShowMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-		tv = leadsView.findViewById(R.id.tv);
+    llShowMore = leadsView.findViewById(R.id.llShowMore);
+    tvTotal = leadsView.findViewById(R.id.tvTotal);
+    tvShowMore = leadsView.findViewById(R.id.tvShowMore);
+    tvShowMore.setPaintFlags(tvShowMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+    tv = leadsView.findViewById(R.id.tv);
 
-		llShowMore.setOnClickListener(this);
+    llShowMore.setOnClickListener(this);
 
-		Legend l = mChart.getLegend();
-		l.setTextSize(getResources().getDimension(R.dimen.chart_text_size));
-		l.setWordWrapEnabled(true);
-		l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-		l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-		l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-		l.setDrawInside(false);
+    Legend l = mChart.getLegend();
+    l.setTextSize(getResources().getDimension(R.dimen.chart_text_size));
+    l.setWordWrapEnabled(true);
+    l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+    l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+    l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+    l.setDrawInside(false);
 
-		mChart.getDescription().setEnabled(false);
-		mChart.setPinchZoom(false);
-		mChart.setScaleXEnabled(true);
-		mChart.setScaleYEnabled(false);
-		mChart.setDrawGridBackground(false);
-		mChart.setDrawBarShadow(false);
+    mChart.getDescription().setEnabled(false);
+    mChart.setPinchZoom(false);
+    mChart.setScaleXEnabled(true);
+    mChart.setScaleYEnabled(false);
+    mChart.setDrawGridBackground(false);
+    mChart.setDrawBarShadow(false);
 
-		mChart.setDrawValueAboveBar(false);
-		mChart.setHighlightFullBarEnabled(false);
+    mChart.setDrawValueAboveBar(false);
+    mChart.setHighlightFullBarEnabled(false);
 
-		YAxis leftAxis = mChart.getAxisLeft();
-		//  leftAxis.setValueFormatter(new MyAxisValueFormatter());
-		leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-		mChart.getAxisRight().setEnabled(false);
-		mChart.getAxisLeft().setEnabled(false);
-		dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
+    YAxis leftAxis = mChart.getAxisLeft();
+    //  leftAxis.setValueFormatter(new MyAxisValueFormatter());
+    leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+    mChart.getAxisRight().setEnabled(false);
+    mChart.getAxisLeft().setEnabled(false);
+    dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
 
-		if (dashboardModel != null) {
-			DashboardGroupModel groupModel =
-				dashboardModel.getGroupModel(DashboardSystemModel.getLeadSystemName());
-			WidgetModel model;
-			List<WidgetModel> widgetList = groupModel.getWidgetList();
-			if (widgetList != null && widgetList.size() > 0) {
-				if (widgetList.size() == 1) {
-					model = widgetList.get(0);
-				} else {
-					model = widgetList.get(1);
-				}
-				widgetSystemName = model.getSystemName();
+    if (dashboardModel != null) {
+      DashboardGroupModel groupModel =
+          dashboardModel.getGroupModel(DashboardSystemModel.getLeadSystemName());
+      WidgetModel model;
+      List<WidgetModel> widgetList = groupModel.getWidgetList();
+      if (widgetList != null && widgetList.size() > 0) {
+        if (widgetList.size() == 1) {
+          model = widgetList.get(0);
+        } else {
+          model = widgetList.get(1);
+        }
+        widgetSystemName = model.getSystemName();
 
-				//set filter data
-				List<WidgetFilterModel> filterList = model.getWidgetFilterList();
-				if (filterList != null && filterList.size() == 2) {
-					ArrayAdapter<FilterRowData> adapter1 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(0).getFilterData());
-					adapter1.setDropDownViewResource(R.layout.mdropdown);
-					spFilter1.setAdapter(adapter1);
+        //set filter data
+        List<WidgetFilterModel> filterList = model.getWidgetFilterList();
+        if (filterList != null && filterList.size() == 2) {
+          ArrayAdapter<FilterRowData> adapter1 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(0).getFilterData());
+          adapter1.setDropDownViewResource(R.layout.mdropdown);
+          spFilter1.setAdapter(adapter1);
 
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
+          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          if (productDataFirst != null) {
+            spFilter1.setSelection(productDataFirst.getPosition());
+          }
 
-					ArrayAdapter<FilterRowData> adapter2 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(1).getFilterData());
-					adapter2.setDropDownViewResource(R.layout.mdropdown);
-					spFilter2.setAdapter(adapter2);
-					spFilter2.setVisibility(View.VISIBLE);
+          ArrayAdapter<FilterRowData> adapter2 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(1).getFilterData());
+          adapter2.setDropDownViewResource(R.layout.mdropdown);
+          spFilter2.setAdapter(adapter2);
+          spFilter2.setVisibility(View.VISIBLE);
 
-					FilterRowData productDataSecond =
-						getSpinnerFilterDataByValue(filterSecond, adapter2);
-					if (productDataSecond != null) {
-						spFilter2.setSelection(productDataSecond.getPosition());
-					}
-				}
-				if (filterList != null && filterList.size() == 3) {
-					ArrayAdapter<FilterRowData> adapter1 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(0).getFilterData());
-					adapter1.setDropDownViewResource(R.layout.mdropdown);
-					spFilter1.setAdapter(adapter1);
+          FilterRowData productDataSecond = getSpinnerFilterDataByValue(filterSecond, adapter2);
+          if (productDataSecond != null) {
+            spFilter2.setSelection(productDataSecond.getPosition());
+          }
+        }
+        if (filterList != null && filterList.size() == 3) {
+          ArrayAdapter<FilterRowData> adapter1 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(0).getFilterData());
+          adapter1.setDropDownViewResource(R.layout.mdropdown);
+          spFilter1.setAdapter(adapter1);
 
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
+          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          if (productDataFirst != null) {
+            spFilter1.setSelection(productDataFirst.getPosition());
+          }
 
-					ArrayAdapter<FilterRowData> adapter2 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(1).getFilterData());
-					adapter2.setDropDownViewResource(R.layout.mdropdown);
-					spFilter2.setAdapter(adapter2);
+          ArrayAdapter<FilterRowData> adapter2 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(1).getFilterData());
+          adapter2.setDropDownViewResource(R.layout.mdropdown);
+          spFilter2.setAdapter(adapter2);
 
-					FilterRowData productDataSecond =
-						getSpinnerFilterDataByValue(filterSecond, adapter2);
-					if (productDataSecond != null) {
-						spFilter2.setSelection(productDataSecond.getPosition());
-					}
+          FilterRowData productDataSecond = getSpinnerFilterDataByValue(filterSecond, adapter2);
+          if (productDataSecond != null) {
+            spFilter2.setSelection(productDataSecond.getPosition());
+          }
 
-					ArrayAdapter<FilterRowData> adapter3 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(2).getFilterData());
-					adapter3.setDropDownViewResource(R.layout.mdropdown);
-					spFilter3.setAdapter(adapter3);
+          ArrayAdapter<FilterRowData> adapter3 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(2).getFilterData());
+          adapter3.setDropDownViewResource(R.layout.mdropdown);
+          spFilter3.setAdapter(adapter3);
 
-					FilterRowData productDataThird =
-						getSpinnerFilterDataByValue(filterThird, adapter3);
-					if (productDataThird != null) {
-						spFilter3.setSelection(productDataThird.getPosition());
-					}
-					spFilter2.setVisibility(View.VISIBLE);
-					spFilter3.setVisibility(View.VISIBLE);
-				} else if (filterList != null && filterList.size() == 1) {
-					ArrayAdapter<FilterRowData> adapter1 =
-						new ArrayAdapter<FilterRowData>(getActivity(),
-							android.R.layout.simple_spinner_item,
-							filterList.get(0).getFilterData());
-					adapter1.setDropDownViewResource(R.layout.mdropdown);
-					spFilter1.setAdapter(adapter1);
+          FilterRowData productDataThird = getSpinnerFilterDataByValue(filterThird, adapter3);
+          if (productDataThird != null) {
+            spFilter3.setSelection(productDataThird.getPosition());
+          }
+          spFilter2.setVisibility(View.VISIBLE);
+          spFilter3.setVisibility(View.VISIBLE);
+        } else if (filterList != null && filterList.size() == 1) {
+          ArrayAdapter<FilterRowData> adapter1 =
+              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+                  filterList.get(0).getFilterData());
+          adapter1.setDropDownViewResource(R.layout.mdropdown);
+          spFilter1.setAdapter(adapter1);
 
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
-				}
-			}
-		}
-	}
+          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          if (productDataFirst != null) {
+            spFilter1.setSelection(productDataFirst.getPosition());
+          }
+        }
+      }
+    }
+  }
 
-	private Map getAddtionalParameterMap() {
+  private Map getAddtionalParameterMap() {
 
-		Map addtionalParameterMap = new HashMap<>();
-		try {
-			FilterRowData filter1 = (FilterRowData) spFilter1.getSelectedItem();
-			FilterRowData filter2 = (FilterRowData) spFilter2.getSelectedItem();
-			FilterRowData filter3 = (FilterRowData) spFilter3.getSelectedItem();
+    Map addtionalParameterMap = new HashMap<>();
+    try {
+      FilterRowData filter1 = (FilterRowData) spFilter1.getSelectedItem();
+      FilterRowData filter2 = (FilterRowData) spFilter2.getSelectedItem();
+      FilterRowData filter3 = (FilterRowData) spFilter3.getSelectedItem();
 
-			if (filter1 != null) {
-				addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
-			}
-			if (filter2 != null) {
-				addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
-				filterSecond = filter2.getValue();
-			}
-			if (filter3 != null) {
-				addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
-				filterThird = filter3.getValue();
-			}
-			addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
+      if (filter1 != null) {
+        addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
+      }
+      if (filter2 != null) {
+        addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
+        filterSecond = filter2.getValue();
+      }
+      if (filter3 != null) {
+        addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
+        filterThird = filter3.getValue();
+      }
+      addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
 
-		return addtionalParameterMap;
-	}
+    return addtionalParameterMap;
+  }
 
-	private void webServiceCall() {
-		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-			showProgress();
-			String serviceMethod = "Dashboard/LoadWidgetAsync";
-			Map inputMap = new HashMap<>();
+  private void webServiceCall() {
+    if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+      showProgress();
+      String serviceMethod = "Dashboard/LoadWidgetAsync";
+      Map inputMap = new HashMap<>();
 
-			inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-			inputMap.put("WidgetSystemName", widgetSystemName);
-			inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-			inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-			inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
+      inputMap.put("AddtionalParameters", getAddtionalParameterMap());
+      inputMap.put("WidgetSystemName", widgetSystemName);
+      inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
+      inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
+      inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
 
-			try {
-				CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-					new TextHttpResponseHandler() {
+      try {
+        CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+            new TextHttpResponseHandler() {
 
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-							String responseString,
-							Throwable throwable) {
-							try {
-								JSONObject errorResponse = new JSONObject(responseString);
-								hideProgress();
-								if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-									MSFDialog.alertDialog(getMainActivity(), 0,
-										getResources().getString(R.string.motilal_oswal),
-										UNAUTHORIZE_USER, "OK",
-										false, new MSFDialog.DialogListener() {
-											@Override
-											public void alertDialogAction(MSFDialog.Action action,
-												Object... data) {
-												if (action == MSFDialog.Action.OK) {
-													Intent i = new Intent(getMainActivity(),
-														LoginActivity.class);
-													startActivity(i);
-													getActivity().finish();
-												}
-											}
-										});
-									return;
-								} else {
-									String error =
-										CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-									if (CRMAppUtil.isBlank(error)) {
-										error = SOME_SERVER_ERROR_OCCURRED;
-									}
-									MSFDialog.alertDialog(getMainActivity(), 0,
-										getResources().getString(R.string.motilal_oswal), error,
-										"OK", true, null);
-									return;
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								// MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-							}
-						}
+              @Override
+              public void onFailure(int statusCode, Header[] headers, String responseString,
+                  Throwable throwable) {
+                try {
+                  JSONObject errorResponse = new JSONObject(responseString);
+                  hideProgress();
+                  if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+                    MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                        false, new MSFDialog.DialogListener() {
+                          @Override
+                          public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                              Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                              startActivity(i);
+                              getActivity().finish();
+                            }
+                          }
+                        });
+                    return;
+                  } else {
+                    String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                    if (CRMAppUtil.isBlank(error)) {
+                      error = SOME_SERVER_ERROR_OCCURRED;
+                    }
+                    MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                    return;
+                  }
+                } catch (Exception ex) {
+                  ex.printStackTrace();
+                  // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                }
+              }
 
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers,
-							String responseS) {
-							try {
+              @Override
+              public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+                  String responseS) {
+                try {
 
-								Gson mGson = new Gson();
-								Type type = new TypeToken<HashMap<String, Object>>() {
-								}.getType();
-								HashMap<String, Object> response = mGson.fromJson(responseS, type);
-								if (statusCode == 200) {
-									String status = response.get(STATUS).toString();
-									if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase(
-										"true")) {
-										tv.setVisibility(View.VISIBLE);
-										llShowMore.setVisibility(View.VISIBLE);
-										hideProgress();
+                  Gson mGson = new Gson();
+                  Type type = new TypeToken<HashMap<String, Object>>() {
+                  }.getType();
+                  HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                  if (statusCode == 200) {
+                    String status = response.get(STATUS).toString();
+                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                      tv.setVisibility(View.VISIBLE);
+                      llShowMore.setVisibility(View.VISIBLE);
+                      hideProgress();
 
-										ArrayList<String> columnsYAxis = new ArrayList<String>();
-										String total = "";
-										String[] lableString = new String[] {};
+                      ArrayList<String> columnsYAxis = new ArrayList<String>();
+                      String total = "";
+                      String[] lableString = new String[] {};
 
-										final ArrayList<ArrayList<String>> yAxisListFirst =
-											new ArrayList<>();
-										Map<String, Object> responseJsonObj =
-											(Map<String, Object>) response.get("Response");
-										List<Map<String, Object>> arrayDetail =
-											(List<Map<String, Object>>) responseJsonObj.get(
-												"Table");
-										if (arrayDetail.size() != 0) {
-											for (int y = 2; y < arrayDetail.size(); y++) {
-												Map<String, Object> objDetail =
-													(Map<String, Object>) arrayDetail.get(y);
-												String stages =
-													objDetail.get("stage").toString().equals("")
-														? "0"
-														: objDetail.get("stage").toString();
-												if (stages.equalsIgnoreCase("Total")) {
-													total =
-														(objDetail.get("Total") == null || objDetail
-															.get("Total")
-															.toString()
-															.equals("")) ? "0"
-															: objDetail.get("Total").toString();
-												}
-											}
-											try {
-												if (responseJsonObj.get("Table1") != null) {
-													List<Map<String, Object>> arrayDetailTotal =
-														(List<Map<String, Object>>) responseJsonObj.get(
-															"Table1");
-													Map<String, Object> jobjFKey =
-														arrayDetailTotal.get(0);
-													for (Object keySetE : jobjFKey.keySet()) {
-														if (keySetE.toString()
-															.equalsIgnoreCase("id")
-															| keySetE.toString()
-															.trim()
-															.equalsIgnoreCase("Total")) {
-														} else {
-															columnsYAxis.add(keySetE.toString());
-														}
-													}
-													for (Map<String, Object> jobj : arrayDetailTotal) {
+                      final ArrayList<ArrayList<String>> yAxisListFirst = new ArrayList<>();
+                        Map<String, Object> responseJsonObj =
+                            (Map<String, Object>) response.get("Response");
+                        List<Map<String, Object>> arrayDetail =
+                            (List<Map<String, Object>>) responseJsonObj.get("Table");
+                      if (arrayDetail.size() != 0) {
+                        for (int y = 2; y < arrayDetail.size(); y++) {
+                            Map<String, Object> objDetail =
+                                (Map<String, Object>) arrayDetail.get(y);
+                          String stages = objDetail.get("stage").toString().equals("") ? "0"
+                              : objDetail.get("stage").toString();
+                          if (stages.equalsIgnoreCase("Total")) {
+                            String Total = (objDetail.get("Total").toString().equals("")) ? "0"
+                                : objDetail.get("Total").toString();
+                            total = Total;
+                          }
+                        }
+                        try {
+                          if (responseJsonObj.get("Table1") != null) {
+                              List<Map<String, Object>> arrayDetailTotal =
+                                  (List<Map<String, Object>>) responseJsonObj.get("Table1");
+                              Map<String, Object> jobjFKey = arrayDetailTotal.get(0);
+                            for (Object keySetE : jobjFKey.keySet()) {
+                              if (keySetE.toString().equalsIgnoreCase("id") | keySetE.toString()
+                                  .trim()
+                                  .equalsIgnoreCase("Total")) {
+                              } else {
+                                columnsYAxis.add(keySetE.toString());
+                              }
+                            }
+                              for (Map<String, Object> jobj : arrayDetailTotal) {
 
-														final ArrayList<String> yAxisList =
-															new ArrayList<String>();
+                              final ArrayList<String> yAxisList = new ArrayList<String>();
 
-														for (Object keySetE : columnsYAxis) {
-															if (keySetE.toString()
-																.equalsIgnoreCase("id")
-																|| keySetE.toString()
-																.equalsIgnoreCase("Total")) {
-															} else {
-																yAxisList.add(
-																	jobj.get(keySetE).toString());
-															}
-														}
-														yAxisListFirst.add(yAxisList);
-													}
-												}
-											} catch (Exception e) {
-												e.printStackTrace();
-											}
+                              for (Object keySetE : columnsYAxis) {
+                                if (keySetE.toString().equalsIgnoreCase("id") || keySetE.toString()
+                                    .equalsIgnoreCase("Total")) {
+                                } else {
+                                  yAxisList.add(jobj.get(keySetE).toString());
+                                }
+                              }
+                              yAxisListFirst.add(yAxisList);
+                            }
+                          }
+                        } catch (Exception e) {
+                          e.printStackTrace();
+                        }
 
-											if (yAxisListFirst != null
-												&& yAxisListFirst.size() > 0) {
-												lableString = new String[] {
-													yAxisListFirst.get(0).get(0)
-													, yAxisListFirst.get(1).get(0)
-												};
-												yAxisListFirst.get(0).remove(0);
-												yAxisListFirst.get(1).remove(0);
-												tvTotal.setText(total);
-												stackedBarData(columnsYAxis, yAxisListFirst,
-													lableString);
-											}
-										} else {
-											hideProgress();
-											//  String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-											String errorMsg =
-												CRMMOSLCommon.getErrorMsgFromResponse(
-													new JSONObject(responseS));
-											MSFDialog.alertDialog(getMainActivity(), 0,
-												getResources().getString(R.string.motilal_oswal),
-												errorMsg, "OK", true,
-												null);
-										}
-									} else {
-										hideProgress();
-										//     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-										String errorMsg =
-											CRMMOSLCommon.getErrorMsgFromResponse(
-												new JSONObject(responseS));
-										MSFDialog.alertDialog(getMainActivity(), 0,
-											getResources().getString(R.string.motilal_oswal),
-											errorMsg, "OK", true,
-											null);
-									}
-								} else {
-									hideProgress();
-									//                                customProgress.setVisibility(View.GONE);
-								}
-							} catch (
-								ClassCastException ce) {
-								ce.printStackTrace();
-								hideProgress();
-							} catch (
-								Exception e) {
-								e.printStackTrace();
-								hideProgress();
-								MSFDialog.alertDialog(getMainActivity(), 0,
-									getResources().getString(R.string.motilal_oswal),
-									ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-							}
-						}
-					});
-			} catch (Exception e) {
-				hideProgress();
-				e.printStackTrace();
-				MSFDialog.alertDialog(getMainActivity(), 0,
-					getResources().getString(R.string.motilal_oswal),
-					ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-			}
-		} else {
-			//            customProgress.setVisibility(View.GONE);
-			MSFDialog.alertDialog(getMainActivity(), 0,
-				getResources().getString(R.string.motilal_oswal),
-				INTERNET_CONNECTION, "OK", true, null);
-		}
-	}
+                        if (yAxisListFirst != null && yAxisListFirst.size() > 0) {
+                          lableString = new String[] {
+                              yAxisListFirst.get(0).get(0)
+                              , yAxisListFirst.get(1).get(0)
+                          };
+                          yAxisListFirst.get(0).remove(0);
+                          yAxisListFirst.get(1).remove(0);
+                          tvTotal.setText(total);
+                          stackedBarData(columnsYAxis, yAxisListFirst, lableString);
+                        }
+                      } else {
+                        hideProgress();
+                        //  String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                        String errorMsg =
+                            CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
+                        MSFDialog.alertDialog(getMainActivity(), 0,
+                            getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true,
+                            null);
+                      }
+                    } else {
+                      hideProgress();
+                      //     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
+                      String errorMsg =
+                          CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
+                      MSFDialog.alertDialog(getMainActivity(), 0,
+                          getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true,
+                          null);
+                    }
+                  } else {
+                    hideProgress();
+                    //                                customProgress.setVisibility(View.GONE);
+                  }
+                } catch (
+                    ClassCastException ce)
 
-	private void stackedBarData(final ArrayList<String> xAxisValue,
-		final ArrayList<ArrayList<String>> yAxisFirst, final String[] lableString) {
-		xAxisValue.remove(0);
+                {
+                  ce.printStackTrace();
+                  hideProgress();
+                } catch (
+                    Exception e)
 
-		Collections.reverse(xAxisValue);
-		try {
-			Collections.reverse(yAxisFirst.get(0));
-			Collections.reverse(yAxisFirst.get(1));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		XAxis xAxis = mChart.getXAxis();
-		xAxis.setDrawGridLines(false);
-		xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-		xAxis.setCenterAxisLabels(true);
-		xAxis.setDrawAxisLine(false);
+                {
+                  e.printStackTrace();
+                  hideProgress();
+                  MSFDialog.alertDialog(getMainActivity(), 0,
+                      getResources().getString(R.string.motilal_oswal),
+                      ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
+                }
+              }
+            });
+      } catch (Exception e) {
+        hideProgress();
+        e.printStackTrace();
+        MSFDialog.alertDialog(getMainActivity(), 0,
+            getResources().getString(R.string.motilal_oswal),
+            ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
+      }
+    } else
 
-		xAxis.setValueFormatter(new IAxisValueFormatter() {
-			@Override
-			public String getFormattedValue(float value, AxisBase axis) {
+    {
+      //            customProgress.setVisibility(View.GONE);
+      MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+          INTERNET_CONNECTION, "OK", true, null);
+    }
+  }
 
-				try {
-					if (value < 0) {
-						return "";
-					} else {
-						return xAxisValue.get((int) value % xAxisValue.size());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-		});
+  private void stackedBarData(final ArrayList<String> xAxisValue,
+      final ArrayList<ArrayList<String>> yAxisFirst, final String[] lableString) {
+    xAxisValue.remove(0);
 
-		ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+    Collections.reverse(xAxisValue);
+    try {
+      Collections.reverse(yAxisFirst.get(0));
+      Collections.reverse(yAxisFirst.get(1));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    XAxis xAxis = mChart.getXAxis();
+    xAxis.setDrawGridLines(false);
+    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+    xAxis.setCenterAxisLabels(true);
+    xAxis.setDrawAxisLine(false);
 
-		for (int i = 0; i < yAxisFirst.get(0).size(); i++) {
-			try {
-				float val1 = Float.parseFloat(yAxisFirst.get(0).get(i));
-				float val2 = Float.parseFloat(yAxisFirst.get(1).get(i));
-				yVals1.add(new BarEntry(i + 0.5f, new float[] { val1, val2 }));
-			} catch (java.lang.NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}
+    xAxis.setValueFormatter(new IAxisValueFormatter() {
+      @Override
+      public String getFormattedValue(float value, AxisBase axis) {
 
-		BarDataSet set1;
+        try {
+          if (value < 0) {
+            return "";
+          } else {
+            return xAxisValue.get((int) value % xAxisValue.size());
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+    });
 
-		ArrayList<Integer> colors = new ArrayList<Integer>();
-		int[] VORDIPLOM_COLORS = {
-			Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
-		};
-		for (int c : VORDIPLOM_COLORS)
-			colors.add(c);
-		set1 = new BarDataSet(yVals1, "");
-		set1.setColors(colors);
-		set1.setStackLabels(lableString);
+    ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-		ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-		dataSets.add(set1);
+    for (int i = 0; i < yAxisFirst.get(0).size(); i++) {
+      try {
+        float val1 = Float.parseFloat(yAxisFirst.get(0).get(i));
+        float val2 = Float.parseFloat(yAxisFirst.get(1).get(i));
+        yVals1.add(new BarEntry(i + 0.5f, new float[] { val1, val2 }));
+      } catch (java.lang.NumberFormatException e) {
+        e.printStackTrace();
+      }
+    }
 
-		BarData data = new BarData(dataSets);
-		data.setValueFormatter(new CRMValueFormatter());
-		data.setValueTextColor(Color.WHITE);
-		data.setValueTextSize(13f);
-		data.setBarWidth(0.6f);
+    BarDataSet set1;
 
-		mChart.setData(data);
-		mChart.getLegend().setEnabled(false);
-		mChart.invalidate();
-		mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-			@Override
-			public void onValueSelected(Entry e, Highlight h) {
-				if (e == null) {
-					return;
-				}
-				if (e.getY() == 0.0f) return;
-				mChart.highlightValues(null);
-				addtionalParameterMap.clear();
-				pieChartDetail(e.getX());
-				addtionalParameterMap.put(COL_FILTER, xAxisValue.get((int) (e.getX())));
-				addtionalParameterMap.put(ROW_FILTER, lableString[h.getStackIndex()]);
-				addtionalParameterMap.putAll(getAddtionalParameterMap());
-				Bundle args = new Bundle();
-				args.putString(SYSTEM_NAME, widgetSystemName);
-				args.putString(LABEL, LEAD);
-				args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-				if (lableString[h.getStackIndex()].equalsIgnoreCase("Assigned")) {
-					if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
-						.equalsIgnoreCase("0.0")) {
-						navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-					}
-				} else {
-					navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-				}
-			}
+    ArrayList<Integer> colors = new ArrayList<Integer>();
+    int[] VORDIPLOM_COLORS = {
+        Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
+    };
+    for (int c : VORDIPLOM_COLORS)
+      colors.add(c);
+    set1 = new BarDataSet(yVals1, "");
+    set1.setColors(colors);
+    set1.setStackLabels(lableString);
 
-			private void pieChartDetail(float sliceIndex) {
-			}
+    ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+    dataSets.add(set1);
 
-			@Override
-			public void onNothingSelected() {
+    BarData data = new BarData(dataSets);
+    data.setValueFormatter(new CRMValueFormatter());
+    data.setValueTextColor(Color.WHITE);
+    data.setValueTextSize(13f);
+    data.setBarWidth(0.6f);
 
-			}
-		});
-	}
+    mChart.setData(data);
+    mChart.invalidate();
+    mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+      @Override
+      public void onValueSelected(Entry e, Highlight h) {
+        if (e == null) {
+          return;
+        }
+        if (e.getY() == 0.0f) return;
+        mChart.highlightValues(null);
+        addtionalParameterMap.clear();
+        pieChartDetail(e.getX());
+        addtionalParameterMap.put(COL_FILTER, xAxisValue.get((int) (e.getX())));
+        addtionalParameterMap.put(ROW_FILTER, lableString[h.getStackIndex()]);
+        addtionalParameterMap.putAll(getAddtionalParameterMap());
+        Bundle args = new Bundle();
+        args.putString(SYSTEM_NAME, widgetSystemName);
+        args.putString(LABEL, LEAD);
+        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+        if (lableString[h.getStackIndex()].equalsIgnoreCase("Assigned")) {
+          if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
+              .equalsIgnoreCase("0.0")) {
+            navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+          }
+        } else {
+          navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+        }
+      }
 
-	@Override
-	public void onClick(View view) {
-		int id = view.getId();
-		if (id == R.id.llShowMore) {
-			Bundle args = new Bundle();
-			ClientsLeadShowFragment clientsFragment =
-				ClientsLeadShowFragment.newInstance(getContext());
-			args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-			args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
-			args.putString(SYSTEM_NAME, widgetSystemName);
-			args.putString(FILTERFIRST, filterFirst);
-			args.putString(FILTERSECOND, filterSecond);
-			args.putString(FILTERTHIRD, filterThird);
-			clientsFragment.setArguments(args);
-			getActivity().getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.llReplaceClientFragment, clientsFragment)
-				.commit();
-		}
-	}
+      private void pieChartDetail(float sliceIndex) {
+      }
+
+      @Override
+      public void onNothingSelected() {
+
+      }
+    });
+  }
+
+  @Override
+  public void onClick(View view) {
+    int id = view.getId();
+    if (id == R.id.llShowMore) {
+      Bundle args = new Bundle();
+      ClientsLeadShowFragment clientsFragment = ClientsLeadShowFragment.newInstance(getContext());
+      args.putSerializable(DASHBOARD_MODEL, dashboardModel);
+      args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
+      args.putString(SYSTEM_NAME, widgetSystemName);
+      args.putString(FILTERFIRST, filterFirst);
+      args.putString(FILTERSECOND, filterSecond);
+      args.putString(FILTERTHIRD, filterThird);
+      clientsFragment.setArguments(args);
+      getActivity().getSupportFragmentManager()
+          .beginTransaction()
+          .replace(R.id.llReplaceClientFragment, clientsFragment)
+          .commit();
+    }
+  }
 }

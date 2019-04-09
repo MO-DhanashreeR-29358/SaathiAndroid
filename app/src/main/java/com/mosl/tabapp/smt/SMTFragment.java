@@ -13,14 +13,14 @@ import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-
 import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
+import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 
 public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMTCallBack {
         private View view;
@@ -73,9 +73,21 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
         }
 
     @Override public void openEkyc(String OAOUserId) {
-        HashMap<String, String> hashMap = new HashMap();
-        hashMap.put(USERID, OAOUserId);
-        gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
+        if (AccountDetails.isNewEkyc()) {
+            HashMap<String, String> map = new HashMap();
+            map.put(NEW_USERID, OAOUserId);
+            map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+            map.put(COMMANDTYPE, "RESUME");
+            map.put(APPLICATIONTYPE, "CRM");
+            map.put(OSTYPE, "ANDROID");
+            map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+            map.put(TOKENKEY, AccountDetails.getToken());
+            gotoNewEkyc(getInputBody(map));
+        } else {
+            HashMap<String, String> hashMap = new HashMap();
+            hashMap.put(USERID, OAOUserId);
+            gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
+        }
     }
 
     public class WebViewClient extends android.webkit.WebViewClient {
