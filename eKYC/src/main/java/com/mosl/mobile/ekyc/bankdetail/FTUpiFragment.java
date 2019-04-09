@@ -90,6 +90,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
     String strEquBankName = "", strEquAccNo = "";
     private CustomTabsClient mClient;
     private boolean onlineEquFlag, onlineCommFlag;
+    private boolean auSmall;
 
     public static FTUpiFragment newInstance(Context context, int equityStatus,
         int commodityStatus) {
@@ -183,13 +184,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
         btnSkipPayment = netBankView.findViewById(R.id.btnSkipPayment);
         btnNext = netBankView.findViewById(R.id.btnNext);
 
-        if (getAppType().equals(PP)) {
-            rlSkipPayment.setVisibility(View.VISIBLE);
-            etFundTransferred.setEnabled(true);
-        } else {
-            rlSkipPayment.setVisibility(View.GONE);
-            etFundTransferred.setEnabled(false);
-        }
+        showSkipPaymentButton();
 
         etFundTransferred.addTextChangedListener(new TextWatcher() {
             @Override
@@ -202,7 +197,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                     input_layout_FundTransferred.setErrorEnabled(false);
                     if (!getAppType().equalsIgnoreCase(PP)
                         && !getAppType().equalsIgnoreCase(DIRECT)
-                        && etFundTransferred.length() < 4) {
+                        && !auSmall && etFundTransferred.length() < 4) {
                         etFundTransferredError.setVisibility(View.VISIBLE);
                         etFundTransferredError.setText(
                             getResources().getString(R.string.fund_transfer_error_msg));
@@ -281,6 +276,16 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
             showCommPending();
         } else {
             commodityPaid();
+        }
+    }
+
+    private void showSkipPaymentButton() {
+        if (getAppType().equals(PP) || auSmall) {
+            rlSkipPayment.setVisibility(View.VISIBLE);
+            etFundTransferred.setEnabled(true);
+        } else {
+            rlSkipPayment.setVisibility(View.GONE);
+            etFundTransferred.setEnabled(false);
         }
     }
 
@@ -453,6 +458,13 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                                     || object.getString("UPI_MESSAGE")
                                                     .equals("")) ? ""
                                                     : object.getString("UPI_MESSAGE");
+                                            String auStatus =
+                                                (object.isNull("AU_STATUS")
+                                                    || object.getString("AU_STATUS")
+                                                    .equals("")) ? ""
+                                                    : object.getString("AU_STATUS");
+
+                                            auSmall = auStatus.equals("1");
                                             /*
                                              *  fundTransferThroughId 1 fundTransferThrough Net Banking
                                              *  fundTransferThroughId 2 fundTransferThrough Debit Card
@@ -461,6 +473,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                                              *  fundTransferThroughId 5 fundTransferThrough UPI Payment
                                              *  fundTransferThroughId 0 fundTransferThrough Payment Pending
                                              */
+                                            showSkipPaymentButton();
                                             if (product.equalsIgnoreCase(EQUITY)) {
                                                 eqPaymentMode = fundTransferThrough;
                                                 eqPaymentId =
@@ -563,7 +576,7 @@ public class FTUpiFragment extends Fragment implements MOSLConstants {
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
             } else if (!getAppType().equalsIgnoreCase(PP)
                 && !getAppType().equalsIgnoreCase(DIRECT)
-                && etFundTransferred.length() < 4) {
+                && !auSmall && etFundTransferred.length() < 4) {
                 etFundTransferredError.setText(
                     getResources().getString(R.string.fund_transfer_error_msg));
                 etFundTransferredError.setVisibility(View.VISIBLE);

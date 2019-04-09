@@ -107,24 +107,18 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
             replaceNetBankingFragment();
         }
         if (id == R.id.btnDebitCard) {
-            FTDebitCardFragment ftDebitCardFragment = FTDebitCardFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+            FTDebitCardFragment ftDebitCardFragment =
+                FTDebitCardFragment.newInstance(getContext(), mEquStatus, mCommStatus);
             ftDebitCardFragment.setTabPageIndicator(tabPageIndicator);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceFragment, ftDebitCardFragment).commit();
-
-            btnDebitCard.setImageResource(R.drawable.icon_debit);
-            btnNetBank.setImageResource(R.drawable.icon_net_1);
-            btnCheque.setImageResource(R.drawable.icon_cheque_1);
-            btnUPI.setImageResource(R.drawable.icon_upi_1);
+            setImage(DEBITCARD);
         }
         if (id == R.id.btnCheque) {
-            FTChequeFragment ftChequeFragment = FTChequeFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+            FTChequeFragment ftChequeFragment =
+                FTChequeFragment.newInstance(getContext(), mEquStatus, mCommStatus);
             ftChequeFragment.setTabPageIndicator(tabPageIndicator);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceFragment, ftChequeFragment).commit();
-
-            btnDebitCard.setImageResource(R.drawable.icon_debit_1);
-            btnNetBank.setImageResource(R.drawable.icon_net_1);
-            btnCheque.setImageResource(R.drawable.icon_cheque);
-            btnUPI.setImageResource(R.drawable.icon_upi_1);
+            setImage(CHEQUE);
         }
 
         if (id == R.id.btnUPI) {
@@ -135,23 +129,87 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
                 .beginTransaction()
                 .replace(R.id.llReplaceFragment, ftUpiFragment)
                 .commit();
-
-            btnDebitCard.setImageResource(R.drawable.icon_debit_1);
-            btnNetBank.setImageResource(R.drawable.icon_net_1);
-            btnCheque.setImageResource(R.drawable.icon_cheque_1);
-            btnUPI.setImageResource(R.drawable.icon_upi);
+            setImage(UPI);
         }
     }
 
     public void replaceNetBankingFragment() {
         if (tabPageIndicator != null) {
-            FTNetBankingFragment bd = FTNetBankingFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+            FTNetBankingFragment bd =
+                FTNetBankingFragment.newInstance(getContext(), mEquStatus, mCommStatus);
             bd.setTabPageIndicator(tabPageIndicator);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.llReplaceFragment, bd).commit();
-            btnDebitCard.setImageResource(R.drawable.icon_debit_1);
-            btnNetBank.setImageResource(R.drawable.icon_net);
-            btnCheque.setImageResource(R.drawable.icon_cheque_1);
-            btnUPI.setImageResource(R.drawable.icon_upi_1);
+            setImage(NETBANKING);
+        }
+    }
+
+    public void replaceDefaultFragment(String type) {
+        if (tabPageIndicator != null) {
+
+            switch (type) {
+                case DEBITCARD: {
+                    FTDebitCardFragment ftDebitCardFragment =
+                        FTDebitCardFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+                    ftDebitCardFragment.setTabPageIndicator(tabPageIndicator);
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.llReplaceFragment, ftDebitCardFragment)
+                        .commit();
+                    setImage(DEBITCARD);
+                    break;
+                }
+                case UPI: {
+                    FTUpiFragment ftUpiFragment =
+                        FTUpiFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+                    ftUpiFragment.setTabPageIndicator(tabPageIndicator);
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.llReplaceFragment, ftUpiFragment)
+                        .commit();
+                    setImage(UPI);
+                    break;
+                }
+                case CHEQUE: {
+                    FTChequeFragment ftChequeFragment =
+                        FTChequeFragment.newInstance(getContext(), mEquStatus, mCommStatus);
+                    ftChequeFragment.setTabPageIndicator(tabPageIndicator);
+                    getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.llReplaceFragment, ftChequeFragment)
+                        .commit();
+                    setImage(CHEQUE);
+                    break;
+                }
+                case NETBANKING: {
+                    replaceNetBankingFragment();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void setImage(String type) {
+        btnDebitCard.setImageResource(R.drawable.icon_debit_1);
+        btnNetBank.setImageResource(R.drawable.icon_net_1);
+        btnCheque.setImageResource(R.drawable.icon_cheque_1);
+        btnUPI.setImageResource(R.drawable.icon_upi_1);
+        switch (type) {
+            case DEBITCARD: {
+                btnDebitCard.setImageResource(R.drawable.icon_debit);
+                break;
+            }
+            case UPI: {
+                btnUPI.setImageResource(R.drawable.icon_upi);
+                break;
+            }
+            case CHEQUE: {
+                btnCheque.setImageResource(R.drawable.icon_cheque);
+                break;
+            }
+            case NETBANKING: {
+                btnNetBank.setImageResource(R.drawable.icon_net);
+                break;
+            }
         }
     }
 }

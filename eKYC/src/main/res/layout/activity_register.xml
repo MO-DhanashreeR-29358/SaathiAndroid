@@ -18,8 +18,11 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@color/secondaryBackground"
+            android:paddingBottom="@dimen/_3sdp"
+            android:paddingTop="@dimen/_3sdp"
             android:scaleType="fitCenter"
-            android:src="@drawable/mosl_logo" />
+            android:src="@drawable/aufsb_logo"
+            />
 
         <TextView
             android:layout_width="match_parent"

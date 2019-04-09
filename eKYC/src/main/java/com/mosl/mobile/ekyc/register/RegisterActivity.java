@@ -70,41 +70,26 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setUserID;
  */
 public class RegisterActivity extends Activity implements MOSLConstants {
 
+    public static String userIDStr;
     private Spinner spInterestedIn;
     private SearchableSpinner spState, spCity;
     private Button btnProceed, btnSendRepresentative;
     private EditText etName, etEmail, etMobile, etPincode, etBABranchCode;
     private LinearLayout customProgress;
     private Dialog dialog;
-    public static String userIDStr;
-
     private ArrayList<RowData> arrState, arrCity, arrInterested;
     private ArrayAdapter<RowData> arrAdapState, arrAdapCity, arrAdapInterested;
     private CheckBox cbTC;
     private TextView tvTC, tvMsg, tvMsg1, tvMsg2, tvMsg3;
     private String stateCodeStr, cityCodeStr, stateNameStr, cityNameStr, interestedInStr;
     private Button btnOK;
-    private ImageView ivClose;
-    private EditText etStateError, etCityError, etInterestedInError, etMobileError, etPincodeError, etNameError, etEmailError;
-    private TextInputLayout input_layout_name, input_layout_email, input_layout_mobile, inputLayoutPincode, inputLayoutBABranchCode;
+    private ImageView ivClose, ivMotilalOswal;
+    private EditText etStateError, etCityError, etInterestedInError, etMobileError, etPincodeError,
+        etNameError, etEmailError;
+    private TextInputLayout input_layout_name, input_layout_email, input_layout_mobile,
+        inputLayoutPincode, inputLayoutBABranchCode;
     private LinearLayout llPincode, llCity, llState, llBABranchCode, llEditText;
     private ScrollView scrollview;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_register);
-            setPermisson(RegisterActivity.this, this);
-            overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
-            setUpView();
-        } catch (Exception e) {
-            e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
-//            Crashlytics.logException(e);
-        }
-    }
-
     private AdapterView.OnItemSelectedListener interestedInListener =
         new AdapterView.OnItemSelectedListener() {
             @Override
@@ -122,6 +107,20 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             }
 
             @Override public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private AdapterView.OnItemSelectedListener cityListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
+                cityNameStr = ((RowData) spCity.getSelectedItem()).getValue();
+                etCityError.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         };
@@ -144,6 +143,21 @@ public class RegisterActivity extends Activity implements MOSLConstants {
 
             }
         };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_register);
+            setPermisson(RegisterActivity.this, this);
+            overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+            setUpView();
+        } catch (Exception e) {
+            e.printStackTrace();
+            //            Crashlytics.setUserIdentifier(getUserID() + "-" + getAppLoginID());
+            //            Crashlytics.logException(e);
+        }
+    }
 
     private void sendRepresentative(final String name, final String emailId, final String mob,
         String otp, String uniqueId) {
@@ -328,6 +342,10 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         llBABranchCode = findViewById(R.id.llBABranchCode);
         etBABranchCode = findViewById(R.id.etBABranchCode);
         inputLayoutBABranchCode = findViewById(R.id.inputLayoutBABranchCode);
+        ivMotilalOswal = findViewById(R.id.ivMotilalOswal);
+        if (getIntent().getBooleanExtra("isSaathiAufsb", false)) {
+            ivMotilalOswal.setImageResource(R.drawable.aufsb_logo);
+        }
         if (getAppType().equals(DIRECT)) {
             llPincode.setVisibility(View.GONE);//Registration Change 26-10-2018 before its Visible
             llBABranchCode.setVisibility(View.VISIBLE);//BA branch code layout visible for Direct
@@ -367,17 +385,18 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                     } else {
                         inputLayoutPincode.setErrorEnabled(false);
                         etPincodeError.setVisibility(View.GONE);
-                        if (spState.getSelectedItem() == null || ((RowData) spState.getSelectedItem()).getKey().equals("-1")) {
+                        if (spState.getSelectedItem() == null
+                            || ((RowData) spState.getSelectedItem()).getKey().equals("-1")) {
                             etStateError.setVisibility(View.VISIBLE);
                             etStateError.setText("Select your state");
                             etStateError.requestFocus();
-                        } else if (spCity.getSelectedItem() == null || ((RowData) spCity.getSelectedItem()).getKey().equals("-1")) {
+                        } else if (spCity.getSelectedItem() == null
+                            || ((RowData) spCity.getSelectedItem()).getKey().equals("-1")) {
                             etCityError.setVisibility(View.VISIBLE);
                             etCityError.setText("Select your city");
                             etCityError.requestFocus();
                         } else {
                             getPincodeDetails();
-
                         }
                     }
                 } else {
@@ -438,7 +457,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                     if (!s.toString().equals(newStr)) {
                         etName.setText("");
                         etName.append(newStr);
-                    } else if (!ValidationRule.validateOnlyAlphabetWithoutSplChar(etName.getText().toString().trim())) {
+                    } else if (!ValidationRule.validateOnlyAlphabetWithoutSplChar(
+                        etName.getText().toString().trim())) {
                         etNameError.setVisibility(View.VISIBLE);
                         etNameError.setText(ErrorMsgName);
                         etName.requestFocus();
@@ -469,13 +489,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                         etEmailError.setVisibility(View.GONE);
                         input_layout_email.setErrorEnabled(false);
 
-//                      checkMobileEmail("Email",etEmail.getText().toString());
+                        //                      checkMobileEmail("Email",etEmail.getText().toString());
                     }
                 } else {
                     etEmailError.setVisibility(View.GONE);
                     input_layout_email.setErrorEnabled(false);
 
-//                      checkMobileEmail("Email",etEmail.getText().toString());
+                    //                      checkMobileEmail("Email",etEmail.getText().toString());
                 }
             }
 
@@ -495,7 +515,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             public void onClick(View v) {
                 if (!validateEditText(etName, input_layout_name, "Enter your name")) {
                     return;
-                } else if (!ValidationRule.validateOnlyAlphabetWithoutSplChar(etName.getText().toString().trim())) {
+                } else if (!ValidationRule.validateOnlyAlphabetWithoutSplChar(
+                    etName.getText().toString().trim())) {
                     etNameError.setVisibility(View.VISIBLE);
                     etNameError.setText(ErrorMsgName);
                     etName.requestFocus();
@@ -522,23 +543,28 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                     etStateError.setText("Select your state");
                     etStateError.requestFocus();
                     return;
-                } else if (!getAppType().equals(PP) && (spCity.getSelectedItem() == null || ((RowData) spCity.getSelectedItem()).getKey().equals("-1"))) {
+                } else if (!getAppType().equals(PP) && (spCity.getSelectedItem() == null
+                    || ((RowData) spCity.getSelectedItem()).getKey().equals("-1"))) {
                     etCityError.setVisibility(View.VISIBLE);
                     etCityError.setText("Select your city");
                     etCityError.requestFocus();
                     return;
-                } else if (spInterestedIn.getSelectedItem() == null || ((RowData) spInterestedIn.getSelectedItem()).getKey().equals("-1")) {
+                } else if (spInterestedIn.getSelectedItem() == null
+                    || ((RowData) spInterestedIn.getSelectedItem()).getKey().equals("-1")) {
                     etInterestedInError.setVisibility(View.VISIBLE);
                     etInterestedInError.setText("Select your interest from list");
                     etInterestedInError.requestFocus();
                     return;
                 }/* else if (getAppType().equals(DIRECT) && !validateEditText(etPincode, inputLayoutPincode, "Enter pincode")) {
                     return;
-                }*/ else if (etPincode.getText().toString().trim().length() > 0 && getAppType().equals(DIRECT) && etPincode.length() < 6) {
+                }*/ else if (etPincode.getText().toString().trim().length() > 0
+                    && getAppType().equals(DIRECT)
+                    && etPincode.length() < 6) {
                     etPincode.requestFocus();
                     return;
                 } else if (!cbTC.isChecked()) {
-                    commonMsgDialog(RegisterActivity.this, "Terms & Conditions not accepted", false, "");
+                    commonMsgDialog(RegisterActivity.this, "Terms & Conditions not accepted", false,
+                        "");
                     return;
                 } else {
                     input_layout_mobile.setErrorEnabled(false);
@@ -546,10 +572,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                     setRegisteredName(etName.getText().toString());
                     setRegisterEmail(etEmail.getText().toString());
                     removeKeyboard(RegisterActivity.this, etEmail);
-                    if (getAppType().equalsIgnoreCase(DIRECT) && !isBlank(etBABranchCode.getText().toString().trim())) { //check enter BA code valid or not call GETBADETAILS API
+                    if (getAppType().equalsIgnoreCase(DIRECT) && !isBlank(etBABranchCode.getText()
+                        .toString()
+                        .trim())) { //check enter BA code valid or not call GETBADETAILS API
                         getBADetails();
                     } else { // call sign up API
-                        signUp(etName.getText().toString(), etEmail.getText().toString(), etMobile.getText().toString(), "", "");
+                        signUp(etName.getText().toString(), etEmail.getText().toString(),
+                            etMobile.getText().toString(), "", "");
                     }
                 }
             }
@@ -602,12 +631,14 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         tvTC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MOSLCommon.showPopUpThreeLine(RegisterActivity.this, tvTC, MOSLConstants.TERMS_N_COND, "", false, "", "");
+                MOSLCommon.showPopUpThreeLine(RegisterActivity.this, tvTC,
+                    MOSLConstants.TERMS_N_COND, "", false, "", "");
             }
         });
     }
 
-    public void signUp(final String name, final String emailId, final String mob, String otp, String uniqueId) {
+    public void signUp(final String name, final String emailId, final String mob, String otp,
+        String uniqueId) {
         Map<String, String> inputMap = new HashMap<>();
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
@@ -658,9 +689,9 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             }
 
             WebServiceHandler.post(this, SIGNUP, SIGNUP, inputMap, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
 
                             /*{
                                 "_userid":null,
@@ -675,100 +706,118 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                                     "_Role":null,
                                     "_ShowChangePassword":null
                             }*/
-                            if (statusCode == 200) {
-                                if (response.length() != 0) {
-                                    try {
-                                        String msg = (response.isNull("_msg") || response.getString("_msg").equals("")) ? "" : response.getString("_msg");
-                                        String success = (response.isNull("_Success") || response.getString("_Success").equals("")) ? "" : response.getString("_Success");
-                                        String status = (response.isNull("_Status") || response.getString("_Status").equals("")) ? "" : response.getString("_Status").trim();
-                                        String userID = (response.isNull("_userid") || response.getString("_userid").equals("")) ? "" : response.getString("_userid");
-                                        String otp = (response.isNull("_OTP") || response.getString("_OTP").equals("")) ? "" : response.getString("_OTP");
-                                        String uniqueId = (response.isNull("_uniqueId") || response.getString("_uniqueId").equals("")) ? "" : response.getString("_uniqueId");
-                                        String showChangePassword = (response.isNull("_ShowChangePassword") || response.getString("_ShowChangePassword").equals("")) ? "" : response.getString("_ShowChangePassword");
-                                        String isAadhaarByPass = (response.isNull("ISAADHAARBYPASS")
-                                            || response.getString("ISAADHAARBYPASS").equals(""))
-                                            ? "" : response.getString("ISAADHAARBYPASS").trim();
-                                        int intStatus = Integer.parseInt(status);
+                        if (statusCode == 200) {
+                            if (response.length() != 0) {
+                                try {
+                                    String msg = (response.isNull("_msg") || response.getString("_msg")
+                                        .equals("")) ? "" : response.getString("_msg");
+                                    String success =
+                                        (response.isNull("_Success") || response.getString("_Success")
+                                            .equals("")) ? "" : response.getString("_Success");
+                                    String status =
+                                        (response.isNull("_Status") || response.getString("_Status")
+                                            .equals("")) ? "" : response.getString("_Status").trim();
+                                    String userID =
+                                        (response.isNull("_userid") || response.getString("_userid")
+                                            .equals("")) ? "" : response.getString("_userid");
+                                    String otp = (response.isNull("_OTP") || response.getString("_OTP")
+                                        .equals("")) ? "" : response.getString("_OTP");
+                                    String uniqueId =
+                                        (response.isNull("_uniqueId") || response.getString("_uniqueId")
+                                            .equals("")) ? "" : response.getString("_uniqueId");
+                                    String showChangePassword =
+                                        (response.isNull("_ShowChangePassword") || response.getString(
+                                            "_ShowChangePassword").equals("")) ? ""
+                                            : response.getString("_ShowChangePassword");
+                                    String isAadhaarByPass = (response.isNull("ISAADHAARBYPASS")
+                                        || response.getString("ISAADHAARBYPASS").equals(""))
+                                        ? "" : response.getString("ISAADHAARBYPASS").trim();
+                                    int intStatus = Integer.parseInt(status);
 
-                                        if (intStatus == 4 && isBlank(userID)) {
-                                            commonMsgDialog(RegisterActivity.this, DATA_IS_MISSING, false, "");
-                                            finish();
-                                            return;
-                                        } else {
-                                            setUserID(userID);
-                                        }
-                                        setAadhaarByPass(isAadhaarByPass.equals("1"));
-                                        if (intStatus == 0 || intStatus == 4 || intStatus == 1) {
-                                            if (intStatus == 1) {
-                                                sendOTP(name, emailId, mob, otp, SIGNUP, uniqueId);
-                                            } else if (intStatus == 4) {
-                                                //Set app type to franchise and isDirectProspect flag true if BA branch code entered
-                                                if (getAppType().equalsIgnoreCase(DIRECT) && !isBlank(etBABranchCode.getText().toString().trim())) {
-                                                    setAppType(PP);
-                                                    setIsDirectProspect(true);
-                                                    setBaFranchiseeCode(etBABranchCode.getText().toString().trim());
-                                                }
-                                            }
-                                            submitDialog(msg, intStatus, SIGNUP, showChangePassword);
-                                        }
-                                        customProgress.setVisibility(View.GONE);
-                                        if (intStatus == 2) {
-                                            sendOTP(name, emailId, mob, otp, SIGNUP, uniqueId);
-                                        }
-
-                                        if (intStatus == 3) {
-                                            commonMsgDialog(RegisterActivity.this, msg, false, "");
-                                        }
-                                    } catch (Exception e) {
-                                        commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-                                        e.printStackTrace();
-                                        customProgress.setVisibility(View.GONE);
+                                    if (intStatus == 4 && isBlank(userID)) {
+                                        commonMsgDialog(RegisterActivity.this, DATA_IS_MISSING, false,
+                                            "");
+                                        finish();
+                                        return;
+                                    } else {
+                                        setUserID(userID);
                                     }
+                                    setAadhaarByPass(isAadhaarByPass.equals("1"));
+                                    if (intStatus == 0 || intStatus == 4 || intStatus == 1) {
+                                        if (intStatus == 1) {
+                                            sendOTP(name, emailId, mob, otp, SIGNUP, uniqueId);
+                                        } else if (intStatus == 4) {
+                                            //Set app type to franchise and isDirectProspect flag true if BA branch code entered
+                                            if (getAppType().equalsIgnoreCase(DIRECT) && !isBlank(
+                                                etBABranchCode.getText().toString().trim())) {
+                                                setAppType(PP);
+                                                setIsDirectProspect(true);
+                                                setBaFranchiseeCode(
+                                                    etBABranchCode.getText().toString().trim());
+                                            }
+                                        }
+                                        submitDialog(msg, intStatus, SIGNUP, showChangePassword);
+                                    }
+                                    customProgress.setVisibility(View.GONE);
+                                    if (intStatus == 2) {
+                                        sendOTP(name, emailId, mob, otp, SIGNUP, uniqueId);
+                                    }
+
+                                    if (intStatus == 3) {
+                                        commonMsgDialog(RegisterActivity.this, msg, false, "");
+                                    }
+                                } catch (Exception e) {
+                                    commonMsgDialog(RegisterActivity.this,
+                                        SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                    e.printStackTrace();
+                                    customProgress.setVisibility(View.GONE);
                                 }
                             }
                         }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable
-                                throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
                     }
-            );
 
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable
+                            throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                }
+            );
         } else {
             MOSLCommon.alertDInternet(RegisterActivity.this);
             customProgress.setVisibility(View.GONE);
         }
-
     }
 
     public void submitDialog(String msg, final int status, String flag, final String showPassword) {
@@ -778,7 +827,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
 
         dialog.getWindow().setWindowAnimations(R.style.animationName);
         dialog.setContentView(R.layout.layout_dialog_info);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
 
@@ -804,9 +854,10 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                             tvMsg3.setVisibility(View.VISIBLE);
                             tvMsg1.setText("Thank You for choosing ");
                             tvMsg2.setText("MOTILAL OSWAL.");
-                            tvMsg2.setTextColor(getResources().getColor(R.color.secondaryBackground));
+                            tvMsg2.setTextColor(
+                                getResources().getColor(R.color.secondaryBackground));
                             tvMsg3.setText(getResources().getString(R.string.mf_success_reg));
-//                            tvMsg.setText(getResources().getString(R.string.mf_success_reg));
+                            //                            tvMsg.setText(getResources().getString(R.string.mf_success_reg));
                         } else {
                             tvMsg.setVisibility(View.GONE);
 
@@ -815,7 +866,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                             tvMsg3.setVisibility(View.VISIBLE);
                             tvMsg1.setText("Thank You for choosing ");
                             tvMsg2.setText("MOTILAL OSWAL.");
-                            tvMsg2.setTextColor(getResources().getColor(R.color.secondaryBackground));
+                            tvMsg2.setTextColor(
+                                getResources().getColor(R.color.secondaryBackground));
                             tvMsg3.setText(getResources().getString(R.string.crm_success_reg));
                         }
                         break;
@@ -828,10 +880,11 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                             tvMsg3.setVisibility(View.VISIBLE);
                             tvMsg1.setText("Thank You for choosing ");
                             tvMsg2.setText("MOTILAL OSWAL.");
-                            tvMsg2.setTextColor(getResources().getColor(R.color.secondaryBackground));
+                            tvMsg2.setTextColor(
+                                getResources().getColor(R.color.secondaryBackground));
                             tvMsg3.setText(getResources().getString(R.string.mf_success_reg));
 
-//                            tvMsg.setText(getResources().getString(R.string.mf_success_reg));
+                            //                            tvMsg.setText(getResources().getString(R.string.mf_success_reg));
                         } else {
                             tvMsg.setVisibility(View.GONE);
 
@@ -840,7 +893,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                             tvMsg3.setVisibility(View.VISIBLE);
                             tvMsg1.setText("Thank You for choosing ");
                             tvMsg2.setText("MOTILAL OSWAL.");
-                            tvMsg2.setTextColor(getResources().getColor(R.color.secondaryBackground));
+                            tvMsg2.setTextColor(
+                                getResources().getColor(R.color.secondaryBackground));
                             tvMsg3.setText(getResources().getString(R.string.pp_success_reg));
                         }
                         break;
@@ -875,18 +929,20 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 if (status == 4) {
                     dialog.dismiss();
                     if (Integer.parseInt(showPassword) == 1) { //show change password dialog
-//                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
-//                        startActivity(intent);
+                        //                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                        //                        startActivity(intent);
                         if (getAppType().equals(DIRECT)) {
                             ChangePassword cp = new ChangePassword(RegisterActivity.this);
                             cp.show();
                         } else {
-                            Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                            Intent intent =
+                                new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
                             startActivity(intent);
                             finish();
                         }
                     } else {
-                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                        Intent intent =
+                            new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -902,18 +958,20 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 if (status == 4) {
                     dialog.dismiss();
                     if (Integer.parseInt(showPassword) == 1) { //show change password dialog
-//                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
-//                        startActivity(intent);
+                        //                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                        //                        startActivity(intent);
                         if (getAppType().equals(DIRECT)) {
                             ChangePassword cp = new ChangePassword(RegisterActivity.this);
                             cp.show();
                         } else {
-                            Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                            Intent intent =
+                                new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
                             startActivity(intent);
                             finish();
                         }
                     } else {
-                        Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
+                        Intent intent =
+                            new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -926,12 +984,14 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         dialog.show();
     }
 
-    public void sendOTP(final String name, final String emailId, final String mob, final String otp, final String flag, final String uniqueId) {
+    public void sendOTP(final String name, final String emailId, final String mob, final String otp,
+        final String flag, final String uniqueId) {
         final Dialog dialog = new Dialog(RegisterActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.dc_otp);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
         TextView tvEditMobileNumber = dialog.findViewById(R.id.tvEditMobileNumber);
         final EditText etOTP = dialog.findViewById(R.id.etOTP);
@@ -941,12 +1001,12 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             @Override
             public void onClick(View v) {
                 if (!etOTP.getText().toString().equals("")) {
-//                    if (etOTP.getText().toString().equalsIgnoreCase(otp)) {
+                    //                    if (etOTP.getText().toString().equalsIgnoreCase(otp)) {
                     if (flag.equalsIgnoreCase(SIGNUP)) {
                         signUp(name, emailId, mob, etOTP.getText().toString(), uniqueId);
                         removeKeyboard(RegisterActivity.this, etOTP);
                     } else if (flag.equalsIgnoreCase(SENDREPRESENTATIVE)) {
-//                            sendRepresentative(name, emailId, mob, etOTP.getText().toString(), uniqueId);
+                        //                            sendRepresentative(name, emailId, mob, etOTP.getText().toString(), uniqueId);
                     }
                     dialog.dismiss();
                     /*} else {
@@ -963,10 +1023,10 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             @Override
             public void onClick(View v) {
                 if (flag.equalsIgnoreCase(SIGNUP)) {
-//                    signUp(name, emailId, mob, "", "");
+                    //                    signUp(name, emailId, mob, "", "");
                     resendOTP(name, emailId, mob, SIGNUP, uniqueId);
                 } else if (flag.equalsIgnoreCase(SENDREPRESENTATIVE)) {
-//                    sendRepresentative(name, emailId, mob, "", "");
+                    //                    sendRepresentative(name, emailId, mob, "", "");
                     resendOTP(name, emailId, mob, SENDREPRESENTATIVE, uniqueId);
                 }
                 dialog.dismiss();
@@ -984,7 +1044,8 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         dialog.show();
     }
 
-    public void resendOTP(final String name, final String emailId, final String mob, final String type, final String uniqueId) {
+    public void resendOTP(final String name, final String emailId, final String mob,
+        final String type, final String uniqueId) {
         if (MOSLCommon.isNetworkEnabled(this)) {
             customProgress.setVisibility(View.VISIBLE);
             Map<String, String> inputMap = new HashMap<>();
@@ -995,64 +1056,77 @@ public class RegisterActivity extends Activity implements MOSLConstants {
 
             WebServiceHandler.post(this, SIGNUPRESENDOTP, SIGNUP, inputMap,
                 new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                    if (response.length() != 0) {
-                        try {
-                            String msg = (response.isNull("_msg") || response.getString("_msg").equals("")) ? "" : response.getString("_msg");
-                            String uniqueID = (response.isNull("_uniqueId") || response.getString("_uniqueId").equals("")) ? "" : response.getString("_uniqueId");
-                            String status = (response.isNull("_Status") || response.getString("_Status").equals("")) ? "" : response.getString("_Status").trim();
-                            String otp = (response.isNull("_OTP") || response.getString("_OTP").equals("")) ? "" : response.getString("_OTP");
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        if (response.length() != 0) {
+                            try {
+                                String msg = (response.isNull("_msg") || response.getString("_msg")
+                                    .equals("")) ? "" : response.getString("_msg");
+                                String uniqueID =
+                                    (response.isNull("_uniqueId") || response.getString("_uniqueId")
+                                        .equals("")) ? "" : response.getString("_uniqueId");
+                                String status =
+                                    (response.isNull("_Status") || response.getString("_Status")
+                                        .equals("")) ? "" : response.getString("_Status").trim();
+                                String otp = (response.isNull("_OTP") || response.getString("_OTP")
+                                    .equals("")) ? "" : response.getString("_OTP");
 
-                            if (Integer.parseInt(status) == 1) {
-                                sendOTP(name, emailId, mob, otp, type, uniqueID);
-                                commonMsgDialog(RegisterActivity.this, msg, false, "");
-//                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
-                            } else {
-                                commonMsgDialog(RegisterActivity.this, msg, false, "");
-//                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
+                                if (Integer.parseInt(status) == 1) {
+                                    sendOTP(name, emailId, mob, otp, type, uniqueID);
+                                    commonMsgDialog(RegisterActivity.this, msg, false, "");
+                                    //                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
+                                } else {
+                                    commonMsgDialog(RegisterActivity.this, msg, false, "");
+                                    //                                MOSLCommon.alertDialog(RegisterActivity.this, 0, "Motilal Oswal", msg, "OK", true, null);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(RegisterActivity.this,
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                //                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                         }
+                        customProgress.setVisibility(View.GONE);
                     }
-                    customProgress.setVisibility(View.GONE);
-                }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+                });
         }
     }
 
@@ -1063,85 +1137,87 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             customProgress.setVisibility(View.VISIBLE);
             WebServiceHandler.post(this, BINDSTATE, SIGNUP, inputMap,
                 new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            arrState = new ArrayList<>();
-                            customProgress.setVisibility(View.VISIBLE);
-                            if (statusCode == 200) {
-                                if (response != null) {
-                                    String stateCode, stateName;
-                                    arrState.clear();
-                                    arrState.add(new RowData(0, "-1", "Select"));
-                                    try {
-                                        JSONArray jsonArray = response.getJSONArray(STATE_DETAILS);
-                                        if (jsonArray.length() != 0) {
-                                            for (int i = 0; i < jsonArray.length(); i++) {
-                                                JSONObject object = jsonArray.getJSONObject(i);
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        arrState = new ArrayList<>();
+                        customProgress.setVisibility(View.VISIBLE);
+                        if (statusCode == 200) {
+                            if (response != null) {
+                                String stateCode, stateName;
+                                arrState.clear();
+                                arrState.add(new RowData(0, "-1", "Select"));
+                                try {
+                                    JSONArray jsonArray = response.getJSONArray(STATE_DETAILS);
+                                    if (jsonArray.length() != 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject object = jsonArray.getJSONObject(i);
 
-                                                stateCode = object.getString("STATE_CODE");
-                                                stateName = object.getString("STATE_NAME");
-                                                arrState.add(new RowData(i + 1, stateCode, stateName));
-                                            }
+                                            stateCode = object.getString("STATE_CODE");
+                                            stateName = object.getString("STATE_NAME");
+                                            arrState.add(new RowData(i + 1, stateCode, stateName));
                                         }
-                                        arrAdapState = new ArrayAdapter<>(RegisterActivity.this, R.layout.simple_spinner_item, arrState);
-                                        arrAdapState.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                        spState.setAdapter(arrAdapState);
-                                        spState.setOnItemSelectedListener(stateListener);
-                                        customProgress.setVisibility(View.GONE);
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
-
-                                } else {
+                                    arrAdapState = new ArrayAdapter<>(RegisterActivity.this,
+                                        R.layout.simple_spinner_item, arrState);
+                                    arrAdapState.setDropDownViewResource(
+                                        android.R.layout.simple_spinner_dropdown_item);
+                                    spState.setAdapter(arrAdapState);
+                                    spState.setOnItemSelectedListener(stateListener);
                                     customProgress.setVisibility(View.GONE);
-                                    MOSLCommon.showToastMsg(RegisterActivity.this, "No state");
-
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    commonMsgDialog(RegisterActivity.this,
+                                        SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                    //                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                 }
+                            } else {
+                                customProgress.setVisibility(View.GONE);
+                                MOSLCommon.showToastMsg(RegisterActivity.this, "No state");
                             }
-
-
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable
-                                throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
                         }
                     }
 
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable
+                            throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+                }
 
             );
         } else {
@@ -1159,84 +1235,84 @@ public class RegisterActivity extends Activity implements MOSLConstants {
         if (MOSLCommon.isNetworkEnabled(RegisterActivity.this)) {
             customProgress.setVisibility(View.VISIBLE);
             WebServiceHandler.post(this, BINDCITY, SIGNUP, inputMap, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //  customProgress.setVisibility(View.VISIBLE);
-                            arrCity = new ArrayList<>();
-                            if (statusCode == 200) {
-                                if (response.length() != 0 || response != null) {
-                                    String cityCode, cityName;
-                                    arrCity.add(new RowData(0, "-1", "Select"));
-                                    try {
-                                        JSONArray jsonArray = response.getJSONArray(CITY_DETAILS);
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        //  customProgress.setVisibility(View.VISIBLE);
+                        arrCity = new ArrayList<>();
+                        if (statusCode == 200) {
+                            if (response.length() != 0 || response != null) {
+                                String cityCode, cityName;
+                                arrCity.add(new RowData(0, "-1", "Select"));
+                                try {
+                                    JSONArray jsonArray = response.getJSONArray(CITY_DETAILS);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
 
-                                            cityCode = object.getString("CITY_CODE");
-                                            cityName = object.getString("CITY_NAME");
-                                            arrCity.add(new RowData(i + 1, cityCode, cityName));
-                                        }
-                                        arrAdapCity = new ArrayAdapter<>(RegisterActivity.this, R.layout.simple_spinner_item, arrCity);
-                                        arrAdapCity.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                        spCity.setAdapter(arrAdapCity);
-
-                                        customProgress.setVisibility(View.GONE);
-
-                                        spCity.setOnItemSelectedListener(cityListener);
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        customProgress.setVisibility(View.GONE);
-                                        commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+                                        cityCode = object.getString("CITY_CODE");
+                                        cityName = object.getString("CITY_NAME");
+                                        arrCity.add(new RowData(i + 1, cityCode, cityName));
                                     }
+                                    arrAdapCity = new ArrayAdapter<>(RegisterActivity.this,
+                                        R.layout.simple_spinner_item, arrCity);
+                                    arrAdapCity.setDropDownViewResource(
+                                        android.R.layout.simple_spinner_dropdown_item);
+                                    spCity.setAdapter(arrAdapCity);
 
-                                } else {
                                     customProgress.setVisibility(View.GONE);
-                                    MOSLCommon.showToastMsg(RegisterActivity.this, "NO CITY");
 
+                                    spCity.setOnItemSelectedListener(cityListener);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    customProgress.setVisibility(View.GONE);
+                                    commonMsgDialog(RegisterActivity.this,
+                                        SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                    //                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                 }
+                            } else {
+                                customProgress.setVisibility(View.GONE);
+                                MOSLCommon.showToastMsg(RegisterActivity.this, "NO CITY");
                             }
-
-
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable
-                                throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
                         }
                     }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable
+                            throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
+                    }
+                }
 
             );
         } else {
@@ -1254,103 +1330,96 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             customProgress.setVisibility(View.VISIBLE);
             WebServiceHandler.post(this, BINDINTERESTEDIN, SIGNUP, inputMap,
                 new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            customProgress.setVisibility(View.VISIBLE);
-                            arrInterested = new ArrayList<>();
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        customProgress.setVisibility(View.VISIBLE);
+                        arrInterested = new ArrayList<>();
 
-                            if (statusCode == 200) {
-                                if (response.length() != 0) {
-                                    String interestedID, interestedText;
-                                    arrInterested.add(new RowData(0, "-1", "Interested In"));
-                                    try {
-                                        JSONArray jsonArray = response.getJSONArray(INTERESTED_IN_DETAILS);
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject object = jsonArray.getJSONObject(i);
+                        if (statusCode == 200) {
+                            if (response.length() != 0) {
+                                String interestedID, interestedText;
+                                arrInterested.add(new RowData(0, "-1", "Interested In"));
+                                try {
+                                    JSONArray jsonArray =
+                                        response.getJSONArray(INTERESTED_IN_DETAILS);
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject object = jsonArray.getJSONObject(i);
 
-                                            interestedID = object.getString("ID");
-                                            interestedText = object.getString("TEXT");
-                                            arrInterested.add(new RowData(i + 1, interestedID, interestedText));
-                                        }
-                                        arrAdapInterested = new ArrayAdapter<>(RegisterActivity.this, R.layout.simple_spinner_item, arrInterested);
-                                        arrAdapInterested.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                                        spInterestedIn.setAdapter(arrAdapInterested);
-                                        customProgress.setVisibility(View.GONE);
-
-                                        spInterestedIn.setOnItemSelectedListener(interestedInListener);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        customProgress.setVisibility(View.GONE);
-                                        commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+                                        interestedID = object.getString("ID");
+                                        interestedText = object.getString("TEXT");
+                                        arrInterested.add(
+                                            new RowData(i + 1, interestedID, interestedText));
                                     }
-
-                                } else {
+                                    arrAdapInterested = new ArrayAdapter<>(RegisterActivity.this,
+                                        R.layout.simple_spinner_item, arrInterested);
+                                    arrAdapInterested.setDropDownViewResource(
+                                        android.R.layout.simple_spinner_dropdown_item);
+                                    spInterestedIn.setAdapter(arrAdapInterested);
                                     customProgress.setVisibility(View.GONE);
-                                    MOSLCommon.showToastMsg(RegisterActivity.this, "NO Interested fields");
 
+                                    spInterestedIn.setOnItemSelectedListener(interestedInListener);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    customProgress.setVisibility(View.GONE);
+                                    commonMsgDialog(RegisterActivity.this,
+                                        SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                    //                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                 }
+                            } else {
+                                customProgress.setVisibility(View.GONE);
+                                MOSLCommon.showToastMsg(RegisterActivity.this,
+                                    "NO Interested fields");
                             }
-
-
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable
-                                throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray
-                                errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
                         }
                     }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable
+                            throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray
+                            errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+                }
 
             );
         } else {
             MOSLCommon.alertDInternet(RegisterActivity.this);
         }
     }
-
-    private AdapterView.OnItemSelectedListener cityListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
-            cityNameStr = ((RowData) spCity.getSelectedItem()).getValue();
-            etCityError.setVisibility(View.GONE);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -1403,74 +1472,84 @@ public class RegisterActivity extends Activity implements MOSLConstants {
 
             WebServiceHandler.post(this, GETPINCODEDETAILS, SIGNUP, inputMap,
                 new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    super.onSuccess(statusCode, headers, response);
-                   /* {"STATE":"MAHARASHTRA","CITY":"MUMBAI","PINCODE":"400068"}*/
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        /* {"STATE":"MAHARASHTRA","CITY":"MUMBAI","PINCODE":"400068"}*/
 
-                    if (response != null) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("PincodeDetails");
-                            if (jsonArray.length() == 0) {
-//                                etPincode.setText("");
-                                CustomDialog dialogMsg = new CustomDialog(RegisterActivity.this, INVALID_PIN, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action, Object... data) {
+                        if (response != null) {
+                            try {
+                                JSONArray jsonArray = response.getJSONArray("PincodeDetails");
+                                if (jsonArray.length() == 0) {
+                                    //                                etPincode.setText("");
+                                    CustomDialog dialogMsg =
+                                        new CustomDialog(RegisterActivity.this, INVALID_PIN, true,
+                                            false, false, "", OK, "",
+                                            new CustomDialog.CustomDialogListener() {
+                                                @Override
+                                                public void dialogAction(MOSLCommon.Action action,
+                                                    Object... data) {
 
-                                    }
-                                });
-                                dialogMsg.show();
+                                                }
+                                            });
+                                    dialogMsg.show();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                customProgress.setVisibility(View.GONE);
+                                commonMsgDialog(RegisterActivity.this,
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                //                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            customProgress.setVisibility(View.GONE);
-                            commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                         }
+
+                        customProgress.setVisibility(View.GONE);
                     }
 
-                    customProgress.setVisibility(View.GONE);
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        super.onSuccess(statusCode, headers, response);
+                    }
 
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                        super.onSuccess(statusCode, headers, responseString);
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                    super.onSuccess(statusCode, headers, response);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString,
+                        Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                    super.onSuccess(statusCode, headers, responseString);
-                }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    super.onFailure(statusCode, headers, responseString, throwable);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                    super.onFailure(statusCode, headers, throwable, errorResponse);
-                    customProgress.setVisibility(View.GONE);
-                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                }
-            });
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                        JSONArray errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        customProgress.setVisibility(View.GONE);
+                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false,
+                            "");
+                    }
+                });
         } else {
             MOSLCommon.alertDInternet(this);
         }
     }
 
-
-    private boolean validateEditText(EditText editText, TextInputLayout textInputLayout, String error) {
+    private boolean validateEditText(EditText editText, TextInputLayout textInputLayout,
+        String error) {
         if (editText.getText().toString().trim().isEmpty()) {
             textInputLayout.setError(error);
             editText.requestFocus();
@@ -1660,11 +1739,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
     public class ChangePassword extends Dialog implements MOSLConstants {
 
         Context mContext;
+        RelativeLayout customProgress;
         private ImageView ivClose;
         private Button btnChangePasswordSubmit, btnChangePasswordReset;
-        RelativeLayout customProgress;
-        private EditText etChangePasswordUserId, etOldPassword, etNewPassword, etConfirmPassword, etNewPasswordError, etConfirmPasswordError;
-        private TextInputLayout input_layout_oldPassword, input_layout_newPassword, input_layout_confirmPassword;
+        private EditText etChangePasswordUserId, etOldPassword, etNewPassword, etConfirmPassword,
+            etNewPasswordError, etConfirmPasswordError;
+        private TextInputLayout input_layout_oldPassword, input_layout_newPassword,
+            input_layout_confirmPassword;
 
         public ChangePassword(Context context) {
             super(context);
@@ -1676,9 +1757,10 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             super.onCreate(savedInstanceState);
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setWindowAnimations(R.style.animationName);
-//        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            //        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             setContentView(R.layout.dc_change_password);
-            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
             setCanceledOnTouchOutside(false);
             setUpView();
         }
@@ -1718,27 +1800,35 @@ public class RegisterActivity extends Activity implements MOSLConstants {
             btnChangePasswordSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!validateEditText(etOldPassword, input_layout_oldPassword, "Enter old password")) {
+                    if (!validateEditText(etOldPassword, input_layout_oldPassword,
+                        "Enter old password")) {
                         return;
-                    } else if (!validateEditText(etNewPassword, input_layout_newPassword, "Enter new password")) {
+                    } else if (!validateEditText(etNewPassword, input_layout_newPassword,
+                        "Enter new password")) {
                         return;
                     } else if (etNewPassword.length() < 8) {
-//                    etNewPassword.setError("New password min length must be 8 digit");
+                        //                    etNewPassword.setError("New password min length must be 8 digit");
                         etNewPasswordError.setText("New password min length must be 8 digit");
                         etNewPasswordError.setVisibility(View.VISIBLE);
-                    } else if (!validateEditText(etConfirmPassword, input_layout_confirmPassword, "Please enter password")) {
+                    } else if (!validateEditText(etConfirmPassword, input_layout_confirmPassword,
+                        "Please enter password")) {
                         etNewPasswordError.setVisibility(View.GONE);
                         return;
-                    } else if (!etNewPassword.getText().toString().trim().equals(etConfirmPassword.getText().toString().trim())) {
+                    } else if (!etNewPassword.getText()
+                        .toString()
+                        .trim()
+                        .equals(etConfirmPassword.getText().toString().trim())) {
                         etConfirmPassword.setText("");
-                        etConfirmPasswordError.setText("Confirm password and new password should be same");
+                        etConfirmPasswordError.setText(
+                            "Confirm password and new password should be same");
                         etConfirmPasswordError.setVisibility(View.VISIBLE);
                     } else {
                         etNewPasswordError.setVisibility(View.GONE);
                         etConfirmPasswordError.setVisibility(View.GONE);
                         removeKeyboard(mContext, etConfirmPassword);
-                        changePassword(etNewPassword.getText().toString().trim(), etOldPassword.getText().toString().trim());
-//                    changePWdialog.dismiss();
+                        changePassword(etNewPassword.getText().toString().trim(),
+                            etOldPassword.getText().toString().trim());
+                        //                    changePWdialog.dismiss();
                     }
                 }
             });
@@ -1755,12 +1845,13 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                 WebServiceHandler.post(mContext, CHANGEPASSWORD, LOGIN, inputMap,
                     new JsonHttpResponseHandler() {
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        try {
-                            if (statusCode == 200) {
-                                if (response != null && response.length() != 0) {
+                        @Override
+                        public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                if (statusCode == 200) {
+                                    if (response != null && response.length() != 0) {
                             /*"_userid": null,
                             "_isnewcustomer": null,
                             "_msg": "Password Update Successfully",
@@ -1775,10 +1866,15 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                             "_AppLoginId": null,
                             "_ShowChangePassword": null*/
 
-                                    String success = (response.isNull("_Success") || response.getString("_Success").equals("")) ? "" : response.getString("_Success");
-                                    String msg = (response.isNull("_msg") || response.getString("_msg").equals("")) ? "" : response.getString("_msg");
+                                        String success =
+                                            (response.isNull("_Success") || response.getString(
+                                                "_Success").equals("")) ? ""
+                                                : response.getString("_Success");
+                                        String msg =
+                                            (response.isNull("_msg") || response.getString("_msg")
+                                                .equals("")) ? "" : response.getString("_msg");
 
-                                    if (Integer.parseInt(success) == 1) {
+                                        if (Integer.parseInt(success) == 1) {
                                        /* MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", msg, "OK", true, new MOSLCommon.DialogListener() {
                                             @Override
                                             public void alertDialogAction(MOSLCommon.Action action, Object... data) {
@@ -1789,76 +1885,97 @@ public class RegisterActivity extends Activity implements MOSLConstants {
                                                 }
                                             }
                                         });*/
-                                        CustomDialog dialog = new CustomDialog(RegisterActivity.this, msg, true, false, false, "", OK, "", new CustomDialog.CustomDialogListener() {
-                                            @Override
-                                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                                if (action == MOSLCommon.Action.OK) {
-                                                    dismiss();
-                                                    Intent intent = new Intent(RegisterActivity.this, PANAdharRegistActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
-                                                }
-                                            }
-                                        });
-                                        dialog.show();
-                                    } else if (Integer.parseInt(success) == 0) {
-                                        commonMsgDialog(RegisterActivity.this, msg, false, "");
-//                                        MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", msg, "OK", true, null);
+                                            CustomDialog dialog =
+                                                new CustomDialog(RegisterActivity.this, msg, true,
+                                                    false, false, "", OK, "",
+                                                    new CustomDialog.CustomDialogListener() {
+                                                        @Override
+                                                        public void dialogAction(
+                                                            MOSLCommon.Action action,
+                                                            Object... data) {
+                                                            if (action == MOSLCommon.Action.OK) {
+                                                                dismiss();
+                                                                Intent intent = new Intent(
+                                                                    RegisterActivity.this,
+                                                                    PANAdharRegistActivity.class);
+                                                                startActivity(intent);
+                                                                finish();
+                                                            }
+                                                        }
+                                                    });
+                                            dialog.show();
+                                        } else if (Integer.parseInt(success) == 0) {
+                                            commonMsgDialog(RegisterActivity.this, msg, false, "");
+                                            //                                        MOSLCommon.alertDialog(mContext, 0, "Motilal Oswal", msg, "OK", true, null);
+                                        }
+                                    } else {
+                                        customProgress.setVisibility(View.GONE);
+                                        commonMsgDialog(RegisterActivity.this,
+                                            SOME_SERVER_ERROR_OCCURRED, false, "");
                                     }
-                                } else {
-                                    customProgress.setVisibility(View.GONE);
-                                    commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
                                 }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                commonMsgDialog(RegisterActivity.this,
+                                    SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
+                                //                            MOSLCommon.alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            commonMsgDialog(RegisterActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            MOSLCommon.alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+                            customProgress.setVisibility(View.GONE);
                         }
-                        customProgress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        customProgress.setVisibility(View.GONE);
-                    }
+                        @Override
+                        public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                            customProgress.setVisibility(View.GONE);
+                        }
 
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        customProgress.setVisibility(View.GONE);
-                    }
+                        @Override
+                        public void onSuccess(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
+                            customProgress.setVisibility(View.GONE);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        customProgress.setVisibility(View.GONE);
-                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                    }
+                        @Override
+                        public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            customProgress.setVisibility(View.GONE);
+                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED,
+                                false, "");
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        customProgress.setVisibility(View.GONE);
-                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                    }
+                        @Override
+                        public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+                            JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            customProgress.setVisibility(View.GONE);
+                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED,
+                                false, "");
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        MOSLCommon.showToastMsg(mContext, responseString);
-                        customProgress.setVisibility(View.GONE);
-                        commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED, false, "");
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode,
+                            cz.msebera.android.httpclient.Header[] headers, String responseString,
+                            Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            MOSLCommon.showToastMsg(mContext, responseString);
+                            customProgress.setVisibility(View.GONE);
+                            commonMsgDialog(RegisterActivity.this, SOME_SERVER_ERROR_OCCURRED,
+                                false, "");
+                        }
+                    });
             } else {
                 MOSLCommon.alertDInternet(RegisterActivity.this);
                 customProgress.setVisibility(View.GONE);
             }
         }
 
-        private boolean validateEditText(EditText edietText, TextInputLayout textInputLayout, String error) {
+        private boolean validateEditText(EditText edietText, TextInputLayout textInputLayout,
+            String error) {
             if (edietText.getText().toString().trim().isEmpty()) {
                 textInputLayout.setError(error);
                 edietText.requestFocus();

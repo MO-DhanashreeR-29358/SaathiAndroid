@@ -84,7 +84,6 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isIpvORDocumentStageDone;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isNomineeTabApplicable;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isThisSecondProductFlow;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.minMarginValueForOtherAmount;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
@@ -130,6 +129,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.isGotoFundTransfer;
 import static com.mosl.mobile.ekyc.model.CommonModel.isGotoReviewEdit;
 import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isSaathiAufsb;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrFutSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquCurrOptSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setEquDPSchSelID;
@@ -606,6 +606,7 @@ public class BankDetailsFormFragment extends Fragment
         };
     private SimpleDateFormat dateFormatter;
     TextView tvequSchValidity, tvequSchDpAmc, tvequSchUpfrontFees;
+    boolean equAuSmall = false, commAuSmall = false;
     private final AdapterView.OnItemSelectedListener commNCXBrokSchListener =
         new AdapterView.OnItemSelectedListener() {
             @Override
@@ -824,12 +825,14 @@ public class BankDetailsFormFragment extends Fragment
         new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                strEquSchMarDep = ((RowData) arrEquScheme.get(position)).getMarDep();
-                strEquSchID = ((RowData) arrEquScheme.get(position)).getSchmeID();
-                strEquSchSelID = ((RowData) arrEquScheme.get(position)).getSchemeSelID();
-                strEquSchKey = ((RowData) arrEquScheme.get(position)).getKey();
+                strEquSchMarDep = (arrEquScheme.get(position)).getMarDep();
+                strEquSchID = (arrEquScheme.get(position)).getSchmeID();
+                strEquSchSelID = (arrEquScheme.get(position)).getSchemeSelID();
+                strEquSchKey = (arrEquScheme.get(position)).getKey();
                 customProgress.setVisibility(View.GONE);
                 etEquSchemeError.setVisibility(View.GONE);
+                input_layout_equMarginDeposit.setErrorEnabled(false);
+                etEquMarginDepositError.setVisibility(View.GONE);
 
                 if (isCommodityOriginal()) {
                     for (RowData i : arrCommScheme) {
@@ -841,7 +844,7 @@ public class BankDetailsFormFragment extends Fragment
                             strCommSchKey = i.getKey();
                             etCommSchemeError.setVisibility(View.GONE);
                         } else if (i.getMarDep()
-                            .equals(((RowData) arrEquScheme.get(position)).getMarDep())) {
+                            .equals((arrEquScheme.get(position)).getMarDep())) {
                             commSchMarDep = i.getMarDep();
                             strComSchID = i.getSchmeID();
                             strCommSchSelID = i.getSchemeSelID();
@@ -1663,6 +1666,11 @@ public class BankDetailsFormFragment extends Fragment
             arrListBrokerage.add(new RowData(1, "D", DEFAULT));
             arrListBrokerage.add(new RowData(2, "MR", MAX_RATE));
         }
+
+        if (isSaathiAufsb()) {
+            btnEquityBankDetails.setText(SEARCH_BRANCH);
+        }
+
         arrAdapBrokerage =
             new ArrayAdapter<RowData>(mContext, R.layout.simple_spinner_item, arrListBrokerage);
         arrAdapBrokerage.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -2030,19 +2038,13 @@ public class BankDetailsFormFragment extends Fragment
 
                 if (etEquMarginDeposit.getText().toString().equals("")) {
                     etEquMarginDepositError.setVisibility(View.VISIBLE);
-                    etEquMarginDepositError.setText(
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                    etEquMarginDepositError.setText(otherAmountValidationMessage());
                     //                    btnGetEquScheme.setBackgroundColor(getResources().getColor(R.color.light_grey_menu));
                     //                    btnGetEquScheme.setEnabled(false);
                 } else if (Integer.parseInt(etEquMarginDeposit.getText().toString())
                     < minMarginValueForOtherAmount()) {
                     etEquMarginDepositError.setVisibility(View.VISIBLE);
-                    etEquMarginDepositError.setText(
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                    etEquMarginDepositError.setText(otherAmountValidationMessage());
                     //                    btnGetEquScheme.setBackgroundColor(getResources().getColor(R.color.light_grey_menu));
                     //                    btnGetEquScheme.setEnabled(false);
                 } else {
@@ -2065,19 +2067,13 @@ public class BankDetailsFormFragment extends Fragment
 
                 if (etCommMarginDeposit.getText().toString().equals("")) {
                     etCommMarginDepositError.setVisibility(View.VISIBLE);
-                    etCommMarginDepositError.setText(
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                    etCommMarginDepositError.setText(otherAmountValidationMessage());
                     //                    btnGetCommScheme.setBackgroundColor(getResources().getColor(R.color.light_grey_menu));
                     //                    btnGetCommScheme.setEnabled(false);
                 } else if (Integer.parseInt(etCommMarginDeposit.getText().toString())
                     < minMarginValueForOtherAmount()) {
                     etCommMarginDepositError.setVisibility(View.VISIBLE);
-                    etCommMarginDepositError.setText(
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                    etCommMarginDepositError.setText(otherAmountValidationMessage());
                     //                    btnGetCommScheme.setBackgroundColor(getResources().getColor(R.color.light_grey_menu));
                     //                    btnGetCommScheme.setEnabled(false);
                 } else {
@@ -2305,16 +2301,15 @@ public class BankDetailsFormFragment extends Fragment
     public void getOtherCommSchDetail() {
         if (MOSLCommon.isNetworkEnabled(mContext) && !isBlank(
             etCommMarginDeposit.getText().toString())) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_Amount", etCommMarginDeposit.getText().toString());
             inputMap.put("_Segment", "Commodity");
             inputMap.put("_userId", getUserID());
             inputMap.put("_userType", getAppType());
+            inputMap.put("AU_SMALL", commAuSmall ? "1" : "0");
 
-            String flag = GETDETAILSBYOTHERAMOUNT;
-            String category = SCHEMEDETAILS;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETDETAILSBYOTHERAMOUNT, SCHEMEDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -2339,13 +2334,21 @@ public class BankDetailsFormFragment extends Fragment
                                 if (jsonArray.length() != 0) {
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
-                                        String delivery = object.getString("Delivery");
+                                        String delivery =
+                                            (object.isNull("Delivery") || object.getString(
+                                                "Delivery")
+                                                .equals("")) ? "" : object.getString("Delivery");
+                                        String intraday =
+                                            (object.isNull("Intraday1stLegMax") || object.getString(
+                                                "Intraday1stLegMax")
+                                                .equals("")) ? ""
+                                                : object.getString("Intraday1stLegMax");
+                                        //if (!object.has("Status")) {
                                         BigDecimal bdDelivery = new BigDecimal(delivery);
-                                        String intraday = object.getString("Intraday1stLegMax");
                                         BigDecimal bdIntraday = new BigDecimal(intraday);
-
                                         tvCommDelBrok.setText(String.valueOf(bdDelivery));
                                         tvCommIntradayBrok.setText(String.valueOf(bdIntraday));
+                                        //}
                                     }
                                     disableEnableField();
                                 }
@@ -2353,21 +2356,11 @@ public class BankDetailsFormFragment extends Fragment
                                 customProgress.setVisibility(View.GONE);
                             } catch (Exception e) {
                                 e.printStackTrace();
+                                commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false,
+                                    "");
                             }
-                        } else {
-
                         }
                         customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
                     }
 
                     @Override
@@ -2383,7 +2376,6 @@ public class BankDetailsFormFragment extends Fragment
                         JSONObject errorResponse) {
                         customProgress.setVisibility(View.GONE);
                         commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-
                     }
 
                     @Override
@@ -2406,18 +2398,15 @@ public class BankDetailsFormFragment extends Fragment
     public void getOtherEquSchDetail() {
         if (MOSLCommon.isNetworkEnabled(mContext) && !isBlank(
             etEquMarginDeposit.getText().toString())) {
-            //            if (isOtherAmountSubmitted)
-            //                return;
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_Amount", etEquMarginDeposit.getText().toString());
             inputMap.put("_Segment", "Equity");
             inputMap.put("_userId", getUserID());
             inputMap.put("_userType", getAppType());
+            inputMap.put("AU_SMALL", equAuSmall ? "1" : "0");
 
-            String flag = GETDETAILSBYOTHERAMOUNT;
-            String category = SCHEMEDETAILS;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETDETAILSBYOTHERAMOUNT, SCHEMEDETAILS, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -2446,7 +2435,8 @@ public class BankDetailsFormFragment extends Fragment
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
                                         String accountOpeningFee =
-                                            (object.isNull("AccountOpeningFee") || object.getString(
+                                            (object.isNull("AccountOpeningFee")
+                                                || object.getString(
                                                 "AccountOpeningFee").equals("")) ? ""
                                                 : object.getString("AccountOpeningFee");
                                         //                                    BigDecimal bdAccountOpeningFee = new BigDecimal(accountOpeningFee);
@@ -2480,13 +2470,14 @@ public class BankDetailsFormFragment extends Fragment
                                         BigDecimal bdIntradayFutures1stLegMAX =
                                             new BigDecimal(intradayFutures1stLegMAX);
                                         String intradayFutures2ndLegMAX =
-                                            (object.isNull("Intraday2ndLeg") || object.getString(
-                                                "Intraday2ndLeg").equals("")) ? ""
-                                                : object.getString("Intraday2ndLeg");
+                                            (object.isNull("Futures2ndLeg") || object.getString(
+                                                "Futures2ndLeg").equals("")) ? ""
+                                                : object.getString("Futures2ndLeg");
                                         BigDecimal bdIntradayFutures2ndLegMAX =
                                             new BigDecimal(intradayFutures2ndLegMAX);
                                         String options1stLegAnd2ndLegINR =
-                                            (object.isNull("Options") || object.getString("Options")
+                                            (object.isNull("Options") || object.getString(
+                                                "Options")
                                                 .equals("")) ? "" : object.getString("Options");
                                         BigDecimal bdOptions1stLegAnd2ndLegINR =
                                             new BigDecimal(options1stLegAnd2ndLegINR);
@@ -2505,6 +2496,16 @@ public class BankDetailsFormFragment extends Fragment
                                         String dpAmc =
                                             (object.isNull("DPAMC") || object.getString("DPAMC")
                                                 .equals("")) ? "" : object.getString("DPAMC");
+                                        String adminCharges =
+                                            (object.isNull("Admin Charges")
+                                                || object.getString("Admin Charges")
+                                                .equals("")) ? ""
+                                                : object.getString("Admin Charges");
+                                        String brokingAMC =
+                                            (object.isNull("Broking AMC(Annually)")
+                                                || object.getString("Broking AMC(Annually)")
+                                                .equals("")) ? ""
+                                                : object.getString("Broking AMC(Annually)");
 
                                         //                                    tvequSchInfoAccOpenCharge.setText(String.valueOf(bdAccountOpeningFee));
                                         //                                    tvequSchInfoSoftCharge.setText(String.valueOf(bdSoftwareCharges));
@@ -2527,6 +2528,8 @@ public class BankDetailsFormFragment extends Fragment
                                         tvequSchInfoCurrOption.setText(
                                             String.valueOf(bdCurrencyOptions));
                                         tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
+                                        tvEqAdminCharges.setText(adminCharges);
+                                        tvEqBrokingAmc.setText(brokingAMC);
 
                                     }
                                     disableEnableField();
@@ -2623,23 +2626,11 @@ public class BankDetailsFormFragment extends Fragment
                                 e.printStackTrace();
                                 commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false,
                                     "");
-                                //                            customProgress.setVisibility(View.GONE);
                             }
                         } else {
                             commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-                            //                        MOSLCommon.showToastMsg(mContext, NO_RESPONSE);
                         }
                         customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
                     }
 
                     @Override
@@ -3796,7 +3787,18 @@ public class BankDetailsFormFragment extends Fragment
                                                         (object.isNull("DPAMC") || object.getString(
                                                             "DPAMC").equals("")) ? ""
                                                             : object.getString("DPAMC");
-
+                                                    String adminCharges =
+                                                        (object.isNull("Admin Charges")
+                                                            || object.getString("Admin Charges")
+                                                            .equals("")) ? ""
+                                                            : object.getString("Admin Charges");
+                                                    String brokingAMC =
+                                                        (object.isNull("Broking AMC(Annually)")
+                                                            || object.getString(
+                                                            "Broking AMC(Annually)")
+                                                            .equals("")) ? ""
+                                                            : object.getString(
+                                                                "Broking AMC(Annually)");
                                                     tvequSchInfoIntraday1stLeg.setText(
                                                         intradayCashSegment1stLegMAX);
                                                     tvequSchInfoIntraday2ndLeg.setText(
@@ -3816,6 +3818,8 @@ public class BankDetailsFormFragment extends Fragment
                                                         accountOpeningFee);
                                                     tvequSchInfoSoftCharge.setText(softwareCharges);
                                                     tvEquAccOpenNote.setText("DP-AMC " + dpAmc);
+                                                    tvEqAdminCharges.setText(adminCharges);
+                                                    tvEqBrokingAmc.setText(brokingAMC);
                                                 } else if (rbValuePacAcc.isChecked()) {
                                                     String Validitydays =
                                                         (object.isNull("ValidityDays")
@@ -3910,6 +3914,18 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("SoftwareCharges")
                                                             .equals("")) ? ""
                                                             : object.getString("SoftwareCharges");
+                                                    String adminCharges =
+                                                        (object.isNull("Admin Charges")
+                                                            || object.getString("Admin Charges")
+                                                            .equals("")) ? ""
+                                                            : object.getString("Admin Charges");
+                                                    String brokingAMC =
+                                                        (object.isNull("Broking AMC(Annually)")
+                                                            || object.getString(
+                                                            "Broking AMC(Annually)")
+                                                            .equals("")) ? ""
+                                                            : object.getString(
+                                                                "Broking AMC(Annually)");
 
                                                     tvequSchInfoIntraday1stLeg.setText(
                                                         intradayCashSegment1stLegMAX);
@@ -3929,6 +3945,8 @@ public class BankDetailsFormFragment extends Fragment
                                                     tvequSchInfoAccOpenCharge.setText(
                                                         accountOpeningFee);
                                                     tvequSchInfoSoftCharge.setText(softwareCharges);
+                                                    tvEqAdminCharges.setText(adminCharges);
+                                                    tvEqBrokingAmc.setText(brokingAMC);
                                                 }
                                             }
                                             customProgress.setVisibility(View.GONE);
@@ -3944,6 +3962,8 @@ public class BankDetailsFormFragment extends Fragment
                                             tvequSchValidity.setText("");
                                             tvequSchDpAmc.setText("");
                                             tvequSchUpfrontFees.setText("");
+                                            tvEqAdminCharges.setText("");
+                                            tvEqBrokingAmc.setText("");
                                         }
 
                                         if (response.has("CurrencyFuture")) {
@@ -7313,16 +7333,12 @@ public class BankDetailsFormFragment extends Fragment
                 String otherAmountComm = etCommMarginDeposit.getText().toString();
                 if (otherAmountComm.equals("")) {
                     validateEditText(etCommMarginDeposit, input_layout_commMarginDeposit,
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                        otherAmountValidationMessage());
                     return false;
                 } else if (etCommMarginDeposit.isEnabled()
                     && Double.parseDouble(otherAmountComm) < minMarginValueForOtherAmount()) {
                     validateEditText(etCommMarginDeposit, input_layout_commMarginDeposit,
-                        getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                            R.string.margin_25000)
-                            : getResources().getString(R.string.margin_50000));
+                        otherAmountValidationMessage());
                     return false;
                 }
 
@@ -7486,15 +7502,13 @@ public class BankDetailsFormFragment extends Fragment
             String otherAmountEqu = etEquMarginDeposit.getText().toString();
             if (strEquSchID.equals("9999") && otherAmountEqu.equals("")) {
                 validateEditText(etEquMarginDeposit, input_layout_equMarginDeposit,
-                    getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                        R.string.margin_25000) : getResources().getString(R.string.margin_50000));
+                    otherAmountValidationMessage());
                 return false;
             } else if (strEquSchID.equals("9999")
                 && etEquMarginDeposit.isEnabled()
                 && Double.parseDouble(otherAmountEqu) < minMarginValueForOtherAmount()) {
                 validateEditText(etEquMarginDeposit, input_layout_equMarginDeposit,
-                    getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                        R.string.margin_25000) : getResources().getString(R.string.margin_50000));
+                    otherAmountValidationMessage());
                 return false;
             } else if (spEquScheme.getSelectedItem().toString().equalsIgnoreCase(SELECT)) {
                 etEquSchemeError.setVisibility(View.VISIBLE);
@@ -7502,8 +7516,8 @@ public class BankDetailsFormFragment extends Fragment
                 etEquSchemeError.requestFocus();
                 //   informationDialog("Equity Scheme." + CANNOT_BE_LEFT_BLANK);
                 return false;
-            } else if (getAppType().equals(CRM) && spDpScheme.getSelectedItem()
-                .toString()
+            } else if (!equAuSmall && getAppType().equals(CRM)
+                && spDpScheme.getSelectedItem().toString()
                 .equalsIgnoreCase(SELECT)) {
                 etDpSchemeError.setVisibility(View.VISIBLE);
                 etDpSchemeError.setText("Select DP scheme");
@@ -8700,7 +8714,7 @@ public class BankDetailsFormFragment extends Fragment
 
         if (MOSLCommon.isNetworkEnabled(mContext)) {
 
-            Map inputMap = new HashMap<>();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
             inputMap.put("_userType", userType);
             inputMap.put("IS_DIRECT_BA", isDirectProspect() ? "1" : "0");
@@ -9083,6 +9097,12 @@ public class BankDetailsFormFragment extends Fragment
                                                 || object.getString("SchemeSelectedID").equals(""))
                                                 ? "" : object.getString("SchemeSelectedID");
 
+                                            if (object.has("AU_SMALL")) {
+                                                String auSmall = (object.isNull("AU_SMALL")
+                                                    || object.getString("AU_SMALL").equals(""))
+                                                    ? "" : object.getString("AU_SMALL");
+                                                equAuSmall = auSmall.equals("1");
+                                            }                                            
                                             if (id.equalsIgnoreCase(MF_CUM_EQUITY)) {
                                                 if (schemeSelectedID.equalsIgnoreCase(
                                                     MF_CUM_EQUITY)) {
@@ -9340,7 +9360,12 @@ public class BankDetailsFormFragment extends Fragment
                                             String userId = object.getString("UserId");
                                             String schemeSelectedID =
                                                 object.getString("SchemeSelectedID");
-
+                                            if (object.has("AU_SMALL")) {
+                                                String auSmall = (object.isNull("AU_SMALL")
+                                                    || object.getString("AU_SMALL").equals(""))
+                                                    ? "" : object.getString("AU_SMALL");
+                                                commAuSmall = auSmall.equals("1");
+                                            }
                                             tvCommAccOpenNote.setText(
                                                 "DP-AMC " + accountOpeningFee);
 
@@ -9560,6 +9585,7 @@ public class BankDetailsFormFragment extends Fragment
                                 e.printStackTrace();
                                 customProgress.setVisibility(View.GONE);
                             }
+                            setAuFinanceChanges();
                         } else {
                             customProgress.setVisibility(View.GONE);
                         }
@@ -9605,6 +9631,12 @@ public class BankDetailsFormFragment extends Fragment
             );
         } else {
             MOSLCommon.alertDInternet(mContext);
+        }
+    }
+
+    private void setAuFinanceChanges() {
+        if (equAuSmall) {
+            spDpScheme.setVisibility(View.GONE);
         }
     }
 
@@ -10344,8 +10376,7 @@ public class BankDetailsFormFragment extends Fragment
                 && Integer.parseInt(strEquMarginDeposit) < minMarginValueForOtherAmount()) {
                 etEquMarginDepositError.setVisibility(View.VISIBLE);
                 etEquMarginDepositError.setText(
-                    getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                        R.string.margin_25000) : getResources().getString(R.string.margin_50000));
+                    otherAmountValidationMessage());
                 btnGetEquScheme.setBackgroundColor(
                     getResources().getColor(R.color.light_grey_menu));
                 btnGetEquScheme.setEnabled(false);
@@ -10365,8 +10396,7 @@ public class BankDetailsFormFragment extends Fragment
             if (Integer.parseInt(strCommMarginDeposit) < minMarginValueForOtherAmount()) {
                 etCommMarginDepositError.setVisibility(View.VISIBLE);
                 etCommMarginDepositError.setText(
-                    getAppType().equalsIgnoreCase(DIRECT) ? getResources().getString(
-                        R.string.margin_25000) : getResources().getString(R.string.margin_50000));
+                    otherAmountValidationMessage());
                 btnGetCommScheme.setBackgroundColor(
                     getResources().getColor(R.color.light_grey_menu));
                 btnGetCommScheme.setEnabled(false);
@@ -14022,14 +14052,12 @@ public class BankDetailsFormFragment extends Fragment
 
     public void getPaymentStatus() {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map inputMap = new HashMap();
+            Map<String, String> inputMap = new HashMap<>();
             inputMap.put("_userId", userID);
             //            inputMap.put("_segmentType", userID);
 
-            String flag = GETPAYMENTSTATUS;
-            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, flag, category, inputMap,
+            WebServiceHandler.post(mContext, GETPAYMENTSTATUS, FUNDTRANSFER, inputMap,
                 new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -14039,8 +14067,8 @@ public class BankDetailsFormFragment extends Fragment
                                 //                             {"FUNDTRANSFER":[{"EQPAYMENTSTATUS":3.0,"COMMPAYMENTSTATUS":3.0}]}
                                 if (response.has("FUNDTRANSFER")) {
                                     JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
-                                    BigDecimal bdEqPaymentStatus = null, bdCommPaymentStatus = null;
-                                    String eqPaymentStatus = "", commPaymentStatus = "";
+                                    BigDecimal bdEqPaymentStatus, bdCommPaymentStatus;
+                                    String eqPaymentStatus, commPaymentStatus, defaultPaymentMode;
                                     if (jsonArray.length() != 0) {
 
                                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -14057,6 +14085,11 @@ public class BankDetailsFormFragment extends Fragment
                                                         || object.getString("COMMPAYMENTSTATUS")
                                                         .equals("")) ? ""
                                                         : object.getString("COMMPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!eqPaymentStatus.equals("")
                                                     && !commPaymentStatus.equals("")) {
                                                     bdEqPaymentStatus =
@@ -14066,7 +14099,8 @@ public class BankDetailsFormFragment extends Fragment
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(
                                                         (int) bdEqPaymentStatus.longValue(),
-                                                        (int) bdCommPaymentStatus.longValue());
+                                                        (int) bdCommPaymentStatus.longValue(),
+                                                        defaultPaymentMode);
                                                 } else {
                                                     //                                                MOSLCommon.showToastMsg(mContext, "Status is null");
                                                 }
@@ -14076,12 +14110,18 @@ public class BankDetailsFormFragment extends Fragment
                                                     || object.getString("EQPAYMENTSTATUS")
                                                     .equals("")) ? ""
                                                     : object.getString("EQPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!eqPaymentStatus.equals("")) {
                                                     bdEqPaymentStatus =
                                                         new BigDecimal(eqPaymentStatus);
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(
-                                                        (int) bdEqPaymentStatus.longValue(), 4);
+                                                        (int) bdEqPaymentStatus.longValue(), 4,
+                                                        defaultPaymentMode);
                                                 }
                                             } else if (object.has("COMMPAYMENTSTATUS")) {
                                                 commPaymentStatus =
@@ -14089,12 +14129,18 @@ public class BankDetailsFormFragment extends Fragment
                                                         || object.getString("COMMPAYMENTSTATUS")
                                                         .equals("")) ? ""
                                                         : object.getString("COMMPAYMENTSTATUS");
+                                                defaultPaymentMode =
+                                                    (object.isNull("DEFAULTPAYMENTMOD")
+                                                        || object.getString("DEFAULTPAYMENTMOD")
+                                                        .equals("")) ? ""
+                                                        : object.getString("DEFAULTPAYMENTMOD");
                                                 if (!commPaymentStatus.equals("")) {
                                                     bdCommPaymentStatus =
                                                         new BigDecimal(commPaymentStatus);
                                                     // 4 set for no segment selected
                                                     navigateToFundTransfer(4,
-                                                        (int) bdCommPaymentStatus.longValue());
+                                                        (int) bdCommPaymentStatus.longValue(),
+                                                        defaultPaymentMode);
                                                 }
                                             }
 
@@ -14155,16 +14201,15 @@ public class BankDetailsFormFragment extends Fragment
         }
     }
 
-    private void navigateToFundTransfer(int equityStatus, int commodityStatus) {
+    private void navigateToFundTransfer(int equityStatus, int commodityStatus,
+        String defaultPaymentMode) {
         llFundTransfer.setVisibility(View.VISIBLE);
         llBankDetailForm.setVisibility(View.GONE);
         customProgress.setVisibility(View.GONE);
         fragFundTransfer = (FundTransferFragment) getChildFragmentManager().findFragmentById(
             R.id.fragFundTransfer);
         fragFundTransfer.setTabPageIndicator(tabPageIndicator);
-        fragFundTransfer.replaceNetBankingFragment();
-
-
+        fragFundTransfer.replaceDefaultFragment(defaultPaymentMode);
     }
 
     //set Equity bank info Review and edit
@@ -14394,6 +14439,7 @@ public class BankDetailsFormFragment extends Fragment
     }
 
     private void currencyFutureShowRadioButton(List<SchemeDetailsModel> detailsModelList) {
+        if (equAuSmall) return;
         if (detailsModelList.size() != 0) {
             RadioGroup.LayoutParams rprms;
             currencyfutureRadiogroup.removeAllViews();
@@ -14440,6 +14486,7 @@ public class BankDetailsFormFragment extends Fragment
     }
 
     private void currOptionShowRadioButton(List<SchemeDetailsModel> schemeDetailsModelList) {
+        if (equAuSmall) return;
         if (schemeDetailsModelList.size() != 0) {
             RadioGroup.LayoutParams rprms;
             currencyoptionRadiogroup.removeAllViews();
@@ -14872,6 +14919,33 @@ public class BankDetailsFormFragment extends Fragment
         } else {
             btnMarginSelectedScheme.setVisibility(View.VISIBLE);
             btnCommMarginSelectedScheme.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /*
+     * Return Minimum value for margin deposit in case of other amount option in scheme
+     * for direct 25000
+     * for branch 50000
+     * */
+    private int minMarginValueForOtherAmount() {
+        //return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
+        if (getAppType().equalsIgnoreCase(DIRECT)) {
+            return 1000;
+        } else if (equAuSmall || commAuSmall) {
+            return 0;
+        } else {
+            return 50000;
+        }
+    }
+
+    private String otherAmountValidationMessage() {
+        //if (getAppType().equalsIgnoreCase(DIRECT) || equAuSmall || commAuSmall) {
+        if (getAppType().equalsIgnoreCase(DIRECT)) {
+            return getResources().getString(R.string.margin_25000);
+        } else if (equAuSmall || commAuSmall) {
+            return getResources().getString(R.string.margin_0);
+        } else {
+            return getResources().getString(R.string.margin_50000);
         }
     }
 }

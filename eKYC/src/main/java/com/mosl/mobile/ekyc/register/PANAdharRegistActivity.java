@@ -103,6 +103,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.isMfIpvDone;
 import static com.mosl.mobile.ekyc.model.CommonModel.isMfSegmentExist;
 import static com.mosl.mobile.ekyc.model.CommonModel.isOffline;
 import static com.mosl.mobile.ekyc.model.CommonModel.isOfflineDocumentUploadedDone;
+import static com.mosl.mobile.ekyc.model.CommonModel.isSaathiAufsb;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAadhaarVerifiedByBio;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAadharNo;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAddressMode;
@@ -558,6 +559,8 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                 } else {
                     llBABranchCode.setVisibility(View.VISIBLE);
                 }
+            } else if (isSaathiAufsb()) {
+                llSIPIntent.setVisibility(View.GONE);
             } else {
                 llSIPIntent.setVisibility(View.VISIBLE);
             }
@@ -1235,7 +1238,10 @@ public class PANAdharRegistActivity extends Activity implements MOSLConstants {
                         setSipIntent("0");
                         submitData();
                     } else {
-                        if (cbSIP.isChecked()) {
+                        if (isSaathiAufsb()) {
+                            setSipIntent("0");
+                            submitData();
+                        } else if (cbSIP.isChecked()) {
                             setSipIntent("1");
                             submitData();
                         } else {

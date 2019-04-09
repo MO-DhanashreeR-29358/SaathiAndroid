@@ -307,6 +307,7 @@
     <string name="nominee_form_detail">Do you wish to add nominee ?</string>
     <string name="nominee_guardian_note">Note : As the Nominee is minor as on date, the following appointed person will act as Guardian.</string>
     <!--<string name="margin_25000">Margin Deposit cannot be less than 25,000</string>-->
+    <string name="margin_0">Margin Deposit cannot be less than 0</string>
     <string name="margin_25000">Margin Deposit cannot be less than 1000</string>
     <string name="margin_50000">Margin Deposit cannot be less than 50,000</string>
     <string name="update_tab_for_iris">"Dear Customer, To use the Biometric \"IRIS Scan\" authentication mode, you need to upgrade the TAB to have (minimum):\n
