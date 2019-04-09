@@ -33,7 +33,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	public static ArrayList<MenuReport> menuReportArrayList = new ArrayList<>();
 	// Splash screen timer
-	private static int SPLASH_TIME_OUT = 3000;
+	private static int SPLASH_TIME_OUT = 300;
 
 	public static Map getHeader(Context context) {
 		Map headerMap = new HashMap<>();
@@ -159,7 +159,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 
 											boolean aufsb = userType.equals("9");
 											AccountDetails.setNewEkyc(aufsb);
-
 											new RoleSelectionModel("", "", "", "",
 												employeeCode.trim(), rmId.trim(),
 												businessUnitId.trim(), "",/*roleId*/"");
