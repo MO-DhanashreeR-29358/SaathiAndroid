@@ -100,12 +100,10 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
 //        }
     }
 
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.btnNetBank) {
-
             replaceNetBankingFragment();
         }
         if (id == R.id.btnDebitCard) {
@@ -143,7 +141,6 @@ public class FundTransferFragment extends Fragment implements View.OnClickListen
             btnCheque.setImageResource(R.drawable.icon_cheque_1);
             btnUPI.setImageResource(R.drawable.icon_upi);
         }
-
     }
 
     public void replaceNetBankingFragment() {

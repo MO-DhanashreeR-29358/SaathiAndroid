@@ -76,6 +76,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.droidparts.widget.ClearableEditText;
 import org.json.JSONArray;
@@ -188,14 +189,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 	private boolean editableFlag = true;
 	private String refereeCode, refereeName;
 	private boolean isRefreeCode;
+
 	private boolean isLowMargin;
 	private List<LowMargin> lowMarginList = new ArrayList<>();
 	private ProgressBar pbLoadingIndicatorRefreeCode, pbLoadingIndicatorRefreeName;
 	private boolean stateFlag, officeStateFlag;
 	private String leadOwner = "";
 	private ArrayList<String> arrPmsProduct;
-
-	private boolean leadEditable = true, isPotentialPMSProduct = false;
+	private boolean leadEditable = true, isPotentialPMSProduct = false, isPMSProductStageStatus;
 	private AdapterView.OnItemSelectedListener profileListener =
 		new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -5283,6 +5284,162 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		}
 	}
 
+	private void GetStageSelectList(final Spinner spStageDialog, final String stageId,
+		final LinearLayout progressLayout) {
+		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+			progressLayout.setVisibility(View.VISIBLE);
+			Map inputMap = new HashMap<>();
+			inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
+			if (!isBlank(stageId)) {
+				inputMap.put("StageID", stageId);
+			}
+			String serviceMethod = GETSTAGEMOBILESELECTLIST;
+
+			try {
+				CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
+					new JsonHttpResponseHandler() {
+
+						@Override
+						public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
+							super.onSuccess(statusCode, headers, response);
+							arrStage = new ArrayList<>();
+							try {
+								if (statusCode == 200) {
+									String status = response.getString(STATUS);
+									if (status.equalsIgnoreCase("true")) {
+										progressLayout.setVisibility(View.GONE);
+										arrStage.add(new RowData(0, "-1", "Select", ""));
+										JSONArray jsonArray = response.getJSONArray(RESPONSE);
+
+										for (int i = 0; i < jsonArray.length(); i++) {
+											JSONObject objDetail = jsonArray.getJSONObject(i);
+											String stageId = objDetail.isNull(STAGEID) ? ""
+												: objDetail.getString(STAGEID);
+											String stageCode = objDetail.isNull(STAGECODE) ? ""
+												: objDetail.getString(STAGECODE);
+											String stageName = objDetail.isNull(STAGENAME) ? ""
+												: objDetail.getString(STAGENAME);
+											String showPotentialPopup =
+												objDetail.isNull(SHOWPOTENTIALPOPUP) ? ""
+													: objDetail.getString(SHOWPOTENTIALPOPUP);
+											arrStage.add(new RowData(i + 1, stageId, stageName,
+												showPotentialPopup));
+										}
+										arrAdapStage = new ArrayAdapter<>(getMainActivity(),
+											R.layout.simple_spinner_item, arrStage);
+										arrAdapStage.setDropDownViewResource(R.layout.mdropdown);
+										spStageDialog.setAdapter(arrAdapStage);
+										RowData stageData =
+											getSpinnerRowDataById(stageId, arrAdapStage);
+										if (stageData != null) {
+											spStageDialog.setSelection(stageData.getPosition());
+										}
+									} else {
+										progressLayout.setVisibility(View.GONE);
+										String errorMsg =
+											CRMMOSLCommon.getErrorMsgFromResponse(response);
+										alertDialog(getMainActivity(), 0,
+											getResources().getString(R.string.motilal_oswal),
+											errorMsg, "OK", true, null);
+									}
+								} else {
+									progressLayout.setVisibility(View.GONE);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+								progressLayout.setVisibility(View.GONE);
+								alertDialog(getMainActivity(), 0,
+									getResources().getString(R.string.motilal_oswal),
+									SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+							}
+						}
+
+						@Override
+						public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
+							super.onSuccess(statusCode, headers, response);
+							progressLayout.setVisibility(View.GONE);
+						}
+
+						@Override
+						public void onSuccess(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, String responseString) {
+							super.onSuccess(statusCode, headers, responseString);
+							progressLayout.setVisibility(View.GONE);
+						}
+
+						@Override
+						public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+							JSONObject errorResponse) {
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+							try {
+								progressLayout.setVisibility(View.GONE);
+								if (statusCode == UNAUTHORIZE_STATUS_CODE) {
+									alertDialog(getMainActivity(), 0,
+										getResources().getString(R.string.motilal_oswal),
+										UNAUTHORIZE_USER, "OK", false,
+										new MSFDialog.DialogListener() {
+											@Override
+											public void alertDialogAction(MSFDialog.Action action,
+												Object... data) {
+												if (action == MSFDialog.Action.OK) {
+													Intent i = new Intent(getMainActivity(),
+														LoginActivity.class);
+													startActivity(i);
+													getActivity().finish();
+												}
+											}
+										});
+									return;
+								} else {
+									alertDialog(getMainActivity(), 0,
+										getResources().getString(R.string.motilal_oswal),
+										SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+									return;
+								}
+							} catch (Exception ex) {
+								//eat it
+								ex.printStackTrace();
+							}
+						}
+
+						@Override
+						public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
+							JSONArray errorResponse) {
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+							progressLayout.setVisibility(View.GONE);
+							alertDialog(getMainActivity(), 0,
+								getResources().getString(R.string.motilal_oswal),
+								SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+						}
+
+						@Override
+						public void onFailure(int statusCode,
+							cz.msebera.android.httpclient.Header[] headers, String responseString,
+							Throwable throwable) {
+							super.onFailure(statusCode, headers, responseString, throwable);
+							progressLayout.setVisibility(View.GONE);
+							alertDialog(getMainActivity(), 0,
+								getResources().getString(R.string.motilal_oswal),
+								SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+						}
+					});
+			} catch (Exception e) {
+				e.printStackTrace();
+				progressLayout.setVisibility(View.GONE);
+				alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+					SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+			}
+		} else {
+			progressLayout.setVisibility(View.GONE);
+			alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+				INTERNET_CONNECTION, "OK", true, null);
+		}
+	}
+
 	private void addNewSections() {
 		if (mLeadFieldSectionModelList == null || mLeadFieldSectionModelList.size() <= 0) {
 			Log.w(TAG, "mLeadFieldSectionModelList Was null or empty");
@@ -7943,7 +8100,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 			String productSpecialistId) {
 			final Dialog dialog = new Dialog(getMainActivity());
 			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+			Objects.requireNonNull(dialog.getWindow())
+				.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 			dialog.setCanceledOnTouchOutside(false);
 			dialog.setContentView(R.layout.dialog_leadview_add_product);
 			dialog.getWindow()
@@ -8578,7 +8736,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 				}
 			});
 			llInterestedIn.setVisibility(View.GONE);
-			GetStage(spStageDialog, stageId, progressLayout);
+			GetStageSelectList(spStageDialog, stageId, progressLayout);
 
 			spStageDialog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -8593,6 +8751,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 						lowMarginList.clear();
 						newStageCodeStr = ((RowData) spStageDialog.getSelectedItem()).getKey();
 						newStageNameStr = ((RowData) spStageDialog.getSelectedItem()).getValue();
+						// getSchemeId is ShowPotentialPopup
+						if (((RowData) spStageDialog.getSelectedItem()).getSchmeID()
+							.equalsIgnoreCase(YES)) {
+							if (spPmsProduct.getSelectedItem().toString().equals(NO)) {
+								isPMSProductStageStatus = true;
+							}
+						} else {
+							isPMSProductStageStatus = false;
+						}
 						if (!newStageCodeStr.equalsIgnoreCase("-1")) {
 							newGetStatus(newStageCodeStr, spStatusDialog, statusId, progressLayout);
 						}
@@ -8655,7 +8822,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 					final String primaryRM =
 						CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
 
-					if (isPotentialPMSProduct) {
+					if (isPotentialPMSProduct || isPMSProductStageStatus) {
 						MSFDialog.alertDialog(getActivity(), 0,
 							getResources().getString(R.string.motilal_oswal),
 							POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
