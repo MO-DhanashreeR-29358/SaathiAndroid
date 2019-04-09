@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -44,9 +43,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -54,8 +51,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
 
@@ -97,7 +93,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     spFilter1 = leadsView.findViewById(R.id.spFilter1);
     spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
-      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+          int position,
           long id) {
         filterFirst = ((FilterRowData) spFilter1.getSelectedItem()).getValue();
         webServiceCall();
@@ -111,7 +108,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     spFilter2 = leadsView.findViewById(R.id.spFilter2);
     spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
-      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+          int position,
           long id) {
         filterSecond = ((FilterRowData) spFilter2.getSelectedItem()).getValue();
         webServiceCall();
@@ -125,7 +123,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     spFilter3 = leadsView.findViewById(R.id.spFilter3);
     spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
-      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+          int position,
           long id) {
         filterThird = ((FilterRowData) spFilter3.getSelectedItem()).getValue();
         webServiceCall();
@@ -201,58 +200,68 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
         List<WidgetFilterModel> filterList = model.getWidgetFilterList();
         if (filterList != null && filterList.size() == 2) {
           ArrayAdapter<FilterRowData> adapter1 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(0).getFilterData());
           adapter1.setDropDownViewResource(R.layout.mdropdown);
           spFilter1.setAdapter(adapter1);
 
-          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          FilterRowData productDataFirst =
+              getSpinnerFilterDataByValue(filterFirst, adapter1);
           if (productDataFirst != null) {
             spFilter1.setSelection(productDataFirst.getPosition());
           }
 
           ArrayAdapter<FilterRowData> adapter2 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(1).getFilterData());
           adapter2.setDropDownViewResource(R.layout.mdropdown);
           spFilter2.setAdapter(adapter2);
           spFilter2.setVisibility(View.VISIBLE);
 
-          FilterRowData productDataSecond = getSpinnerFilterDataByValue(filterSecond, adapter2);
+          FilterRowData productDataSecond =
+              getSpinnerFilterDataByValue(filterSecond, adapter2);
           if (productDataSecond != null) {
             spFilter2.setSelection(productDataSecond.getPosition());
           }
         }
         if (filterList != null && filterList.size() == 3) {
           ArrayAdapter<FilterRowData> adapter1 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(0).getFilterData());
           adapter1.setDropDownViewResource(R.layout.mdropdown);
           spFilter1.setAdapter(adapter1);
 
-          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          FilterRowData productDataFirst =
+              getSpinnerFilterDataByValue(filterFirst, adapter1);
           if (productDataFirst != null) {
             spFilter1.setSelection(productDataFirst.getPosition());
           }
 
           ArrayAdapter<FilterRowData> adapter2 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(1).getFilterData());
           adapter2.setDropDownViewResource(R.layout.mdropdown);
           spFilter2.setAdapter(adapter2);
 
-          FilterRowData productDataSecond = getSpinnerFilterDataByValue(filterSecond, adapter2);
+          FilterRowData productDataSecond =
+              getSpinnerFilterDataByValue(filterSecond, adapter2);
           if (productDataSecond != null) {
             spFilter2.setSelection(productDataSecond.getPosition());
           }
 
           ArrayAdapter<FilterRowData> adapter3 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(2).getFilterData());
           adapter3.setDropDownViewResource(R.layout.mdropdown);
           spFilter3.setAdapter(adapter3);
 
-          FilterRowData productDataThird = getSpinnerFilterDataByValue(filterThird, adapter3);
+          FilterRowData productDataThird =
+              getSpinnerFilterDataByValue(filterThird, adapter3);
           if (productDataThird != null) {
             spFilter3.setSelection(productDataThird.getPosition());
           }
@@ -260,12 +269,14 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
           spFilter3.setVisibility(View.VISIBLE);
         } else if (filterList != null && filterList.size() == 1) {
           ArrayAdapter<FilterRowData> adapter1 =
-              new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item,
+              new ArrayAdapter<FilterRowData>(getActivity(),
+                  android.R.layout.simple_spinner_item,
                   filterList.get(0).getFilterData());
           adapter1.setDropDownViewResource(R.layout.mdropdown);
           spFilter1.setAdapter(adapter1);
 
-          FilterRowData productDataFirst = getSpinnerFilterDataByValue(filterFirst, adapter1);
+          FilterRowData productDataFirst =
+              getSpinnerFilterDataByValue(filterFirst, adapter1);
           if (productDataFirst != null) {
             spFilter1.setSelection(productDataFirst.getPosition());
           }
@@ -318,19 +329,23 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
             new TextHttpResponseHandler() {
 
               @Override
-              public void onFailure(int statusCode, Header[] headers, String responseString,
+              public void onFailure(int statusCode, Header[] headers,
+                  String responseString,
                   Throwable throwable) {
                 try {
                   JSONObject errorResponse = new JSONObject(responseString);
                   hideProgress();
                   if (statusCode == UNAUTHORIZE_STATUS_CODE) {
                     MSFDialog.alertDialog(getMainActivity(), 0,
-                        getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK",
+                        getResources().getString(R.string.motilal_oswal),
+                        UNAUTHORIZE_USER, "OK",
                         false, new MSFDialog.DialogListener() {
                           @Override
-                          public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                          public void alertDialogAction(MSFDialog.Action action,
+                              Object... data) {
                             if (action == MSFDialog.Action.OK) {
-                              Intent i = new Intent(getMainActivity(), LoginActivity.class);
+                              Intent i = new Intent(getMainActivity(),
+                                  LoginActivity.class);
                               startActivity(i);
                               getActivity().finish();
                             }
@@ -338,12 +353,14 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                         });
                     return;
                   } else {
-                    String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
+                    String error =
+                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
                     if (CRMAppUtil.isBlank(error)) {
                       error = SOME_SERVER_ERROR_OCCURRED;
                     }
                     MSFDialog.alertDialog(getMainActivity(), 0,
-                        getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                        getResources().getString(R.string.motilal_oswal), error,
+                        "OK", true, null);
                     return;
                   }
                 } catch (Exception ex) {
@@ -353,7 +370,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
               }
 
               @Override
-              public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
+              public void onSuccess(int statusCode,
+                  cz.msebera.android.httpclient.Header[] headers,
                   String responseS) {
                 try {
 
@@ -363,7 +381,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                   HashMap<String, Object> response = mGson.fromJson(responseS, type);
                   if (statusCode == 200) {
                     String status = response.get(STATUS).toString();
-                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
+                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase(
+                        "true")) {
                       tv.setVisibility(View.VISIBLE);
                       llShowMore.setVisibility(View.VISIBLE);
                       hideProgress();
@@ -372,45 +391,60 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                       String total = "";
                       String[] lableString = new String[] {};
 
-                      final ArrayList<ArrayList<String>> yAxisListFirst = new ArrayList<>();
-                        Map<String, Object> responseJsonObj =
-                            (Map<String, Object>) response.get("Response");
-                        List<Map<String, Object>> arrayDetail =
-                            (List<Map<String, Object>>) responseJsonObj.get("Table");
+                      final ArrayList<ArrayList<String>> yAxisListFirst =
+                          new ArrayList<>();
+                      Map<String, Object> responseJsonObj =
+                          (Map<String, Object>) response.get("Response");
+                      List<Map<String, Object>> arrayDetail =
+                          (List<Map<String, Object>>) responseJsonObj.get(
+                              "Table");
                       if (arrayDetail.size() != 0) {
                         for (int y = 2; y < arrayDetail.size(); y++) {
-                            Map<String, Object> objDetail =
-                                (Map<String, Object>) arrayDetail.get(y);
-                          String stages = objDetail.get("stage").toString().equals("") ? "0"
-                              : objDetail.get("stage").toString();
+                          Map<String, Object> objDetail =
+                              (Map<String, Object>) arrayDetail.get(y);
+                          String stages =
+                              objDetail.get("stage").toString().equals("")
+                                  ? "0"
+                                  : objDetail.get("stage").toString();
                           if (stages.equalsIgnoreCase("Total")) {
-                            String Total = (objDetail.get("Total").toString().equals("")) ? "0"
-                                : objDetail.get("Total").toString();
-                            total = Total;
+                            total =
+                                (objDetail.get("Total") == null || objDetail
+                                    .get("Total")
+                                    .toString()
+                                    .equals("")) ? "0"
+                                    : objDetail.get("Total").toString();
                           }
                         }
                         try {
                           if (responseJsonObj.get("Table1") != null) {
-                              List<Map<String, Object>> arrayDetailTotal =
-                                  (List<Map<String, Object>>) responseJsonObj.get("Table1");
-                              Map<String, Object> jobjFKey = arrayDetailTotal.get(0);
+                            List<Map<String, Object>> arrayDetailTotal =
+                                (List<Map<String, Object>>) responseJsonObj.get(
+                                    "Table1");
+                            Map<String, Object> jobjFKey =
+                                arrayDetailTotal.get(0);
                             for (Object keySetE : jobjFKey.keySet()) {
-                              if (keySetE.toString().equalsIgnoreCase("id") | keySetE.toString()
+                              if (keySetE.toString()
+                                  .equalsIgnoreCase("id")
+                                  | keySetE.toString()
                                   .trim()
                                   .equalsIgnoreCase("Total")) {
                               } else {
                                 columnsYAxis.add(keySetE.toString());
                               }
                             }
-                              for (Map<String, Object> jobj : arrayDetailTotal) {
+                            for (Map<String, Object> jobj : arrayDetailTotal) {
 
-                              final ArrayList<String> yAxisList = new ArrayList<String>();
+                              final ArrayList<String> yAxisList =
+                                  new ArrayList<String>();
 
                               for (Object keySetE : columnsYAxis) {
-                                if (keySetE.toString().equalsIgnoreCase("id") || keySetE.toString()
+                                if (keySetE.toString()
+                                    .equalsIgnoreCase("id")
+                                    || keySetE.toString()
                                     .equalsIgnoreCase("Total")) {
                                 } else {
-                                  yAxisList.add(jobj.get(keySetE).toString());
+                                  yAxisList.add(
+                                      jobj.get(keySetE).toString());
                                 }
                               }
                               yAxisListFirst.add(yAxisList);
@@ -420,7 +454,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                           e.printStackTrace();
                         }
 
-                        if (yAxisListFirst != null && yAxisListFirst.size() > 0) {
+                        if (yAxisListFirst != null
+                            && yAxisListFirst.size() > 0) {
                           lableString = new String[] {
                               yAxisListFirst.get(0).get(0)
                               , yAxisListFirst.get(1).get(0)
@@ -428,24 +463,29 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                           yAxisListFirst.get(0).remove(0);
                           yAxisListFirst.get(1).remove(0);
                           tvTotal.setText(total);
-                          stackedBarData(columnsYAxis, yAxisListFirst, lableString);
+                          stackedBarData(columnsYAxis, yAxisListFirst,
+                              lableString);
                         }
                       } else {
                         hideProgress();
                         //  String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
                         String errorMsg =
-                            CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
+                            CRMMOSLCommon.getErrorMsgFromResponse(
+                                new JSONObject(responseS));
                         MSFDialog.alertDialog(getMainActivity(), 0,
-                            getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true,
+                            getResources().getString(R.string.motilal_oswal),
+                            errorMsg, "OK", true,
                             null);
                       }
                     } else {
                       hideProgress();
                       //     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
                       String errorMsg =
-                          CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
+                          CRMMOSLCommon.getErrorMsgFromResponse(
+                              new JSONObject(responseS));
                       MSFDialog.alertDialog(getMainActivity(), 0,
-                          getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true,
+                          getResources().getString(R.string.motilal_oswal),
+                          errorMsg, "OK", true,
                           null);
                     }
                   } else {
@@ -453,15 +493,11 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                     //                                customProgress.setVisibility(View.GONE);
                   }
                 } catch (
-                    ClassCastException ce)
-
-                {
+                    ClassCastException ce) {
                   ce.printStackTrace();
                   hideProgress();
                 } catch (
-                    Exception e)
-
-                {
+                    Exception e) {
                   e.printStackTrace();
                   hideProgress();
                   MSFDialog.alertDialog(getMainActivity(), 0,
@@ -477,11 +513,10 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
             getResources().getString(R.string.motilal_oswal),
             ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
       }
-    } else
-
-    {
+    } else {
       //            customProgress.setVisibility(View.GONE);
-      MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+      MSFDialog.alertDialog(getMainActivity(), 0,
+          getResources().getString(R.string.motilal_oswal),
           INTERNET_CONNECTION, "OK", true, null);
     }
   }
@@ -554,6 +589,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     data.setBarWidth(0.6f);
 
     mChart.setData(data);
+    mChart.getLegend().setEnabled(false);
     mChart.invalidate();
     mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
       @Override
@@ -597,7 +633,8 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     int id = view.getId();
     if (id == R.id.llShowMore) {
       Bundle args = new Bundle();
-      ClientsLeadShowFragment clientsFragment = ClientsLeadShowFragment.newInstance(getContext());
+      ClientsLeadShowFragment clientsFragment =
+          ClientsLeadShowFragment.newInstance(getContext());
       args.putSerializable(DASHBOARD_MODEL, dashboardModel);
       args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
       args.putString(SYSTEM_NAME, widgetSystemName);

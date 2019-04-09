@@ -62,7 +62,8 @@ public class LoginActivity extends FragmentActivity
 		return headerMap;
 	}
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		setPermisson(LoginActivity.this, getApplicationContext());
@@ -84,11 +85,11 @@ public class LoginActivity extends FragmentActivity
 	private boolean validateForm() {
 		if (etEmpCode.getText().toString().equalsIgnoreCase("")) {
 			alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
-				"Employee code cannot be left blank", "OK", true, null);
+				"Employee code cannot be left blank", OK, true, null);
 			return false;
 		} else if (etPassword.getText().toString().equalsIgnoreCase("")) {
 			alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
-				"Password cannot be left blank", "OK", true, null);
+				"Password cannot be left blank", OK, true, null);
 			return false;
 		} else {
 			return true;
@@ -118,7 +119,8 @@ public class LoginActivity extends FragmentActivity
 				CRMWebServiceHandler.post(this, serviceMethod, headerMap, inputMap,
 					new JsonHttpResponseHandler() {
 
-						@Override public void onSuccess(int statusCode,
+						@Override
+						public void onSuccess(int statusCode,
 							cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
 							super.onSuccess(statusCode, headers, response);
 							//after success code goes here
@@ -130,80 +132,62 @@ public class LoginActivity extends FragmentActivity
 										customProgress.setVisibility(View.GONE);
 										JSONObject objDetail = response.getJSONObject(RESPONSE);
 										boolean smtEnabled =
-											(objDetail.getString(SMT_ENABLED).equals("1")) ? true
-												: false;
+											objDetail.getString(SMT_ENABLED).equals("1");
+										boolean isEkycRevemp =
+											objDetail.getString(ISEKYCREVAMP).equals("1");
 										JSONObject objDetailUser = objDetail.getJSONObject(USER);
-										String userId = (objDetailUser.isNull(USER_ID)
-											|| objDetailUser.getString(USER_ID).equals("")) ? ""
+										String userId = objDetailUser.isNull(USER_ID) ? ""
 											: objDetailUser.getString(USER_ID);
-										String employeeCode = (objDetailUser.isNull(EMPLOYEE_CODE)
-											|| objDetailUser.getString(EMPLOYEE_CODE).equals(""))
+										String employeeCode = objDetailUser.isNull(EMPLOYEE_CODE)
 											? "" : objDetailUser.getString(EMPLOYEE_CODE);
-										String firstName = (objDetailUser.isNull(FIRST_NAME)
-											|| objDetailUser.getString(FIRST_NAME).equals("")) ? ""
+										String firstName = objDetailUser.isNull(FIRST_NAME) ? ""
 											: objDetailUser.getString(FIRST_NAME);
-										String lastName = (objDetailUser.isNull(LAST_NAME)
-											|| objDetailUser.getString(LAST_NAME).equals("")) ? ""
+										String lastName = objDetailUser.isNull(LAST_NAME) ? ""
 											: objDetailUser.getString(LAST_NAME);
-										String imageUrl = (objDetailUser.isNull(IMAGE_URL)
-											|| objDetailUser.getString(IMAGE_URL).equals("")) ? ""
+										String imageUrl = objDetailUser.isNull(IMAGE_URL) ? ""
 											: objDetailUser.getString(IMAGE_URL);
-										String mobile = (objDetailUser.isNull(MOBILE)
-											|| objDetailUser.getString(MOBILE).equals("")) ? ""
+										String mobile = objDetailUser.isNull(MOBILE) ? ""
 											: objDetailUser.getString(MOBILE);
-										String email =
-											(objDetailUser.isNull(EMAIL) || objDetailUser.getString(
-												EMAIL).equals("")) ? ""
-												: objDetailUser.getString(EMAIL);
-										String token =
-											(objDetailUser.isNull(TOKEN) || objDetailUser.getString(
-												TOKEN).equals("")) ? ""
-												: objDetailUser.getString(TOKEN);
-										String userType = (objDetailUser.isNull(USER_TYPE_SEQ)
-											|| objDetailUser.getString(USER_TYPE_SEQ).equals(""))
+										String email = objDetailUser.isNull(EMAIL) ? ""
+											: objDetailUser.getString(EMAIL);
+										String token = objDetailUser.isNull(TOKEN) ? ""
+											: objDetailUser.getString(TOKEN);
+										String userType = objDetailUser.isNull(USER_TYPE_SEQ)
 											? "" : objDetailUser.getString(USER_TYPE_SEQ);
 
 										// getting Branch code from DEFAULT_BUSINESS_PROFILE
 										JSONObject objDetailDefaultBusinessProfile =
 											objDetailUser.getJSONObject(DEFAULT_BUSINESS_PROFILE);
-										String branchCode = (objDetailDefaultBusinessProfile.isNull(
-											BRANCHCODE_DEFAULT_BUSINESS_PROFILE)
-											|| objDetailDefaultBusinessProfile.getString(
-											BRANCHCODE_DEFAULT_BUSINESS_PROFILE).equals("")) ? ""
+										String branchCode = objDetailDefaultBusinessProfile.isNull(
+											BRANCHCODE_DEFAULT_BUSINESS_PROFILE) ? ""
 											: objDetailDefaultBusinessProfile.getString(
 												BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
 										String rmId =
-											(objDetailDefaultBusinessProfile.isNull(USER_ID)
-												|| objDetailDefaultBusinessProfile.getString(
-												USER_ID).equals("")) ? ""
+											objDetailDefaultBusinessProfile.isNull(USER_ID) ? ""
 												: objDetailDefaultBusinessProfile.getString(
 													USER_ID);
 
 										JSONObject objDetailBusinessProfile =
 											objDetailUser.getJSONObject(CURRENT_BUSINESS_PROFILE);
 										String businessProfileId =
-											(objDetailBusinessProfile.isNull(BUSINESS_PROFILE_ID)
-												|| objDetailBusinessProfile.getString(
-												BUSINESS_PROFILE_ID).equals("")) ? ""
+											objDetailBusinessProfile.isNull(BUSINESS_PROFILE_ID)
+												? ""
 												: objDetailBusinessProfile.getString(
 													BUSINESS_PROFILE_ID);
 
 										String businessProfileName =
-											(objDetailBusinessProfile.isNull(
-												CURRENT_BUSINESS_PROFILE_NAME)
-												|| objDetailBusinessProfile.getString(
-												CURRENT_BUSINESS_PROFILE_NAME).equals("")) ? ""
+											objDetailBusinessProfile.isNull(
+												CURRENT_BUSINESS_PROFILE_NAME) ? ""
 												: objDetailBusinessProfile.getString(
 													CURRENT_BUSINESS_PROFILE_NAME);
 										String businessUnitId =
-											(objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID)
-												|| objDetailBusinessProfile.getString(
-												BUSINESS_UNIT_ID).equals("")) ? ""
+											objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ? ""
 												: objDetailBusinessProfile.getString(
 													BUSINESS_UNIT_ID);
 										setAppLoginID(employeeCode);
 										setAppType(CRM);
 
+										boolean aufsb = userType.equals("9");
 										LoginResponseData loginData = new LoginResponseData();
 										loginData.setUserId(userId);
 										loginData.setEmployeeCode(employeeCode.trim());
@@ -221,7 +205,8 @@ public class LoginActivity extends FragmentActivity
 										loginData.setUserType(userType.trim());
 										loginData.setUserType(userType.trim());
 										loginData.setSmtEnabled(smtEnabled);
-
+										loginData.setAufsb(aufsb);
+										loginData.setEkycRevemp(isEkycRevemp);
 										new RoleSelectionModel("", "", "", "", employeeCode.trim(),
 											rmId.trim(), businessUnitId.trim(), "",/*roleId*/"");
 
@@ -232,7 +217,7 @@ public class LoginActivity extends FragmentActivity
 											CRMMOSLCommon.getErrorMsgFromResponse(response);
 										alertDialog(LoginActivity.this, 0,
 											getResources().getString(R.string.motilal_oswal), error,
-											"Ok", true, null);
+											OK, true, null);
 									}
 								} else {
 									customProgress.setVisibility(View.GONE);
@@ -242,25 +227,28 @@ public class LoginActivity extends FragmentActivity
 							}
 						}
 
-						@Override public void onSuccess(int statusCode,
+						@Override
+						public void onSuccess(int statusCode,
 							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
 							super.onSuccess(statusCode, headers, response);
 							customProgress.setVisibility(View.GONE);
 						}
 
-						@Override public void onSuccess(int statusCode,
+						@Override
+						public void onSuccess(int statusCode,
 							cz.msebera.android.httpclient.Header[] headers, String responseString) {
 							super.onSuccess(statusCode, headers, responseString);
 							customProgress.setVisibility(View.GONE);
 						}
 
-						@Override public void onFailure(int statusCode,
+						@Override
+						public void onFailure(int statusCode,
 							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
 							JSONObject errorResponse) {
 							super.onFailure(statusCode, headers, throwable, errorResponse);
 							customProgress.setVisibility(View.GONE);
 							alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-								"Ok", true, null);
+								OK, true, null);
 						}
 
 						@Override public void onFailure(int statusCode,
@@ -269,16 +257,17 @@ public class LoginActivity extends FragmentActivity
 							super.onFailure(statusCode, headers, throwable, errorResponse);
 							customProgress.setVisibility(View.GONE);
 							alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-								"Ok", true, null);
+								OK, true, null);
 						}
 
-						@Override public void onFailure(int statusCode,
+						@Override
+						public void onFailure(int statusCode,
 							cz.msebera.android.httpclient.Header[] headers, String responseString,
 							Throwable throwable) {
 							super.onFailure(statusCode, headers, responseString, throwable);
 							customProgress.setVisibility(View.GONE);
 							alertDialog(LoginActivity.this, 0, "Error", SOME_SERVER_ERROR_OCCURRED,
-								"Ok", true, null);
+								OK, true, null);
 						}
 					});
 			} catch (Exception e) {
@@ -287,7 +276,7 @@ public class LoginActivity extends FragmentActivity
 		} else {
 			customProgress.setVisibility(View.GONE);
 			MSFDialog.alertDialog(LoginActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
 				null);
 		}
 	}
@@ -308,7 +297,7 @@ public class LoginActivity extends FragmentActivity
 			loginData.getEmail(), loginData.getBusinessProfileId(),
 			loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(),
 			loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType(),
-			loginData.isSmtEnabled());
+			loginData.isSmtEnabled(), loginData.isAufsb(), loginData.isEkycRevemp());
 		try {
 			MOSLCommonActivity.sendRegistrationToServer(LoginActivity.this, getContentResolver(),
 				false);
@@ -317,7 +306,11 @@ public class LoginActivity extends FragmentActivity
 		}
 
 		editor.apply();
-		FetchReportTypes();
+		if (loginData.isAufsb()) {
+			openMainActivity();
+		} else {
+			FetchReportTypes();
+		}
 	}
 
 	public void FetchReportTypes() {
@@ -526,12 +519,14 @@ public class LoginActivity extends FragmentActivity
 		}
 	}
 
-	@Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		loginAction();
 		return false;
 	}
 
-	@Override public void onClick(View view) {
+	@Override
+	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.btnLogin: {
 				loginAction();
@@ -545,5 +540,12 @@ public class LoginActivity extends FragmentActivity
 			performLogin(etEmpCode.getText().toString().trim(),
 				etPassword.getText().toString().trim());
 		}
+	}
+
+	private void openMainActivity() {
+		Intent intent =
+			new Intent(LoginActivity.this, MOSLCommonActivity.class);
+		startActivity(intent);
+		finish();
 	}
 }

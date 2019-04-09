@@ -3,7 +3,6 @@ package com.mosl.tabapp.actionbar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -11,10 +10,10 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.ui.MOSLCommonActivity.AutoCompleteAdapter;
@@ -29,7 +28,7 @@ public class CRMAppActionBar extends RelativeLayout implements TextView.OnEditor
     private TextView mTitleView, tvMsgCount;
     private DelayAutoCompleteTextView searchBoxView;
     private Context mContext;
-
+	private LinearLayout llSearch;
     public CRMAppActionBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -58,6 +57,8 @@ public class CRMAppActionBar extends RelativeLayout implements TextView.OnEditor
         searchBoxView.setLoadingIndicator((ProgressBar) mBarView.findViewById(R.id.pbLoadingIndicator));
         searchBoxView.setDropDownBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ivIcon = (ImageView) mBarView.findViewById(R.id.ivIcon);
+		llSearch = mBarView.findViewById(R.id.llSearch);
+
     }
 
 
@@ -99,17 +100,6 @@ public class CRMAppActionBar extends RelativeLayout implements TextView.OnEditor
         btnNotification.setOnClickListener(onClickListener);
 
     }
-
-
-    public void visibleBusinessGlobalIcon() {
-        btnNotification.setVisibility(View.VISIBLE);
-    }
-
-
-    public void hideBusinessSummaryBtn() {
-        btnNotification.setVisibility(View.INVISIBLE);
-    }
-
 
     public void setTitle(CharSequence title) {
         mTitleView.setText(title);

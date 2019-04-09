@@ -4,12 +4,9 @@ package com.mosl.tabapp.constants;
 public interface MOSLConstants extends LabelConfig {
     String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp";
     String URL = "URL";
-    String USER_TYPE_DIRECT = "1";
 
     String USER_TYPE_FRANCHISE = "2";
 
-    int SUCCESS = 1;
-    int FAILED = 2;
     int SEARCH_LENTH = 3;
 
     //Firebase notification constants
@@ -20,6 +17,7 @@ public interface MOSLConstants extends LabelConfig {
 
     //Tab Constant
     int LEAD_DETAIL = 0;
+
     int LEAD_ACTIVITY = 1;
     int LEAD_PROFILING = 2;
     String YES = "YES";
@@ -91,13 +89,6 @@ public interface MOSLConstants extends LabelConfig {
     int PROFESSIONID = 116;
     int MEETINGADDRESSID = 117;
     int TRAVELLINGMODEID = 118;
-    //Contact Type Id
-    int EMAILID = 1;
-    int ALTERNATEEMAILID = 2;
-    int MOBILENO = 3;
-    int LANDLINENO = 4;
-    int ALTERNATEMOBILENO = 5;
-    int EKYCMOBILENO = 6;
 
     //Address Type Id
     int RESIDENCEADDRESS = 1;
@@ -196,34 +187,11 @@ public interface MOSLConstants extends LabelConfig {
 
     //Target tab
     String MEETING = "Meeting";
-    String TALKTIME = "Talktime";
-    String NEW_ACCOUNTS = "New Accounts";
-    String REVENUE = "Revenue";
-    String ONLINE_REVENUE = "Online Revenue";
-    String IP_SALES = "IP Sales";
-    String SIP_SALES = "SIP Sales";
-    String BUSINESS = "Business On House Call";
-    String TAB_POSITION = "Tab Position";
-
     //BusinessSnapshot tab
-    String MAN_POWER = "Man Power";
-    String MARGIN = "Margin";
-
-    String LEADS_SEVEN = "Leads> 7Days";
-    String LEADS_FIFTEEN = "Leads> 15Days";
-    String FAMILY_SEVEN = "Family> 7Days";
     String DATE = "Date";
     String NAME = "Name";
     String TIME = "Time";
     String ENTITY_FIELD = "entity Field";
-
-    String MONTH_NAME = "Month Name";
-    String MONTH_DATE = "Month Date";
-    String TYPE_MANAGEMENT = "Type of Mngnt";
-    String TIME_RANGE = "Time Range";
-    String ATTENDEE_FIRST_NAME = "Attendee First Name";
-    String ATTENDEE_SECOND_NAME = "Attendee Second Name";
-    String ATTENDEE_THIRD_NAME = "Attendee Third Name";
 
     String EMAIL_MESSAGE_CLIENT = "Do you want to send email to your client ?";
     String EMAIL_ALL_MESSAGE = "Do you want to send email to all clients ?";
@@ -234,6 +202,8 @@ public interface MOSLConstants extends LabelConfig {
     String MODULE_NAME = "Module Name";
     String CLIENT_CODE = "Client Code";
     String PRODUCT = "Product";
+    String DASHBOARD = "Dashboard";
+    String ISSAATHIAUFSB = "isSaathiAufsb";
 
     String TRADING_CODE = "Trading Code";
     String UCID = "UCID";
@@ -258,6 +228,8 @@ public interface MOSLConstants extends LabelConfig {
     //Login
     String USER = "User";
     String SMT_ENABLED = "SMTEnabled";
+    String ISEKYCREVAMP = "IsEKYCRevamp";
+    String AUTH_STATE = "AuthState";
     String USER_ID = "Id";
     String BUSINESS_PROFILE_ID = "BusinessProfileId";
     String PROFILE_ID = "ProfileID";
@@ -335,6 +307,10 @@ public interface MOSLConstants extends LabelConfig {
     String COMMENTS = "Comments";
     String ISPOTENTIALPMSPRODUCT = "IsPotentialPMSProduct";
     String ISONLYCLIENT = "IsOnlyClient";
+    String OPERATIONAL = "Operational";
+    String BUSINESS = "Business";
+    String OK = "OK";
+
     //Search
     String DATA = "Data";
     String METADATA = "MetaData";
@@ -606,21 +582,22 @@ public interface MOSLConstants extends LabelConfig {
     String OSTYPE = "OSTYPE";
     String APPLOGINID = "APPLOGINID";
     String OUTPUT = "output";
+    String ISAUFSB = "isAufsb";
     String TOKENKEY = "TOKENKEY";
     String EKYC_APP_NOT_AVAILABLE = "Ekyc app not available";
     String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao";
     String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
     String GETSTAGEMOBILESELECTLIST = "Stage/GetStageMobileSelectList";
 
-	// Prospect Reffer changes
-	String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
-	String INVALID_MOBILE_NO = "Invalid mobile number.";
-	String INVALID_EMAIL_ID = "Invalid email id.";
-	String ENTER_EMAIL_ID = "Enter email id.";
-	String ENTER_MOBILE_NUMBER = "Enter mobile number";
-	String WEBSITE_PROSPECT_REFERRAL = "Website-ProspectReferral";
-	String PROSPECTREFERENAME = "ProspectRefereName";
-	String PROSPECTREFEREMOBILE = "ProspectRefereMobile";
-	String PROSPECTREFEREEMAIL = "ProspectRefereEmail";
-	}
+    // Prospect Reffer changes
+    String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
+    String INVALID_MOBILE_NO = "Invalid mobile number.";
+    String INVALID_EMAIL_ID = "Invalid email id.";
+    String ENTER_EMAIL_ID = "Enter email id.";
+    String ENTER_MOBILE_NUMBER = "Enter mobile number";
+    String WEBSITE_PROSPECT_REFERRAL = "Website-ProspectReferral";
+    String PROSPECTREFERENAME = "ProspectRefereName";
+    String PROSPECTREFEREMOBILE = "ProspectRefereMobile";
+    String PROSPECTREFEREEMAIL = "ProspectRefereEmail";
+}
 

@@ -19,6 +19,16 @@ public class LoginResponseData implements Serializable {
     String businessUnitId = "";
     String userType = "";
     boolean smtEnabled;
+    boolean aufsb;
+    boolean ekycRevemp;
+
+    public boolean isEkycRevemp() {
+        return ekycRevemp;
+    }
+
+    public void setEkycRevemp(boolean ekycRevemp) {
+        this.ekycRevemp = ekycRevemp;
+    }
 
     public String getUserType() {
         return userType;
@@ -134,5 +144,13 @@ public class LoginResponseData implements Serializable {
 
     public void setSmtEnabled(boolean smtEnabled) {
         this.smtEnabled = smtEnabled;
+    }
+
+    public boolean isAufsb() {
+        return aufsb;
+    }
+
+    public void setAufsb(boolean aufsb) {
+        this.aufsb = aufsb;
     }
 }

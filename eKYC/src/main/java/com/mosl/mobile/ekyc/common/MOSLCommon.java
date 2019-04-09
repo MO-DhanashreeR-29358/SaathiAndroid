@@ -758,15 +758,15 @@ public class MOSLCommon implements MOSLConstants {
         return isOffline() ? isVerificationDone() || isOfflineDocumentUploadedDone() : isVerificationDone() || isIPVDone();
     }
 
-    /*
-    * Return Minimum value for margin deposit in case of other amount option in scheme
-    * for direct 25000
-    * for branch 50000
-    * */
-    public static int minMarginValueForOtherAmount() {
-        //return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
-        return getAppType().equalsIgnoreCase(DIRECT) ? 1000 : 50000;
-    }
+	/*
+	 * Return Minimum value for margin deposit in case of other amount option in scheme
+	 * for direct 25000
+	 * for branch 50000
+	 * */
+	public static int minMarginValueForOtherAmount() {
+		//return getAppType().equalsIgnoreCase(DIRECT) ? 25000 : 50000;
+		return getAppType().equalsIgnoreCase(DIRECT) ? 1000 : 50000;
+	}
 
     public static boolean isBrokingFundTransferDone(String segment) {
         if (segment.equalsIgnoreCase(EQUITY) || segment.equalsIgnoreCase(PMS)) {

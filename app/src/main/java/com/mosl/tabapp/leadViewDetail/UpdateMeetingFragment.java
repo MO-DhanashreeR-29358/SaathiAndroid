@@ -35,7 +35,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
@@ -54,10 +53,6 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +60,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
@@ -823,9 +820,13 @@ public class UpdateMeetingFragment extends MOSLCommonFragment implements View.On
                     toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
                     if (fromDat.equals(toDate)) {
                         if (hour > calendar.get(Calendar.HOUR_OF_DAY)) {
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), "Invalid time", "OK", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal), "Invalid time",
+                                "OK", true, null);
                         } else if (minute > calendar.get(Calendar.MINUTE)) {
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), "Invalid time", "OK", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal), "Invalid time",
+                                "OK", true, null);
                         } else {
                             fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
                             toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
@@ -1022,7 +1023,9 @@ public class UpdateMeetingFragment extends MOSLCommonFragment implements View.On
                                 } else {
                                     hideProgress();
                                     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), errorMsg,
+                                        "OK", true, null);
                                 }
 
                             } else {
@@ -1030,7 +1033,9 @@ public class UpdateMeetingFragment extends MOSLCommonFragment implements View.On
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                            alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
                     }
 
@@ -1052,7 +1057,9 @@ public class UpdateMeetingFragment extends MOSLCommonFragment implements View.On
                         try {
                             hideProgress();
                             if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
                                     @Override
                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                         if (action == MSFDialog.Action.OK) {
@@ -1068,12 +1075,16 @@ public class UpdateMeetingFragment extends MOSLCommonFragment implements View.On
                                 if (CRMAppUtil.isBlank(error)) {
                                     error = SOME_SERVER_ERROR_OCCURRED;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal), error, "OK",
+                                    true, null);
                                 return;
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         }
                     }
 

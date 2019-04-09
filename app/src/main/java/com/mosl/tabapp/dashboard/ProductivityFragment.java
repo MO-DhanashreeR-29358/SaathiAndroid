@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
@@ -26,9 +25,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import cz.msebera.android.httpclient.Header;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -36,8 +33,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import cz.msebera.android.httpclient.Header;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -201,7 +197,9 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                                         table.setVisibility(View.GONE);
                                         llShowMore.setVisibility(View.GONE);
                                         tvNochart.setVisibility(View.VISIBLE);
-                                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                        alertDialog(getMainActivity(), 0,
+                                            getResources().getString(R.string.motilal_oswal),
+                                            errorMsg, "OK", true, null);
                                     }
                                 } else {
                                     table.setVisibility(View.GONE);
@@ -231,7 +229,9 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                             JSONObject errorResponse = new JSONObject(responseString);
                             hideProgress();
                             if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
                                     @Override
                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                         if (action == MSFDialog.Action.OK) {
@@ -247,7 +247,9 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                                 if (CRMAppUtil.isBlank(error)) {
                                     error = SOME_SERVER_ERROR_OCCURRED;
                                 }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal), error, "OK",
+                                    true, null);
                                 return;
                             }
                         } catch (Exception ex) {
@@ -261,7 +263,9 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                 e.printStackTrace();
             }
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
 
         }
 

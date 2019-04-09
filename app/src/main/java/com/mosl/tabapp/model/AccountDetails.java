@@ -7,24 +7,48 @@ import java.io.Serializable;
  * Created by raju on 3/27/2017.
  */
 
-public class AccountDetails implements MOSLConstants,Serializable {
-    private static String userId="";
-    private static String firstName="";
-    private static String lastName="";
-    private static String imageUrl="";
-    private static String mobileNo="";
-    private static String email="";
-    private static String businessProfileId="";
-    private static String businessProfileName="";
-    private static String employeeCode="";
-    private static String businessUnitId="";
-    private static String token="";
-    private static String branchCode="";
-    private static String userType="";
-    private static String profileType="";
+public class AccountDetails implements MOSLConstants, Serializable {
+    private static String userId = "";
+    private static String firstName = "";
+    private static String lastName = "";
+    private static String imageUrl = "";
+    private static String mobileNo = "";
+    private static String email = "";
+    private static String businessProfileId = "";
+    private static String businessProfileName = "";
+    private static String employeeCode = "";
+    private static String businessUnitId = "";
+    private static String token = "";
+    private static String branchCode = "";
+    private static String userType = "";
+    private static String profileType = "";
     private static boolean newEkyc;
     private static boolean smtEnabled;
+    private static boolean aufsb;
+    private static boolean ekycRevemp;
 
+    public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
+        String mobileNo, String email, String businessProfileId, String businessProfileName,
+        String employeeCode, String token, String businessUnitId, String branchCode,
+        String userType, boolean smtEnabled, boolean aufsb, boolean isEkycRevemp) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.imageUrl = imageUrl;
+        this.mobileNo = mobileNo;
+        this.email = email;
+        this.businessProfileId = businessProfileId;
+        this.businessProfileName = businessProfileName;
+        this.employeeCode = employeeCode.trim();
+        this.token = token;
+        this.businessUnitId = businessUnitId;
+        this.branchCode = branchCode;
+        this.userType = userType;
+        this.profileType = profileFlag(businessUnitId);
+        this.smtEnabled = smtEnabled;
+        this.aufsb = aufsb;
+        this.newEkyc = isEkycRevemp;
+    }
 
     public static boolean isFranchiseUser() {
         return userType != null && userType.equalsIgnoreCase(USER_TYPE_FRANCHISE);
@@ -45,28 +69,6 @@ public class AccountDetails implements MOSLConstants,Serializable {
     public static void setBusinessUnitId(String businessUnitId) {
         AccountDetails.businessUnitId = businessUnitId;
     }
-
-    public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
-        String mobileNo, String email, String businessProfileId, String businessProfileName,
-        String employeeCode, String token, String businessUnitId, String branchCode,
-        String userType, boolean smtEnabled) {
-        this.userId = userId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.imageUrl = imageUrl;
-        this.mobileNo = mobileNo;
-        this.email = email;
-        this.businessProfileId = businessProfileId;
-        this.businessProfileName = businessProfileName;
-        this.employeeCode = employeeCode.trim();
-        this.token = token;
-        this.businessUnitId = businessUnitId;
-        this.branchCode = branchCode;
-        this.userType = userType;
-        this.profileType = profileFlag(businessUnitId);
-        this.smtEnabled = smtEnabled;
-    }
-
 
     public static String getToken() {
         return token;
@@ -164,22 +166,6 @@ public class AccountDetails implements MOSLConstants,Serializable {
         AccountDetails.profileType = profileType;
     }
 
-    private String profileFlag(String businessUnitId) {
-
-        if (businessUnitId.equalsIgnoreCase("1")) {
-            //businessUnitId=1,then RETAIL;
-            return RETAIL;
-        } else if (businessUnitId.equalsIgnoreCase("3")) {
-            //businessUnitId=3,then FRANCHIES;
-            return FRANCHIES;
-        } else if (businessUnitId.equalsIgnoreCase("4")) {
-            //businessUnitId=4,then IFA;
-            return IFA;
-        }
-        return RETAIL;
-
-    }
-
     public static boolean isNewEkyc() {
         return newEkyc;
     }
@@ -194,5 +180,28 @@ public class AccountDetails implements MOSLConstants,Serializable {
 
     public static void setSmtEnabled(boolean smtEnabled) {
         AccountDetails.smtEnabled = smtEnabled;
+    }
+
+    public static boolean isAufsb() {
+        return aufsb;
+    }
+
+    public static void setAufsb(boolean aufsb) {
+        AccountDetails.aufsb = aufsb;
+    }
+
+    private String profileFlag(String businessUnitId) {
+
+        if (businessUnitId.equalsIgnoreCase("1")) {
+            //businessUnitId=1,then RETAIL;
+            return RETAIL;
+        } else if (businessUnitId.equalsIgnoreCase("3")) {
+            //businessUnitId=3,then FRANCHIES;
+            return FRANCHIES;
+        } else if (businessUnitId.equalsIgnoreCase("4")) {
+            //businessUnitId=4,then IFA;
+            return IFA;
+        }
+        return RETAIL;
     }
 }

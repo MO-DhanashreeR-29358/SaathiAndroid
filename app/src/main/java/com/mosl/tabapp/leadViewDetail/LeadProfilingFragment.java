@@ -18,7 +18,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -32,15 +31,13 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Vijay on 16/03/2017.
@@ -879,7 +876,10 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                                 String status = response.getString(MOSLConstants.STATUS);
                                 if (status.equalsIgnoreCase("true")) {
                                     hideProgress();
-                                    MSFDialog.alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SET_USER_PROFILE, "OK", true, new MSFDialog.DialogListener() {
+                                    MSFDialog.alertDialog(getActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        MOSLConstants.SET_USER_PROFILE, "OK", true,
+                                        new MSFDialog.DialogListener() {
                                         @Override
                                         public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                             if (action == MSFDialog.Action.OK) {
@@ -891,7 +891,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                                 } else {
                                     hideProgress();
                                     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), errorMsg,
+                                        "OK", true, null);
                                 }
 
                             } else {
@@ -899,7 +901,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                             }
                         } catch (Exception e) {
                             hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                             return;
                         }
                     }
@@ -922,7 +926,10 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                         try {
                             hideProgress();
                             if (statusCode == MOSLConstants.UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    MOSLConstants.UNAUTHORIZE_USER, "OK", false,
+                                    new MSFDialog.DialogListener() {
                                     @Override
                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                         if (action == MSFDialog.Action.OK) {
@@ -936,16 +943,22 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                             } else {
                                 String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
                                 if (CRMAppUtil.isBlank(errorMsg)) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal),
+                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 } else {
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), errorMsg,
+                                        "OK", true, null);
                                 }
 
                                 return;
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                         }
                     }
 
@@ -954,14 +967,18 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
                         hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0,
+                            getResources().getString(R.string.motilal_oswal),
+                            MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                     }
 
                     @Override
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
                         hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0,
+                            getResources().getString(R.string.motilal_oswal),
+                            MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                     }
 
                 });
@@ -969,7 +986,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                 e.printStackTrace();
             }
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION,
+                "OK", true, null);
 
         }
     }
@@ -1001,20 +1020,26 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                                 } else {
                                     hideProgress();
                                     String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
+                                    MSFDialog.alertDialog(getMainActivity(), 0,
+                                        getResources().getString(R.string.motilal_oswal), errorMsg,
+                                        "OK", true, null);
                                     hideProgress();
                                     return;
                                 }
 
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "Ok", true, null);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "Ok", true, null);
                                 hideProgress();
                                 return;
                             }
 
                         } catch (Exception e) {
                             e.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "Ok", true, null);
+                            MSFDialog.alertDialog(getMainActivity(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "Ok", true, null);
                             hideProgress();
                             return;
 
@@ -1039,7 +1064,10 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                         try {
                             hideProgress();
                             if (statusCode == MOSLConstants.UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    MOSLConstants.UNAUTHORIZE_USER, "OK", false,
+                                    new MSFDialog.DialogListener() {
                                     @Override
                                     public void alertDialogAction(MSFDialog.Action action, Object... data) {
                                         if (action == MSFDialog.Action.OK) {
@@ -1051,7 +1079,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                                 });
                                 return;
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                                MSFDialog.alertDialog(getMainActivity(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                                 return;
                             }
                         } catch (Exception ex) {
@@ -1063,7 +1093,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
                         hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0,
+                            getResources().getString(R.string.motilal_oswal),
+                            MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         hideProgress();
                         return;
                     }
@@ -1072,7 +1104,9 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                     public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
 
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
+                        MSFDialog.alertDialog(getMainActivity(), 0,
+                            getResources().getString(R.string.motilal_oswal),
+                            MOSLConstants.SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
                         hideProgress();
                         return;
                     }
@@ -1080,13 +1114,17 @@ public class LeadProfilingFragment extends MOSLCommonFragment implements View.On
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                MSFDialog.alertDialog(getMainActivity(), 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
                 hideProgress();
                 return;
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION,
+                "OK", true, null);
             return;
         }
     }

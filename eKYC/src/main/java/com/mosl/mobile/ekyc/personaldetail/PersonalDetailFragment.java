@@ -2340,7 +2340,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+										//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
                                     hideProgress();
                                 } else {
@@ -2592,7 +2592,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+										//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
 
                                 } else {
@@ -2684,7 +2684,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+										//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
                                     customProgress.setVisibility(View.GONE);
                                 } else {
@@ -2782,7 +2782,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+										//                                        alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
                                     customProgress.setVisibility(View.GONE);
                                 } else {
@@ -2881,7 +2881,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                             e.printStackTrace();
                             customProgress.setVisibility(View.GONE);
                             commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+							//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                         }
                         customProgress.setVisibility(View.GONE);
                     } else {
@@ -2962,7 +2962,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                                         e.printStackTrace();
                                         customProgress.setVisibility(View.GONE);
                                         commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+										//                                        MOSLCommon.alertDialog(RegisterActivity.this, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                                     }
                                 } else {
                                     customProgress.setVisibility(View.GONE);
@@ -4715,7 +4715,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                         } catch (Exception e) {
                             e.printStackTrace();
                             commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+							//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                         }
                         hideProgress();
                     } else {
@@ -5726,13 +5726,13 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                             } else {
                                 customProgress.setVisibility(View.GONE);
                                 commonMsgDialog(mContext, SOME_SERVER_ERROR_OCCURRED, false, "");
-//                                alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+								//                                alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
                             customProgress.setVisibility(View.GONE);
                             commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
+							//                            alertDialog(mContext, 0, "Oops", SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN, "OK", true, null);
                         }
                         customProgress.setVisibility(View.GONE);
                     } else {
@@ -6217,7 +6217,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             });
             dialogDocList.show();
 
-//            alertDialog(getActivity(), 0, "Note", getResources().getString(R.string.segment_note), "OK", true, null);
+			//            alertDialog(getActivity(), 0, "Note", getResources().getString(R.string.segment_note), "OK", true, null);
 
           /*  CustomDialog noteDialog = new CustomDialog(getActivity(), getResources().getString(R.string.segment_note), true, false, true, "Note", OK, "", new CustomDialog.CustomDialogListener() {
                 @Override
@@ -6228,7 +6228,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
             noteDialog.show();*/
         } else if (i == R.id.tvFatcaDeclaration) {
             removeKeyboard(mContext, getView());
-//            alertDialog(getActivity(), 0, "Declaration", getResources().getString(R.string.fatca_declaration), "OK", true, null);
+			//            alertDialog(getActivity(), 0, "Declaration", getResources().getString(R.string.fatca_declaration), "OK", true, null);
 
             CustomDialog declarationDialog = new CustomDialog(getActivity(), getResources().getString(R.string.fatca_declaration), true, false, true, "Declaration", OK, "", new CustomDialog.CustomDialogListener() {
                 @Override
@@ -8304,7 +8304,7 @@ public class PersonalDetailFragment extends Fragment implements TextWatcher, MOS
                         } catch (Exception e) {
                             e.printStackTrace();
                             commonMsgDialog(mContext, SOME_ERROR_OCCURED_PLEASE_RETRY, false, "");
-//                            alertDialog(mContext, 0, "Oops", SOME_ERROR_OCCURRED, "OK", true, null);
+							//                            alertDialog(mContext, 0, "Oops", SOME_ERROR_OCCURRED, "OK", true, null);
                         }
                         hideProgress();
                     } else {

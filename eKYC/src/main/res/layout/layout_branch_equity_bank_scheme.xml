@@ -309,7 +309,8 @@
                 android:id="@+id/input_layout_equMarginDeposit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp">
+                android:layout_marginTop="@dimen/_5sdp"
+                >
 
                 <EditText
                     android:id="@+id/etEquMarginDeposit"
