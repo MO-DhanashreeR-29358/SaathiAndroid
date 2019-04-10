@@ -509,7 +509,11 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 														: jsonObject.getString(URL);
 												}
 												final String strURLFinal = strURL;
-
+												String ekycUrl =
+													jsonObject.getString(NEWEKYCURL) == null ? ""
+														: jsonObject.getString(NEWEKYCURL);
+												AccountDetails.setEkycUrl(
+													ekycUrl.replaceAll(" ", "%20"));
 												if (newEkyc.equalsIgnoreCase("1")) {
 													AccountDetails.setNewEkyc(true);
 												} else {

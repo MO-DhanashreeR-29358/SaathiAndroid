@@ -26,6 +26,7 @@ public class AccountDetails implements MOSLConstants, Serializable {
     private static boolean smtEnabled;
     private static boolean aufsb;
     private static boolean ekycRevemp;
+    private static String ekycUrl;
 
     public AccountDetails(String userId, String firstName, String lastName, String imageUrl,
         String mobileNo, String email, String businessProfileId, String businessProfileName,
@@ -188,6 +189,14 @@ public class AccountDetails implements MOSLConstants, Serializable {
 
     public static void setAufsb(boolean aufsb) {
         AccountDetails.aufsb = aufsb;
+    }
+
+    public static String getEkycUrl() {
+        return ekycUrl;
+    }
+
+    public static void setEkycUrl(String ekycUrl) {
+        AccountDetails.ekycUrl = ekycUrl;
     }
 
     private String profileFlag(String businessUnitId) {

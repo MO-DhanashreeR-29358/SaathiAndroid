@@ -4,6 +4,9 @@ package com.mosl.tabapp.constants;
 public interface MOSLConstants extends LabelConfig {
     String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp";
     String URL = "URL";
+    String NEWEKYCURL = "NEWEKYCURL";
+    String MSG_ACCOUNT_OPENING =
+        "You have not installed account opening application, Please Click to download";
 
     String USER_TYPE_FRANCHISE = "2";
 

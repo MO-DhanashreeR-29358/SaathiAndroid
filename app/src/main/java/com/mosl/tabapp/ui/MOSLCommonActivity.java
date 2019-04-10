@@ -1933,7 +1933,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	public void gotoEkycPage(int xyz, Map hashMap) {
-        CommonModel.setSaathiAufsb(isAufsb());
+		CommonModel.setSaathiAufsb(isAufsb());
 		switch (xyz) {
 			case MOSL_MENU_FRESH_REGISTRATION:
 				Intent registerIntent = new Intent(MOSLCommonActivity.this, RegisterActivity.class);
@@ -1968,10 +1968,30 @@ public class MOSLCommonActivity extends AppCompatActivity
 			launchIntent.putExtra(OUTPUT, CRMSecurityUtil.encrypt(body));
 			startActivity(launchIntent);
 		} catch (Exception e) {
-			Intent i = new Intent(android.content.Intent.ACTION_VIEW);
-			i.setData(
-				Uri.parse("https://play.google.com/store/apps/details?id=" + NEWEKYC_PACKAGE_NAME));
-			startActivity(i);
+			if (isBlank(AccountDetails.getEkycUrl())) {
+				Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+				i.setData(
+					Uri.parse(
+						"https://play.google.com/store/apps/details?id=" + NEWEKYC_PACKAGE_NAME));
+				startActivity(i);
+			} else {
+				MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+					getResources().getString(
+						R.string.motilal_oswal), MSG_ACCOUNT_OPENING, "Ok",
+					false, new MSFDialog.DialogListener() {
+						@Override public void alertDialogAction(
+							MSFDialog.Action action,
+							Object... data) {
+							if (action == MSFDialog.Action.OK) {
+								Intent i = new Intent(
+									android.content.Intent.ACTION_VIEW);
+								i.setData(
+									Uri.parse(AccountDetails.getEkycUrl()));
+								startActivity(i);
+							}
+						}
+					});
+			}
 		}
 	}
 
