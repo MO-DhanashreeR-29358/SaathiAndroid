@@ -1965,6 +1965,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 		try {
 			Intent launchIntent =
 				getPackageManager().getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME);
+			launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			launchIntent.putExtra(OUTPUT, CRMSecurityUtil.encrypt(body));
 			startActivity(launchIntent);
 		} catch (Exception e) {
