@@ -1,18 +1,17 @@
 package com.mosl.mobile.ekyc.model;
 
-import android.support.annotation.Nullable;
 import android.widget.ArrayAdapter;
-
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 
 /**
  * Created by Shefali on 2/4/2016.
  */
 public class RowData {
-    int position;
-    String key;
-    String value;
-    String schmeID, schename, schemeSelID, marDep;
+    private int position;
+    private String key;
+    private String value;
+    private String schmeID, schename, schemeSelID, marDep;
+    private String adminCharges, brokingAmc;
 
     public RowData(String key, String value) {
         this.key = key;
@@ -38,6 +37,15 @@ public class RowData {
         this.schename = schename;
         this.schemeSelID = schemeSelID;
         this.marDep = marDep;
+    }
+
+    public RowData(int position, String key, String value,
+        String adminCharges, String brokingAmc) {
+        this.position = position;
+        this.key = key;
+        this.value = value;
+        this.adminCharges = adminCharges;
+        this.brokingAmc = brokingAmc;
     }
 
     public String getSchmeID() {
@@ -94,6 +102,22 @@ public class RowData {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getAdminCharges() {
+        return adminCharges;
+    }
+
+    public void setAdminCharges(String adminCharges) {
+        this.adminCharges = adminCharges;
+    }
+
+    public String getBrokingAmc() {
+        return brokingAmc;
+    }
+
+    public void setBrokingAmc(String brokingAmc) {
+        this.brokingAmc = brokingAmc;
     }
 
     @Override

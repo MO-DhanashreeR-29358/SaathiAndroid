@@ -107,6 +107,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.getEquDelSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getEquFutSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getEquMarginDeposit;
 import static com.mosl.mobile.ekyc.model.CommonModel.getEquOptSchSelID;
+import static com.mosl.mobile.ekyc.model.CommonModel.getEquSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getEquTradeSchSelID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
 import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
@@ -159,6 +160,8 @@ public class BankDetailsFormFragment extends Fragment
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 strDpSchName = arrDpScheme.get(i).getValue();
                 strDpSchID = arrDpScheme.get(i).getKey();
+                tvEqAdminCharges.setText(arrDpScheme.get(i).getAdminCharges());
+                tvEqBrokingAmc.setText(arrDpScheme.get(i).getBrokingAmc());
                 etDpSchemeError.setVisibility(View.GONE);
                 if (!strDpSchID.equalsIgnoreCase("-1")) {
                     tvEquAccOpenNote.setText("DP-AMC " + strDpSchName);
@@ -2055,6 +2058,7 @@ public class BankDetailsFormFragment extends Fragment
                     if (isCommodityOriginal()) {
                         etCommMarginDeposit.setText(etEquMarginDeposit.getText().toString());
                         etCommMarginDepositError.setVisibility(View.GONE);
+                        input_layout_commMarginDeposit.setErrorEnabled(false);
                         getOtherCommSchDetail();
                     }
                 }
@@ -3684,7 +3688,7 @@ public class BankDetailsFormFragment extends Fragment
                 tvequSchInfoCurrOption.setText("");
                 currencyoptionRadiogroup.setVisibility(View.GONE);
                 currencyfutureRadiogroup.setVisibility(View.GONE);
-
+                spDpScheme.setSelection(0);
             } else {
                 if (MOSLCommon.isNetworkEnabled(mContext)) {
                     Map inputMap = new HashMap();
@@ -3702,7 +3706,7 @@ public class BankDetailsFormFragment extends Fragment
                             public void onSuccess(int statusCode, Header[] headers,
                                 JSONObject response) {
                                 if (response != null && response.length() != 0) {
-                                    String accountOpeningFee = "";
+                                    String dpScheme = "";
                                     try {
                                         JSONArray jsonArray =
                                             response.getJSONArray("SchemeDetails");
@@ -3773,7 +3777,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("CURRENCYOPTIONS")
                                                             .equals("")) ? ""
                                                             : object.getString("CURRENCYOPTIONS");
-                                                    accountOpeningFee =
+                                                    String accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -3831,7 +3835,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("ValuePackFee")
                                                             .equals("")) ? ""
                                                             : object.getString("ValuePackFee");
-                                                    accountOpeningFee =
+                                                    String accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -3904,7 +3908,7 @@ public class BankDetailsFormFragment extends Fragment
                                                             || object.getString("CURRENCYOPTIONS")
                                                             .equals("")) ? ""
                                                             : object.getString("CURRENCYOPTIONS");
-                                                    accountOpeningFee =
+                                                    String accountOpeningFee =
                                                         (object.isNull("AccountOpeningFee")
                                                             || object.getString("AccountOpeningFee")
                                                             .equals("")) ? ""
@@ -3948,6 +3952,10 @@ public class BankDetailsFormFragment extends Fragment
                                                     tvEqAdminCharges.setText(adminCharges);
                                                     tvEqBrokingAmc.setText(brokingAMC);
                                                 }
+                                                dpScheme =
+                                                    (object.isNull("DP_SCHEME") || object.getString(
+                                                        "DP_SCHEME").equals("")) ? ""
+                                                        : object.getString("DP_SCHEME");
                                             }
                                             customProgress.setVisibility(View.GONE);
                                         } else {
@@ -4072,7 +4080,7 @@ public class BankDetailsFormFragment extends Fragment
                                         }
                                         customProgress.setVisibility(View.GONE);
                                         if (getAppType().equals(CRM)) {
-                                            getDpSchemeDetails(accountOpeningFee, schemeID);
+                                            getDpSchemeDetails(dpScheme, schemeID);
                                         }
                                     } catch (Exception e) {
                                         Timber.e(e.toString());
@@ -14524,7 +14532,7 @@ public class BankDetailsFormFragment extends Fragment
         }
     }
 
-    public void getDpSchemeDetails(final String accountOpeningFee, String schemeSelectedID) {
+    public void getDpSchemeDetails(final String accountOpeningFee, final String schemeSelectedID) {
         if (MOSLCommon.isNetworkEnabled(mContext)) {
             Map inputMap = new HashMap();
             inputMap.put("_userId", getUserID());
@@ -14553,7 +14561,16 @@ public class BankDetailsFormFragment extends Fragment
                                             (object.isNull("PROFILE_NAME") || object.getString(
                                                 "PROFILE_NAME").equals("")) ? ""
                                                 : object.getString("PROFILE_NAME");
-                                        arrDpScheme.add(new RowData((i + 1), id, name));
+                                        String adminCharges =
+                                            (object.isNull("ADMINCHARGES") || object.getString(
+                                                "ADMINCHARGES").equals("")) ? ""
+                                                : object.getString("ADMINCHARGES");
+                                        String brokingAmc =
+                                            (object.isNull("BROKINGAMC") || object.getString(
+                                                "BROKINGAMC").equals("")) ? ""
+                                                : object.getString("BROKINGAMC");
+                                        arrDpScheme.add(new RowData((i + 1), id, name, adminCharges,
+                                            brokingAmc));
                                     }
                                     arrAdapDpScheme = new ArrayAdapter<>(mContext,
                                         R.layout.simple_spinner_item, arrDpScheme);
@@ -14564,7 +14581,8 @@ public class BankDetailsFormFragment extends Fragment
                                     RowData dpScheme =
                                         RowData.getSpinnerRowDataByValue(accountOpeningFee,
                                             arrAdapDpScheme);
-                                    if (dpScheme != null) {
+                                    if (dpScheme != null && schemeSelectedID.equalsIgnoreCase(
+                                        getEquSchSelID())) {
                                         spDpScheme.setSelection(dpScheme.getPosition());
                                     }
                                 }
