@@ -45,6 +45,11 @@
     <string name="PROSPECT_REFEREE_NAME_HINT_TXT">Prospect Referee Name</string>
     <string name="PROSPECT_REFEREE_MOBILE_HINT_TXT">Prospect Referee Mobile</string>
     <string name="PROSPECT_REFEREE_EMAIL_HINT_TXT">Prospect Referee Email</string>
+    <string name="OPEN_AN_ACCOUNT">Open An Account</string>
+    <string name="TXT_QUERY">For any query:</string>
+    <string name="TXT_AUFSB_GMAIL">johndoe@aubank.com</string>
+    <string name="TXT_AUFSB_TELEPHONE1">022&#8211;456778</string>
+    <string name="TXT_AUFSB_TELEPHONE2">022&#8211;456788</string>
 
 
     <string-array name="meetingDuration">
