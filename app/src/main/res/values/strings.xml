@@ -4,7 +4,7 @@
     <string name="SS_SEARCH">Search</string>
     <string name="ATTENDEE_SEARCH_HINT_TXT"><font size="14">Select Employee Name/Code</font></string>
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
-    <string name="MOSL_MENU_EKYC_TXT">EKYC (Open an Account)</string>
+    <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
