@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="@string/MOSL_MENU_FRESH_REGISTRATION_TXT"
+                android:text="@string/TXT_FRESH_REGISTRATION"
                 android:textColor="@color/grey_text"
                 android:textSize="@dimen/appTitleTextSize"
                 />
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="@string/MOSL_MENU_FRESH_REGISTRATION_TXT"
+                android:text="@string/TXT_EXISTING_APPLICATION"
                 android:textColor="@color/grey_text"
                 android:textSize="@dimen/appTitleTextSize"
                 />
