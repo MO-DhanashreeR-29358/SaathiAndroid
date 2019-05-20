@@ -54,6 +54,7 @@ public class CRMWebServiceHandler {
     public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
     public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
     public static String COLLATERAL_URL = ServiceUrlsImpl.CRM_COLLATERAL_URL();
+    public static String SALES_STADIUM_PITCH_URL = ServiceUrlsImpl.SALES_STADIUM_PITCH_URL();
   /*  public static String CALL_BASE_URL = BuildConfig.CRM_BASE_URL;
     public static final String CALL_URL_UPPERMOST = BuildConfig.UPPERMOST_URL;
     public static String COLLATERAL_URL = BuildConfig.CRM_COLLATERAL_URL;*/

@@ -40,6 +40,9 @@ public class DrawerMenu implements MOSLConstants {
 			groupList.add(new ScreenDetails(R.drawable.ic_sales_brochure,
 				context.getString(R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT),
 				MOSL_MENU_KNOWLEDGE_CENTRE_TXT, false));
+			groupList.add(new ScreenDetails(R.drawable.ic_sales_stadium,
+				context.getString(R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT),
+				MOSL_MENU_SALES_STADIUM_PITCH_TXT, false));
 			groupList.add(new ScreenDetails(R.drawable.ic_menu_birthday_aniversary,
 				context.getString(R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT),
 				MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT, false));

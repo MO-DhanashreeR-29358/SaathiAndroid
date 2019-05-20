@@ -817,6 +817,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 							bundle.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL);
 							fragment.setArguments(bundle);
 							addFragment(R.id.activityFrameLayout, fragment, true, false);
+						} else if (position == MOSL_MENU_SALES_STADIUM_PITCH) {
+							WebViewFragment fragment = new WebViewFragment();
+							Bundle bundle = new Bundle();
+							bundle.putString(URL_PATH,
+								CRMWebServiceHandler.SALES_STADIUM_PITCH_URL);
+							fragment.setArguments(bundle);
+							addFragment(R.id.activityFrameLayout, fragment, true, false);
 						} else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
 							setupFragment(new BirthdayAnniversaryFragment());
 						}
@@ -829,9 +836,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 								logoutCustomer();
 							}
 						} else {
-							if (position == 7) {
+							if (position == 8) {
 								setupFragment(new QueryFragment());
-							} else if (position == 8) {
+							} else if (position == 9) {
 								logoutCustomer();
 							}
 						}
@@ -2291,6 +2298,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 						holderView.rlOpenAccount.setVisibility(View.GONE);
 						holderView.rlOAOForm.setVisibility(View.GONE);
 					}
+				}
+
+				if (isAufsb()) {
+					holderView.rlSetAppointment.setVisibility(View.GONE);
+					holderView.rlCrateMeeting.setVisibility(View.GONE);
 				}
 
 				holderView.rlSetAppointment.setOnClickListener(new View.OnClickListener() {

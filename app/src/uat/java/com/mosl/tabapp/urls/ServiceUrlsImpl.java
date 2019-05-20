@@ -26,4 +26,12 @@ public class ServiceUrlsImpl {
             "http://web20.motilaloswal.com:8000/Brochure/index.html";
 
     }
+
+    @NonNull
+    @Contract(pure = true)
+    public static String SALES_STADIUM_PITCH_URL() {
+        return
+            "http://onlinetrade.motilaloswal.com/emailers/Stadium-Pitch-Objection-Handling/English/Stadium-Pitch/Index.html";
+
+    }
 }

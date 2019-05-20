@@ -1,115 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     >
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="15dp"
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_below="@+id/ivClose"
-            android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+        <View
+            android:id="@+id/view0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@color/black"
-            android:orientation="vertical"
-            android:padding="@dimen/_15sdp"
-            >
+            app:layout_constraintBottom_toBottomOf="@+id/ivCall"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivCreateMeeting"
+            />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivCreateMeeting"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_create_meeting_white"
-                    />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivSetAppointment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_set_app_white"
-                    />
-
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivOpenAccount"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/ic_open_account"
-                    />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivOaoForm"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_oao_form"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/_5sdp"
-                >
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivCall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_call_white"
-                    />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivSms"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_new_sms"
-                    />
-
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/ivSuggestMe"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/ic_suggest_me"
-                    />
-            </LinearLayout>
-        </LinearLayout>
-
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toStartOf="@id/view1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <View
+            android:id="@+id/view1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toStartOf="@id/view2"
+            app:layout_constraintStart_toEndOf="@+id/view"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <View
+            android:id="@+id/view2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view1"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/ivClose"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="@dimen/_minus15sdp"
-            app:srcCompat="@drawable/ic_new_closed"
+            android:id="@+id/ivCreateMeeting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_new_create_meeting_white"
             />
-    </RelativeLayout>
-</LinearLayout>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivSetAppointment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_new_set_app_white"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivOpenAccount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@id/view2"
+            app:layout_constraintStart_toStartOf="@id/view2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_open_account"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivOaoForm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@id/view2"
+            app:layout_constraintStart_toStartOf="@id/view2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_oao_form"
+            tools:visibility="visible"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivCall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivCreateMeeting"
+            app:srcCompat="@drawable/ic_call_white"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivSms"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:layout_constraintEnd_toEndOf="@id/view1"
+            app:layout_constraintStart_toStartOf="@id/view1"
+            app:layout_constraintTop_toBottomOf="@id/ivSetAppointment"
+            app:srcCompat="@drawable/ic_new_sms"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivSuggestMe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/ivCall"
+            app:layout_constraintEnd_toEndOf="@id/view2"
+            app:layout_constraintStart_toStartOf="@id/view2"
+            app:layout_constraintTop_toTopOf="@id/ivCall"
+            app:srcCompat="@drawable/ic_suggest_me"
+            />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/ivClose"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_gravity="end"
+        android:layout_marginBottom="@dimen/_minus15sdp"
+        app:srcCompat="@drawable/ic_new_closed"
+        />
+</FrameLayout>
