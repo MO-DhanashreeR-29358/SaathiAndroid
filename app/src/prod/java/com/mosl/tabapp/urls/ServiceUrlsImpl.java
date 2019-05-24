@@ -8,7 +8,7 @@ public class ServiceUrlsImpl {
     @Contract(pure = true)
     public static String CRM_BASE_URL() {
         return
-                "http://saathi.motilaloswal.com:81/api/";
+            "https://saathi.motilaloswal.com:84/api/";
 
     }
 
