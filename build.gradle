@@ -1,6 +1,7 @@
 buildscript {
   ext.google_services_version = '4.0.1'
   ext.android_plugin_version = '3.2.1'
+  ext.kotlin_version = '1.3.31'
   repositories {
     google()
     jcenter()
@@ -9,6 +10,7 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:3.2.1"
     classpath "com.google.gms:google-services:$google_services_version"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath 'io.fabric.tools:gradle:1.26.1'
   }
 }
@@ -81,6 +83,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
                                      'preferences': "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"],
             'rxBinding'           : ['core': "com.jakewharton.rxbinding2:rxbinding:${versions.rxBinding}",
                                      'V4'  : "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}"],
+            'kotlin'              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
             'gson'                : "com.google.code.gson:gson:${versions.gson}",
             'commonsLang'         : "org.apache.commons:commons-lang3:3.4",
             'segmented'           : "info.hoang8f:android-segmented:1.0.6",
