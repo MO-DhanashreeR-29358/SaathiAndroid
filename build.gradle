@@ -9,12 +9,12 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:3.2.1"
     classpath "com.google.gms:google-services:$google_services_version"
-    classpath 'io.fabric.tools:gradle:1.26.1'
+    classpath 'io.fabric.tools:gradle:1.29.0'
   }
 }
 
-ext.versions = ["compileSdkVersion"   : 27,
-                "targetSdkVersion"    : 27,
+ext.versions = ["compileSdkVersion"   : 28,
+                "targetSdkVersion"    : 28,
                 "buildToolsVersion"   : "28.0.3",
                 'supportLibrary'      : '27.1.1',
                 'multidex'            : '1.0.3',
@@ -31,11 +31,11 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
                 'circleIndicator'     : '1.2.2',
-                'okhttp'              : '3.11.0',
+                'okhttp'              : '3.12.3',
                 'stetho'              : '1.5.0',
-                'gson'                : '2.8.2',
-                'retrofit'            : '2.4.0',
-                'rxJava'              : '2.1.16',
+                'gson'                : '2.8.5',
+                'retrofit'            : '2.5.0',
+                'rxJava'              : '2.2.8',
                 'rxBinding'           : '2.1.1',
                 'room'                : '1.1.0'
 
