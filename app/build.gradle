@@ -89,6 +89,7 @@ android {
       proguardFile 'proguard-library.pro'
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
+      proguardFile 'proguard-slidingpanel.pro'
       proguardFile 'proguard-saxparser.pro'
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
