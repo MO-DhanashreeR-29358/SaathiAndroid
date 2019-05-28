@@ -29,7 +29,7 @@ android {
   versionProps.load(new FileInputStream(file('../version.properties')))
   defaultConfig {
     applicationId 'com.mosl.tabapp'
-    minSdkVersion 15
+    minSdkVersion 17
     targetSdkVersion rootProject.ext.versions.targetSdkVersion
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
