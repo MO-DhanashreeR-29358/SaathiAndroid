@@ -1,12 +1,23 @@
 package com.mosl.saathi.saathiapi
 
-import com.mosl.saathi.saathiapi.model.lead.CountryListResponse
-import com.mosl.saathi.saathiapi.model.lead.StateProvinceListResponse
+import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse
+import com.mosl.saathi.saathiapi.model.lead.CityItem
+import com.mosl.saathi.saathiapi.model.lead.CityListRequest
+import com.mosl.saathi.saathiapi.model.lead.CountryItem
+import com.mosl.saathi.saathiapi.model.lead.LeadViewItem
+import com.mosl.saathi.saathiapi.model.lead.LeadViewRequest
+import com.mosl.saathi.saathiapi.model.lead.LookupItem
+import com.mosl.saathi.saathiapi.model.lead.LookupRequest
+import com.mosl.saathi.saathiapi.model.lead.StateProvinceItem
 import com.mosl.saathi.saathiapi.model.lead.StateProvinceRequest
+import com.mosl.saathi.saathiapi.model.lead.StatusItem
+import com.mosl.saathi.saathiapi.model.lead.StatusRequest
+import com.mosl.saathi.saathiapi.model.lead.UpdateLeadItem
+import com.mosl.saathi.saathiapi.model.lead.UpdateLeadRequest
+import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportRequest
-import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportResponse
+import com.mosl.saathi.saathiapi.model.reports.report.LeadReportItem
 import com.mosl.saathi.saathiapi.model.reports.report.LeadReportRequest
-import com.mosl.saathi.saathiapi.model.reports.report.LeadReportResponse
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -18,35 +29,47 @@ interface SaathiApi {
   @POST("UserApi/GetUserBusinessProfileBranchByHierarchy")
   fun postAssignedLeadReport(
     @Body request: AssignedLeadReportRequest
-  ): Observable<AssignedLeadReportResponse>
+  ): Observable<SaathiCommonResponse<AssignedLeadReportItem>>
 
   @POST("Report/LoadReportViewDataAsync")
   fun postLeadReport(
     @Body request: LeadReportRequest
-  ): Observable<LeadReportResponse>
+  ): Observable<SaathiCommonResponse<LeadReportItem>>
 
   //========================== Lead View Details ==========================
 
   @POST("Country/GetCountryList")
-  fun postCountryList(): Observable<CountryListResponse>
+  fun postCountryList(): Observable<SaathiCommonResponse<CountryItem>>
 
   @POST("StateProvince/GetStateProvinceList")
   fun postStateProvinceList(
     @Body request: StateProvinceRequest
-  ): Observable<StateProvinceListResponse>
+  ): Observable<SaathiCommonResponse<StateProvinceItem>>
 
+  @POST("City/GetCityList")
+  fun postCityList(
+    @Body request: CityListRequest
+  ): Observable<SaathiCommonResponse<CityItem>>
 
+  @POST("Master/GetAllLookup")
+  fun postAllLookup(
+    @Body request: LookupRequest
+  ): Observable<SaathiCommonResponse<LookupItem>>
 
+  @POST("LeadStatus/GetStatusList")
+  fun postStatusList(
+    @Body request: StatusRequest
+  ): Observable<SaathiCommonResponse<StatusItem>>
 
+  @POST("Lead/GetLeadView")
+  fun postLeadView(
+    @Body request: LeadViewRequest
+  ): Observable<SaathiCommonResponse<LeadViewItem>>
 
-
-
-
-
-
-
-
-
+  @POST("Lead/UpdateLead")
+  fun postUpdateLead(
+    @Body request: UpdateLeadRequest
+  ): Observable<SaathiCommonResponse<UpdateLeadItem>>
 
 
 

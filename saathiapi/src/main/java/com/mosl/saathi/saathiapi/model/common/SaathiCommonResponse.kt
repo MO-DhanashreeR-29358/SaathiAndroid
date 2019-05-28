@@ -1,11 +1,11 @@
-package com.mosl.saathi.saathiapi.model.reports.report
+package com.mosl.saathi.saathiapi.model.common
 
 import com.google.gson.annotations.SerializedName
 
-data class LeadReportResponse(
+data class SaathiCommonResponse<T>(
 
   @SerializedName("Response")
-  @JvmField val response: Response,
+  @JvmField val response: List<T>,
 
   @SerializedName("Status")
   @JvmField val status: Boolean,
@@ -17,5 +17,5 @@ data class LeadReportResponse(
   @JvmField val message: String,
 
   @SerializedName("Erros")
-  @JvmField val erros: List<Any?>
+  @JvmField val erros: List<Any>
 )
