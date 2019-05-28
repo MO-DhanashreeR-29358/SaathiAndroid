@@ -1,4 +1,4 @@
-package com.example.saathiapi.model.reports.report
+package com.mosl.saathi.saathiapi.model.reports.report
 
 import com.google.gson.annotations.SerializedName
 
