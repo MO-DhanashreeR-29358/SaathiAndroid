@@ -2,6 +2,8 @@ package com.mosl.saathi.saathiapi
 
 import com.mosl.saathi.saathiapi.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductItem
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.saathiapi.model.lead.CityItem
 import com.mosl.saathi.saathiapi.model.lead.CityListRequest
 import com.mosl.saathi.saathiapi.model.lead.CountryItem
@@ -83,5 +85,10 @@ interface SaathiApi {
   fun postUserBusinessProfile(
     @Body request: UserBusinessProfileRequest
   ): Observable<SaathiCommonResponse<Any>>
+
+  @POST("CrossSellingProductMapping/GetCrossSellingProduct")
+  fun postCrossSellingProduct(
+    @Body request: CrossSellingProductRequest
+  ): Observable<CrossSellingProductItem>
 
 }
