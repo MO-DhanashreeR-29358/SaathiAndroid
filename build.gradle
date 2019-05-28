@@ -1,5 +1,5 @@
 buildscript {
-  ext.google_services_version = '4.0.1'
+  ext.google_services_version = '4.2.0'
   ext.android_plugin_version = '3.4.1'
   repositories {
     google()
@@ -26,7 +26,7 @@ ext.versions = ["compileSdkVersion"   : 28,
                 'asyncHttp'           : '1.4.9',
                 'smoothprogressbar'   : '1.1.0',
                 'floatingbutton'      : '1.10.1',
-                'firebase'            : '11.8.0',
+                'firebase'            : '17.3.4',
                 'espresso'            : '3.0.2',
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
@@ -89,9 +89,9 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
             'okHttp'              : ['core'  : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
                                      'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"],
-            'playService'         : "com.google.android.gms:play-services:${versions.firebase}",
+            'playService'         : "com.google.android.gms:play-services-base:16.1.0",
             'compressor'          : "id.zelory:compressor:2.1.0",
-            'location'            : "com.google.android.gms:play-services-location:11.8.0",
+            'location'            : "com.google.android.gms:play-services-location:16.0.0",
             'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",
             'javax'               : "javax.annotation:jsr250-api:1.0",
 

@@ -10,11 +10,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -25,6 +27,8 @@ import com.mosl.tabapp.ui.MOSLCommonActivity;
 import java.util.Map;
 import java.util.Random;
 
+import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+
 public class MessageReceiverIntentService extends FirebaseMessagingService {
   private static final String CHANNEL_ID = "saathi";
   String TAG = MessageReceiverIntentService.class.getCanonicalName();
@@ -34,6 +38,20 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
     Log.d(TAG, "onMessageReceived");
     super.onMessageReceived(remoteMessage);
     sendNotification(remoteMessage.getData());
+  }
+
+  @Override public void onNewToken(String refreshedToken) {
+    try {
+      SharedPreferences.Editor editor = getPrefs(this).edit();
+      editor.putString("TOKEN_ID", refreshedToken);
+      editor.apply();
+
+      Looper.prepare();
+      MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
+      Log.d(TAG, "New firebase token: " + refreshedToken);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private void sendNotification(Map data) {

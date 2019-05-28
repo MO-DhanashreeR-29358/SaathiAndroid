@@ -94,12 +94,6 @@
                 android:resource="@xml/file_paths"/>
         </provider>
 
-        <service android:name="com.mosl.tabapp.service.CRMAppInstanceIDListenerService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-
         <service
             android:name="com.mosl.tabapp.service.MessageReceiverIntentService"
             android:enabled="true"
