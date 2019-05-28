@@ -1,0 +1,13 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation deps.rx.java
+    implementation deps.retrofit.core
+    implementation deps.gson
+    implementation deps.kotlin
+    //api deps.mofslArtifacts.annotation
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
