@@ -1,8 +1,8 @@
-package com.example.saathiapi.model.reports.report
+package com.mosl.saathi.saathiapi.model.reports.report
 
 import com.google.gson.annotations.SerializedName
 
-data class ResponseItem(
+data class AssignedLeadReportItem(
 
   @SerializedName("Status")
   val status: Int,
