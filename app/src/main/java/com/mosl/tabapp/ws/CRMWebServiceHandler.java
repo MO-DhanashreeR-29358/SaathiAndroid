@@ -2,11 +2,13 @@ package com.mosl.tabapp.ws;
 
 import android.content.Context;
 import android.util.Log;
-import com.example.saathiapi.SaathiApi;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.mosl.app.core.rx.DispatchersKt;
+import com.mosl.saathi.data.MOSLResponseWrapper;
+import com.mosl.saathi.saathiapi.SaathiApi;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.leadcreation.RefreeApi;
@@ -245,7 +247,10 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-    public static SaathiApi buildApi(Context context) {
+    public static SaathiApi buildSaathiApi() {
+        RxJava2CallAdapterFactory callAdapterFactory =
+            RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
+
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
@@ -256,16 +261,18 @@ public class CRMWebServiceHandler {
                 .build();
 
         return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
+            .addConverterFactory(new MOSLResponseWrapper())
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(
+                callAdapterFactory)
             .client(client)
             .build()
             .create(SaathiApi.class);
     }
 
-    public static SaathiApi getApiInstance(Context context) {
+    public static SaathiApi getSaathiApi() {
         if (saathiApi == null) {
-            saathiApi = buildApi(context);
+            saathiApi = buildSaathiApi();
         }
         return saathiApi;
     }

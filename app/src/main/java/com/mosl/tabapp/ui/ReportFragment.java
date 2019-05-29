@@ -19,11 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.example.saathiapi.model.reports.report.AssignedLeadReportRequest;
-import com.example.saathiapi.model.reports.report.ResponseItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.TextHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportItem;
+import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -34,9 +35,7 @@ import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import cz.msebera.android.httpclient.Header;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,8 +45,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
-import timber.log.Timber;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -75,7 +74,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
     private Date fromDat, toDate;
     private RelativeLayout rlEndDate, rlStartDate;
     private Spinner spBranch, spChannel;
-    private ArrayList<RowData> arrSelectChannel, arrSelectBranch;
+    private ArrayList<RowData> arrSelectChannel;
+    private ArrayList<RowData> arrSelectBranch = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectChannel, arrAdapSelectBranch;
     private String channelId, branchCode;
     private String leadId = "0", ucid = "0", leadName;
@@ -158,183 +158,49 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
         return reportView;
     }
 
-    private void selectBranch() {
-        showProgress();
-        AssignedLeadReportRequest request = new AssignedLeadReportRequest("-1");
-        Disposable subscribe = CRMWebServiceHandler.getApiInstance(getMainActivity())
-            .postAssignedLeadReport(request)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                if (response.isSuccess()) {
-                    List<ResponseItem> list = response.getResponse();
-                    for (int i = 0; i < list.size(); i++) {
-                        ResponseItem responseItem = list.get(i);
-                        String businessUnitId = String.valueOf(responseItem.getBusinessUnitId());
-                        String branchCode = responseItem.getBranchCode();
-                        arrSelectBranch.add(
-                            new RowData(i + 1, businessUnitId, branchCode));
-                    }
-                    arrAdapSelectBranch = new ArrayAdapter<>(getMainActivity(),
-                        R.layout.simple_spinner_item, arrSelectBranch);
-                    arrAdapSelectBranch.setDropDownViewResource(
-                        R.layout.mdropdown);
-                    spBranch.setAdapter(arrAdapSelectBranch);
-                    spBranch.setOnItemSelectedListener(selectBranchListener);
-                    arrAdapSelectBranch.notifyDataSetChanged();
-                    arrAdapSelectBranch.setNotifyOnChange(true);
-                } else {
-                    hideProgress();
-                    MSFDialog.alertDialog(getMainActivity(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        response.getMessage(), "OK", true, null);
-                }
-            }, error -> {
-                Timber.e(error);
-            });
-        /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Map inputMap = new HashMap<>();
-            inputMap.put("ChannelIds", "-1");
-            final String serviceMethod = "UserApi/GetUserBusinessProfileBranchByHierarchy";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
+    public void renderAssignedLeadReports(UiModel<List<AssignedLeadReportItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
 
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            arrSelectBranch = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        arrSelectBranch.add(new RowData(0, "", "Select"));
-                                        JSONArray jsonArray = response.getJSONArray(RESPONSE);
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
 
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId = (objDetail.isNull("BusinessUnitId")
-                                                || objDetail.getString("BusinessUnitId").equals(""))
-                                                ? "" : objDetail.getString("BusinessUnitId");
-                                            String lookUpName = (objDetail.isNull("BranchCode")
-                                                || objDetail.getString("BranchCode").equals(""))
-                                                ? "" : objDetail.getString("BranchCode");
-                                            arrSelectBranch.add(
-                                                new RowData(i + 1, lookUpId, lookUpName));
-                                        }
-                                        arrAdapSelectBranch = new ArrayAdapter<>(getMainActivity(),
-                                            R.layout.simple_spinner_item, arrSelectBranch);
-                                        arrAdapSelectBranch.setDropDownViewResource(
-                                            R.layout.mdropdown);
-                                        spBranch.setAdapter(arrAdapSelectBranch);
-                                        spBranch.setOnItemSelectedListener(selectBranchListener);
-                                        arrAdapSelectBranch.notifyDataSetChanged();
-                                        arrAdapSelectBranch.setNotifyOnChange(true);
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            hideProgress();
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            hideProgress();
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+        List<AssignedLeadReportItem> data = uiModel.data;
+        if (data != null) {
+            arrSelectBranch.clear();
+            arrSelectBranch.add(new RowData(0, "", "Select"));
+            for (int i = 0; i < data.size(); i++) {
+                AssignedLeadReportItem responseItem = data.get(i);
+                String businessUnitId = stringOrEmpty(responseItem.businessUnitId);
+                String branchCode = stringOrEmpty(responseItem.branchCode);
+                arrSelectBranch.add(
+                    new RowData(i + 1, businessUnitId, branchCode));
             }
+            arrAdapSelectBranch = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrSelectBranch);
+            arrAdapSelectBranch.setDropDownViewResource(
+                R.layout.mdropdown);
+            spBranch.setAdapter(arrAdapSelectBranch);
+            spBranch.setOnItemSelectedListener(selectBranchListener);
+            arrAdapSelectBranch.notifyDataSetChanged();
+            arrAdapSelectBranch.setNotifyOnChange(true);
+        }
+
+    }
+
+    private void selectBranch() {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            AssignedLeadReportRequest request = new AssignedLeadReportRequest("-1");
+            Disposable subscribe = saathiApi.postAssignedLeadReport(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderAssignedLeadReports);
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
-            return;
-        }*/
+        }
     }
 
     private void getReport() {

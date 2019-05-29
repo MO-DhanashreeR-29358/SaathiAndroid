@@ -44,7 +44,7 @@ interface SaathiApi {
   @POST("UserApi/GetUserBusinessProfileBranchByHierarchy")
   fun postAssignedLeadReport(
     @Body request: AssignedLeadReportRequest
-  ): Observable<SaathiCommonResponse<AssignedLeadReportItem>>
+  ): Observable<List<AssignedLeadReportItem>>
 
   @POST("Report/LoadReportViewDataAsync")
   fun postLeadReport(

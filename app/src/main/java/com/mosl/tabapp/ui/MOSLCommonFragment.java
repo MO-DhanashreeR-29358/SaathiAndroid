@@ -3,6 +3,7 @@ package com.mosl.tabapp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +13,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.core.rx.Dispatchers;
+import com.mosl.app.core.rx.DispatchersKt;
+import com.mosl.saathi.data.MOSLResponseWrapper;
+import com.mosl.saathi.saathiapi.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
@@ -28,17 +33,18 @@ import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-
 import com.mosl.tabapp.smt.SMTFragment;
-import java.util.Map;
-
+import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
+import java.util.Map;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
     public CompositeDisposable compositeDisposable;
+    public final Dispatchers dispatchers = DispatchersKt.RxDispatchers;
+    public final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
 
     public MOSLCommonFragment() {
         super();
@@ -188,6 +194,34 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public void hideProgress() {
         if (getMainActivity() != null) ((MOSLCommonActivity) getMainActivity()).hideProgress();
+    }
+
+    public void toggleProgress(boolean show) {
+        if (show) {
+            showProgress();
+        } else {
+            hideProgress();
+        }
+    }
+
+    public void  showOnFailurePopup(Throwable t) {
+        String message;
+        if (t instanceof ServiceFailureException) {
+            message = ((ServiceFailureException) t).errorMessage;
+        } else {
+            message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+        MSFDialog.alertDialog(getMainActivity(), 0,
+            getResources().getString(R.string.motilal_oswal),
+            message, "OK", true, null);
+    }
+
+    public String stringOrEmpty(@Nullable String input) {
+        if (input != null) {
+            return input;
+        } else {
+            return "";
+        }
     }
 
     public void dashbordFragment() {

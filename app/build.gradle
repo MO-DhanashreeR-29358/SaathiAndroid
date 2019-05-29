@@ -115,6 +115,7 @@ dependencies {
   implementation project(':TabLibrary')
   implementation project(':eKYC')
   implementation project(':saathiapi')
+  implementation project(':data')
   implementation(deps.crashlytics) {
     transitive = true
   }
