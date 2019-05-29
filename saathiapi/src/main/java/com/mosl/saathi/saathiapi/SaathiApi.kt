@@ -3,6 +3,8 @@ package com.mosl.saathi.saathiapi
 import com.mosl.saathi.saathiapi.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.saathiapi.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.saathiapi.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.saathiapi.model.clientprofile.ClientProfileItem
+import com.mosl.saathi.saathiapi.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductRequest
@@ -118,5 +120,10 @@ interface SaathiApi {
   fun postClientDetail(
     @Body request: ClientDetailRequest
   ): Observable<SaathiCommonResponse<ClientDetailItem>>
+
+  @POST("Client/SaveClientProfile")
+  fun postSaveClientProfile(
+    @Body request: ClientProfileRequest
+  ): Observable<ClientProfileItem>
 
 }
