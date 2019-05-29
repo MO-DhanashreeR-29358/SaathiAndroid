@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class CountryItem(
 
   @SerializedName("CountryId")
-  @JvmField val countryId: Int,
+  @JvmField val countryId: String?,
 
   @SerializedName("Status")
   @JvmField val status: Int,

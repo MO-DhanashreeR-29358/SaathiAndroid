@@ -30,7 +30,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.mobile.ekyc.common.ValidationRule;
+import com.mosl.saathi.saathiapi.model.lead.CountryItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -53,9 +55,11 @@ import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
 import cz.msebera.android.httpclient.Header;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.droidparts.widget.ClearableEditText;
@@ -104,8 +108,9 @@ public class LeadCreationFragment extends MOSLCommonFragment
 		statusCodeStr, countryCodeStr, stateCodeStr,
 		cityCodeStr, offCountryCodeStr, offStateCodeStr, offCityCodeStr;
 	private ArrayList<RowData> arrCategory, arrProfession, arrInterested, arrProductType, arrSource,
-		arrProspectSource, arrStage, arrStatus, arrCountry, arrState, arrCity, arrOffState,
+		arrProspectSource, arrStage, arrStatus, arrState, arrCity, arrOffState,
 		arrOffCity;
+	private ArrayList<RowData> arrCountry = new ArrayList<>();
 	private ArrayAdapter<RowData> arrAdapCategory, arrAdapProfession, arrAdapInterested,
 		arrAdapProductType, arrAdapSource, arrAdapProspectSource, arrAdapStage, arrAdapStatus,
 		arrAdapCountry, arrAdapState, arrAdapCity, arrAdapOffState, arrAdapOffCity;
@@ -2720,8 +2725,46 @@ public class LeadCreationFragment extends MOSLCommonFragment
 		}
 	}
 
+	private void renderCountryList(com.mosl.app.core.data.UiModel<List<CountryItem>> uiModel) {
+		toggleProgress(uiModel.inProgress);
+
+		Throwable error = uiModel.error;
+		if (error != null) {
+			showOnFailurePopup(error);
+		}
+
+		List<CountryItem> data = uiModel.data;
+		if (data != null) {
+			arrCountry.clear();
+			for (int i = 0; i < data.size(); i++) {
+				CountryItem countryItem = data.get(i);
+				String countryId = stringOrEmpty(countryItem.countryId);
+				String countryName = stringOrEmpty(countryItem.countryName);
+				arrCountry.add(new RowData(i, countryId, countryName));
+			}
+			arrAdapCountry = new ArrayAdapter<>(getMainActivity(),
+				R.layout.simple_spinner_item, arrCountry);
+			arrAdapCountry.setDropDownViewResource(R.layout.mdropdown);
+			spCountry.setAdapter(arrAdapCountry);
+			spCountry.setOnItemSelectedListener(countryListener);
+			spOffCountry.setAdapter(arrAdapCountry);
+			spOffCountry.setOnItemSelectedListener(offCountryListener);
+		}
+	}
+
 	private void getCountry() {
+
 		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+			Disposable subscribe = saathiApi.postCountryList()
+				.compose(UiModelHelper.applyUiModel())
+				.subscribe(this::renderCountryList);
+		} else {
+			hideProgress();
+			MSFDialog.alertDialog(getMainActivity(), 0,
+				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+				null);
+		}
+		/*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
 			showProgress();
 			Map inputMap = new HashMap<>();
 
@@ -2867,7 +2910,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
 			MSFDialog.alertDialog(getMainActivity(), 0,
 				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
 				null);
-		}
+		}*/
 	}
 
 	private void getState(String id, final String type, final String value) {

@@ -54,7 +54,7 @@ interface SaathiApi {
   //========================== Lead View Details ==========================
 
   @POST("Country/GetCountryList")
-  fun postCountryList(): Observable<SaathiCommonResponse<CountryItem>>
+  fun postCountryList(): Observable<List<CountryItem>>
 
   @POST("StateProvince/GetStateProvinceList")
   fun postStateProvinceList(
