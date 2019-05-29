@@ -230,7 +230,7 @@ public class CRMWebServiceHandler {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
-            new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor(context))
+            new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor())
                 .addInterceptor(interceptor)
                 //.addNetworkInterceptor(new DecryptionFactory())
                 .build();
@@ -250,24 +250,22 @@ public class CRMWebServiceHandler {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
             new OkHttpClient.Builder()
-                .addNetworkInterceptor(new HeaderInterceptor(context))
-                .addNetworkInterceptor(new EncryptionInterceptor())
+                .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(new EncryptionInterceptor())
                 .build();
 
-        saathiApi = new Retrofit.Builder().baseUrl(CALL_BASE_URL)
+        return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(client)
             .build()
             .create(SaathiApi.class);
-
-        return saathiApi;
     }
 
     public static SaathiApi getApiInstance(Context context) {
         if (saathiApi == null) {
-            buildApi(context);
+            saathiApi = buildApi(context);
         }
         return saathiApi;
     }

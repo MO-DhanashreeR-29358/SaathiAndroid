@@ -46,6 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONObject;
+import timber.log.Timber;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -188,6 +189,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
                         getResources().getString(R.string.motilal_oswal),
                         response.getMessage(), "OK", true, null);
                 }
+            }, error -> {
+                Timber.e(error);
             });
         /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             Map inputMap = new HashMap<>();
