@@ -8,6 +8,10 @@ import com.mosl.saathi.saathiapi.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductRequest
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.SaveLeadCrossSellingProductItem
+import com.mosl.saathi.saathiapi.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.saathiapi.model.lead.CityItem
 import com.mosl.saathi.saathiapi.model.lead.CityListRequest
 import com.mosl.saathi.saathiapi.model.lead.CountryItem
@@ -124,6 +128,16 @@ interface SaathiApi {
   @POST("Client/SaveClientProfile")
   fun postSaveClientProfile(
     @Body request: ClientProfileRequest
-  ): Observable<ClientProfileItem>
+  ): Observable<SaathiCommonResponse<ClientProfileItem>>
+
+  @POST("Lead/SaveLeadCrossSellingProduct")
+  fun postSaveLeadCrossSellingProduct(
+    @Body request: SaveLeadCrossSellingProductRequest
+  ): Observable<SaathiCommonResponse<SaveLeadCrossSellingProductItem>>
+
+  @POST("Lead/DeleteLeadProductMapping")
+  fun postDeleteLeadCrossSellingProduct(
+    @Body request: DeleteLeadCrossSellingProductRequest
+  ): Observable<SaathiCommonResponse<DeleteLeadCrossSellingProductItem>>
 
 }
