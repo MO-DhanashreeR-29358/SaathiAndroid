@@ -6,6 +6,10 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.AddUpdateLeadItem
+import com.mosl.saathi.api.model.createlead.AddUpdateLeadRequest
+import com.mosl.saathi.api.model.createlead.LeadSourceListItem
+import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
@@ -154,5 +158,20 @@ interface SaathiApi {
   fun postSourceList(
     @Body request: SourceListRequest
   ): Observable<SaathiCommonResponse<SourceListItem>>
+
+  @POST("LeadSource/GetLeadSourceList")
+  fun postLeadSourceList(
+    @Body request: LeadSourceListRequest
+  ): Observable<SaathiCommonResponse<LeadSourceListItem>>
+
+  @POST("Lead/AddUpdateLead")
+  fun postAddUpdateLead(
+    @Body request: AddUpdateLeadRequest
+  ): Observable<SaathiCommonResponse<AddUpdateLeadItem>>
+
+  @POST("Lead/TransferLeadCaughtInC2")
+  fun postTransferLead(
+    @Body request: Any
+  ): Observable<SaathiCommonResponse<Any>>
 
 }
