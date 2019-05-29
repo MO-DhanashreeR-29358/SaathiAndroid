@@ -14,6 +14,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProduct
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
+import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.InsertLeadProductItem
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
@@ -139,5 +140,10 @@ interface SaathiApi {
   fun postDeleteLeadCrossSellingProduct(
     @Body request: DeleteLeadCrossSellingProductRequest
   ): Observable<SaathiCommonResponse<DeleteLeadCrossSellingProductItem>>
+
+  @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
+  fun postStageWiseConfigurationByStatus(
+    @Body request: ConfigurationByStatusRequest
+  ): Observable<SaathiCommonResponse<Any>>
 
 }
