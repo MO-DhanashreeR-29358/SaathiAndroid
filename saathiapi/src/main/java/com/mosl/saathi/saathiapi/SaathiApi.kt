@@ -1,16 +1,24 @@
 package com.mosl.saathi.saathiapi
 
 import com.mosl.saathi.saathiapi.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.saathiapi.model.clientdetail.ClientDetailItem
+import com.mosl.saathi.saathiapi.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.saathiapi.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.saathiapi.model.lead.CityItem
 import com.mosl.saathi.saathiapi.model.lead.CityListRequest
 import com.mosl.saathi.saathiapi.model.lead.CountryItem
+import com.mosl.saathi.saathiapi.model.lead.InsertLeadProductItem
+import com.mosl.saathi.saathiapi.model.lead.InsertLeadProductRequest
 import com.mosl.saathi.saathiapi.model.lead.LeadViewItem
 import com.mosl.saathi.saathiapi.model.lead.LeadViewRequest
 import com.mosl.saathi.saathiapi.model.lead.LookupItem
 import com.mosl.saathi.saathiapi.model.lead.LookupRequest
+import com.mosl.saathi.saathiapi.model.lead.StageItem
+import com.mosl.saathi.saathiapi.model.lead.StageMobileItem
+import com.mosl.saathi.saathiapi.model.lead.StageMobileRequest
+import com.mosl.saathi.saathiapi.model.lead.StageRequest
 import com.mosl.saathi.saathiapi.model.lead.StateProvinceItem
 import com.mosl.saathi.saathiapi.model.lead.StateProvinceRequest
 import com.mosl.saathi.saathiapi.model.lead.StatusItem
@@ -90,5 +98,25 @@ interface SaathiApi {
   fun postCrossSellingProduct(
     @Body request: CrossSellingProductRequest
   ): Observable<CrossSellingProductItem>
+
+  @POST("Lead/InsertLeadProductMapping")
+  fun postInsertLeadProductMapping(
+    @Body request: InsertLeadProductRequest
+  ): Observable<SaathiCommonResponse<InsertLeadProductItem>>
+
+  @POST("Stage/GetStageList")
+  fun postStageList(
+    @Body request: StageRequest
+  ): Observable<SaathiCommonResponse<StageItem>>
+
+  @POST("Stage/GetStageMobileSelectList")
+  fun postStageMobile(
+    @Body request: StageMobileRequest
+  ): Observable<SaathiCommonResponse<StageMobileItem>>
+
+  @POST("Client/GetClientViewByCommand")
+  fun postClientDetail(
+    @Body request: ClientDetailRequest
+  ): Observable<SaathiCommonResponse<ClientDetailItem>>
 
 }
