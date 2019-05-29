@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class LeadReportRequest(
 
   @SerializedName("TotalCount")
-  @JvmField val totalCount: String,
+  @JvmField val totalCount: Int = 0,
 
   @SerializedName("Period_From")
   @JvmField val periodFrom: String,
@@ -20,19 +20,19 @@ data class LeadReportRequest(
   @JvmField val pageSize: String,
 
   @SerializedName("CalculatedPage")
-  @JvmField val calculatedPage: String,
+  @JvmField val calculatedPage: Int = 0,
 
   @SerializedName("InputTotalCount")
-  @JvmField val inputTotalCount: Int,
+  @JvmField val inputTotalCount: Int = 0,
 
   @SerializedName("Page")
-  @JvmField val page: String,
+  @JvmField val page: Int = 0,
 
   @SerializedName("ReportTypeSystemName")
   @JvmField val reportTypeSystemName: String,
 
   @SerializedName("BusinessChannel")
-  @JvmField val businessChannel: String,
+  @JvmField val businessChannel: String = "-1",
 
   @SerializedName("Period_To")
   @JvmField val periodTo: String,

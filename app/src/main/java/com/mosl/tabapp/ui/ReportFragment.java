@@ -19,9 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.example.saathiapi.model.reports.report.AssignedLeadReportRequest;
+import com.example.saathiapi.model.reports.report.ResponseItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -33,6 +34,9 @@ import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import cz.msebera.android.httpclient.Header;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +45,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -155,7 +158,38 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
     }
 
     private void selectBranch() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        showProgress();
+        AssignedLeadReportRequest request = new AssignedLeadReportRequest("-1");
+        Disposable subscribe = CRMWebServiceHandler.getApiInstance(getMainActivity())
+            .postAssignedLeadReport(request)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(response -> {
+                if (response.isSuccess()) {
+                    List<ResponseItem> list = response.getResponse();
+                    for (int i = 0; i < list.size(); i++) {
+                        ResponseItem responseItem = list.get(i);
+                        String businessUnitId = String.valueOf(responseItem.getBusinessUnitId());
+                        String branchCode = responseItem.getBranchCode();
+                        arrSelectBranch.add(
+                            new RowData(i + 1, businessUnitId, branchCode));
+                    }
+                    arrAdapSelectBranch = new ArrayAdapter<>(getMainActivity(),
+                        R.layout.simple_spinner_item, arrSelectBranch);
+                    arrAdapSelectBranch.setDropDownViewResource(
+                        R.layout.mdropdown);
+                    spBranch.setAdapter(arrAdapSelectBranch);
+                    spBranch.setOnItemSelectedListener(selectBranchListener);
+                    arrAdapSelectBranch.notifyDataSetChanged();
+                    arrAdapSelectBranch.setNotifyOnChange(true);
+                } else {
+                    hideProgress();
+                    MSFDialog.alertDialog(getMainActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal),
+                        response.getMessage(), "OK", true, null);
+                }
+            });
+        /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             Map inputMap = new HashMap<>();
             inputMap.put("ChannelIds", "-1");
             final String serviceMethod = "UserApi/GetUserBusinessProfileBranchByHierarchy";
@@ -297,7 +331,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
             return;
-        }
+        }*/
     }
 
     private void getReport() {

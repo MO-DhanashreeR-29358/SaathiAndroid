@@ -20,4 +20,8 @@ data class AssignedLeadReportResponse(
 
   @field:SerializedName("Erros")
   val erros: List<Any>
-)
+) {
+  fun isSuccess(): Boolean {
+    return status.equals(true)
+  }
+}
