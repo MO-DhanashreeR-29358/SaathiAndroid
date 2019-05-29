@@ -5,6 +5,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.common.NotEncrypted
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.AddUpdateLeadItem
 import com.mosl.saathi.api.model.createlead.AddUpdateLeadRequest
@@ -12,6 +13,11 @@ import com.mosl.saathi.api.model.createlead.LeadSourceListItem
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadItem
+import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createmeeting.ClientByCommandItem
+import com.mosl.saathi.api.model.createmeeting.ClientByCommandRequest
+import com.mosl.saathi.api.model.createmeeting.ClientImageRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -171,7 +177,16 @@ interface SaathiApi {
 
   @POST("Lead/TransferLeadCaughtInC2")
   fun postTransferLead(
-    @Body request: Any
-  ): Observable<SaathiCommonResponse<Any>>
+    @Body request: TransferLeadRequest
+  ): Observable<SaathiCommonResponse<TransferLeadItem>>
+
+  @NotEncrypted
+  @POST("Client/GetClientImage")
+  fun postClientImage(
+    @Body request: ClientImageRequest
+  ): Observable<SaathiCommonResponse<String>>
+
+  @POST("Client/GetClientViewByCommand")
+  fun postClientViewByCommand(@Body request: ClientByCommandRequest): Observable<SaathiCommonResponse<ClientByCommandItem>>
 
 }
