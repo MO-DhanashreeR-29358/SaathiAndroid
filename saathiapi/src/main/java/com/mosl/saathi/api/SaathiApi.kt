@@ -6,6 +6,8 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.SourceListItem
+import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -145,5 +147,12 @@ interface SaathiApi {
   fun postStageWiseConfigurationByStatus(
     @Body request: ConfigurationByStatusRequest
   ): Observable<SaathiCommonResponse<Any>>
+
+  //===================== Create Lead=========================
+
+  @POST("Source/GetSourceList")
+  fun postSourceList(
+    @Body request: SourceListRequest
+  ): Observable<SaathiCommonResponse<SourceListItem>>
 
 }
