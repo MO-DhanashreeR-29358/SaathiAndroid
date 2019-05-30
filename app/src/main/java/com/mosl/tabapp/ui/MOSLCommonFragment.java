@@ -224,6 +224,14 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         }
     }
 
+    public String stringOrZero(@Nullable String input) {
+        if (input != null) {
+            return input;
+        } else {
+            return "0";
+        }
+    }
+
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
                 getMainActivity().getIntent());

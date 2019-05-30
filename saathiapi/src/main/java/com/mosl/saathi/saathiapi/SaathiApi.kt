@@ -133,11 +133,11 @@ interface SaathiApi {
   @POST("ApprovalRequest/GetAprovalCoutSummary")
   fun postApprovalSummaryCount(
     @Body request: PendingApprovalRequest
-  ): Observable<SaathiCommonResponse<ApprovalSummaryCountItem>>
+  ): Observable<ApprovalSummaryCountItem>
 
   @POST("ApprovalRequest/GetApprovalFieldListSummaryByEmployeeCode")
   fun postApprovalSummaryByEmployee(
     @Body request: PendingApprovalRequest
-  ): Observable<SaathiCommonResponse<List<Any>>>
+  ): Observable<List<Any>>
 
 }
