@@ -27,6 +27,8 @@ import com.mosl.saathi.saathiapi.model.lead.StatusItem
 import com.mosl.saathi.saathiapi.model.lead.StatusRequest
 import com.mosl.saathi.saathiapi.model.lead.UpdateLeadItem
 import com.mosl.saathi.saathiapi.model.lead.UpdateLeadRequest
+import com.mosl.saathi.saathiapi.model.pendingapproval.ApprovalSummaryCountItem
+import com.mosl.saathi.saathiapi.model.pendingapproval.PendingApprovalRequest
 import com.mosl.saathi.saathiapi.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.saathiapi.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.saathiapi.model.reports.report.AssignedLeadReportItem
@@ -125,5 +127,17 @@ interface SaathiApi {
   fun postSaveClientProfile(
     @Body request: ClientProfileRequest
   ): Observable<ClientProfileItem>
+
+  //========================== Pending Approval ====================
+
+  @POST("ApprovalRequest/GetAprovalCoutSummary")
+  fun postApprovalSummaryCount(
+    @Body request: PendingApprovalRequest
+  ): Observable<SaathiCommonResponse<ApprovalSummaryCountItem>>
+
+  @POST("ApprovalRequest/GetApprovalFieldListSummaryByEmployeeCode")
+  fun postApprovalSummaryByEmployee(
+    @Body request: PendingApprovalRequest
+  ): Observable<SaathiCommonResponse<List<Any>>>
 
 }
