@@ -215,7 +215,7 @@ public class CalendarFragment extends MOSLCommonFragment implements OnDateSelect
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             CalenderRequest request =
                 new CalenderRequest(selectionDate, "A", AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postCalender(request)
+            Disposable subscribe = saathiApi.postCalenderByDate(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderCalender);
         } else {

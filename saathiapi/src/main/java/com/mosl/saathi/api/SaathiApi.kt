@@ -160,7 +160,7 @@ interface SaathiApi {
   //================== Calender ========================
 
   @POST("Meeting/GetMeetingByDate")
-  fun postCalender(
+  fun postCalenderByDate(
     @Body request: CalenderRequest
   ): Observable<List<CalenderItem>?>
 
