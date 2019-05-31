@@ -1,4 +1,4 @@
-package com.mosl.saathi.saathiapi.model.pendingapproval
+package com.mosl.saathi.api.model.pendingapproval
 
 import com.google.gson.annotations.SerializedName
 
