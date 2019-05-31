@@ -10,6 +10,12 @@ data class CalenderItem(
   @JvmField @SerializedName("Products")
   val products: List<Any>,
 
+  @JvmField @SerializedName("Product")
+  val product: String?,
+
+  @JvmField @SerializedName("MeetingReason")
+  val meetingReason: String?,
+
   @JvmField @SerializedName("MeetingReasonID")
   val meetingReasonID: Int,
 
@@ -29,7 +35,13 @@ data class CalenderItem(
   val uCID: Int,
 
   @JvmField @SerializedName("Name")
-  val name: String,
+  val name: String?,
+
+  @JvmField @SerializedName("EMAIL")
+  val email: String?,
+
+  @JvmField @SerializedName("MOBNO")
+  val mobNo: String?,
 
   @JvmField @SerializedName("IsAdminMode")
   val isAdminMode: Boolean,
@@ -41,7 +53,10 @@ data class CalenderItem(
   val repeatEveryDayCode: Any,
 
   @JvmField @SerializedName("Status")
-  val status: Int,
+  val status: String?,
+
+  @JvmField @SerializedName("StatusName")
+  val statusName: String?,
 
   @JvmField @SerializedName("repeatationStartOn")
   val repeatationStartOn: String,
@@ -100,6 +115,9 @@ data class CalenderItem(
   @JvmField @SerializedName("MeetingWith")
   val meetingWith: String,
 
+  @JvmField @SerializedName("AttendeeEmp")
+  val attendeeEmp: String?,
+
   @JvmField @SerializedName("AttendeeName")
   val attendeeName: String,
 
@@ -110,7 +128,7 @@ data class CalenderItem(
   val pIDTxnMeetingProduct: Int,
 
   @JvmField @SerializedName("MeetingDate")
-  val meetingDate: String,
+  val meetingDate: String?,
 
   @JvmField @SerializedName("Clientcode")
   val clientcode: Any,
@@ -122,13 +140,37 @@ data class CalenderItem(
   val meetingAddress: Any,
 
   @JvmField @SerializedName("MeetingID")
-  val meetingID: Int,
+  val meetingID: String?,
+
+  @JvmField @SerializedName("MeetingDuration")
+  val meetingDuration: String?,
 
   @JvmField @SerializedName("ActionableID")
   val actionableID: Int,
 
+  @JvmField @SerializedName("Actionable")
+  val actionable: String?,
+
   @JvmField @SerializedName("LeadId")
-  val leadId: Int,
+  val leadId: String?,
+
+  @JvmField @SerializedName("Comments")
+  val comments: String?,
+
+  @JvmField @SerializedName("Stage")
+  val stage: String?,
+
+  @JvmField @SerializedName("QueryDesc")
+  val queryDesc: String?,
+
+  @JvmField @SerializedName("DATE_DISPLAY")
+  val dateDisplay: String?,
+
+  @JvmField @SerializedName("CustomerServiceRemark")
+  val customerServiceRemark: String?,
+
+  @JvmField @SerializedName("Category")
+  val category: String?,
 
   @JvmField @SerializedName("MeetingDescription")
   val meetingDescription: Any,
@@ -156,6 +198,9 @@ data class CalenderItem(
 
   @JvmField @SerializedName("ApprovalFieldList")
   val approvalFieldList: Any,
+
+  @JvmField @SerializedName("ActivityType")
+  val activityType: String?,
 
   @JvmField @SerializedName("CustomerRemark")
   val customerRemark: Any,
