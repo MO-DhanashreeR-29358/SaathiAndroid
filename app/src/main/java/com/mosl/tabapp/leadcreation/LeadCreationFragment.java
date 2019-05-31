@@ -32,7 +32,7 @@ import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.mobile.ekyc.common.ValidationRule;
-import com.mosl.saathi.saathiapi.model.lead.CountryItem;
+import com.mosl.saathi.api.model.lead.CountryItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;

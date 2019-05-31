@@ -2,7 +2,7 @@ package com.mosl.saathi.data;
 
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
-import com.mosl.saathi.saathiapi.model.common.SaathiCommonResponse;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
