@@ -6,7 +6,7 @@ dependencies {
     implementation deps.retrofit.core
     implementation deps.gson
     implementation deps.kotlin
-    //api deps.mofslArtifacts.annotation
+    api deps.mofslArtifacts.annotation
 }
 
 sourceCompatibility = "1.8"
