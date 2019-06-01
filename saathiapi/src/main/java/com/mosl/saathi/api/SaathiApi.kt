@@ -76,7 +76,7 @@ interface SaathiApi {
   @POST("Master/GetAllLookup")
   fun postAllLookup(
     @Body request: LookupRequest
-  ): Observable<SaathiCommonResponse<LookupItem>>
+  ): Observable<List<LookupItem>>
 
   @POST("LeadStatus/GetStatusList")
   fun postStatusList(

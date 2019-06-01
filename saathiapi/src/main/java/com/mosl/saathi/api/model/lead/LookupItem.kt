@@ -20,10 +20,10 @@ data class LookupItem(
   @JvmField val lookupType: Int,
 
   @SerializedName("LookUpid")
-  @JvmField val lookUpid: Int,
+  @JvmField val lookUpid: String?,
 
   @SerializedName("LookUpName")
-  @JvmField val lookUpName: String,
+  @JvmField val lookUpName: String?,
 
   @SerializedName("BusinessUnitId")
   @JvmField val businessUnitId: Int,
