@@ -21,6 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest;
+import com.mosl.saathi.api.model.birthdayanniversary.Filter;
+import com.mosl.saathi.api.model.birthdayanniversary.FiltersItem;
+import com.mosl.saathi.api.model.birthdayanniversary.Request;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.tabapp.R;
@@ -209,6 +215,99 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderBirthdayAnniversary(UiModel<BirthdayAnniversaryItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+
+        if (error != null) {
+            birthdayAnniversaryAdapter =
+                new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
+            rvBirthdayAnniversary.setLayoutManager(
+                new GridLayoutManager(getMainActivity(), 3));
+            rvBirthdayAnniversary.setAdapter(
+                birthdayAnniversaryAdapter);
+            birthdayAnniversaryAdapter.notifyDataSetChanged();
+            dataFoundFlag = false;
+            tvNoData.setVisibility(View.VISIBLE);
+            final String eventType =
+                spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+            setNoDataText(eventType);
+            showOnFailurePopup(error);
+        }
+
+        BirthdayAnniversaryItem item = uiModel.data;
+        if (item != null) {
+            List<BirthdayAnniversaryData> birthdayAnniversaryDataList = item.data;
+            final String eventType =
+                spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+            if (birthdayAnniversaryDataList.size() != 0) {
+                for (int i = 0; i < birthdayAnniversaryDataList.size(); i++) {
+                    BirthdayAnniversaryData data = birthdayAnniversaryDataList.get(i);
+                    String clientCode = stringOrZero(data.clientCode);
+                    String clientType = stringOrEmpty(data.clientType);
+                    String ucid = stringOrZero(data.ucid);
+                    String clientName = stringOrEmpty(data.clientName);
+                    String dob = stringOrEmpty(data.dob);
+                    String aniversaryDate = stringOrEmpty(data.anniversaryDate);
+                    String noOfYearBirthday = stringOrEmpty(data.noOfYearBirthday);
+                    String mobile = stringOrEmpty(data.backOfficeMobileNumber);
+                    String email = stringOrEmpty(data.email);
+                    String birthdayCount = stringOrEmpty(data.birthdayCount);
+                    String aniversaryCount = stringOrEmpty(data.anniversaryCount);
+                    String clientPotential = stringOrEmpty(data.clientPotential);
+                    boolean birthdayFlag = data.birthdayFlag;
+                    boolean anniversoryFlag = data.anniversaryFlag;
+
+                    birthdayAnniversaryList.add(
+                        new BirthdayAnniversaryModel(clientName,
+                            clientCode, ucid,
+                            eventType.equals("B") ? dob
+                                : aniversaryDate, email, mobile,
+                            eventType.equals("B") ? noOfYearBirthday
+                                : aniversaryCount,
+                            eventType.equals("B") ? "Birthday"
+                                : "Anniversary",
+                            eventType.equals("B") ? birthdayFlag
+                                : anniversoryFlag, eventType));
+                }
+                tvNoData.setVisibility(View.GONE);
+                birthdayAnniversaryAdapter =
+                    new BirthdayAnniversaryAdapter(
+                        birthdayAnniversaryList);
+                rvBirthdayAnniversary.setLayoutManager(
+                    new GridLayoutManager(getMainActivity(), 3));
+                rvBirthdayAnniversary.setAdapter(
+                    birthdayAnniversaryAdapter);
+                birthdayAnniversaryAdapter.notifyDataSetChanged();
+                dataFoundFlag = true;
+            } else {
+                birthdayAnniversaryAdapter =
+                    new BirthdayAnniversaryAdapter(
+                        birthdayAnniversaryList);
+                rvBirthdayAnniversary.setLayoutManager(
+                    new GridLayoutManager(getMainActivity(), 3));
+                rvBirthdayAnniversary.setAdapter(
+                    birthdayAnniversaryAdapter);
+                birthdayAnniversaryAdapter.notifyDataSetChanged();
+                dataFoundFlag = false;
+                tvNoData.setVisibility(View.VISIBLE);
+                setNoDataText(eventType);
+            }
+        }
+    }
+
+    private void setNoDataText(String eventType) {
+        if (eventType.equalsIgnoreCase("B")) {
+            tvNoData.setText(
+                "No clients having Birthday " + dayType);
+        } else {
+            tvNoData.setText(
+                "No clients having Anniversary " + dayType);
+        }
+    }
+
+
     private void getData() {
         final String profileId;
         birthdayAnniversaryList = new ArrayList<>();
@@ -223,305 +322,30 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         }
         final String eventType =
             spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("daytype", filterType);
-            inputMap.put("Occasion", eventType);
-            inputMap.put("PageSize", REPORT_PAGE_SIZE);
-            inputMap.put("Page", "1");
-            inputMap.put("CalculatedPage", "0");
-            inputMap.put("TotalCount", "0");
-            String serviceMethod = "Client/GetBirthdayAnniversary";
 
-            try {
-                CRMWebServiceHandler.postWithRequestAndFilterObjectBirthdayAndAniversary(
-                    getMainActivity(), serviceMethod, getHeader(), inputMap, profileId,
-                    new JsonHttpResponseHandler() {
+            FiltersItem filtersItem = new FiltersItem();
+            List<FiltersItem> filters = new ArrayList<FiltersItem>();
+            filters.add(filtersItem);
+            Filter filter = new Filter(filters, "and");
+            String dayType = filterType;
+            String page = "1";
+            String calculatedPage = "0";
+            String totalCount = "0";
+            Request birthdayRequest =
+                new Request(dayType, totalCount, REPORT_PAGE_SIZE, eventType, calculatedPage, page);
 
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            try {
-                                if (statusCode == 200) {
-                                    hideProgress();
-                                    String status = response.getString(STATUS);
-                                    String message = response.getString(MESSAGE);
-                                    birthdayAnniversaryList = new ArrayList<>();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        JSONObject jsonObject = response.getJSONObject("Response");
-                                        if (jsonObject.has("Data")) {
-                                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                                            if (jsonArray.length() != 0) {
-                                                for (int i = 0; i < jsonArray.length(); i++) {
-                                                    JSONObject objDetail =
-                                                        jsonArray.getJSONObject(i);
-                                                    String clientCode =
-                                                        (objDetail.isNull("ClientCode") || objDetail
-                                                            .getString("ClientCode")
-                                                            .equals("")) ? "0"
-                                                            : objDetail.getString("ClientCode")
-                                                                .trim();
-                                                    String clientType =
-                                                        (objDetail.isNull("ClientType") || objDetail
-                                                            .getString("ClientType")
-                                                            .equals("")) ? ""
-                                                            : objDetail.getString("ClientType");
-                                                    String ucid = (objDetail.isNull("UCID")
-                                                        || objDetail.getString("UCID").equals(""))
-                                                        ? "0" : objDetail.getString("UCID");
-                                                    String clientName =
-                                                        (objDetail.isNull("ClientName") || objDetail
-                                                            .getString("ClientName")
-                                                            .equals("")) ? ""
-                                                            : objDetail.getString("ClientName");
-                                                    String dob = (objDetail.isNull("DOB")
-                                                        || objDetail.getString("DOB").equals(""))
-                                                        ? "" : objDetail.getString("DOB");
-                                                    String aniversaryDate =
-                                                        (objDetail.isNull("AniversaryDate")
-                                                            || objDetail.getString("AniversaryDate")
-                                                            .equals("")) ? ""
-                                                            : objDetail.getString("AniversaryDate");
-                                                    String noOfYearBirthday =
-                                                        (objDetail.isNull("NoOfYearBirthday")
-                                                            || objDetail.getString(
-                                                            "NoOfYearBirthday").equals("")) ? ""
-                                                            : objDetail.getString(
-                                                                "NoOfYearBirthday");
-                                                    String mobile =
-                                                        (objDetail.isNull("BackOfficeMobileNumber")
-                                                            || objDetail.getString(
-                                                            "BackOfficeMobileNumber").equals(""))
-                                                            ? "" : objDetail.getString(
-                                                            "BackOfficeMobileNumber");
-                                                    String email = (objDetail.isNull("Email")
-                                                        || objDetail.getString("Email").equals(""))
-                                                        ? "" : objDetail.getString("Email");
-                                                    String birthdayCount =
-                                                        (objDetail.isNull("BirthdayCount")
-                                                            || objDetail.getString("BirthdayCount")
-                                                            .equals("")) ? ""
-                                                            : objDetail.getString("BirthdayCount");
-                                                    String aniversaryCount =
-                                                        (objDetail.isNull("AniversaryCount")
-                                                            || objDetail.getString(
-                                                            "AniversaryCount").equals("")) ? ""
-                                                            : objDetail.getString(
-                                                                "AniversaryCount");
-                                                    String clientPotential =
-                                                        (objDetail.isNull("ClientPotential")
-                                                            || objDetail.getString(
-                                                            "ClientPotential").equals("")) ? ""
-                                                            : objDetail.getString(
-                                                                "ClientPotential");
-                                                    //  String eventType = (objDetail.isNull("EventType") || objDetail.getString("EventType").equals("")) ? "" : objDetail.getString("EventType");
-                                                    boolean birthdayFlag =
-                                                        objDetail.getBoolean("Birthday");
-                                                    boolean anniversoryFlag =
-                                                        objDetail.getBoolean("Anniversory");
-
-                                                    birthdayAnniversaryList.add(
-                                                        new BirthdayAnniversaryModel(clientName,
-                                                            clientCode, ucid,
-                                                            eventType.equals("B") ? dob
-                                                                : aniversaryDate, email, mobile,
-                                                            eventType.equals("B") ? noOfYearBirthday
-                                                                : aniversaryCount,
-                                                            eventType.equals("B") ? "Birthday"
-                                                                : "Anniversary",
-                                                            eventType.equals("B") ? birthdayFlag
-                                                                : anniversoryFlag, eventType));
-                                                }
-                                                tvNoData.setVisibility(View.GONE);
-                                                birthdayAnniversaryAdapter =
-                                                    new BirthdayAnniversaryAdapter(
-                                                        birthdayAnniversaryList);
-                                                rvBirthdayAnniversary.setLayoutManager(
-                                                    new GridLayoutManager(getMainActivity(), 3));
-                                                rvBirthdayAnniversary.setAdapter(
-                                                    birthdayAnniversaryAdapter);
-                                                birthdayAnniversaryAdapter.notifyDataSetChanged();
-                                                dataFoundFlag = true;
-                                            } else {
-                                                birthdayAnniversaryAdapter =
-                                                    new BirthdayAnniversaryAdapter(
-                                                        birthdayAnniversaryList);
-                                                rvBirthdayAnniversary.setLayoutManager(
-                                                    new GridLayoutManager(getMainActivity(), 3));
-                                                rvBirthdayAnniversary.setAdapter(
-                                                    birthdayAnniversaryAdapter);
-                                                birthdayAnniversaryAdapter.notifyDataSetChanged();
-                                                dataFoundFlag = false;
-                                                hideProgress();
-                                                tvNoData.setVisibility(View.VISIBLE);
-                                                if (eventType.equalsIgnoreCase("B")) {
-                                                    tvNoData.setText(
-                                                        "No clients having Birthday " + dayType);
-                                                } else {
-                                                    tvNoData.setText(
-                                                        "No clients having Anniversary " + dayType);
-                                                }
-                                            }
-                                        } else {
-                                            birthdayAnniversaryAdapter =
-                                                new BirthdayAnniversaryAdapter(
-                                                    birthdayAnniversaryList);
-                                            rvBirthdayAnniversary.setLayoutManager(
-                                                new GridLayoutManager(getMainActivity(), 3));
-                                            rvBirthdayAnniversary.setAdapter(
-                                                birthdayAnniversaryAdapter);
-                                            birthdayAnniversaryAdapter.notifyDataSetChanged();
-                                            dataFoundFlag = false;
-                                            hideProgress();
-                                            tvNoData.setVisibility(View.VISIBLE);
-                                            if (eventType.equalsIgnoreCase("B")) {
-                                                tvNoData.setText(
-                                                    "No clients having Birthday " + dayType);
-                                            } else {
-                                                tvNoData.setText(
-                                                    "No clients having Anniversary " + dayType);
-                                            }
-                                        }
-                                    } else {
-                                        birthdayAnniversaryAdapter =
-                                            new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
-                                        rvBirthdayAnniversary.setLayoutManager(
-                                            new GridLayoutManager(getMainActivity(), 3));
-                                        rvBirthdayAnniversary.setAdapter(
-                                            birthdayAnniversaryAdapter);
-                                        birthdayAnniversaryAdapter.notifyDataSetChanged();
-                                        dataFoundFlag = false;
-                                        hideProgress();
-                                        tvNoData.setVisibility(View.VISIBLE);
-                                        if (eventType.equalsIgnoreCase("B")) {
-                                            tvNoData.setText(
-                                                "No clients having Birthday " + dayType);
-                                        } else {
-                                            tvNoData.setText(
-                                                "No clients having Anniversary " + dayType);
-                                        }
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-
-                                    hideProgress();
-                                }
-                            } catch (Exception e) {
-                                dataFoundFlag = false;
-                                e.printStackTrace();
-                                hideProgress();
-                                tvNoData.setVisibility(View.VISIBLE);
-                                if (eventType.equalsIgnoreCase("B")) {
-                                    tvNoData.setText("No clients having Birthday " + dayType);
-                                } else {
-                                    tvNoData.setText("No clients having Anniversary " + dayType);
-                                }
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                dataFoundFlag = false;
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    tvNoData.setVisibility(View.VISIBLE);
-                                    if (eventType.equalsIgnoreCase("B")) {
-                                        tvNoData.setText("No clients having Birthday " + dayType);
-                                    } else {
-                                        tvNoData.setText(
-                                            "No clients having Anniversary " + dayType);
-                                    }
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                //eat it
-                                ex.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            tvNoData.setVisibility(View.VISIBLE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            tvNoData.setVisibility(View.VISIBLE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                tvNoData.setVisibility(View.VISIBLE);
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            BirthdayAnniversaryRequest request =
+                new BirthdayAnniversaryRequest(filter, birthdayRequest, true);
+            Disposable subscribe = saathiApi.postBirthdayAnniversary(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderBirthdayAnniversary);
         } else {
             hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 

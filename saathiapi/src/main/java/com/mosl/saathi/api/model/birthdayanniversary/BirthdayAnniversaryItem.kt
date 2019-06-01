@@ -14,7 +14,7 @@ data class BirthdayAnniversaryItem(
   val permissions: Permissions,
 
   @JvmField @SerializedName("Data")
-  val data: List<Any?>,
+  val data: List<BirthdayAnniversaryData>,
 
   @JvmField @SerializedName("ExtraData")
   val extraData: Any
