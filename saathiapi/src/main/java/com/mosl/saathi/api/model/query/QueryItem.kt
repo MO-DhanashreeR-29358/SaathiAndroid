@@ -1,9 +1,7 @@
 package com.mosl.saathi.api.model.query
 
 import com.google.gson.annotations.SerializedName
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
 data class QueryItem(
 
   @JvmField @SerializedName("Status")

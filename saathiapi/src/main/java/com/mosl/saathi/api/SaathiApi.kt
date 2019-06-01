@@ -161,7 +161,7 @@ interface SaathiApi {
 
   @POST("Common/RequetQuery")
   fun postQuery(
-    request: QueryRequest
+    @Body request: QueryRequest
   ): Observable<QueryItem>
 
 }
