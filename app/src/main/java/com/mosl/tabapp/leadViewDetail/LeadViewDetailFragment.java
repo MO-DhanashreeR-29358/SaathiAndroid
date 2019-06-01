@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
 import com.mosl.mobile.ekyc.common.ValidationRule;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -50,7 +51,6 @@ import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.common.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
-import com.mosl.tabapp.common.UiModel;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddressDetailModel;
@@ -83,6 +83,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.ErrorMsgName;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
@@ -95,7 +96,6 @@ import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
 import static com.mosl.tabapp.common.CRMValidationRule.validateTel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
-import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class LeadViewDetailFragment extends MOSLCommonFragment
