@@ -116,7 +116,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
     private ImageView close;
     private Button btnSubmit;
     private ArrayList<RowData>
-        arrActionables, arrBAClient, arrOutStation;
+        arrActionables, arrOutStation;
 
     private ArrayList<RowData> arrSelectProduct = new ArrayList<>();
     private ArrayList<RowData> arrMeetingDuration = new ArrayList<>();
@@ -125,6 +125,8 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
     private ArrayList<RowData> arrMeetingReason = new ArrayList<>();
     private ArrayList<RowData> arrCategory = new ArrayList<>();
     private ArrayList<RowData> arrSubCategory = new ArrayList<>();
+    private ArrayList<RowData> arrBAClient = new ArrayList<>();
+
     private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
         arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory,
         arrAdapBAClient, arrAdapOutStation;
@@ -1657,7 +1659,48 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderBaClient(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrBAClient.clear();
+            arrBAClient.add(new RowData(0, "-1", SELECT_BA_CLIENT_MEETING));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrBAClient.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapBAClient = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrBAClient);
+            arrAdapBAClient.setDropDownViewResource(R.layout.mdropdown);
+            spBAClient.setAdapter(arrAdapBAClient);
+            spBAClient.setOnItemSelectedListener(
+                selectBAClientListener);
+            arrAdapBAClient.notifyDataSetChanged();
+        }
+    }
+
     private void baClient() {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            outStation();
+            LookupRequest request =
+                new LookupRequest(BACLIENTMEETING, AccountDetails.getBusinessUnitId(),
+                    null);
+            Disposable subscribe = saathiApi.postAllLookup(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderBaClient);
+        } else {
+            hideProgress();
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
+        }
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             outStation();
