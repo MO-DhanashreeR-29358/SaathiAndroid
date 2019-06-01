@@ -41,6 +41,8 @@ import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.prospect.ProspectRequest
+import com.mosl.saathi.api.model.prospect.ProspectResponse
+import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportItem
@@ -167,8 +169,11 @@ interface SaathiApi {
   fun logout(@Body logoutRequest: LogoutRequest): Observable<Any>
 
   @POST("Auth/UpdateFCMToken")
-  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest)
+  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<Any>
 
   @POST("Prospect/RegisterProspectOnline")
-  fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<String>
+  fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
+
+  @POST("Prospect/SMT_RegisterProspectOnline")
+  fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
 }
