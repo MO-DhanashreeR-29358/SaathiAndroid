@@ -149,7 +149,6 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class MOSLCommonActivity extends AppCompatActivity
 	implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
@@ -907,10 +906,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 				.compose(applyUiModel())
 				.subscribe(this::renderLogout);
 		} else {
-			hideProgress();
-			MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
+			noInternetConnectionDialog();
 		}
 	}
 
@@ -974,11 +970,14 @@ public class MOSLCommonActivity extends AppCompatActivity
 					.compose(applyUiModel())
 					.subscribe(this::renderProspect);
 		} else {
-			hideProgress();
-			MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
+			noInternetConnectionDialog();
 		}
+	}
+
+	private void noInternetConnectionDialog() {
+		MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+			getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
+			null);
 	}
 
 	private void renderProspect(UiModel<SaathiCommonResponse<List<ProspectResponse>>> uiModel) {
@@ -1775,9 +1774,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 					.compose(applyUiModel())
 					.subscribe(this::renderSuggestMe);
 		} else {
-			alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
+			noInternetConnectionDialog();
 		}
 	}
 
@@ -2307,9 +2304,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 									}
 								}
 							} else {
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									INTERNET_CONNECTION, OK, true, null);
+								noInternetConnectionDialog();
 							}
 						}
 					} catch (Exception ex) {
