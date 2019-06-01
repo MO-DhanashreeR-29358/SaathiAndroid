@@ -1,6 +1,8 @@
 package com.mosl.saathi.api
 
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
@@ -154,5 +156,12 @@ interface SaathiApi {
   fun postSourceList(
     @Body request: SourceListRequest
   ): Observable<SaathiCommonResponse<SourceListItem>>
+
+  //======================= Birthday Anniversary ====================
+
+  @POST("Client/GetBirthdayAnniversary")
+  fun postBirthdayAnniversary(
+    @Body request: BirthdayAnniversaryRequest
+  ): Observable<BirthdayAnniversaryItem>
 
 }
