@@ -115,12 +115,13 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
     private DatePicker dpFromDate;
     private ImageView close;
     private Button btnSubmit;
-    private ArrayList<RowData> arrActivityType, arrMeetingReason,
+    private ArrayList<RowData> arrMeetingReason,
         arrActionables, arrCategory, arrSubCategory, arrBAClient, arrOutStation;
 
     private ArrayList<RowData> arrSelectProduct = new ArrayList<>();
     private ArrayList<RowData> arrMeetingDuration = new ArrayList<>();
     private ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
+    private ArrayList<RowData> arrActivityType = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectProduct, arrAdapMeetingDuration, arrAdapActivityType,
         arrAdapMeetingReason, arrAdapActionables, arrAdapCategory, arrAdapSubCategory,
         arrAdapBAClient, arrAdapOutStation;
@@ -1831,8 +1832,58 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderActivityType(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+        String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrActivityType.clear();
+            arrActivityType.add(new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrActivityType.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapActivityType = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrActivityType);
+            arrAdapActivityType.setDropDownViewResource(
+                R.layout.mdropdown);
+            spActivityType.setAdapter(arrAdapActivityType);
+            spActivityType.setOnItemSelectedListener(
+                selectActivityTypeListener);
+            arrAdapActivityType.notifyDataSetChanged();
+            RowData activityTypeData =
+                getSpinnerRowDataById(id, arrAdapActivityType);
+            if (activityTypeData != null) {
+                spActivityType.setSelection(
+                    activityTypeData.getPosition());
+            }
+        }
+    }
+
     private void activityType(final String id) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            actionables(ActionableID);
+            LookupRequest request =
+                new LookupRequest(ACTIVITYTYPE, AccountDetails.getBusinessUnitId(), null);
+            Disposable subscribe = saathiApi.postAllLookup(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(uiModelList -> {
+                    renderActivityType(uiModelList, id);
+                });
+        } else {
+            hideProgress();
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
+        }
+       /* if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             actionables(ActionableID);
             showProgress();
             //            customProgress.setVisibility(View.VISIBLE);
@@ -2024,7 +2075,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             //            customProgress.setVisibility(View.GONE);
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
-        }
+        }*/
     }
 
     private void meetingReason(final String id) {
