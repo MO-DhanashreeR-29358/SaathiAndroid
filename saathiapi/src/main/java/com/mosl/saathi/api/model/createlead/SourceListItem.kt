@@ -4,29 +4,29 @@ import com.google.gson.annotations.SerializedName
 
 data class SourceListItem(
 
-  @SerializedName("Status") @JvmField val status: Int,
+  @JvmField @SerializedName("Status") val status: Int,
 
-  @SerializedName("CreationDate") @JvmField val creationDate: String,
+  @JvmField @SerializedName("CreationDate") val creationDate: String,
 
-  @SerializedName("LastModifiedBy") @JvmField val lastModifiedBy: Any,
+  @JvmField @SerializedName("LastModifiedBy") val lastModifiedBy: Any,
 
-  @SerializedName("CreatedBy") @JvmField val createdBy: String,
+  @JvmField @SerializedName("CreatedBy") val createdBy: String,
 
-  @SerializedName("IdentifierPropertyName") @JvmField val identifierPropertyName: String,
+  @JvmField @SerializedName("IdentifierPropertyName") val identifierPropertyName: String,
 
-  @SerializedName("SourceID") @JvmField val sourceID: Int,
+  @JvmField @SerializedName("SourceID") val sourceID: Int,
 
-  @SerializedName("BusinessUnitID") @JvmField val businessUnitID: Int,
+  @JvmField @SerializedName("BusinessUnitID") val businessUnitID: Int,
 
-  @SerializedName("SourceName") @JvmField val sourceName: String,
+  @JvmField @SerializedName("SourceName") val sourceName: String,
 
-  @SerializedName("Sequence") @JvmField val sequence: Int,
+  @JvmField @SerializedName("Sequence") val sequence: Int,
 
-  @SerializedName("InApproval") @JvmField val inApproval: Boolean,
+  @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @SerializedName("ApprovalFieldList") @JvmField val approvalFieldList: Any,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
 
-  @SerializedName("LastModificationDate") @JvmField val lastModificationDate: Any,
+  @JvmField @SerializedName("LastModificationDate") val lastModificationDate: Any,
 
-  @SerializedName("EntityStatus") @JvmField val entityStatus: Int
+  @JvmField @SerializedName("EntityStatus") val entityStatus: Int
 )
