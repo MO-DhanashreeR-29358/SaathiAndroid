@@ -2754,7 +2754,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
 	private void getCountry() {
 
 		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-			Disposable subscribe = saathiApi.postCountryList()
+			Disposable subscribe = saathiApi.getCountries()
 				.compose(applyUiModel())
 				.subscribe(this::renderCountryList);
 		} else {

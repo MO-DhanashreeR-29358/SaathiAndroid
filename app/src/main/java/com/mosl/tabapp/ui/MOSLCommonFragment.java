@@ -3,6 +3,7 @@ package com.mosl.tabapp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -205,22 +206,30 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void  showOnFailurePopup(Throwable t) {
-        String message;
-        if (t instanceof ServiceFailureException) {
-            message = ((ServiceFailureException) t).errorMessage;
-        } else {
-            message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
-        }
         MSFDialog.alertDialog(getMainActivity(), 0,
             getResources().getString(R.string.motilal_oswal),
-            message, "OK", true, null);
+            getErrorOnFailure(t), "OK", true, null);
     }
 
+    public String getErrorOnFailure(Throwable t) {
+        if (t instanceof ServiceFailureException) {
+            return  ((ServiceFailureException) t).errorMessage;
+        } else {
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+    }
+
+    @NonNull
     public String stringOrEmpty(@Nullable String input) {
+        return stringOrDefault(input, "");
+    }
+
+    @NonNull
+    public String stringOrDefault(@Nullable String input, @NonNull String defaultVal) {
         if (input != null) {
             return input;
         } else {
-            return "";
+            return defaultVal;
         }
     }
 

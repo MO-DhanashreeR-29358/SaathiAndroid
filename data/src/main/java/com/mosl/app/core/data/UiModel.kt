@@ -4,16 +4,9 @@ package com.mosl.app.core.data
  * Created by snehaganapuram on 04-01-2018.
  */
 
-@Suppress("DEPRECATION")
 sealed class UiModel<out T> constructor(
     @JvmField val inProgress: Boolean,
-    @Deprecated("Use this.onSuccess{} with when expression",
-        replaceWith = ReplaceWith("this.onSuccess{data -> }",
-            imports = ["com.mosl.app.core.data.onSuccess"]))
     @JvmField val data: T? = null,
-    @Deprecated("Use this.onFailure{} with when expression",
-        replaceWith = ReplaceWith("this.onFailure{error -> }",
-            imports = ["com.mosl.app.core.data.onFailure"]))
     @JvmField val error: Throwable? = null
 ) {
   val isSuccess: Boolean
