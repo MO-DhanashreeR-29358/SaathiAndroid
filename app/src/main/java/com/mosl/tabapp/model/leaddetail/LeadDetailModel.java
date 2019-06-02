@@ -407,7 +407,6 @@ public class LeadDetailModel {
 		String json = "{";
 		json += "\"Salutation\":" + null;
 		json += ",\"Name\":\"" + getName() + "\"";
-
 		json += ",\"EmailId\":\"" + geteMail() + "\"";
 		json += ",\"AlternateEmailId\":\"" + getAlternateEmail() + "\"";
 		json += ",\"Mobile\":\"" + getMobileNo() + "\"";
@@ -447,8 +446,7 @@ public class LeadDetailModel {
 		return json;
 	}
 
-	CharSequence getLeadFieldValueModels() {
-
+	public CharSequence getLeadFieldValueModels() {
 		return leadFieldValueModels;
 	}
 

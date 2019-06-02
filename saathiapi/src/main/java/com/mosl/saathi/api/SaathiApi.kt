@@ -3,25 +3,23 @@ package com.mosl.saathi.api
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
-import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
-import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
 import com.mosl.saathi.api.model.lead.CountryItem
-import com.mosl.saathi.api.model.lead.InsertLeadProductItem
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -30,12 +28,13 @@ import com.mosl.saathi.api.model.lead.StageItem
 import com.mosl.saathi.api.model.lead.StageMobileItem
 import com.mosl.saathi.api.model.lead.StageMobileRequest
 import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StageWiseConfiguration
 import com.mosl.saathi.api.model.lead.StateProvinceItem
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
 import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
-import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
@@ -46,7 +45,9 @@ import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface SaathiApi {
 
@@ -95,7 +96,7 @@ interface SaathiApi {
   @POST("Lead/UpdateLead")
   fun updateLead(
       @Body request: UpdateLeadRequest
-  ): Observable<SaathiCommonResponse<UpdateLeadItem>>
+  ): Observable<UpdateLeadResponse>
 
   @POST("UserApi/AutoCompleteProductSpecialist")
   fun getProductSpecialist(
@@ -108,14 +109,14 @@ interface SaathiApi {
   ): Observable<List<BusinessProfile>>
 
   @POST("CrossSellingProductMapping/GetCrossSellingProduct")
-  fun postCrossSellingProduct(
+  fun getCrossSellingProduct(
       @Body request: CrossSellingProductRequest
-  ): Observable<CrossSellingProductItem>
+  ): Observable<List<CrossSellingProduct>>
 
   @POST("Lead/InsertLeadProductMapping")
-  fun postInsertLeadProductMapping(
+  fun insertLeadProductMapping(
       @Body request: InsertLeadProductRequest
-  ): Observable<SaathiCommonResponse<InsertLeadProductItem>>
+  ): Observable<List<LeadProductMappingItem>>
 
   @POST("Stage/GetStageList")
   fun getStageList(
@@ -133,24 +134,41 @@ interface SaathiApi {
   ): Observable<ClientDetailItem>
 
   @POST("Client/SaveClientProfile")
-  fun postSaveClientProfile(
+  fun saveClientProfile(
       @Body request: ClientProfileRequest
-  ): Observable<SaathiCommonResponse<ClientProfileItem>>
+  ): Observable<ClientProfileResponse>
 
   @POST("Lead/SaveLeadCrossSellingProduct")
   fun saveLeadCrossSellingProduct(
       @Body request: SaveLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<SaveLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/DeleteLeadProductMapping")
-  fun postDeleteLeadCrossSellingProduct(
+  fun deleteLeadCrossSellingProduct(
       @Body request: DeleteLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<DeleteLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
-  fun postStageWiseConfigurationByStatus(
+  fun getStageWiseConfigurationByStatus(
       @Body request: ConfigurationByStatusRequest
-  ): Observable<SaathiCommonResponse<Any>>
+  ): Observable<List<StageWiseConfiguration>>
+
+  @POST("Lead/UpdateLeadProductMapping")
+  fun updateLeadProductMapping(
+      @Body request: Map<String, Any>
+  ): Observable<List<LeadProductMappingItem>>
+
+  @GET("GetClientSummary")
+  fun getClientSummary(
+      @Query("Userid") userId: String,
+      @Query("ClientUCID") ucid: String
+  ): Observable<String>
+
+  @GET("GetClientGainLossSummary")
+  fun getClientGainLossSummary(
+      @Query("Userid") userId: String,
+      @Query("ClientUCID") ucid: String
+  ): Observable<String>
 
   //===================== Create Lead=========================
 
