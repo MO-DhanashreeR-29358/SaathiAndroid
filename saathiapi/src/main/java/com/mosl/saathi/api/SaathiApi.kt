@@ -15,6 +15,8 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadItem
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.ClientByCommandItem
 import com.mosl.saathi.api.model.createmeeting.ClientByCommandRequest
 import com.mosl.saathi.api.model.createmeeting.ClientImageRequest
@@ -195,5 +197,11 @@ interface SaathiApi {
 
   @POST("Meeting/GetMeetingByID")
   fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+
+  @POST("UserApi/AutoCompleteAttendee")
+  fun postAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
+  @POST("UserApi/AutoCompleteSplAttendee")
+  fun postAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
 
 }
