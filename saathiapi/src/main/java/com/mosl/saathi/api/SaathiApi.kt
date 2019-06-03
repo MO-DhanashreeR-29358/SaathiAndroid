@@ -18,6 +18,8 @@ import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createmeeting.ClientByCommandItem
 import com.mosl.saathi.api.model.createmeeting.ClientByCommandRequest
 import com.mosl.saathi.api.model.createmeeting.ClientImageRequest
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -188,5 +190,10 @@ interface SaathiApi {
 
   @POST("Client/GetClientViewByCommand")
   fun postClientViewByCommand(@Body request: ClientByCommandRequest): Observable<SaathiCommonResponse<ClientByCommandItem>>
+
+  //===================== Update meeting =========================
+
+  @POST("Meeting/GetMeetingByID")
+  fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
 
 }

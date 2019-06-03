@@ -36,7 +36,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.tabapp.R;
@@ -948,355 +952,87 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         dialog.show();
     }
 
-    private void getMeetingById(String meetingId) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            //            customProgress.setVisibility(View.VISIBLE);
-            showProgress();
-            //          Map inputMap = new HashMap<>();
-            // inputMap.put("id", meetingId);
+    private void renderMeetingById(UiModel<MeetingByIdItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
 
-            String serviceMethod = "Meeting/GetMeetingByID";
-            String tmpReq = String.format(ID_OBJECT, meetingId);
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        MeetingByIdItem data = uiModel.data;
+        if (data != null) {
+            MeetingDate = stringOrEmpty(data.meetingDate);
+            ActivityTypeID = stringOrEmpty(data.activityTypeID);
+            ProductTypeID = stringOrEmpty(data.productTypeID);
+            MeetingReasonID = stringOrEmpty(data.meetingReasonID);
+            MeetingDurationID = stringOrEmpty(data.meetingDurationID);
+            String MeetingDescription = stringOrEmpty(data.meetingDescription);
+            String CustomerRemark = stringOrEmpty(data.customerRemark);
+            ActionableID = stringOrEmpty(data.actionableID);
+            CategoryID = stringOrEmpty(data.categoryID);
+            String CategoryDescription = stringOrEmpty(data.categoryDescription);
+            SubCategoryID = stringOrEmpty(data.subCategoryID);
+            String SubCategoryDescription = stringOrEmpty(data.subCategoryDescription);
 
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
-                    new JsonHttpResponseHandler() {
+            List<MeetingAttendeeItem> meetingAttendee = data.meetingAttendee;
+            for (int i = 0; i < meetingAttendee.size(); i++) {
+                MeetingAttendeeItem item = meetingAttendee.get(i);
+                String MeetingAttendeeID = stringOrEmpty(item.meetingAttendeeID);
+                String AttendeeEmpcode = stringOrEmpty(item.attendeeEmpcode);
+                String AttendeeType = stringOrEmpty(item.attendeeType);
+                String DefaultAttendee = stringOrEmpty(item.defaultAttendee);
+                String AttendeeEmpName = stringOrEmpty(item.attendeeEmpName);
 
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrCategory = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        //                                    customProgress.setVisibility(View.GONE);
-                                        JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                      /*  "Response": {
-                                        "MeetingID": 3007,
-                                                "LeadId": 6028,
-                                                "MeetingDate": "2017-03-30T18:29:00",
-                                                "ActivityTypeID": 76,
-                                                "ProductTypeID": 21,
-                                                "MeetingReasonID": 0,
-                                                "MeetingDurationID": 0,
-                                                "MeetingDescription": null,
-                                                "BAClientMeetingID": 0,
-                                                "OutstationMeetingID": 0,
-                                                "Clientcode": null,
-                                                "Clientname": null,
-                                                "MeetingObjectiveID": 0,
-                                                "ProductCategoryID": 0,
-                                                "CustomerRemark": null,
-                                                "ActionableID": 0,
-                                                "CategoryID": 0,
-                                                "CategoryDescription": null,
-                                                "SubCategoryID": 0,
-                                                "SubCategoryDescription": null,
-                                                "MeetingWith": null,
-                                                "AttendeeCode": null,
-                                                "AttendeeName": null,
-                                                "repeatOnCode": null,
-                                                "repeatEveryWeekCode": null,
-                                                "repeatEveryDayCode": null,
-                                                "repeatationStartOn": null,
-                                                "repeatationEndsOn": null,
-                                                "MeetingType": "A",
-                                                "ParentID": null,
-                                                "meetingAttendee": [
-                                        {
-                                            "MeetingAttendeeID": 3010,
-                                                "MeetingID": 3007,
-                                                "AttendeeEmpcode": "mukesh",
-                                                "AttendeeType": "R",
-                                                "Attended": true,
-                                                "IsAdminMode": true,
-                                                "Status": 0,
-                                                "InApproval": false,
-                                                "ApprovalFieldList": null
-                                        }
-                                        ],
-                                       */
-
-                                        MeetingDate = (jsonObject.isNull("MeetingDate")
-                                            || jsonObject.getString("MeetingDate").equals("")) ? ""
-                                            : jsonObject.getString("MeetingDate");
-                                        ActivityTypeID = (jsonObject.isNull("ActivityTypeID")
-                                            || jsonObject.getString("ActivityTypeID").equals(""))
-                                            ? "" : jsonObject.getString("ActivityTypeID");
-                                        ProductTypeID = (jsonObject.isNull("ProductTypeID")
-                                            || jsonObject.getString("ProductTypeID").equals(""))
-                                            ? "" : jsonObject.getString("ProductTypeID");
-                                        MeetingReasonID = (jsonObject.isNull("MeetingReasonID")
-                                            || jsonObject.getString("MeetingReasonID").equals(""))
-                                            ? "" : jsonObject.getString("MeetingReasonID");
-                                        MeetingDurationID = (jsonObject.isNull("MeetingDurationID")
-                                            || jsonObject.getString("MeetingDurationID").equals(""))
-                                            ? "" : jsonObject.getString("MeetingDurationID");
-                                        String MeetingDescription =
-                                            (jsonObject.isNull("MeetingDescription")
-                                                || jsonObject.getString("MeetingDescription")
-                                                .equals("")) ? ""
-                                                : jsonObject.getString("MeetingDescription");
-                                        String Clientcode = (jsonObject.isNull("Clientcode")
-                                            || jsonObject.getString("Clientcode").equals("")) ? ""
-                                            : jsonObject.getString("Clientcode");
-                                        String Clientname = (jsonObject.isNull("Clientname")
-                                            || jsonObject.getString("Clientname").equals("")) ? ""
-                                            : jsonObject.getString("Clientname");
-                                        String MeetingObjectiveID =
-                                            (jsonObject.isNull("MeetingObjectiveID")
-                                                || jsonObject.getString("MeetingObjectiveID")
-                                                .equals("")) ? ""
-                                                : jsonObject.getString("MeetingObjectiveID");
-                                        String ProductCategoryID =
-                                            (jsonObject.isNull("ProductCategoryID")
-                                                || jsonObject.getString("ProductCategoryID")
-                                                .equals("")) ? ""
-                                                : jsonObject.getString("ProductCategoryID");
-                                        String CustomerRemark = (jsonObject.isNull("CustomerRemark")
-                                            || jsonObject.getString("CustomerRemark").equals(""))
-                                            ? "" : jsonObject.getString("CustomerRemark");
-                                        ActionableID = (jsonObject.isNull("ActionableID")
-                                            || jsonObject.getString("ActionableID").equals("")) ? ""
-                                            : jsonObject.getString("ActionableID");
-                                        CategoryID = (jsonObject.isNull("CategoryID")
-                                            || jsonObject.getString("CategoryID").equals("")) ? ""
-                                            : jsonObject.getString("CategoryID");
-                                        String CategoryDescription =
-                                            (jsonObject.isNull("CategoryDescription")
-                                                || jsonObject.getString("CategoryDescription")
-                                                .equals("")) ? ""
-                                                : jsonObject.getString("CategoryDescription");
-                                        SubCategoryID = (jsonObject.isNull("SubCategoryID")
-                                            || jsonObject.getString("SubCategoryID").equals(""))
-                                            ? "" : jsonObject.getString("SubCategoryID");
-                                        String SubCategoryDescription =
-                                            (jsonObject.isNull("SubCategoryDescription")
-                                                || jsonObject.getString("SubCategoryDescription")
-                                                .equals("")) ? ""
-                                                : jsonObject.getString("SubCategoryDescription");
-                                        String ParentID =
-                                            (jsonObject.isNull("ParentID") || jsonObject.getString(
-                                                "ParentID").equals("")) ? ""
-                                                : jsonObject.getString("ParentID");
-                                   /* "meetingAttendee": [
-                                    {
-                                        "MeetingAttendeeID": 3010,
-                                            "MeetingID": 3007,
-                                            "AttendeeEmpcode": "mukesh",
-                                            "AttendeeType": "R",
-                                            "Attended": true,
-                                            "IsAdminMode": true,
-                                            "Status": 0,
-                                            "InApproval": false,
-                                            "ApprovalFieldList": null
-                                    }
-                                    ]*/
-                                        JSONArray jsonArray =
-                                            jsonObject.getJSONArray("meetingAttendee");
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject attendeeJsonObject =
-                                                jsonArray.getJSONObject(i);
-
-                                            String MeetingAttendeeID =
-                                                (attendeeJsonObject.isNull("MeetingAttendeeID")
-                                                    || attendeeJsonObject.getString(
-                                                    "MeetingAttendeeID").equals("")) ? ""
-                                                    : attendeeJsonObject.getString(
-                                                        "MeetingAttendeeID");
-                                            String MeetingID =
-                                                (attendeeJsonObject.isNull("MeetingAttendeeID")
-                                                    || attendeeJsonObject.getString(
-                                                    "MeetingAttendeeID").equals("")) ? ""
-                                                    : attendeeJsonObject.getString(
-                                                        "MeetingAttendeeID");
-                                            String AttendeeEmpcode =
-                                                (attendeeJsonObject.isNull("AttendeeEmpcode")
-                                                    || attendeeJsonObject.getString(
-                                                    "AttendeeEmpcode").equals("")) ? ""
-                                                    : attendeeJsonObject.getString(
-                                                        "AttendeeEmpcode");
-                                            String AttendeeType =
-                                                (attendeeJsonObject.isNull("AttendeeType")
-                                                    || attendeeJsonObject.getString("AttendeeType")
-                                                    .equals("")) ? ""
-                                                    : attendeeJsonObject.getString("AttendeeType");
-                                            String Attended = (attendeeJsonObject.isNull("Attended")
-                                                || attendeeJsonObject.getString("Attended")
-                                                .equals("")) ? ""
-                                                : attendeeJsonObject.getString("Attended");
-                                            String DefaultAttendee =
-                                                (attendeeJsonObject.isNull("DefaultAttendee")
-                                                    || attendeeJsonObject.getString(
-                                                    "DefaultAttendee").equals("")) ? ""
-                                                    : attendeeJsonObject.getString(
-                                                        "DefaultAttendee");
-                                            String AttendeeEmpName =
-                                                (attendeeJsonObject.isNull("AttendeeEmpName")
-                                                    || attendeeJsonObject.getString(
-                                                    "AttendeeEmpName").equals("")) ? ""
-                                                    : attendeeJsonObject.getString(
-                                                        "AttendeeEmpName");
-
-                                            if (AttendeeType.equalsIgnoreCase("S")) {
-                                                addedSplAttendeeModelList.add(
-                                                    new AddedSplAttendeeModel(AttendeeType, true,
-                                                        AttendeeEmpName, AttendeeEmpcode,
-                                                        MeetingAttendeeID));
-                                                addedSplAttendeeCount++;
-                                            } else {
-                                                if (!DefaultAttendee.equalsIgnoreCase("true")) {
-                                                    addedAttendeeModelList.add(
-                                                        new AddedAttendeeModel(AttendeeType, true,
-                                                            AttendeeEmpName, AttendeeEmpcode,
-                                                            MeetingAttendeeID));
-                                                    addedAttendeeCount++;
-                                                }
-                                            }
-                                        }
-
-                                        // tvSplAttendeeCount.setText("(" + String.valueOf(addedSplAttendeeCount) + ")");
-                                        setCountForSpecial(addedSplAttendeeCount);
-                                        //  tvAttendeeCount.setText("(" + String.valueOf(addedAttendeeCount) + ")");
-                                        setCount(addedAttendeeCount);
-                                        selectProduct(ProductTypeID);
-
-                                        String metadataArray[] = MeetingDate.split("T");
-                                        String dateArray[] = metadataArray[0].split("-");
-                                        String timeArray[] = metadataArray[1].split(":");
-                                        currentYear = ((Integer.parseInt(dateArray[0])));
-                                        month = ((Integer.parseInt(dateArray[1])));
-                                        day = ((Integer.parseInt(dateArray[2])));
-                                        hour = ((Integer.parseInt(timeArray[0])));
-                                        minute = ((Integer.parseInt(timeArray[1])));
-                                        etMeetingDescription.setText(MeetingDescription);
-                                        etCustomerComment.setText(CustomerRemark);
-                                        etCategory.setText(CategoryDescription);
-                                        etSubCategory.setText(SubCategoryDescription);
-                                        MeetingDate = MeetingDate.replace("T", " ");
-                                        // tvStartDate.setText(MeetingDate);
-                                        tvStartDate.setText(CRMAppUtil.getDBDate(
-                                            CRMAppUtil.getDBDateObj(currentYear, month, day, hour,
-                                                minute), DATE_FORMAT_TO_DISPLAY));
-                                   /* meetingDuration(MeetingDurationID);
-                                    activityType(ActivityTypeID);
-                                    meetingReason(MeetingReasonID);
-                                    actionables(ActionableID);
-                                    category(CategoryID);*/
-                                        // subCategory(SubCategoryID);
-
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg,
-                                            "OK", true, null);
-                                    }
-                                } else {
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK",
-                                        true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
+                if (AttendeeType.equalsIgnoreCase("S")) {
+                    addedSplAttendeeModelList.add(
+                        new AddedSplAttendeeModel(AttendeeType, true,
+                            AttendeeEmpName, AttendeeEmpcode,
+                            MeetingAttendeeID));
+                    addedSplAttendeeCount++;
+                } else {
+                    if (!DefaultAttendee.equalsIgnoreCase("true")) {
+                        addedAttendeeModelList.add(
+                            new AddedAttendeeModel(AttendeeType, true,
+                                AttendeeEmpName, AttendeeEmpcode,
+                                MeetingAttendeeID));
+                        addedAttendeeCount++;
+                    }
+                }
             }
+            setCountForSpecial(addedSplAttendeeCount);
+            setCount(addedAttendeeCount);
+            selectProduct(ProductTypeID);
+
+            String metadataArray[] = MeetingDate.split("T");
+            String dateArray[] = metadataArray[0].split("-");
+            String timeArray[] = metadataArray[1].split(":");
+            currentYear = ((Integer.parseInt(dateArray[0])));
+            month = ((Integer.parseInt(dateArray[1])));
+            day = ((Integer.parseInt(dateArray[2])));
+            hour = ((Integer.parseInt(timeArray[0])));
+            minute = ((Integer.parseInt(timeArray[1])));
+            etMeetingDescription.setText(MeetingDescription);
+            etCustomerComment.setText(CustomerRemark);
+            etCategory.setText(CategoryDescription);
+            etSubCategory.setText(SubCategoryDescription);
+            MeetingDate = MeetingDate.replace("T", " ");
+            tvStartDate.setText(CRMAppUtil.getDBDate(
+                CRMAppUtil.getDBDateObj(currentYear, month, day, hour,
+                    minute), DATE_FORMAT_TO_DISPLAY));
+        }
+    }
+
+    private void getMeetingById(String meetingId) {
+
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            baClient();
+            MeetingByIdRequest request =
+                new MeetingByIdRequest(meetingId);
+            Disposable subscribe = saathiApi.postMeetingById(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderMeetingById);
         } else {
+            hideProgress();
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
         }
@@ -1746,7 +1482,6 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
         }
-
     }
 
     private void renderActionables(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
