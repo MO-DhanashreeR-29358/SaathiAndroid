@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.app.core.data.UiModel;
 import com.mosl.mobile.ekyc.common.ValidationRule;
 import com.mosl.saathi.api.model.lead.CountryItem;
 import com.mosl.tabapp.R;
@@ -40,7 +40,6 @@ import com.mosl.tabapp.common.CRMValidationRule;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.common.SearchableSpinner;
-import com.mosl.tabapp.common.UiModel;
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddressDetailModel;
@@ -67,6 +66,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.ErrorMsgName;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
@@ -75,7 +75,6 @@ import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
 import static com.mosl.tabapp.common.CRMValidationRule.validateTel;
-import static com.mosl.tabapp.common.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class LeadCreationFragment extends MOSLCommonFragment
@@ -2756,7 +2755,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
 
 		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
 			Disposable subscribe = saathiApi.postCountryList()
-				.compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
 				.subscribe(this::renderCountryList);
 		} else {
 			hideProgress();
