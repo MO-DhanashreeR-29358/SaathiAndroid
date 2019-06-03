@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalListItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest;
 import com.mosl.tabapp.R;
@@ -452,7 +453,6 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         }
     }
 
-
     private void getApprovelReqestUserList() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             ApprovelRequest request =
@@ -468,19 +468,45 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderApprovalRequest(UiModel<ApprovalListItem> uiModel) {
+
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        ApprovalListItem data = uiModel.data;
+
+        if (data != null) {
+
+        }
+    }
+
     private void webServiceCall(String emoloyeeStr, String profileStr) {
+        /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            String updatedStartDate = tvStartDate.getText().toString() + " 00:00:00";
+            String updatedEndDate = tvEndDate.getText().toString() + " 00:00:00";
+
+            ApprovalListRequest request =
+                new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
+                    AccountDetails.getEmployeeCode(), "0", updatedStartDate, updatedEndDate,
+                    profileStr);
+            Disposable subscribe = saathiApi.postApprovalRequestList(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderApprovalRequest);
+        } else {
+            hideProgress();
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }*/
 
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             Map inputMap = new HashMap<>();
-           /* "ApprovalRequestId": 1,
-                    "UpdatedBy": 2,
-                    "EntityField": "sample string 3",
-                    "UpdatedStartDate": "2017-04-17T10:52:03.0675446+05:30",
-                    "UpdatedEndDate": "2017-04-17T10:52:03.0685445+05:30",
-                    "CalculatedPage": 6,
-                    "PageSize": 7,
-                    "TotalCount": 8*/
             inputMap.put("ApprovalRequestId", null);
             inputMap.put("UpdatedBy", emoloyeeStr);
             inputMap.put("EntityField", profileStr);
