@@ -21,12 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest;
 import com.mosl.saathi.api.model.birthdayanniversary.Filter;
 import com.mosl.saathi.api.model.birthdayanniversary.FiltersItem;
 import com.mosl.saathi.api.model.birthdayanniversary.Request;
+import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.tabapp.R;
@@ -42,6 +45,7 @@ import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,6 +56,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.saathi.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -307,7 +312,6 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         }
     }
 
-
     private void getData() {
         final String profileId;
         birthdayAnniversaryList = new ArrayList<>();
@@ -349,133 +353,48 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderSendGift(UiModel<String> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        String data = uiModel.data;
+        if (data != null) {
+            alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), data, "Ok", true, null);
+        }
+    }
+
+    private String getErrorMessage(SaathiCommonResponse<?> response) {
+        if (response.errors.isEmpty()) {
+            return SERVER_ERROR_OCCURRED;
+        } else {
+            return response.errors.get(0).message;
+        }
+    }
+
     private void sendGift(String ucid, String eventType) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("SelectedUcids", ucid);
-            inputMap.put("EventType", eventType);
-            String serviceMethod = "Client/SendGiftRequest";
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrProfile = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            GIFT_SEND, "Ok", true, null);
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    hideProgress();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                //eat it
-                                ex.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            SendGiftRequest request = new SendGiftRequest(ucid, eventType);
+            Disposable subscribe = saathiApi.postSendGift(request)
+                .map((Function<SaathiCommonResponse, String>) response -> {
+                    if (response.status) {
+                        return GIFT_SEND;
+                    } else {
+                        String errorMessage = getErrorMessage(response);
+                        throw new ServiceFailureException(errorMessage);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderSendGift);
         } else {
             hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 

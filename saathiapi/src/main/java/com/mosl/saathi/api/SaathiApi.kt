@@ -3,6 +3,7 @@ package com.mosl.saathi.api
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
+import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
@@ -163,5 +164,10 @@ interface SaathiApi {
   fun postBirthdayAnniversary(
     @Body request: BirthdayAnniversaryRequest
   ): Observable<BirthdayAnniversaryItem>
+
+  @POST("Client/SendGiftRequest")
+  fun postSendGift(
+    @Body request: SendGiftRequest
+  ): Observable<SaathiCommonResponse<String>>
 
 }
