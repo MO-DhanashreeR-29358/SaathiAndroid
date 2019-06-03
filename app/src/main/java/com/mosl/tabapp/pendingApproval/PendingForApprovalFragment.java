@@ -22,8 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
-import com.mosl.saathi.api.model.pendingforapproval.ApprovelFieldItem;
-import com.mosl.saathi.api.model.pendingforapproval.ApprovelFieldRequest;
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem;
+import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -374,7 +375,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         return input + "";
     }
 
-    private void renderApprovalField(UiModel<List<ApprovelFieldItem>> uiModel) {
+    private void renderApprovalField(UiModel<List<ApprovalFieldItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -383,10 +384,10 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
             showOnFailurePopup(error);
         }
 
-        List<ApprovelFieldItem> dataList = uiModel.data;
+        List<ApprovalFieldItem> dataList = uiModel.data;
         if (dataList != null) {
             for (int i = 0; i < dataList.size(); i++) {
-                ApprovelFieldItem item = dataList.get(i);
+                ApprovalFieldItem item = dataList.get(i);
                 String lookUpId = stringOrEmpty(item.entityField);
                 String lookUpName = stringOrEmpty(item.referenceName);
                 arrProfile = new ArrayList<>();
@@ -410,8 +411,8 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
 
     private void getApprovelReqestFieldList(final String entityField) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            ApprovelFieldRequest request =
-                new ApprovelFieldRequest(AccountDetails.getEmployeeCode());
+            ApprovelRequest request =
+                new ApprovelRequest(AccountDetails.getEmployeeCode());
             Disposable subscribe = saathiApi.postApprovalFieldList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalField);
@@ -423,163 +424,47 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderApprovalUser(UiModel<List<ApprovalUserItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        List<ApprovalUserItem> dataList = uiModel.data;
+        if (dataList != null) {
+            for (int i = 0; i < dataList.size(); i++) {
+                ApprovalUserItem item = dataList.get(i);
+                String lookUpId = stringOrEmpty(item.updatedBy);
+                String lookUpName = stringOrEmpty(item.name);
+                arrEmployee = new ArrayList<>();
+                arrEmployee.add(new RowData(i, lookUpId, lookUpName));
+            }
+            arrAdapEmployee = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrEmployee);
+            arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
+            spSelectEmployee.setAdapter(arrAdapEmployee);
+            spSelectEmployee.setOnItemSelectedListener(
+                selectEmployeeListener);
+            arrAdapEmployee.notifyDataSetChanged();
+        }
+    }
+
+
     private void getApprovelReqestUserList() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-
-            String serviceMethod = "ApprovalRequest/GetApprovelReqestUserList";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrEmployee = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        //                                    customProgress.setVisibility(View.GONE);
-                                        JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId = (objDetail.isNull("UpdatedBy")
-                                                || objDetail.getString("UpdatedBy").equals("")) ? ""
-                                                : objDetail.getString("UpdatedBy");
-                                            String lookUpName =
-                                                (objDetail.isNull("Name") || objDetail.getString(
-                                                    "Name").equals("")) ? ""
-                                                    : objDetail.getString("Name");
-
-                                            arrEmployee.add(new RowData(i, lookUpId, lookUpName));
-                                        }
-                                        arrAdapEmployee = new ArrayAdapter<>(getMainActivity(),
-                                            R.layout.simple_spinner_item, arrEmployee);
-                                        arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
-                                        spSelectEmployee.setAdapter(arrAdapEmployee);
-                                        spSelectEmployee.setOnItemSelectedListener(
-                                            selectEmployeeListener);
-                                        arrAdapEmployee.notifyDataSetChanged();
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    hideProgress();
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-                    });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            ApprovelRequest request =
+                new ApprovelRequest(AccountDetails.getEmployeeCode());
+            Disposable subscribe = saathiApi.postApprovalUserList(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderApprovalUser);
         } else {
-            //            customProgress.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            hideProgress();
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
