@@ -278,37 +278,6 @@ public class MOSLCommonActivity extends AppCompatActivity
         Disposable subscribe =
             CRMWebServiceHandler.getSaathiApi().updateFCMToken(request).subscribe(o ->
                 Timber.d("Token Res %s", o.toString()));
-		/*String serviceMethod = "Auth/UpdateFCMToken";
-		requestMap.put("DeviceToken", token);
-		requestMap.put("DeviceId", deviceId);
-
-		CRMWebServiceHandler.post(context, serviceMethod, headerMap, requestMap,
-			new JsonHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-					super.onSuccess(statusCode, headers, response);
-					Log.d("Send Token Response: ", response.toString());
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-					JSONObject errorResponse) {
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-					JSONArray errorResponse) {
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, String responseString,
-					Throwable throwable) {
-					super.onFailure(statusCode, headers, responseString, throwable);
-					Log.e("Failure", responseString);
-				}
-			});*/
 	}
 
 	public static String getInputBody(Map param) {
