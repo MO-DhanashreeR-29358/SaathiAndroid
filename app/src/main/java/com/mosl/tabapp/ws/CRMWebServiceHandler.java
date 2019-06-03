@@ -262,8 +262,8 @@ public class CRMWebServiceHandler {
                 .build();
 
         return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
-            .addConverterFactory(new MOSLResponseWrapper())
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(new MOSLResponseWrapper())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(
                 callAdapterFactory)
