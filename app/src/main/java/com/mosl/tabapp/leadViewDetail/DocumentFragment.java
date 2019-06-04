@@ -38,6 +38,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest;
+import com.mosl.saathi.api.model.documents.LeadDocumentsItem;
+import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -47,6 +52,7 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import io.reactivex.disposables.Disposable;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -303,7 +309,52 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
         }
     }
 
+    private void renderLeadDocuments(UiModel<List<LeadDocumentsItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        List<LeadDocumentsItem> data = uiModel.data;
+        if (data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                LeadDocumentsItem item = data.get(i);
+                String id = stringOrEmpty(item.id);
+                String documentName = stringOrEmpty(item.documentName);
+                String documentType = stringOrEmpty(item.documentType);
+                String documentPath = stringOrEmpty(item.documentPath);
+                String creationDate = stringOrEmpty(item.creationDate);
+                String documentFullPath = stringOrEmpty(item.documentFullPath);
+                creationDate =
+                    CRMAppUtil.getDateFromString(creationDate,
+                        "yyyy-MM-dd'T'kk:mm:ss",
+                        "MMM dd yyyy  hh:mm a");
+                creationDate = creationDate.replace("a.m.", "AM")
+                    .replace("p.m.", "PM");
+                documentList.add(
+                    new DocumentModel(id, documentName, documentType,
+                        documentPath, creationDate, documentFullPath));
+            }
+            showHideAddHeader();
+            documentAdapter.notifyDataSetChanged();
+        }
+    }
+
     public void loadUploadedFiles() {
+
+       /* if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LeadDocumentsRequest request =
+                new LeadDocumentsRequest(leadId, ucid, "10", "1", "0", "0");
+            Disposable subscribe = saathiApi.getLeadDocuments(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderLeadDocuments);
+        } else {
+            hideProgress();
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }*/
         if (CRMAppUtil.isNetworkEnabled(getActivity())) {
             showProgress();
 
@@ -697,273 +748,71 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
         }
     }
 
+    private void renderUpdatedocuments(UiModel<String> uiModel, String id, String documentName) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        String data = uiModel.data;
+        if (data != null) {
+            documentAdapter.updateDocumentName(id, documentName);
+
+            alertDialog(getActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
+                DOCUMENT_RENAME, "OK", true, null);
+        }
+    }
+
     public void renameLeadDocuments(final String id, final String documentName) {
         //login parameters
-        if (CRMAppUtil.isNetworkEnabled(getActivity())) {
-            showProgress();
-            Map inputMap = new HashMap();
-            inputMap.put("id", id);
-            inputMap.put("DocumentName", documentName);
-            String serviceMethod = "Lead/UpdateLeadDocuments";
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
-                            super.onSuccess(statusCode, headers, json);
-
-                            if (statusCode == 200) {
-                                try {
-                                    String status = json.getString(STATUS);
-                                    hideProgress();
-                                    if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-                                        documentAdapter.updateDocumentName(id, documentName);
-
-                                        alertDialog(getActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            DOCUMENT_RENAME, "OK", true, null);
-                                    } else {
-
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(json);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } catch (Exception ex) {
-                                    hideProgress();
-                                    ex.printStackTrace();
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                                }
-                            } else {
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            UpdateDocumentsRequest request =
+                new UpdateDocumentsRequest(id, documentName);
+            Disposable subscribe = saathiApi.postUpdateDocuments(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(uiModel -> {
+                    renderUpdatedocuments(uiModel, id, documentName);
+                });
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
         }
+
+    }
+
+    private void renderDeleteDocument(UiModel<String> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        String data = uiModel.data;
+        if (data != null) {
+            documentAdapter.deleteDocument(id);
+            alertDialog(getActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
+                DOCUMENT_DELETED, "OK", true,
+                (action, data1) -> {
+                });
+        }
     }
 
     public void deleteLeadDocuments(final String id) {
         //login parameters
 
-        if (CRMAppUtil.isNetworkEnabled(getActivity())) {
-            showProgress();
-
-            Map inputMap = new HashMap();
-            inputMap.put("id", id);
-
-            String serviceMethod = "Lead/DeleteLeadDocuments";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
-                            super.onSuccess(statusCode, headers, json);
-
-                            if (statusCode == 200) {
-                                try {
-                                    String status = json.getString(STATUS);
-                                    hideProgress();
-                                    if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-                                        documentAdapter.deleteDocument(id);
-                                        alertDialog(getActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            DOCUMENT_DELETED, "OK", true,
-                                            new MSFDialog.DialogListener() {
-                                                @Override public void alertDialogAction(
-                                                    MSFDialog.Action action, Object... data) {
-                                                    if (action == MSFDialog.Action.OK) {
-
-                                                    }
-                                                }
-                                            });
-                                    } else {
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(json);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } catch (Exception ex) {
-                                    hideProgress();
-                                    ex.printStackTrace();
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                                }
-                            } else {
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            DeleteDocumentRequest request =
+                new DeleteDocumentRequest(id);
+            Disposable subscribe = saathiApi.postDeleteDocuments(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(uiModel -> {
+                    renderDeleteDocument(uiModel, id);
+                });
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
