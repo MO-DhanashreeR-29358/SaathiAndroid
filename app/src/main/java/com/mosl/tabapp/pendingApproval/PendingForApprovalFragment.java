@@ -494,14 +494,14 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     }
 
     private void renderTable(JSONArray arrayDetail) throws JSONException {
-            pendingApprovalTableAdapter =
-                new PendingApprovalTableAdapter(getActivity(),
-                    new ArrayList<HashMap<String, String>>());
-            table.setAdapter(pendingApprovalTableAdapter);
-            selectedRowList.clear();
-            selectedRowMap.clear();
-            isAllChecked = false;
-            isSingleAllChecked = false;
+        pendingApprovalTableAdapter =
+            new PendingApprovalTableAdapter(getActivity(),
+                new ArrayList<HashMap<String, String>>());
+        table.setAdapter(pendingApprovalTableAdapter);
+        selectedRowList.clear();
+        selectedRowMap.clear();
+        isAllChecked = false;
+        isSingleAllChecked = false;
 
         String Status = "";
         if (arrayDetail.length() != 0) {
@@ -641,192 +641,6 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
         }
-
-        /////////////////////////////
-
-       /* if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("ApprovalRequestId", null);
-            inputMap.put("UpdatedBy", emoloyeeStr);
-            inputMap.put("EntityField", profileStr);
-            inputMap.put("UpdatedStartDate", tvStartDate.getText().toString() + " 00:00:00");
-            inputMap.put("UpdatedEndDate", tvEndDate.getText().toString() + " 00:00:00");
-            inputMap.put("CalculatedPage", "0");
-            inputMap.put("PageSize", REPORT_PAGE_SIZE);
-            inputMap.put("TotalCount", "1");
-            inputMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-
-            String serviceMethod = "ApprovalRequest/ApprovalRequestList";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrProfile = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    hideProgress();
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        pendingApprovalTableAdapter =
-                                            new PendingApprovalTableAdapter(getActivity(),
-                                                new ArrayList<HashMap<String, String>>());
-                                        table.setAdapter(pendingApprovalTableAdapter);
-                                        selectedRowList.clear();
-                                        selectedRowMap.clear();
-                                        isAllChecked = false;
-                                        isSingleAllChecked = false;
-                                        JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                        JSONArray arrayDetail = jsonObject.getJSONArray(DATA);
-                                        String Status = "";
-                                        if (arrayDetail.length() != 0) {
-                                            pendingApprovalTableAdapter.notifyDataSetChanged();
-                                            dataFoundFlag = true;
-                                            table.setVisibility(View.VISIBLE);
-                                            tvNochart.setVisibility(View.GONE);
-                                            llButton.setVisibility(View.VISIBLE);
-                                        } else {
-                                            dataFoundFlag = false;
-                                            table.setVisibility(View.GONE);
-                                            llButton.setVisibility(View.GONE);
-                                            tvNochart.setVisibility(View.VISIBLE);
-                                        }
-                                    } else {
-                                        dataFoundFlag = false;
-                                        table.setVisibility(View.GONE);
-                                        tvNochart.setVisibility(View.VISIBLE);
-                                        llButton.setVisibility(View.GONE);
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    dataFoundFlag = false;
-                                    table.setVisibility(View.GONE);
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                    llButton.setVisibility(View.GONE);
-                                    hideProgress();
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                dataFoundFlag = false;
-                                table.setVisibility(View.GONE);
-                                tvNochart.setVisibility(View.VISIBLE);
-                                llButton.setVisibility(View.GONE);
-                                e.printStackTrace();
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                dataFoundFlag = false;
-                                table.setVisibility(View.GONE);
-                                tvNochart.setVisibility(View.VISIBLE);
-                                llButton.setVisibility(View.GONE);
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            hideProgress();
-                        }
-                    });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        } else {
-            //            customProgress.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
-        }*/
     }
 
     private class CommonHeader {
