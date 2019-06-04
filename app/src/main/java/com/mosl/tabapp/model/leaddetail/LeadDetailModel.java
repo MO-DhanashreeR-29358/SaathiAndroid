@@ -1,5 +1,6 @@
 package com.mosl.tabapp.model.leaddetail;
 
+import com.mosl.saathi.api.model.lead.LeadFieldValueRequest;
 import com.mosl.tabapp.model.AddressDetailModel;
 import com.mosl.tabapp.model.ContactDetailModel;
 import java.util.List;
@@ -11,7 +12,7 @@ import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
  */
 
 public class LeadDetailModel {
-	CharSequence leadFieldValueModels;
+	private List<LeadFieldValueRequest> leadFieldValueModels;
 	private String leadID;
 	private String businessUnitID;
 	private String leadCategoryID;
@@ -318,9 +319,8 @@ public class LeadDetailModel {
 		return professionID;
 	}
 
-	public LeadDetailModel setProfessionID(String professionID) {
+	public void setProfessionID(String professionID) {
 		this.professionID = professionID;
-		return this;
 	}
 
 	public String getIsPotentialPMSProduct() {
@@ -405,7 +405,6 @@ public class LeadDetailModel {
 
 	private String getContactJson() {
 		String json = "{";
-		json += "\"Salutation\":" + null;
 		json += ",\"Name\":\"" + getName() + "\"";
 		json += ",\"EmailId\":\"" + geteMail() + "\"";
 		json += ",\"AlternateEmailId\":\"" + getAlternateEmail() + "\"";
@@ -446,11 +445,11 @@ public class LeadDetailModel {
 		return json;
 	}
 
-	public CharSequence getLeadFieldValueModels() {
+	public List<LeadFieldValueRequest> getLeadFieldValueModels() {
 		return leadFieldValueModels;
 	}
 
-	public void setLeadFieldValueModels(CharSequence leadFieldValueModels) {
+	public void setLeadFieldValueModels(List<LeadFieldValueRequest> leadFieldValueModels) {
 		this.leadFieldValueModels = leadFieldValueModels;
 	}
 

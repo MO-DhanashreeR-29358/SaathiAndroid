@@ -133,11 +133,11 @@ public class LeadFieldValueModel implements Serializable {
         ControlObject = controlObject;
     }
 
-    private CharSequence getUiValue() {
+    public String getUiValue() {
         if (ControlObject == null) {
             return "";
         } else if (ControlObject instanceof EditText) {
-            return ((EditText) ControlObject).getText();
+            return ((EditText) ControlObject).getText().toString();
         } else if (ControlObject instanceof Spinner) {
             return ((Spinner) ControlObject).getSelectedItem().toString();
 

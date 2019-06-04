@@ -63,6 +63,7 @@ import com.mosl.saathi.api.model.lead.CrossSellingProduct;
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest;
 import com.mosl.saathi.api.model.lead.LeadFieldSection;
 import com.mosl.saathi.api.model.lead.LeadFieldValueData;
+import com.mosl.saathi.api.model.lead.LeadFieldValueRequest;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LeadViewItem;
 import com.mosl.saathi.api.model.lead.LeadViewRequest;
@@ -2064,7 +2065,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 ));
             }
             ContactRequest contactRequest = new ContactRequest(
-                null,
                 model.getName(),
                 model.geteMail(),
                 model.getAlternateEmail(),
@@ -2080,30 +2080,16 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 contactAddresses
             );
             UpdateLeadRequest updateLeadRequest = new UpdateLeadRequest(
-                model.getProfileID(),
-                model.getCreatedThrough(),
-                model.getCreationDate(),
-                model.getCreatedBy(),
-                model.getProfessionID(),
-                model.getProspectRefereMobile(),
-                model.getBusinessUnitID(),
-                model.getSourceID(),
-                model.getLeadSourceID(),
-                model.getProspectRefereEmail(),
-                model.getLeadSourceDetailsID(),
-                model.getIsPotentialPMSProduct(),
-                model.getLeadSourceDetails(),
-                model.getProspectRefereName(),
-                contactRequest,
-                model.getLeadID(),
-                model.getLeadCategoryID(),
-                model.getContactPerson(),
-                model.getRefereeCode(),
-                model.getRefereeName(),
-                model.getRefereeEmail(),
-                model.getRefereeMobile(),
-                model.getComments(),
-                model.getLeadFieldValueModels().toString()
+				model.getLeadID(), model.getBusinessUnitID(), model.getIsPotentialPMSProduct(),
+				model.getLeadCategoryID(), model.getContactPerson(), model.getSourceID(),
+				model.getLeadSourceID(), model.getLeadSourceDetailsID(),
+				model.getLeadSourceDetails(), model.getRefereeCode(), model.getRefereeName(),
+				model.getRefereeEmail(), model.getRefereeMobile(), model.getComments(), model.getProfileID(),
+				model.getProfessionID(), model.getCreatedBy(), model.getProspectRefereName(),
+				model.getProspectRefereMobile(), model.getProspectRefereEmail(),
+				model.getCreatedThrough(), model.getCreationDate(),
+				contactRequest,
+				model.getLeadFieldValueModels()
             );
             Disposable disposable = saathiApi.updateLead(updateLeadRequest)
                 .compose(applyUiModel())
@@ -2312,7 +2298,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 			}
 		});
 
-		GetStage(spStage, "", progressLayout);
+		getStage(spStage, "", progressLayout);
 		spStage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -3086,17 +3072,18 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		leadDetailModel.setProfessionID(professionCodeStr);
 		leadDetailModel.setCreatedBy(etCreatedBy.getText().toString().trim());
 		leadDetailModel.setCreatedThrough("0");
-		leadDetailModel.setCreationDate(
-			etCreationDate.getText().toString().trim().replace("p.m.", "PM").replace("a.m", "AM"));
+		leadDetailModel.setCreationDate(etCreationDate.getText().toString().trim()
+				.replace("p.m.", "PM")
+				.replace("a.m", "AM"));
 		leadDetailModel.setContactDetailModels(contactDetailList);
 		leadDetailModel.setAddressDetailModels(addressDetailList);
 		leadDetailModel.setSecondaryRM(null);
 		leadDetailModel.setLeadDetailAddProductModels(leadDetailAddProductList);
-		leadDetailModel.setLeadFieldValueModels(getSectionJson());
+		leadDetailModel.setLeadFieldValueModels(getLeadFieldValues(mLeadFieldSectionModelList));
 		updateLead(leadDetailModel);
 	}
 
-	private void GetStage(final Spinner spStageDialog, final String stageId,
+	private void getStage(final Spinner spStageDialog, final String stageId,
 		final LinearLayout progressLayout) {
 		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
 			String stageID = isBlank(stageId) ? null : stageId;
@@ -3265,21 +3252,26 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 		}
 	}
 
-	private CharSequence getSectionJson() {
-		StringBuilder sB = new StringBuilder();
-		sB.append("[");
-		if (mLeadFieldSectionModelList != null) {
-			for (LeadFieldSectionModel mSection : mLeadFieldSectionModelList) {
-				if (mSection.getSelectionList() != null) {
-					for (LeadFieldValueModel modal : mSection.getSelectionList()) {
-						sB.append(modal.getJson()).append(",");
-					}
-					sB.setLength(sB.length() - 1);
-				}
+	private List<LeadFieldValueRequest> getLeadFieldValues(@Nullable List<LeadFieldSectionModel> fieldSectionModels) {
+		List<LeadFieldValueRequest> requests = new ArrayList<>();
+		if (fieldSectionModels == null) {
+			return requests;
+		}
+		for (LeadFieldSectionModel mSection : fieldSectionModels) {
+			List<LeadFieldValueModel> selectionList = mSection.getSelectionList();
+			if (selectionList == null) {
+				continue;
+			}
+			for (LeadFieldValueModel modal : selectionList) {
+				requests.add(new LeadFieldValueRequest(
+					modal.getLF_SysName(),
+					modal.getUiValue(),
+					modal.getLeadFieldId(),
+					LeadFieldValueModel.getLeadid()
+				));
 			}
 		}
-		sB.append("]");
-		return sB;
+		return requests;
 	}
 
 	private void getClientDetail(int uCid) {

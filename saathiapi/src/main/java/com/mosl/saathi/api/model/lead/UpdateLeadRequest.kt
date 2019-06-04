@@ -3,34 +3,40 @@ package com.mosl.saathi.api.model.lead
 import com.google.gson.annotations.SerializedName
 
 data class UpdateLeadRequest(
-    @JvmField @SerializedName("ProfileID") val profileID: String,
-    @JvmField @SerializedName("CreatedThrough") val createdThrough: String,
-    @JvmField @SerializedName("CreationDate") val creationDate: String,
-    @JvmField @SerializedName("CreatedBy") val createdBy: String?,
-    @JvmField @SerializedName("ProfessionID") val professionID: String,
-    @JvmField @SerializedName("ProspectRefereMobile") val prospectRefereMobile: String,
-    @JvmField @SerializedName("BusinessUnitID") val businessUnitID: String,
-    @JvmField @SerializedName("SourceID") val sourceID: String,
-    @JvmField @SerializedName("LeadSourceID") val leadSourceID: String,
-    @JvmField @SerializedName("ProspectRefereEmail") val prospectRefereEmail: String,
-    @JvmField @SerializedName("LeadSourceDetailsID") val leadSourceDetailsID: String,
-    @JvmField @SerializedName("IsPotentialPMSProductValue") val isPotentialPMSProductValue: String,
-    @JvmField @SerializedName("LeadSourceDetails") val leadSourceDetails: String,
-    @JvmField @SerializedName("ProspectRefereName") val prospectRefereName: String,
-    @JvmField @SerializedName("contact") val contact: ContactRequest,
     @JvmField @SerializedName("LeadID") val leadID: String,
+    @JvmField @SerializedName("BusinessUnitID") val businessUnitID: String,
+    @JvmField @SerializedName("IsPotentialPMSProductValue") val isPotentialPMSProductValue: String,
     @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: String?,
     @JvmField @SerializedName("ContactPerson") val contactPerson: String?,
+    @JvmField @SerializedName("SourceID") val sourceID: String,
+    @JvmField @SerializedName("LeadSourceID") val leadSourceID: String,
+    @JvmField @SerializedName("LeadSourceDetailsID") val leadSourceDetailsID: String,
+    @JvmField @SerializedName("LeadSourceDetails") val leadSourceDetails: String,
     @JvmField @SerializedName("RefereeCode") val refereeCode: String?,
     @JvmField @SerializedName("RefereeName") val refereeName: String?,
     @JvmField @SerializedName("RefereeEmail") val refereeEmail: String?,
     @JvmField @SerializedName("RefereeMobile") val refereeMobile: String?,
     @JvmField @SerializedName("Comments") val comments: String?,
-    @JvmField @SerializedName("leadFieldValueModels") val leadFieldValueModels: String
+    @JvmField @SerializedName("ProfileID") val profileID: String,
+    @JvmField @SerializedName("ProfessionID") val professionID: String,
+    @JvmField @SerializedName("CreatedBy") val createdBy: String?,
+    @JvmField @SerializedName("ProspectRefereName") val prospectRefereName: String,
+    @JvmField @SerializedName("ProspectRefereMobile") val prospectRefereMobile: String,
+    @JvmField @SerializedName("ProspectRefereEmail") val prospectRefereEmail: String,
+    @JvmField @SerializedName("CreatedThrough") val createdThrough: String,
+    @JvmField @SerializedName("CreationDate") val creationDate: String,
+    @JvmField @SerializedName("contact") val contact: ContactRequest,
+    @JvmField @SerializedName("leadFieldValueModels") val leadFieldValueModels: List<LeadFieldValueRequest>
+)
+
+data class LeadFieldValueRequest(
+    @JvmField @SerializedName("LF_SysName") val lF_SysName: String?,
+    @JvmField @SerializedName("LeadField_Value") val leadField_Value: String?,
+    @JvmField @SerializedName("LeadFieldId") val leadFieldId: Int,
+    @JvmField @SerializedName("LeadID") val leadID: String?
 )
 
 data class ContactRequest(
-    @JvmField @SerializedName("Salutation") val salutation: String?,
     @JvmField @SerializedName("Name") val name: String?,
     @JvmField @SerializedName("EmailId") val emailId: String?,
     @JvmField @SerializedName("AlternateEmailId") val alternateEmailId: String?,
