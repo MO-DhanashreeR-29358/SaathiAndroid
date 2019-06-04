@@ -416,7 +416,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             ApprovelRequest request =
                 new ApprovelRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postApprovalFieldList(request)
+            Disposable subscribe = saathiApi.getApprovalFieldList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalField);
         } else {
@@ -459,7 +459,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             ApprovelRequest request =
                 new ApprovelRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postApprovalUserList(request)
+            Disposable subscribe = saathiApi.getApprovalUserList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalUser);
         } else {

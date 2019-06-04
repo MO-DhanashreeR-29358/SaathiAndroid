@@ -172,12 +172,12 @@ interface SaathiApi {
   //================= Pending For Approval ====================
 
   @POST("ApprovalRequest/GetApprovelReqestFieldList")
-  fun postApprovalFieldList(
+  fun getApprovalFieldList(
     @Body request: ApprovelRequest
   ): Observable<List<ApprovalFieldItem>>
 
   @POST("ApprovalRequest/GetApprovelReqestUserList")
-  fun postApprovalUserList(
+  fun getApprovalUserList(
     @Body request: ApprovelRequest
   ): Observable<List<ApprovalUserItem>>
 
