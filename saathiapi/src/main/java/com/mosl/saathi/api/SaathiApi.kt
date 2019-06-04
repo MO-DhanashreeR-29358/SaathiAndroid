@@ -1,5 +1,7 @@
 package com.mosl.saathi.api
 
+
+import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
@@ -181,9 +183,10 @@ interface SaathiApi {
     @Body request: ApprovelRequest
   ): Observable<List<ApprovalUserItem>>
 
+  @ExcludeWrapper
   @POST("ApprovalRequest/ApprovalRequestList")
-  fun postApprovalRequestList(
+  fun getApprovalRequestList(
     @Body request: ApprovalListRequest
-  ): Observable<ApprovalListItem>
+  ): Observable<String>
 
 }

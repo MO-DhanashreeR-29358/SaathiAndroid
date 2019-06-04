@@ -20,10 +20,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListItem;
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest;
 import com.mosl.tabapp.R;
@@ -39,6 +43,7 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.Disposable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -468,25 +473,131 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderApprovalRequest(UiModel<ApprovalListItem> uiModel) {
+    private void renderApprovalRequest(UiModel<HashMap<String,Object>> uiModel) {
 
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
-
         if (error != null) {
+            dataFoundFlag = false;
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+            llButton.setVisibility(View.GONE);
             showOnFailurePopup(error);
         }
 
-        ApprovalListItem data = uiModel.data;
-
+        HashMap<String,Object> data = uiModel.data;
         if (data != null) {
-
+            renderTable(data);
         }
     }
 
+
+    private void renderTable(HashMap<String,Object> response){
+        hideProgress();
+
+            pendingApprovalTableAdapter =
+                new PendingApprovalTableAdapter(getActivity(),
+                    new ArrayList<HashMap<String, String>>());
+            table.setAdapter(pendingApprovalTableAdapter);
+            selectedRowList.clear();
+            selectedRowMap.clear();
+            isAllChecked = false;
+            isSingleAllChecked = false;
+            Map<String,Object> responseJsonObject = (Map<String,Object>) response.get(RESPONSE);
+            List<Map<String,Object>> arrayDetail = (List<Map<String,Object>>) responseJsonObject.get(DATA);
+
+
+            //////////////////////////////////////
+
+
+        String Status = "";
+        if (arrayDetail.size() != 0) {
+            for (int y = 0; y < arrayDetail.size(); y++) {
+                Map<String,Object> objDetail = (Map<String,Object>) arrayDetail.get(y);
+                String approvalRequestId = stringOrZero((String) objDetail.get("ApprovalRequestId"));
+                String employeeCode = stringOrZero((String) objDetail.get("UpdatedBy"));
+                String leadId = stringOrZero((String) objDetail.get("LeadID"));
+                String FieldName = stringOrEmpty((String) objDetail.get("ReferenceName"));
+                String empName = stringOrEmpty((String) objDetail.get("EmployeeName"));
+                String subOption = stringOrEmpty((String) objDetail.get("ApprovalFieldValue"));
+                String ucid = stringOrZero((String) objDetail.get("UCID"));
+                String clientName = stringOrEmpty((String) objDetail.get("ClientName"));
+                String clientCode = stringOrZero((String) objDetail.get("ClientCode"));
+                String moduleName = stringOrZero((String) objDetail.get("Entity"));
+                String FinalStatus = stringOrZero((String) objDetail.get("FinalStatus"));
+                String requestDate = stringOrEmpty((String) objDetail.get("UpdationDate"));
+                String approvedDate = stringOrEmpty((String) objDetail.get("Approver2StatusUpdateDate"));
+                if (FinalStatus.equalsIgnoreCase("1")) {
+                    Status = "Pending";
+                } else if (FinalStatus.equalsIgnoreCase("2")) {
+                    Status = "Approve";
+                } else if (FinalStatus.equalsIgnoreCase("3")) {
+                    Status = "Reject";
+                }
+
+                requestDate =
+                    CRMAppUtil.getDateFromString(requestDate,
+                        DATE_FORMAT_TO_SERVER_MEETING,
+                        CAL_DATE_FORMAT);
+                approvedDate =
+                    CRMAppUtil.getDateFromString(approvedDate,
+                        DATE_FORMAT_TO_SERVER_MEETING,
+                        CAL_DATE_FORMAT);
+
+                LinkedHashMap<String, String> hm =
+                    new LinkedHashMap<>();
+                hm.put(EMPLOYEE_CODE_APP, employeeCode);
+                hm.put(EMP_NAME, empName);
+                hm.put(LEAD_ID_APP, leadId);
+                hm.put(CLIENT_CODE, clientCode);
+                hm.put(UCID, ucid);
+                hm.put(NEW_CLIENT_NAME, clientName);
+                hm.put(MODULE_NAME, moduleName);
+                hm.put(FIELD_NAME, FieldName);
+                hm.put(SUB_OPTION, subOption);
+                hm.put(STATUS, Status);
+                hm.put(REQUEST_DATE, requestDate);
+                hm.put(APPROVED_DATE, approvedDate);
+                hm.put(APPROVAL_REQUEST_ID, approvalRequestId);
+                pendingApprovalTableAdapter.add(hm);
+            }
+            pendingApprovalTableAdapter.notifyDataSetChanged();
+            dataFoundFlag = true;
+            table.setVisibility(View.VISIBLE);
+            tvNochart.setVisibility(View.GONE);
+            llButton.setVisibility(View.VISIBLE);
+        } else {
+            dataFoundFlag = false;
+            table.setVisibility(View.GONE);
+            llButton.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            /////////////////////////////
+
+
+    }
+
     private void webServiceCall(String emoloyeeStr, String profileStr) {
-        /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             String updatedStartDate = tvStartDate.getText().toString() + " 00:00:00";
             String updatedEndDate = tvEndDate.getText().toString() + " 00:00:00";
 
@@ -494,7 +605,20 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
                     AccountDetails.getEmployeeCode(), "0", updatedStartDate, updatedEndDate,
                     profileStr);
-            Disposable subscribe = saathiApi.postApprovalRequestList(request)
+            Disposable subscribe = saathiApi.getApprovalRequestList(request)
+                .map(responseS -> {
+                    Gson mGson = new Gson();
+                    Type type = new TypeToken<HashMap<String, Object>>() {
+                    }.getType();
+                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return response;
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalRequest);
         } else {
@@ -502,8 +626,11 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
-        }*/
+        }
 
+        /////////////////////////////
+
+        /*
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             Map inputMap = new HashMap<>();
@@ -550,14 +677,14 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                                                 JSONObject objDetail =
                                                     (JSONObject) arrayDetail.get(y);
 
-                                         /*   {"Response":{"ExtraData":null,"Data":[{"ApprovalRequestId":3,
+                                         *//*   {"Response":{"ExtraData":null,"Data":[{"ApprovalRequestId":3,
                                          "EmployeeCode":null,
                                          "Entity":"Company",
                                          "EntityId":"2007",
                                          "EntityField":"CompanyName",
                                          "FieldValue":"test 30 march 2 1",
                                          "UpdatedBy":"4942                ",
-                                         "Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:02:58.71"},{"ApprovalRequestId":4,"EmployeeCode":null,"Entity":"Company","EntityId":"2005","EntityField":"CompanyName","FieldValue":"Testing 30 March 2017","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:03:28.803"},{"ApprovalRequestId":5,"EmployeeCode":null,"Entity":"Company","EntityId":"4","EntityField":"CompanyName","FieldValue":"Aspire cv","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:08:57.32"},{"ApprovalRequestId":6,"EmployeeCode":null,"Entity":"Company","EntityId":"5","EntityField":"CompanyName","FieldValue":"Mosl Prabhadevi","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:09:28.083"},{"ApprovalRequestId":7,"EmployeeCode":null,"Entity":"Company","EntityId":"3","EntityField":"CompanyName","FieldValue":"MOT Prabhadevi","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:09:59.64"},{"ApprovalRequestId":8,"EmployeeCode":null,"Entity":"Company","EntityId":"2","EntityField":"CompanyName","FieldValue":"Wealth NIIT 2","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-04-11T16:47:07.073"},{"ApprovalRequestId":9,"EmployeeCode":null,"Entity":"Company","EntityId":"3007","EntityField":"CompanyName","FieldValue":"test 13 Apr","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-04-13T18:14:08.69"}],"Errors":null,"Total":1,"Permissions":{"Read":false,"Write":false,"Export":false,"BusinessProfileId":0,"SystemName":null}},"Message":"Process Completed Successfull","Status":true,"Erros":[]}*/
+                                         "Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:02:58.71"},{"ApprovalRequestId":4,"EmployeeCode":null,"Entity":"Company","EntityId":"2005","EntityField":"CompanyName","FieldValue":"Testing 30 March 2017","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:03:28.803"},{"ApprovalRequestId":5,"EmployeeCode":null,"Entity":"Company","EntityId":"4","EntityField":"CompanyName","FieldValue":"Aspire cv","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:08:57.32"},{"ApprovalRequestId":6,"EmployeeCode":null,"Entity":"Company","EntityId":"5","EntityField":"CompanyName","FieldValue":"Mosl Prabhadevi","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:09:28.083"},{"ApprovalRequestId":7,"EmployeeCode":null,"Entity":"Company","EntityId":"3","EntityField":"CompanyName","FieldValue":"MOT Prabhadevi","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-03-31T20:09:59.64"},{"ApprovalRequestId":8,"EmployeeCode":null,"Entity":"Company","EntityId":"2","EntityField":"CompanyName","FieldValue":"Wealth NIIT 2","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-04-11T16:47:07.073"},{"ApprovalRequestId":9,"EmployeeCode":null,"Entity":"Company","EntityId":"3007","EntityField":"CompanyName","FieldValue":"test 13 Apr","UpdatedBy":"4942                ","Name":null,"ClientCode":null,"UCID":null,"ClientName":null,"referencename":null,"UpdationDate":"2017-04-13T18:14:08.69"}],"Errors":null,"Total":1,"Permissions":{"Read":false,"Write":false,"Export":false,"BusinessProfileId":0,"SystemName":null}},"Message":"Process Completed Successfull","Status":true,"Erros":[]}*//*
 
                                                 String approvalRequestId =
                                                     (objDetail.isNull("ApprovalRequestId")
@@ -791,7 +918,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
             //            customProgress.setVisibility(View.GONE);
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
-        }
+        }*/
     }
 
     private class CommonHeader {
