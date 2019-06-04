@@ -42,6 +42,7 @@ import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
 import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
+import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
@@ -186,5 +187,11 @@ interface SaathiApi {
   fun getApprovalRequestList(
     @Body request: ApprovalListRequest
   ): Observable<String>
+
+  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+  fun postMultiUpdateApproval(
+    @Body request: MultiUpdateApprovalRequest
+  ): Observable<String>
+
 
 }
