@@ -5,6 +5,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
@@ -38,6 +39,8 @@ import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.LoginResponse
 import com.mosl.saathi.api.model.logout.LogoutRequest
+import com.mosl.saathi.api.model.notification.NotificationRequest
+import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.prospect.ProspectRequest
@@ -180,5 +183,12 @@ interface SaathiApi {
   fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
 
   @POST("Common/GetAppVersion")
+  @ExtraDataWrapper
   fun appVersion(@Body versionRequest: VersionRequest): Observable<List<VersionResponse>>
+  //===================== Notification=========================
+
+  @POST("NotificationMessage/GetNotificationMessageMobile")
+  @ExtraDataWrapper
+  fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
 }
