@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -53,6 +54,8 @@ import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
@@ -62,6 +65,16 @@ import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
+import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest;
+import com.mosl.saathi.api.model.login.LoginRequest;
+import com.mosl.saathi.api.model.login.LoginResponse;
+import com.mosl.saathi.api.model.login.User;
+import com.mosl.saathi.api.model.logout.LogoutRequest;
+import com.mosl.saathi.api.model.prospect.ProspectRequest;
+import com.mosl.saathi.api.model.prospect.ProspectResponse;
+import com.mosl.saathi.api.model.prospect.SuggestMeRequest;
+import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.actionbar.CRMAppActionBar;
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
@@ -95,6 +108,7 @@ import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
 import cz.msebera.android.httpclient.Header;
+import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,7 +120,9 @@ import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import timber.log.Timber;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.getAppVersionCode;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
@@ -133,7 +149,6 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class MOSLCommonActivity extends AppCompatActivity
 	implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
@@ -258,37 +273,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 		Map requestMap = new HashMap();
 		Map headerMap = getHeader(context);
-		String serviceMethod = "Auth/UpdateFCMToken";
-		requestMap.put("DeviceToken", token);
-		requestMap.put("DeviceId", deviceId);
 
-		CRMWebServiceHandler.post(context, serviceMethod, headerMap, requestMap,
-			new JsonHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-					super.onSuccess(statusCode, headers, response);
-					Log.d("Send Token Response: ", response.toString());
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-					JSONObject errorResponse) {
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-					JSONArray errorResponse) {
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] headers, String responseString,
-					Throwable throwable) {
-					super.onFailure(statusCode, headers, responseString, throwable);
-					Log.e("Failure", responseString);
-				}
-			});
+		FcmTokenRequest request = new FcmTokenRequest(token, deviceId);
+        Disposable subscribe =
+            CRMWebServiceHandler.getSaathiApi().updateFCMToken(request).subscribe(o ->
+                Timber.d("Token Res %s", o.toString()));
 	}
 
 	public static String getInputBody(Map param) {
@@ -878,116 +867,52 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private void closeActivity(int code) {
 		setResult(code);
 		if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {
-			//TODO call progress bar
-			Map inputMap = new HashMap<>();
-			inputMap.put("id", AccountDetails.getUserId());
-			inputMap.put("token", AccountDetails.getToken());
-			inputMap.put("clientinfo", "android");
-			inputMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
-			inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-			inputMap.put("macaddress", CRMMOSLCommon.getDeviceID(this, this.getContentResolver()));
+			LogoutRequest request =
+				new LogoutRequest(AccountDetails.getUserId(), AccountDetails.getToken(),
+					"android", CRMAppUtil.getLocalIpAddress(), AccountDetails.getBusinessUnitId(),
+					CRMMOSLCommon.getDeviceID(this, this.getContentResolver()));
+			Disposable subscribe = CRMWebServiceHandler.getSaathiApi().logout(request)
+				.compose(applyUiModel())
+				.subscribe(this::renderLogout);
+		} else {
+			noInternetConnectionDialog();
+		}
+	}
 
-			String serviceMethod = "/Auth/Logout";
+	private void renderLogout(UiModel<Object> uiModel) {
+		toggleProgress(uiModel.inProgress);
+		Throwable error = uiModel.error;
+		if (error != null) {
+			Timber.d("on error %s", error.getMessage());
+			showOnFailurePopup(error);
+		}
 
+		stopService(new Intent(MOSLCommonActivity.this,
+			ForegroundService.class));
+		mWorkManager.cancelWorkById(compressionWorkId);
+		Intent i = new Intent(MOSLCommonActivity.this,
+			ImageSliderActivity.class);
+		startActivity(i);
+		finish();
+	}
+
+	public void showOnFailurePopup(Throwable t) {
+		String message;
+		if (t instanceof ServiceFailureException) {
+			message = ((ServiceFailureException) t).errorMessage;
+		} else {
+			message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+		}
+		MSFDialog.alertDialog(getApplicationContext(), 0,
+			getResources().getString(R.string.motilal_oswal),
+			message, "OK", true, null);
+	}
+
+	public void toggleProgress(boolean show) {
+		if (show) {
 			showProgress();
-			try {
-				CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
-					getHeader(getApplicationContext()), inputMap, new JsonHttpResponseHandler() {
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-							super.onSuccess(statusCode, headers, response);
-							try {
-								if (statusCode == 200) {
-									String status = response.getString(STATUS);
-									hideProgress();
-									if (status.equalsIgnoreCase("true")) {
-										stopService(new Intent(MOSLCommonActivity.this,
-											ForegroundService.class));
-										mWorkManager.cancelWorkById(compressionWorkId);
-										Intent i = new Intent(MOSLCommonActivity.this,
-											ImageSliderActivity.class);
-										startActivity(i);
-										finish();
-									} else {
-										String message = response.getString(MESSAGE);
-										MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-											getResources().getString(R.string.motilal_oswal),
-											message, OK, true, null);
-									}
-								} else {
-									hideProgress();
-								}
-								hideProgress();
-							} catch (Exception e) {
-								e.printStackTrace();
-								hideProgress();
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-							}
-						}
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-							super.onSuccess(statusCode, headers, response);
-						}
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString) {
-							super.onSuccess(statusCode, headers, responseString);
-							hideProgress();
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONObject errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							hideProgress();
-							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONArray errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							hideProgress();
-							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString,
-							Throwable throwable) {
-							super.onFailure(statusCode, headers, responseString, throwable);
-							hideProgress();
-							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-					});
-			} catch (Exception e) {
-				e.printStackTrace();
-
-				MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-					getResources().getString(R.string.motilal_oswal),
-					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-				hideProgress();
-			}
 		} else {
 			hideProgress();
-			MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
 		}
 	}
 
@@ -1005,180 +930,63 @@ public class MOSLCommonActivity extends AppCompatActivity
 		final String branchEmplyeeCode, final String SourceName, final String ProspectSourceName,
 		final String ProspectSourceDetails, final String InterestedIn) {
 		if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {
-			showProgress();
-			final Map inputMap = new HashMap<>();
+			ProspectRequest request =
+				new ProspectRequest(mobile, email, branchEmplyeeCode, SourceName,
+					ProspectSourceName, ProspectSourceDetails, InterestedIn);
 
-			inputMap.put("Mobile", mobile);
-			inputMap.put("Email", email);
-			inputMap.put("BranchRm_EmpCode", branchEmplyeeCode);
-			inputMap.put("SourceName", SourceName);
-			inputMap.put("ProspectSourceName", ProspectSourceName);
-			inputMap.put("ProspectSourceDetails", ProspectSourceDetails);
-			inputMap.put("InterestedIn", InterestedIn);
-			String serviceMethod = "Prospect/RegisterProspectOnline";
+			Disposable subscribe =
+				CRMWebServiceHandler.getSaathiApi().registerProspectOnline(request)
+					.compose(applyUiModel())
+					.subscribe(this::renderProspect);
+		} else {
+			noInternetConnectionDialog();
+		}
+	}
 
-			try {
-				CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
-					getHeader(MOSLCommonActivity.this), inputMap, new JsonHttpResponseHandler() {
+	private void noInternetConnectionDialog() {
+		MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+			getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
+			null);
+	}
 
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-							super.onSuccess(statusCode, headers, response);
-							//after success code goes here
-							try {
+	private void renderProspect(UiModel<SaathiCommonResponse<List<ProspectResponse>>> uiModel) {
+		toggleProgress(uiModel.inProgress);
 
-								if (statusCode == 200) {
-									String status = response.getString(STATUS);
-									String message = response.getString(MESSAGE);
-									if (status.equalsIgnoreCase("true")) {
-										hideProgress();
-										JSONArray jsonArray = response.getJSONArray("Response");
-										JSONObject jsonObject = jsonArray.getJSONObject(0);
-										String RegistrationAllowed =
-											(jsonObject.isNull("RegistrationAllowed")
-												|| jsonObject.getString("RegistrationAllowed")
-												.equals("")) ? ""
-												: jsonObject.getString("RegistrationAllowed");
-										if (RegistrationAllowed.equalsIgnoreCase("true")) {
-											String eKYC_UserID = (jsonObject.isNull("eKYC_UserID")
-												|| jsonObject.getString("eKYC_UserID").equals(""))
-												? "0" : jsonObject.getString("eKYC_UserID");
-											if (AccountDetails.isNewEkyc()) {
-												HashMap map = new HashMap();
-												map.put(NEW_USERID, eKYC_UserID);
-												map.put(BRANCHEMPCODE,
-													AccountDetails.getEmployeeCode());
-												map.put(COMMANDTYPE, "RESUME");
-												map.put(APPLICATIONTYPE, "CRM");
-												map.put(OSTYPE, "ANDROID");
-												map.put(APPLOGINID,
-													AccountDetails.getEmployeeCode());
-												map.put(TOKENKEY, AccountDetails.getToken());
-												map.put(ISAUFSB, AccountDetails.isAufsb());
-												newEkyc(getInputBody(map));
-											} else {
-												HashMap<String, String> hashMap = new HashMap();
-												hashMap.put(USERID, eKYC_UserID);
-												gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
-											}
-										} else {
-											MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-												getResources().getString(R.string.motilal_oswal),
-												message, OK, true, null);
-										}
-									} else {
-										hideProgress();
-										String errorMsg =
-											CRMMOSLCommon.getErrorMsgFromResponse(response);
-										MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-											getResources().getString(R.string.motilal_oswal),
-											errorMsg, OK, true, null);
-									}
-								} else {
-									hideProgress();
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								hideProgress();
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-							}
-						}
+		Throwable error = uiModel.error;
+		if (error != null) {
+			showOnFailurePopup(error);
+		}
 
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-							super.onSuccess(statusCode, headers, response);
-							hideProgress();
-						}
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString) {
-							super.onSuccess(statusCode, headers, responseString);
-							hideProgress();
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONObject errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							try {
-								hideProgress();
-								if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-									MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-										getResources().getString(R.string.motilal_oswal),
-										UNAUTHORIZE_USER, OK, false,
-										new MSFDialog.DialogListener() {
-											@Override
-											public void alertDialogAction(MSFDialog.Action action,
-												Object... data) {
-												if (action == MSFDialog.Action.OK) {
-													Intent i = new Intent(MOSLCommonActivity.this,
-														LoginActivity.class);
-													startActivity(i);
-													finish();
-												}
-											}
-										});
-									return;
-								} else {
-									String error =
-										CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-									if (CRMAppUtil.isBlank(error)) {
-										error = SOME_SERVER_ERROR_OCCURRED;
-									}
-									MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-										getResources().getString(R.string.motilal_oswal), error,
-										OK, true, null);
-									return;
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-							}
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONArray errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							hideProgress();
-							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString,
-							Throwable throwable) {
-							super.onFailure(statusCode, headers, responseString, throwable);
-							hideProgress();
-							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-					});
-			} catch (Exception e) {
-				e.printStackTrace();
-				hideProgress();
+		SaathiCommonResponse<List<ProspectResponse>> data = uiModel.data;
+		if (data != null) {
+			ProspectResponse prospectResponse = uiModel.data.response.get(0);
+			if (prospectResponse.isRegistrationAllowed()) {
+				String ekycUserID = prospectResponse.ekycUserID;
+				if (AccountDetails.isNewEkyc()) {
+					HashMap map = new HashMap();
+					map.put(NEW_USERID, ekycUserID);
+					map.put(BRANCHEMPCODE,
+						AccountDetails.getEmployeeCode());
+					map.put(COMMANDTYPE, "RESUME");
+					map.put(APPLICATIONTYPE, "CRM");
+					map.put(OSTYPE, "ANDROID");
+					map.put(APPLOGINID,
+						AccountDetails.getEmployeeCode());
+					map.put(TOKENKEY, AccountDetails.getToken());
+					map.put(ISAUFSB, AccountDetails.isAufsb());
+					newEkyc(getInputBody(map));
+				} else {
+					HashMap<String, String> hashMap = new HashMap();
+					hashMap.put(USERID, ekycUserID);
+					gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
+				}
+			} else {
 				MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
 					getResources().getString(R.string.motilal_oswal),
-					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
+					data.message, OK, true, null);
 			}
-		} else {
-			hideProgress();
-			MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
 		}
+
 	}
 
 	//quick dialog
@@ -1409,151 +1217,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 		if (empCode != null && password != null) {
 			if (CRMAppUtil.isNetworkEnabled(this)) {
-
-				Map inputMap = new HashMap<>();
-				inputMap.put("EmployeeCode", empCode);
-				inputMap.put("Password", password);
-				inputMap.put("IPAddress", CRMAppUtil.getLocalIpAddress());
-				inputMap.put("ClientInfo", CLIENT_INFO);
-				inputMap.put("Macaddress",
-					CRMMOSLCommon.getDeviceID(getApplicationContext(), getContentResolver()));
-				inputMap.put("AppId", "2");
-
-				Map headerMap = null;
-				String serviceMethod = "Auth/Login";
-
-				try {
-					CRMWebServiceHandler.post(this, serviceMethod, headerMap, inputMap,
-						new JsonHttpResponseHandler() {
-
-							@Override
-							public void onSuccess(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers,
-								JSONObject response) {
-								super.onSuccess(statusCode, headers, response);
-								//after success code goes here
-								try {
-									if (statusCode == 200) {
-
-										String status = response.getString(STATUS);
-										if (status.equalsIgnoreCase("true")) {
-											JSONObject objDetail = response.getJSONObject(RESPONSE);
-											boolean smtEnabled =
-												objDetail.getString(SMT_ENABLED).equals("1");
-											boolean isEkycRevemp =
-												objDetail.getString(ISEKYCREVAMP).equals("1");
-											JSONObject objDetailUser =
-												objDetail.getJSONObject(USER);
-											String userId = objDetailUser.isNull(USER_ID) ?
-												"" : objDetailUser.getString(USER_ID);
-											String employeeCode =
-												objDetailUser.isNull(EMPLOYEE_CODE) ?
-													"" : objDetailUser.getString(EMPLOYEE_CODE);
-											String firstName = objDetailUser.isNull(FIRST_NAME) ?
-												"" : objDetailUser.getString(FIRST_NAME);
-											String lastName = objDetailUser.isNull(LAST_NAME) ?
-												"" : objDetailUser.getString(LAST_NAME);
-											String imageUrl = objDetailUser.isNull(IMAGE_URL) ?
-												"" : objDetailUser.getString(IMAGE_URL);
-											String mobile = objDetailUser.isNull(MOBILE) ?
-												"" : objDetailUser.getString(MOBILE);
-											String email = objDetailUser.isNull(EMAIL) ?
-												"" : objDetailUser.getString(EMAIL);
-											String token = objDetailUser.isNull(TOKEN) ?
-												"" : objDetailUser.getString(TOKEN);
-											String userType = objDetailUser.isNull(USER_TYPE_SEQ) ?
-												"" : objDetailUser.getString(USER_TYPE_SEQ);
-											JSONObject objDetailDefaultBusinessProfile =
-												objDetailUser.getJSONObject(
-													DEFAULT_BUSINESS_PROFILE);
-											String branchCode =
-												objDetailDefaultBusinessProfile.isNull(
-													BRANCHCODE_DEFAULT_BUSINESS_PROFILE) ?
-													"" : objDetailDefaultBusinessProfile.getString(
-													BRANCHCODE_DEFAULT_BUSINESS_PROFILE);
-											setAppLoginID(employeeCode);
-											setAppType(CRM);
-
-											JSONObject objDetailBusinessProfile =
-												objDetailUser.getJSONObject(
-													CURRENT_BUSINESS_PROFILE);
-											String businessProfileId =
-												objDetailBusinessProfile.isNull(
-													BUSINESS_PROFILE_ID) ?
-													"" : objDetailBusinessProfile.getString(
-													BUSINESS_PROFILE_ID);
-											String businessProfileName =
-												objDetailBusinessProfile.isNull(
-													CURRENT_BUSINESS_PROFILE_NAME) ?
-													"" : objDetailBusinessProfile.getString(
-													CURRENT_BUSINESS_PROFILE_NAME);
-											String businessUnitId =
-												objDetailBusinessProfile.isNull(BUSINESS_UNIT_ID) ?
-													"" : objDetailBusinessProfile.getString(
-													BUSINESS_UNIT_ID);
-											boolean aufsb = userType.equals("9");
-
-											new AccountDetails(userId,
-												firstName, lastName,
-												imageUrl.replaceAll(" ", "%20"),
-												mobile, email,
-												businessProfileId,
-												businessProfileName,
-												employeeCode, token,
-												businessUnitId,
-												branchCode, userType,
-												smtEnabled, aufsb, isEkycRevemp);
-
-											initView();
-										} else {
-
-											handleLoginError();
-										}
-									}
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-
-							@Override
-							public void onSuccess(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers,
-								JSONArray response) {
-								super.onSuccess(statusCode, headers, response);
-							}
-
-							@Override
-							public void onSuccess(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers,
-								String responseString) {
-								super.onSuccess(statusCode, headers, responseString);
-							}
-
-							@Override
-							public void onFailure(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-								JSONObject errorResponse) {
-								super.onFailure(statusCode, headers, throwable, errorResponse);
-								handleLoginError();
-							}
-
-							@Override
-							public void onFailure(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-								JSONArray errorResponse) {
-								super.onFailure(statusCode, headers, throwable, errorResponse);
-							}
-
-							@Override
-							public void onFailure(int statusCode,
-								cz.msebera.android.httpclient.Header[] headers,
-								String responseString, Throwable throwable) {
-								super.onFailure(statusCode, headers, responseString, throwable);
-							}
-						});
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				LoginRequest request =
+					new LoginRequest(empCode, password, CRMAppUtil.getLocalIpAddress(), CLIENT_INFO,
+						CRMMOSLCommon.getDeviceID(getApplicationContext(), getContentResolver()),
+						"2");
+				Disposable subscribe = CRMWebServiceHandler.getSaathiApi().login(request)
+					.compose(applyUiModel())
+					.subscribe(this::renderLogin);
 			} else {
 				MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
 					INTERNET_CONNECTION, OK, false, new MSFDialog.DialogListener() {
@@ -1566,8 +1236,63 @@ public class MOSLCommonActivity extends AppCompatActivity
 					});
 			}
 		} else {
-
 			handleLoginError();
+		}
+	}
+
+	private void renderLogin(UiModel<LoginResponse> uiModel) {
+		toggleProgress(uiModel.inProgress);
+
+		Throwable error = uiModel.error;
+		if (error != null) {
+			Timber.d("error %s", error.getMessage());
+			handleLoginError();
+		}
+
+		LoginResponse data = uiModel.data;
+		if (data != null) {
+			boolean smtEnabled = data.isSMTEnabled();
+			boolean ekycRevamp = data.isEkycRevamp();
+			User user = data.user;
+			String userId = stringOrEmpty(user.userId);
+			String employeeCode = stringOrEmpty(user.employeeCode);
+			String firstName = stringOrEmpty(user.firstName);
+			String lastName = stringOrEmpty(user.lastName);
+			String imageUrl = stringOrEmpty(user.imageUrl);
+			String mobile = stringOrEmpty(user.mobile);
+			String token = stringOrEmpty(user.token);
+			String email = stringOrEmpty(user.email);
+			String userTypeSequence = stringOrEmpty(user.userTypeSequence);
+
+			setAppLoginID(employeeCode);
+			setAppType(CRM);
+
+			String branchCode = stringOrEmpty(user.defaultBusinessProfile.branchCode);
+			String businessProfileId = stringOrEmpty(user.currentBusinessProfile.businessProfileId);
+			String businessProfileName = stringOrEmpty(user.currentBusinessProfile.name);
+			String businessUnitId = stringOrEmpty(user.currentBusinessProfile.businessUnitId);
+			boolean aufsb = userTypeSequence.equals("9");
+
+			new AccountDetails(userId,
+				firstName, lastName,
+				imageUrl.replaceAll(" ", "%20"),
+				mobile, email,
+				businessProfileId,
+				businessProfileName,
+				employeeCode, token,
+				businessUnitId,
+				branchCode, userTypeSequence,
+				smtEnabled, aufsb, ekycRevamp);
+
+			initView();
+		}
+	}
+
+	public String stringOrEmpty(@Nullable String input) {
+		if (input != null) {
+			return input;
+		} else {
+			return "";
 		}
 	}
 
@@ -2011,153 +1736,36 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	private void getSuggestMe() {
-
 		if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {
-			showProgress();
-			Map inputMap = new HashMap<>();
-			inputMap.put(UCID, ZERO);
-			inputMap.put(LEAD_ID, ZERO);
-			String serviceMethod = "Prospect/SMT_RegisterProspectOnline/";
-			try {
-				CRMWebServiceHandler.post(MOSLCommonActivity.this, serviceMethod,
-					getHeader(MOSLCommonActivity.this), inputMap, new JsonHttpResponseHandler() {
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-							super.onSuccess(statusCode, headers, response);
-							//after success code goes here
-							try {
-
-								if (statusCode == 200) {
-									String status = response.getString(STATUS);
-									if (status.equalsIgnoreCase("true")) {
-										hideProgress();
-										JSONObject objDetail = response.getJSONObject(RESPONSE);
-										String encryptedUrl = (objDetail.isNull(ENCRYPTED_URL)) ? ""
-											: objDetail.getString(ENCRYPTED_URL);
-										SMTFragment fragment = new SMTFragment();
-										Bundle bundle = new Bundle();
-										bundle.putString(URL_PATH, encryptedUrl);
-
-										fragment.setArguments(bundle);
-										addFragment(R.id.activityFrameLayout, fragment, true,
-											false);
-										//                                            Intent intent =
-										//                                                    new Intent(MOSLCommonActivity.this, WebActivity.class);
-										//                                            intent.putExtra(URL_PATH, encryptedUrl);
-										//                                            startActivity(intent);
-									} else {
-										hideProgress();
-										String errorMsg =
-											CRMMOSLCommon.getErrorMsgFromResponse(response);
-										alertDialog(MOSLCommonActivity.this, 0,
-											getResources().getString(R.string.motilal_oswal),
-											errorMsg, OK, true, null);
-									}
-								} else {
-									hideProgress();
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								hideProgress();
-								alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-							}
-						}
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-							super.onSuccess(statusCode, headers, response);
-							hideProgress();
-						}
-
-						@Override
-						public void onSuccess(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString) {
-							super.onSuccess(statusCode, headers, responseString);
-							hideProgress();
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONObject errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							try {
-								hideProgress();
-								if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-									alertDialog(MOSLCommonActivity.this, 0,
-										getResources().getString(R.string.motilal_oswal),
-										UNAUTHORIZE_USER, OK, false,
-										new MSFDialog.DialogListener() {
-											@Override
-											public void alertDialogAction(MSFDialog.Action action,
-												Object... data) {
-												if (action == MSFDialog.Action.OK) {
-													Intent i = new Intent(MOSLCommonActivity.this,
-														LoginActivity.class);
-													startActivity(i);
-													finish();
-												}
-											}
-										});
-									return;
-								} else {
-									String error =
-										CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-									if (CRMAppUtil.isBlank(error)) {
-										error = SOME_SERVER_ERROR_OCCURRED;
-									}
-									MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-										getResources().getString(R.string.motilal_oswal), error,
-										OK, true, null);
-									return;
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-							}
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-							JSONArray errorResponse) {
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-							hideProgress();
-							alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-
-						@Override
-						public void onFailure(int statusCode,
-							cz.msebera.android.httpclient.Header[] headers, String responseString,
-							Throwable throwable) {
-							super.onFailure(statusCode, headers, responseString, throwable);
-							hideProgress();
-							alertDialog(MOSLCommonActivity.this, 0,
-								getResources().getString(R.string.motilal_oswal),
-								SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-						}
-					});
-			} catch (Exception e) {
-				e.printStackTrace();
-				hideProgress();
-				alertDialog(MOSLCommonActivity.this, 0,
-					getResources().getString(R.string.motilal_oswal),
-					SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-			}
+			SuggestMeRequest request = new SuggestMeRequest(0, 0);
+			Disposable subscribe =
+				CRMWebServiceHandler.getSaathiApi().suggestMe(request)
+					.compose(applyUiModel())
+					.subscribe(this::renderSuggestMe);
 		} else {
-			hideProgress();
-			alertDialog(MOSLCommonActivity.this, 0,
-				getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-				null);
+			noInternetConnectionDialog();
+		}
+	}
+
+	private void renderSuggestMe(
+		UiModel<SaathiCommonResponse<ProspectResponse>> uiModel) {
+		toggleProgress(uiModel.inProgress);
+
+		Throwable error = uiModel.error;
+		if (error != null) {
+			showOnFailurePopup(error);
+		}
+
+		SaathiCommonResponse<ProspectResponse> data = uiModel.data;
+		if (data != null && data.response != null) {
+			String encryptedUrl = stringOrEmpty(data.response.encryptedUrl);
+			SMTFragment fragment = new SMTFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString(URL_PATH, encryptedUrl);
+
+			fragment.setArguments(bundle);
+			addFragment(R.id.activityFrameLayout, fragment, true,
+				false);
 		}
 	}
 
@@ -2665,9 +2273,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 									}
 								}
 							} else {
-								MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
-									getResources().getString(R.string.motilal_oswal),
-									INTERNET_CONNECTION, OK, true, null);
+								noInternetConnectionDialog();
 							}
 						}
 					} catch (Exception ex) {
