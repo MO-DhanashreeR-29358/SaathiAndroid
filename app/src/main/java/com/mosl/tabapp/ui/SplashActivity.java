@@ -5,9 +5,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.mosl.mobile.ekyc.model.RoleSelectionModel;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.saathi.api.model.login.LoginRequest;
+import com.mosl.saathi.api.model.login.LoginResponse;
+import com.mosl.saathi.api.model.login.User;
+import com.mosl.saathi.api.model.splash.VersionRequest;
+import com.mosl.saathi.api.model.splash.VersionResponse;
+import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -16,12 +24,16 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import timber.log.Timber;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
@@ -64,11 +76,86 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 		}, SPLASH_TIME_OUT);
 	}
 
+    private void renderLogin(UiModel<LoginResponse> uiModel) {
+        //toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            Timber.d("error %s", error.getMessage());
+            handleLoginError();
+        }
+
+        LoginResponse data = uiModel.data;
+        if (data != null) {
+            boolean smtEnabled = data.isSMTEnabled();
+            boolean ekycRevamp = data.isEkycRevamp();
+            User user = data.user;
+            String userId = stringOrEmpty(user.userId);
+            String employeeCode = stringOrEmpty(user.employeeCode);
+            String firstName = stringOrEmpty(user.firstName);
+            String lastName = stringOrEmpty(user.lastName);
+            String imageUrl = stringOrEmpty(user.imageUrl);
+            String mobile = stringOrEmpty(user.mobile);
+            String token = stringOrEmpty(user.token);
+            String email = stringOrEmpty(user.email);
+            String userTypeSequence = stringOrEmpty(user.userTypeSequence);
+
+            setAppLoginID(employeeCode);
+            setAppType(CRM);
+
+            String branchCode = stringOrEmpty(user.defaultBusinessProfile.branchCode);
+            String businessProfileId = stringOrEmpty(user.currentBusinessProfile.businessProfileId);
+            String businessProfileName = stringOrEmpty(user.currentBusinessProfile.name);
+            String businessUnitId = stringOrEmpty(user.currentBusinessProfile.businessUnitId);
+            boolean aufsb = userTypeSequence.equals("9");
+
+            new AccountDetails(userId,
+                firstName, lastName,
+                imageUrl.replaceAll(" ", "%20"),
+                mobile, email,
+                businessProfileId,
+                businessProfileName,
+                employeeCode, token,
+                businessUnitId,
+                branchCode, userTypeSequence,
+                smtEnabled, aufsb, ekycRevamp);
+
+            if (aufsb) {
+                openMainActivity();
+            } else {
+                FetchReportTypes();
+            }
+        }
+    }
+
+    public String stringOrEmpty(@Nullable String input) {
+        if (input != null) {
+            return input;
+        } else {
+            return "";
+        }
+    }
+
 	private void handleStartupPage() {
 		String empCode = getPrefs(this).getString("EmployeeCode", null);
 		String password = getPrefs(this).getString("PASSWORD", null);
 
-		if (empCode != null && password != null) {
+        if (empCode != null && password != null) {
+            if (CRMAppUtil.isNetworkEnabled(this)) {
+                LoginRequest request =
+                    new LoginRequest(empCode, password, CRMAppUtil.getLocalIpAddress(), CLIENT_INFO,
+                        CRMMOSLCommon.getDeviceID(getApplicationContext(), getContentResolver()),
+                        "2");
+                Disposable subscribe = CRMWebServiceHandler.getSaathiApi().login(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderLogin);
+            } else {
+                noInternetDialog();
+            }
+        } else {
+            handleLoginError();
+        }
+		/*if (empCode != null && password != null) {
 			if (CRMAppUtil.isNetworkEnabled(this)) {
 
 				Map inputMap = new HashMap<>();
@@ -161,7 +248,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 											AccountDetails.setNewEkyc(aufsb);
 											new RoleSelectionModel("", "", "", "",
 												employeeCode.trim(), rmId.trim(),
-												businessUnitId.trim(), "",/*roleId*/"");
+												businessUnitId.trim(), "",*//*roleId*//*"");
 											new AccountDetails(userId,
 												firstName, lastName,
 												imageUrl.replaceAll(" ", "%20"), mobile,
@@ -237,7 +324,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 		} else {
 
 			handleLoginError();
-		}
+		}*/
 	}
 
 	public void FetchReportTypes() {
@@ -439,18 +526,21 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 					SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
 			}
 		} else {
-			MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
-				INTERNET_CONNECTION, "OK", false, new MSFDialog.DialogListener() {
-					@Override
-					public void alertDialogAction(MSFDialog.Action action, Object... data) {
-						if (action == MSFDialog.Action.OK) {
-							finish();
-						}
-					}
-				});
+            noInternetDialog();
 		}
 	}
 
+    private void noInternetDialog() {
+        MSFDialog.alertDialog(this, 0, getResources().getString(R.string.motilal_oswal),
+            INTERNET_CONNECTION, "OK", false, new MSFDialog.DialogListener() {
+                @Override
+                public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                    if (action == MSFDialog.Action.OK) {
+                        finish();
+                    }
+                }
+            });
+    }
 	private void handleLoginError() {
 		clearLoginPrefData();
 		Intent i = new Intent(SplashActivity.this, LoginActivity.class);
@@ -465,7 +555,16 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	}
 
 	private void versionCheck() {
-		if (CRMAppUtil.isNetworkEnabled(SplashActivity.this)) {
+        if (CRMAppUtil.isNetworkEnabled(SplashActivity.this)) {
+            VersionRequest request =
+                new VersionRequest(NEW_CRM, getAppVersionCode(SplashActivity.this), "Android", "");
+            Disposable subscribe = CRMWebServiceHandler.getSaathiApi().appVersion(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderStartup);
+        } else {
+            noInternetDialog();
+        }
+		/*if (CRMAppUtil.isNetworkEnabled(SplashActivity.this)) {
 
 			final Map inputMap = new HashMap<>();
 
@@ -695,8 +794,106 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 						}
 					}
 				});
-		}
-	}
+		}*/
+    }
+
+    public void showOnFailurePopup(Throwable t) {
+        String message;
+        if (t instanceof ServiceFailureException) {
+            message = ((ServiceFailureException) t).errorMessage;
+        } else {
+            message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+        MSFDialog.alertDialog(SplashActivity.this, 0,
+            getResources().getString(R.string.motilal_oswal),
+            message, "OK", true, null);
+    }
+
+    private void renderStartup(UiModel<List<VersionResponse>> uiModel) {
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        List<VersionResponse> data = uiModel.data;
+        if (data != null) {
+            VersionResponse response = data.get(0);
+            int statusCode = response.statusCode;
+            String url;
+            if (response.hasUrl()) {
+                url = response.url;
+            } else {
+                url = GOOGLE_PLAY_URL;
+            }
+
+            String newEkycUrl = stringOrEmpty(response.newEkycUrl);
+            AccountDetails.setEkycUrl(newEkycUrl.replaceAll(" ", "%20"));
+            if (response.isNewEkyc()) {
+                AccountDetails.setNewEkyc(true);
+            } else {
+                AccountDetails.setNewEkyc(false);
+            }
+
+            String msg = stringOrEmpty(response.msg);
+            if (statusCode == 1) {
+                handleStartupPage();
+            } else if (statusCode == 0) {
+                MSFDialog.alertDialog(SplashActivity.this, 0,
+                    getResources().getString(
+                        R.string.motilal_oswal), msg, "Update",
+                    false, new MSFDialog.DialogListener() {
+                        @Override public void alertDialogAction(
+                            MSFDialog.Action action,
+                            Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent i = new Intent(
+                                    android.content.Intent.ACTION_VIEW);
+                                i.setData(
+                                    Uri.parse(url));
+                                startActivity(i);
+                                finish();
+                            }
+                        }
+                    });
+            } else if (statusCode == 3) {
+                MSFDialog.alertDialog(SplashActivity.this, 0,
+                    getResources().getString(
+                        R.string.motilal_oswal), msg, "Update",
+                    "Continue", false,
+                    new MSFDialog.DialogListener() {
+                        @Override public void alertDialogAction(
+                            MSFDialog.Action action,
+                            Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent i = new Intent(
+                                    android.content.Intent.ACTION_VIEW);
+                                i.setData(
+                                    Uri.parse(url));
+                                startActivity(i);
+                                finish();
+                            } else if (action
+                                == MSFDialog.Action.CANCEL) {
+                                handleStartupPage();
+                            }
+                        }
+                    });
+            } else if (statusCode == 2) {
+                MSFDialog.alertDialog(SplashActivity.this, 0,
+                    getResources().getString(
+                        R.string.motilal_oswal), msg, "Ok",
+                    false, new MSFDialog.DialogListener() {
+                        @Override public void alertDialogAction(
+                            MSFDialog.Action action,
+                            Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                finish();
+                            }
+                        }
+                    });
+            }
+        }
+    }
+
 
 	@Override public void onBackPressed() {
 
