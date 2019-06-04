@@ -3,37 +3,15 @@ package com.mosl.saathi.api.model.lead
 import com.google.gson.annotations.SerializedName
 
 data class LookupItem(
-
-  @SerializedName("ParentId")
-  @JvmField val parentId: Int,
-
-  @SerializedName("Status")
-  @JvmField val status: Int,
-
-  @SerializedName("SysName")
-  @JvmField val sysName: Any,
-
-  @SerializedName("Active")
-  @JvmField val active: Boolean,
-
-  @SerializedName("LookupType")
-  @JvmField val lookupType: Int,
-
-  @SerializedName("LookUpid")
-  @JvmField val lookUpid: Int,
-
-  @SerializedName("LookUpName")
-  @JvmField val lookUpName: String,
-
-  @SerializedName("BusinessUnitId")
-  @JvmField val businessUnitId: Int,
-
-  @SerializedName("Sequence")
-  @JvmField val sequence: Int,
-
-  @SerializedName("IgnoreBusinessUnit")
-  @JvmField val ignoreBusinessUnit: Boolean,
-
-  @SerializedName("LookupTypeId")
-  @JvmField val lookupTypeId: Int
+  @JvmField @SerializedName("ParentId") val parentId: Int,
+  @JvmField @SerializedName("Status") val status: Int,
+  @JvmField @SerializedName("SysName") val sysName: String?,
+  @JvmField @SerializedName("Active") val active: Boolean,
+  @JvmField @SerializedName("LookupType") val lookupType: Int,
+  @JvmField @SerializedName("LookUpid") val lookUpid: Int,
+  @JvmField @SerializedName("LookUpName") val lookUpName: String?,
+  @JvmField @SerializedName("BusinessUnitId") val businessUnitId: Int,
+  @JvmField @SerializedName("Sequence") val sequence: Int,
+  @JvmField @SerializedName("IgnoreBusinessUnit") val ignoreBusinessUnit: Boolean,
+  @JvmField @SerializedName("LookupTypeId") val lookupTypeId: Int
 )

@@ -7,7 +7,7 @@ data class SaathiCommonResponse<T>(
     @JvmField @SerializedName("Status") val status: Boolean,
     @JvmField @SerializedName("Type") val type: String,
     @JvmField @SerializedName("Message") val message: String,
-    @JvmField @SerializedName("Erros") val errors: List<ApiError>
+    @JvmField @SerializedName("Erros") val errors: List<ApiError>?
 )
 
 data class ApiError(

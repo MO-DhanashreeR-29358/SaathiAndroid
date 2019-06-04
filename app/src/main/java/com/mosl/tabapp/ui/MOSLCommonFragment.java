@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.core.rx.Dispatchers;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -35,7 +36,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.smt.SMTFragment;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.AppProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
 
@@ -45,7 +46,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     private FrameLayout mLinearContainerView;
     public CompositeDisposable compositeDisposable;
     public final Dispatchers dispatchers = DispatchersKt.RxDispatchers;
-    public final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
+    public final SaathiApi saathiApi = AppProvider.getSaathiApi();
+    public final Gson gson = AppProvider.getGson();
 
     public MOSLCommonFragment() {
         super();

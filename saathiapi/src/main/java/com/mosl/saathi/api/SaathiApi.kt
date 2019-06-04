@@ -7,8 +7,13 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.LeadSourceItem
+import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
@@ -173,9 +178,24 @@ interface SaathiApi {
   //===================== Create Lead=========================
 
   @POST("Source/GetSourceList")
-  fun postSourceList(
+  fun getSourceList(
       @Body request: SourceListRequest
-  ): Observable<SaathiCommonResponse<SourceListItem>>
+  ): Observable<List<SourceListItem>>
+
+  @POST("LeadSource/GetLeadSourceList")
+  fun getLeadSourceList(
+      @Body request: LeadSourceListRequest
+  ): Observable<List<LeadSourceItem>>
+
+  @POST("Lead/TransferLeadCaughtInC2")
+  fun transferLead(
+      @Body request: TransferLeadRequest
+  ) : Observable<SaathiCommonResponse<TransferLeadResponse>>
+
+  @POST("Lead/AddUpdateLead")
+  fun addUpdateLead(
+      @Body request: String
+  ) : Observable<SaathiCommonResponse<CreateLeadResponse>>
 
   //===================== Notification=========================
 
