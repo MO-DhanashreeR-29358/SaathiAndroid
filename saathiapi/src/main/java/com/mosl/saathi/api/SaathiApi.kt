@@ -15,8 +15,12 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
+import com.mosl.saathi.api.model.documents.LeadDocumentsItem
 import com.mosl.saathi.api.model.documents.LeadDocumentsRequest
-import com.mosl.saathi.api.model.documents.LeadDocumentsResponse
+import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
+import com.mosl.saathi.api.model.documents.UploadDocumentItem
+import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
@@ -171,5 +175,21 @@ interface SaathiApi {
   @POST("Lead/GetLeadDocuments")
   fun getLeadDocuments(
     @Body request: LeadDocumentsRequest
-  ): Observable<List<LeadDocumentsResponse>>
+  ): Observable<List<LeadDocumentsItem>>
+
+  @POST("Lead/UploadDocument")
+  fun postUploadDocuments(
+    @Body request: UploadDocumentsRequest
+  ): Observable<UploadDocumentItem>
+
+  @POST("Lead/UpdateLeadDocuments")
+  fun postUpdateDocuments(
+    @Body request: UpdateDocumentsRequest
+  ): Observable<String>
+
+  @POST("Lead/DeleteLeadDocuments")
+  fun postDeleteDocuments(
+    @Body request: DeleteDocumentRequest
+  ): Observable<String>
+
 }

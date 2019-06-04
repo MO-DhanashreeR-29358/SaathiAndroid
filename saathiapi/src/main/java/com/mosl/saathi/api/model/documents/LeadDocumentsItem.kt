@@ -2,7 +2,7 @@ package com.mosl.saathi.api.model.documents
 
 import com.google.gson.annotations.SerializedName
 
-data class LeadDocumentsResponse(
+data class LeadDocumentsItem(
 
   @JvmField @SerializedName("ID") val id: String?,
 
