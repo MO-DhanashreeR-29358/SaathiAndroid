@@ -1,6 +1,5 @@
 package com.mosl.tabapp.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,9 +27,7 @@ import com.mosl.tabapp.model.MenuReport;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
@@ -46,21 +43,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	public static ArrayList<MenuReport> menuReportArrayList = new ArrayList<>();
 	// Splash screen timer
 	private static int SPLASH_TIME_OUT = 3000;
-
-	public static Map getHeader(Context context) {
-		Map headerMap = new HashMap<>();
-		headerMap.put("Content-Type", "application/json; charset=UTF-8");
-		headerMap.put("token", AccountDetails.getToken());
-		headerMap.put("userid", AccountDetails.getUserId());
-		headerMap.put("clientinfo", "android");
-		headerMap.put("ipaddress", CRMAppUtil.getLocalIpAddress());
-		headerMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-		headerMap.put("macaddress",
-			CRMMOSLCommon.getDeviceID(context, context.getContentResolver()));
-		headerMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-		headerMap.put("AppId", "2");
-		return headerMap;
-	}
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
