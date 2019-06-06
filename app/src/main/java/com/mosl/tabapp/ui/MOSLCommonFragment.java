@@ -39,6 +39,7 @@ import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.AppProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
+import timber.log.Timber;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
@@ -208,6 +209,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void  showOnFailurePopup(Throwable t) {
+        Timber.e(t);
         MSFDialog.alertDialog(getMainActivity(), 0,
             getResources().getString(R.string.motilal_oswal),
             getErrorOnFailure(t), "OK", true, null);

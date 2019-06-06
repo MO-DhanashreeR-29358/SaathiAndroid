@@ -1,6 +1,7 @@
 package com.mosl.tabapp.model;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LeadCreationContact {
@@ -101,8 +102,9 @@ public class LeadCreationContact {
     }
 
     public void setAddresses(AddressDetailModel officeAddress, AddressDetailModel residenceAddress) {
-        addresses.set(0, officeAddress);
-        addresses.set(1, residenceAddress);
+        addresses = new ArrayList<>();
+        addresses.add(officeAddress);
+        addresses.add(residenceAddress);
     }
 
     public AddressDetailModel getOfficeAddress() {

@@ -1691,7 +1691,6 @@ public class LeadCreationFragment extends MOSLCommonFragment
 		List<StatusItem> data = uiModel.data;
 		if (data != null) {
 			arrStatus.clear();
-			arrStatus.add(new RowData(0, "-1", "Select"));
 
 			for (int i = 0; i < data.size(); i++) {
 				StatusItem item = data.get(i);
@@ -1869,7 +1868,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
 
 	private void updateLead(LeadCreationModel leadCreationModel) {
 		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-			Disposable disposable = saathiApi.addUpdateLead(gson.toJson(leadCreationModel))
+			Disposable disposable = saathiApi.addUpdateLead(leadCreationModel)
 				.compose(applyUiModel())
 				.subscribe(this::renderUpdateLead);
 		} else {

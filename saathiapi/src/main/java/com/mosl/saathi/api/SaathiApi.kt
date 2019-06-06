@@ -194,7 +194,7 @@ interface SaathiApi {
 
   @POST("Lead/AddUpdateLead")
   fun addUpdateLead(
-      @Body request: String
+    @Body request: Any
   ) : Observable<SaathiCommonResponse<CreateLeadResponse>>
 
   //===================== Notification=========================
