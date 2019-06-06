@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName
 data class TableItem(
 
   @JvmField @SerializedName("DAY_CNT")
-  val dAYCNT: String,
+  val dAYCNT: String?,
 
   @JvmField @SerializedName("FAMILYSTATUS")
-  val fAMILYSTATUS: String,
+  val fAMILYSTATUS: String?,
 
   @JvmField @SerializedName("MTD_CNT")
-  val mTDCNT: String,
+  val mTDCNT: String?,
 
   @JvmField @SerializedName("WTD_PER")
   val wTDPER: String,
@@ -29,5 +29,5 @@ data class TableItem(
   val dAYPER: String,
 
   @JvmField @SerializedName("YTD_CNT")
-  val yTDCNT: String
+  val yTDCNT: String?
 )
