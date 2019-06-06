@@ -15,6 +15,8 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.dashboard.client.ClientItem
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
@@ -164,4 +166,10 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  //====================== Dashboard =====================
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClients(
+    @Body request: ClientRequest
+  ): Observable<ClientItem>
 }
