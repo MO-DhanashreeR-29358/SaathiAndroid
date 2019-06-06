@@ -50,6 +50,7 @@ import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
 import io.reactivex.Observable
@@ -185,6 +186,9 @@ interface SaathiApi {
   @POST("Common/GetAppVersion")
   @ExtraDataWrapper
   fun appVersion(@Body versionRequest: VersionRequest): Observable<List<VersionResponse>>
+
+  @POST("Report/FetchReportTypes")
+  fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
   //===================== Notification=========================
 
   @POST("NotificationMessage/GetNotificationMessageMobile")
