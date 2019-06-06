@@ -16,8 +16,8 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
+import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
-import com.mosl.saathi.api.model.documents.LeadDocumentsRequest
 import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
 import com.mosl.saathi.api.model.documents.UploadDocumentItem
 import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
@@ -173,8 +173,9 @@ interface SaathiApi {
   //===================== Documents=========================
 
   @POST("Lead/GetLeadDocuments")
+  @ExtraDataWrapper
   fun getLeadDocuments(
-    @Body request: LeadDocumentsRequest
+    @Body request: DocumentsRequest
   ): Observable<List<LeadDocumentsItem>>
 
   @POST("Lead/UploadDocument")
