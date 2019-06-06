@@ -37,6 +37,7 @@ import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
+import timber.log.Timber;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
@@ -205,6 +206,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void  showOnFailurePopup(Throwable t) {
+        Timber.e(t);
         String message;
         if (t instanceof ServiceFailureException) {
             message = ((ServiceFailureException) t).errorMessage;
