@@ -243,11 +243,11 @@ public class LoginActivity extends FragmentActivity
 							for (int j = 0; j < childMenuList.size(); j++) {
 								ChildMenu childMenu = childMenuList.get(i);
 								if (childMenu.isBasicReports()) {
-									List<ChildMenu> childMenuList1 = childMenu.ChildMenuList;
-									for (int k = 0; k < childMenuList1.size(); k++) {
-										ChildMenu childMenu1 = childMenuList1.get(i);
-										String systemName = stringOrEmpty(childMenu1.systemName);
-										String name = stringOrEmpty(childMenu1.name);
+                                    List<ChildMenu> subChildMenuList = childMenu.ChildMenuList;
+                                    for (int k = 0; k < subChildMenuList.size(); k++) {
+                                        ChildMenu subChildMenu = subChildMenuList.get(k);
+                                        String systemName = stringOrEmpty(subChildMenu.systemName);
+                                        String name = stringOrEmpty(subChildMenu.name);
 										SplashActivity.menuReportArrayList.add(
 											new MenuReport(name, systemName));
 									}
