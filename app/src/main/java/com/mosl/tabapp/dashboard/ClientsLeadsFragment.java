@@ -313,6 +313,11 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
   }
 
   private void webServiceCall() {
+
+      //////////////////////////////////////
+
+      ////////////////////////////////////////
+
     if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
       showProgress();
       String serviceMethod = "Dashboard/LoadWidgetAsync";

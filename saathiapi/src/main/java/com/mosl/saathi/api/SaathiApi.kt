@@ -203,6 +203,7 @@ interface SaathiApi {
     @Body request: ClientRequest
   ): Observable<ClientItem>
 
+  @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
   fun getClientLead(
     @Body request: ClientRequest
