@@ -18,6 +18,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProduct
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
+import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
@@ -220,4 +221,9 @@ interface SaathiApi {
   fun getProductivity(
     @Body request: ClientRequest
   ): Observable<String>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getSnapshot(
+    @Body request: ClientRequest
+  ): Observable<SnapshotItem>
 }
