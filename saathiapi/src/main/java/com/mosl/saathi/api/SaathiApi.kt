@@ -172,4 +172,9 @@ interface SaathiApi {
   fun getClients(
     @Body request: ClientRequest
   ): Observable<ClientItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClientLead(
+    @Body request: ClientRequest
+  ): Observable<String>
 }
