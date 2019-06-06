@@ -299,7 +299,6 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
                         column = column.toUpperCase();
                     }
                     hm.put(getRefreshColumnName(column), columnData.trim());
-                    Timber.d("hash map %s", hm.toString());
                 }
                 secondClickTableAdapter.add(hm);
             }

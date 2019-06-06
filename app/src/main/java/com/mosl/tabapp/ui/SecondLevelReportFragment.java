@@ -5,7 +5,6 @@ package com.mosl.tabapp.ui;
  */
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,22 +14,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.saathi.api.model.reports.report.LeadReportRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
+import timber.log.Timber;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -77,185 +77,115 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
 
     private void getReport() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            String serviceMethod = "Report/LoadReportViewDataAsync";
-            Map inputMap = new HashMap<>();
-            inputMap = mMap;
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new TextHttpResponseHandler() {
-
-                        @Override public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                            try {
-                                if (statusCode == 200) {
-                                    Gson mGson = new Gson();
-                                    Type type = new TypeToken<HashMap<String, Object>>() {
-                                    }.getType();
-                                    HashMap<String, Object> response =
-                                        mGson.fromJson(responseS, type);
-                                    if (response.size() != 0) {
-                                        String status = response.get(STATUS).toString();
-                                        if (status.equalsIgnoreCase("true")) {
-                                            hideProgress();
-                                            secondClickTableAdapter =
-                                                new SecondLevelReportFragment.SecondClickTableAdapter(
-                                                    getActivity(),
-                                                    new ArrayList<HashMap<String, String>>());
-                                            table.setAdapter(secondClickTableAdapter);
-                                            Map<String, Object> responseJSONObject =
-                                                (Map<String, Object>) response.get("Response");
-                                            List<Map<String, Object>> arrayDetail =
-                                                (List<Map<String, Object>>) responseJSONObject.get(
-                                                    "Data");
-                                            ArrayList<String> columns = new ArrayList<String>();
-                                            ArrayList<String> columnsHeader =
-                                                new ArrayList<String>();
-
-                                            if (arrayDetail.size() != 0) {
-                                                for (int y = 0; y < arrayDetail.size(); y++) {
-                                                    Map<String, Object> objDetail =
-                                                        arrayDetail.get(y);
-
-                                                    if (columns.size() == 0) {
-                                                        for (Object columnName : objDetail.keySet()) {
-                                                            columns.add(columnName.toString());
-                                                            if (columnName.toString()
-                                                                .equalsIgnoreCase("lead_id")) {
-                                                                columnName = columnName.toString()
-                                                                    .toUpperCase();
-                                                            }
-                                                            columnsHeader.add(getRefreshColumnName(
-                                                                columnName.toString()));
-                                                        }
-                                                        String[] stockArr =
-                                                            new String[columnsHeader.size()];
-                                                        stockArr = columnsHeader.toArray(stockArr);
-                                                        secondClickTableAdapter.setHeaders(
-                                                            stockArr);
-                                                    }
-                                                    LinkedHashMap<String, String> hm =
-                                                        new LinkedHashMap<>();
-                                                    for (String column : columns) {
-                                                        String columnData =
-                                                            (objDetail.get(column) == null
-                                                                || objDetail.get(column).toString()
-                                                                == null) ? ""
-                                                                : objDetail.get(column).toString();
-                                                        if (column.equalsIgnoreCase("lead_id")) {
-                                                            column = column.toUpperCase();
-                                                        }
-                                                        if (objDetail.get(
-                                                            column) instanceof Number) {
-                                                            String strValue = objDetail.get(column)
-                                                                .toString()
-                                                                .trim();
-
-                                                            if (strValue.indexOf(".") > -1
-                                                                && !strValue.endsWith(".0")
-                                                                && !strValue.endsWith(".00")) {
-                                                                columnData = String.format("%.2f",
-                                                                    Double.parseDouble(
-                                                                        objDetail.get(column)
-                                                                            .toString()));
-                                                            } else {
-                                                                columnData = String.format("%.0f",
-                                                                    Double.parseDouble(
-                                                                        objDetail.get(column)
-                                                                            .toString()));
-                                                            }
-                                                        }
-                                                        hm.put(
-                                                            CRMAppUtil.getRefreshColumnName(column),
-                                                            columnData.trim());
-                                                    }
-                                                    secondClickTableAdapter.add(hm);
-                                                }
-                                                secondClickTableAdapter.notifyDataSetChanged();
-                                                dataFoundFlag = true;
-                                                table.setVisibility(View.VISIBLE);
-                                                tvNochart.setVisibility(View.GONE);
-                                            } else {
-                                                dataFoundFlag = false;
-                                                table.setVisibility(View.GONE);
-                                                tvNochart.setVisibility(View.VISIBLE);
-                                            }
-                                        } else {
-                                            hideProgress();
-                                            String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(
-                                                new JSONObject(responseS));
-                                            table.setVisibility(View.GONE);
-                                            dataFoundFlag = false;
-                                            tvNochart.setVisibility(View.VISIBLE);
-                                            alertDialog(getMainActivity(), 0,
-                                                getResources().getString(R.string.motilal_oswal),
-                                                errorMsg, "OK", true, null);
-                                        }
-                                    } else {
-                                        dataFoundFlag = false;
-                                        table.setVisibility(View.GONE);
-                                        tvNochart.setVisibility(View.VISIBLE);
-                                    }
-                                } else {
-                                    dataFoundFlag = false;
-                                    table.setVisibility(View.GONE);
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                }
-                            } catch (Exception e) {
-                                dataFoundFlag = false;
-                                table.setVisibility(View.GONE);
-                                tvNochart.setVisibility(View.VISIBLE);
-                                e.printStackTrace();
-                            }
-                            hideProgress();
-                        }
-
-                        @Override public void onFailure(int statusCode, Header[] headers,
-                            String responseString, Throwable throwable) {
-                            try {
-                                JSONObject errorResponse = new JSONObject(responseString);
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            LeadReportRequest
+                request =
+                new LeadReportRequest(0, mMap.get("Period_From"), false,
+                    mMap.get("EmployeeCode"),
+                    mMap.get("PageSize"), 0, 0, 0, mMap.get("ReportTypeSystemName"), "-1",
+                    mMap.get("Period_To"), mMap.get("BranchCode"));
+            Disposable subscribe = saathiApi.postLeadReport(request)
+                .map(responseS -> {
+                    Gson mGson = new Gson();
+                    Type type = new TypeToken<HashMap<String, Object>>() {
+                    }.getType();
+                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return response;
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderReports);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
+            hideProgress();
+            alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
+        }
+    }
+
+    private void renderReports(UiModel<HashMap<String, Object>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            Timber.d("throwable %s", error.getMessage());
+            showOnFailurePopup(error);
+        }
+
+        HashMap<String, Object> data = uiModel.data;
+        if (data != null) {
+            renderTable(data);
+        }
+    }
+
+    private void renderTable(HashMap<String, Object> response) {
+        hideProgress();
+        secondClickTableAdapter =
+            new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+        table.setAdapter(secondClickTableAdapter);
+        Map<String, Object> responseJSONObject = (Map<String, Object>) response.get("Response");
+        List<Map<String, Object>> arrayDetail =
+            (List<Map<String, Object>>) responseJSONObject.get("Data");
+        ArrayList<String> columns = new ArrayList<String>();
+        ArrayList<String> columnsHeader = new ArrayList<String>();
+
+        if (arrayDetail.size() != 0) {
+            for (int y = 0; y < arrayDetail.size(); y++) {
+                Map<String, Object> objDetail = arrayDetail.get(y);
+
+                if (columns.size() == 0) {
+                    for (Object columnName : objDetail.keySet()) {
+                        columns.add(columnName.toString());
+                        if (columnName.toString().equalsIgnoreCase("lead_id")) {
+                            columnName = columnName.toString().toUpperCase();
+                        }
+                        columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                    }
+                    String[] stockArr = new String[columnsHeader.size()];
+                    stockArr = columnsHeader.toArray(stockArr);
+                    secondClickTableAdapter.setHeaders(
+                        stockArr);
+                }
+                LinkedHashMap<String, String> hm =
+                    new LinkedHashMap<>();
+                for (String column : columns) {
+                    String columnData =
+                        (objDetail.get(column) == null || objDetail.get(column).toString() == null)
+                            ? "" : objDetail.get(column).toString();
+
+                    if (objDetail.get(column) instanceof Number) {
+                        String strValue = objDetail.get(column).toString().trim();
+
+                        if (strValue.indexOf(".") > -1
+                            && !strValue.endsWith(".0")
+                            && !strValue.endsWith(".00")) {
+                            columnData = String.format("%.2f",
+                                Double.parseDouble(objDetail.get(column).toString()));
+                        } else {
+                            columnData = String.format("%.0f",
+                                Double.parseDouble(objDetail.get(column).toString()));
+                        }
+                    }
+                    if (column.equalsIgnoreCase("lead_id")) {
+                        column = column.toUpperCase();
+                    }
+                    hm.put(getRefreshColumnName(column), columnData.trim());
+                    Timber.d("hash map %s", hm.toString());
+                }
+                secondClickTableAdapter.add(hm);
+            }
+            secondClickTableAdapter.notifyDataSetChanged();
+            dataFoundFlag = true;
+            table.setVisibility(View.VISIBLE);
+            tvNochart.setVisibility(View.GONE);
+        } else {
+            dataFoundFlag = false;
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
         }
     }
 
