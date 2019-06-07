@@ -237,4 +237,10 @@ interface SaathiApi {
   fun getTargetAchievementTeam(
     @Body request: ClientRequest
   ): Observable<TargetAchievementTeamItem>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getBusinessSnapshot(
+    @Body request: ClientRequest
+  ): Observable<String>
 }
