@@ -243,4 +243,11 @@ interface SaathiApi {
   fun getBusinessSnapshot(
     @Body request: ClientRequest
   ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getTrends(
+    @Body request: ClientRequest
+  ): Observable<String>
+
 }

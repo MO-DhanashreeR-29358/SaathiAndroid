@@ -1,7 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -36,33 +34,31 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.CRMValueFormatter;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
+import io.reactivex.disposables.Disposable;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/27/2017.
@@ -407,165 +403,94 @@ public class TrendsTabFragment extends MOSLCommonFragment {
 
     private void webServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-            inputMap.put("WidgetSystemName", widgetSystemName);
+            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+            ClientRequest request = new ClientRequest(
+                businessProfileId,
+                null,
+                widgetSystemName,
+                dashboardModel.getProductId(),
+                dashboardModel.getEmployeeCode()
+            );
 
-            //dashboard for
-            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
+            Disposable subscribe = saathiApi.getTrends(request)
+                .map(responseS -> {
 
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                int j = 0;
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    hideProgress();
-                                    try {
-                                        List<List<ChartDataModel>> dynamicList = new ArrayList<>();
-                                        List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
-                                        JSONObject responceObj = response.getJSONObject(RESPONSE);
-                                        JSONArray tableArr = responceObj.names();
-                                        String paramValue = "";
-                                        JSONArray arrayDetailTotal = responceObj.getJSONArray("Table");
-                                        if (arrayDetailTotal.length() > 0) {
-                                            dataList.clear();
-                                            for (int ctr = 0; ctr < arrayDetailTotal.length(); ctr++) {
-                                                ChartDataModel model = new ChartDataModel();
-
-                                                JSONObject object = arrayDetailTotal.getJSONObject(ctr);
-                                                JSONArray paramNameArr = object.names();
-                                                for (int y = 0; y < paramNameArr.length(); y++) {
-                                                    String paramName = paramNameArr.getString(y);
-                                                    if (paramName.equals("Parameters")) {
-                                                        paramValue = object.getString(paramName);
-                                                        model.setLegendText(paramValue);
-                                                    } else if (paramName.equals("ChartType")) {
-                                                        paramValue = object.getString(paramName);
-                                                        model.setChartType(paramValue);
-                                                    } else {
-                                                        if (paramName.equalsIgnoreCase("WidgetType")) {
-                                                        } else {
-                                                            paramValue = object.getString(paramName);
-                                                            float monthData = Float.parseFloat(paramValue);
-                                                            model.getMonthData().put(paramName, monthData);
-
-                                                        }
-                                                    }
-
-                                                }
-
-                                                dataList.add(model);
-                                            }
-                                        }
-                                        dynamicList.add(dataList);
-                                        setChartData(dynamicList);
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-
-                                }
-
-                            } else {
-
-                                hideProgress();
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-
-                        }
+                    JSONObject response = new JSONObject(responseS);
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return response.getJSONObject(RESPONSE).getJSONArray("Table");
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
                     }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderTrends);
         } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            hideProgress();
+            alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
 
     }
 
+    private void renderTrends(UiModel<JSONArray> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        JSONArray jsonArray = uiModel.data;
+        if (jsonArray != null) {
+            try {
+                renderGraph(jsonArray);
+            } catch (Exception e) {
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        }
+    }
+
+    private void renderGraph(JSONArray jsonArray) throws JSONException {
+        int j = 0;
+        List<List<ChartDataModel>> dynamicList = new ArrayList<>();
+        List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
+        String paramValue;
+        if (jsonArray.length() > 0) {
+            dataList.clear();
+            for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
+                ChartDataModel model = new ChartDataModel();
+
+                JSONObject object = jsonArray.getJSONObject(ctr);
+                JSONArray paramNameArr = object.names();
+                for (int y = 0; y < paramNameArr.length(); y++) {
+                    String paramName = paramNameArr.getString(y);
+                    if (paramName.equals("Parameters")) {
+                        paramValue = object.getString(paramName);
+                        model.setLegendText(paramValue);
+                    } else if (paramName.equals("ChartType")) {
+                        paramValue = object.getString(paramName);
+                        model.setChartType(paramValue);
+                    } else {
+                        if (paramName.equalsIgnoreCase("WidgetType")) {
+                        } else {
+                            paramValue = object.getString(paramName);
+                            float monthData = Float.parseFloat(paramValue);
+                            model.getMonthData().put(paramName, monthData);
+                        }
+                    }
+                }
+
+                dataList.add(model);
+            }
+        }
+
+        dynamicList.add(dataList);
+        setChartData(dynamicList);
+    }
 
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
