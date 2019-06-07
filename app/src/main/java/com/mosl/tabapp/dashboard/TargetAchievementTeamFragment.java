@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -53,16 +52,14 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by raju on 2/20/2017.
@@ -705,9 +702,6 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment implements
                                 int j = 0;
                                 if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
                                     hideProgress();
-                                   /* "value" : 0,
-                                            "label" : Unique Meeting,
-                                    "formatted" : 0.00%*/
                                     targetAchievementModelsSecond.clear();
                                     targetAchievementModelsFirst.clear();
                                     targetAchievementModelsThird.clear();
@@ -802,11 +796,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment implements
                                                             }
                                                         }
                                                         txtLeftValue.setText(value);
-                                                    } /*else if (ord == 2) {
-                                                        centerStr = displayText;
-                                                        txtCenterStr.setText(displayText);
-                                                        txtCenterValue.setText(value);
-                                                    }*/
+                                                    }
 
                                                 }
 
@@ -814,22 +804,6 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment implements
                                         }
                                     }
 
-                                   /* if (!responseJsonObj.isNull("Table4")) {
-                                        JSONArray tableArrayTargetWidget = responseJsonObj.getJSONArray("Table4");
-                                        if (tableArrayTargetWidget.length() != 0 && tableArrayTargetWidget != null) {
-                                            llTopFirst.setVisibility(View.VISIBLE);
-                                            ivView.setVisibility(View.VISIBLE);
-                                            for (int i = 0; i < tableArrayTargetWidget.length(); i++) {
-                                                JSONObject getJsonObject = tableArrayTargetWidget.getJSONObject(0);
-                                                String target = (getJsonObject.isNull("Target") || getJsonObject.getString("Target").equals("")) ? "0" : getJsonObject.getString("Target");
-                                                String achieved = (getJsonObject.isNull("Achieved") || getJsonObject.getString("Achieved").equals("")) ? "0" : getJsonObject.getString("Achieved");
-                                                String unique = (getJsonObject.isNull("Unique") || getJsonObject.getString("Unique").equals("")) ? "0" : getJsonObject.getString("Unique");
-                                                targetStr = target;
-                                                widgetName = achieved;
-                                                uniqueStr = unique;
-                                            }
-                                        }
-                                    }*/
 
                                     Map<String, List<TargetAchievementModel>> dataMap = new HashMap();
                                     JSONArray tableDataArray = responseJsonObj.getJSONArray("Table");

@@ -20,6 +20,7 @@ import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
+import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
@@ -231,4 +232,9 @@ interface SaathiApi {
   fun getTargetAchievement(
     @Body request: ClientRequest
   ): Observable<TargetAchievementItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getTargetAchievementTeam(
+    @Body request: ClientRequest
+  ): Observable<TargetAchievementTeamItem>
 }
