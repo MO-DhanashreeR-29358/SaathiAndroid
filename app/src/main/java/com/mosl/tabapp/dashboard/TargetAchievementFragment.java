@@ -1,7 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -35,10 +34,13 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.target.Table1Item;
+import com.mosl.saathi.api.model.dashboard.target.TableItem;
+import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.common.LockedPieChart;
 import com.mosl.tabapp.model.TargetAchievementModel;
@@ -48,18 +50,16 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 
 /**
  * Created by raju on 2/16/2017.
@@ -68,7 +68,8 @@ import org.json.JSONObject;
 public class TargetAchievementFragment extends MOSLCommonFragment implements View.OnClickListener {
 
     private View targetView;
-    private TextView txtRightValue, txtRightStr, txtCenterValue, txtCenterStr, txtLeftStr, txtLeftValue, tvUniqueLeads, tvError;
+    private TextView txtRightValue, txtRightStr, txtCenterValue, txtCenterStr, txtLeftStr,
+        txtLeftValue, tvUniqueLeads, tvError;
     private LockedPieChart chartTarget;
     private ArrayList<String> xdataTargetArr = new ArrayList<>();
     private ArrayList<String> yDataTargetArr = new ArrayList<>();
@@ -83,12 +84,13 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
     private ArrayList<TargetAchievementModel> targetAchievementModels;
     private LinearLayout NewDataLinearLayout, llTop;
     private int[] VORDIPLOM_COLORS = {
-            Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
-            Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46), Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
-            Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46)
+        Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
+        Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46), Color.rgb(255, 21, 0), Color.rgb(38, 127, 183),
+        Color.rgb(0, 177, 207),
+        Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46)
     };
     private Spinner spTargetVsAchivementFilter;
     private DashboardModel dashboardModel;
@@ -100,12 +102,15 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
     private List<WidgetType> widgetTypeList = new ArrayList<>();
     private String widgetName;
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        targetView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_target_achievement);
-        setUpView(targetView);
-        return targetView;
+    public static void smoothScrollToUserSelectedPosition(final RecyclerView scrollView,
+        int destination) {
+
+        final RecyclerView.Adapter adapter = scrollView.getAdapter();
+        int totalCount = adapter.getItemCount();
+        if (destination > 0 && destination < totalCount - 1) {
+            //AutoScrool
+            scrollView.smoothScrollToPosition(destination);
+        }
     }
 
     public static TargetAchievementFragment newInstance(Context context) {
@@ -114,15 +119,35 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         return fragment;
     }
 
+    @Override
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+        targetView = super.onCreateView(inflater, container, savedInstanceState);
+        attachLayout(R.layout.frag_target_achievement);
+        setUpView(targetView);
+        return targetView;
+    }
+
+    private void secondClickTarget(Map addtionalParameterMap) {
+        addtionalParameterMap.putAll(getAddtionalParameterMap());
+        Bundle args = new Bundle();
+        args.putString(SYSTEM_NAME, widgetSystemName);
+        args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
+        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+    }
+
     public void setUpView(View targetView) {
         widgetModelList = new ArrayList<>();
         try {
             dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
-            widgetModelList = dashboardModel.getGroupModel(DashboardSystemModel.getTargetAchivementSystemName()).getWidgetList();
-            if(widgetModelList.size() <3){
+            widgetModelList =
+                dashboardModel.getGroupModel(DashboardSystemModel.getTargetAchivementSystemName())
+                    .getWidgetList();
+            if (widgetModelList.size() < 3) {
                 widgetModelList.add(new WidgetModel());
                 widgetModelList.add(new WidgetModel());
-            }else if(widgetModelList.size() <4){
+            } else if (widgetModelList.size() < 4) {
                 widgetModelList.add(new WidgetModel());
             }
         } catch (Exception e) {
@@ -137,7 +162,8 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         txtLeftValue = (TextView) targetView.findViewById(R.id.txtLeftValue);
         txtLeftStr = (TextView) targetView.findViewById(R.id.txtLeftStr);
         tvUniqueLeads = (TextView) targetView.findViewById(R.id.tvUniqueLeads);
-        horizontalRecyclerView = (RecyclerView) targetView.findViewById(R.id.horizontalRecyclerView);
+        horizontalRecyclerView =
+            (RecyclerView) targetView.findViewById(R.id.horizontalRecyclerView);
         verticalRecyclerView = (RecyclerView) targetView.findViewById(R.id.verticalRecyclerView);
         chartTarget = (LockedPieChart) targetView.findViewById(R.id.chartTarget);
         chartTarget.setRotationEnabled(false);
@@ -147,60 +173,51 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         linearLayoutLeft = (LinearLayout) targetView.findViewById(R.id.linearLayoutLeft);
         linearLayoutCenter = (LinearLayout) targetView.findViewById(R.id.linearLayoutCenter);
         linearLayoutRight = (LinearLayout) targetView.findViewById(R.id.linearLayoutRight);
-        spTargetVsAchivementFilter = (Spinner) targetView.findViewById(R.id.spTargetVsAchivementFilter);
-        DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getTargetAchivementSystemName());
+        spTargetVsAchivementFilter =
+            (Spinner) targetView.findViewById(R.id.spTargetVsAchivementFilter);
+        DashboardGroupModel groupModel =
+            dashboardModel.getGroupModel(DashboardSystemModel.getTargetAchivementSystemName());
         //set filter data
         List<WidgetFilterModel> filterList = groupModel.getGroupFilterList();
         if (filterList != null && filterList.size() == 1) {
-            ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
+            ArrayAdapter<FilterRowData> adapter1 =
+                new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
+                    filterList.get(0).getFilterData());
             adapter1.setDropDownViewResource(R.layout.mdropdown);
             spTargetVsAchivementFilter.setAdapter(adapter1);
         }
-        spTargetVsAchivementFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                webServiceCall();
-            }
+        spTargetVsAchivementFilter.setOnItemSelectedListener(
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                    int position, long id) {
+                    webServiceCall();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
+            });
         horizontalAdapter = new HorizontalAdapter(widgetModelList);
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getMainActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager horizontalLayoutManagaer =
+            new LinearLayoutManager(getMainActivity(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         horizontalRecyclerView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
-
 
         linearLayoutLeft.setOnClickListener(this);
         linearLayoutCenter.setOnClickListener(this);
         linearLayoutRight.setOnClickListener(this);
     }
 
-    private void secondClickTarget(Map addtionalParameterMap) {
-        addtionalParameterMap.putAll(getAddtionalParameterMap());
-        Bundle args = new Bundle();
-        args.putString(SYSTEM_NAME, widgetSystemName);
-        args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
-        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-    }
+    private Map<String, String> getAddtionalParameterMap() {
 
-    private Map getAddtionalParameterMap() {
-
-        Map addtionalParameterMap = new HashMap<>();
+        Map<String, String> addtionalParameterMap = new HashMap<>();
         try {
             FilterRowData filter1 = (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
             addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
             addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
-           /* if (dashboardModel.getName().toLowerCase().endsWith("self")) {
-                addtionalParameterMap.put(SELF_KEY, "SELF");
-            }*/
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -208,7 +225,8 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         return addtionalParameterMap;
     }
 
-    private void populateTotalClientPieChartBroking(ArrayList<TargetAchievementModel> targetAchievementModels) {
+    private void populateTotalClientPieChartBroking(
+        ArrayList<TargetAchievementModel> targetAchievementModels) {
         Description des = chartTarget.getDescription();
         des.setEnabled(false);
         chartTarget.setUsePercentValues(true);
@@ -226,7 +244,6 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         chartTarget.setDrawCenterText(true);
         chartTarget.setDrawSliceText(false);
 
-
         // enable rotation of the chart by touch
 
         // totalClientPieChart.setOnChartValueSelectedListener(this);
@@ -236,14 +253,54 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         chartTarget.animateY(1400, Easing.EasingOption.EaseInOutQuad);
     }
 
-    private void setDataBroking(int count, float range, final ArrayList<TargetAchievementModel> targetAchievementModels) {
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.linearLayoutCenter) {
+            NewaddtionalParameterMap.clear();
+            NewaddtionalParameterMap.put(WIDGETTYPE, centerStr);
+            try {
+                if (Double.parseDouble(txtCenterValue.getText().toString().trim()) != 0) {
+                    secondClickTarget(NewaddtionalParameterMap);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.linearLayoutRight) {
+            NewaddtionalParameterMap.clear();
+            NewaddtionalParameterMap.put(WIDGETTYPE, rightStr);
+            try {
+                if (Double.parseDouble(txtRightValue.getText().toString().trim()) != 0) {
+                    secondClickTarget(NewaddtionalParameterMap);
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (id == R.id.linearLayoutLeft) {
+            if (!leftStr.equalsIgnoreCase("Target")) {
+                NewaddtionalParameterMap.clear();
+                NewaddtionalParameterMap.put(WIDGETTYPE, leftStr.toLowerCase());
+                try {
+                    if (Double.parseDouble(txtLeftValue.getText().toString().trim()) != 0) {
+                        secondClickTarget(NewaddtionalParameterMap);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void setDataBroking(int count, float range,
+        final ArrayList<TargetAchievementModel> targetAchievementModels) {
 
         float mult = range;
 
         ArrayList<PieEntry> yVals1 = new ArrayList<PieEntry>();
         // drawn above each other.
         for (int i = 0; i < targetAchievementModels.size(); i++) {
-            yVals1.add(new PieEntry(Float.valueOf(targetAchievementModels.get(i).getValue()), targetAchievementModels.get(i).getLabel(), i));
+            yVals1.add(new PieEntry(Float.valueOf(targetAchievementModels.get(i).getValue()),
+                targetAchievementModels.get(i).getLabel(), i));
         }
        /* yVals1.add(new PieEntry(Float.valueOf("0.83"), targetAchievementModels.get(0).getLabel(), 0));
         yVals1.add(new PieEntry(Float.valueOf("0.83"), targetAchievementModels.get(1).getLabel(), 1));*/
@@ -270,7 +327,6 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         PieData data = new PieData(dataSet);
         //  data.setValueFormatter(new PercentFormatter());
 
-
         data.setDrawValues(false);     // for text hidden
         data.setValueTextSize(11f);
         data.setValueTextColor(Color.WHITE);
@@ -290,7 +346,8 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 pieChartDetail(e.getX());
                 Log.d("Highlited", String.valueOf(h.getX()));
                 Log.d("xValue", String.valueOf((int) (e.getX())));
-                addtionalParameterMap.put(KEY, targetAchievementModels.get((int) h.getX()).getLabel());
+                addtionalParameterMap.put(KEY,
+                    targetAchievementModels.get((int) h.getX()).getLabel());
                 // addtionalParameterMap.put(WIDGETTYPE, targetAchievementModels.get((int) h.getX()).getWidgetType().getWidgetTypes());
                 //  secondClickTarget(addtionalParameterMap);
                 addtionalParameterMap.putAll(getAddtionalParameterMap());
@@ -299,7 +356,6 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
                 args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                 navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-
             }
 
             private void pieChartDetail(float sliceIndex) {
@@ -313,52 +369,223 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             public void onNothingSelected() {
 
             }
-
         });
-
 
         chartTarget.invalidate();
     }
 
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.linearLayoutCenter) {
-            NewaddtionalParameterMap.clear();
-            NewaddtionalParameterMap.put(WIDGETTYPE, centerStr);
-            try {
-                if (Double.parseDouble(txtCenterValue.getText().toString().trim()) != 0) {
-                    secondClickTarget(NewaddtionalParameterMap);
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        } else if (id == R.id.linearLayoutRight) {
-            NewaddtionalParameterMap.clear();
-            NewaddtionalParameterMap.put(WIDGETTYPE, rightStr);
-            try {
-                if (Double.parseDouble(txtRightValue.getText().toString().trim()) != 0) {
-                    secondClickTarget(NewaddtionalParameterMap);
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
+    private void webServiceCall() {
+        targetAchievementModels = new ArrayList<>();
+        yDataTargetArr.clear();
+        xdataTargetArr.clear();
+        dataArr.clear();
+        tvUniqueLeads.setText("");
+        populateTotalClientPieChartBroking(targetAchievementModels);
+        tvError.setVisibility(View.GONE);
 
-        } else if (id == R.id.linearLayoutLeft) {
-            if (!leftStr.equalsIgnoreCase("Target")) {
-                NewaddtionalParameterMap.clear();
-                NewaddtionalParameterMap.put(WIDGETTYPE, leftStr.toLowerCase());
-                try {
-                    if (Double.parseDouble(txtLeftValue.getText().toString().trim()) != 0) {
-                        secondClickTarget(NewaddtionalParameterMap);
-                    }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+            ClientRequest request = new ClientRequest(
+                businessProfileId,
+                getAddtionalParameterMap(),
+                widgetSystemName,
+                dashboardModel.getProductId(),
+                dashboardModel.getEmployeeCode()
+            );
+            Disposable subscribe = saathiApi.getTargetAchievement(request)
+                .compose(applyUiModel())
+                .subscribe(this::render);
+        } else {
+            hideProgress();
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
+    private void renderTargetAchievement(TargetAchievementItem response) {
+        int j = 0;
+        targetAchievementModels.clear();
+        if (response.table1 != null) {
+            List<Table1Item> table1Items = response.table1;
+            if (table1Items.size() != 0) {
+                for (int i = 0; i < table1Items.size(); i++) {
+                    Table1Item item = table1Items.get(i);
+                    String value = stringOrZero(item.value);
+                    String label = stringOrZero(item.label);
+                    String formatted = stringOrZero(item.formatted);
+                    try {
+                        j = Double.valueOf(value).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    yDataTargetArr.add(i, String.valueOf(j));
+                    xdataTargetArr.add(i, label);
+                    targetAchievementModels.add(
+                        new TargetAchievementModel(label, formatted, value, null));
+                }
+                verticalAdapter = new VerticalAdapter(targetAchievementModels);
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setAdapter(verticalAdapter);
+                verticalAdapter.notifyDataSetChanged();
+                populateTotalClientPieChartBroking(targetAchievementModels);
+            } else {
+                tvError.setVisibility(View.VISIBLE);
+                verticalAdapter = new VerticalAdapter(targetAchievementModels);
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setAdapter(verticalAdapter);
+                verticalAdapter.notifyDataSetChanged();
+                populateTotalClientPieChartBroking(targetAchievementModels);
+            }
+        } else {
+            tvError.setVisibility(View.VISIBLE);
+            verticalAdapter = new VerticalAdapter(targetAchievementModels);
+            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+            verticalRecyclerView.setAdapter(verticalAdapter);
+            verticalAdapter.notifyDataSetChanged();
+            populateTotalClientPieChartBroking(targetAchievementModels);
+        }
+        if (response.table != null) {
+            List<TableItem> tableItems = response.table;
+            int arrayLength;
+            if (tableItems.size() == 5) {
+                arrayLength = 3;
+            } else {
+                arrayLength = tableItems.size();
+            }
+            if (tableItems.size() != 0) {
+                llTop.setVisibility(View.VISIBLE);
+                for (int i = 0; i < arrayLength; i++) {
+                    if (arrayLength == 3) {
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutRight.setVisibility(View.VISIBLE);
+                        linearLayoutCenter.setVisibility(View.VISIBLE);
+                        TableItem item = tableItems.get(i);
+                        String displayText = stringOrEmpty(item.displayText);
+                        String value = stringOrZero(item.value);
+                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        } else if (ord == 2) {
+                            centerStr = displayText;
+                            txtCenterStr.setText(displayText);
+                            txtCenterValue.setText(value);
+                        } else if (ord == 3) {
+                            rightStr = displayText;
+                            txtRightStr.setText(displayText);
+                            txtRightValue.setText(value);
+                        }
+                    } else if (tableItems.size() == 2) {
+                        linearLayoutRight.setVisibility(View.GONE);
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutCenter.setVisibility(View.VISIBLE);
+                        TableItem item = tableItems.get(i);
+                        String displayText = stringOrEmpty(item.displayText);
+                        String value = stringOrEmpty(item.value);
+                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        } else if (ord == 2) {
+                            centerStr = displayText;
+                            txtCenterStr.setText(displayText);
+                            txtCenterValue.setText(value);
+                        }
+                    } else if (tableItems.size() == 1) {
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutRight.setVisibility(View.GONE);
+                        linearLayoutCenter.setVisibility(View.GONE);
+                        TableItem item = tableItems.get(i);
+                        String displayText = stringOrEmpty(item.displayText);
+                        String value = stringOrEmpty(item.value);
+                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        }
+                    }
+                    try {
+                        tvUniqueLeads.setText(widgetTypeList.get(0).getTitle());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        tvUniqueLeads.setText("");
+                    }
+                }
+            } else {
+                tvUniqueLeads.setText("");
+            }
+        } else {
+            tvUniqueLeads.setText("");
+        }
+    }
+
+    private void render(UiModel<TargetAchievementItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            tvError.setVisibility(View.VISIBLE);
+            tvUniqueLeads.setText("");
+            verticalAdapter = new VerticalAdapter(targetAchievementModels);
+            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+            verticalRecyclerView.setAdapter(verticalAdapter);
+            verticalAdapter.notifyDataSetChanged();
+            populateTotalClientPieChartBroking(targetAchievementModels);
+            showOnFailurePopup(error);
+        }
+
+        TargetAchievementItem data = uiModel.data;
+        if (data != null) {
+            try {
+                renderTargetAchievement(data);
+            } catch (Exception e) {
+                tvError.setVisibility(View.VISIBLE);
+                tvUniqueLeads.setText("");
+                verticalAdapter = new VerticalAdapter(targetAchievementModels);
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setAdapter(verticalAdapter);
+                verticalAdapter.notifyDataSetChanged();
+                populateTotalClientPieChartBroking(targetAchievementModels);
+            }
+        }
+    }
 
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
@@ -379,16 +606,14 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             }
         }
 
-
         public HorizontalAdapter(List<WidgetModel> widgetModelList) {
             this.widgetModelList = widgetModelList;
         }
 
-
         @Override
         public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_target_achievement_list, parent, false);
+                .inflate(R.layout.item_target_achievement_list, parent, false);
 
             return new HorizontalAdapter.MyViewHolder(itemView);
         }
@@ -405,13 +630,15 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         }
 
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, final int position) {
+        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder,
+            final int position) {
             final WidgetModel widgetModel = widgetModelList.get(position);
             if (widgetModel.isSelected()) {
                 holder.tvWidgetName.setTextColor(getResources().getColor(R.color.white));
                 setImage(widgetModel.getIconUrl2().replaceAll(" ", "%20"), holder.imageView);
                 holder.tvWidgetName.setText(widgetModel.getName());
-                holder.card_view.setCardBackgroundColor(getResources().getColor(R.color.secondaryBackground));
+                holder.card_view.setCardBackgroundColor(
+                    getResources().getColor(R.color.secondaryBackground));
                 widgetSystemName = widgetModel.getSystemName();
                 widgetTypeList = widgetModel.getWidgetTypeList();
                 webServiceCall();
@@ -453,357 +680,31 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                     }
                 }
             });
-
         }
 
         public void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(context).load(imageUrl)
-                    //remove Chache         
-                    .asBitmap().placeholder(R.drawable.ic_white).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
-                @Override
-                protected void setResource(Bitmap resource) {
-                    RoundedBitmapDrawable circularBitmapDrawable =
+            Glide.with(context)
+                .load(imageUrl)
+                //remove Chache
+                .asBitmap()
+                .placeholder(R.drawable.ic_white)
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(new BitmapImageViewTarget(imageView) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable circularBitmapDrawable =
                             RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                    //circularBitmapDrawable.setCircular(true);
-                    imageView.setImageDrawable(circularBitmapDrawable);
-                }
-            });
+                        //circularBitmapDrawable.setCircular(true);
+                        imageView.setImageDrawable(circularBitmapDrawable);
+                    }
+                });
         }
 
         @Override
         public int getItemCount() {
             return widgetModelList.size();
-        }
-    }
-
-
-    private void webServiceCall() {
-        targetAchievementModels = new ArrayList<>();
-        yDataTargetArr.clear();
-        xdataTargetArr.clear();
-        dataArr.clear();
-        tvUniqueLeads.setText("");
-        populateTotalClientPieChartBroking(targetAchievementModels);
-        tvError.setVisibility(View.GONE);
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-            inputMap.put("WidgetSystemName", widgetSystemName);
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-
-            //dashboard for
-            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    renderTargetAcheivement(response);
-                                } else {
-                                    tvError.setVisibility(View.VISIBLE);
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    tvUniqueLeads.setText("");
-                                    verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                    verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                    verticalRecyclerView.setAdapter(verticalAdapter);
-                                    verticalAdapter.notifyDataSetChanged();
-                                    populateTotalClientPieChartBroking(targetAchievementModels);
-                                }
-
-                            } else {
-                                tvError.setVisibility(View.VISIBLE);
-                                hideProgress();
-                                tvUniqueLeads.setText("");
-                                verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                verticalRecyclerView.setAdapter(verticalAdapter);
-                                verticalAdapter.notifyDataSetChanged();
-                                populateTotalClientPieChartBroking(targetAchievementModels);
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            tvError.setVisibility(View.VISIBLE);
-                            e.printStackTrace();
-                            hideProgress();
-                            //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            tvUniqueLeads.setText("");
-                            verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                            verticalRecyclerView.setAdapter(verticalAdapter);
-                            verticalAdapter.notifyDataSetChanged();
-                            populateTotalClientPieChartBroking(targetAchievementModels);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                tvError.setVisibility(View.VISIBLE);
-                                tvUniqueLeads.setText("");
-                                verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                verticalRecyclerView.setAdapter(verticalAdapter);
-                                verticalAdapter.notifyDataSetChanged();
-                                populateTotalClientPieChartBroking(targetAchievementModels);
-
-                                String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(errorMsg)) {
-                                    //     MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                                } else {
-                                    //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            //eat it
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        hideProgress();
-                    }
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
-        }
-
-    }
-
-    private void renderTargetAcheivement(JSONObject response) throws JSONException {
-        int j = 0;
-        hideProgress();
-        targetAchievementModels.clear();
-        JSONObject responseJsonObj = response.getJSONObject("Response");
-        if (!responseJsonObj.isNull("Table1")) {
-            JSONArray arrayDetail = responseJsonObj.getJSONArray("Table1");
-            if (arrayDetail.length() != 0 && arrayDetail != null) {
-                for (int i = 0; i < arrayDetail.length(); i++) {
-                    JSONObject jsonObject = arrayDetail.getJSONObject(i);
-                    String value =
-                        (jsonObject.isNull("value") || jsonObject.get("value").equals("")) ? "0"
-                            : jsonObject.getString("value");
-                    String label =
-                        (jsonObject.isNull("label") || jsonObject.getString("label").equals(""))
-                            ? "0" : jsonObject.getString("label");
-                    String formatted =
-                        (jsonObject.isNull("formatted") || jsonObject.getString("formatted")
-                            .equals("")) ? "0" : jsonObject.getString("formatted");
-                    try {
-                        j = new Double(value).intValue();
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                    yDataTargetArr.add(i, String.valueOf(j));
-                    xdataTargetArr.add(i, label);
-                    targetAchievementModels.add(
-                        new TargetAchievementModel(label, formatted, value, null));
-                }
-                verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                verticalRecyclerView.setAdapter(verticalAdapter);
-                verticalAdapter.notifyDataSetChanged();
-                populateTotalClientPieChartBroking(targetAchievementModels);
-            } else {
-                tvError.setVisibility(View.VISIBLE);
-                verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                verticalRecyclerView.setAdapter(verticalAdapter);
-                verticalAdapter.notifyDataSetChanged();
-                populateTotalClientPieChartBroking(targetAchievementModels);
-            }
-        } else {
-            tvError.setVisibility(View.VISIBLE);
-            verticalAdapter = new VerticalAdapter(targetAchievementModels);
-            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-            verticalRecyclerView.setAdapter(verticalAdapter);
-            verticalAdapter.notifyDataSetChanged();
-            populateTotalClientPieChartBroking(targetAchievementModels);
-        }
-        if (!responseJsonObj.isNull("Table")) {
-            JSONArray tableArray = responseJsonObj.getJSONArray("Table");
-            int arrayLength = 0;
-            if (tableArray.length() == 5) {
-                arrayLength = 3;
-            } else {
-                arrayLength = tableArray.length();
-            }
-            if (tableArray.length() != 0 && tableArray != null) {
-                llTop.setVisibility(View.VISIBLE);
-                for (int i = 0; i < arrayLength; i++) {
-                    if (arrayLength == 3) {
-                        linearLayoutLeft.setVisibility(View.VISIBLE);
-                        linearLayoutRight.setVisibility(View.VISIBLE);
-                        linearLayoutCenter.setVisibility(View.VISIBLE);
-                        JSONObject getJsonObject = tableArray.getJSONObject(i);
-                        String displayText =
-                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
-                                "DisplayText").equals("")) ? ""
-                                : getJsonObject.getString("DisplayText");
-                        String value =
-                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
-                                .equals("")) ? "0" : getJsonObject.getString("Value");
-                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                        if (ord == 1) {
-                            leftStr = displayText;
-                            if (!displayText.equalsIgnoreCase("Target")) {
-                                txtLeftStr.setText(displayText);
-                            } else {
-                                FilterRowData filter1 =
-                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
-                                    .equalsIgnoreCase("WTD")) {
-                                    txtLeftStr.setText("MTD " + displayText);
-                                } else {
-                                    txtLeftStr.setText(displayText);
-                                }
-                            }
-                            txtLeftValue.setText(value);
-                        } else if (ord == 2) {
-                            centerStr = displayText;
-                            txtCenterStr.setText(displayText);
-                            txtCenterValue.setText(value);
-                        } else if (ord == 3) {
-                            rightStr = displayText;
-                            txtRightStr.setText(displayText);
-                            txtRightValue.setText(value);
-                        }
-                    } else if (tableArray.length() == 2) {
-                        linearLayoutRight.setVisibility(View.GONE);
-                        linearLayoutLeft.setVisibility(View.VISIBLE);
-                        linearLayoutCenter.setVisibility(View.VISIBLE);
-                        JSONObject getJsonObject = tableArray.getJSONObject(i);
-                        String displayText =
-                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
-                                "DisplayText").equals("")) ? ""
-                                : getJsonObject.getString("DisplayText");
-                        String value =
-                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
-                                .equals("")) ? "" : getJsonObject.getString("Value");
-                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                        if (ord == 1) {
-                            leftStr = displayText;
-                            if (!displayText.equalsIgnoreCase("Target")) {
-                                txtLeftStr.setText(displayText);
-                            } else {
-                                FilterRowData filter1 =
-                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
-                                    .equalsIgnoreCase("WTD")) {
-                                    txtLeftStr.setText("MTD " + displayText);
-                                } else {
-                                    txtLeftStr.setText(displayText);
-                                }
-                            }
-                            txtLeftValue.setText(value);
-                        } else if (ord == 2) {
-                            centerStr = displayText;
-                            txtCenterStr.setText(displayText);
-                            txtCenterValue.setText(value);
-                        }
-                    } else if (tableArray.length() == 1) {
-                        linearLayoutLeft.setVisibility(View.VISIBLE);
-                        linearLayoutRight.setVisibility(View.GONE);
-                        linearLayoutCenter.setVisibility(View.GONE);
-                        JSONObject getJsonObject = tableArray.getJSONObject(i);
-                        String displayText =
-                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
-                                "DisplayText").equals("")) ? ""
-                                : getJsonObject.getString("DisplayText");
-                        String value =
-                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
-                                .equals("")) ? "" : getJsonObject.getString("Value");
-                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                        if (ord == 1) {
-                            leftStr = displayText;
-                            if (!displayText.equalsIgnoreCase("Target")) {
-                                txtLeftStr.setText(displayText);
-                            } else {
-                                FilterRowData filter1 =
-                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
-                                    .equalsIgnoreCase("WTD")) {
-                                    txtLeftStr.setText("MTD " + displayText);
-                                } else {
-                                    txtLeftStr.setText(displayText);
-                                }
-                            }
-                            txtLeftValue.setText(value);
-                        }
-                    }
-                    try {
-                        tvUniqueLeads.setText(widgetTypeList.get(0).getTitle());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        tvUniqueLeads.setText("");
-                    }
-                }
-            } else {
-                tvUniqueLeads.setText("");
-            }
-        } else {
-            tvUniqueLeads.setText("");
         }
     }
 
@@ -823,20 +724,17 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             }
         }
 
-
         public VerticalAdapter(List<TargetAchievementModel> targetAchievementModelList) {
             this.targetAchievementModelList = targetAchievementModelList;
         }
 
-
         @Override
         public VerticalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_target_achievement_dynamic_list, parent, false);
+                .inflate(R.layout.item_target_achievement_dynamic_list, parent, false);
 
             return new VerticalAdapter.MyViewHolder(itemView);
         }
-
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
@@ -844,26 +742,11 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             holder.tvLabel.setText(widgetModel.getLabel());
             holder.tvPercentage.setText(widgetModel.getForrmated());
             holder.imageView.setBackgroundColor(VORDIPLOM_COLORS[position]);
-
         }
-
 
         @Override
         public int getItemCount() {
             return targetAchievementModels.size();
         }
     }
-
-    public static void smoothScrollToUserSelectedPosition(final RecyclerView scrollView, int destination) {
-
-        final RecyclerView.Adapter adapter = scrollView.getAdapter();
-        int totalCount = adapter.getItemCount();
-        if (destination > 0 && destination < totalCount - 1) {
-            //AutoScrool
-            scrollView.smoothScrollToPosition(destination);
-        }
-
-
-    }
-
 }
