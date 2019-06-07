@@ -59,7 +59,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.json.JSONException;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 
@@ -757,8 +756,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderTargetAchievementTeam(TargetAchievementTeamItem response)
-        throws JSONException {
+    private void renderTargetAchievementTeam(TargetAchievementTeamItem response) {
         int j = 0;
         targetAchievementModelsSecond.clear();
         targetAchievementModelsFirst.clear();
