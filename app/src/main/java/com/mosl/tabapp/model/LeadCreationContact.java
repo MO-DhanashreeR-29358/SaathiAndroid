@@ -111,6 +111,10 @@ public class LeadCreationContact {
         return addresses.get(0);
     }
 
+    public List<AddressDetailModel> getAddress() {
+        return addresses;
+    }
+
     public String getContactJson() {
         String json = "{";
         json += "\"Salutation\":" + null;
