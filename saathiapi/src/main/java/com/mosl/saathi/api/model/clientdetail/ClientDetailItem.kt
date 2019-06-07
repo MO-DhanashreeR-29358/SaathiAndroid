@@ -3,7 +3,7 @@ package com.mosl.saathi.api.model.clientdetail
 import com.google.gson.annotations.SerializedName
 
 data class ClientDetailItem(
-  @JvmField @SerializedName("FamilyUCID") val familyUCID: Int,
+  @JvmField @SerializedName("FamilyUCID") val familyUCID: String,
   @JvmField @SerializedName("BankName") val bankName: String?,
   @JvmField @SerializedName("CreationDate") val creationDate: String?,
   @JvmField @SerializedName("IsFamilyHead") val isFamilyHead: Boolean,
