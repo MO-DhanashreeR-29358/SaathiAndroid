@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -53,15 +52,14 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by raju on 2/16/2017.
@@ -509,180 +507,9 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                         try {
                             if (statusCode == 200) {
                                 String status = response.getString(STATUS);
-                                int j = 0;
+
                                 if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    hideProgress();
-                                   /* "value" : 0,
-                                            "label" : Unique Meeting,
-                                    "formatted" : 0.00%*/
-                                    targetAchievementModels.clear();
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
-                                    if (!responseJsonObj.isNull("Table1")) {
-                                        JSONArray arrayDetail = responseJsonObj.getJSONArray("Table1");
-                                        if (arrayDetail.length() != 0 && arrayDetail != null) {
-                                            for (int i = 0; i < arrayDetail.length(); i++) {
-                                                JSONObject jsonObject = arrayDetail.getJSONObject(i);
-                                                String value = (jsonObject.isNull("value") || jsonObject.get("value").equals("")) ? "0" : jsonObject.getString("value");
-                                                String label = (jsonObject.isNull("label") || jsonObject.getString("label").equals("")) ? "0" : jsonObject.getString("label");
-                                                String formatted = (jsonObject.isNull("formatted") || jsonObject.getString("formatted").equals("")) ? "0" : jsonObject.getString("formatted");
-                                                try {
-                                                    j = new Double(value).intValue();
-                                                } catch (NumberFormatException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                yDataTargetArr.add(i, String.valueOf(j));
-                                                xdataTargetArr.add(i, label);
-                                                targetAchievementModels.add(new TargetAchievementModel(label, formatted, value, null));
-                                            }
-                                            verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                            verticalRecyclerView.setAdapter(verticalAdapter);
-                                            verticalAdapter.notifyDataSetChanged();
-                                            populateTotalClientPieChartBroking(targetAchievementModels);
-
-                                        } else {
-                                            tvError.setVisibility(View.VISIBLE);
-                                            verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                            verticalRecyclerView.setAdapter(verticalAdapter);
-                                            verticalAdapter.notifyDataSetChanged();
-                                            populateTotalClientPieChartBroking(targetAchievementModels);
-                                        }
-                                    } else {
-                                        tvError.setVisibility(View.VISIBLE);
-                                        verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                                        verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
-                                        verticalRecyclerView.setAdapter(verticalAdapter);
-                                        verticalAdapter.notifyDataSetChanged();
-                                        populateTotalClientPieChartBroking(targetAchievementModels);
-                                    }
-                                    if (!responseJsonObj.isNull("Table")) {
-                                        JSONArray tableArray = responseJsonObj.getJSONArray("Table");
-                                        int arrayLength = 0;
-                                        if (tableArray.length() == 5) {
-                                            arrayLength = 3;
-                                        } else {
-                                            arrayLength = tableArray.length();
-                                        }
-                                        if (tableArray.length() != 0 && tableArray != null) {
-                                            llTop.setVisibility(View.VISIBLE);
-                                            for (int i = 0; i < arrayLength; i++) {
-                                                if (arrayLength == 3) {
-                                                    linearLayoutLeft.setVisibility(View.VISIBLE);
-                                                    linearLayoutRight.setVisibility(View.VISIBLE);
-                                                    linearLayoutCenter.setVisibility(View.VISIBLE);
-                                                    JSONObject getJsonObject = tableArray.getJSONObject(i);
-                                                    String displayText = (getJsonObject.isNull("DisplayText") || getJsonObject.getString("DisplayText").equals("")) ? "" : getJsonObject.getString("DisplayText");
-                                                    String value = (getJsonObject.isNull("Value") || getJsonObject.getString("Value").equals("")) ? "0" : getJsonObject.getString("Value");
-                                                    int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                                                    if (ord == 1) {
-                                                        leftStr = displayText;
-                                                        if (!displayText.equalsIgnoreCase("Target")) {
-                                                            txtLeftStr.setText(displayText);
-                                                        } else {
-                                                            FilterRowData filter1 = (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                                            if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue().equalsIgnoreCase("WTD")) {
-                                                                txtLeftStr.setText("MTD " + displayText);
-                                                            } else {
-                                                                txtLeftStr.setText(displayText);
-                                                            }
-                                                        }
-                                                        txtLeftValue.setText(value);
-                                                    } else if (ord == 2) {
-                                                        centerStr = displayText;
-                                                        txtCenterStr.setText(displayText);
-                                                        txtCenterValue.setText(value);
-                                                    } else if (ord == 3) {
-                                                        rightStr = displayText;
-                                                        txtRightStr.setText(displayText);
-                                                        txtRightValue.setText(value);
-                                                    }
-                                                } else if (tableArray.length() == 2) {
-                                                    linearLayoutRight.setVisibility(View.GONE);
-                                                    linearLayoutLeft.setVisibility(View.VISIBLE);
-                                                    linearLayoutCenter.setVisibility(View.VISIBLE);
-                                                    JSONObject getJsonObject = tableArray.getJSONObject(i);
-                                                    String displayText = (getJsonObject.isNull("DisplayText") || getJsonObject.getString("DisplayText").equals("")) ? "" : getJsonObject.getString("DisplayText");
-                                                    String value = (getJsonObject.isNull("Value") || getJsonObject.getString("Value").equals("")) ? "" : getJsonObject.getString("Value");
-                                                    int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                                                    if (ord == 1) {
-                                                        leftStr = displayText;
-                                                        if (!displayText.equalsIgnoreCase("Target")) {
-                                                            txtLeftStr.setText(displayText);
-                                                        } else {
-                                                            FilterRowData filter1 = (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                                            if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue().equalsIgnoreCase("WTD")) {
-                                                                txtLeftStr.setText("MTD " + displayText);
-                                                            } else {
-                                                                txtLeftStr.setText(displayText);
-                                                            }
-                                                        }
-                                                        txtLeftValue.setText(value);
-                                                    } else if (ord == 2) {
-                                                        centerStr = displayText;
-                                                        txtCenterStr.setText(displayText);
-                                                        txtCenterValue.setText(value);
-                                                    }
-
-                                                } else if (tableArray.length() == 1) {
-                                                    linearLayoutLeft.setVisibility(View.VISIBLE);
-                                                    linearLayoutRight.setVisibility(View.GONE);
-                                                    linearLayoutCenter.setVisibility(View.GONE);
-                                                    JSONObject getJsonObject = tableArray.getJSONObject(i);
-                                                    String displayText = (getJsonObject.isNull("DisplayText") || getJsonObject.getString("DisplayText").equals("")) ? "" : getJsonObject.getString("DisplayText");
-                                                    String value = (getJsonObject.isNull("Value") || getJsonObject.getString("Value").equals("")) ? "" : getJsonObject.getString("Value");
-                                                    int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
-                                                    if (ord == 1) {
-                                                        leftStr = displayText;
-                                                        if (!displayText.equalsIgnoreCase("Target")) {
-                                                            txtLeftStr.setText(displayText);
-                                                        } else {
-                                                            FilterRowData filter1 = (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                                            if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue().equalsIgnoreCase("WTD")) {
-                                                                txtLeftStr.setText("MTD " + displayText);
-                                                            } else {
-                                                                txtLeftStr.setText(displayText);
-                                                            }
-                                                        }
-                                                        txtLeftValue.setText(value);
-                                                    } /*else if (ord == 2) {
-                                                        centerStr = displayText;
-                                                        txtCenterStr.setText(displayText);
-                                                        txtCenterValue.setText(value);
-                                                    }*/
-
-                                                }
-                                                /*JSONArray jsonArrayKeys = getJsonObject.names();
-                                                leftStr = jsonArrayKeys.getString(0);
-                                                centerStr = jsonArrayKeys.getString(1);
-                                                txtLeftStr.setText(leftStr);
-                                                txtCenterStr.setText(centerStr);
-                                                int target = getJsonObject.isNull(leftStr) ? 0 : getJsonObject.getInt(leftStr);
-                                                int achieved = getJsonObject.isNull(centerStr) ? 0 : getJsonObject.getInt(centerStr);
-                                                txtLeftValue.setText(target + "");
-                                                txtCenterValue.setText(achieved + "");
-                                                if (getJsonObject.has("Unique")) {
-                                                    int unique = getJsonObject.isNull("Unique") ? 0 : getJsonObject.getInt("Unique");
-                                                    txtRightValue.setText(unique + "");
-                                                    linearLayoutUnique.setVisibility(View.VISIBLE);
-                                                } else {
-                                                    linearLayoutUnique.setVisibility(View.GONE);
-                                                }*/
-                                                try {
-                                                    tvUniqueLeads.setText(widgetTypeList.get(0).getTitle());
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
-                                                    tvUniqueLeads.setText("");
-                                                }
-                                            }
-                                        } else {
-                                            tvUniqueLeads.setText("");
-                                        }
-                                    } else {
-                                        tvUniqueLeads.setText("");
-                                    }
-
-
+                                    renderTargetAcheivement(response);
                                 } else {
                                     tvError.setVisibility(View.VISIBLE);
                                     hideProgress();
@@ -804,6 +631,181 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
 
     }
 
+    private void renderTargetAcheivement(JSONObject response) throws JSONException {
+        int j = 0;
+        hideProgress();
+        targetAchievementModels.clear();
+        JSONObject responseJsonObj = response.getJSONObject("Response");
+        if (!responseJsonObj.isNull("Table1")) {
+            JSONArray arrayDetail = responseJsonObj.getJSONArray("Table1");
+            if (arrayDetail.length() != 0 && arrayDetail != null) {
+                for (int i = 0; i < arrayDetail.length(); i++) {
+                    JSONObject jsonObject = arrayDetail.getJSONObject(i);
+                    String value =
+                        (jsonObject.isNull("value") || jsonObject.get("value").equals("")) ? "0"
+                            : jsonObject.getString("value");
+                    String label =
+                        (jsonObject.isNull("label") || jsonObject.getString("label").equals(""))
+                            ? "0" : jsonObject.getString("label");
+                    String formatted =
+                        (jsonObject.isNull("formatted") || jsonObject.getString("formatted")
+                            .equals("")) ? "0" : jsonObject.getString("formatted");
+                    try {
+                        j = new Double(value).intValue();
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                    yDataTargetArr.add(i, String.valueOf(j));
+                    xdataTargetArr.add(i, label);
+                    targetAchievementModels.add(
+                        new TargetAchievementModel(label, formatted, value, null));
+                }
+                verticalAdapter = new VerticalAdapter(targetAchievementModels);
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setAdapter(verticalAdapter);
+                verticalAdapter.notifyDataSetChanged();
+                populateTotalClientPieChartBroking(targetAchievementModels);
+            } else {
+                tvError.setVisibility(View.VISIBLE);
+                verticalAdapter = new VerticalAdapter(targetAchievementModels);
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setAdapter(verticalAdapter);
+                verticalAdapter.notifyDataSetChanged();
+                populateTotalClientPieChartBroking(targetAchievementModels);
+            }
+        } else {
+            tvError.setVisibility(View.VISIBLE);
+            verticalAdapter = new VerticalAdapter(targetAchievementModels);
+            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+            verticalRecyclerView.setAdapter(verticalAdapter);
+            verticalAdapter.notifyDataSetChanged();
+            populateTotalClientPieChartBroking(targetAchievementModels);
+        }
+        if (!responseJsonObj.isNull("Table")) {
+            JSONArray tableArray = responseJsonObj.getJSONArray("Table");
+            int arrayLength = 0;
+            if (tableArray.length() == 5) {
+                arrayLength = 3;
+            } else {
+                arrayLength = tableArray.length();
+            }
+            if (tableArray.length() != 0 && tableArray != null) {
+                llTop.setVisibility(View.VISIBLE);
+                for (int i = 0; i < arrayLength; i++) {
+                    if (arrayLength == 3) {
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutRight.setVisibility(View.VISIBLE);
+                        linearLayoutCenter.setVisibility(View.VISIBLE);
+                        JSONObject getJsonObject = tableArray.getJSONObject(i);
+                        String displayText =
+                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
+                                "DisplayText").equals("")) ? ""
+                                : getJsonObject.getString("DisplayText");
+                        String value =
+                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
+                                .equals("")) ? "0" : getJsonObject.getString("Value");
+                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        } else if (ord == 2) {
+                            centerStr = displayText;
+                            txtCenterStr.setText(displayText);
+                            txtCenterValue.setText(value);
+                        } else if (ord == 3) {
+                            rightStr = displayText;
+                            txtRightStr.setText(displayText);
+                            txtRightValue.setText(value);
+                        }
+                    } else if (tableArray.length() == 2) {
+                        linearLayoutRight.setVisibility(View.GONE);
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutCenter.setVisibility(View.VISIBLE);
+                        JSONObject getJsonObject = tableArray.getJSONObject(i);
+                        String displayText =
+                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
+                                "DisplayText").equals("")) ? ""
+                                : getJsonObject.getString("DisplayText");
+                        String value =
+                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
+                                .equals("")) ? "" : getJsonObject.getString("Value");
+                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        } else if (ord == 2) {
+                            centerStr = displayText;
+                            txtCenterStr.setText(displayText);
+                            txtCenterValue.setText(value);
+                        }
+                    } else if (tableArray.length() == 1) {
+                        linearLayoutLeft.setVisibility(View.VISIBLE);
+                        linearLayoutRight.setVisibility(View.GONE);
+                        linearLayoutCenter.setVisibility(View.GONE);
+                        JSONObject getJsonObject = tableArray.getJSONObject(i);
+                        String displayText =
+                            (getJsonObject.isNull("DisplayText") || getJsonObject.getString(
+                                "DisplayText").equals("")) ? ""
+                                : getJsonObject.getString("DisplayText");
+                        String value =
+                            (getJsonObject.isNull("Value") || getJsonObject.getString("Value")
+                                .equals("")) ? "" : getJsonObject.getString("Value");
+                        int ord = getJsonObject.isNull("Ord") ? 0 : getJsonObject.getInt("Ord");
+                        if (ord == 1) {
+                            leftStr = displayText;
+                            if (!displayText.equalsIgnoreCase("Target")) {
+                                txtLeftStr.setText(displayText);
+                            } else {
+                                FilterRowData filter1 =
+                                    (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
+                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                    .equalsIgnoreCase("WTD")) {
+                                    txtLeftStr.setText("MTD " + displayText);
+                                } else {
+                                    txtLeftStr.setText(displayText);
+                                }
+                            }
+                            txtLeftValue.setText(value);
+                        }
+                    }
+                    try {
+                        tvUniqueLeads.setText(widgetTypeList.get(0).getTitle());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        tvUniqueLeads.setText("");
+                    }
+                }
+            } else {
+                tvUniqueLeads.setText("");
+            }
+        } else {
+            tvUniqueLeads.setText("");
+        }
+    }
 
     public class VerticalAdapter extends RecyclerView.Adapter<VerticalAdapter.MyViewHolder> {
 
