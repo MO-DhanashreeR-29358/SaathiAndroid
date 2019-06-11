@@ -50,9 +50,13 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse;
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest;
+import com.mosl.saathi.api.model.lead.AssetProductItem;
+import com.mosl.saathi.api.model.lead.BrokingProductItem;
 import com.mosl.saathi.api.model.lead.BusinessProfile;
+import com.mosl.saathi.api.model.lead.CashPortfolioItem;
 import com.mosl.saathi.api.model.lead.CityItem;
 import com.mosl.saathi.api.model.lead.CityListRequest;
+import com.mosl.saathi.api.model.lead.ClientSummaryResponse;
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest;
 import com.mosl.saathi.api.model.lead.Contact;
 import com.mosl.saathi.api.model.lead.ContactAddressItem;
@@ -69,6 +73,7 @@ import com.mosl.saathi.api.model.lead.LeadViewItem;
 import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
+import com.mosl.saathi.api.model.lead.PortfolioSnapshotItem;
 import com.mosl.saathi.api.model.lead.StageItem;
 import com.mosl.saathi.api.model.lead.StageMobileItem;
 import com.mosl.saathi.api.model.lead.StageMobileRequest;
@@ -3412,196 +3417,161 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             Disposable disposable = saathiApi.getClientSummary(
                 "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
                 AccountDetails.getUserId(), ucid)
-                .map(JSONObject::new)
-                //.doOnNext(data->Timber.d(" bmk %s",data))
                 .compose(applyUiModel())
-                .subscribe(uiModel -> {
-                    toggleProgress(uiModel.inProgress);
-
-                    Throwable error = uiModel.error;
-                    if (error != null) {
-                        Timber.e(error);
-                    }
-
-                    JSONObject response = uiModel.data;
-                    if (response != null) {
-                        int bgcolor = 0;
-
-                        JSONArray headerArray = response.getJSONArray("Portfolio Snapshot");
-                        JSONObject jsonObject = headerArray.getJSONObject(0);
-
-                        String networth = jsonObject.getString("Networth").equals("") ? ""
-                            : jsonObject.getString("Networth");
-                        String daychangeamount =
-                            jsonObject.getString("DayChangeAmount").equals("") ? ""
-                                : jsonObject.getString("DayChangeAmount");
-                        String daychangeper =
-                            jsonObject.getString("DayChangePercentage").equals("") ? ""
-                                : jsonObject.getString("DayChangePercentage");
-                        String overallchangeamt =
-                            jsonObject.getString("OverallChangeAmount").equals("") ? ""
-                                : jsonObject.getString("OverallChangeAmount");
-                        String overallchangeperst =
-                            jsonObject.getString("OverallChangePercentage").equals("") ? ""
-                                : jsonObject.getString("OverallChangePercentage");
-
-                        txtNetworth.setText(StringStuff.commaDecorator(networth));
-                        txtDaychgamt.setText(StringStuff.commaDecorator(daychangeamount));
-                        txtDaychgperst.setText(
-                            "(" + StringStuff.commaDecorator(daychangeper) + " %)");
-                        if (daychangeamount.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        txtDaychgamt.setBackgroundColor(getResources().getColor(bgcolor));
-
-                        if (daychangeper.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        txtDaychgperst.setTextColor(getResources().getColor(bgcolor));
-
-                        txtOverallchgamt.setText(
-                            StringStuff.commaDecorator(overallchangeamt));
-                        txt_overallchgperst.setText(
-                            "(" + StringStuff.commaDecorator(overallchangeperst) + " %)");
-                        if (overallchangeamt.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        txtOverallchgamt.setBackgroundColor(
-                            getResources().getColor(bgcolor));
-
-                        if (overallchangeperst.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        txt_overallchgperst.setTextColor(getResources().getColor(bgcolor));
-
-                        arrayList_broking = new ArrayList<HashMap<String, String>>();
-                        JSONArray headerArray_broking =
-                            response.getJSONArray("Broking Product");
-                        if (headerArray_broking != null) {
-                            for (int x = 0; x < headerArray_broking.length(); x++) {
-                                JSONObject jsonObject_broking =
-                                    headerArray_broking.getJSONObject(x);
-
-                                String product = jsonObject_broking.getString("product");
-                                String marketVal = jsonObject_broking.getString("MarketValue");
-                                String investmentValue =
-                                    jsonObject_broking.getString("PurchaseValue");
-                                String overallGainLoss =
-                                    jsonObject_broking.getString("OverallGainLoss");
-                                String percentageGainLoss =
-                                    jsonObject_broking.getString("PercentageGainLoss");
-                                String productID = jsonObject_broking.getString("ProductID");
-
-                                brokingMap = new HashMap<String, String>();
-                                brokingMap.put(PRODUCT, product);
-                                brokingMap.put(INVEST_AMT,
-                                    StringStuff.commaDecorator(investmentValue));
-                                brokingMap.put(PURCHASE_VALUE,
-                                    StringStuff.commaDecorator(marketVal));
-                                brokingMap.put(OVERALL_GAIN_LOSS,
-                                    StringStuff.commaDecorator(overallGainLoss));
-                                brokingMap.put(PERCENTAGE_GAIN_LOSS,
-                                    StringStuff.commaDecorator(percentageGainLoss) + " %");
-                                brokingMap.put(PRODUCT_ID, productID);
-                                arrayList_broking.add(brokingMap);
-                            }
-                        }
-
-                        final PortfolioSnapshotBrokAdapter navListAdapter =
-                            new PortfolioSnapshotBrokAdapter(
-                                getActivity().getApplicationContext(), arrayList_broking);
-                        lvBrok.setAdapter(navListAdapter);
-
-                        navListAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvBrok);
-                        arrayList_asset = new ArrayList<HashMap<String, String>>();
-                        JSONArray headerArray_asset =
-                            response.getJSONArray("Asset Product");
-                        if (headerArray_asset != null) {
-                            for (int x = 0; x < headerArray_asset.length(); x++) {
-                                JSONObject jsonObject_asset =
-                                    headerArray_asset.getJSONObject(x);
-
-                                String ProductID = jsonObject_asset.getString("ProductID");
-                                String product_aaset = jsonObject_asset.getString("product");
-                                String investmentValue_aaset =
-                                    jsonObject_asset.getString("MarketValue");
-                                String purchaseValue_aaset =
-                                    jsonObject_asset.getString("PurchaseValue");
-                                String overallGainLoss_aaset =
-                                    jsonObject_asset.getString("OverallGainLoss");
-                                String percentageGainLoss_aaset =
-                                    jsonObject_asset.getString("PercentageGainLoss");
-                                String productType = jsonObject_asset.getString("Producttype");
-
-                                assestMap = new HashMap<String, String>();
-                                assestMap.put(MOSLConstants.PRODUCT_ID, ProductID);
-                                assestMap.put(MOSLConstants.PRODUCT, product_aaset);
-                                assestMap.put(MOSLConstants.INVEST_AMT,
-                                    StringStuff.commaDecorator(investmentValue_aaset));
-                                assestMap.put(MOSLConstants.PURCHASE_VALUE,
-                                    StringStuff.commaDecorator(purchaseValue_aaset));
-                                assestMap.put(MOSLConstants.OVERALL_GAIN_LOSS,
-                                    StringStuff.commaDecorator(overallGainLoss_aaset));
-                                assestMap.put(MOSLConstants.PERCENTAGE_GAIN_LOSS,
-                                    StringStuff.commaDecorator(percentageGainLoss_aaset)
-                                        + " %");
-                                assestMap.put(MOSLConstants.PRODUCT_TYPE, productType);
-                                arrayList_asset.add(assestMap);
-                            }
-                        }
-
-                        PortfolioSnapshotAssetAdapter navListAssetAdapter =
-                            new PortfolioSnapshotAssetAdapter(
-                                getActivity().getApplicationContext(), arrayList_asset);
-                        navListAssetAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvAsset);
-                        arrayList_cash = new ArrayList<HashMap<String, String>>();
-
-                        JSONArray headerArray_cash = response.getJSONArray("Cash Portfolio");
-                        for (int x = 0; x < headerArray_cash.length(); x++) {
-                            JSONObject jsonObject_cash = headerArray_cash.getJSONObject(x);
-
-                            String product_cash = jsonObject_cash.getString("Product");
-                            String totalLedgerBalance_cash =
-                                jsonObject_cash.getString("TotalLedgerBalance");
-
-                            cashMap = new HashMap<String, String>();
-                            cashMap.put(MOSLConstants.PRODUCT, product_cash);
-                            cashMap.put(MOSLConstants.TOTAL,
-                                StringStuff.commaDecorator(totalLedgerBalance_cash));
-
-                            arrayList_cash.add(cashMap);
-                        }
-
-                        PortfolioSnapshotCashAdapter navListCashAdapter =
-                            new PortfolioSnapshotCashAdapter(
-                                getActivity().getApplicationContext(), arrayList_cash);
-                        lvCash.setAdapter(navListCashAdapter);
-                        navListAssetAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvCash);
-                    }
-                });
+                .subscribe(this::renderClientSummary);
         } else {
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
+        }
+    }
+
+    private void renderClientSummary(UiModel<ClientSummaryResponse> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            Timber.e(error);
+        }
+        ClientSummaryResponse data = uiModel.data;
+        if (data != null) {
+            int bgcolor = 0;
+            List<PortfolioSnapshotItem> snapshotProduct = data.portfolioSnapshot;
+            PortfolioSnapshotItem item = snapshotProduct.get(0);
+            String netWorth = stringOrEmpty(item.networth);
+            String dayChangeAmount = stringOrEmpty(item.dayChangeAmount);
+            String dayChangePer = stringOrEmpty(item.dayChangePercentage);
+            String overallChangeAmt = stringOrEmpty(item.overallChangeAmount);
+            String overallChangePer = stringOrEmpty(item.overallChangePercentage);
+
+            txtNetworth.setText(StringStuff.commaDecorator(netWorth));
+            txtDaychgamt.setText(StringStuff.commaDecorator(dayChangeAmount));
+            txtDaychgperst.setText(
+                "(" + StringStuff.commaDecorator(dayChangePer) + " %)");
+
+            if (dayChangeAmount.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            txtDaychgamt.setBackgroundColor(getResources().getColor(bgcolor));
+
+            if (dayChangePer.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            txtDaychgperst.setTextColor(getResources().getColor(bgcolor));
+
+            txtOverallchgamt.setText(
+                StringStuff.commaDecorator(overallChangeAmt));
+            txt_overallchgperst.setText(
+                "(" + StringStuff.commaDecorator(overallChangePer) + " %)");
+            if (overallChangeAmt.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            txtOverallchgamt.setBackgroundColor(
+                getResources().getColor(bgcolor));
+
+            if (overallChangePer.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            txt_overallchgperst.setTextColor(getResources().getColor(bgcolor));
+
+            arrayList_broking = new ArrayList<>();
+            List<BrokingProductItem> brokingProduct = data.brokingProduct;
+            for (int i = 0; i < brokingProduct.size(); i++) {
+                BrokingProductItem brokingItem = brokingProduct.get(i);
+                String product = brokingItem.product;
+                String marketVal = brokingItem.marketValue;
+                String investmentValue = brokingItem.purchaseValue;
+                String overallGainLoss = brokingItem.overallGainLoss;
+                String percentageGainLoss = brokingItem.percentageGainLoss;
+                String productID = brokingItem.productId;
+
+                brokingMap = new HashMap<>();
+                brokingMap.put(PRODUCT, product);
+                brokingMap.put(INVEST_AMT,
+                    StringStuff.commaDecorator(investmentValue));
+                brokingMap.put(PURCHASE_VALUE,
+                    StringStuff.commaDecorator(marketVal));
+                brokingMap.put(OVERALL_GAIN_LOSS,
+                    StringStuff.commaDecorator(overallGainLoss));
+                brokingMap.put(PERCENTAGE_GAIN_LOSS,
+                    StringStuff.commaDecorator(percentageGainLoss) + " %");
+                brokingMap.put(PRODUCT_ID, productID);
+                arrayList_broking.add(brokingMap);
+            }
+            final PortfolioSnapshotBrokAdapter navListAdapter =
+                new PortfolioSnapshotBrokAdapter(
+                    getActivity().getApplicationContext(), arrayList_broking);
+            lvBrok.setAdapter(navListAdapter);
+
+            navListAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvBrok);
+            arrayList_asset = new ArrayList<>();
+
+            List<AssetProductItem> assetProduct = data.assetProduct;
+            for (int x = 0; x < assetProduct.size(); x++) {
+                AssetProductItem assetItem = assetProduct.get(x);
+                String ProductID = assetItem.productID;
+                String product_aaset = assetItem.product;
+                String marketValue_asset = assetItem.marketValue;
+                String purchaseValue_asset = assetItem.purchaseValue;
+                String overallGainLoss_asset = assetItem.overallGainLoss;
+                String percentGainLoss_asset = assetItem.percentageGainLoss;
+                String productType = assetItem.producttype;
+
+                assestMap = new HashMap<>();
+                assestMap.put(MOSLConstants.PRODUCT_ID, ProductID);
+                assestMap.put(MOSLConstants.PRODUCT, product_aaset);
+                assestMap.put(MOSLConstants.INVEST_AMT,
+                    StringStuff.commaDecorator(marketValue_asset));
+                assestMap.put(MOSLConstants.PURCHASE_VALUE,
+                    StringStuff.commaDecorator(purchaseValue_asset));
+                assestMap.put(MOSLConstants.OVERALL_GAIN_LOSS,
+                    StringStuff.commaDecorator(overallGainLoss_asset));
+                assestMap.put(MOSLConstants.PERCENTAGE_GAIN_LOSS,
+                    StringStuff.commaDecorator(percentGainLoss_asset)
+                        + " %");
+                assestMap.put(MOSLConstants.PRODUCT_TYPE, productType);
+                arrayList_asset.add(assestMap);
+            }
+
+            PortfolioSnapshotAssetAdapter navListAssetAdapter =
+                new PortfolioSnapshotAssetAdapter(
+                    getActivity().getApplicationContext(), arrayList_asset);
+            navListAssetAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvAsset);
+
+            arrayList_cash = new ArrayList<>();
+
+            List<CashPortfolioItem> cashPortfolio = data.cashPortfolio;
+            for (int i = 0; i < cashPortfolio.size(); i++) {
+                CashPortfolioItem cashItem = cashPortfolio.get(i);
+
+                String productCash = cashItem.product;
+                String totalLedger = cashItem.totalLedgerBalance;
+
+                cashMap = new HashMap<>();
+                cashMap.put(MOSLConstants.PRODUCT, productCash);
+                cashMap.put(MOSLConstants.TOTAL,
+                    StringStuff.commaDecorator(totalLedger));
+
+                arrayList_cash.add(cashMap);
+            }
         }
     }
 
