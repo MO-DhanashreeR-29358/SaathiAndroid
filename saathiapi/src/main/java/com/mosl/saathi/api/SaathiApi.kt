@@ -21,6 +21,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProduct
 import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
+import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
 import com.mosl.saathi.api.model.lead.ClientSummaryResponse
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
 import com.mosl.saathi.api.model.lead.CountryItem
@@ -180,7 +181,7 @@ interface SaathiApi {
     @Url url: String,
     @Query("Userid") userId: String,
     @Query("ClientUCID") ucid: String
-  ): Observable<String>
+  ): Observable<ClientGainLossSummaryResponse>
 
   //===================== Create Lead=========================
 

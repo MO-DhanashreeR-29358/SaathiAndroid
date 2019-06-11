@@ -50,12 +50,16 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse;
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest;
+import com.mosl.saathi.api.model.lead.AssetGainLossItem;
 import com.mosl.saathi.api.model.lead.AssetProductItem;
+import com.mosl.saathi.api.model.lead.AvailableLimitsItem;
+import com.mosl.saathi.api.model.lead.BrokingGainLossItem;
 import com.mosl.saathi.api.model.lead.BrokingProductItem;
 import com.mosl.saathi.api.model.lead.BusinessProfile;
 import com.mosl.saathi.api.model.lead.CashPortfolioItem;
 import com.mosl.saathi.api.model.lead.CityItem;
 import com.mosl.saathi.api.model.lead.CityListRequest;
+import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse;
 import com.mosl.saathi.api.model.lead.ClientSummaryResponse;
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest;
 import com.mosl.saathi.api.model.lead.Contact;
@@ -83,6 +87,7 @@ import com.mosl.saathi.api.model.lead.StateProvinceItem;
 import com.mosl.saathi.api.model.lead.StateProvinceRequest;
 import com.mosl.saathi.api.model.lead.StatusItem;
 import com.mosl.saathi.api.model.lead.StatusRequest;
+import com.mosl.saathi.api.model.lead.TotalGainLossItem;
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest;
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse;
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest;
@@ -124,7 +129,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.droidparts.widget.ClearableEditText;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
@@ -3572,6 +3576,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                 arrayList_cash.add(cashMap);
             }
+
+            PortfolioSnapshotCashAdapter navListCashAdapter =
+                new PortfolioSnapshotCashAdapter(
+                    getActivity().getApplicationContext(), arrayList_cash);
+            lvCash.setAdapter(navListCashAdapter);
+            navListAssetAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvCash);
         }
     }
 
@@ -3580,172 +3591,157 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             Disposable disposable = saathiApi.getClientGainLossSummary(
                 "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
                 AccountDetails.getUserId(), ucid)
-                .map(JSONObject::new)
                 .compose(applyUiModel())
-                .subscribe(uiModel -> {
-                    toggleProgress(uiModel.inProgress);
-
-                    Throwable error = uiModel.error;
-                    if (error != null) {
-                        Timber.e(error);
-                    }
-
-                    JSONObject response = uiModel.data;
-                    if (response != null) {
-                        int bgcolor = 0;
-
-                        JSONArray headerArray = response.getJSONArray("Total Gain Loss");
-                        JSONObject jsonObject = headerArray.getJSONObject(0);
-
-                        String totalSTGain =
-                            jsonObject.getString("TOTALST_GAIN").equals("") ? ""
-                                : jsonObject.getString("TOTALST_GAIN");
-                        String totalLTGain =
-                            jsonObject.getString("TOTALLT_GAIN").equals("") ? ""
-                                : jsonObject.getString("TOTALLT_GAIN");
-                        String totalGain =
-                            jsonObject.getString("TOTAL_GAIN").equals("") ? ""
-                                : jsonObject.getString("TOTAL_GAIN");
-                        String STGainPer =
-                            jsonObject.getString("ST_GAIN_PER").equals("") ? ""
-                                : jsonObject.getString("ST_GAIN_PER");
-                        String LTGainPer =
-                            jsonObject.getString("LT_GAIN_PER").equals("") ? ""
-                                : jsonObject.getString("LT_GAIN_PER");
-                        tvTotalGainLoss.setText(StringStuff.commaDecorator(totalGain));
-
-                        tvSTGainLoss.setText(StringStuff.commaDecorator(totalSTGain));
-                        tvSTGainLossPer.setText(
-                            "(" + StringStuff.commaDecorator(STGainPer) + " %)");
-                        tvLTGainLoss.setText(StringStuff.commaDecorator(totalLTGain));
-                        tvLTGainLossPer.setText(
-                            "(" + StringStuff.commaDecorator(LTGainPer) + " %)");
-
-                        if (totalSTGain.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        tvSTGainLoss.setBackgroundColor(getResources().getColor(bgcolor));
-
-                        if (STGainPer.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        tvSTGainLossPer.setTextColor(getResources().getColor(bgcolor));
-
-                        if (totalLTGain.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        tvLTGainLoss.setBackgroundColor(getResources().getColor(bgcolor));
-
-                        if (LTGainPer.startsWith("-")) {
-
-                            bgcolor = R.color.action_bar_negative;
-                        } else {
-
-                            bgcolor = R.color.action_bar_positive;
-                        }
-                        tvLTGainLossPer.setTextColor(getResources().getColor(bgcolor));
-                        arrLstPLBrok = new ArrayList<HashMap<String, String>>();
-                        JSONArray headerArray_broking =
-                            response.getJSONArray("Broking Productwise Gainloss");
-                        for (int x = 0; x < headerArray_broking.length(); x++) {
-                            JSONObject jsonObject_broking =
-                                headerArray_broking.getJSONObject(x);
-
-                            String productId =
-                                jsonObject_broking.getString("ASSET_SUB_TYPE_ID");
-                            String product = jsonObject_broking.getString("PRODUCT");
-                            String STGainLoss = jsonObject_broking.getString("ST_GAIN");
-                            String LTGainLoss = jsonObject_broking.getString("LT_GAIN");
-                            String totalGainLoss = jsonObject_broking.getString("TOTAL_GAIN");
-                            String assetSubTypeID =
-                                jsonObject_broking.getString("ASSET_SUB_TYPE_ID");
-
-                            brokPLHashMap = new HashMap<String, String>();
-                            brokPLHashMap.put(PRODUCT_ID, productId);
-                            brokPLHashMap.put(PRODUCT, product);
-                            brokPLHashMap.put(STGL, StringStuff.commaDecorator(STGainLoss));
-                            brokPLHashMap.put(LTGL, StringStuff.commaDecorator(LTGainLoss));
-                            brokPLHashMap.put(TOTAL_GAIN_LOSS,
-                                StringStuff.commaDecorator(totalGainLoss));
-                            brokPLHashMap.put(ASSET_SUB_TYPE_ID, assetSubTypeID);
-
-                            arrLstPLBrok.add(brokPLHashMap);
-                        }
-
-                        PortfolioPLBrokingAdapter plBrokingAdapter =
-                            new PortfolioPLBrokingAdapter(getActivity().getApplicationContext(),
-                                arrLstPLBrok);
-                        lvPLBrok.setAdapter(plBrokingAdapter);
-                        plBrokingAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvPLBrok);
-                        arrLstPLAsset = new ArrayList<HashMap<String, String>>();
-                        JSONArray jsonArrPLAsset =
-                            response.getJSONArray("Asset Productwise Gainloss");
-                        for (int x = 0; x < jsonArrPLAsset.length(); x++) {
-                            JSONObject jsonObject_broking = jsonArrPLAsset.getJSONObject(x);
-                            String productId =
-                                jsonObject_broking.getString("ASSET_SUB_TYPE_ID");
-                            String product = jsonObject_broking.getString("PRODUCT");
-                            String STGainLoss = jsonObject_broking.getString("ST_GAIN");
-                            String LTGainLoss = jsonObject_broking.getString("LT_GAIN");
-                            String totalGainLoss = jsonObject_broking.getString("TOTAL_GAIN");
-
-                            assetPLHashMap = new HashMap<String, String>();
-                            assetPLHashMap.put(PRODUCT_ID, productId);
-                            assetPLHashMap.put(PRODUCT, product);
-                            assetPLHashMap.put(STGL, StringStuff.commaDecorator(STGainLoss));
-                            assetPLHashMap.put(LTGL, StringStuff.commaDecorator(LTGainLoss));
-                            assetPLHashMap.put(TOTAL_GAIN_LOSS,
-                                StringStuff.commaDecorator(totalGainLoss));
-
-                            arrLstPLAsset.add(assetPLHashMap);
-                        }
-                        PortfolioPLAssetAdapter plAssetAdapter =
-                            new PortfolioPLAssetAdapter(getActivity().getApplicationContext(),
-                                arrLstPLAsset);
-                        lvPLAsset.setAdapter(plAssetAdapter);
-                        plAssetAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvPLAsset);
-
-                        arrLstPLLimits = new ArrayList<HashMap<String, String>>();
-                        JSONArray jsonArrPLLimits = response.getJSONArray("Available Limits");
-                        for (int x = 0; x < jsonArrPLLimits.length(); x++) {
-                            JSONObject jsonObject_broking = jsonArrPLLimits.getJSONObject(x);
-
-                            String cash = jsonObject_broking.getString("CASH");
-                            String amt = jsonObject_broking.getString("AMOUNT");
-
-                            limitsPLHashMap = new HashMap<String, String>();
-                            limitsPLHashMap.put(CASH, cash);
-                            limitsPLHashMap.put(AMOUNT, StringStuff.commaDecorator(amt));
-
-                            arrLstPLLimits.add(limitsPLHashMap);
-                        }
-                        PortfolioPLLimitsAdapter plLimitsAdapter =
-                            new PortfolioPLLimitsAdapter(getActivity().getApplicationContext(),
-                                arrLstPLLimits);
-                        lvPLLimits.setAdapter(plLimitsAdapter);
-                        plAssetAdapter.notifyDataSetChanged();
-                        setListViewHeightBasedOnChildren(lvPLLimits);
-                    }
-                });
+                .subscribe(this::renderGainLossSummary);
         } else {
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
             hideProgress();
+        }
+    }
+
+    private void renderGainLossSummary(UiModel<ClientGainLossSummaryResponse> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            Timber.e(error);
+        }
+        ClientGainLossSummaryResponse data = uiModel.data;
+        if (data != null) {
+            int bgcolor = 0;
+            List<TotalGainLossItem> totalGainLossProduct = data.totalGainLoss;
+            TotalGainLossItem gainLossItem = totalGainLossProduct.get(0);
+
+            String totalSTGain = stringOrEmpty(gainLossItem.tOTALSTGAIN);
+            String totalLTGain = stringOrEmpty(gainLossItem.tOTALLTGAIN);
+            String totalGain = stringOrEmpty(gainLossItem.tOTALGAIN);
+            String stGainPer = stringOrEmpty(gainLossItem.sTGAINPER);
+            String ltGainPer = stringOrEmpty(gainLossItem.lTGAINPER);
+
+            tvTotalGainLoss.setText(StringStuff.commaDecorator(totalGain));
+
+            tvSTGainLoss.setText(StringStuff.commaDecorator(totalSTGain));
+            tvSTGainLossPer.setText(
+                "(" + StringStuff.commaDecorator(stGainPer) + " %)");
+            tvLTGainLoss.setText(StringStuff.commaDecorator(totalLTGain));
+            tvLTGainLossPer.setText(
+                "(" + StringStuff.commaDecorator(ltGainPer) + " %)");
+
+            if (totalSTGain.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            tvSTGainLoss.setBackgroundColor(getResources().getColor(bgcolor));
+
+            if (stGainPer.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            tvSTGainLossPer.setTextColor(getResources().getColor(bgcolor));
+
+            if (totalLTGain.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            tvLTGainLoss.setBackgroundColor(getResources().getColor(bgcolor));
+
+            if (ltGainPer.startsWith("-")) {
+
+                bgcolor = R.color.action_bar_negative;
+            } else {
+
+                bgcolor = R.color.action_bar_positive;
+            }
+            tvLTGainLossPer.setTextColor(getResources().getColor(bgcolor));
+
+            arrLstPLBrok = new ArrayList<>();
+            List<BrokingGainLossItem> brokingGainloss = data.brokingProductwiseGainloss;
+            for (int i = 0; i < brokingGainloss.size(); i++) {
+                BrokingGainLossItem brokingItem = brokingGainloss.get(i);
+
+                String productId = brokingItem.assetSubTypeId;
+                String product = brokingItem.assetSubTypeId;
+                String stGainLoss = brokingItem.assetSubTypeId;
+                String ltGainLoss = brokingItem.assetSubTypeId;
+                String totalGainLoss = brokingItem.assetSubTypeId;
+                String assetSubTypeID = brokingItem.assetSubTypeId;
+
+                brokPLHashMap = new HashMap<>();
+                brokPLHashMap.put(PRODUCT_ID, productId);
+                brokPLHashMap.put(PRODUCT, product);
+                brokPLHashMap.put(STGL, StringStuff.commaDecorator(stGainLoss));
+                brokPLHashMap.put(LTGL, StringStuff.commaDecorator(ltGainLoss));
+                brokPLHashMap.put(TOTAL_GAIN_LOSS,
+                    StringStuff.commaDecorator(totalGainLoss));
+                brokPLHashMap.put(ASSET_SUB_TYPE_ID, assetSubTypeID);
+
+                arrLstPLBrok.add(brokPLHashMap);
+            }
+            PortfolioPLBrokingAdapter plBrokingAdapter =
+                new PortfolioPLBrokingAdapter(getActivity().getApplicationContext(),
+                    arrLstPLBrok);
+            lvPLBrok.setAdapter(plBrokingAdapter);
+            plBrokingAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvPLBrok);
+
+            arrLstPLAsset = new ArrayList<>();
+            List<AssetGainLossItem> assetGainloss = data.assetProductwiseGainloss;
+            for (int i = 0; i < assetGainloss.size(); i++) {
+                AssetGainLossItem assetItem = assetGainloss.get(i);
+                String productId = assetItem.assetSubTypeId;
+                String product = assetItem.assetSubTypeId;
+                String stGainLoss = assetItem.assetSubTypeId;
+                String ltGainLoss = assetItem.assetSubTypeId;
+                String totalGainLoss = assetItem.assetSubTypeId;
+
+                assetPLHashMap = new HashMap<>();
+                assetPLHashMap.put(PRODUCT_ID, productId);
+                assetPLHashMap.put(PRODUCT, product);
+                assetPLHashMap.put(STGL, StringStuff.commaDecorator(stGainLoss));
+                assetPLHashMap.put(LTGL, StringStuff.commaDecorator(ltGainLoss));
+                assetPLHashMap.put(TOTAL_GAIN_LOSS,
+                    StringStuff.commaDecorator(totalGainLoss));
+
+                arrLstPLAsset.add(assetPLHashMap);
+            }
+            PortfolioPLAssetAdapter plAssetAdapter =
+                new PortfolioPLAssetAdapter(getActivity().getApplicationContext(),
+                    arrLstPLAsset);
+            lvPLAsset.setAdapter(plAssetAdapter);
+            plAssetAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvPLAsset);
+
+            arrLstPLLimits = new ArrayList<>();
+            List<AvailableLimitsItem> availableLimits = data.availableLimits;
+            for (int i = 0; i < availableLimits.size(); i++) {
+                AvailableLimitsItem limitsItem = availableLimits.get(i);
+
+                String cash = limitsItem.cASH;
+                String amount = limitsItem.aMOUNT;
+
+                limitsPLHashMap = new HashMap<>();
+                limitsPLHashMap.put(CASH, cash);
+                limitsPLHashMap.put(AMOUNT, StringStuff.commaDecorator(amount));
+
+                arrLstPLLimits.add(limitsPLHashMap);
+            }
+            PortfolioPLLimitsAdapter plLimitsAdapter =
+                new PortfolioPLLimitsAdapter(getActivity().getApplicationContext(),
+                    arrLstPLLimits);
+            lvPLLimits.setAdapter(plLimitsAdapter);
+            plAssetAdapter.notifyDataSetChanged();
+            setListViewHeightBasedOnChildren(lvPLLimits);
         }
     }
 
