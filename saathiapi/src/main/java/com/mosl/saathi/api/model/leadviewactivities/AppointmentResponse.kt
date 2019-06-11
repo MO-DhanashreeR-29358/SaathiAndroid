@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName
 
 data class AppointmentResponse(
 
-  @JvmField @SerializedName("MOBNO") val mOBNO: Any,
+  @JvmField @SerializedName("MOBNO") val mOBNO: String?,
 
-  @JvmField @SerializedName("Product") val product: String,
+  @JvmField @SerializedName("Product") val product: String?,
 
-  @JvmField @SerializedName("EMAIL") val eMAIL: Any,
+  @JvmField @SerializedName("EMAIL") val eMAIL: String?,
 
-  @JvmField @SerializedName("Name") val name: String,
+  @JvmField @SerializedName("Name") val name: String?,
 
   @JvmField @SerializedName("AttendeeEmp") val attendeeEmp: String,
 
-  @JvmField @SerializedName("MeetingID") val meetingID: Int,
+  @JvmField @SerializedName("MeetingID") val meetingID: String?,
 
   @JvmField @SerializedName("Stage") val stage: Any,
 
@@ -22,15 +22,15 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("DATE_DISPLAY") val dATEDISPLAY: String,
 
-  @JvmField @SerializedName("Status") val status: Int,
+  @JvmField @SerializedName("Status") val status: String?,
 
-  @JvmField @SerializedName("CreatedBy") val createdBy: String,
+  @JvmField @SerializedName("CreatedBy") val createdBy: String?,
 
-  @JvmField @SerializedName("ActivityType") val activityType: String,
+  @JvmField @SerializedName("ActivityType") val activityType: String?,
 
-  @JvmField @SerializedName("TIME") val tIME: String,
+  @JvmField @SerializedName("TIME") val tIME: String?,
 
-  @JvmField @SerializedName("StatusName") val statusName: Any,
+  @JvmField @SerializedName("StatusName") val statusName: String?,
 
   @JvmField @SerializedName("ATTENDEE_4") val aTTENDEE4: Any,
 
@@ -42,15 +42,17 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @JvmField @SerializedName("DATE") val dATE: String,
+  @JvmField @SerializedName("DATE") val dATE: String?,
 
   @JvmField @SerializedName("ATTENDEE_5") val aTTENDEE5: Any,
 
   @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
 
-  @JvmField @SerializedName("LeadID") val leadID: Int,
+  @JvmField @SerializedName("LeadID") val leadID: String?,
 
-  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: Any,
+  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String?,
 
-  @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean
+  @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean,
+
+  @JvmField @SerializedName("UCID") val ucid: String?
 )

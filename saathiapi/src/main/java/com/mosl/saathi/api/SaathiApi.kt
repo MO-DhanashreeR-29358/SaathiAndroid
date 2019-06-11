@@ -51,6 +51,7 @@ import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface SaathiApi {
 
@@ -179,7 +180,10 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getAppointments(@Body request: AppointmentRequest): Observable<List<AppointmentResponse>>
 
-  @POST("Meeting/")
+  @POST("Meeting/{action}")
   @ExtraDataWrapper
-  fun deleteAppointments(@Body request: DeleteAppointmentRequest): Observable<String>
+  fun deleteAppointments(
+    @Path("action") action: String,
+    @Body request: DeleteAppointmentRequest
+  ): Observable<String>
 }

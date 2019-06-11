@@ -22,6 +22,8 @@ import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
 import com.mosl.saathi.api.model.leadviewactivities.Filter;
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest;
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse;
@@ -40,9 +42,7 @@ import io.reactivex.disposables.Disposable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,7 +58,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
     private TextView tvAppointment, tvMeeting, tvNoAppointment, tvNoMeeting;
     private LinearLayout llAppointment, llMeeting;
     private RecyclerView rvAppointment, rvMeeting;
-    private ArrayList<LeadActivitiesAppointModel> appointmentList;
+    private ArrayList<LeadActivitiesAppointModel> appointmentList = new ArrayList<>();
     private ArrayList<LeadActivitiesMeetingModel> meetingList = new ArrayList<>();
     private AppointmentAdapter appointmentAdapter;
     private MeetingAdapter meetingAdapter;
@@ -219,262 +219,70 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
 
     private void appointments() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("LeadID", leadId);
-            inputMap.put("PageSize", REPORT_PAGE_SIZE);
-            inputMap.put("Page", "1");
-            inputMap.put("CalculatedPage", "0");
-            inputMap.put("TotalCount", "0");
-            inputMap.put(UCID, mUcid);
-            String serviceMethod = "Meeting/GetAppointment";
-
-            try {
-                CRMWebServiceHandler.postWithRequestAndFilterObject(getMainActivity(),
-                    serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    hideProgress();
-                                    meeting();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        appointmentList = new ArrayList<>();
-
-                                        JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                        JSONArray dataArray = jsonObject.getJSONArray(DATA);
-                                        String repeatOnCode = "";
-                                        if (dataArray.length() > 0) {
-                                            for (int i = 0; i < dataArray.length(); i++) {
-                                                JSONObject objDetail = dataArray.getJSONObject(i);
-                                                String Status = (objDetail.isNull(STATUS)
-                                                    || objDetail.getString(STATUS).equals("")) ? ""
-                                                    : objDetail.getString(STATUS);
-                                                String MeetingID = (objDetail.isNull("MeetingID")
-                                                    || objDetail.getString("MeetingID").equals(""))
-                                                    ? "" : objDetail.getString("MeetingID");
-                                                String LeadID = (objDetail.isNull("LeadID")
-                                                    || objDetail.getString("LeadID").equals(""))
-                                                    ? "" : objDetail.getString("LeadID");
-                                                String Name =
-                                                    (objDetail.isNull(NAME) || objDetail.getString(
-                                                        NAME).equals("")) ? ""
-                                                        : objDetail.getString(NAME);
-                                                String EMAIL = (objDetail.isNull("EMAIL")
-                                                    || objDetail.getString("EMAIL").equals("")) ? ""
-                                                    : objDetail.getString("EMAIL");
-                                                String mobNo =
-                                                    (objDetail.isNull(MOBNO) || objDetail.getString(
-                                                        MOBNO).equals("")) ? ""
-                                                        : objDetail.getString(MOBNO);
-                                                String date = (objDetail.isNull("DATE")
-                                                    || objDetail.getString("DATE").equals("")) ? ""
-                                                    : objDetail.getString("DATE");
-                                                String time = (objDetail.isNull("TIME")
-                                                    || objDetail.getString("TIME").equals("")) ? ""
-                                                    : objDetail.getString("TIME");
-                                                String AttendeeEmp =
-                                                    (objDetail.isNull("AttendeeEmp")
-                                                        || objDetail.getString("AttendeeEmp")
-                                                        .equals("")) ? ""
-                                                        : objDetail.getString("AttendeeEmp");
-                                                String Product = (objDetail.isNull("Product")
-                                                    || objDetail.getString("Product").equals(""))
-                                                    ? "" : objDetail.getString("Product");
-                                                String StatusName = (objDetail.isNull("StatusName")
-                                                    || objDetail.getString("StatusName").equals(""))
-                                                    ? "" : objDetail.getString("StatusName");
-                                                String ActivityType =
-                                                    (objDetail.isNull("ActivityType")
-                                                        || objDetail.getString("ActivityType")
-                                                        .equals("")) ? ""
-                                                        : objDetail.getString("ActivityType");
-                                                String ucid =
-                                                    (objDetail.isNull(UCID) || objDetail.getString(
-                                                        UCID).equals("")) ? ""
-                                                        : objDetail.getString(UCID);
-                                                String CreatedBy = (objDetail.isNull("CreatedBy")
-                                                    || objDetail.getString("CreatedBy").equals(""))
-                                                    ? "" : objDetail.getString("CreatedBy");
-                                                if (objDetail.has("repeatOnCode")) {
-                                                    repeatOnCode = (objDetail.isNull("repeatOnCode")
-                                                        || objDetail.getString("repeatOnCode")
-                                                        .equals("")) ? ""
-                                                        : objDetail.getString("repeatOnCode");
-                                                }
-
-                                                appointmentList.add(
-                                                    new LeadActivitiesAppointModel(CreatedBy,
-                                                        Status, MeetingID, LeadID, Name, EMAIL,
-                                                        mobNo, CRMMOSLCommon.formatMonth(date),
-                                                        time, AttendeeEmp
-                                                        , Product, StatusName, ActivityType, ucid,
-                                                        repeatOnCode));
-                                            }
-                                            appointmentAdapter =
-                                                new AppointmentAdapter(appointmentList);
-                                            RecyclerView.LayoutManager mLayoutManager =
-                                                new LinearLayoutManager(getActivity());
-                                            rvAppointment.setLayoutManager(mLayoutManager);
-                                            rvAppointment.setAdapter(appointmentAdapter);
-                                            tvNoAppointment.setVisibility(View.GONE);
-                                        } else {
-
-                                            tvNoAppointment.setVisibility(View.VISIBLE);
-                                        }
-                                    } else {
-                                        tvNoAppointment.setVisibility(View.VISIBLE);
-                                        appointmentList = new ArrayList<>();
-                                        appointmentAdapter =
-                                            new AppointmentAdapter(appointmentList);
-                                        RecyclerView.LayoutManager mLayoutManager =
-                                            new LinearLayoutManager(getActivity());
-                                        rvAppointment.setLayoutManager(mLayoutManager);
-                                        rvAppointment.setAdapter(appointmentAdapter);
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    meeting();
-                                    tvNoAppointment.setVisibility(View.VISIBLE);
-                                    appointmentList = new ArrayList<>();
-                                    appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                    RecyclerView.LayoutManager mLayoutManager =
-                                        new LinearLayoutManager(getActivity());
-                                    rvAppointment.setLayoutManager(mLayoutManager);
-                                    rvAppointment.setAdapter(appointmentAdapter);
-                                    hideProgress();
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                meeting();
-                                tvNoAppointment.setVisibility(View.VISIBLE);
-                                appointmentList = new ArrayList<>();
-                                appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                RecyclerView.LayoutManager mLayoutManager =
-                                    new LinearLayoutManager(getActivity());
-                                rvAppointment.setLayoutManager(mLayoutManager);
-                                rvAppointment.setAdapter(appointmentAdapter);
-                                e.printStackTrace();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            hideProgress();
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    meeting();
-                                    tvNoAppointment.setVisibility(View.VISIBLE);
-                                    appointmentList = new ArrayList<>();
-                                    appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                    RecyclerView.LayoutManager mLayoutManager =
-                                        new LinearLayoutManager(getActivity());
-                                    rvAppointment.setLayoutManager(mLayoutManager);
-                                    rvAppointment.setAdapter(appointmentAdapter);
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                meeting();
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            meeting();
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            meeting();
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                meeting();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            AppointmentRequest request =
+                new AppointmentRequest(new Request(leadId, REPORT_PAGE_SIZE, "1", "0", "0", mUcid),
+                    new Filter(null, null, null, null, null, null, null), true);
+            Disposable subscribe = saathiApi.getAppointments(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderAppointments);
         } else {
-            meeting();
             alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, "OK", true, null);
+        }
+    }
+
+    private void renderAppointments(UiModel<List<AppointmentResponse>> uiModel)
+        throws ParseException {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+            tvNoMeeting.setVisibility(View.VISIBLE);
+        }
+        List<AppointmentResponse> data = uiModel.data;
+        if (data != null) {
+            meeting();
+            appointmentList.clear();
+            String repeatOnCode = "";
+            for (int i = 0; i < data.size(); i++) {
+                AppointmentResponse item = data.get(i);
+
+                String status = stringOrEmpty(item.status);
+                String meetingId = stringOrEmpty(item.meetingID);
+                String leadId = stringOrEmpty(item.leadID);
+                String name = stringOrEmpty(item.name);
+                String email = stringOrEmpty(item.eMAIL);
+                String mobNo = stringOrEmpty(item.mOBNO);
+                String date = stringOrEmpty(item.dATE);
+                String time = stringOrEmpty(item.tIME);
+                String attendeeEmp = stringOrEmpty(item.attendeeEmp);
+                String product = stringOrEmpty(item.product);
+                String statusName = stringOrEmpty(item.statusName);
+                String activityType = stringOrEmpty(item.activityType);
+                String ucid = stringOrEmpty(item.ucid);
+                String createdBy = stringOrEmpty(item.createdBy);
+                if (item.repeatOnCode != null && (item.repeatOnCode).contains("repeatOnCode")) {
+                    repeatOnCode = item.repeatOnCode;
+                }
+                appointmentList.add(
+                    new LeadActivitiesAppointModel(createdBy,
+                        status, meetingId, leadId, name, email,
+                        mobNo, CRMMOSLCommon.formatMonth(date),
+                        time, attendeeEmp
+                        , product, statusName, activityType, ucid,
+                        repeatOnCode));
+            }
+            appointmentAdapter =
+                new AppointmentAdapter(appointmentList);
+            RecyclerView.LayoutManager mLayoutManager =
+                new LinearLayoutManager(getActivity());
+            rvAppointment.setLayoutManager(mLayoutManager);
+            rvAppointment.setAdapter(appointmentAdapter);
+            tvNoAppointment.setVisibility(View.GONE);
+            if (data.isEmpty()) {
+                tvNoAppointment.setVisibility(View.VISIBLE);
+            }
         }
     }
 
