@@ -18,6 +18,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProduct
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
+import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
@@ -248,6 +249,12 @@ interface SaathiApi {
   @POST("Dashboard/LoadWidgetAsync")
   fun getTrends(
     @Body request: ClientRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoaddetailsWidgeAsync")
+  fun getDashboardSecondLevel(
+    @Body request: DashboardSecondLevelRequest
   ): Observable<String>
 
 }
