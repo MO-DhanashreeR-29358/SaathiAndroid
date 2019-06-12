@@ -181,7 +181,6 @@ interface SaathiApi {
   fun getAppointments(@Body request: AppointmentRequest): Observable<List<AppointmentResponse>>
 
   @POST("Meeting/{action}")
-  @ExtraDataWrapper
   fun deleteAppointments(
     @Path("action") action: String,
     @Body request: DeleteAppointmentRequest

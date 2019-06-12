@@ -2,7 +2,6 @@ package com.mosl.tabapp.leadViewDetail;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,13 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
+import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.Filter;
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest;
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse;
@@ -34,19 +33,14 @@ import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.Disposable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -244,7 +238,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         if (data != null) {
             meeting();
             appointmentList.clear();
-            String repeatOnCode = "";
             for (int i = 0; i < data.size(); i++) {
                 AppointmentResponse item = data.get(i);
 
@@ -262,9 +255,8 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 String activityType = stringOrEmpty(item.activityType);
                 String ucid = stringOrEmpty(item.ucid);
                 String createdBy = stringOrEmpty(item.createdBy);
-                if (item.repeatOnCode != null && (item.repeatOnCode).contains("repeatOnCode")) {
-                    repeatOnCode = item.repeatOnCode;
-                }
+                String repeatOnCode = stringOrEmpty(item.repeatOnCode);
+
                 appointmentList.add(
                     new LeadActivitiesAppointModel(createdBy,
                         status, meetingId, leadId, name, email,
@@ -419,148 +411,41 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
 
     public void deleteAppintments(final String meetingId, String url) {
         //login parameters
-
-        if (CRMAppUtil.isNetworkEnabled(getActivity())) {
-            showProgress();
-
-            String serviceMethod = "Meeting/" + url;
-            String tmpReq = String.format(ID_OBJECT, meetingId);
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
-                            super.onSuccess(statusCode, headers, json);
-
-                            if (statusCode == 200) {
-                                try {
-                                    String status = json.getString(STATUS);
-                                    hideProgress();
-                                    if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-                                        appointmentAdapter.deleteAppointment(meetingId);
-                                        alertDialog(getActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            APPT_CANCELLED, "OK", true,
-                                            new MSFDialog.DialogListener() {
-                                                @Override
-                                                public void alertDialogAction(
-                                                    MSFDialog.Action action, Object... data) {
-                                                    if (action == MSFDialog.Action.OK) {
-
-                                                    }
-                                                }
-                                            });
-                                    } else {
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(json);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } catch (Exception ex) {
-                                    hideProgress();
-                                    ex.printStackTrace();
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                                }
-                            } else {
-                                hideProgress();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            DeleteAppointmentRequest request =
+                new DeleteAppointmentRequest(meetingId);
+            Disposable subscribe = saathiApi.deleteAppointments(url, request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(uiModel -> {
+                    renderDeleteAppointments(uiModel, meetingId);
+                });
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
+        }
+    }
+
+    private void renderDeleteAppointments(UiModel<String> uiModel, String meetingId) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        String data = uiModel.data;
+        if (data != null) {
+            appointmentAdapter.deleteAppointment(meetingId);
+            alertDialog(getActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
+                APPT_CANCELLED, "OK", true,
+                (action, data1) -> {
+                    if (action == MSFDialog.Action.OK) {
+
+                    }
+                });
         }
     }
 

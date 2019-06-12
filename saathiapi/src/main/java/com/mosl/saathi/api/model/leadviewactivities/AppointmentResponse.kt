@@ -50,7 +50,7 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("LeadID") val leadID: String?,
 
-  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String?,
+  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String? = "",
 
   @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean,
 
