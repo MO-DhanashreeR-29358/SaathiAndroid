@@ -35,6 +35,9 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
@@ -163,5 +166,15 @@ interface SaathiApi {
   @POST("NotificationMessage/GetNotificationMessageMobile")
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
+  //===================== Lead View Main=========================
+
+  @POST("Client/GetClientImage")
+  fun getClientImage(@Body request: ClientImageRequest): Observable<String>
+
+  @POST("Client/GetClientViewByCommand/")
+  fun getClientViewByCommand(@Body request: ClientViewByCommandRequest): Observable<ClientViewByCommandResponse>
+
+
 
 }
