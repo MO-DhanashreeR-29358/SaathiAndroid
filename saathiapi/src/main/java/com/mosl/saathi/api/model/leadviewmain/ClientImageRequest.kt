@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ClientImageRequest(
 
-  @JvmField @SerializedName("id") val id: Int
+  @JvmField @SerializedName("id") val id: String
 )
