@@ -4,45 +4,91 @@ import com.google.gson.annotations.SerializedName
 
 data class ClientViewByCommandResponse(
 
-  @JvmField @SerializedName("IsEkyCReLive") val isEkyCReLive: Boolean,
+  @JvmField @SerializedName("FamilyUCID") val familyUCID: Int,
 
-  @JvmField @SerializedName("Registration_InterestedIn") val registrationInterestedIn: Any,
+  @JvmField @SerializedName("BankName") val bankName: String,
 
-  @JvmField @SerializedName("DedupeBranch") val dedupeBranch: Any,
+  @JvmField @SerializedName("CreationDate") val creationDate: String,
 
-  @JvmField @SerializedName("Registration_Tradercode") val registrationTradercode: Any,
+  @JvmField @SerializedName("IsFamilyHead") val isFamilyHead: Boolean,
 
-  @JvmField @SerializedName("Registration_PSource") val registrationPSource: Any,
+  @JvmField @SerializedName("Products") val products: List<ProductsItem?>,
 
-  @JvmField @SerializedName("DedupeOn") val dedupeOn: Any,
+  @JvmField @SerializedName("AdvisoryType") val advisoryType: Any,
 
-  @JvmField @SerializedName("Registration_Emailid") val registrationEmailid: Any,
+  @JvmField @SerializedName("Email") val email: Any,
 
-  @JvmField @SerializedName("DedupeWith") val dedupeWith: Any,
+  @JvmField @SerializedName("Address") val address: String,
 
-  @JvmField @SerializedName("DedupeRemark") val dedupeRemark: Any,
+  @JvmField @SerializedName("ProductName") val productName: Any,
 
-  @JvmField @SerializedName("eKYC_UserID") val eKYCUserID: Any,
+  @JvmField @SerializedName("ClientProfile") val clientProfile: Any,
 
-  @JvmField @SerializedName("Registration_PSourceDetail") val registrationPSourceDetail: Any,
+  @JvmField @SerializedName("Sourcing") val sourcing: Any,
 
-  @JvmField @SerializedName("URL") val uRL: Any,
+  @JvmField @SerializedName("AccountOpeningDate") val accountOpeningDate: String,
 
-  @JvmField @SerializedName("Registration_Branchcode") val registrationBranchcode: Any,
+  @JvmField @SerializedName("UCID") val uCID: Int,
 
-  @JvmField @SerializedName("RegistrationAllowed") val registrationAllowed: Boolean,
+  @JvmField @SerializedName("Profile") val profile: Any,
 
-  @JvmField @SerializedName("EncryptedURL") val encryptedURL: String,
+  @JvmField @SerializedName("ClientName") val clientName: String? = "",
 
-  @JvmField @SerializedName("Registration_Source") val registrationSource: Any,
+  @JvmField @SerializedName("PendingDays") val pendingDays: String? = "",
 
-  @JvmField @SerializedName("Registration_MobileNumber") val registrationMobileNumber: Any,
+  @JvmField @SerializedName("PANNumber") val pANNumber: String,
 
-  @JvmField @SerializedName("Registration_Subbrokercode") val registrationSubbrokercode: Any,
+  @JvmField @SerializedName("PrimaryAdvisor") val primaryAdvisor: Any,
 
-  @JvmField @SerializedName("IsDedupe") val isDedupe: Boolean,
+  @JvmField @SerializedName("DOB") val dOB: String,
 
-  @JvmField @SerializedName("Registration_ApplicationFrom") val registrationApplicationFrom: Any,
+  @JvmField @SerializedName("SubBrokerCode") val subBrokerCode: Any,
 
-  @JvmField @SerializedName("Registration_Employeecode") val registrationEmployeecode: Any
+  @JvmField @SerializedName("CreatedBy") val createdBy: Any,
+
+  @JvmField @SerializedName("EmployeeCode") val employeeCode: Any,
+
+  @JvmField @SerializedName("OAOUserid") val oAOUserid: Int? = 0,
+
+  @JvmField @SerializedName("MappedBy") val mappedBy: Any,
+
+  @JvmField @SerializedName("AccountNo") val accountNo: Any,
+
+  @JvmField @SerializedName("StageName") val stageName: String? = "",
+
+  @JvmField @SerializedName("Channel") val channel: String,
+
+  @JvmField @SerializedName("DefaultBank") val defaultBank: Any,
+
+  @JvmField @SerializedName("SecondaryAdvisor") val secondaryAdvisor: Any,
+
+  @JvmField @SerializedName("FamilyHead") val familyHead: Any,
+
+  @JvmField @SerializedName("AccountType") val accountType: Any,
+
+  @JvmField @SerializedName("Mobile") val mobile: String? = "",
+
+  @JvmField @SerializedName("VintagewithMotilalOswalYears") val vintagewithMotilalOswalYears: Int,
+
+  @JvmField @SerializedName("AadhaarNumber") val aadhaarNumber: String,
+
+  @JvmField @SerializedName("ClientProfileComplition") val clientProfileComplition: String,
+
+  @JvmField @SerializedName("ClientCode") val clientCode: Any,
+
+  @JvmField @SerializedName("AreaCode") val areaCode: String,
+
+  @JvmField @SerializedName("BankAccountType") val bankAccountType: String,
+
+  @JvmField @SerializedName("LeadID") val leadID: String? = "",
+
+  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: String,
+
+  @JvmField @SerializedName("MappingDate") val mappingDate: Any,
+
+  @JvmField @SerializedName("BranchCode") val branchCode: String,
+
+  @JvmField @SerializedName("BankAccountNumber") val bankAccountNumber: String,
+
+  @JvmField @SerializedName("IsOnlyClient") val isOnlyClient: Boolean
 )
