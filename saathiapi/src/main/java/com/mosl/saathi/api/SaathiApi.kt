@@ -38,6 +38,8 @@ import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
+import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
+import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineResponse
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
@@ -175,6 +177,6 @@ interface SaathiApi {
   @POST("Client/GetClientViewByCommand/")
   fun getClientViewByCommand(@Body request: ClientViewByCommandRequest): Observable<ClientViewByCommandResponse>
 
-
-
+  @POST("Prospect/SMT_RegisterProspectOnline/")
+  fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
 }
