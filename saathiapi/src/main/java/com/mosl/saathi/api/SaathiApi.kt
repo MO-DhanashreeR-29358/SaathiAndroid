@@ -21,6 +21,8 @@ import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
 import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
@@ -269,5 +271,10 @@ interface SaathiApi {
   fun getDashboardHierarchy(
     @Body request: DashboardHierarchyRequest
   ): Observable<String>
+
+  @POST("Dashboard/GetIncentivePolicy")
+  fun getIncentivePolicy(
+    @Body request: IncentivePolicyRequest
+  ): Observable<IncentivePolicyItem>
 
 }

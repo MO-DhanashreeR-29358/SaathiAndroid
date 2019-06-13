@@ -52,6 +52,9 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem;
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
@@ -71,6 +74,7 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import io.reactivex.disposables.Disposable;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -93,7 +97,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -116,7 +120,8 @@ public class DashboardFragment extends MOSLCommonFragment
         ivPerformanceAndIncentivesHeader;
     //
     //Subb button
-    private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded, btnProductivity, btnBusinessSnapshotAdvisor;
+    private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded, btnProductivity,
+        btnBusinessSnapshotAdvisor;
     private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
     private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton leadcreation;
@@ -128,7 +133,8 @@ public class DashboardFragment extends MOSLCommonFragment
 
     //Hierarchy
     private TextView txtTeamTarget;
-    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour, tableAdvPerformance, tableCurrentQuaterStatusFirst,
+    private TableLayout tableMData, tableCurrentQuaterStatusThree, tableCurrentQuaterStatusFour,
+        tableAdvPerformance, tableCurrentQuaterStatusFirst,
         tableCurrentQuaterStatusSecond;
     private LinearLayout llSnapshot;
     private TextView tvSnapshot, txtMonthTrends;
@@ -200,7 +206,6 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         });
 
-
         tvDetailIncentive = dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
         tvDetailIncentive.setOnClickListener(this);
         llMain = dashAdvisoryView.findViewById(R.id.llMain);
@@ -213,7 +218,8 @@ public class DashboardFragment extends MOSLCommonFragment
         ivTeamTargetAchievement = dashAdvisoryView.findViewById(R.id.ivTeamTargetAchievement);
         ivMonthOnMonth = dashAdvisoryView.findViewById(R.id.ivMonthOnMonth);
         ivBusinessSnapshotHead = dashAdvisoryView.findViewById(R.id.ivBusinessSnapshotHead);
-        ivPerformanceAndIncentivesHeader = dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
+        ivPerformanceAndIncentivesHeader =
+            dashAdvisoryView.findViewById(R.id.ivPerformanceAndIncentivesHeader);
         txtClients = dashAdvisoryView.findViewById(R.id.txtClients);
         txtTarget = dashAdvisoryView.findViewById(R.id.txtTarget);
         txtTeamTarget = dashAdvisoryView.findViewById(R.id.txtTeamTarget);
@@ -272,7 +278,6 @@ public class DashboardFragment extends MOSLCommonFragment
             dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
         llAdvPerformance = dashAdvisoryView.findViewById(R.id.llAdvPerformance);
         llTeamPerformance = dashAdvisoryView.findViewById(R.id.llTeamPerformance);
-
 
         rlClientLeads.setOnClickListener(this);
         rlTargetAchievementADV.setOnClickListener(this);
@@ -337,7 +342,8 @@ public class DashboardFragment extends MOSLCommonFragment
         tableAdvPerformance = dashAdvisoryView.findViewById(R.id.tableAdvPerformance);
         spQuarter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position,
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                int position,
                 long id) {
 
                 incentiveView(spQuarter.getSelectedItem().toString());
@@ -398,7 +404,7 @@ public class DashboardFragment extends MOSLCommonFragment
         mChartAdv.setScaleYEnabled(false);
 
         xAxis.setValueFormatter(new IAxisValueFormatter() {
-            private String[] mActivities = new String[]{"Q1", "Q2", "Q3", "Q4", "YTD"};
+            private String[] mActivities = new String[] { "Q1", "Q2", "Q3", "Q4", "YTD" };
 
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
@@ -410,7 +416,6 @@ public class DashboardFragment extends MOSLCommonFragment
             rlClientLeads.setVisibility(View.GONE);
             btnLeads.setText(DASHBOARD);
         }
-
     }
 
     private void generateAxisLabel(ChartDataModel data) {
@@ -494,8 +499,9 @@ public class DashboardFragment extends MOSLCommonFragment
             for (int i = 0; i < jsonArray.length(); i++) {
                 ChartDataModel model = new ChartDataModel();
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Name = (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
-                    : jsonObject.getString("Name");
+                String Name =
+                    (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
+                        : jsonObject.getString("Name");
                 String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
                     : jsonObject.getString("Q1");
                 String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
@@ -532,7 +538,6 @@ public class DashboardFragment extends MOSLCommonFragment
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         if (generateBarData(dataList) != null) {
             mChartAdv.setData(generateBarData(dataList));
@@ -594,11 +599,9 @@ public class DashboardFragment extends MOSLCommonFragment
         mChartAdv.groupBars(startYear, groupSpace, barSpace);
         mChartAdv.invalidate();
 
-
         llAdvPerformance.setVisibility(View.VISIBLE);
         tvPerformance.setText("Performance");
     }
-
 
     @Override
     public void onClick(View view) {
@@ -649,13 +652,13 @@ public class DashboardFragment extends MOSLCommonFragment
             } else if (id == R.id.rlTeamTargetAchievement) {
                 toggleSectionExpansion(llTeamTargetAchievement, ivTeamTargetAchievement);
             } else if (id == R.id.rlPerformanceAndIncentivesHeader) {
-                toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
+                toggleSectionExpansion(llPerformanceAndIncentivesHeader,
+                    ivPerformanceAndIncentivesHeader);
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
         }
     }
-
 
     private void loadLead() {
         Bundle args = new Bundle();
@@ -668,7 +671,6 @@ public class DashboardFragment extends MOSLCommonFragment
             .replace(R.id.llReplaceClientFragment, leadsFragment)
             .commit();
     }
-
 
     private void loadProductivity() {
         Bundle args = new Bundle();
@@ -734,7 +736,8 @@ public class DashboardFragment extends MOSLCommonFragment
     private void setTabActivre(Button button) {
         btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshotAdvisor.setBackgroundDrawable(
+            getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
         btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
         btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
@@ -747,13 +750,12 @@ public class DashboardFragment extends MOSLCommonFragment
 
         button.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
         button.setTextColor(getResources().getColor(R.color.white));
-
-
     }
 
     private void loadTargetAchievement() {
         Bundle args = new Bundle();
-        TargetAchievementFragment leadsFragment = TargetAchievementFragment.newInstance(getContext());
+        TargetAchievementFragment leadsFragment =
+            TargetAchievementFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         getActivity().getSupportFragmentManager()
@@ -796,7 +798,6 @@ public class DashboardFragment extends MOSLCommonFragment
             .commit();
     }
 
-
     private void actionableInsightDialog() {
         if (currentDashboard == null) return;
 
@@ -819,7 +820,6 @@ public class DashboardFragment extends MOSLCommonFragment
         });
 
         lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
-
 
         dialog.show();
     }
@@ -1009,7 +1009,8 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, OK, true, null);
             return;
         }
@@ -1202,7 +1203,8 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         } else {
             //            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, OK, true, null);
         }
     }
@@ -1254,12 +1256,14 @@ public class DashboardFragment extends MOSLCommonFragment
 
                 JSONArray childrenGroupArray = groupObj.getJSONArray("Children");
                 if (childrenGroupArray != null && childrenGroupArray.length() > 0) {
-                    List<DashboardGroupModel> childrenGroup = getGroupModelFromJsonArray(childrenGroupArray);
+                    List<DashboardGroupModel> childrenGroup =
+                        getGroupModelFromJsonArray(childrenGroupArray);
                     groupModel.getSubGroupList().addAll(childrenGroup);
                 }
 
                 JSONArray availableWidgets = groupObj.getJSONArray("AvailableWidgets");
-                List<WidgetModel> widgetModelList = getWidgetModelFromAvailableWidgets(availableWidgets);
+                List<WidgetModel> widgetModelList =
+                    getWidgetModelFromAvailableWidgets(availableWidgets);
 
                 groupModel.getWidgetList().addAll(widgetModelList);
 
@@ -1299,7 +1303,8 @@ public class DashboardFragment extends MOSLCommonFragment
 
                             String text = rowObj.getString("text");
                             String value = rowObj.getString("value");
-                            FilterRowData rowData = new FilterRowData(filterRowCount, text, value, keyValue);
+                            FilterRowData rowData =
+                                new FilterRowData(filterRowCount, text, value, keyValue);
                             filterRowList.add(rowData);
                         }
                     }
@@ -1337,8 +1342,10 @@ public class DashboardFragment extends MOSLCommonFragment
                 String displayName = jsonObject.isNull("Name") ? "" : jsonObject.getString("Name");
                 String systemName =
                     jsonObject.isNull("SystemName") ? "" : jsonObject.getString("SystemName");
-                String iconUrl1 = jsonObject.isNull("ImageUrl") ? "" : jsonObject.getString("ImageUrl");
-                String iconUr2 = jsonObject.isNull("ImageUrl2") ? "" : jsonObject.getString("ImageUrl2");
+                String iconUrl1 =
+                    jsonObject.isNull("ImageUrl") ? "" : jsonObject.getString("ImageUrl");
+                String iconUr2 =
+                    jsonObject.isNull("ImageUrl2") ? "" : jsonObject.getString("ImageUrl2");
 
                 JSONArray WidgetType = jsonObject.getJSONArray("WidgetType");
 
@@ -1361,7 +1368,8 @@ public class DashboardFragment extends MOSLCommonFragment
         return widgetModelList;
     }
 
-    private List<WidgetType> getWidgetTypeFromAvailableWidgets(JSONArray jsonArray) throws Exception {
+    private List<WidgetType> getWidgetTypeFromAvailableWidgets(JSONArray jsonArray)
+        throws Exception {
         List<WidgetType> widgetModelList = new ArrayList<>();
 
         for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
@@ -1430,10 +1438,8 @@ public class DashboardFragment extends MOSLCommonFragment
                 btnProductivity.setVisibility(View.GONE);
                 btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
                 break;
-
         }
     }
-
 
     /**
      * This method will dynamically hide/show widget fragments
@@ -1568,7 +1574,8 @@ public class DashboardFragment extends MOSLCommonFragment
             DashboardSystemModel.setBusinessSnapshotSystemName(SYS_RH_BUSINESS_SNAPSHOT);
         }
         if (currentDashboard.isGroupExists(SELF_TARGET_ACHIEVEMNET)) {
-            txtTarget.setText(currentDashboard.getGroupModel(SELF_TARGET_ACHIEVEMNET).getDisplayName());
+            txtTarget.setText(
+                currentDashboard.getGroupModel(SELF_TARGET_ACHIEVEMNET).getDisplayName());
             setIcon(llTargetAchievementADV, ivTargetAchievementADV);
             if (llTargetAchievementADV.getVisibility() != View.VISIBLE) {
                 toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
@@ -1588,7 +1595,8 @@ public class DashboardFragment extends MOSLCommonFragment
             }
             llTeamTarget.setVisibility(View.VISIBLE);
             loadTeamTargetAchievement();
-            DashboardSystemModel.setTargetAchivementSystemName(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT);
+            DashboardSystemModel.setTargetAchivementSystemName(
+                TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT);
         }
         if (currentDashboard.isGroupExists(MONTH_ON_MONTH)) {
             llMonthTrend.setVisibility(View.VISIBLE);
@@ -1615,7 +1623,8 @@ public class DashboardFragment extends MOSLCommonFragment
             setIncentiveVisibility(PERFORMANCE_INCENTIVE_ACHIEVEMNET);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
-                toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
+                toggleSectionExpansion(llPerformanceAndIncentivesHeader,
+                    ivPerformanceAndIncentivesHeader);
             }
         } else if (currentDashboard.isGroupExists(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)) {
             tvPerformanceAndIncentivesHeader.setText(
@@ -1624,7 +1633,8 @@ public class DashboardFragment extends MOSLCommonFragment
             setIncentiveVisibility(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
-                toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
+                toggleSectionExpansion(llPerformanceAndIncentivesHeader,
+                    ivPerformanceAndIncentivesHeader);
             }
         } else if (currentDashboard.isGroupExists(MY_PERFORMANCE_INCENTIVE)) {
             tvPerformanceAndIncentivesHeader.setText(
@@ -1633,7 +1643,8 @@ public class DashboardFragment extends MOSLCommonFragment
             setIncentiveVisibility(MY_PERFORMANCE_INCENTIVE);
             setIcon(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
             if (llPerformanceAndIncentivesHeader.getVisibility() != View.VISIBLE) {
-                toggleSectionExpansion(llPerformanceAndIncentivesHeader, ivPerformanceAndIncentivesHeader);
+                toggleSectionExpansion(llPerformanceAndIncentivesHeader,
+                    ivPerformanceAndIncentivesHeader);
             }
         }
         //endregion
@@ -1655,7 +1666,6 @@ public class DashboardFragment extends MOSLCommonFragment
                     llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE);
                 }
             }
-
         }
     }
 
@@ -1668,7 +1678,6 @@ public class DashboardFragment extends MOSLCommonFragment
         }
         return addtionalParameterMap;
     }
-
 
     private void updateActionableCount() {
         if (currentDashboard == null) return;
@@ -1840,11 +1849,10 @@ public class DashboardFragment extends MOSLCommonFragment
                     SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
                     true, null);
             }
-
-
         } else {
             //            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, OK, true, null);
         }
     }
@@ -2104,11 +2112,11 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         } else {
             //            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 INTERNET_CONNECTION, OK, true, null);
         }
     }
-
 
     private String keyName(Set<String> keySet) {
         String key = "";
@@ -2141,9 +2149,11 @@ public class DashboardFragment extends MOSLCommonFragment
 
                 for (int y = 0; y < paramNameJsonArray.length(); y++) {
                     String paramName = paramNameJsonArray.getString(y);
-                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
-                        : jsonRowObject.getString(paramName);
-                    if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase("Table")) {
+                    String paramValue =
+                        jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
+                            : jsonRowObject.getString(paramName);
+                    if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase(
+                        "Table")) {
                         Map map = new HashMap();
                         map.put(paramName, paramValue);
                         list.add(map);
@@ -2176,8 +2186,9 @@ public class DashboardFragment extends MOSLCommonFragment
 
                     TextView headingCell = new TextView(getActivity());
                     headingRow.addView(headingCell);
-                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
+                    headingCell.setLayoutParams(
+                        new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     headingCell.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     headingCell.setPadding(padding, padding, padding, padding);
@@ -2190,8 +2201,9 @@ public class DashboardFragment extends MOSLCommonFragment
             for (String column1Heading : rowHeadingSet) {
                 TableRow tableRow = new TableRow(getActivity());
                 tableCurrentQuaterStatusFirst.addView(tableRow);
-                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
+                tableRow.setLayoutParams(
+                    new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
                 for (Map map : rowList) {
@@ -2200,8 +2212,9 @@ public class DashboardFragment extends MOSLCommonFragment
 
                     TextView textView = new TextView(getActivity());
                     tableRow.addView(textView);
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(
+                        new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     textView.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     textView.setPadding(padding, padding, padding, padding);
@@ -2235,9 +2248,11 @@ public class DashboardFragment extends MOSLCommonFragment
 
                 for (int y = 0; y < paramNameJsonArray.length(); y++) {
                     String paramName = paramNameJsonArray.getString(y);
-                    String paramValue = jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
-                        : jsonRowObject.getString(paramName);
-                    if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase("Table")) {
+                    String paramValue =
+                        jsonRowObject.getString(paramName).equalsIgnoreCase("null") ? ""
+                            : jsonRowObject.getString(paramName);
+                    if (!paramName.equalsIgnoreCase("Heading") && !paramName.equalsIgnoreCase(
+                        "Table")) {
                         Map map = new HashMap();
                         map.put(paramName, paramValue);
                         list.add(map);
@@ -2270,8 +2285,9 @@ public class DashboardFragment extends MOSLCommonFragment
 
                     TextView headingCell = new TextView(getActivity());
                     headingRow.addView(headingCell);
-                    headingCell.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
+                    headingCell.setLayoutParams(
+                        new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     headingCell.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     headingCell.setPadding(padding, padding, padding, padding);
@@ -2284,8 +2300,9 @@ public class DashboardFragment extends MOSLCommonFragment
             for (String column1Heading : rowHeadingSet) {
                 TableRow tableRow = new TableRow(getActivity());
                 tableCurrentQuaterStatusSecond.addView(tableRow);
-                tableRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
+                tableRow.setLayoutParams(
+                    new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                        TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
                 for (Map map : rowList) {
@@ -2294,8 +2311,9 @@ public class DashboardFragment extends MOSLCommonFragment
 
                     TextView textView = new TextView(getActivity());
                     tableRow.addView(textView);
-                    textView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT));
+                    textView.setLayoutParams(
+                        new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
+                            TableRow.LayoutParams.WRAP_CONTENT));
                     textView.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     textView.setPadding(padding, padding, padding, padding);
@@ -2382,8 +2400,9 @@ public class DashboardFragment extends MOSLCommonFragment
                     : jsonObject.getString("Q3");
                 String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
                     : jsonObject.getString("Q4");
-                String yTD = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
-                    : jsonObject.getString("YTD");
+                String yTD =
+                    (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
+                        : jsonObject.getString("YTD");
                 fieldData.put(PARAMETERS, Parameters);
                 fieldData.put(Q1, q1.equalsIgnoreCase("0.0") ? "0" : q1);
                 fieldData.put(Q2, q2.equalsIgnoreCase("0.0") ? "0" : q2);
@@ -2497,154 +2516,48 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    public void webServiceInceniveSlab(String dashboardId) {
-        //login parameters
+    private void render(UiModel<IncentivePolicyItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
 
-        if (CRMAppUtil.isNetworkEnabled(getActivity())) {
-            showProgress();
-
-            Map inputMap = new HashMap();
-            inputMap.put("EmployeeCode", AccountDetails.getEmployeeCode());
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put("DashboardId", dashboardId);
-
-            String serviceMethod = "Dashboard/GetIncentivePolicy";
-
+        IncentivePolicyItem data = uiModel.data;
+        if (data != null) {
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-
-                            if (statusCode == 200) {
-                                try {
-                                    String status = response.getString(STATUS);
-                                    hideProgress();
-                                    if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-
-                                        JSONObject obj = response.getJSONObject(RESPONSE);
-                                        String filePath =
-                                            obj.isNull("FilePath") || obj.get("FilePath").equals("")
-                                                ? ""
-                                                : obj.getString("FilePath");
-                                        if (filePath.isEmpty()) {
-                                            alertDialog(getMainActivity(), 0,
-                                                getResources().getString(
-                                                    R.string.motilal_oswal), MISSING_FILE, OK,
-                                                true, null);
-                                        } else {
-                                            new DownloadFileFromURL().execute(
-                                                filePath.replaceAll(" ", "%20"));
-                                        }
-
-                                   /* alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), DOCUMENT_DELETED, OK, true, new MSFDialog.DialogListener() {
-                                        @Override
-                                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                            if (action == MSFDialog.Action.OK) {
-
-                                            }
-                                        }
-                                    });*/
-
-                                    } else {
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        //   alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
-                                    }
-                                } catch (Exception ex) {
-                                    hideProgress();
-                                    ex.printStackTrace();
-                                    //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                                }
-                            } else {
-                                hideProgress();
-                                //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, OK,
-                                        false, new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            // alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                        }
-                    });
+                String filePath = stringOrEmpty(data.filePath);
+                if (filePath.isEmpty()) {
+                    alertDialog(getMainActivity(), 0,
+                        getResources().getString(
+                            R.string.motilal_oswal), MISSING_FILE, OK,
+                        true, null);
+                } else {
+                    new DownloadFileFromURL().execute(
+                        filePath.replaceAll(" ", "%20"));
+                }
             } catch (Exception e) {
-                e.printStackTrace();
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                hideProgress();
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
+        }
+    }
+
+    public void webServiceInceniveSlab(String dashboardId) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            IncentivePolicyRequest request = new IncentivePolicyRequest(
+                businessProfileIdForDashboard,
+                AccountDetails.getEmployeeCode(),
+                dashboardId
+            );
+            Disposable subscribe = saathiApi.getIncentivePolicy(request)
+                .compose(applyUiModel())
+                .subscribe(this::render);
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
@@ -2665,10 +2578,12 @@ public class DashboardFragment extends MOSLCommonFragment
 
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), OK, true, null);
         } catch (Exception ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
                 SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
         }
     }
@@ -2750,7 +2665,8 @@ public class DashboardFragment extends MOSLCommonFragment
             final Holder holder = new Holder();
             view = inflater.inflate(R.layout.item_list_actionable_insights, viewGroup, false);
 
-            final WidgetModel advisoryActionableInsightModel = advisoryActionableInsightModelList.get(i);
+            final WidgetModel advisoryActionableInsightModel =
+                advisoryActionableInsightModelList.get(i);
             holder.ivActionableInsights = (ImageView) view.findViewById(R.id.ivActionableInsights);
             holder.pbLoadingIndicator = (ProgressBar) view.findViewById(R.id.pbLoadingIndicator);
             holder.tvActionableInsights = (TextView) view.findViewById(R.id.tvActionableInsights);
@@ -2805,7 +2721,8 @@ public class DashboardFragment extends MOSLCommonFragment
                             }
                         }
                     }
-                    if (!advisoryActionableInsightModel.getActionableCount().equalsIgnoreCase("0")) {
+                    if (!advisoryActionableInsightModel.getActionableCount()
+                        .equalsIgnoreCase("0")) {
                         navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
                         dialog.dismiss();
                     }
