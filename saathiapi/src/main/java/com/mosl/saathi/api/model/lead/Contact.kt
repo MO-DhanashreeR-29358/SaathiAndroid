@@ -1,83 +1,56 @@
 package com.mosl.saathi.api.model.lead
 
 import com.google.gson.annotations.SerializedName
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
 data class Contact(
 
-  @field:SerializedName("FDB")
-  val fDB: Any? = null,
+  @JvmField @SerializedName("FDB") val fDB: Any,
 
-  @field:SerializedName("EKYCMobileNo")
-  val eKYCMobileNo: String? = null,
+  @JvmField @SerializedName("EKYCMobileNo") val eKYCMobileNo: String,
 
-  @field:SerializedName("AadharNumber")
-  val aadharNumber: String? = null,
+  @JvmField @SerializedName("AadharNumber") val aadharNumber: String,
 
-  @field:SerializedName("IsSameAsAbove")
-  val isSameAsAbove: Boolean? = null,
+  @JvmField @SerializedName("IsSameAsAbove") val isSameAsAbove: Boolean,
 
-  @field:SerializedName("AlternateMobileNo")
-  val alternateMobileNo: String? = null,
+  @JvmField @SerializedName("AlternateMobileNo") val alternateMobileNo: String,
 
-  @field:SerializedName("Salutation")
-  val salutation: Any? = null,
+  @JvmField @SerializedName("Salutation") val salutation: Any,
 
-  @field:SerializedName("AnnualCashFlow")
-  val annualCashFlow: Any? = null,
+  @JvmField @SerializedName("AnnualCashFlow") val annualCashFlow: Any,
 
-  @field:SerializedName("UCID")
-  val uCID: Int? = null,
+  @JvmField @SerializedName("UCID") val uCID: String? = "0",
 
-  @field:SerializedName("Name")
-  val name: String? = null,
+  @JvmField @SerializedName("Name") val name: String? = "",
 
-  @field:SerializedName("CompanyName")
-  val companyName: Any? = null,
+  @JvmField @SerializedName("CompanyName") val companyName: Any,
 
-  @field:SerializedName("LandlineNo")
-  val landlineNo: String? = null,
+  @JvmField @SerializedName("LandlineNo") val landlineNo: String,
 
-  @field:SerializedName("DOB")
-  val dOB: Any? = null,
+  @JvmField @SerializedName("DOB") val dOB: Any,
 
-  @field:SerializedName("DOA")
-  val dOA: Any? = null,
+  @JvmField @SerializedName("DOA") val dOA: Any,
 
-  @field:SerializedName("PrefixCode")
-  val prefixCode: Any? = null,
+  @JvmField @SerializedName("PrefixCode") val prefixCode: Any,
 
-  @field:SerializedName("IsAdminMode")
-  val isAdminMode: Boolean? = null,
+  @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
 
-  @field:SerializedName("contactAddress")
-  val contactAddress: List<ContactAddressItem?>? = null,
+  @JvmField @SerializedName("contactAddress") val contactAddress: List<ContactAddressItem?>,
 
-  @field:SerializedName("Status")
-  val status: Int? = null,
+  @JvmField @SerializedName("Status") val status: Int,
 
-  @field:SerializedName("Designation")
-  val designation: Any? = null,
+  @JvmField @SerializedName("Designation") val designation: Any,
 
-  @field:SerializedName("EmailId")
-  val emailId: String? = null,
+  @JvmField @SerializedName("EmailId") val emailId: String?,
 
-  @field:SerializedName("ContactID")
-  val contactID: Int? = null,
+  @JvmField @SerializedName("ContactID") val contactID: Int,
 
-  @field:SerializedName("Mobile")
-  val mobile: String? = null,
+  @JvmField @SerializedName("Mobile") val mobile: String?,
 
-  @field:SerializedName("InApproval")
-  val inApproval: Boolean? = null,
+  @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @field:SerializedName("AlternateEmailId")
-  val alternateEmailId: String? = null,
+  @JvmField @SerializedName("AlternateEmailId") val alternateEmailId: String,
 
-  @field:SerializedName("ApprovalFieldList")
-  val approvalFieldList: Any? = null,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
 
-  @field:SerializedName("PanNumber")
-  val panNumber: String? = null
+  @JvmField @SerializedName("PanNumber") val panNumber: String
 )
