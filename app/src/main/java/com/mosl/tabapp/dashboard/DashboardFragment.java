@@ -57,6 +57,13 @@ import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item;
 import com.mosl.saathi.api.model.dashboard.actionablecount.TableItem;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableFilterItem;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsItem;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.FilterData;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.GroupsItem;
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.WidgetTypeItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest;
 import com.mosl.tabapp.R;
@@ -855,7 +862,7 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderMetaData(UiModel<JSONArray> uiModel) {
+    private void renderMetaData(UiModel<List<DashboardMetaDataItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -863,10 +870,23 @@ public class DashboardFragment extends MOSLCommonFragment
             showOnFailurePopup(error);
         }
 
-        JSONArray jsonArray = uiModel.data;
-        if (jsonArray != null) {
+        List<DashboardMetaDataItem> dataList = uiModel.data;
+        if (dataList != null) {
             try {
-                // renderGraph(jsonArray);
+                for (int i = 0; i < dataList.size(); i++) {
+                    DashboardMetaDataItem data = dataList.get(i);
+                    fillAvailableWidgetModel(data);
+                }
+                if (dashboardList.size() > 0) {
+                    currentDashboard = dashboardList.get(0);
+                    currentDashboard.setBusinessProfileIdForDashboard(
+                        businessProfileIdForDashboard);
+                    currentDashboard.setProductId(productId);
+                    currentDashboard.setEmployeeCode(employeeCode);
+                    createFloatingButtons();
+                    renderDashboard();
+                }
+
             } catch (Exception e) {
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
@@ -877,8 +897,7 @@ public class DashboardFragment extends MOSLCommonFragment
     private void loadDahboardMetaData() {
         //////////////////////////////////////////////
 
-
-       /* if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             DashboardMetaDataRequest request = new DashboardMetaDataRequest(
                 businessProfileIdForDashboard,
                 productId,
@@ -886,17 +905,6 @@ public class DashboardFragment extends MOSLCommonFragment
             );
 
             Disposable subscribe = saathiApi.getDashboardMetaData(request)
-                .map(responseS -> {
-
-                    JSONObject response = new JSONObject(responseS);
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return response.getJSONArray(RESPONSE);
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
                 .compose(applyUiModel())
                 .subscribe(this::renderMetaData);
         } else {
@@ -904,9 +912,10 @@ public class DashboardFragment extends MOSLCommonFragment
             alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
-        }*/
+        }
 
         /////////////////////////////////////////
+        /*
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             dashboardList.clear();
@@ -1069,6 +1078,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 INTERNET_CONNECTION, OK, true, null);
             return;
         }
+        */
     }
 
     private Map<String, String> getAddtionalParameterMapActionable() {
@@ -1150,11 +1160,11 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private void fillAvailableWidgetModel(JSONObject responseJsonObj) throws Exception {
-        if (responseJsonObj != null) {
-            String dashboardId = responseJsonObj.getString("Id");
-            String dashboardName = responseJsonObj.getString("Name");
-            String dashboardFor = responseJsonObj.getString("DashboardFor");
+    private void fillAvailableWidgetModel(DashboardMetaDataItem data) throws Exception {
+        if (data != null) {
+            String dashboardId = String.valueOf(data.id);
+            String dashboardName = data.name;
+            String dashboardFor = data.dashboardFor;
 
             DashboardModel dashboardModel = new DashboardModel();
             dashboardList.add(dashboardModel);
@@ -1162,30 +1172,30 @@ public class DashboardFragment extends MOSLCommonFragment
             dashboardModel.setName(dashboardName);
             dashboardModel.setDashboardFor(dashboardFor);
 
-            JSONArray groupArray = responseJsonObj.getJSONArray("Groups");
+            List<GroupsItem> groupsItems = data.groups;
 
-            List<DashboardGroupModel> mainGroupList = getGroupModelFromJsonArray(groupArray);
+            List<DashboardGroupModel> mainGroupList = getGroupModelFromJsonArray(groupsItems);
             dashboardModel.getGroupList().clear();
             dashboardModel.getGroupList().addAll(mainGroupList);
         }
     }
 
-    private List<DashboardGroupModel> getGroupModelFromJsonArray(JSONArray groupArray)
+    private List<DashboardGroupModel> getGroupModelFromJsonArray(List<GroupsItem> groupsItems)
         throws Exception {
         List<DashboardGroupModel> groupList = new ArrayList();
 
-        for (int liX = 0; liX < groupArray.length(); liX++) {
+        for (int liX = 0; liX < groupsItems.size(); liX++) {
 
-            JSONObject groupObj = groupArray.getJSONObject(liX);
-            if (groupObj != null) {
+            GroupsItem item = groupsItems.get(liX);
+            if (item != null) {
                 DashboardGroupModel groupModel = new DashboardGroupModel();
                 groupList.add(groupModel);
 
-                String dashBordGroupId = groupObj.getString("DashBoardGroupId");
-                String groupName = groupObj.getString("GroupName");
-                String groupSystemName = groupObj.getString("SystemName");
-                String imageUrl1 = groupObj.getString("ImageUrl");
-                String imageUrl2 = groupObj.getString("ImageUrl2");
+                String dashBordGroupId = String.valueOf(item.dashBoardGroupId);
+                String groupName = item.groupName;
+                String groupSystemName = item.systemName;
+                String imageUrl1 = item.imageUrl;
+                String imageUrl2 = item.imageUrl2;
 
                 groupModel.setId(dashBordGroupId);
                 groupModel.setDisplayName(groupName);
@@ -1195,21 +1205,21 @@ public class DashboardFragment extends MOSLCommonFragment
                 boolean selected = (liX == 0) ? true : false;
                 groupModel.setSelected(selected);
 
-                JSONArray childrenGroupArray = groupObj.getJSONArray("Children");
-                if (childrenGroupArray != null && childrenGroupArray.length() > 0) {
+                List<GroupsItem> childrenGroupItems = item.children;
+                if (childrenGroupItems != null && childrenGroupItems.size() > 0) {
                     List<DashboardGroupModel> childrenGroup =
-                        getGroupModelFromJsonArray(childrenGroupArray);
+                        getGroupModelFromJsonArray(childrenGroupItems);
                     groupModel.getSubGroupList().addAll(childrenGroup);
                 }
 
-                JSONArray availableWidgets = groupObj.getJSONArray("AvailableWidgets");
+                List<AvailableWidgetsItem> availableWidgets = item.availableWidgets;
                 List<WidgetModel> widgetModelList =
                     getWidgetModelFromAvailableWidgets(availableWidgets);
 
                 groupModel.getWidgetList().addAll(widgetModelList);
 
                 //filter list
-                groupModel.setGroupFilterList(getFilterList(groupObj));
+                groupModel.setGroupFilterList(getFilterList(item.availableFilter));
             }
         }
         return groupList;
@@ -1218,35 +1228,35 @@ public class DashboardFragment extends MOSLCommonFragment
     /**
      * this method will collect the filter data (dropdown)
      */
-    public List<WidgetFilterModel> getFilterList(JSONObject jsonObject) {
+    public List<WidgetFilterModel> getFilterList(List<AvailableFilterItem> availableFilterItems) {
         //Timber.v("All " + jsonObject.toString());
         List<WidgetFilterModel> filterList = new ArrayList<>();
         try {
 
-            if (jsonObject.has("AvailableFilter")) {
-                JSONArray filterArray = jsonObject.getJSONArray("AvailableFilter");
-
-                for (int filterCount = 0; filterCount < filterArray.length(); filterCount++) {
-
+            if (availableFilterItems != null) {
+                for (int filterCount = 0; filterCount < availableFilterItems.size();
+                    filterCount++) {
                     List<FilterRowData> filterRowList = new ArrayList<>();
+                    AvailableFilterItem item = availableFilterItems.get(filterCount);
+                    String filterSysName = item.filterSysName;
+                    String keyValue = item.keyValue;
 
-                    JSONObject filterObject = filterArray.getJSONObject(filterCount);
-                    String filterSysName = filterObject.getString("FilterSysName");
-                    String keyValue = filterObject.getString("KeyValue");
+                    FilterData filterData = item.filterData;
 
-                    JSONObject filterData = filterObject.getJSONObject("FilterData");
-
-                    if (filterData.has("Table")) {
-                        JSONArray filterRowArray = filterData.getJSONArray("Table");
-                        for (int filterRowCount = 0; filterRowCount < filterRowArray.length();
-                            filterRowCount++) {
-                            JSONObject rowObj = filterRowArray.getJSONObject(filterRowCount);
-
-                            String text = rowObj.getString("text");
-                            String value = rowObj.getString("value");
-                            FilterRowData rowData =
-                                new FilterRowData(filterRowCount, text, value, keyValue);
-                            filterRowList.add(rowData);
+                    if (filterData != null) {
+                        if (filterData.table != null) {
+                            List<com.mosl.saathi.api.model.dashboard.dashboardmetadata.TableItem>
+                                filterRowArray = filterData.table;
+                            for (int filterRowCount = 0; filterRowCount < filterRowArray.size();
+                                filterRowCount++) {
+                                com.mosl.saathi.api.model.dashboard.dashboardmetadata.TableItem
+                                    rowObj = filterRowArray.get(filterRowCount);
+                                String text = rowObj.text;
+                                String value = rowObj.value;
+                                FilterRowData rowData =
+                                    new FilterRowData(filterRowCount, text, value, keyValue);
+                                filterRowList.add(rowData);
+                            }
                         }
                     }
 
@@ -1267,31 +1277,28 @@ public class DashboardFragment extends MOSLCommonFragment
      *
      * @throws Exception
      */
-    private List<WidgetModel> getWidgetModelFromAvailableWidgets(JSONArray jsonArray)
+    private List<WidgetModel> getWidgetModelFromAvailableWidgets(
+        List<AvailableWidgetsItem> widgetsItems)
         throws Exception {
         List<WidgetModel> widgetModelList = new ArrayList<>();
 
-        for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(ctr);
+        for (int ctr = 0; ctr < widgetsItems.size(); ctr++) {
+            AvailableWidgetsItem item = (AvailableWidgetsItem) widgetsItems.get(ctr);
 
-            if (jsonObject != null) {
+            if (item != null) {
                 WidgetModel widgetModel = new WidgetModel();
-
                 widgetModelList.add(widgetModel);
+                String id = stringOrEmpty(String.valueOf(item.id));
+                String displayName = stringOrEmpty(item.name);
+                String systemName = stringOrEmpty(item.systemName);
+                String iconUrl1 = stringOrEmpty(item.imageUrl);
+                String iconUr2 = stringOrEmpty(item.imageUrl2);
 
-                String id = jsonObject.isNull("Id") ? "" : jsonObject.getString("Id");
-                String displayName = jsonObject.isNull("Name") ? "" : jsonObject.getString("Name");
-                String systemName =
-                    jsonObject.isNull("SystemName") ? "" : jsonObject.getString("SystemName");
-                String iconUrl1 =
-                    jsonObject.isNull("ImageUrl") ? "" : jsonObject.getString("ImageUrl");
-                String iconUr2 =
-                    jsonObject.isNull("ImageUrl2") ? "" : jsonObject.getString("ImageUrl2");
+                List<WidgetTypeItem> widgetTypeItems = item.widgetType;
 
-                JSONArray WidgetType = jsonObject.getJSONArray("WidgetType");
-
-                if (WidgetType != null) {
-                    List<WidgetType> childrenGroup = getWidgetTypeFromAvailableWidgets(WidgetType);
+                if (widgetTypeItems != null) {
+                    List<WidgetType> childrenGroup =
+                        getWidgetTypeFromAvailableWidgets(widgetTypeItems);
                     widgetModel.setWidgetTypeList(childrenGroup);
                 }
 
@@ -1302,24 +1309,23 @@ public class DashboardFragment extends MOSLCommonFragment
                 widgetModel.setSystemName(systemName);
                 widgetModel.setIconUrl1(iconUrl1);
                 widgetModel.setIconUrl2(iconUr2);
-                widgetModel.setWidgetFilterList(getFilterList(jsonObject));
+                widgetModel.setWidgetFilterList(getFilterList(item.availableFilter));
                 widgetModel.setPreviousSelectedPosition(ctr);
             }
         }
         return widgetModelList;
     }
 
-    private List<WidgetType> getWidgetTypeFromAvailableWidgets(JSONArray jsonArray)
+    private List<WidgetType> getWidgetTypeFromAvailableWidgets(List<WidgetTypeItem> widgetTypeItems)
         throws Exception {
         List<WidgetType> widgetModelList = new ArrayList<>();
 
-        for (int ctr = 0; ctr < jsonArray.length(); ctr++) {
-            JSONObject jsonObject = (JSONObject) jsonArray.get(ctr);
+        for (int ctr = 0; ctr < widgetTypeItems.size(); ctr++) {
+            WidgetTypeItem item = (WidgetTypeItem) widgetTypeItems.get(ctr);
 
-            if (jsonObject != null) {
-                String widgetTypes =
-                    jsonObject.isNull("WidgetTypes") ? "" : jsonObject.getString("WidgetTypes");
-                String title = jsonObject.isNull("Title") ? "" : jsonObject.getString("Title");
+            if (item != null) {
+                String widgetTypes = stringOrEmpty(item.widgetTypes);
+                String title = stringOrEmpty(item.title);
                 widgetModelList.add(new WidgetType(widgetTypes, title));
             }
         }

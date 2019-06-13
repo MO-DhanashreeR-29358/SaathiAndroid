@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 data class FilterData(
 
   @JvmField @SerializedName("Table")
-  val table: List<Any>?
+  val table: List<TableItem>?
 )

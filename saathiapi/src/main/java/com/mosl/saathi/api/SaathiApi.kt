@@ -284,7 +284,7 @@ interface SaathiApi {
   @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
   fun getDashboardMetaData(
     @Body request: DashboardMetaDataRequest
-  ): Observable<DashboardMetaDataItem>
+  ): Observable<List<DashboardMetaDataItem>>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getActionableCount(

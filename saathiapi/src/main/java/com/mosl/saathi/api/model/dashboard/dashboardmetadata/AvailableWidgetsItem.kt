@@ -29,7 +29,7 @@ data class AvailableWidgetsItem(
   val id: Int?,
 
   @JvmField @SerializedName("WidgetType")
-  val widgetType: List<Any>?,
+  val widgetType: List<WidgetTypeItem>?,
 
   @JvmField @SerializedName("Name")
   val name: String?

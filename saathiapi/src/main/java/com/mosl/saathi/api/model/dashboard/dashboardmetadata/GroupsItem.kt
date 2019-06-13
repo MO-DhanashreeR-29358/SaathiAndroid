@@ -14,13 +14,13 @@ data class GroupsItem(
   val displayOrder: Int?,
 
   @JvmField @SerializedName("ImageUrl2")
-  val imageUrl2: Any?,
+  val imageUrl2: String?,
 
   @JvmField @SerializedName("AvailableFilter")
-  val availableFilter: List<Any>?,
+  val availableFilter: List<AvailableFilterItem>?,
 
   @JvmField @SerializedName("ImageUrl")
-  val imageUrl: Any?,
+  val imageUrl: String?,
 
   @JvmField @SerializedName("SystemName")
   val systemName: String?,
@@ -32,5 +32,5 @@ data class GroupsItem(
   val dashBoardGroupId: Int?,
 
   @JvmField @SerializedName("Children")
-  val children: List<Any?>?
+  val children: List<GroupsItem>?
 )
