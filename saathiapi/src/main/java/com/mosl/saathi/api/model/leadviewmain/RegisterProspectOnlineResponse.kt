@@ -32,7 +32,7 @@ data class RegisterProspectOnlineResponse(
 
   @JvmField @SerializedName("RegistrationAllowed") val registrationAllowed: Boolean,
 
-  @JvmField @SerializedName("EncryptedURL") val encryptedURL: String,
+  @JvmField @SerializedName("EncryptedURL") val encryptedURL: String?,
 
   @JvmField @SerializedName("Registration_Source") val registrationSource: Any,
 
