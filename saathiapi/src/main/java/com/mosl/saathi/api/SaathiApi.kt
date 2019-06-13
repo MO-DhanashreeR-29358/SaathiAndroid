@@ -16,12 +16,13 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
-import com.mosl.saathi.api.model.dashboard.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
 import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
@@ -280,11 +281,10 @@ interface SaathiApi {
     @Body request: IncentivePolicyRequest
   ): Observable<IncentivePolicyItem>
 
-  @ExcludeWrapper
   @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
   fun getDashboardMetaData(
     @Body request: DashboardMetaDataRequest
-  ): Observable<String>
+  ): Observable<DashboardMetaDataItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getActionableCount(

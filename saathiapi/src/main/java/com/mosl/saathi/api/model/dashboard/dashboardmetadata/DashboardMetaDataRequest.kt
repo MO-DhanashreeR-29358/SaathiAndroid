@@ -1,4 +1,4 @@
-package com.mosl.saathi.api.model.dashboard
+package com.mosl.saathi.api.model.dashboard.dashboardmetadata
 
 import com.google.gson.annotations.SerializedName
 
