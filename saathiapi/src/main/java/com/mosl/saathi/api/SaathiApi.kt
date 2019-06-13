@@ -16,6 +16,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.dashboard.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
@@ -276,5 +277,11 @@ interface SaathiApi {
   fun getIncentivePolicy(
     @Body request: IncentivePolicyRequest
   ): Observable<IncentivePolicyItem>
+
+  @ExcludeWrapper
+  @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
+  fun getDashboardMetaData(
+    @Body request: DashboardMetaDataRequest
+  ): Observable<String>
 
 }

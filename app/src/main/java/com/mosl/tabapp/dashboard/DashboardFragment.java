@@ -851,7 +851,59 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderMetaData(UiModel<JSONArray> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        JSONArray jsonArray = uiModel.data;
+        if (jsonArray != null) {
+            try {
+                // renderGraph(jsonArray);
+            } catch (Exception e) {
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        }
+    }
+
+
     private void loadDahboardMetaData() {
+        //////////////////////////////////////////////
+
+
+       /* if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            DashboardMetaDataRequest request = new DashboardMetaDataRequest(
+                businessProfileIdForDashboard,
+                productId,
+                employeeCode
+            );
+
+            Disposable subscribe = saathiApi.getDashboardMetaData(request)
+                .map(responseS -> {
+
+                    JSONObject response = new JSONObject(responseS);
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return response.getJSONArray(RESPONSE);
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderMetaData);
+        } else {
+            hideProgress();
+            alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }*/
+
+        /////////////////////////////////////////
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
             dashboardList.clear();
@@ -2516,7 +2568,7 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private void render(UiModel<IncentivePolicyItem> uiModel) {
+    private void renderIncentivePolicy(UiModel<IncentivePolicyItem> uiModel) {
         toggleProgress(uiModel.inProgress);
         Throwable error = uiModel.error;
         if (error != null) {
@@ -2552,7 +2604,7 @@ public class DashboardFragment extends MOSLCommonFragment
             );
             Disposable subscribe = saathiApi.getIncentivePolicy(request)
                 .compose(applyUiModel())
-                .subscribe(this::render);
+                .subscribe(this::renderIncentivePolicy);
         } else {
             hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
