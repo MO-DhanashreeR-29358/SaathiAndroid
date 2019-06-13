@@ -17,6 +17,8 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.DashboardMetaDataRequest
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
@@ -283,5 +285,10 @@ interface SaathiApi {
   fun getDashboardMetaData(
     @Body request: DashboardMetaDataRequest
   ): Observable<String>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getActionableCount(
+    @Body request: ActionableCountRequest
+  ): Observable<ActionableCountItem>
 
 }
