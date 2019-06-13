@@ -31,6 +31,6 @@ public class ServiceUrlsImpl {
     @Contract(pure = true)
     public static String SALES_STADIUM_PITCH_URL() {
         return
-            "http://onlinetrade.motilaloswal.com/emailers/Stadium-Pitch-Objection-Handling/English/Stadium-Pitch/Index.html";
+            "https://saathi.motilaloswal.com/Stadium-Pitch-Objection-Handling/English/Stadium-Pitch/Index.html";
     }
 }
