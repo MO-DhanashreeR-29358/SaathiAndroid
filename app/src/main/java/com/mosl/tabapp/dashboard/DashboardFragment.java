@@ -854,7 +854,7 @@ public class DashboardFragment extends MOSLCommonFragment
                     }
                     dashboardBtnList.clear();
                     dashboardList.clear();
-                    loadDahboardMetaData();
+                    loadDashboardMetaData();
                 }
             }
         } catch (Exception e) {
@@ -886,7 +886,6 @@ public class DashboardFragment extends MOSLCommonFragment
                     createFloatingButtons();
                     renderDashboard();
                 }
-
             } catch (Exception e) {
                 alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
@@ -894,9 +893,7 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private void loadDahboardMetaData() {
-        //////////////////////////////////////////////
-
+    private void loadDashboardMetaData() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             DashboardMetaDataRequest request = new DashboardMetaDataRequest(
                 businessProfileIdForDashboard,
@@ -913,172 +910,6 @@ public class DashboardFragment extends MOSLCommonFragment
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
         }
-
-        /////////////////////////////////////////
-        /*
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            dashboardList.clear();
-
-            String serviceMethod = "Dashboard/GetDashboardWithWidgetsWithGroup/";
-            Map inputMap = new HashMap<>();
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put(PRODUCT_ID, productId);
-            inputMap.put(EMPLOYEE_CODE, employeeCode);
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    hideProgress();
-
-                                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase(
-                                        "true")) {
-                                        JSONArray responseJSONArray =
-                                            response.getJSONArray("Response");
-                                        for (int i = 0; i < responseJSONArray.length(); i++) {
-                                            JSONObject responseJsonObj =
-                                                responseJSONArray.getJSONObject(i);
-                                            fillAvailableWidgetModel(responseJsonObj);
-                                        }
-                                        if (dashboardList.size() > 0) {
-                                            currentDashboard = dashboardList.get(0);
-                                            currentDashboard.setBusinessProfileIdForDashboard(
-                                                businessProfileIdForDashboard);
-                                            currentDashboard.setProductId(productId);
-                                            currentDashboard.setEmployeeCode(employeeCode);
-                                            createFloatingButtons();
-                                            renderDashboard();
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
-                                        hideProgress();
-                                        return;
-                                    }
-                                } else {
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                                    hideProgress();
-                                    return;
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                                hideProgress();
-                                return;
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, OK,
-                                        false, new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                            return;
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                            return;
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
-                    true, null);
-                hideProgress();
-                return;
-            }
-        } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
-            return;
-        }
-        */
     }
 
     private Map<String, String> getAddtionalParameterMapActionable() {
