@@ -9,6 +9,7 @@ import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createmeeting.ClientImageRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -164,4 +165,6 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  @POST("Client/GetClientImage")
+  fun getClientImage(@Body request: ClientImageRequest): Observable<String>
 }
