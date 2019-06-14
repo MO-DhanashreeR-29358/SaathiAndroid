@@ -929,7 +929,7 @@ public class DashboardFragment extends MOSLCommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
-            showOnFailurePopup(error);
+            // showOnFailurePopup(error);
         }
 
         ActionableCountItem data = uiModel.data;
