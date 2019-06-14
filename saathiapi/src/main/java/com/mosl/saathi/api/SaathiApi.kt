@@ -90,7 +90,7 @@ interface SaathiApi {
   @POST("Lead/GetLeadView")
   fun postLeadView(
       @Body request: LeadViewRequest
-  ): Observable<SaathiCommonResponse<LeadViewItem>>
+  ): Observable<LeadViewItem>
 
   @POST("Lead/UpdateLead")
   fun postUpdateLead(
