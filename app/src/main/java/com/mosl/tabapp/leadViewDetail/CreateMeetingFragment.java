@@ -1972,6 +1972,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
 
     private void meetingReason() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            baClient();
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGREASON,
                     activityTypeCodeStr);
