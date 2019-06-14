@@ -51,7 +51,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
@@ -66,12 +65,12 @@ import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRe
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.FilterData;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.GroupsItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.WidgetTypeItem;
+import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
@@ -82,11 +81,9 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.Disposable;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -502,34 +499,24 @@ public class DashboardFragment extends MOSLCommonFragment
         return d;
     }
 
-    public void advLoadChart(JSONArray jsonArray) {
+    public void advLoadChart(
+        List<com.mosl.saathi.api.model.dashboard.incentive.Table1Item> table1Items) {
         String ytd = "";
         float groupSpace = 0.25f;
         float barSpace = 0.05f;
         float barWidth = 0.35f;
         List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
+        for (int i = 0; i < table1Items.size(); i++) {
                 ChartDataModel model = new ChartDataModel();
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Name =
-                    (jsonObject.isNull("Name") || jsonObject.getString("Name").equals("")) ? ""
-                        : jsonObject.getString("Name");
-                String Q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
-                    : jsonObject.getString("Q1");
-                String Q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
-                    : jsonObject.getString("Q2");
-                String Q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
-                    : jsonObject.getString("Q3");
-                String Q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
-                    : jsonObject.getString("Q4");
-                String WidgetType =
-                    (jsonObject.isNull("WidgetType") || jsonObject.getString("WidgetType")
-                        .equals("")) ? ""
-                        : jsonObject.getString("WidgetType");
-                if (jsonObject.has("YTD")) {
-                    ytd = (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
-                        : jsonObject.getString("YTD");
+            com.mosl.saathi.api.model.dashboard.incentive.Table1Item item = table1Items.get(i);
+            String Name = stringOrEmpty(item.name);
+            String Q1 = stringOrZero(item.q1);
+            String Q2 = stringOrZero(item.q2);
+            String Q3 = stringOrZero(item.q3);
+            String Q4 = stringOrZero(item.q4);
+            String WidgetType = stringOrEmpty(item.widgetType);
+            if (item.yTD != null) {
+                ytd = stringOrZero(item.yTD);
                     yDataGraphArrAdv.add(ytd);
                 }
                 yDataGraphArrAdv.add(Name);
@@ -543,14 +530,12 @@ public class DashboardFragment extends MOSLCommonFragment
                 model.getMonthData().put("Q3", Float.parseFloat(Q3));
                 model.getMonthData().put("Q4", Float.parseFloat(Q4));
 
-                if (jsonObject.has("YTD")) {
+            if (item.yTD != null) {
                     model.getMonthData().put("YTD", Float.parseFloat(ytd));
                 }
                 dataList.add(model);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
 
         if (generateBarData(dataList) != null) {
             mChartAdv.setData(generateBarData(dataList));
@@ -1437,7 +1422,6 @@ public class DashboardFragment extends MOSLCommonFragment
 
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             for (int i = 0; i < widgetList.size(); i++) {
-
                 String widgetTypes = widgetList.get(i).getWidgetTypeList().get(0).getWidgetTypes();
                 if (widgetTypes.equalsIgnoreCase(PERFORMANCE_INCENTIVE)) {
                     incentiveWebServiceCall(widgetList.get(i).getSystemName());
@@ -1478,162 +1462,52 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
+    private void renderIncentive(UiModel<IncentiveItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+
+        IncentiveItem data = uiModel.data;
+
+        if (data != null) {
+            try {
+                if (data.table != null) {
+                    List<com.mosl.saathi.api.model.dashboard.incentive.TableItem> tableItems =
+                        data.table;
+                    incentiveData(tableItems);
+                }
+                if (data.table1 != null) {
+                    List<com.mosl.saathi.api.model.dashboard.incentive.Table1Item> table1Items =
+                        data.table1;
+                    advLoadChart(table1Items);
+                }
+            } catch (Exception e) {
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        }
+    }
+
     private void incentiveWebServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("WidgetSystemName", widgetSystemName);
-
-            //dashboard for
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put(PRODUCT_ID, productId);
-            inputMap.put(EMPLOYEE_CODE, employeeCode);
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            try {
-                                if (statusCode == 200) {
-                                    hideProgress();
-                                    String status = response.getString(STATUS);
-
-                                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase(
-                                        "true")) {
-                                        JSONObject responseJsonObj =
-                                            response.getJSONObject("Response");
-
-                                        if (responseJsonObj.has("Table")) {
-                                            JSONArray jsonArray =
-                                                responseJsonObj.getJSONArray("Table");
-                                            incentiveData(jsonArray);
-                                        }
-                                        if (responseJsonObj.has("Table1")) {
-                                            JSONArray jsonArray =
-                                                responseJsonObj.getJSONArray("Table1");
-                                            // perfotmanceData(jsonArray);
-                                            advLoadChart(jsonArray);
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
-                                    }
-                                } else {
-                                    hideProgress();
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                hideProgress();
-                                //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, OK,
-                                        false, new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                        }
-                    });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
-                    true, null);
-            }
+            ClientRequest request = new ClientRequest(
+                businessProfileIdForDashboard,
+                getAddtionalParameterMap(),
+                widgetSystemName,
+                productId,
+                employeeCode
+            );
+            Disposable subscribe = saathiApi.getIncentive(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderIncentive);
         } else {
-            //            customProgress.setVisibility(View.GONE);
+            hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
@@ -1655,7 +1529,6 @@ public class DashboardFragment extends MOSLCommonFragment
             }
         }
     }
-
 
     private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
@@ -2067,39 +1940,27 @@ public class DashboardFragment extends MOSLCommonFragment
         llCurrentQuaterStatusFour.setVisibility(View.VISIBLE);
     }
 
-    private void incentiveData(JSONArray jsonArray) {
+    private void incentiveData(
+        List<com.mosl.saathi.api.model.dashboard.incentive.TableItem> tableItems) {
         arrayListIncentive.clear();
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                HashMap<String, String> fieldData = new HashMap<String, String>();
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String Parameters =
-                    (jsonObject.isNull("Parameters") || jsonObject.getString("Parameters")
-                        .equals("")) ? ""
-                        : jsonObject.getString("Parameters");
-                String q1 = (jsonObject.isNull("Q1") || jsonObject.getString("Q1").equals("")) ? "0"
-                    : jsonObject.getString("Q1");
-                String q2 = (jsonObject.isNull("Q2") || jsonObject.getString("Q2").equals("")) ? "0"
-                    : jsonObject.getString("Q2");
-                String q3 = (jsonObject.isNull("Q3") || jsonObject.getString("Q3").equals("")) ? "0"
-                    : jsonObject.getString("Q3");
-                String q4 = (jsonObject.isNull("Q4") || jsonObject.getString("Q4").equals("")) ? "0"
-                    : jsonObject.getString("Q4");
-                String yTD =
-                    (jsonObject.isNull("YTD") || jsonObject.getString("YTD").equals("")) ? "0"
-                        : jsonObject.getString("YTD");
-                fieldData.put(PARAMETERS, Parameters);
-                fieldData.put(Q1, q1.equalsIgnoreCase("0.0") ? "0" : q1);
-                fieldData.put(Q2, q2.equalsIgnoreCase("0.0") ? "0" : q2);
-                fieldData.put(Q3, q3.equalsIgnoreCase("0.0") ? "0" : q3);
-                fieldData.put(Q4, q4.equalsIgnoreCase("0.0") ? "0" : q4);
-                fieldData.put(YTD, yTD.equalsIgnoreCase("0.0") ? "0" : yTD);
-                arrayListIncentive.add(fieldData);
-            }
-            incentiveView("Q1");
-        } catch (JSONException je) {
-            je.printStackTrace();
+        for (int i = 0; i < tableItems.size(); i++) {
+            HashMap<String, String> fieldData = new HashMap<String, String>();
+            com.mosl.saathi.api.model.dashboard.incentive.TableItem item = tableItems.get(i);
+            String Parameters = stringOrEmpty(item.parameters);
+            String q1 = stringOrZero(String.valueOf(item.q1));
+            String q2 = stringOrZero(String.valueOf(item.q2));
+            String q3 = stringOrZero(String.valueOf(item.q3));
+            String q4 = stringOrZero(String.valueOf(item.q4));
+            String yTD = stringOrZero(String.valueOf(item.yTD));
+            fieldData.put(PARAMETERS, Parameters);
+            fieldData.put(Q1, q1.equalsIgnoreCase("0.0") ? "0" : q1);
+            fieldData.put(Q2, q2.equalsIgnoreCase("0.0") ? "0" : q2);
+            fieldData.put(Q3, q3.equalsIgnoreCase("0.0") ? "0" : q3);
+            fieldData.put(Q4, q4.equalsIgnoreCase("0.0") ? "0" : q4);
+            fieldData.put(YTD, yTD.equalsIgnoreCase("0.0") ? "0" : yTD);
+            arrayListIncentive.add(fieldData);
         }
+        incentiveView("Q1");
     }
 
     private void incentiveView(String value) {

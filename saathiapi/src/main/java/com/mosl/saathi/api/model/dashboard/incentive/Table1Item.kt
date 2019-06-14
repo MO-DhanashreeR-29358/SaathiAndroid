@@ -23,5 +23,8 @@ data class Table1Item(
   val widgetType: String?,
 
   @JvmField @SerializedName("Name")
-  val name: String?
+  val name: String?,
+
+  @JvmField @SerializedName("YTD")
+  val yTD: String?
 )
