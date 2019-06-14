@@ -25,6 +25,7 @@ import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataIt
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
 import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest
+import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
@@ -296,5 +297,10 @@ interface SaathiApi {
   fun getCurrentQuarterStatus(
     @Body request: ClientRequest
   ): Observable<String>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getIncentive(
+    @Body request: ClientRequest
+  ): Observable<IncentiveItem>
 
 }
