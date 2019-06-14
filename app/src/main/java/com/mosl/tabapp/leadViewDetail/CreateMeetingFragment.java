@@ -51,6 +51,9 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.lead.LookupItem;
+import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -69,6 +72,7 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
+import io.reactivex.disposables.Disposable;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -82,6 +86,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -131,8 +136,9 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private Spinner spProduct, spMeetingDuration, spActivityType, spMeetingReason, spActionables,
         spSubCategory, spCategory, spBAClient, spOutStaition, spMeetingObjective, spMeetingLocation,
         spTravellingMode;
+    private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private ArrayList<RowData> arrSelectProduct, arrMeetingDuration, arrActivityType,
-        arrMeetingReason, arrActionables, arrCategory, arrSubCategory, arrBAClient, arrOutStation,
+        arrMeetingReason, arrActionables, arrSubCategory, arrBAClient, arrOutStation,
         arrMeetingObjective, arrMeetingLocation, arrTravellingMode;
     private String leadId;
     private int currentYear, month, day, hour, minute;
@@ -1573,156 +1579,45 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     }
 
     private void category() {
-        showProgress();
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", CATEGORY);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            String serviceMethod = "Master/GetAllLookup";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            arrCategory = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        arrCategory.add(new RowData(0, "-1", SELECT_CATEGORY));
-                                        JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                objDetail.isNull(LOOKUPID) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = objDetail.isNull(LOOKUPNAME)
-                                                ? "" : objDetail.getString(LOOKUPNAME);
-                                            arrCategory.add(
-                                                new RowData(i + 1, lookUpId, lookUpName));
-                                        }
-                                        arrAdapCategory = new ArrayAdapter<>(getMainActivity(),
-                                            R.layout.simple_spinner_item, arrCategory);
-                                        arrAdapCategory.setDropDownViewResource(R.layout.mdropdown);
-                                        spCategory.setAdapter(arrAdapCategory);
-                                        spCategory.setOnItemSelectedListener(
-                                            selectCategoryListener);
-                                        arrAdapCategory.notifyDataSetChanged();
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    hideProgress();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                hideProgress();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), CATEGORY, null);
+            Disposable disposable = saathiApi.postAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderCategory);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            hideProgress();
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
+        }
+    }
+
+    private void renderCategory(
+        UiModel<List<LookupItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrCategory.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrCategory.clear();
+            arrCategory.add(new RowData(0, "-1", SELECT_CATEGORY));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrCategory.add(new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapCategory = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrCategory);
+            arrAdapCategory.setDropDownViewResource(R.layout.mdropdown);
+            spCategory.setAdapter(arrAdapCategory);
+            spCategory.setOnItemSelectedListener(
+                selectCategoryListener);
+            arrAdapCategory.notifyDataSetChanged();
         }
     }
 
