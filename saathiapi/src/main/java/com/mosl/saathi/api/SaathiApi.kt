@@ -130,7 +130,7 @@ interface SaathiApi {
   @POST("Client/GetClientViewByCommand")
   fun postClientDetail(
       @Body request: ClientDetailRequest
-  ): Observable<SaathiCommonResponse<ClientDetailItem>>
+  ): Observable<ClientDetailItem>
 
   @POST("Client/SaveClientProfile")
   fun postSaveClientProfile(

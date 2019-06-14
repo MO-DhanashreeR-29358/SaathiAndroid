@@ -1,6 +1,5 @@
 package com.mosl.tabapp.leadViewDetail;
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
@@ -58,11 +56,6 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,6 +63,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -830,7 +826,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                                 String status = response.getString(STATUS);
                                 if (status.equalsIgnoreCase("true")) {
                                     JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                    new ClientDetail(objDetail);
+                                    //new ClientDetail(objDetail);
                                     tvLeadId.setText(ClientDetail.getLeadId());
                                     tvCurrentStage.setText(ClientDetail.getCurrentStage());
                                     if (!ClientDetail.getCurrentStageSince().isEmpty()) {
