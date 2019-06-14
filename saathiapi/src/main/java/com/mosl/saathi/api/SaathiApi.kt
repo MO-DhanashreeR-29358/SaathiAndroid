@@ -291,4 +291,10 @@ interface SaathiApi {
     @Body request: ActionableCountRequest
   ): Observable<ActionableCountItem>
 
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getCurrentQuarterStatus(
+    @Body request: ClientRequest
+  ): Observable<String>
+
 }

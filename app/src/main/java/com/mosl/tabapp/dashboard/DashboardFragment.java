@@ -53,10 +53,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item;
 import com.mosl.saathi.api.model.dashboard.actionablecount.TableItem;
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableFilterItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem;
@@ -1447,8 +1449,8 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private Map getAddtionalParameterMap() {
-        Map addtionalParameterMap = new HashMap<>();
+    private Map<String, String> getAddtionalParameterMap() {
+        Map<String, String> addtionalParameterMap = new HashMap<>();
         try {
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
         } catch (Exception ex) {
@@ -1635,264 +1637,169 @@ public class DashboardFragment extends MOSLCommonFragment
         }
     }
 
-    private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
-        // Timber.v(text);
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
+    private void renderStatus(UiModel<JSONObject> uiModel) {
+        toggleProgress(uiModel.inProgress);
 
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("WidgetSystemName", widgetSystemName);
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
 
-            //dashboard for
-            inputMap.put("BusinessProfileId", businessProfileIdForDashboard);
-            inputMap.put(PRODUCT_ID, productId);
-            inputMap.put(EMPLOYEE_CODE, employeeCode);
-
+        JSONObject data = uiModel.data;
+        if (data != null) {
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            try {
-                                if (statusCode == 200) {
-                                    hideProgress();
-                                    String status = response.getString(STATUS);
-
-                                    if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase(
-                                        "true")) {
-                                        JSONObject responseJsonObj =
-                                            response.getJSONObject("Response");
-
-                                        if (responseJsonObj.has("Table")) {
-                                            JSONArray jsonArray =
-                                                responseJsonObj.getJSONArray("Table");
-                                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                            String Table =
-                                                (jsonObject.isNull("Table") || jsonObject.getString(
-                                                    "Table").equals(""))
-                                                    ? "" : jsonObject.getString("Table");
-                                            if (Table.equalsIgnoreCase("3")) {
-                                                ArrayList<String> keyList = new ArrayList<String>();
-                                                String headingName =
-                                                    (jsonObject.isNull("Heading")
-                                                        || jsonObject.getString("Heading")
-                                                        .equals("")) ? ""
-                                                        : jsonObject.getString("Heading");
-                                                Iterator iter = jsonObject.keys();
-                                                while (iter.hasNext()) {
-                                                    String columnName = iter.next().toString();
-                                                    keyList.add(columnName);
-                                                }
-
-                                                final ArrayList<HashMap<String, String>> yAxisList =
-                                                    new ArrayList<HashMap<String, String>>();
-
-                                                for (String keySetE : keyList) {
-                                                    HashMap<String, String> keyValue =
-                                                        new HashMap<>();
-                                                    if (keySetE.toString()
-                                                        .equalsIgnoreCase("Heading")
-                                                        || keySetE.toString()
-                                                        .equalsIgnoreCase("Table")) {
-                                                    } else {
-                                                        String columnData =
-                                                            jsonObject.getString(keySetE)
-                                                                .toString()
-                                                                .equals("") ? ""
-                                                                : jsonObject.getString(keySetE)
-                                                                    .toString();
-                                                        keyValue.put(keySetE.toString(),
-                                                            columnData);
-                                                        yAxisList.add(keyValue);
-                                                    }
-                                                }
-                                                currentQuarterStatusTableThird(headingName,
-                                                    yAxisList);
-                                            } else if (Table.equalsIgnoreCase("1")) {
-                                                String headingName =
-                                                    (jsonObject.isNull("Heading")
-                                                        || jsonObject.getString("Heading")
-                                                        .equals("")) ? ""
-                                                        : jsonObject.getString("Heading");
-                                                currentQuarterStatusTableFirst(headingName,
-                                                    jsonArray);
-                                            }
-                                            // incentiveData(jsonArray);
-                                        }
-                                        if (responseJsonObj.has("Table1")) {
-                                            JSONArray jsonArray =
-                                                responseJsonObj.getJSONArray("Table1");
-                                            JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                            String Table =
-                                                (jsonObject.isNull("Table") || jsonObject.getString(
-                                                    "Table").equals(""))
-                                                    ? "" : jsonObject.getString("Table");
-                                            if (Table.equalsIgnoreCase("4")) {
-                                                ArrayList<String> keyList = new ArrayList<String>();
-                                                String headingName =
-                                                    (jsonObject.isNull("Heading")
-                                                        || jsonObject.getString("Heading")
-                                                        .equals("")) ? ""
-                                                        : jsonObject.getString("Heading");
-                                                Iterator iter = jsonObject.keys();
-                                                while (iter.hasNext()) {
-                                                    String columnName = iter.next().toString();
-                                                    keyList.add(columnName);
-                                                }
-
-                                                final ArrayList<HashMap<String, String>> yAxisList =
-                                                    new ArrayList<HashMap<String, String>>();
-
-                                                for (String keySetE : keyList) {
-                                                    HashMap<String, String> keyValue =
-                                                        new HashMap<>();
-                                                    if (keySetE.toString()
-                                                        .equalsIgnoreCase("Heading")
-                                                        || keySetE.toString()
-                                                        .equalsIgnoreCase("Table")) {
-                                                    } else {
-                                                        String columnData =
-                                                            jsonObject.getString(keySetE)
-                                                                .toString()
-                                                                .equals("") ? ""
-                                                                : jsonObject.getString(keySetE)
-                                                                    .toString();
-                                                        keyValue.put(keySetE.toString(),
-                                                            columnData);
-                                                        yAxisList.add(keyValue);
-                                                    }
-                                                }
-                                                currentQuarterStatusTableFourth(headingName,
-                                                    yAxisList);
-                                            } else if (Table.equalsIgnoreCase("2")) {
-                                                String headingName =
-                                                    (jsonObject.isNull("Heading")
-                                                        || jsonObject.getString("Heading")
-                                                        .equals("")) ? ""
-                                                        : jsonObject.getString("Heading");
-                                                currentQuarterStatusTableSecond(headingName,
-                                                    jsonArray);
-                                            }
-                                            // incentiveData(jsonArray);
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, OK, true, null);
-                                    }
-                                } else {
-                                    hideProgress();
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                hideProgress();
-                                //   MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, OK,
-                                        false, new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, OK, true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, OK, true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            Throwable throwable, JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers,
-                            String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED,
-                                OK, true, null);
-                            hideProgress();
-                        }
-                    });
+                renderCurrentQuarterStatus(data);
             } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, OK,
-                    true, null);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
+        }
+    }
+
+
+    private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            ClientRequest request = new ClientRequest(
+                businessProfileIdForDashboard,
+                getAddtionalParameterMap(),
+                widgetSystemName,
+                productId,
+                employeeCode
+            );
+
+            Disposable subscribe = saathiApi.getCurrentQuarterStatus(request)
+                .map(responseS -> {
+                    JSONObject response = new JSONObject(responseS);
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return response.getJSONObject(RESPONSE);
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderStatus);
         } else {
-            //            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            hideProgress();
+            alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }
+    }
+
+    private void renderCurrentQuarterStatus(JSONObject responseJsonObj) throws JSONException {
+        if (responseJsonObj.has("Table")) {
+            JSONArray jsonArray =
+                responseJsonObj.getJSONArray("Table");
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            String Table =
+                (jsonObject.isNull("Table") || jsonObject.getString(
+                    "Table").equals(""))
+                    ? "" : jsonObject.getString("Table");
+            if (Table.equalsIgnoreCase("3")) {
+                ArrayList<String> keyList = new ArrayList<String>();
+                String headingName =
+                    (jsonObject.isNull("Heading")
+                        || jsonObject.getString("Heading")
+                        .equals("")) ? ""
+                        : jsonObject.getString("Heading");
+                Iterator iter = jsonObject.keys();
+                while (iter.hasNext()) {
+                    String columnName = iter.next().toString();
+                    keyList.add(columnName);
+                }
+
+                final ArrayList<HashMap<String, String>> yAxisList =
+                    new ArrayList<HashMap<String, String>>();
+
+                for (String keySetE : keyList) {
+                    HashMap<String, String> keyValue =
+                        new HashMap<>();
+                    if (keySetE.toString()
+                        .equalsIgnoreCase("Heading")
+                        || keySetE.toString()
+                        .equalsIgnoreCase("Table")) {
+                    } else {
+                        String columnData =
+                            jsonObject.getString(keySetE)
+                                .toString()
+                                .equals("") ? ""
+                                : jsonObject.getString(keySetE)
+                                    .toString();
+                        keyValue.put(keySetE.toString(),
+                            columnData);
+                        yAxisList.add(keyValue);
+                    }
+                }
+                currentQuarterStatusTableThird(headingName,
+                    yAxisList);
+            } else if (Table.equalsIgnoreCase("1")) {
+                String headingName =
+                    (jsonObject.isNull("Heading")
+                        || jsonObject.getString("Heading")
+                        .equals("")) ? ""
+                        : jsonObject.getString("Heading");
+                currentQuarterStatusTableFirst(headingName,
+                    jsonArray);
+            }
+            // incentiveData(jsonArray);
+        }
+        if (responseJsonObj.has("Table1")) {
+            JSONArray jsonArray =
+                responseJsonObj.getJSONArray("Table1");
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            String Table =
+                (jsonObject.isNull("Table") || jsonObject.getString(
+                    "Table").equals(""))
+                    ? "" : jsonObject.getString("Table");
+            if (Table.equalsIgnoreCase("4")) {
+                ArrayList<String> keyList = new ArrayList<String>();
+                String headingName =
+                    (jsonObject.isNull("Heading")
+                        || jsonObject.getString("Heading")
+                        .equals("")) ? ""
+                        : jsonObject.getString("Heading");
+                Iterator iter = jsonObject.keys();
+                while (iter.hasNext()) {
+                    String columnName = iter.next().toString();
+                    keyList.add(columnName);
+                }
+
+                final ArrayList<HashMap<String, String>> yAxisList =
+                    new ArrayList<HashMap<String, String>>();
+
+                for (String keySetE : keyList) {
+                    HashMap<String, String> keyValue =
+                        new HashMap<>();
+                    if (keySetE.toString()
+                        .equalsIgnoreCase("Heading")
+                        || keySetE.toString()
+                        .equalsIgnoreCase("Table")) {
+                    } else {
+                        String columnData =
+                            jsonObject.getString(keySetE)
+                                .toString()
+                                .equals("") ? ""
+                                : jsonObject.getString(keySetE)
+                                    .toString();
+                        keyValue.put(keySetE.toString(),
+                            columnData);
+                        yAxisList.add(keyValue);
+                    }
+                }
+                currentQuarterStatusTableFourth(headingName,
+                    yAxisList);
+            } else if (Table.equalsIgnoreCase("2")) {
+                String headingName =
+                    (jsonObject.isNull("Heading")
+                        || jsonObject.getString("Heading")
+                        .equals("")) ? ""
+                        : jsonObject.getString("Heading");
+                currentQuarterStatusTableSecond(headingName,
+                    jsonArray);
+            }
+            // incentiveData(jsonArray);
         }
     }
 
