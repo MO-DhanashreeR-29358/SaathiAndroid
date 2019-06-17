@@ -37,6 +37,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
+import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
@@ -169,6 +170,11 @@ interface SaathiApi {
   //==================== Lead Profile ===========================
   @POST("Lead/GetLeadProfileParameters")
   fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
+
+  @POST("Lead/SaveLeadProfileParameter")
+  fun postLeadProfile(
+    @Body request: List<SaveLeadProfileRequest>
+  ): Observable<String>
 
 
 }
