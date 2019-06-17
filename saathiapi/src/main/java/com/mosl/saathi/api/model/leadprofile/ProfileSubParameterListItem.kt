@@ -8,7 +8,7 @@ data class ProfileSubParameterListItem(
   val status: Int?,
 
   @JvmField @SerializedName("IsHide")
-  val isHide: Any?,
+  val isHide: String?,
 
   @JvmField @SerializedName("LeadProfileParameterID")
   val leadProfileParameterID: Int?,
@@ -26,7 +26,7 @@ data class ProfileSubParameterListItem(
   val sequence: Int?,
 
   @JvmField @SerializedName("ExtraInfoFieldName")
-  val extraInfoFieldName: Any?,
+  val extraInfoFieldName: String?,
 
   @JvmField @SerializedName("ExtraInfoRowCount")
   val extraInfoRowCount: Int?,
@@ -41,10 +41,10 @@ data class ProfileSubParameterListItem(
   val approvalFieldList: Any?,
 
   @JvmField @SerializedName("Value")
-  val value: Any?,
+  val value: String?,
 
   @JvmField @SerializedName("HideDepedentQuestion")
-  val hideDepedentQuestion: Any?,
+  val hideDepedentQuestion: String?,
 
   @JvmField @SerializedName("Permissions")
   val permissions: Any?,

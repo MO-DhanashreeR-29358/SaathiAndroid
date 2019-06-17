@@ -11,26 +11,29 @@ data class LeadProfileItem(
   val status: Int?,
 
   @JvmField @SerializedName("InApproval")
-  val inApproval: Boolean?,
+  val inApproval: Boolean,
 
   @JvmField @SerializedName("Active")
   val active: Boolean?,
 
   @JvmField @SerializedName("ProfileParameterGroupID")
-  val profileParameterGroupID: Int?,
+  val profileParameterGroupID: Int,
 
   @JvmField @SerializedName("BusinessUnitId")
-  val businessUnitId: Int?,
+  val businessUnitId: Int,
 
   @JvmField @SerializedName("ApprovalFieldList")
   val approvalFieldList: Any?,
 
   @JvmField @SerializedName("IsAdminMode")
-  val isAdminMode: Boolean?,
+  val isAdminMode: Boolean,
 
   @JvmField @SerializedName("ProfileParameterList")
   val profileParameterList: List<ProfileParameterListItem>?,
 
   @JvmField @SerializedName("Sysname")
-  val sysname: String?
+  val sysname: String?,
+
+  @JvmField @SerializedName("ProfileParameterID")
+  val profileParameterId: String?
 )

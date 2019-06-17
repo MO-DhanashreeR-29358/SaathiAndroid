@@ -23,10 +23,10 @@ data class ProfileParameterListItem(
   val profileSubParameterList: List<ProfileSubParameterListItem>?,
 
   @JvmField @SerializedName("IsDefaultHidden")
-  val isDefaultHidden: Any?,
+  val isDefaultHidden: String?,
 
   @JvmField @SerializedName("ProfileParameterGroupID")
-  val profileParameterGroupID: Int?,
+  val profileParameterGroupID: Int,
 
   @JvmField @SerializedName("ApprovalFieldList")
   val approvalFieldList: Any?,
@@ -41,7 +41,7 @@ data class ProfileParameterListItem(
   val isAdminMode: Boolean?,
 
   @JvmField @SerializedName("ControlType")
-  val controlType: Int?,
+  val controlType: Int,
 
   @JvmField @SerializedName("ProfileSubParameterValueModel")
   val profileSubParameterValueModel: List<Any>?,
