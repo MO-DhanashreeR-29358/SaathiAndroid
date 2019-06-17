@@ -156,9 +156,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private final ArrayList<RowData> arrSubCategory = new ArrayList<>();
     private final ArrayList<RowData> arrBAClient = new ArrayList<>();
     private final ArrayList<RowData> arrOutStation = new ArrayList<>();
-    private ArrayList<RowData>
-
-        arrMeetingLocation, arrTravellingMode;
+    private final ArrayList<RowData> arrMeetingLocation = new ArrayList<>();
+    private ArrayList<RowData> arrTravellingMode;
     private String leadId;
     private int currentYear, month, day, hour, minute;
     private Calendar calendar = Calendar.getInstance();
@@ -1250,7 +1249,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void category() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), CATEGORY, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), CATEGORY, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderCategory);
@@ -1293,7 +1292,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void meetingObjective() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGOBJECTIVE, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGOBJECTIVE, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingObjective);
@@ -1339,7 +1338,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void subCategory() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), SUBCATEGORY, categoryCodeStr);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), SUBCATEGORY, categoryCodeStr,
+                    null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::rendrerSubCategory);
@@ -1392,7 +1392,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             meetingDuration();
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderProduct);
@@ -1436,7 +1436,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             activityType();
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGDURATION, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGDURATION, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingDuration);
@@ -1481,7 +1481,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void activityType() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderActivityType);
@@ -1528,7 +1528,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             baClient();
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGREASON,
-                    activityTypeCodeStr);
+                    activityTypeCodeStr, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingReason);
@@ -1574,7 +1574,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             outStation();
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), BACLIENTMEETING,
-                    null);
+                    null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderBaClient);
@@ -1619,7 +1619,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             actionables();
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), OUTSTATIONMEETING,
-                    null);
+                    null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderOutStation);
@@ -1664,7 +1664,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             category();
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIONABLES, null);
+                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIONABLES, null, null);
             Disposable disposable = saathiApi.postAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderActionables);
@@ -1706,8 +1706,19 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     }
 
     private void meetingLocation() {
-        showProgress();
         travellingMode();
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LookupRequest request =
+                new LookupRequest("0", MEETINGADDRESSID, null, true);
+            Disposable disposable = saathiApi.postAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderMeetingLocation);
+        } else {
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }
+       /* showProgress();
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             Map inputMap = new HashMap<>();
             inputMap.put("LookupTypeId", MEETINGADDRESSID);
@@ -1860,6 +1871,37 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
+        }*/
+    }
+
+    private void renderMeetingLocation(UiModel<List<LookupItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrMeetingLocation.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrMeetingLocation.clear();
+            arrMeetingLocation.add(new RowData(0, "-1", SELECT_MEETING_LOCATION));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrMeetingLocation.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapMeetingLocation =
+                new ArrayAdapter<>(getMainActivity(),
+                    R.layout.simple_spinner_item, arrMeetingLocation);
+            arrAdapMeetingLocation.setDropDownViewResource(
+                R.layout.mdropdown);
+            spMeetingLocation.setAdapter(arrAdapMeetingLocation);
+            spMeetingLocation.setOnItemSelectedListener(
+                selectMeetingLocation);
+            arrAdapMeetingLocation.notifyDataSetChanged();
         }
     }
 
