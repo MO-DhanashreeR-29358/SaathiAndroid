@@ -35,6 +35,8 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
+import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
@@ -163,5 +165,10 @@ interface SaathiApi {
   @POST("NotificationMessage/GetNotificationMessageMobile")
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
+  //==================== Lead Profile ===========================
+  @POST("Lead/GetLeadProfileParameters")
+  fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
+
 
 }
