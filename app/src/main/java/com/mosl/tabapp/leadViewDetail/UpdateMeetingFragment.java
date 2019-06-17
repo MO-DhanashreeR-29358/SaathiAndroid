@@ -38,6 +38,8 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem;
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest;
 import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem;
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest;
@@ -2153,87 +2155,44 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         @Override
         public Filter getFilter() {
             return new Filter() {
+                final Filter.FilterResults filterResults = new Filter.FilterResults();
+
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-                    final FilterResults filterResults = new FilterResults();
+
                     ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
-                            // String url = "ClientSearch?Userid=" + AccountDetails.getLoginId().trim() + "&SearchText=" + URLEncoder.encode(constraint.toString(), "utf-8");
-
-                            Map requestMap = new HashMap();
-                            requestMap.put("EmployeeName",
-                                URLEncoder.encode(constraint.toString(), "utf-8"));
-                            requestMap.put("EmployeeCode",
-                                URLEncoder.encode(constraint.toString(), "utf-8"));
-
-                            String serviceMethod = "UserApi/AutoCompleteSplAttendee";
-
-                            if (MSFStatistics.isNetworkEnabled(getContext())) {
-                                JSONObject response =
-                                    WebServiceDirectCall.getData(serviceMethod, getHeader(),
-                                        requestMap);
-
-                                if (response == null) {
-                                    return null;
-                                }
-
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    //  JSONArray jsonArray = objDetail.getJSONArray(DATA);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                     /*   "Id": 0,
-                                                "BusinessUnitName": "Retail",
-                                                "EmployeeName": "Ramnarayan  ",
-                                                "UserType": 1,
-                                                "UserId": 15256,
-                                                "EmployeeCode": "6508",
-                                                "BusinessChannelId": 1,
-                                                "ChannelName": "Direct",
-                                                "BusinessUnitId": 3,
-                                                "BusinessUnit": null,
-                                                "BusinessProfileId": 3,
-                                                "BusinessProfileName": "OAO TeleSales",*/
-                                        String employeeName =
-                                            jsonObject.getString(EMPLOYEE_NAME) == null ? ""
-                                                : jsonObject.getString(EMPLOYEE_NAME);
-                                        String employeeCode =
-                                            jsonObject.getString(EMPLOYEE_CODE) == null ? ""
-                                                : jsonObject.getString(EMPLOYEE_CODE);
-                                        String BranchCode =
-                                            jsonObject.getString("BranchCode") == null ? ""
-                                                : jsonObject.getString("BranchCode");
-                                        //region Check self Empcode and don't add to list
-                                        if (employeeCode.equalsIgnoreCase(
-                                            AccountDetails.getEmployeeCode())) {
-                                            continue;
-                                        }
-                                        //endregion
+                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                AutoCompleteAttendeeRequest request =
+                                    new AutoCompleteAttendeeRequest(
+                                        URLEncoder.encode(constraint.toString(), "utf-8"),
+                                        URLEncoder.encode(constraint.toString(), "utf-8")
+                                    );
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteSplAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
                                         modelList.add(
                                             new SplAttendeeModel(employeeName, employeeCode,
                                                 BranchCode));
-
-                                        // Assign the data to the FilterResults
                                         filterResults.values = modelList;
                                         filterResults.count = modelList.size();
                                     }
-                                } else {
-
-                                    hideProgress();
-                                    modelList.add(SplAttendeeModel.getNoData(
-                                        CRMMOSLCommon.getErrorMsgFromResponse(response)));
-                                    //  modelList.add(SplAttendeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
-                                    // Assign the data to the FilterResults
+                                } catch (Exception e) {
+                                    modelList.add(SplAttendeeModel.getNoData(getErrorOnFailure(e)));
                                     filterResults.values = modelList;
                                     filterResults.count = modelList.size();
-                                    return filterResults;
                                 }
                             } else {
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                     getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+                                    INTERNET_CONNECTION, "OK", true,
+                                    null);
                             }
                         }
                     } catch (Exception ex) {

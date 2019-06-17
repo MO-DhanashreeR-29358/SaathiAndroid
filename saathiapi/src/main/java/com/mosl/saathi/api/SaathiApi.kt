@@ -199,9 +199,9 @@ interface SaathiApi {
   fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
 
   @POST("UserApi/AutoCompleteAttendee")
-  fun postAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+  fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
 
   @POST("UserApi/AutoCompleteSplAttendee")
-  fun postAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+  fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
 
 }
