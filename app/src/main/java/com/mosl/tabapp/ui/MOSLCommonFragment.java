@@ -205,17 +205,19 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         }
     }
 
+    public String getErrorOnFailure(Throwable t) {
+        if (t instanceof ServiceFailureException) {
+            return ((ServiceFailureException) t).errorMessage;
+        } else {
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+    }
+
     public void  showOnFailurePopup(Throwable t) {
         Timber.e(t);
-        String message;
-        if (t instanceof ServiceFailureException) {
-            message = ((ServiceFailureException) t).errorMessage;
-        } else {
-            message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
-        }
         MSFDialog.alertDialog(getMainActivity(), 0,
             getResources().getString(R.string.motilal_oswal),
-            message, "OK", true, null);
+            getErrorOnFailure(t), "OK", true, null);
     }
 
     public String stringOrEmpty(@Nullable String input) {
