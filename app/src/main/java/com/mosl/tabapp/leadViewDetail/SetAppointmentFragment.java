@@ -119,7 +119,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
     private final ArrayList<RowData> arrSelectWeek = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectWeek;
     private String weekCodeStr, weekNameStr, weekDayCodeStr, weekDayNameStr;
-    private ArrayList<RowData> arrSelectWeekDay;
+    private final ArrayList<RowData> arrSelectWeekDay = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectWeekDay;
     private ArrayAdapter<RowData> arrAdapActivityType;
     private final ArrayList<RowData> arrActivityType = new ArrayList<>();
@@ -1811,174 +1811,51 @@ public class SetAppointmentFragment extends MOSLCommonFragment
     // Date picker end
     private void selectWeekDay(final String id) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            //            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", DAYS);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            final String serviceMethod = "Master/GetAllLookup";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrSelectWeekDay = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    if (status.equalsIgnoreCase("true")) {
-                                        //                                    customProgress.setVisibility(View.GONE);
-                                        arrSelectWeekDay.add(
-                                            new RowData(0, "-1", SELECT_WEEK_DAYS));
-                                        JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-
-                                            arrSelectWeekDay.add(
-                                                new RowData(i + 1, lookUpId, lookUpName));
-                                            ///   Log.v(TAG, "Week Day:" + lookUpName);
-                                        }
-                                        arrAdapSelectWeekDay = new ArrayAdapter<>(getMainActivity(),
-                                            R.layout.simple_spinner_item, arrSelectWeekDay);
-                                        arrAdapSelectWeekDay.setDropDownViewResource(
-                                            R.layout.mdropdown);
-                                        spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
-                                        spSelectWeekDay.setOnItemSelectedListener(
-                                            selectWeekDayListener);
-                                        arrAdapSelectWeekDay.notifyDataSetChanged();
-                                        RowData productData =
-                                            getSpinnerRowDataById(id, arrAdapSelectWeekDay);
-                                        if (productData != null) {
-                                            spSelectWeekDay.setSelection(productData.getPosition());
-                                        }
-                                        ///adding to cache
-                                        //LruCacheManager.getInstance().put(serviceMethod + DAYS, response);
-                                    } else {
-                                        //                                    customProgress.setVisibility(View.GONE);
-                                        String message = response.getString(MESSAGE);
-                                        MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            message, "Ok", true, null);
-                                    }
-                                } else {
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            //                        customProgress.setVisibility(View.GONE);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Log.v(TAG, e.toString());
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), DAYS, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderWeekDay(uiModel, id));
         } else {
-
-            hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
                 getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
                 null);
-            return;
+        }
+    }
+
+    private void renderWeekDay(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrSelectWeekDay.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrSelectWeekDay.clear();
+            arrSelectWeekDay.add(
+                new RowData(0, "-1", SELECT_WEEK_DAYS));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrSelectWeekDay.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapSelectWeekDay = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrSelectWeekDay);
+            arrAdapSelectWeekDay.setDropDownViewResource(
+                R.layout.mdropdown);
+            spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
+            spSelectWeekDay.setOnItemSelectedListener(
+                selectWeekDayListener);
+            arrAdapSelectWeekDay.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapSelectWeekDay);
+            if (productData != null) {
+                spSelectWeekDay.setSelection(productData.getPosition());
+            }
         }
     }
 
