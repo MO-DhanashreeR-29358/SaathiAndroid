@@ -44,7 +44,6 @@ import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
-import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -59,10 +58,11 @@ interface SaathiApi {
     @Body request: AssignedLeadReportRequest
   ): Observable<List<AssignedLeadReportItem>>
 
+  @ExcludeWrapper
   @POST("Report/LoadReportViewDataAsync")
   fun postLeadReport(
     @Body request: LeadReportRequest
-  ): Observable<SaathiCommonResponse<LeadReportItem>>
+  ): Observable<String>
 
   //========================== Lead View Details ==========================
 

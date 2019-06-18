@@ -24,6 +24,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static io.reactivex.schedulers.Schedulers.io;
 
@@ -261,6 +262,7 @@ public class CRMWebServiceHandler {
                 .build();
 
         return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(new MOSLResponseWrapper())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(

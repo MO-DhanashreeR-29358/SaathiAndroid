@@ -216,6 +216,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
             message, "OK", true, null);
     }
 
+
     public String stringOrEmpty(@Nullable String input) {
         if (input != null) {
             return input;
