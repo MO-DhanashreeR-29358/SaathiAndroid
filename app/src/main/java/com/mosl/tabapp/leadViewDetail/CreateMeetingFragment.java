@@ -70,7 +70,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
-import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddedAttendeeModel;
@@ -83,7 +82,6 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -2304,63 +2302,47 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         @Override
         public Filter getFilter() {
             return new Filter() {
-                FilterResults filterResults = new FilterResults();
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
-
+                    final FilterResults filterResults = new FilterResults();
+                    ArrayList<EmployeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
-                            if (MSFStatistics.isNetworkEnabled(getContext())) {
+                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
                                 AutoCompleteAttendeeRequest request =
                                     new AutoCompleteAttendeeRequest(
                                         URLEncoder.encode(constraint.toString(), "utf-8"),
-                                        URLEncoder.encode(constraint.toString(), "utf-8"));
-                                Disposable subscribe = saathiApi.getAutoCompleteAttendee(request)
-                                    .compose(UiModelHelper.applyUiModel())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(uiModel -> {
-                                        //toggleProgress(uiModel.inProgress);
-
-                                        Throwable error = uiModel.error;
-                                        if (error != null) {
-                                            final ArrayList<EmployeeModel> modelList =
-                                                new ArrayList<>();
-                                            modelList.add(
-                                                EmployeeModel.getNoData(getErrorOnFailure(error)));
-                                            filterResults.values = modelList;
-                                            filterResults.count = modelList.size();
+                                        URLEncoder.encode(constraint.toString(), "utf-8")
+                                    );
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
+                                        if (employeeCode.equalsIgnoreCase(
+                                            AccountDetails.getEmployeeCode())) {
+                                            continue;
                                         }
-                                        List<AutoCompleteAttendeeItem> data = uiModel.data;
-                                        if (data != null) {
-                                            final ArrayList<EmployeeModel> modelList =
-                                                new ArrayList<>();
-                                            for (AutoCompleteAttendeeItem datum : data) {
-                                                String employeeName =
-                                                    stringOrEmpty(datum.employeeName);
-                                                String employeeCode =
-                                                    stringOrEmpty(datum.employeeCode);
-                                                String branchCode = stringOrEmpty(datum.branchCode);
-                                                if (AccountDetails.getEmployeeCode()
-                                                    .equalsIgnoreCase(employeeCode)) {
-                                                    continue;
-                                                }
-                                                modelList.add(
-                                                    new EmployeeModel(
-                                                        employeeName,
-                                                        employeeCode,
-                                                        branchCode, false));
-                                                filterResults.values = modelList;
-                                                filterResults.count = modelList.size();
-                                                if (modelList.isEmpty()) {
-                                                    modelList.add(EmployeeModel.getNoData(
-                                                        ATTENDEEE_NOT_FOUND_MESSAGE));
-                                                }
-                                            }
+                                        modelList.add(new EmployeeModel(employeeName, employeeCode,
+                                            BranchCode, false));
+                                        filterResults.values = modelList;
+                                        filterResults.count = modelList.size();
+                                        if (modelList.isEmpty()) {
+                                            modelList.add(EmployeeModel.getNoData(
+                                                ATTENDEEE_NOT_FOUND_MESSAGE));
                                         }
-                                    });
+                                    }
+                                } catch (Exception e) {
+                                    modelList.add(EmployeeModel.getNoData(getErrorOnFailure(e)));
+                                    filterResults.values = modelList;
+                                    filterResults.count = modelList.size();
+                                    return filterResults;
+                                }
                             } else {
-                                hideProgress();
                                 alertDialog(getMainActivity(), 0,
                                     getResources().getString(R.string.motilal_oswal),
                                     INTERNET_CONNECTION, "OK", true, null);
