@@ -51,7 +51,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
-import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddedAttendeeModel;
@@ -68,15 +67,12 @@ import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import com.mosl.tabapp.ws.WebServiceDirectCall;
 import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1601,7 +1597,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment
         List<LookupItem> data = uiModel.data;
         if (data != null) {
             arrActivityType.clear();
-            arrActivityType.add(new RowData(0, "-1", SELECT_PRODUCT));
+            arrActivityType.add(
+                new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 String lookUpId = stringOrEmpty(item.lookUpid);
@@ -2235,76 +2232,31 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     final FilterResults filterResults = new FilterResults();
+                    ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
-                            // String url = "ClientSearch?Userid=" + AccountDetails.getLoginId().trim() + "&SearchText=" + URLEncoder.encode(constraint.toString(), "utf-8");
-
-                            Map requestMap = new HashMap();
-                            requestMap.put("EmployeeName",
-                                URLEncoder.encode(constraint.toString(), "utf-8"));
-                            requestMap.put("EmployeeCode",
-                                URLEncoder.encode(constraint.toString(), "utf-8"));
-
-                            String serviceMethod = "UserApi/AutoCompleteSplAttendee";
-
-                            if (MSFStatistics.isNetworkEnabled(getContext())) {
-                                JSONObject response =
-                                    WebServiceDirectCall.getData(serviceMethod, getHeader(),
-                                        requestMap);
-
-                                if (response == null) {
-                                    return null;
-                                }
-                                ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    //  JSONArray jsonArray = objDetail.getJSONArray(DATA);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                     /*   "Id": 0,
-                                                "BusinessUnitName": "Retail",
-                                                "EmployeeName": "Ramnarayan  ",
-                                                "UserType": 1,
-                                                "UserId": 15256,
-                                                "EmployeeCode": "6508",
-                                                "BusinessChannelId": 1,
-                                                "ChannelName": "Direct",
-                                                "BusinessUnitId": 3,
-                                                "BusinessUnit": null,
-                                                "BusinessProfileId": 3,
-                                                "BusinessProfileName": "OAO TeleSales",*/
-                                        String employeeName =
-                                            jsonObject.getString(EMPLOYEE_NAME) == null ? ""
-                                                : jsonObject.getString(EMPLOYEE_NAME);
-                                        String employeeCode =
-                                            jsonObject.getString(EMPLOYEE_CODE) == null ? ""
-                                                : jsonObject.getString(EMPLOYEE_CODE);
-                                        String BranchCode =
-                                            jsonObject.getString("BranchCode") == null ? ""
-                                                : jsonObject.getString("BranchCode");
+                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                AutoCompleteAttendeeRequest request =
+                                    new AutoCompleteAttendeeRequest(
+                                        URLEncoder.encode(constraint.toString(), "utf-8"),
+                                        URLEncoder.encode(constraint.toString(), "utf-8")
+                                    );
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteSplAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
                                         modelList.add(
                                             new SplAttendeeModel(employeeName, employeeCode,
                                                 BranchCode));
-
-                                        // Assign the data to the FilterResults
                                         filterResults.values = modelList;
                                         filterResults.count = modelList.size();
                                     }
-                                } else {
-
-                                    hideProgress();
-
-                                    //                                        final String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //                                        modelList.add( EmployeeModel.getNoData(errorMsg));
-                                    //                                        // Assign the data to the FilterResults
-                                    //                                        filterResults.values = modelList;
-                                    //                                        filterResults.count = modelList.size();
-                                    //                                        return filterResults;
-                                    modelList.add(
-                                        SplAttendeeModel.getNoData(
-                                            ATTENDEEE_NOT_FOUND_MESSAGE));
-                                    // Assign the data to the FilterResults
+                                } catch (Exception e) {
+                                    modelList.add(SplAttendeeModel.getNoData(getErrorOnFailure(e)));
                                     filterResults.values = modelList;
                                     filterResults.count = modelList.size();
                                     return filterResults;
@@ -2312,11 +2264,17 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                             } else {
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                     getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+                                    INTERNET_CONNECTION, "OK", true,
+                                    null);
                             }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                    }
+                    if (filterResults.count == 0) {
+                        modelList.add(SplAttendeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
+                        filterResults.values = modelList;
+                        filterResults.count = modelList.size();
                     }
                     return filterResults;
                 }
