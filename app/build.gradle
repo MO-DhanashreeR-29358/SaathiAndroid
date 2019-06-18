@@ -168,7 +168,7 @@ dependencies {
   implementation deps.rxBinding.V4
   implementation deps.rx.android
   implementation deps.gson
-
+  implementation deps.retrofit.scalar
 }
 
 apply plugin: 'com.google.gms.google-services'
