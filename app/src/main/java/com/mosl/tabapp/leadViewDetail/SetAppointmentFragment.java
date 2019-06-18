@@ -122,7 +122,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
     private ArrayList<RowData> arrSelectWeekDay;
     private ArrayAdapter<RowData> arrAdapSelectWeekDay;
     private ArrayAdapter<RowData> arrAdapActivityType;
-    private ArrayList<RowData> arrActivityType;
+    private final ArrayList<RowData> arrActivityType = new ArrayList<>();
     //date picker variable
     private Calendar today;
     private Dialog dialogDateTime;
@@ -2060,170 +2060,50 @@ public class SetAppointmentFragment extends MOSLCommonFragment
 
     private void activityType(final String id) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            //            meetingReason(MeetingReasonID);
-            showProgress();
-            //            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", ACTIVITYTYPE);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            String serviceMethod = "Master/GetAllLookup";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            arrActivityType = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    hideProgress();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        //                                    customProgress.setVisibility(View.GONE);
-                                        arrActivityType.add(
-                                            new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
-                                        JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject objDetail = jsonArray.getJSONObject(i);
-                                            String lookUpId =
-                                                (objDetail.isNull(LOOKUPID) || objDetail.getString(
-                                                    LOOKUPID).equals("")) ? ""
-                                                    : objDetail.getString(LOOKUPID);
-                                            String lookUpName = (objDetail.isNull(LOOKUPNAME)
-                                                || objDetail.getString(LOOKUPNAME).equals("")) ? ""
-                                                : objDetail.getString(LOOKUPNAME);
-                                            arrActivityType.add(
-                                                new RowData(i + 1, lookUpId, lookUpName));
-                                        }
-                                        arrAdapActivityType = new ArrayAdapter<>(getMainActivity(),
-                                            R.layout.simple_spinner_item, arrActivityType);
-                                        arrAdapActivityType.setDropDownViewResource(
-                                            R.layout.mdropdown);
-                                        spActivityType.setAdapter(arrAdapActivityType);
-                                        spActivityType.setOnItemSelectedListener(
-                                            selectActivityTypeListener);
-                                        arrAdapActivityType.notifyDataSetChanged();
-                                        RowData productData =
-                                            getSpinnerRowDataById(id, arrAdapActivityType);
-                                        if (productData != null) {
-                                            spActivityType.setSelection(productData.getPosition());
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    //                                customProgress.setVisibility(View.GONE);
-                                }
-                            } catch (Exception e) {
-                                hideProgress();
-                                e.printStackTrace();
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            //                        customProgress.setVisibility(View.GONE);
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderActivityType(uiModel, id));
         } else {
-            //            customProgress.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
+        }
+    }
+
+    private void renderActivityType(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrActivityType.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrActivityType.clear();
+            arrActivityType.add(new RowData(0, "-1", SELECT_PRODUCT));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrActivityType.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapActivityType = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrActivityType);
+            arrAdapActivityType.setDropDownViewResource(
+                R.layout.mdropdown);
+            spActivityType.setAdapter(arrAdapActivityType);
+            spActivityType.setOnItemSelectedListener(
+                selectActivityTypeListener);
+            arrAdapActivityType.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapActivityType);
+            if (productData != null) {
+                spActivityType.setSelection(productData.getPosition());
+            }
         }
     }
 
