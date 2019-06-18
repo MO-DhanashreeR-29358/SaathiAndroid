@@ -2441,10 +2441,10 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         @Override
         public Filter getFilter() {
             return new Filter() {
-                FilterResults filterResults = new FilterResults();
 
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
+                    final FilterResults filterResults = new FilterResults();
                     ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
@@ -2454,13 +2454,26 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                         URLEncoder.encode(constraint.toString(), "utf-8"),
                                         URLEncoder.encode(constraint.toString(), "utf-8")
                                     );
-                                Disposable subscribe = saathiApi.getAutoCompleteSplAttendee(request)
-                                    .compose(applyUiModel())
-                                    .subscribe(uiModel -> {
-                                        renderSpecialAttendees(modelList, uiModel);
-                                    });
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteSplAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
+                                        modelList.add(
+                                            new SplAttendeeModel(employeeName, employeeCode,
+                                                BranchCode));
+                                        filterResults.values = modelList;
+                                        filterResults.count = modelList.size();
+                                    }
+                                } catch (Exception e) {
+                                    modelList.add(SplAttendeeModel.getNoData(getErrorOnFailure(e)));
+                                    filterResults.values = modelList;
+                                    filterResults.count = modelList.size();
+                                }
                             } else {
-                                hideProgress();
                                 MSFDialog.alertDialog(getMainActivity(), 0,
                                     getResources().getString(R.string.motilal_oswal),
                                     INTERNET_CONNECTION, "OK", true,
@@ -2476,31 +2489,6 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                         filterResults.count = modelList.size();
                     }
                     return filterResults;
-                }
-
-                private void renderSpecialAttendees(ArrayList<SplAttendeeModel> modelList,
-                    UiModel<List<AutoCompleteAttendeeItem>> uiModel) {
-
-                    Throwable error = uiModel.error;
-                    if (error != null) {
-                        modelList.add(SplAttendeeModel.getNoData(getErrorOnFailure(error)));
-                        filterResults.values = modelList;
-                        filterResults.count = modelList.size();
-                    }
-
-                    List<AutoCompleteAttendeeItem> dataList = uiModel.data;
-                    if (dataList != null) {
-                        for (AutoCompleteAttendeeItem item : dataList) {
-                            String employeeName = stringOrEmpty(item.employeeName);
-                            String employeeCode = stringOrEmpty(item.employeeCode);
-                            String BranchCode = stringOrEmpty(item.branchCode);
-                            modelList.add(
-                                new SplAttendeeModel(employeeName, employeeCode,
-                                    BranchCode));
-                            filterResults.values = modelList;
-                            filterResults.count = modelList.size();
-                        }
-                    }
                 }
 
                 @Override
