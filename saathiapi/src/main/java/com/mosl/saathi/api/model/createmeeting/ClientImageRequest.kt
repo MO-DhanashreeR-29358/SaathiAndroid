@@ -1,4 +1,4 @@
-package com.mosl.saathi.api.model.setappointment
+package com.mosl.saathi.api.model.createmeeting
 
 import com.google.gson.annotations.SerializedName
 

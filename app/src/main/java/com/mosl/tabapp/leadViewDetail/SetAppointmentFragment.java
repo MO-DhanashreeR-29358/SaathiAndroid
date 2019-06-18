@@ -36,9 +36,9 @@ import android.widget.Toast;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.createmeeting.ClientImageRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
-import com.mosl.saathi.api.model.setappointment.ClientImageRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -967,7 +967,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                                     String status = response.getString(STATUS);
                                     if (status.equalsIgnoreCase("true")) {
                                         JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                        new ClientDetail(objDetail);
+                                        //new ClientDetail(objDetail);
                                         tvLeadId.setText(ClientDetail.getLeadId());
                                         tvCurrentStage.setText(ClientDetail.getCurrentStage());
                                         if (!ClientDetail.getCurrentStageSince().isEmpty()) {

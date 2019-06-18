@@ -366,7 +366,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                                         if (status.equalsIgnoreCase("true")) {
                                             JSONObject objDetail = response.getJSONObject(RESPONSE);
 
-                                            new ClientDetail(objDetail);
+                                            //new ClientDetail(objDetail);
                                             tvName.setText(ClientDetail.getName());
                                             setTitle(ClientDetail.getName());
                                             tvLeadId.setText(ClientDetail.getLeadId());

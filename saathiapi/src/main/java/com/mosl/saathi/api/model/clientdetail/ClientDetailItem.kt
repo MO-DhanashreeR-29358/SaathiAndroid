@@ -4,135 +4,91 @@ import com.google.gson.annotations.SerializedName
 
 data class ClientDetailItem(
 
-  @SerializedName("FamilyUCID")
-  @JvmField val familyUCID: Int,
+  @JvmField @SerializedName("FamilyUCID") val familyUCID: Int,
 
-  @SerializedName("BankName")
-  @JvmField val bankName: String,
+  @JvmField @SerializedName("BankName") val bankName: String,
 
-  @SerializedName("CreationDate")
-  @JvmField val creationDate: String,
+  @JvmField @SerializedName("CreationDate") val creationDate: String,
 
-  @SerializedName("IsFamilyHead")
-  @JvmField val isFamilyHead: Boolean,
+  @JvmField @SerializedName("IsFamilyHead") val isFamilyHead: Boolean,
 
-  @SerializedName("Products")
-  @JvmField val products: List<ProductsItem?>,
+  @JvmField @SerializedName("Products") val products: List<ProductsItem?>,
 
-  @SerializedName("AdvisoryType")
-  @JvmField val advisoryType: Any,
+  @JvmField @SerializedName("AdvisoryType") val advisoryType: Any,
 
-  @SerializedName("Email")
-  @JvmField val email: Any,
+  @JvmField @SerializedName("Email") val email: Any,
 
-  @SerializedName("Address")
-  @JvmField val address: String,
+  @JvmField @SerializedName("Address") val address: String,
 
-  @SerializedName("ProductName")
-  @JvmField val productName: Any,
+  @JvmField @SerializedName("ProductName") val productName: Any,
 
-  @SerializedName("ClientProfile")
-  @JvmField val clientProfile: Any,
+  @JvmField @SerializedName("ClientProfile") val clientProfile: Any,
 
-  @SerializedName("Sourcing")
-  @JvmField val sourcing: Any,
+  @JvmField @SerializedName("Sourcing") val sourcing: Any,
 
-  @SerializedName("AccountOpeningDate")
-  @JvmField val accountOpeningDate: String,
+  @JvmField @SerializedName("AccountOpeningDate") val accountOpeningDate: String,
 
-  @SerializedName("UCID")
-  @JvmField val uCID: Int,
+  @JvmField @SerializedName("UCID") val uCID: Int,
 
-  @SerializedName("Profile")
-  @JvmField val profile: Any,
+  @JvmField @SerializedName("Profile") val profile: Any,
 
-  @SerializedName("ClientName")
-  @JvmField val clientName: String,
+  @JvmField @SerializedName("ClientName") val clientName: String,
 
-  @SerializedName("PendingDays")
-  @JvmField val pendingDays: String,
+  @JvmField @SerializedName("PendingDays") val pendingDays: String?,
 
-  @SerializedName("PANNumber")
-  @JvmField val pANNumber: String,
+  @JvmField @SerializedName("PANNumber") val pANNumber: String,
 
-  @SerializedName("PrimaryAdvisor")
-  @JvmField val primaryAdvisor: Any,
+  @JvmField @SerializedName("PrimaryAdvisor") val primaryAdvisor: Any,
 
-  @SerializedName("DOB")
-  @JvmField val dOB: String,
+  @JvmField @SerializedName("DOB") val dOB: String,
 
-  @SerializedName("SubBrokerCode")
-  @JvmField val subBrokerCode: Any,
+  @JvmField @SerializedName("SubBrokerCode") val subBrokerCode: Any,
 
-  @SerializedName("CreatedBy")
-  @JvmField val createdBy: Any,
+  @JvmField @SerializedName("CreatedBy") val createdBy: Any,
 
-  @SerializedName("EmployeeCode")
-  @JvmField val employeeCode: Any,
+  @JvmField @SerializedName("EmployeeCode") val employeeCode: Any,
 
-  @SerializedName("OAOUserid")
-  @JvmField val oAOUserid: Int,
+  @JvmField @SerializedName("OAOUserid") val oAOUserid: Int,
 
-  @SerializedName("MappedBy")
-  @JvmField val mappedBy: Any,
+  @JvmField @SerializedName("MappedBy") val mappedBy: Any,
 
-  @SerializedName("AccountNo")
-  @JvmField val accountNo: Any,
+  @JvmField @SerializedName("AccountNo") val accountNo: Any,
 
-  @SerializedName("StageName")
-  @JvmField val stageName: String,
+  @JvmField @SerializedName("StageName") val stageName: String?,
 
-  @SerializedName("Channel")
-  @JvmField val channel: String,
+  @JvmField @SerializedName("Channel") val channel: String,
 
-  @SerializedName("DefaultBank")
-  @JvmField val defaultBank: Any,
+  @JvmField @SerializedName("DefaultBank") val defaultBank: Any,
 
-  @SerializedName("SecondaryAdvisor")
-  @JvmField val secondaryAdvisor: Any,
+  @JvmField @SerializedName("SecondaryAdvisor") val secondaryAdvisor: Any,
 
-  @SerializedName("FamilyHead")
-  @JvmField val familyHead: Any,
+  @JvmField @SerializedName("FamilyHead") val familyHead: Any,
 
-  @SerializedName("AccountType")
-  @JvmField val accountType: Any,
+  @JvmField @SerializedName("AccountType") val accountType: Any,
 
-  @SerializedName("Mobile")
-  @JvmField val mobile: Any,
+  @JvmField @SerializedName("Mobile") val mobile: String,
 
-  @SerializedName("VintagewithMotilalOswalYears")
-  @JvmField val vintagewithMotilalOswalYears: Int,
+  @JvmField @SerializedName("VintagewithMotilalOswalYears") val vintagewithMotilalOswalYears: Int,
 
-  @SerializedName("AadhaarNumber")
-  @JvmField val aadhaarNumber: Any,
+  @JvmField @SerializedName("AadhaarNumber") val aadhaarNumber: Any,
 
-  @SerializedName("ClientProfileComplition")
-  @JvmField val clientProfileComplition: String,
+  @JvmField @SerializedName("ClientProfileComplition") val clientProfileComplition: String,
 
-  @SerializedName("ClientCode")
-  @JvmField val clientCode: Any,
+  @JvmField @SerializedName("ClientCode") val clientCode: Any,
 
-  @SerializedName("AreaCode")
-  @JvmField val areaCode: String,
+  @JvmField @SerializedName("AreaCode") val areaCode: String,
 
-  @SerializedName("BankAccountType")
-  @JvmField val bankAccountType: String,
+  @JvmField @SerializedName("BankAccountType") val bankAccountType: String,
 
-  @SerializedName("LeadID")
-  @JvmField val leadID: Int,
+  @JvmField @SerializedName("LeadID") val leadID: String?,
 
-  @SerializedName("IsPotentialPMSProduct")
-  @JvmField val isPotentialPMSProduct: Any,
+  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: String?,
 
-  @SerializedName("MappingDate")
-  @JvmField val mappingDate: Any,
+  @JvmField @SerializedName("MappingDate") val mappingDate: Any,
 
-  @SerializedName("BranchCode")
-  @JvmField val branchCode: String,
+  @JvmField @SerializedName("BranchCode") val branchCode: String,
 
-  @SerializedName("BankAccountNumber")
-  @JvmField val bankAccountNumber: String,
+  @JvmField @SerializedName("BankAccountNumber") val bankAccountNumber: String,
 
-  @SerializedName("IsOnlyClient")
-  @JvmField val isOnlyClient: Boolean
+  @JvmField @SerializedName("IsOnlyClient") val isOnlyClient: Boolean
 )
