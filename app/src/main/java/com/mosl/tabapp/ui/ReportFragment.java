@@ -193,10 +193,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
                 .compose(applyUiModel())
                 .subscribe(this::renderAssignedLeadReports);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -240,10 +237,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
                 .compose(applyUiModel())
                 .subscribe(this::renderReports);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
