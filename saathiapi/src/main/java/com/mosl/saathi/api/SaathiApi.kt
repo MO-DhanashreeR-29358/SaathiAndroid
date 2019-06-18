@@ -14,6 +14,8 @@ import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.ClientImageRequest
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -180,4 +182,7 @@ interface SaathiApi {
 
   @POST("UserApi/AutoCompleteSplAttendee")
   fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
+  @POST("Meeting/GetMeetingByID")
+  fun getMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
 }
