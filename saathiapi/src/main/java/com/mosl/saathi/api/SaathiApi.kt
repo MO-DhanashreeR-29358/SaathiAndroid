@@ -43,6 +43,7 @@ import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.setappointment.ClientImageRequest
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -164,4 +165,6 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  @POST("Client/GetClientImage")
+  fun getClientImage(@Body request: ClientImageRequest): Observable<String>
 }
