@@ -33,7 +33,6 @@ import timber.log.Timber;
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class SecondLevelReportFragment extends MOSLCommonFragment implements View.OnClickListener {
     private View reportView;
@@ -100,10 +99,7 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
                 .compose(applyUiModel())
                 .subscribe(this::renderReports);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -174,7 +170,6 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
                         column = column.toUpperCase();
                     }
                     hm.put(getRefreshColumnName(column), columnData.trim());
-                    Timber.d("hash map %s", hm.toString());
                 }
                 secondClickTableAdapter.add(hm);
             }
