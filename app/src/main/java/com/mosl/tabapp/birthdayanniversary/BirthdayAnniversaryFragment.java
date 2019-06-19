@@ -20,7 +20,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest;
@@ -42,7 +41,6 @@ import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -206,10 +204,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderAllLookUp);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -339,10 +334,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderBirthdayAnniversary);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -357,7 +349,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         String data = uiModel.data;
         if (data != null) {
             alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), data, "Ok", true, null);
+                getResources().getString(R.string.motilal_oswal), GIFT_SEND, "Ok", true, null);
         }
     }
 
@@ -373,21 +365,10 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             SendGiftRequest request = new SendGiftRequest(ucid, eventType);
             Disposable subscribe = saathiApi.postSendGift(request)
-                .map((Function<SaathiCommonResponse, String>) response -> {
-                    if (response.status) {
-                        return GIFT_SEND;
-                    } else {
-                        String errorMessage = getErrorMessage(response);
-                        throw new ServiceFailureException(errorMessage);
-                    }
-                })
                 .compose(applyUiModel())
                 .subscribe(this::renderSendGift);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -402,7 +383,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         String data = uiModel.data;
         if (data != null) {
             alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), data, "Ok", true, null);
+                getResources().getString(R.string.motilal_oswal), EMAIL_SEND, "Ok", true, null);
         }
     }
 
@@ -411,21 +392,10 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
             SendEmailRequest request =
                 new SendEmailRequest(ucid, false, eventType + "-T", "E", null, null);
             Disposable subscribe = saathiApi.postSendEmail(request)
-                .map((Function<SaathiCommonResponse, String>) response -> {
-                    if (response.status) {
-                        return EMAIL_SEND;
-                    } else {
-                        String errorMessage = getErrorMessage(response);
-                        throw new ServiceFailureException(errorMessage);
-                    }
-                })
                 .compose(applyUiModel())
                 .subscribe(this::renderSendEmail);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -438,21 +408,10 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                 new SendEmailRequest(null, true, eventType, "E", AccountDetails.getEmployeeCode(),
                     filterType);
             Disposable subscribe = saathiApi.postSendEmail(request)
-                .map((Function<SaathiCommonResponse, String>) response -> {
-                    if (response.status) {
-                        return EMAIL_SEND;
-                    } else {
-                        String errorMessage = getErrorMessage(response);
-                        throw new ServiceFailureException(errorMessage);
-                    }
-                })
                 .compose(applyUiModel())
                 .subscribe(this::renderSendEmail);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 

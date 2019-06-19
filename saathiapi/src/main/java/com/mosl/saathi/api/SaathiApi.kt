@@ -172,12 +172,12 @@ interface SaathiApi {
   @POST("Client/SendGiftRequest")
   fun postSendGift(
     @Body request: SendGiftRequest
-  ): Observable<SaathiCommonResponse<String>>
+  ): Observable<String>
 
   @POST("Client/GetMailClientId")
   fun postSendEmail(
     @Body request: SendEmailRequest
-  ): Observable<SaathiCommonResponse<String>>
+  ): Observable<String>
 
   //===================== Notification=========================
 
