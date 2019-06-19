@@ -19,7 +19,6 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.CalenderModel;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -219,10 +218,7 @@ public class CalendarFragment extends MOSLCommonFragment implements OnDateSelect
                 .compose(applyUiModel())
                 .subscribe(this::renderCalender);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
