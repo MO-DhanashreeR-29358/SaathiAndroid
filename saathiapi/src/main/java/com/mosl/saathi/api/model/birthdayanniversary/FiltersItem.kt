@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 
 data class FiltersItem(
 
-  @field:SerializedName("Operator")
+  @JvmField @SerializedName("Operator")
   val operator: String = "startswith",
 
-  @field:SerializedName("Field")
+  @JvmField @SerializedName("Field")
   val field: String = "ClientPotential",
 
-  @field:SerializedName("Value")
-  val value: List<String> = listOf("")
+  @JvmField @SerializedName("Value")
+  var value: ArrayList<String> = arrayListOf("")
 )

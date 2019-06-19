@@ -301,7 +301,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
     }
 
     private void getData() {
-        final String profileId;
+        String profileId;
         birthdayAnniversaryList = new ArrayList<>();
         birthdayAnniversaryAdapter = new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
         rvBirthdayAnniversary.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
@@ -316,9 +316,12 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
             spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
 
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-
             FiltersItem filtersItem = new FiltersItem();
+            ArrayList<String> valueList = new ArrayList<>();
+            valueList.add(profileId);
+            filtersItem.value = valueList;
             List<FiltersItem> filters = new ArrayList<FiltersItem>();
+
             filters.add(filtersItem);
             Filter filter = new Filter(filters, "and");
             String dayType = filterType;

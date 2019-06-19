@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class BirthdayAnniversaryRequest(
 
   @JvmField @SerializedName("Filter")
-  val filter: Filter,
+  var filter: Filter,
 
   @JvmField @SerializedName("Request")
   val request: Request,
