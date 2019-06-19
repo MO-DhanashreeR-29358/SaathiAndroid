@@ -1,5 +1,6 @@
 package com.mosl.saathi.api
 
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
@@ -51,6 +52,7 @@ import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -185,4 +187,9 @@ interface SaathiApi {
 
   @POST("Meeting/GetMeetingByID")
   fun getMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+
+  //================================Add Update Meeting======================================
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
 }
