@@ -1674,26 +1674,8 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
     }
 
     private void updateMeetingSave(MeetingApptModel meetingApptModel) {
-        /*addedAttendeeModelList;
-        addedSplAttendeeModelList;*/
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
-            // customProgress.setVisibility(View.VISIBLE);
-           /* Map inputMap = new HashMap<>();
-            inputMap.put("LeadId", leadId);
-            inputMap.put("MeetingDate", fromPostingDate);
-            inputMap.put("ActivityTypeID", activityTypeCodeStr);
-            inputMap.put("ProductTypeID", productCodeStr);
-            inputMap.put("MeetingReasonID", meetingDurationCodeStr);
-            inputMap.put("MeetingDurationID", meetingDurationCodeStr);
-            inputMap.put("ActionableID", actionablesCodeStr);
-            inputMap.put("MeetingDescription", etMeetingDescription.getText().toString().trim());
-            inputMap.put("CustomerRemark", etCustomerComment.getText().toString().trim());
-            inputMap.put("CategoryDescription", etCategory.getText().toString().trim());
-            inputMap.put("SubCategoryDescription", etSubCategory.getText().toString().trim());
-            inputMap.put("MeetingType", "M");
-            inputMap.put("DisplayType", "A");*/
-
             String requestJson = meetingApptModel.getJson();
             String serviceMethod = "Meeting/AddUpdateMeeting";
             showProgress();
@@ -1705,32 +1687,24 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                         public void onSuccess(int statusCode,
                             cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
                             arrActionables = new ArrayList<>();
                             try {
                                 if (statusCode == 200) {
                                     hideProgress();
                                     String status = response.getString(STATUS);
                                     if (status.equalsIgnoreCase("true")) {
-                                        //
-                                        //JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                        //  alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), "Meeting Succefully", "Ok", true, null);
                                         alertDialog(getActivity(), 0,
                                             getResources().getString(R.string.motilal_oswal),
                                             UPDATED_MEETING, "OK", true,
-                                            new MSFDialog.DialogListener() {
-                                                @Override
-                                                public void alertDialogAction(
-                                                    MSFDialog.Action action, Object... data) {
-                                                    if (action == MSFDialog.Action.OK) {
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString(LEAD_ID,
-                                                            getArguments().getString(LEAD_ID));
-                                                        bundle.putString(UCID,
-                                                            getArguments().getString(UCID));
-                                                        navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle,
-                                                            getFragmentManager(), false);
-                                                    }
+                                            (action, data) -> {
+                                                if (action == MSFDialog.Action.OK) {
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString(LEAD_ID,
+                                                        getArguments().getString(LEAD_ID));
+                                                    bundle.putString(UCID,
+                                                        getArguments().getString(UCID));
+                                                    navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle,
+                                                        getFragmentManager(), false);
                                                 }
                                             });
                                     } else {
