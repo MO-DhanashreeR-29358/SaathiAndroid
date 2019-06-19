@@ -44,6 +44,8 @@ import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
+import com.mosl.saathi.api.model.query.QueryItem
+import com.mosl.saathi.api.model.query.QueryRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
@@ -162,6 +164,13 @@ interface SaathiApi {
   fun postSourceList(
     @Body request: SourceListRequest
   ): Observable<SaathiCommonResponse<SourceListItem>>
+
+  // ==================== Query ===========================
+
+  @POST("Common/RequetQuery")
+  fun postQuery(
+    @Body request: QueryRequest
+  ): Observable<QueryItem>
 
   //========================== Pending Approval ====================
 
