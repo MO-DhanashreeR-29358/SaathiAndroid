@@ -92,7 +92,8 @@ public class NotificationFragment extends MOSLCommonFragment
         if (data != null) {
             notificationList.clear();
             for (NotificationResponse datum : data) {
-                Date creationDate = DateFormatUtils.parseOrDefault(DateFormatUtils.DATE_TIME_UTC, stringOrEmpty(datum.creationDate));
+                Date creationDate = DateFormatUtils.parseOrDefault(DateFormatUtils.DATE_TIME_UTC,
+                    stringOrEmpty(datum.creationDate));
                 NewsDate newsDate = NewsDateKt.toNewsDate(creationDate);
                 notificationList.add(
                     new NotificationModel(
@@ -109,10 +110,9 @@ public class NotificationFragment extends MOSLCommonFragment
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(notificationAdapter);
 
-
             if (notificationList.isEmpty()) {
                 tvNochart.setVisibility(View.VISIBLE);
-            } else  {
+            } else {
                 tvNochart.setVisibility(View.GONE);
             }
         }

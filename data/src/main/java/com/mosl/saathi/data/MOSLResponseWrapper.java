@@ -20,6 +20,9 @@ import retrofit2.Retrofit;
 
 public class MOSLResponseWrapper extends Converter.Factory {
 
+    public static final String SERVER_ERROR_OCCURRED =
+        "Something went wrong while getting response from server. Please try again.";
+
     @NotNull protected static Class<?> getRawType(Type type) {
         if (type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -28,6 +31,44 @@ public class MOSLResponseWrapper extends Converter.Factory {
             return (Class<?>) rawType;
         }
         throw new IllegalArgumentException();
+    }
+
+    protected static String errorMessageFromResponse(SaathiCommonResponse<?> response) {
+        if (response != null) {
+            if (response.errors.isEmpty()) {
+                return SERVER_ERROR_OCCURRED;
+            } else {
+                return response.errors.get(0).message;
+            }
+        } else {
+            return SERVER_ERROR_OCCURRED;
+        }
+    }
+
+    private static boolean hasExcludeWrapper(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType() == ExcludeWrapper.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasExtraDataWrapper(Annotation[] annotations) {
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType() == ExtraDataWrapper.class) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isWrapped(Type type) {
+        if (type instanceof ParameterizedType) {
+            Class<?> rawType = getRawType(type);
+            return (rawType == SaathiCommonResponse.class);
+        }
+        return false;
     }
 
     @Override
@@ -71,46 +112,5 @@ public class MOSLResponseWrapper extends Converter.Factory {
                 throw new ServiceFailureException(code, message);
             };
         }
-    }
-
-    public static final String SERVER_ERROR_OCCURRED =
-        "Something went wrong while getting response from server. Please try again.";
-
-    protected static String errorMessageFromResponse(SaathiCommonResponse<?> response) {
-        if (response != null) {
-            if (response.errors.isEmpty()) {
-                return SERVER_ERROR_OCCURRED;
-            } else {
-                return response.errors.get(0).message;
-            }
-        } else {
-            return SERVER_ERROR_OCCURRED;
-        }
-    }
-
-    private static boolean hasExcludeWrapper(Annotation[] annotations) {
-        for (Annotation annotation : annotations) {
-            if (annotation.annotationType() == ExcludeWrapper.class) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean hasExtraDataWrapper(Annotation[] annotations) {
-        for (Annotation annotation : annotations) {
-            if (annotation.annotationType() == ExtraDataWrapper.class) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static boolean isWrapped(Type type) {
-        if (type instanceof ParameterizedType) {
-            Class<?> rawType = getRawType(type);
-            return (rawType == SaathiCommonResponse.class);
-        }
-        return false;
     }
 }

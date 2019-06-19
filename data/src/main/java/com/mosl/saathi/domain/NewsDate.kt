@@ -3,10 +3,10 @@ package com.mosl.saathi.domain
 import java.util.Date
 
 data class NewsDate(
-    @JvmField val original: Date,
-    @JvmField val day: String,
-    @JvmField val month: String,
-    @JvmField val time: String
+  @JvmField val original: Date,
+  @JvmField val day: String,
+  @JvmField val month: String,
+  @JvmField val time: String
 )
 
 fun Date.toNewsDate(): NewsDate {

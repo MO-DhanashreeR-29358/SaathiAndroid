@@ -1,4 +1,5 @@
 @file:JvmName("DateFormatUtils")
+
 package com.mosl.saathi.domain
 
 import java.text.DateFormat
@@ -15,7 +16,6 @@ val DF_MONTH: DateFormat = SimpleDateFormat("MMM", Locale.ENGLISH)
 @JvmField
 val DF_TIME: DateFormat = SimpleDateFormat("hh:mm:ss a", Locale.ENGLISH)
 
-
 fun DateFormat.formatOrNull(date: Date?): String? {
   if (date == null) return null
   return try {
@@ -26,7 +26,10 @@ fun DateFormat.formatOrNull(date: Date?): String? {
 }
 
 @JvmOverloads
-fun DateFormat.formatOrDefault(date: Date?, default: String = ""): String {
+fun DateFormat.formatOrDefault(
+  date: Date?,
+  default: String = ""
+): String {
   if (date == null) return default
   return try {
     format(date)
@@ -45,7 +48,10 @@ fun DateFormat.parseOrNull(input: String?): Date? {
 }
 
 @JvmOverloads
-fun DateFormat.parseOrDefault(input: String?, defaultDate: Date = Date()): Date {
+fun DateFormat.parseOrDefault(
+  input: String?,
+  defaultDate: Date = Date()
+): Date {
   if (input.isNullOrBlank()) return defaultDate
   return try {
     parse(input)

@@ -2,6 +2,10 @@ package com.mosl.saathi.api
 
 import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
+import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
+import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
+import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest
 import com.mosl.saathi.api.model.calender.CalenderItem
 import com.mosl.saathi.api.model.calender.CalenderRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
@@ -92,7 +96,7 @@ interface SaathiApi {
   @POST("Master/GetAllLookup")
   fun postAllLookup(
     @Body request: LookupRequest
-  ): Observable<SaathiCommonResponse<LookupItem>>
+  ): Observable<List<LookupItem>>
 
   @POST("LeadStatus/GetStatusList")
   fun postStatusList(
@@ -189,6 +193,23 @@ interface SaathiApi {
   fun postApprovalSummaryByEmployee(
     @Body request: PendingApprovalRequest
   ): Observable<List<ApprovalSummaryByEmployeeItem>>
+
+  //======================= Birthday Anniversary ====================
+
+  @POST("Client/GetBirthdayAnniversary")
+  fun postBirthdayAnniversary(
+    @Body request: BirthdayAnniversaryRequest
+  ): Observable<BirthdayAnniversaryItem>
+
+  @POST("Client/SendGiftRequest")
+  fun postSendGift(
+    @Body request: SendGiftRequest
+  ): Observable<String>
+
+  @POST("Client/GetMailClientId")
+  fun postSendEmail(
+    @Body request: SendEmailRequest
+  ): Observable<String>
 
   //===================== Notification=========================
 
