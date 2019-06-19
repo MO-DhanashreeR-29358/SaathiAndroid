@@ -14,6 +14,7 @@ import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.PendingApprovalModel;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
@@ -87,15 +88,13 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
 
     public void getAprovalCoutSummary() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            PendingApprovalRequest request = new PendingApprovalRequest("-1");
+            PendingApprovalRequest request =
+                new PendingApprovalRequest(AccountDetails.getEmployeeCode());
             Disposable subscribe = saathiApi.postApprovalSummaryCount(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryCount);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -115,12 +114,12 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
 
             for (int i = 0; i < data.size(); i++) {
                 ApprovalSummaryByEmployeeItem item = data.get(i);
-                String pandingCount = stringOrEmpty(item.pendingCount);
+                String pendingCount = stringOrEmpty(item.pendingCount);
                 String referenceName = stringOrEmpty(item.approvedCount);
                 String entityField = stringOrEmpty(item.entityField);
 
                 pendingApprovalList.add(
-                    new PendingApprovalModel(referenceName, pandingCount, entityField));
+                    new PendingApprovalModel(referenceName, pendingCount, entityField));
             }
             pendingApprovalAdapter = new PendingApprovalAdapter(pendingApprovalList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -132,15 +131,13 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
     public void getAprovalList() {
 
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            PendingApprovalRequest request = new PendingApprovalRequest("-1");
+            PendingApprovalRequest request =
+                new PendingApprovalRequest(AccountDetails.getEmployeeCode());
             Disposable subscribe = saathiApi.postApprovalSummaryByEmployee(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryByCount);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
 
 
