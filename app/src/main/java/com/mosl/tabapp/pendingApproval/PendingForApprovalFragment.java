@@ -384,11 +384,11 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
 
         List<ApprovalFieldItem> dataList = uiModel.data;
         if (dataList != null) {
+            arrProfile = new ArrayList<>();
             for (int i = 0; i < dataList.size(); i++) {
                 ApprovalFieldItem item = dataList.get(i);
                 String lookUpId = stringOrEmpty(item.entityField);
                 String lookUpName = stringOrEmpty(item.referenceName);
-                arrProfile = new ArrayList<>();
                 arrProfile.add(new RowData(i, lookUpId, lookUpName));
             }
             arrAdapProfile =
@@ -415,10 +415,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalField);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -433,11 +430,12 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
 
         List<ApprovalUserItem> dataList = uiModel.data;
         if (dataList != null) {
+            arrEmployee = new ArrayList<>();
+
             for (int i = 0; i < dataList.size(); i++) {
                 ApprovalUserItem item = dataList.get(i);
                 String lookUpId = stringOrEmpty(item.updatedBy);
                 String lookUpName = stringOrEmpty(item.name);
-                arrEmployee = new ArrayList<>();
                 arrEmployee.add(new RowData(i, lookUpId, lookUpName));
             }
             arrAdapEmployee = new ArrayAdapter<>(getMainActivity(),
@@ -458,10 +456,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalUser);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -628,10 +623,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalRequest);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -697,10 +689,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderMultiUpdate);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
