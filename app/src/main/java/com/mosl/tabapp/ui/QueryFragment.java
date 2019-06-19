@@ -161,10 +161,7 @@ public class QueryFragment extends MOSLCommonFragment implements View.OnClickLis
                 .compose(applyUiModel())
                 .subscribe(this::renderQuery);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
