@@ -1,7 +1,8 @@
 package com.mosl.saathi.api
 
-import com.mosl.annotations.ExcludeWrapper
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.calender.CalenderItem
+import com.mosl.saathi.api.model.calender.CalenderRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
@@ -164,5 +165,12 @@ interface SaathiApi {
   @POST("NotificationMessage/GetNotificationMessageMobile")
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
+  //================== Calender ========================
+
+  @POST("Meeting/GetMeetingByDate")
+  fun postCalenderByDate(
+    @Body request: CalenderRequest
+  ): Observable<List<CalenderItem>?>
 
 }
