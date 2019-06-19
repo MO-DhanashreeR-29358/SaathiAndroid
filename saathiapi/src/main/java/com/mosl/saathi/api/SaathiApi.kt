@@ -39,6 +39,9 @@ import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
+import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
+import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
+import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
@@ -159,6 +162,18 @@ interface SaathiApi {
   fun postSourceList(
     @Body request: SourceListRequest
   ): Observable<SaathiCommonResponse<SourceListItem>>
+
+  //========================== Pending Approval ====================
+
+  @POST("ApprovalRequest/GetAprovalCoutSummary")
+  fun postApprovalSummaryCount(
+    @Body request: PendingApprovalRequest
+  ): Observable<ApprovalSummaryCountItem>
+
+  @POST("ApprovalRequest/GetApprovalFieldListSummaryByEmployeeCode")
+  fun postApprovalSummaryByEmployee(
+    @Body request: PendingApprovalRequest
+  ): Observable<List<ApprovalSummaryByEmployeeItem>>
 
   //===================== Notification=========================
 

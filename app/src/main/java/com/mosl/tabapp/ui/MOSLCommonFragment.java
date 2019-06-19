@@ -216,17 +216,25 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
             message, "OK", true, null);
     }
 
+    public String stringOrEmpty(@Nullable String input) {
+        if (input != null) {
+            return input;
+        } else {
+            return "";
+        }
+    }
+
     public void noInternetConnectionDialog() {
         MSFDialog.alertDialog(getMainActivity(), 0,
             getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
             null);
     }
 
-    public String stringOrEmpty(@Nullable String input) {
+    public String stringOrZero(@Nullable String input) {
         if (input != null) {
             return input;
         } else {
-            return "";
+            return "0";
         }
     }
 
