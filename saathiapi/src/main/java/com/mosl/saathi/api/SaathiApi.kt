@@ -1,5 +1,6 @@
 package com.mosl.saathi.api
 
+import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.calender.CalenderItem
 import com.mosl.saathi.api.model.calender.CalenderRequest
@@ -42,6 +43,11 @@ import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
+import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
+import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.query.QueryItem
@@ -189,6 +195,30 @@ interface SaathiApi {
   @POST("NotificationMessage/GetNotificationMessageMobile")
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
+  //================= Pending For Approval ====================
+
+  @POST("ApprovalRequest/GetApprovelReqestFieldList")
+  fun getApprovalFieldList(
+    @Body request: ApprovelRequest
+  ): Observable<List<ApprovalFieldItem>>
+
+  @POST("ApprovalRequest/GetApprovelReqestUserList")
+  fun getApprovalUserList(
+    @Body request: ApprovelRequest
+  ): Observable<List<ApprovalUserItem>>
+
+  @ExcludeWrapper
+  @POST("ApprovalRequest/ApprovalRequestList")
+  fun getApprovalRequestList(
+    @Body request: ApprovalListRequest
+  ): Observable<String>
+
+  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+  fun postMultiUpdateApproval(
+    @Body request: MultiUpdateApprovalRequest
+  ): Observable<String>
+
 
   //================== Calender ========================
 
