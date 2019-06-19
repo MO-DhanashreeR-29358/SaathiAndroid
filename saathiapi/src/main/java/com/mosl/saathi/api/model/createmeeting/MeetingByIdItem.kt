@@ -26,11 +26,11 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("CategoryID") val categoryID: String?,
 
-  @JvmField @SerializedName("repeatEveryDayCode") val repeatEveryDayCode: Any,
+  @JvmField @SerializedName("repeatEveryDayCode") val repeatEveryDayCode: String?,
 
   @JvmField @SerializedName("Status") val status: Int,
 
-  @JvmField @SerializedName("repeatationStartOn") val repeatationStartOn: String,
+  @JvmField @SerializedName("repeatationStartOn") val repeatationStartOn: String?,
 
   @JvmField @SerializedName("SubCategoryDescription") val subCategoryDescription: String?,
 
@@ -50,13 +50,13 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("MeetingDurationID") val meetingDurationID: String?,
 
-  @JvmField @SerializedName("repeatationEndsOn") val repeatationEndsOn: String,
+  @JvmField @SerializedName("repeatationEndsOn") val repeatationEndsOn: String?,
 
   @JvmField @SerializedName("GeoArea") val geoArea: Any,
 
   @JvmField @SerializedName("DeviceType") val deviceType: Any,
 
-  @JvmField @SerializedName("MeetingType") val meetingType: String,
+  @JvmField @SerializedName("MeetingType") val meetingType: String?,
 
   @JvmField @SerializedName("CategoryDescription") val categoryDescription: String?,
 
@@ -64,11 +64,11 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("Pincode") val pincode: Any,
 
-  @JvmField @SerializedName("repeatEveryWeekCode") val repeatEveryWeekCode: Any,
+  @JvmField @SerializedName("repeatEveryWeekCode") val repeatEveryWeekCode: String?,
 
   @JvmField @SerializedName("MeetingWith") val meetingWith: String,
 
-  @JvmField @SerializedName("AttendeeName") val attendeeName: Any,
+  @JvmField @SerializedName("AttendeeName") val attendeeName: String?,
 
   @JvmField @SerializedName("ProductTypeID") val productTypeID: String?,
 
@@ -82,7 +82,7 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("MeetingAddress") val meetingAddress: Any,
 
-  @JvmField @SerializedName("MeetingID") val meetingID: Int,
+  @JvmField @SerializedName("MeetingID") val meetingID: String?,
 
   @JvmField @SerializedName("ActionableID") val actionableID: String?,
 
@@ -110,5 +110,5 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: Any,
 
-  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: Any
+  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String?
 )

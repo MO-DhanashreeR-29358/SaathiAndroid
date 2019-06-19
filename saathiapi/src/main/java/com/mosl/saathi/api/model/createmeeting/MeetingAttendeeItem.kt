@@ -24,5 +24,5 @@ data class MeetingAttendeeItem(
 
   @JvmField @SerializedName("Attended") val attended: Boolean,
 
-  @JvmField @SerializedName("DefaultAttendee") val defaultAttendee: String?
+  @JvmField @SerializedName("DefaultAttendee") val defaultAttendee: Boolean
 )

@@ -41,6 +41,9 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem;
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest;
 import com.mosl.saathi.api.model.createmeeting.ClientImageRequest;
+import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest;
 import com.mosl.saathi.api.model.lead.Contact;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LeadViewItem;
@@ -74,7 +77,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
@@ -1628,216 +1630,89 @@ public class SetAppointmentFragment extends MOSLCommonFragment
     //@param  strMeetingId
     private void getAppointmentDetailsFromServer(CharSequence strMeetingId) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-
-            String serviceMethod = "Meeting/GetMeetingByID";// + strMeetingId;
-            String tmpReq = String.format(ID_OBJECT, meetingId);
-            showProgress();
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq,
-                    new JsonHttpResponseHandler() {
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //after success code goes here
-                            //    arrInterested = new ArrayList<>();
-                            try {
-                                if (statusCode == 200) {
-                                    String status = response.getString(STATUS);
-                                    hideProgress();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        JSONObject Response_obj = response.getJSONObject(RESPONSE);
-                                        MeetingApptModel mModel = getAppointmentDet(Response_obj);
-                                        setCallenderDateFrom(mModel);
-
-                                        //edit mode start
-                                        selectProduct(mModel.getProduct());
-                                        activityType(mModel.getActivityTypeID());
-                                        getRepeatMode(mModel.getRepeatOnCode());
-                                        selectWeek(mModel.getRepeatEveryWeekCode());
-                                        selectWeekDay(mModel.getRepeatEveryDayCode());
-                                        //edit mode end
-
-                                    } else {
-
-                                        String errorMsg =
-                                            CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                        MSFDialog.alertDialog(getMainActivity(), 0,
-                                            getResources().getString(R.string.motilal_oswal),
-                                            errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    //                                customProgress.setVisibility(View.GONE);
-
-                                }
-                                hideProgress();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-
-                                Log.e(TAG, e.toString());
-                                hideProgress();
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                            //                        customProgress.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                            hideProgress();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            try {
-                                hideProgress();
-                                if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        UNAUTHORIZE_USER, "OK", false,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    Intent i = new Intent(getMainActivity(),
-                                                        LoginActivity.class);
-                                                    startActivity(i);
-                                                    getActivity().finish();
-                                                }
-                                            }
-                                        });
-                                    return;
-                                } else {
-                                    String error =
-                                        CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                    if (CRMAppUtil.isBlank(error)) {
-                                        error = SOME_SERVER_ERROR_OCCURRED;
-                                    }
-                                    MSFDialog.alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal), error,
-                                        "OK", true, null);
-                                    return;
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode,
-                            cz.msebera.android.httpclient.Header[] headers, String responseString,
-                            Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            hideProgress();
-                            MSFDialog.alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, e.toString());
-                MSFDialog.alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
+            MeetingByIdRequest request =
+                new MeetingByIdRequest(meetingId);
+            Disposable subscribe = saathiApi.getMeetingById(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderMeetingById);
         } else {
-            //            customProgress.setVisibility(View.GONE);
-            hideProgress();
             MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+                getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
         }
     }
 
-    private MeetingApptModel getAppointmentDet(JSONObject response) throws JSONException {
+    private void renderMeetingById(UiModel<MeetingByIdItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        MeetingByIdItem data = uiModel.data;
+        if (data != null) {
+            MeetingApptModel mModel = getAppointmentDet(data);
+            setCallenderDateFrom(mModel);
+            selectProduct(mModel.getProduct());
+            activityType(mModel.getActivityTypeID());
+            getRepeatMode(mModel.getRepeatOnCode());
+            selectWeek(mModel.getRepeatEveryWeekCode());
+            selectWeekDay(mModel.getRepeatEveryDayCode());
+        }
+    }
+
+    private MeetingApptModel getAppointmentDet(MeetingByIdItem response) {
         MeetingApptModel mModel = new MeetingApptModel();
         //        response.get(MEETING_ID);
 
-        mModel.setMeetingType(
-            response.getString(MEETINGTYPE) == null ? "" : response.getString(MEETINGTYPE));
+        mModel.setMeetingType(stringOrEmpty(response.meetingType));
         mModel.setDisplayType("A");
-        mModel.setMeetingID(
-            response.getString(MEETING_ID) == null ? "" : response.getString(MEETING_ID));
+        mModel.setMeetingID(stringOrEmpty(response.meetingID));
         // mModel.setLeadId(response.getInt(LEADID) == null ? "" : response.getString(LEADID));
         // mModel.setLeadId(String.valueOf(response.getInt(LEADID)));
-        mModel.setLeadId(String.valueOf(response.getInt("LeadId")));
+        mModel.setLeadId(String.valueOf(response.leadId));
         //TODO LEAD ID IS DIFFRENT
-        mModel.setMeetingDate(
-            response.getString(MeetingDate) == null ? "" : response.getString(MeetingDate));
-        mModel.setActivityTypeID(
-            response.getString(ActivityTypeID) == null ? "" : response.getString(ActivityTypeID));
-        mModel.setProduct(
-            response.getString(ProductTypeID) == null ? "" : response.getString(ProductTypeID));
+        mModel.setMeetingDate(stringOrEmpty(response.meetingDate));
+        mModel.setActivityTypeID(stringOrEmpty(response.activityTypeID));
+        mModel.setProduct(stringOrEmpty(response.productTypeID));
         //REPEATATIONSTARTON
-        mModel.setAppointmentStartTime(response.getString(REPEATATIONSTARTON) == null ? ""
-            : response.getString(REPEATATIONSTARTON));
+        mModel.setAppointmentStartTime(stringOrEmpty(response.repeatationStartOn));
         // REPEATATION_END_SON
-        mModel.setAppointmentEndTime(response.getString(REPEATATION_END_SON) == null ? ""
-            : response.getString(REPEATATION_END_SON));
+        mModel.setAppointmentEndTime(stringOrEmpty(response.repeatationEndsOn));
 
         //String str_repeatEveryWeekCode = response.getString(TAG_REPEATEVERYWEEKCODE);
         mModel.setRepeatEveryWeekCode(
-            response.getString(REPEATEVERYWEEKCODE) == null ? ""
-                : response.getString(REPEATEVERYWEEKCODE)
+            stringOrEmpty(response.repeatEveryWeekCode)
         );
         //   String str_repeatEveryDayCode = response.getString(TAG_REPEATEVERYDAYCODE);
-        mModel.setRepeatEveryDayCode(response.getString(REPEATEVERYDAYCODE) == null ? ""
-            : response.getString(REPEATEVERYDAYCODE));
+        mModel.setRepeatEveryDayCode(stringOrEmpty(response.repeatEveryDayCode));
 
         // String str_ParentID = response.getString(TAG_PARENTID);
 
         //        String str_repeatationStartOn = response.getString(TAG_REPEATATIONSTARTON);
         mModel.setRepeatOnCode(
-            response.getString(REPEATONCODE) == null ? "" : response.getString(REPEATONCODE));
-        String str_repeatationEndsOn = response.getString(REPEATEVERYWEEKCODE);
-        String str_AttendeeName = response.getString(TAG_ATTENDEENAME);
+            stringOrEmpty(response.repeatOnCode));
+        String str_repeatationEndsOn = response.repeatEveryWeekCode;
+        String str_AttendeeName = response.attendeeName;
 
         //REPEATONCODE
         //   String str_repeatOnCode = response.getString((response.isNull(REPEATONCODE)||response.getString(REPEATONCODE) == null) ? "" : response.getString(REPEATONCODE));
 
-        JSONArray meetingAttendee = response.getJSONArray(MEETING_ATTENDEE);
-        for (int meetingAttendee_i = 0; meetingAttendee_i < meetingAttendee.length();
+        List<MeetingAttendeeItem> meetingAttendee = response.meetingAttendee;
+        for (int meetingAttendee_i = 0; meetingAttendee_i < meetingAttendee.size();
             meetingAttendee_i++) {
-            JSONObject meetingAttendee_obj = meetingAttendee.getJSONObject(meetingAttendee_i);
-            String str_AttendeeType = meetingAttendee_obj.getString(ATTENDEETYPE);
+            MeetingAttendeeItem meetingAttendee_obj = meetingAttendee.get(meetingAttendee_i);
+            String str_AttendeeType = meetingAttendee_obj.attendeeType;
 
-            String str_AttendeeEmpcode = meetingAttendee_obj.getString(ATTENDEE_EMPCODE);
+            String str_AttendeeEmpcode = meetingAttendee_obj.attendeeEmpcode;
 
-            String str_AttendeeEmpName = meetingAttendee_obj.getString(ATTENDEE_EMPNAME);
-            String str_meetingAttendeeCode = meetingAttendee_obj.getString(MEETING_ATTENDEE_CODE);
+            String str_AttendeeEmpName = meetingAttendee_obj.attendeeEmpName;
+            String str_meetingAttendeeCode = meetingAttendee_obj.meetingAttendeeID;
 
-            boolean attended = meetingAttendee_obj.getBoolean(IS_ATTENDED);
+            boolean attended = meetingAttendee_obj.attended;
 
-            boolean defaultAttendee = meetingAttendee_obj.getBoolean(DEFAULTATTENDEE);
-            int status = meetingAttendee_obj.getInt(STATUS);
+            boolean defaultAttendee = meetingAttendee_obj.defaultAttendee;
+            int status = meetingAttendee_obj.status;
             if (status == 1) {
                 if (!defaultAttendee) {
                     //TODO ignore self object
