@@ -1540,7 +1540,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 employeeCode
             );
 
-            Disposable subscribe = saathiApi.getCurrentQuarterStatus(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
                     JSONObject response = new JSONObject(responseS);
                     String status = response.get(STATUS).toString();

@@ -217,19 +217,7 @@ interface SaathiApi {
 
   @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
-  fun getClientLead(
-    @Body request: ClientRequest
-  ): Observable<String>
-
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getClientLeadShow(
-    @Body request: ClientRequest
-  ): Observable<String>
-
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getProductivity(
+  fun getDashboardData(
     @Body request: ClientRequest
   ): Observable<String>
 
@@ -247,18 +235,6 @@ interface SaathiApi {
   fun getTargetAchievementTeam(
     @Body request: ClientRequest
   ): Observable<TargetAchievementTeamItem>
-
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getBusinessSnapshot(
-    @Body request: ClientRequest
-  ): Observable<String>
-
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTrends(
-    @Body request: ClientRequest
-  ): Observable<String>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClientsTradedYesterday(
@@ -291,12 +267,6 @@ interface SaathiApi {
   fun getActionableCount(
     @Body request: ActionableCountRequest
   ): Observable<ActionableCountItem>
-
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getCurrentQuarterStatus(
-    @Body request: ClientRequest
-  ): Observable<String>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getIncentive(

@@ -225,7 +225,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getBusinessSnapshot(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {

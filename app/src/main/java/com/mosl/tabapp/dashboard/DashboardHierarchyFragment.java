@@ -208,10 +208,7 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
             .compose(applyUiModel())
             .subscribe(this::renderDashboardHierarchy);
     } else {
-        hideProgress();
-        alertDialog(getMainActivity(), 0,
-            getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-            null);
+        noInternetConnectionDialog();
     }
   }
 

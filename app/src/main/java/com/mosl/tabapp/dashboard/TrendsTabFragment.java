@@ -412,7 +412,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getTrends(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
 
                     JSONObject response = new JSONObject(responseS);
@@ -427,10 +427,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 .compose(applyUiModel())
                 .subscribe(this::renderTrends);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
 
     }

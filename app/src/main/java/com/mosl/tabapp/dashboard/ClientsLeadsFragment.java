@@ -313,7 +313,6 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     private void renderLeadStackedBarChart(Map<String, Object> responseJsonObj) {
         tv.setVisibility(View.VISIBLE);
         llShowMore.setVisibility(View.VISIBLE);
-        hideProgress();
 
         ArrayList<String> columnsYAxis = new ArrayList<String>();
         String total = "";
@@ -430,7 +429,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getClientLead(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -449,10 +448,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                 .compose(applyUiModel())
                 .subscribe(this::renderClientLead);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 

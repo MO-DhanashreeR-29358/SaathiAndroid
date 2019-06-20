@@ -182,7 +182,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getClientLeadShow(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {

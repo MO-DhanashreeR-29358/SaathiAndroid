@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class BusSnapshotAdvFragment extends MOSLCommonFragment {
 
@@ -140,10 +139,7 @@ public class BusSnapshotAdvFragment extends MOSLCommonFragment {
                 .compose(applyUiModel())
                 .subscribe(this::renderSnapshot);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
 
     }

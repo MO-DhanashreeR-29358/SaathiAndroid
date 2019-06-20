@@ -206,7 +206,7 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getProductivity(request)
+            Disposable subscribe = saathiApi.getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -225,10 +225,7 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                 .compose(applyUiModel())
                 .subscribe(this::renderProductivity);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
