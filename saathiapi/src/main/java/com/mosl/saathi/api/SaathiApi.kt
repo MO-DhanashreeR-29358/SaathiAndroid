@@ -22,6 +22,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
@@ -42,6 +43,9 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.login.LoginRequest
+import com.mosl.saathi.api.model.login.LoginResponse
+import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
@@ -54,6 +58,9 @@ import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
 import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
+import com.mosl.saathi.api.model.prospect.ProspectRequest
+import com.mosl.saathi.api.model.prospect.ProspectResponse
+import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.saathi.api.model.query.QueryItem
 import com.mosl.saathi.api.model.query.QueryRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
@@ -248,4 +255,18 @@ interface SaathiApi {
     @Body request: CalenderRequest
   ): Observable<List<CalenderItem>?>
 
+  @POST("Auth/Login")
+  fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>
+
+  @POST("Auth/Logout")
+  fun logout(@Body logoutRequest: LogoutRequest): Observable<Any>
+
+  @POST("Auth/UpdateFCMToken")
+  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<Any>
+
+  @POST("Prospect/RegisterProspectOnline")
+  fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
+
+  @POST("Prospect/SMT_RegisterProspectOnline")
+  fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
 }
