@@ -62,11 +62,9 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
     private boolean dataFoundFlag, isTabClick;
     private String leadId = "";
     int click = 1;
-    private String mobileNo = "";
     private SecondClickTableAdapter secondClickTableAdapter;
     private ArrayList<String> arrEventType;
     private ArrayAdapter<String> arrAdapEventType;
-    public static final String LEAD_INTERACTION_FILTER = "{\"Request\":{\"LeadId\":%s,\"UCID\":%s,\"PageSize\":" + REPORT_PAGE_SIZE + ",\"Page\":1,\"CalculatedPage\":0,\"TotalCount\":0},\"Filter\":{\"Export\":null,\"ExportFilter\":null,\"Field\":null,\"Operator\":null,\"Value\":null,\"Logic\":null,\"Filters\":null},\"IsAdminMode\":true}";
 
     //Case end
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,7 +130,7 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
 
                 serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
                 //String tmpReq = String.format(LEAD_INTERACTION_FILTER, leadId, mUcid);
-                getInteractionMapping(serviceUrl, leadId, mUcid);
+                getInteractionMapping(serviceUrl);
                 isTabClick = false;
 
             }
@@ -173,12 +171,12 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
         }
     }
 
-    private void getInteractionMapping(String serviceMethod, String leadId, String ucid) {
+    private void getInteractionMapping(String serviceMethod) {
         isTabClick = true;
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LeadInteractionRequest leadInteractionRequest = new LeadInteractionRequest();
-            leadInteractionRequest.request.leadId = leadId;
-            leadInteractionRequest.request.uCID = ucid;
+            leadInteractionRequest.request.leadId = this.leadId;
+            leadInteractionRequest.request.uCID = this.mUcid;
             Observable<String> interactiveObs;
             switch (serviceMethod) {
                 case "TalismaInteractionRequest/TalismaRequestGet": {
@@ -218,7 +216,6 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
                 .compose(applyUiModel())
                 .subscribe(this::render);
         } else {
-            hideProgress();
             noInternetConnectionDialog();
         }
 
@@ -253,9 +250,7 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
                     String columnData =
                         (objDetail.get(column) == null || objDetail.get(column).toString() == null)
                             ? "" : objDetail.get(column).toString();
-                    if (column.equalsIgnoreCase("MOBILE")) {
-                        mobileNo = columnData;
-                    }
+
                     if (objDetail.get(column) instanceof Number) {
                         String strValue = objDetail.get(column).toString().trim();
 
@@ -300,7 +295,7 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
                 if (isTabClick) {
                     serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
                     //String tmpReq = String.format(LEAD_INTERACTION_FILTER, leadId, mUcid);
-                    getInteractionMapping(serviceUrl, leadId, mUcid);
+                    getInteractionMapping(serviceUrl);
                 }
 
             }
@@ -308,13 +303,13 @@ public class LeadViewInteractionFragment extends MOSLCommonFragment implements A
             case 1: {
                 serviceUrl = "Client/GetClientBirthdayAnniversaryWishLog";
                 //String tmpReq = String.format(LEAD_INTERACTION_FILTER, leadId, mUcid);
-                getInteractionMapping(serviceUrl, leadId, mUcid);
+                getInteractionMapping(serviceUrl);
             }
             break;
             case 2: {
                 serviceUrl = "Event/GetEventSeminarAttendedList";
                 //String tmpReq = String.format(LEAD_INTERACTION_FILTER, leadId, mUcid);
-                getInteractionMapping(serviceUrl, leadId, mUcid);
+                getInteractionMapping(serviceUrl);
 
             }
             break;
