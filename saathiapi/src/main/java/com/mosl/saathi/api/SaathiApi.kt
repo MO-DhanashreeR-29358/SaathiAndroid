@@ -55,6 +55,7 @@ import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportItem
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -203,5 +204,8 @@ interface SaathiApi {
 
   @POST("UserApi/AutoCompleteSplAttendee")
   fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
 
 }
