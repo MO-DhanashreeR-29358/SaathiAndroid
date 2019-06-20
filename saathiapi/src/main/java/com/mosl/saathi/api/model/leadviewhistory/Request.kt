@@ -5,17 +5,17 @@ import com.google.gson.annotations.SerializedName
 data class Request(
 
   @JvmField @SerializedName("TotalCount")
-  val totalCount: Int? = 0,
+  val totalCount: Int = 0,
 
   @JvmField @SerializedName("PageSize")
-  val pageSize: Int? = 50,
+  val pageSize: Int = 50,
 
   @JvmField @SerializedName("CalculatedPage")
-  val calculatedPage: Int? = 0,
+  val calculatedPage: Int = 0,
 
   @JvmField @SerializedName("LeadID")
-  var leadID: String? = "0",
+  var leadID: String = "0",
 
   @JvmField @SerializedName("Page")
-  val page: Int? = 1
+  val page: Int = 1
 )

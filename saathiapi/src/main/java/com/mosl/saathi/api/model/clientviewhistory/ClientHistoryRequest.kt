@@ -11,5 +11,5 @@ data class ClientHistoryRequest(
   var request: Request = Request(),
 
   @JvmField @SerializedName("IsAdminMode")
-  val isAdminMode: Boolean? = true
+  val isAdminMode: Boolean = true
 )

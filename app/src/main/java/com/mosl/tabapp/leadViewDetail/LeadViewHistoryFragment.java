@@ -26,7 +26,6 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
@@ -267,6 +266,11 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
                                         .toString()));
                         }
                     }
+                    if (columnData.contains("T")) {
+                        columnData =
+                            CRMAppUtil.getDateStrT(columnData, mFormat, DATE_FORMAT_TO_DISPLAY);
+                    }
+
                     if (column.equalsIgnoreCase("lead_id")) {
                         column = column.toUpperCase();
                     }
@@ -368,10 +372,7 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
                 .compose(applyUiModel())
                 .subscribe(this::render);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
