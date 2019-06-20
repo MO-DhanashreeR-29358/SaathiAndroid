@@ -248,7 +248,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
         }
 
         List<VersionResponse> data = uiModel.data;
-        if (data != null) {
+        if (data != null && !data.isEmpty()) {
             VersionResponse response = data.get(0);
             int statusCode = response.statusCode;
             String url;
