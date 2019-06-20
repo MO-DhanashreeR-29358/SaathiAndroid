@@ -15,23 +15,29 @@ public class EncryptionInterceptor implements Interceptor {
         Request request = chain.request();
 
         RequestBody oldBody = request.body();
-        Buffer buffer = new Buffer();
-        oldBody.writeTo(buffer);
-        String strOldBody = buffer.readUtf8();
+        boolean isEncrypted = false;
+        if (oldBody != null) {
+            Buffer buffer = new Buffer();
+            oldBody.writeTo(buffer);
+            String strOldBody = buffer.readUtf8();
 
-        MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
-        String strNewBody = CRMSecurityUtil.encrypt(strOldBody);
-        RequestBody body = RequestBody.create(mediaType, strNewBody);
-
-        request = request.newBuilder().method(request.method(), body).build();
+            MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
+            String strNewBody = CRMSecurityUtil.encrypt(strOldBody);
+            RequestBody body = RequestBody.create(mediaType, strNewBody);
+            request = request.newBuilder().method(request.method(), body).build();
+            isEncrypted = true;
+        }
 
         Response response = chain.proceed(request);
-
-        String strResponse = response.body().string();
-
-        ResponseBody decryptedBody = ResponseBody
-            .create(MediaType.parse("application/json"), CRMSecurityUtil.decrypt(strResponse));
-
-        return response.newBuilder().body(decryptedBody).build();
+        if (isEncrypted && response.body() != null) {
+            String strResponse = response.body().string();
+            ResponseBody decryptedBody = ResponseBody.create(
+                MediaType.parse("application/json"),
+                CRMSecurityUtil.decrypt(strResponse)
+            );
+            return response.newBuilder().body(decryptedBody).build();
+        } else {
+            return response;
+        }
     }
 }
