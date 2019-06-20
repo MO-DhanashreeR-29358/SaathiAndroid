@@ -1,7 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
@@ -27,13 +26,8 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,8 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cz.msebera.android.httpclient.Header;
-
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -94,7 +87,8 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
 
         spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                int position, long id) {
                 webServiceCall();
             }
 
@@ -102,13 +96,12 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-
         });
-
 
         spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                int position, long id) {
                 webServiceCall();
             }
 
@@ -116,13 +109,12 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-
         });
-
 
         spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+                int position, long id) {
                 webServiceCall();
             }
 
@@ -130,11 +122,11 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             public void onNothingSelected(AdapterView<?> parentView) {
                 // your code here
             }
-
         });
 
         if (dashboardModel != null) {
-            DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getBusinessSnapshotSystemName());
+            DashboardGroupModel groupModel =
+                dashboardModel.getGroupModel(DashboardSystemModel.getBusinessSnapshotSystemName());
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             if (widgetList != null && widgetList.size() > 0) {
@@ -144,48 +136,60 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                 //set filter data
                 List<WidgetFilterModel> filterList = model.getWidgetFilterList();
                 if (filterList != null && filterList.size() == 2) {
-                    ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter1 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(0).getFilterData());
                     adapter1.setDropDownViewResource(R.layout.mdropdown);
                     spFilter1.setAdapter(adapter1);
 
-
-                    ArrayAdapter<FilterRowData> adapter2 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(1).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter2 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(1).getFilterData());
                     adapter2.setDropDownViewResource(R.layout.mdropdown);
                     spFilter2.setAdapter(adapter2);
                     spFilter2.setVisibility(View.VISIBLE);
-
                 }
                 if (filterList != null && filterList.size() == 3) {
-                    ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter1 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(0).getFilterData());
                     adapter1.setDropDownViewResource(R.layout.mdropdown);
                     spFilter1.setAdapter(adapter1);
 
-
-                    ArrayAdapter<FilterRowData> adapter2 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(1).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter2 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(1).getFilterData());
                     adapter2.setDropDownViewResource(R.layout.mdropdown);
                     spFilter2.setAdapter(adapter2);
 
-
-                    ArrayAdapter<FilterRowData> adapter3 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(2).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter3 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(2).getFilterData());
                     adapter3.setDropDownViewResource(R.layout.mdropdown);
                     spFilter3.setAdapter(adapter3);
 
                     spFilter2.setVisibility(View.VISIBLE);
                     spFilter3.setVisibility(View.VISIBLE);
                 } else if (filterList != null && filterList.size() == 1) {
-                    ArrayAdapter<FilterRowData> adapter1 = new ArrayAdapter<FilterRowData>(getActivity(), android.R.layout.simple_spinner_item, filterList.get(0).getFilterData());
+                    ArrayAdapter<FilterRowData> adapter1 =
+                        new ArrayAdapter<FilterRowData>(getActivity(),
+                            android.R.layout.simple_spinner_item,
+                            filterList.get(0).getFilterData());
                     adapter1.setDropDownViewResource(R.layout.mdropdown);
                     spFilter1.setAdapter(adapter1);
-
                 }
             }
         }
-
     }
 
-    private Map getAddtionalParameterMap() {
+    private Map<String, String> getAddtionalParameterMap() {
 
-        Map addtionalParameterMap = new HashMap<>();
+        Map<String, String> addtionalParameterMap = new HashMap<>();
         try {
             FilterRowData filter1 = (FilterRowData) spFilter1.getSelectedItem();
             FilterRowData filter2 = (FilterRowData) spFilter2.getSelectedItem();
@@ -193,15 +197,12 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
 
             if (filter1 != null) {
                 addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
-
             }
             if (filter2 != null) {
                 addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
-
             }
             if (filter3 != null) {
                 addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
-
             }
             addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
         } catch (Exception ex) {
@@ -212,167 +213,133 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
     }
 
     private void webServiceCall() {
+        ////////////////////////////////////////////
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-            inputMap.put("WidgetSystemName", widgetSystemName);
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
+            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+            ClientRequest request = new ClientRequest(
+                businessProfileId,
+                getAddtionalParameterMap(),
+                widgetSystemName,
+                dashboardModel.getProductId(),
+                dashboardModel.getEmployeeCode()
+            );
 
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new TextHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                        try {
-                            if (statusCode == 200) {
-                                hierarchyMapList = new ArrayList<HashMap<String, String>>();
-                                Gson mGson = new Gson();
-                                Type type = new TypeToken<HashMap<String, Object>>() {
-                                }.getType();
-                                HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                                if (response.size() != 0) {
-                                    String status = response.get(STATUS).toString();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        secondClickTableAdapter = new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
-                                        table.setAdapter(secondClickTableAdapter);
-                                        Map<String, Object> responseJSONObject =
-                                                (Map<String, Object>) response.get("Response");
-                                        List<Map<String, Object>> arrayDetail =
-                                                (List<Map<String, Object>>) responseJSONObject.get(
-                                                        "Table");
-                                        ArrayList<String> columns = new ArrayList<String>();
-                                        ArrayList<String> columnsHeader = new ArrayList<String>();
-                                        if (arrayDetail.size() != 0) {
-                                            for (int y = 0; y < arrayDetail.size(); y++) {
-                                                Map<String, Object> objDetail = arrayDetail.get(y);
-                                                if (columns.size() == 0) {
-                                                    for (Object columnName : objDetail.keySet()) {
-                                                        if (!columnName.toString().equalsIgnoreCase("DisplayOrder")) {
-                                                            columns.add(columnName.toString());
-                                                            if (columnName.toString().equalsIgnoreCase("flg_empcode")) {
-                                                            } else {
-                                                                columnsHeader.add(getRefreshColumnName(columnName.toString()));
-                                                            }
-                                                        }
-                                                    }
-                                                    String[] stockArr = new String[columnsHeader.size()];
-                                                    stockArr = columnsHeader.toArray(stockArr);
-                                                    secondClickTableAdapter.setHeaders(stockArr);
-                                                }
-                                                HashMap map = new HashMap();
-                                                LinkedHashMap<String, String> hm = new LinkedHashMap<>();
-                                                for (String column : columns) {
-                                                    if (column.toString().equalsIgnoreCase("flg_empcode")) {
-                                                        map.put("flg_empcode", objDetail.get("flg_empcode").toString());
-
-                                                    } else {
-                                                        String columnData = (objDetail.get(column) == null || objDetail.get(column).toString() == null) ? "" : objDetail.get(column).toString();
-
-                                                        if (objDetail.get(column) instanceof Number) {
-                                                            String strValue = objDetail.get(column).toString().trim();
-                                                            if (strValue.indexOf(".") > -1 && !strValue.endsWith(".0") && !strValue.endsWith(".00")) {
-                                                                columnData = String.format("%.2f", Double.parseDouble(objDetail.get(column).toString()));
-                                                            } else {
-                                                                columnData = String.format("%.0f", Double.parseDouble(objDetail.get(column).toString()));
-                                                            }
-                                                        }
-
-                                                        if (column.equalsIgnoreCase("lead_id")) {
-                                                            column = column.toUpperCase();
-                                                        }
-
-                                                        hm.put(CRMAppUtil.getRefreshColumnName(column), columnData.trim());
-                                                    }
-                                                }
-                                                secondClickTableAdapter.add(hm);
-                                                if (map.size() != 0) {
-                                                    hierarchyMapList.add(map);
-                                                }
-                                            }
-                                            secondClickTableAdapter.notifyDataSetChanged();
-                                            dataFoundFlag = true;
-                                            table.setVisibility(View.VISIBLE);
-                                            tvNochart.setVisibility(View.GONE);
-                                        } else {
-                                            dataFoundFlag = false;
-                                            table.setVisibility(View.GONE);
-                                            tvNochart.setVisibility(View.VISIBLE);
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                        table.setVisibility(View.GONE);
-                                        dataFoundFlag = false;
-                                        tvNochart.setVisibility(View.VISIBLE);
-                                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    dataFoundFlag = false;
-                                    table.setVisibility(View.GONE);
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                }
-
-                            } else {
-                                dataFoundFlag = false;
-                                table.setVisibility(View.GONE);
-                                tvNochart.setVisibility(View.VISIBLE);
-                            }
-
-                        } catch (Exception e) {
-                            dataFoundFlag = false;
-                            table.setVisibility(View.GONE);
-                            tvNochart.setVisibility(View.VISIBLE);
-                            e.printStackTrace();
-                        }
-                        hideProgress();
+            Disposable subscribe = saathiApi.getDashboardData(request)
+                .map(responseS -> {
+                    Gson mGson = new Gson();
+                    Type type = new TypeToken<HashMap<String, Object>>() {
+                    }.getType();
+                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                    Map<String, Object> responseJsonObj =
+                        (Map<String, Object>) response.get("Response");
+                    List<Map<String, Object>> tableResponseList =
+                        (List<Map<String, Object>>) responseJsonObj.get(
+                            "Table");
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return tableResponseList;
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
                     }
-
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        try {
-                            JSONObject errorResponse = new JSONObject(responseString);
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderBusinessSnapshot);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
+        }
+    }
 
+    private void renderBusinessSnapshot(UiModel<List<Map<String, Object>>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            table.setVisibility(View.GONE);
+            dataFoundFlag = false;
+            tvNochart.setVisibility(View.VISIBLE);
+            showOnFailurePopup(error);
         }
 
+        List<Map<String, Object>> data = uiModel.data;
+        if (data != null) {
+            try {
+                renderTable(data);
+            } catch (Exception e) {
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        }
+    }
+
+    private void renderTable(List<Map<String, Object>> tableList) {
+        hierarchyMapList = new ArrayList<HashMap<String, String>>();
+        secondClickTableAdapter =
+            new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+        table.setAdapter(secondClickTableAdapter);
+        ArrayList<String> columns = new ArrayList<String>();
+        ArrayList<String> columnsHeader = new ArrayList<String>();
+        if (tableList.size() != 0) {
+            for (int y = 0; y < tableList.size(); y++) {
+                Map<String, Object> objDetail = tableList.get(y);
+                if (columns.size() == 0) {
+                    for (Object columnName : objDetail.keySet()) {
+                        if (!columnName.toString().equalsIgnoreCase("DisplayOrder")) {
+                            columns.add(columnName.toString());
+                            if (columnName.toString().equalsIgnoreCase("flg_empcode")) {
+                            } else {
+                                columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                            }
+                        }
+                    }
+                    String[] stockArr = new String[columnsHeader.size()];
+                    stockArr = columnsHeader.toArray(stockArr);
+                    secondClickTableAdapter.setHeaders(stockArr);
+                }
+                HashMap map = new HashMap();
+                LinkedHashMap<String, String> hm = new LinkedHashMap<>();
+                for (String column : columns) {
+                    if (column.toString().equalsIgnoreCase("flg_empcode")) {
+                        map.put("flg_empcode", objDetail.get("flg_empcode").toString());
+                    } else {
+                        String columnData = (objDetail.get(column) == null
+                            || objDetail.get(column).toString() == null) ? ""
+                            : objDetail.get(column).toString();
+
+                        if (objDetail.get(column) instanceof Number) {
+                            String strValue = objDetail.get(column).toString().trim();
+                            if (strValue.indexOf(".") > -1
+                                && !strValue.endsWith(".0")
+                                && !strValue.endsWith(".00")) {
+                                columnData = String.format("%.2f",
+                                    Double.parseDouble(objDetail.get(column).toString()));
+                            } else {
+                                columnData = String.format("%.0f",
+                                    Double.parseDouble(objDetail.get(column).toString()));
+                            }
+                        }
+
+                        if (column.equalsIgnoreCase("lead_id")) {
+                            column = column.toUpperCase();
+                        }
+
+                        hm.put(CRMAppUtil.getRefreshColumnName(column), columnData.trim());
+                    }
+                }
+                secondClickTableAdapter.add(hm);
+                if (map.size() != 0) {
+                    hierarchyMapList.add(map);
+                }
+            }
+            secondClickTableAdapter.notifyDataSetChanged();
+            dataFoundFlag = true;
+            table.setVisibility(View.VISIBLE);
+            tvNochart.setVisibility(View.GONE);
+        } else {
+            dataFoundFlag = false;
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+        }
     }
 
     ///SDTable
@@ -410,12 +377,11 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
         ArrayList<HashMap<String, String>> hashArray;
         private LayoutInflater inflater = null;
 
-        public SecondClickTableAdapter(Context context, ArrayList<HashMap<String, String>> hashArray) {
-            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
+        public SecondClickTableAdapter(Context context,
+            ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
             this.hashArray = hashArray;
             density = context.getResources().getDisplayMetrics().density;
-
-
         }
 
         public String[] getHeaders() {
@@ -448,7 +414,6 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             }
 
             commonHeaders[0].list.add(new Item(rowData));
-
         }
 
         @Override
@@ -476,7 +441,6 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                         }
                     });
 
-
                     break;
                 case 3:
                     view = getBody(row, column, convertView, parent);
@@ -487,10 +451,12 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             String columnName = stringSet.toArray()[column].toString();
                             addtionalParameterMap.clear();
                             addtionalParameterMap.put(COL_FILTER, columnName);
-                            addtionalParameterMap.put(ROW_FILTER, hashArray.get(row).values().toArray()[0].toString());
+                            addtionalParameterMap.put(ROW_FILTER,
+                                hashArray.get(row).values().toArray()[0].toString());
                             addtionalParameterMap.putAll(getAddtionalParameterMap());
                             if (hierarchyMapList.size() >= 1) {
-                                addtionalParameterMap.put("flt_Hierarchy_empCode", hierarchyMapList.get(row).get("flg_empcode").toString());
+                                addtionalParameterMap.put("flt_Hierarchy_empCode",
+                                    hierarchyMapList.get(row).get("flg_empcode").toString());
                             }
                             Bundle args = new Bundle();
                             args.putString(SYSTEM_NAME, widgetSystemName);
@@ -500,10 +466,10 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             String columnData = lMap.get(columnName).toString();
                             if (columnData != null) {
                                 if (!columnData.trim().equalsIgnoreCase("0")) {
-                                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(),
+                                        true);
                                 }
                             }
-
                         }
                     });
                     break;
@@ -532,7 +498,8 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
             }
-            RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.relativeLayout);
+            RelativeLayout relativeLayout =
+                (RelativeLayout) convertView.findViewById(R.id.relativeLayout);
             TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
             try {
                 head.setText(headers[0]);
@@ -566,7 +533,8 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             }
 
             commonHeaders[0].list.clear();
-            ArrayList<HashMap<String, String>> tempHashArray = (ArrayList<HashMap<String, String>>) hashArray.clone();
+            ArrayList<HashMap<String, String>> tempHashArray =
+                (ArrayList<HashMap<String, String>>) hashArray.clone();
             hashArray.clear();
 
             for (int i = 0; i < out.size(); i++) {
@@ -584,7 +552,6 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             secondClickTableAdapter.notifyDataSetChanged();
         }
 
-
         private View getHeader(int row, int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header, parent, false);
@@ -598,9 +565,12 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_first, parent, false);
             }
-            LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table_first);
-            listLayout.setBackgroundResource(row % 2 == 0 ? R.color.alternateBackground : R.color.white);
-            final TextView tv_table_first = (TextView) convertView.findViewById(R.id.tv_table_first);
+            LinearLayout listLayout =
+                (LinearLayout) convertView.findViewById(R.id.item_table_first);
+            listLayout.setBackgroundResource(
+                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+            final TextView tv_table_first =
+                (TextView) convertView.findViewById(R.id.tv_table_first);
             tv_table_first.setText(getDevice(row).data[column + 1]);
 
             return convertView;
@@ -611,8 +581,10 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                 convertView = inflater.inflate(R.layout.item_table, parent, false);
             }
             LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table);
-            listLayout.setBackgroundResource(row % 2 == 0 ? R.color.alternateBackground : R.color.white);
-            ((TextView) convertView.findViewById(android.R.id.text1)).setText(getDevice(row).data[column]);
+            listLayout.setBackgroundResource(
+                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(
+                getDevice(row).data[column]);
             TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
             text1.setBackgroundResource(0);
             return convertView;
@@ -708,5 +680,4 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             return 5;
         }
     }
-
 }

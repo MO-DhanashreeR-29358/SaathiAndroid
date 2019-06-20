@@ -22,6 +22,21 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
+import com.mosl.saathi.api.model.dashboard.client.ClientItem
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest
+import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
+import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
+import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
+import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest
+import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
+import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
+import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
+import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
@@ -247,6 +262,70 @@ interface SaathiApi {
     @Body request: MultiUpdateApprovalRequest
   ): Observable<String>
 
+  //====================== Dashboard =====================
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClients(
+    @Body request: ClientRequest
+  ): Observable<ClientItem>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getDashboardData(
+    @Body request: ClientRequest
+  ): Observable<String>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getSnapshot(
+    @Body request: ClientRequest
+  ): Observable<SnapshotItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getTargetAchievement(
+    @Body request: ClientRequest
+  ): Observable<TargetAchievementItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getTargetAchievementTeam(
+    @Body request: ClientRequest
+  ): Observable<TargetAchievementTeamItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClientsTradedYesterday(
+    @Body request: ClientRequest
+  ): Observable<ClientTradedYesterdayItem>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoaddetailsWidgeAsync")
+  fun getDashboardSecondLevel(
+    @Body request: DashboardSecondLevelRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoaddetailsWidgeAsync")
+  fun getDashboardHierarchy(
+    @Body request: DashboardHierarchyRequest
+  ): Observable<String>
+
+  @POST("Dashboard/GetIncentivePolicy")
+  fun getIncentivePolicy(
+    @Body request: IncentivePolicyRequest
+  ): Observable<IncentivePolicyItem>
+
+  @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
+  fun getDashboardMetaData(
+    @Body request: DashboardMetaDataRequest
+  ): Observable<List<DashboardMetaDataItem>>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getActionableCount(
+    @Body request: ActionableCountRequest
+  ): Observable<ActionableCountItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getIncentive(
+    @Body request: ClientRequest
+  ): Observable<IncentiveItem>
 
   //================== Calender ========================
 

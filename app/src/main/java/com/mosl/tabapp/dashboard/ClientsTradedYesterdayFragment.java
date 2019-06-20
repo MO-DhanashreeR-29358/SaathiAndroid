@@ -1,48 +1,46 @@
 package com.mosl.tabapp.dashboard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem;
+import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.TableItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+
 /**
  * Created by Sanket Gurav on 7/5/2017.
  */
 
-public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
+    implements View.OnClickListener {
     private View clientYesterdayView;
     static Context mContext;
     private DashboardModel dashboardModel;
     private String widgetSystemName;
     private String groupName;
     private Map addtionalParameterMap = new HashMap<>();
-    private ArrayList<HashMap<String, String>> arrayListClient = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> arrayListClient =
+        new ArrayList<HashMap<String, String>>();
     private TableLayout tableLayout;
     boolean dataFoundFlag;
 
@@ -51,7 +49,8 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
     private TextView tvNochart;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         clientYesterdayView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_client_traded);
         setUpView(clientYesterdayView);
@@ -73,10 +72,10 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
         pBar = clientsView.findViewById(R.id.pBar);
         tvNochart = (TextView) clientsView.findViewById(R.id.tvNochart);
 
-
         dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
         if (dashboardModel != null) {
-            DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getClientTradedSystemName());
+            DashboardGroupModel groupModel =
+                dashboardModel.getGroupModel(DashboardSystemModel.getClientTradedSystemName());
             WidgetModel model;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             if (widgetList != null && widgetList.size() > 0) {
@@ -87,15 +86,12 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                 }
                 widgetSystemName = model.getSystemName();
                 groupName = model.getName();
-
             }
         }
-
-
     }
 
-    private Map getAddtionalParameterMap() {
-        Map addtionalParameterMap = new HashMap<>();
+    private Map<String, String> getAddtionalParameterMap() {
+        Map<String, String> addtionalParameterMap = new HashMap<>();
         try {
             addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
         } catch (Exception ex) {
@@ -107,165 +103,74 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
     @Override
     public void onClick(View view) {
         int id = view.getId();
+    }
 
+    private void renderClientTradedYesterday(ClientTradedYesterdayItem item) {
+        if (item.tables != null) {
+            List<TableItem> tableList = item.tables;
+            for (int i = 0; i < tableList.size(); i++) {
+                HashMap<String, String> fieldData = new HashMap<String, String>();
+                TableItem tableItem = tableList.get(i);
+                String revenueType = stringOrEmpty(tableItem.revenueType);
+                String NoOfClients = stringOrZero(String.valueOf(tableItem.nOOFCLIENTS));
+                String RevenueGenerated = stringOrZero(String.valueOf(tableItem.rEVENUEGENERATED));
+                fieldData.put("REVENUETYPE", revenueType);
+                fieldData.put("NOOFCLIENTS", NoOfClients);
+                fieldData.put("REVENUEGENERATED", RevenueGenerated);
+                arrayListClient.add(fieldData);
+            }
+            dataFoundFlag = true;
+            incentiveDynamicView(arrayListClient);
+        }
+    }
+
+    private void render(UiModel<ClientTradedYesterdayItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            clientHideProgress();
+            arrayListClient.clear();
+            tvNochart.setVisibility(View.VISIBLE);
+            showOnFailurePopup(error);
+        }
+
+        ClientTradedYesterdayItem data = uiModel.data;
+        if (data != null) {
+            clientHideProgress();
+            try {
+                renderClientTradedYesterday(data);
+            } catch (Exception e) {
+                arrayListClient.clear();
+                tvNochart.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void webServiceCall() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            // showProgress();
-            clientShowProgress();
-            String serviceMethod = "Dashboard/LoadWidgetAsync";
-            Map inputMap = new HashMap<>();
-
-            inputMap.put("AddtionalParameters", getAddtionalParameterMap());
-            inputMap.put("WidgetSystemName", widgetSystemName);
-
-            //dashboard for
-            inputMap.put("BusinessProfileId", dashboardModel.getBusinessProfileIdForDashboard());
-            inputMap.put(PRODUCT_ID, dashboardModel.getProductId());
-            inputMap.put(EMPLOYEE_CODE, dashboardModel.getEmployeeCode());
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        try {
-                            if (statusCode == 200) {
-                                clientHideProgress();
-                                String status = response.getString(STATUS);
-                                arrayListClient.clear();
-                                if (!CRMAppUtil.isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    JSONObject responseJsonObj = response.getJSONObject("Response");
-
-                                    if (responseJsonObj.has("Table")) {
-                                        JSONArray jsonArray = responseJsonObj.getJSONArray("Table");
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            HashMap<String, String> fieldData = new HashMap<String, String>();
-                                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                            String revenueType = (jsonObject.isNull("RevenueType") || jsonObject.getString("RevenueType").equals("")) ? "" : jsonObject.getString("RevenueType");
-                                            String NoOfClients = (jsonObject.isNull("NO_OF_CLIENTS") || jsonObject.getString("NO_OF_CLIENTS").equals("")) ? "0" : jsonObject.getString("NO_OF_CLIENTS");
-                                            String RevenueGenerated = (jsonObject.isNull("REVENUE_GENERATED") || jsonObject.getString("REVENUE_GENERATED").equals("")) ? "0" : jsonObject.getString("REVENUE_GENERATED");
-
-                                            fieldData.put("REVENUETYPE", revenueType);
-                                            fieldData.put("NOOFCLIENTS", NoOfClients);
-                                            fieldData.put("REVENUEGENERATED", RevenueGenerated);
-
-                                            arrayListClient.add(fieldData);
-                                        }
-                                        dataFoundFlag = true;
-
-                                        incentiveDynamicView(arrayListClient);
-                                    }
-
-
-                                } else {
-                                    clientHideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    arrayListClient.clear();
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                }
-
-
-                            } else {
-                                clientHideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                                arrayListClient.clear();
-                                tvNochart.setVisibility(View.VISIBLE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            clientHideProgress();
-                            arrayListClient.clear();
-                            tvNochart.setVisibility(View.VISIBLE);
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            clientHideProgress();
-                            arrayListClient.clear();
-                            tvNochart.setVisibility(View.VISIBLE);
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            //  MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        clientHideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        clientHideProgress();
-                    }
-
-                });
-            } catch (Exception e) {
-                clientHideProgress();
-                e.printStackTrace();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), ERROR_LOADING_DATA_FOR + widgetSystemName, "OK", true, null);
-            }
+            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+            ClientRequest request = new ClientRequest(
+                businessProfileId,
+                getAddtionalParameterMap(),
+                widgetSystemName,
+                dashboardModel.getProductId(),
+                dashboardModel.getEmployeeCode()
+            );
+            Disposable subscribe = saathiApi.getClientsTradedYesterday(request)
+                .compose(applyUiModel())
+                .subscribe(this::render);
         } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            noInternetConnectionDialog();
         }
 
     }
-
 
     private void incentiveDynamicView(ArrayList<HashMap<String, String>> arrayListClient) {
         tableLayout.removeAllViews();
         try {
             LayoutInflater inFla = getActivity().getLayoutInflater();
             View tableRowH = inFla.inflate(R.layout.frag_client_traded_top, null);
-
 
             tableLayout.addView(tableRowH);
             if (arrayListClient.size() > 0) {
@@ -276,8 +181,10 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                     String revenuegenerated = arrayListClient.get(i).get("REVENUEGENERATED");
                     View tableRow = inFla.inflate(R.layout.frag_client_traded_bottom, null);
                     final TextView tvSegment = (TextView) tableRow.findViewById(R.id.tvSegment);
-                    final TextView tvNoOfClients = (TextView) tableRow.findViewById(R.id.tvNoOfClients);
-                    final TextView tvRevenueGenerated = (TextView) tableRow.findViewById(R.id.tvRevenueGenerated);
+                    final TextView tvNoOfClients =
+                        (TextView) tableRow.findViewById(R.id.tvNoOfClients);
+                    final TextView tvRevenueGenerated =
+                        (TextView) tableRow.findViewById(R.id.tvRevenueGenerated);
 
                     tvSegment.setText(revenuetype);
                     tvNoOfClients.setText(noofclients);
@@ -307,10 +214,12 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment implement
                             args.putString(SYSTEM_NAME, widgetSystemName);
                             args.putString(LABEL, groupName);
                             args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            if (!tvRevenueGenerated.getText().toString().trim().equalsIgnoreCase("0")) {
+                            if (!tvRevenueGenerated.getText()
+                                .toString()
+                                .trim()
+                                .equalsIgnoreCase("0")) {
                                 navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
                             }
-
                         }
                     });
                     //  }
