@@ -1,6 +1,7 @@
 package com.mosl.saathi.api
 
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
+import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
@@ -192,4 +193,7 @@ interface SaathiApi {
 
   @POST("Meeting/AddUpdateMeeting")
   fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>
 }
