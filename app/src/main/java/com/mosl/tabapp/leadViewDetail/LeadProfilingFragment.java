@@ -927,10 +927,7 @@ public class LeadProfilingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderSubmitProfile);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -962,10 +959,7 @@ public class LeadProfilingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProfileParameters);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 }
