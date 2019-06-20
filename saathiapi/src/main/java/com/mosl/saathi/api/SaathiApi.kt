@@ -84,6 +84,9 @@ import com.mosl.saathi.api.model.query.QueryRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.splash.ReportTypeResponse
+import com.mosl.saathi.api.model.splash.VersionRequest
+import com.mosl.saathi.api.model.splash.VersionResponse
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -361,4 +364,13 @@ interface SaathiApi {
 
   @POST("Prospect/SMT_RegisterProspectOnline")
   fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
+
+  @POST("Common/GetAppVersion")
+  @ExtraDataWrapper
+  fun appVersion(@Body versionRequest: VersionRequest): Observable<List<VersionResponse>>
+
+  @POST("Report/FetchReportTypes")
+  fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
+
+
 }
