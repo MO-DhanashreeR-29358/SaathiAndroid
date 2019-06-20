@@ -349,10 +349,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadDocuments);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -451,10 +448,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderUploadDocument);
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
