@@ -93,6 +93,7 @@ public class CRMWebServiceHandler {
         return getJsonString(param, false);
     }
 
+
     public static String getJsonString(Map param, boolean encrypt) {
         String result = "";
         if (param != null && param.size() > 0) {
@@ -233,7 +234,8 @@ public class CRMWebServiceHandler {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
-            new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor())
+            new OkHttpClient.Builder()
+                .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(interceptor)
                 //.addNetworkInterceptor(new DecryptionFactory())
                 .build();
@@ -248,7 +250,7 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-    public static SaathiApi buildSaathiApi() {
+    private static SaathiApi buildSaathiApi(Context context) {
         RxJava2CallAdapterFactory callAdapterFactory =
             RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
 
@@ -257,6 +259,7 @@ public class CRMWebServiceHandler {
         OkHttpClient client =
             new OkHttpClient.Builder()
                 .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new AuthorizationInterceptor(context))
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new EncryptionInterceptor())
                 .build();
@@ -273,9 +276,15 @@ public class CRMWebServiceHandler {
             .create(SaathiApi.class);
     }
 
+    public static void initSaathiApi(Context context) {
+        if (saathiApi == null) {
+            saathiApi = buildSaathiApi(context);
+        }
+    }
+
     public static SaathiApi getSaathiApi() {
         if (saathiApi == null) {
-            saathiApi = buildSaathiApi();
+            throw new IllegalStateException("Must call initSaathiApi first");
         }
         return saathiApi;
     }
