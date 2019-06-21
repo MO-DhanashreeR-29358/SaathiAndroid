@@ -12,23 +12,26 @@ import com.mosl.saathi.api.model.calender.CalenderItem
 import com.mosl.saathi.api.model.calender.CalenderRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
-import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
+import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.LeadSourceItem
+import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
-import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
@@ -52,12 +55,16 @@ import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
 import com.mosl.saathi.api.model.documents.UploadDocumentItem
 import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
+import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
+import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
+import com.mosl.saathi.api.model.lead.ClientSummaryResponse
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
 import com.mosl.saathi.api.model.lead.CountryItem
-import com.mosl.saathi.api.model.lead.InsertLeadProductItem
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -66,12 +73,13 @@ import com.mosl.saathi.api.model.lead.StageItem
 import com.mosl.saathi.api.model.lead.StageMobileItem
 import com.mosl.saathi.api.model.lead.StageMobileRequest
 import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StageWiseConfiguration
 import com.mosl.saathi.api.model.lead.StateProvinceItem
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
 import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
-import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
@@ -80,6 +88,7 @@ import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
+import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
@@ -114,8 +123,11 @@ import com.mosl.saathi.api.model.splash.VersionResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface SaathiApi {
 
