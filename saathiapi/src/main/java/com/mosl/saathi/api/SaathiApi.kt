@@ -45,6 +45,12 @@ import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyReques
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
+import com.mosl.saathi.api.model.documents.DocumentsRequest
+import com.mosl.saathi.api.model.documents.LeadDocumentsItem
+import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
+import com.mosl.saathi.api.model.documents.UploadDocumentItem
+import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
@@ -415,5 +421,27 @@ interface SaathiApi {
   @POST("Report/FetchReportTypes")
   fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
 
+  //===================== Documents=========================
+
+  @POST("Lead/GetLeadDocuments")
+  @ExtraDataWrapper
+  fun getLeadDocuments(
+    @Body request: DocumentsRequest
+  ): Observable<List<LeadDocumentsItem>>
+
+  @POST("Lead/UploadDocument")
+  fun postUploadDocuments(
+    @Body request: UploadDocumentsRequest
+  ): Observable<UploadDocumentItem>
+
+  @POST("Lead/UpdateLeadDocuments")
+  fun postUpdateDocuments(
+    @Body request: UpdateDocumentsRequest
+  ): Observable<String>
+
+  @POST("Lead/DeleteLeadDocuments")
+  fun postDeleteDocuments(
+    @Body request: DeleteDocumentRequest
+  ): Observable<String>
 
 }
