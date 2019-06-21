@@ -1,140 +1,96 @@
 package com.mosl.saathi.api.model.lead
 
 import com.google.gson.annotations.SerializedName
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
 data class LeadProductMappingItem(
 
-  @field:SerializedName("LastModifiedBy")
-  val lastModifiedBy: Any? = null,
+  @JvmField @SerializedName("LastModifiedBy") val lastModifiedBy: Any,
 
-  @field:SerializedName("ThirdRM")
-  val thirdRM: Any? = null,
+  @JvmField @SerializedName("ThirdRM") val thirdRM: Any,
 
-  @field:SerializedName("ProductName")
-  val productName: Any? = null,
+  @JvmField @SerializedName("ProductName") val productName: Any,
 
-  @field:SerializedName("CrossSellingProducts")
-  val crossSellingProducts: List<Any?>? = null,
+  @JvmField @SerializedName("CrossSellingProducts") val crossSellingProducts: List<Any?>,
 
-  @field:SerializedName("UCID")
-  val uCID: Any? = null,
+  @JvmField @SerializedName("UCID") val uCID: Any,
 
-  @field:SerializedName("IsProductDisabled")
-  val isProductDisabled: Int? = null,
+  @JvmField @SerializedName("IsProductDisabled") val isProductDisabled: Int,
 
-  @field:SerializedName("FollowUpDate")
-  val followUpDate: Any? = null,
+  @JvmField @SerializedName("FollowUpDate") val followUpDate: Any,
 
-  @field:SerializedName("FourthRMAssignDate")
-  val fourthRMAssignDate: Any? = null,
+  @JvmField @SerializedName("FourthRMAssignDate") val fourthRMAssignDate: Any,
 
-  @field:SerializedName("PendingDays")
-  val pendingDays: Int? = null,
+  @JvmField @SerializedName("PendingDays") val pendingDays: String?,
 
-  @field:SerializedName("ThirdRMAssignDate")
-  val thirdRMAssignDate: Any? = null,
+  @JvmField @SerializedName("ThirdRMAssignDate") val thirdRMAssignDate: Any,
 
-  @field:SerializedName("FourthRMAssignedBy")
-  val fourthRMAssignedBy: Any? = null,
+  @JvmField @SerializedName("FourthRMAssignedBy") val fourthRMAssignedBy: Any,
 
-  @field:SerializedName("IsProductSpecialistEditDisabled")
-  val isProductSpecialistEditDisabled: Int? = null,
+  @JvmField @SerializedName(
+      "IsProductSpecialistEditDisabled"
+  ) val isProductSpecialistEditDisabled: Int,
 
-  @field:SerializedName("SecondaryRM")
-  val secondaryRM: Any? = null,
+  @JvmField @SerializedName("SecondaryRM") val secondaryRM: Any,
 
-  @field:SerializedName("AssignedByDate")
-  val assignedByDate: String? = null,
+  @JvmField @SerializedName("AssignedByDate") val assignedByDate: String,
 
-  @field:SerializedName("StatusID")
-  val statusID: Int? = null,
+  @JvmField @SerializedName("StatusID") val statusID: Int,
 
-  @field:SerializedName("IsAdminMode")
-  val isAdminMode: Boolean? = null,
+  @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
 
-  @field:SerializedName("AssignedBy")
-  val assignedBy: String? = null,
+  @JvmField @SerializedName("AssignedBy") val assignedBy: String,
 
-  @field:SerializedName("IsDefault")
-  val isDefault: Boolean? = null,
+  @JvmField @SerializedName("IsDefault") val isDefault: String?,
 
-  @field:SerializedName("Status")
-  val status: Int? = null,
+  @JvmField @SerializedName("Status") val status: Int,
 
-  @field:SerializedName("StageName")
-  val stageName: Any? = null,
+  @JvmField @SerializedName("StageName") val stageName: String?,
 
-  @field:SerializedName("StageID")
-  val stageID: Int? = null,
+  @JvmField @SerializedName("StageID") val stageID: Int,
 
-  @field:SerializedName("LowMargin")
-  val lowMargin: Any? = null,
+  @JvmField @SerializedName("LowMargin") val lowMargin: Any,
 
-  @field:SerializedName("PrimaryRM_Name")
-  val primaryRMName: Any? = null,
+  @JvmField @SerializedName("PrimaryRM_Name") val primaryRMName: Any,
 
-  @field:SerializedName("ProductID")
-  val productID: Any? = null,
+  @JvmField @SerializedName("ProductID") val productID: Any,
 
-  @field:SerializedName("StatusName")
-  val statusName: Any? = null,
+  @JvmField @SerializedName("StatusName") val statusName: Any,
 
-  @field:SerializedName("ProductSpecialist_Name")
-  val productSpecialistName: Any? = null,
+  @JvmField @SerializedName("ProductSpecialist_Name") val productSpecialistName: Any,
 
-  @field:SerializedName("lead")
-  val lead: Any? = null,
+  @JvmField @SerializedName("lead") val lead: Any,
 
-  @field:SerializedName("InterestedIn")
-  val interestedIn: Int? = null,
+  @JvmField @SerializedName("InterestedIn") val interestedIn: String?,
 
-  @field:SerializedName("InApproval")
-  val inApproval: Boolean? = null,
+  @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @field:SerializedName("Active")
-  val active: Boolean? = null,
+  @JvmField @SerializedName("Active") val active: Boolean,
 
-  @field:SerializedName("SecondaryRMAssignedDate")
-  val secondaryRMAssignedDate: Any? = null,
+  @JvmField @SerializedName("SecondaryRMAssignedDate") val secondaryRMAssignedDate: Any,
 
-  @field:SerializedName("ApprovalFieldList")
-  val approvalFieldList: Any? = null,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
 
-  @field:SerializedName("ClientCode")
-  val clientCode: Any? = null,
+  @JvmField @SerializedName("ClientCode") val clientCode: String?,
 
-  @field:SerializedName("LastModificationDate")
-  val lastModificationDate: Any? = null,
+  @JvmField @SerializedName("LastModificationDate") val lastModificationDate: Any,
 
-  @field:SerializedName("SecondaryRMAssignedBy")
-  val secondaryRMAssignedBy: Any? = null,
+  @JvmField @SerializedName("SecondaryRMAssignedBy") val secondaryRMAssignedBy: Any,
 
-  @field:SerializedName("LeadID")
-  val leadID: Int? = null,
+  @JvmField @SerializedName("LeadID") val leadID: Int,
 
-  @field:SerializedName("LeadProductMappingID")
-  val leadProductMappingID: Int? = null,
+  @JvmField @SerializedName("LeadProductMappingID") val leadProductMappingID: Int,
 
-  @field:SerializedName("IsPotentialPMSProduct")
-  val isPotentialPMSProduct: Any? = null,
+  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: Any,
 
-  @field:SerializedName("FourthRM")
-  val fourthRM: Any? = null,
+  @JvmField @SerializedName("FourthRM") val fourthRM: Any,
 
-  @field:SerializedName("ProductSpecialist")
-  val productSpecialist: Any? = null,
+  @JvmField @SerializedName("ProductSpecialist") val productSpecialist: Any,
 
-  @field:SerializedName("ThirdRMAssignedBy")
-  val thirdRMAssignedBy: Any? = null,
+  @JvmField @SerializedName("ThirdRMAssignedBy") val thirdRMAssignedBy: Any,
 
-  @field:SerializedName("PrimaryRM")
-  val primaryRM: String? = null,
+  @JvmField @SerializedName("PrimaryRM") val primaryRM: String,
 
-  @field:SerializedName("IsCrossSellingProduct")
-  val isCrossSellingProduct: Boolean? = null,
+  @JvmField @SerializedName("IsCrossSellingProduct") val isCrossSellingProduct: Boolean,
 
-  @field:SerializedName("Is_LowMargin_Lead")
-  val isLowMarginLead: Any? = null
+  @JvmField @SerializedName("Is_LowMargin_Lead") val isLowMarginLead: Any
 )

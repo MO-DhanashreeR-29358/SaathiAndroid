@@ -61,6 +61,11 @@ import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
+import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
+import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineResponse
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.LoginResponse
 import com.mosl.saathi.api.model.logout.LogoutRequest
@@ -134,7 +139,7 @@ interface SaathiApi {
   @POST("Lead/GetLeadView")
   fun postLeadView(
     @Body request: LeadViewRequest
-  ): Observable<SaathiCommonResponse<LeadViewItem>>
+  ): Observable<LeadViewItem>
 
   @POST("Lead/UpdateLead")
   fun postUpdateLead(
@@ -245,6 +250,16 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  //===================== Lead View Main=========================
+
+  @POST("Client/GetClientImage")
+  fun getClientImage(@Body request: ClientImageRequest): Observable<String>
+
+  @POST("Client/GetClientViewByCommand/")
+  fun getClientViewByCommand(@Body request: ClientViewByCommandRequest): Observable<ClientViewByCommandResponse>
+
+  @POST("Prospect/SMT_RegisterProspectOnline/")
+  fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
   //==================== Lead Profile ===========================
   @POST("Lead/GetLeadProfileParameters")
   fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>

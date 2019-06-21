@@ -4,201 +4,139 @@ import com.google.gson.annotations.SerializedName
 
 data class LeadViewItem(
 
-  @SerializedName("CreatedThrough")
-  @JvmField val createdThrough: String,
+  @JvmField @SerializedName("CreatedThrough") val createdThrough: String,
 
-  @SerializedName("CreationDate")
-  @JvmField val creationDate: String,
+  @JvmField @SerializedName("CreationDate") val creationDate: String,
 
-  @SerializedName("ProspectRefereMobile")
-  @JvmField val prospectRefereMobile: String,
+  @JvmField @SerializedName("ProspectRefereMobile") val prospectRefereMobile: String,
 
-  @SerializedName("BusinessUnitID")
-  @JvmField val businessUnitID: Int,
+  @JvmField @SerializedName("BusinessUnitID") val businessUnitID: Int,
 
-  @SerializedName("ContactPerson")
-  @JvmField val contactPerson: Any,
+  @JvmField @SerializedName("ContactPerson") val contactPerson: Any,
 
-  @SerializedName("LeadOwner")
-  @JvmField val leadOwner: String,
+  @JvmField @SerializedName("LeadOwner") val leadOwner: String?,
 
-  @SerializedName("ProspectSource")
-  @JvmField val prospectSource: String,
+  @JvmField @SerializedName("ProspectSource") val prospectSource: String,
 
-  @SerializedName("PotentialPMSProductList")
-  @JvmField val potentialPMSProductList: Any,
+  @JvmField @SerializedName("PotentialPMSProductList") val potentialPMSProductList: Any,
 
-  @SerializedName("contact")
-  @JvmField val contact: Contact,
+  @JvmField @SerializedName("contact") val contact: Contact?,
 
-  @SerializedName("leadProductMapping")
-  @JvmField val leadProductMapping: List<LeadProductMappingItem>,
+  @JvmField @SerializedName(
+      "leadProductMapping"
+  ) val leadProductMapping: List<LeadProductMappingItem>,
 
-  @SerializedName("IsAdminMode")
-  @JvmField val isAdminMode: Boolean,
+  @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
 
-  @SerializedName("IsPotentialPMSProductText")
-  @JvmField val isPotentialPMSProductText: Any,
+  @JvmField @SerializedName("IsPotentialPMSProductText") val isPotentialPMSProductText: Any,
 
-  @SerializedName("StageWiseFieldConfiguration")
-  @JvmField val stageWiseFieldConfiguration: List<StageWiseFieldConfigurationItem?>,
+  @JvmField @SerializedName(
+      "StageWiseFieldConfiguration"
+  ) val stageWiseFieldConfiguration: List<StageWiseFieldConfigurationItem?>,
 
-  @SerializedName("LastReCycleTransferDate")
-  @JvmField val lastReCycleTransferDate: Any,
+  @JvmField @SerializedName("LastReCycleTransferDate") val lastReCycleTransferDate: Any,
 
-  @SerializedName("Status")
-  @JvmField val status: Int,
+  @JvmField @SerializedName("Status") val status: Int,
 
-  @SerializedName("CreatedBy")
-  @JvmField val createdBy: String,
+  @JvmField @SerializedName("CreatedBy") val createdBy: String,
 
-  @SerializedName("RefereeEmail")
-  @JvmField val refereeEmail: Any,
+  @JvmField @SerializedName("RefereeEmail") val refereeEmail: Any,
 
-  @SerializedName("OAOUserid")
-  @JvmField val oAOUserid: Int,
+  @JvmField @SerializedName("OAOUserid") val oAOUserid: Int = 0,
 
-  @SerializedName("QueryId")
-  @JvmField val queryId: Int,
+  @JvmField @SerializedName("QueryId") val queryId: Int,
 
-  @SerializedName("ProspectRefereEmail")
-  @JvmField val prospectRefereEmail: String,
+  @JvmField @SerializedName("ProspectRefereEmail") val prospectRefereEmail: String,
 
-  @SerializedName("ChannelID")
-  @JvmField val channelID: Any,
+  @JvmField @SerializedName("ChannelID") val channelID: Any,
 
-  @SerializedName("IsProductSpecialist")
-  @JvmField val isProductSpecialist: String,
+  @JvmField @SerializedName("IsProductSpecialist") val isProductSpecialist: String,
 
-  @SerializedName("IsAadhar")
-  @JvmField val isAadhar: Int,
+  @JvmField @SerializedName("IsAadhar") val isAadhar: Int,
 
-  @SerializedName("LeadCategoryText")
-  @JvmField val leadCategoryText: String,
+  @JvmField @SerializedName("LeadCategoryText") val leadCategoryText: String,
 
-  @SerializedName("Last_Recycle_Date")
-  @JvmField val lastRecycleDate: Any,
+  @JvmField @SerializedName("Last_Recycle_Date") val lastRecycleDate: Any,
 
-  @SerializedName("Branchcode")
-  @JvmField val branchcode: String,
+  @JvmField @SerializedName("Branchcode") val branchcode: String?,
 
-  @SerializedName("Active")
-  @JvmField val active: Boolean,
+  @JvmField @SerializedName("Active") val active: Boolean,
 
-  @SerializedName("Profession")
-  @JvmField val profession: String,
+  @JvmField @SerializedName("Profession") val profession: String,
 
-  @SerializedName("ProspectRefereName")
-  @JvmField val prospectRefereName: String,
+  @JvmField @SerializedName("ProspectRefereName") val prospectRefereName: String,
 
-  @SerializedName("LastModificationDate")
-  @JvmField val lastModificationDate: String,
+  @JvmField @SerializedName("LastModificationDate") val lastModificationDate: String,
 
-  @SerializedName("ProfileParamPercentage")
-  @JvmField val profileParamPercentage: Int,
+  @JvmField @SerializedName("ProfileParamPercentage") val profileParamPercentage: Int,
 
-  @SerializedName("CanEditLead")
-  @JvmField val canEditLead: Int,
+  @JvmField @SerializedName("CanEditLead") val canEditLead: Int,
 
-  @SerializedName("Is_Recycle_Lead")
-  @JvmField val isRecycleLead: Any,
+  @JvmField @SerializedName("Is_Recycle_Lead") val isRecycleLead: Any,
 
-  @SerializedName("RefereeMobile")
-  @JvmField val refereeMobile: Any,
+  @JvmField @SerializedName("RefereeMobile") val refereeMobile: Any,
 
-  @SerializedName("LastModifiedBy")
-  @JvmField val lastModifiedBy: String,
+  @JvmField @SerializedName("LastModifiedBy") val lastModifiedBy: String,
 
-  @SerializedName("RefereeName")
-  @JvmField val refereeName: Any,
+  @JvmField @SerializedName("RefereeName") val refereeName: Any,
 
-  @SerializedName("ProfessionID")
-  @JvmField val professionID: Any,
+  @JvmField @SerializedName("ProfessionID") val professionID: Any,
 
-  @SerializedName("CampaignName")
-  @JvmField val campaignName: Any,
+  @JvmField @SerializedName("CampaignName") val campaignName: Any,
 
-  @SerializedName("Profile")
-  @JvmField val profile: Any,
+  @JvmField @SerializedName("Profile") val profile: Any,
 
-  @SerializedName("LeadSourceDetails")
-  @JvmField val leadSourceDetails: Any,
+  @JvmField @SerializedName("LeadSourceDetails") val leadSourceDetails: Any,
 
-  @SerializedName("MoneyControlPortfolioURL")
-  @JvmField val moneyControlPortfolioURL: String,
+  @JvmField @SerializedName("MoneyControlPortfolioURL") val moneyControlPortfolioURL: String,
 
-  @SerializedName("AvailableAddressTypes")
-  @JvmField val availableAddressTypes: List<Any?>,
+  @JvmField @SerializedName("AvailableAddressTypes") val availableAddressTypes: List<Any?>,
 
-  @SerializedName("LeadSourceName")
-  @JvmField val leadSourceName: Any,
+  @JvmField @SerializedName("LeadSourceName") val leadSourceName: Any,
 
-  @SerializedName("leadFieldSectionModels")
-  @JvmField val leadFieldSectionModels: List<Any?>,
+  @JvmField @SerializedName("leadFieldSectionModels") val leadFieldSectionModels: List<Any?>,
 
-  @SerializedName("ProfileID")
-  @JvmField val profileID: Int,
+  @JvmField @SerializedName("ProfileID") val profileID: Int,
 
-  @SerializedName("DedupeModel")
-  @JvmField val dedupeModel: DedupeModel,
+  @JvmField @SerializedName("DedupeModel") val dedupeModel: DedupeModel,
 
-  @SerializedName("LoginId")
-  @JvmField val loginId: Any,
+  @JvmField @SerializedName("LoginId") val loginId: Any,
 
-  @SerializedName("ApprovalMessage")
-  @JvmField val approvalMessage: Any,
+  @JvmField @SerializedName("ApprovalMessage") val approvalMessage: Any,
 
-  @SerializedName("Comments")
-  @JvmField val comments: String,
+  @JvmField @SerializedName("Comments") val comments: String,
 
-  @SerializedName("SourceID")
-  @JvmField val sourceID: Int,
+  @JvmField @SerializedName("SourceID") val sourceID: Int,
 
-  @SerializedName("RefereeCode")
-  @JvmField val refereeCode: Any,
+  @JvmField @SerializedName("RefereeCode") val refereeCode: Any,
 
-  @SerializedName("SourceName")
-  @JvmField val sourceName: String,
+  @JvmField @SerializedName("SourceName") val sourceName: String?,
 
-  @SerializedName("LeadSourceID")
-  @JvmField val leadSourceID: Int,
+  @JvmField @SerializedName("LeadSourceID") val leadSourceID: Int,
 
-  @SerializedName("ContactID")
-  @JvmField val contactID: Int,
+  @JvmField @SerializedName("ContactID") val contactID: Int,
 
-  @SerializedName("LeadSourceDetailsID")
-  @JvmField val leadSourceDetailsID: Int,
+  @JvmField @SerializedName("LeadSourceDetailsID") val leadSourceDetailsID: String?,
 
-  @SerializedName("AMCCampaignID")
-  @JvmField val aMCCampaignID: Int,
+  @JvmField @SerializedName("AMCCampaignID") val aMCCampaignID: Int,
 
-  @SerializedName("IsAllowed")
-  @JvmField val isAllowed: Boolean,
+  @JvmField @SerializedName("IsAllowed") val isAllowed: Boolean,
 
-  @SerializedName("IsPotentialPMSProductValue")
-  @JvmField val isPotentialPMSProductValue: String,
+  @JvmField @SerializedName("IsPotentialPMSProductValue") val isPotentialPMSProductValue: String,
 
-  @SerializedName("InApproval")
-  @JvmField val inApproval: Boolean,
+  @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @SerializedName("IsReCycleTransfer")
-  @JvmField val isReCycleTransfer: Any,
+  @JvmField @SerializedName("IsReCycleTransfer") val isReCycleTransfer: Any,
 
-  @SerializedName("ApprovalFieldList")
-  @JvmField val approvalFieldList: Any,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
 
-  @SerializedName("LeadID")
-  @JvmField val leadID: Int,
+  @JvmField @SerializedName("LeadID") val leadID: String?,
 
-  @SerializedName("IsPotentialPMSProduct")
-  @JvmField val isPotentialPMSProduct: String,
+  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: String,
 
-  @SerializedName("leadProfileParameters")
-  @JvmField val leadProfileParameters: Any,
+  @JvmField @SerializedName("leadProfileParameters") val leadProfileParameters: Any,
 
-  @SerializedName("LeadCategoryID")
-  @JvmField val leadCategoryID: Int,
+  @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: Int,
 
-  @SerializedName("leadFieldValueModels")
-  @JvmField val leadFieldValueModels: List<Any?>
+  @JvmField @SerializedName("leadFieldValueModels") val leadFieldValueModels: List<Any?>
 )
