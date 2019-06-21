@@ -80,6 +80,7 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
+import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
@@ -538,5 +539,19 @@ interface SaathiApi {
   fun getMappingHistory(
     @Body request: ClientHistoryRequest
   ): Observable<String>
+
+  // ==========================Lead Interaction===================
+
+  @ExtraDataWrapper
+  @POST("TalismaInteractionRequest/TalismaRequestGet")
+  fun getInteraction(@Body request: LeadInteractionRequest): Observable<String>
+
+  @ExtraDataWrapper
+  @POST("Client/GetClientBirthdayAnniversaryWishLog")
+  fun getBirthdayAnniversaryEvent(@Body request: LeadInteractionRequest): Observable<String>
+
+  @ExtraDataWrapper
+  @POST("Event/GetEventSeminarAttendedList")
+  fun getSeminarEvent(@Body request: LeadInteractionRequest): Observable<String>
 
 }
