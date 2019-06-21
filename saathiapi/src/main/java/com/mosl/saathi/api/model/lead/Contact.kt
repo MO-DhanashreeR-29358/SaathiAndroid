@@ -26,9 +26,9 @@ data class Contact(
 
   @JvmField @SerializedName("LandlineNo") val landlineNo: String,
 
-  @JvmField @SerializedName("DOB") val dOB: Any,
+  @JvmField @SerializedName("DOB") val dOB: String,
 
-  @JvmField @SerializedName("DOA") val dOA: Any,
+  @JvmField @SerializedName("DOA") val dOA: String,
 
   @JvmField @SerializedName("PrefixCode") val prefixCode: Any,
 

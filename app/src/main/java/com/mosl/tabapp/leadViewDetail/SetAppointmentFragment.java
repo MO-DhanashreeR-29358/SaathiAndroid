@@ -828,8 +828,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment
     private void getClientDetail(String ucid) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             ClientDetailRequest request =
-                new ClientDetailRequest(ucid);
-            Disposable subscribe = saathiApi.postClientDetail(request)
+                new ClientDetailRequest(Integer.valueOf(ucid));
+            Disposable subscribe = saathiApi.getClientDetail(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
@@ -873,7 +873,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
-            Disposable subscribe = saathiApi.postLeadView(request)
+            Disposable subscribe = saathiApi.getLeadView(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
@@ -890,7 +890,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
         }
         LeadViewItem data = uiModel.data;
         if (data != null) {
-            String leadId = stringOrEmpty(data.leadID);
+            String leadId = stringOrEmpty(String.valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
             Contact contact = data.contact;
             String name = stringOrEmpty(contact.name);
@@ -900,8 +900,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 LeadProductMappingItem item = leadProductMapping.get(i);
                 String clientCode = stringOrEmpty(item.clientCode);
                 String stageName = stringOrEmpty(item.stageName);
-                String isDefault = stringOrEmpty(item.isDefault);
-                String pendingDays = stringOrEmpty(item.pendingDays);
+                String isDefault = stringOrEmpty(String.valueOf(item.isDefault));
+                String pendingDays = stringOrEmpty(String.valueOf(item.pendingDays));
                 if (isDefault.equalsIgnoreCase("true")) {
                     tvClientCode.setText(clientCode);
                     tvCurrentStage.setText(stageName);
@@ -940,7 +940,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             arrSelectProduct.add(new RowData(0, "-1", SELECT_PRODUCT));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrSelectProduct.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1348,7 +1348,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 new RowData(0, "-1", SELECT_WEEK_DAYS));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrSelectWeekDay.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1474,7 +1474,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrActivityType.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1684,7 +1684,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             arrRepeatMode.add(new RowData(0, "-1", "Repeat On"));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrRepeatMode.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1733,7 +1733,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             arrSelectWeek.add(new RowData(0, "-1", SELECT_WEEK));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrSelectWeek.add(
                     new RowData(i + 1, lookUpId, lookUpName));

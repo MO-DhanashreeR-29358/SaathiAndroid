@@ -274,7 +274,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
-            Disposable subscribe = saathiApi.postLeadView(request)
+            Disposable subscribe = saathiApi.getLeadView(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
@@ -291,13 +291,13 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         }
         LeadViewItem data = uiModel.data;
         if (data != null) {
-            String leadId = stringOrEmpty(data.leadID);
+            String leadId = stringOrEmpty(String.valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
             Contact contact = data.contact;
             LeadOwner = stringOrEmpty(data.leadOwner);
             sourceName = stringOrEmpty(data.sourceName);
             prospectSourceName = stringOrEmpty(data.prospectSource);
-            prospectSourceDetail = stringOrEmpty(data.leadSourceDetailsID);
+            prospectSourceDetail = stringOrEmpty(String.valueOf(data.leadSourceDetailsID));
             oaoUserId = data.oAOUserid;
             List<LeadProductMappingItem> productMapping = data.leadProductMapping;
             if (productMapping.size() != 0) {
@@ -305,9 +305,9 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                     LeadProductMappingItem item = productMapping.get(i);
                     String clientCode = stringOrEmpty(item.clientCode);
                     String stageName = stringOrEmpty(item.stageName);
-                    String isDefault = stringOrEmpty(item.isDefault);
-                    String pendingDays = stringOrEmpty(item.pendingDays);
-                    intrestedIn = stringOrEmpty(item.interestedIn);
+                    String isDefault = stringOrEmpty(String.valueOf(item.isDefault));
+                    String pendingDays = stringOrEmpty(String.valueOf(item.pendingDays));
+                    intrestedIn = stringOrEmpty(String.valueOf(item.interestedIn));
                     if (isDefault.equalsIgnoreCase("true")) {
                         tvClientCode.setText(clientCode);
                         tvCurrentStage.setText(stageName);

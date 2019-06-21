@@ -49,8 +49,8 @@ public class ClientDetail implements MOSLConstants {
 
             name = response.clientName;
             mobile = response.mobile;
-            if (response.leadID != null) {
-                leadId = response.leadID;
+            if (String.valueOf(response.leadID) != null) {
+                leadId = String.valueOf(response.leadID);
             }
 
             if (response.stageName != null) {

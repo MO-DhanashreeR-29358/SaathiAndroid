@@ -14,7 +14,6 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
-import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
@@ -81,7 +80,6 @@ import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
-import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
@@ -137,17 +135,17 @@ interface SaathiApi {
   //========================== Lead View Details ==========================
 
   @POST("Country/GetCountryList")
-  fun postCountryList(): Observable<List<CountryItem>>
+  fun getCountries(): Observable<List<CountryItem>>
 
   @POST("StateProvince/GetStateProvinceList")
-  fun postStateProvinceList(
+  fun getStateProvinces(
     @Body request: StateProvinceRequest
-  ): Observable<SaathiCommonResponse<StateProvinceItem>>
+  ): Observable<List<StateProvinceItem>>
 
   @POST("City/GetCityList")
-  fun postCityList(
+  fun getCityList(
     @Body request: CityListRequest
-  ): Observable<SaathiCommonResponse<CityItem>>
+  ): Observable<List<CityItem>>
 
   @POST("Master/GetAllLookup")
   fun getAllLookup(
@@ -155,81 +153,117 @@ interface SaathiApi {
   ): Observable<List<LookupItem>>
 
   @POST("LeadStatus/GetStatusList")
-  fun postStatusList(
+  fun getStatusList(
     @Body request: StatusRequest
-  ): Observable<SaathiCommonResponse<StatusItem>>
+  ): Observable<List<StatusItem>>
 
   @POST("Lead/GetLeadView")
-  fun postLeadView(
+  fun getLeadView(
     @Body request: LeadViewRequest
   ): Observable<LeadViewItem>
 
   @POST("Lead/UpdateLead")
-  fun postUpdateLead(
+  fun updateLead(
     @Body request: UpdateLeadRequest
-  ): Observable<SaathiCommonResponse<UpdateLeadItem>>
+  ): Observable<UpdateLeadResponse>
 
   @POST("UserApi/AutoCompleteProductSpecialist")
-  fun postProductSpecialist(
+  fun getProductSpecialist(
     @Body request: ProductSpecialistRequest
-  ): Observable<SaathiCommonResponse<ProductSpecialistItem>>
+  ): Observable<List<ProductSpecialistItem>>
 
   @POST("UserApi/GetUserBusinesprofile")
-  fun postUserBusinessProfile(
+  fun getUserBusinessProfile(
     @Body request: UserBusinessProfileRequest
-  ): Observable<SaathiCommonResponse<Any>>
+  ): Observable<List<BusinessProfile>>
 
   @POST("CrossSellingProductMapping/GetCrossSellingProduct")
-  fun postCrossSellingProduct(
+  fun getCrossSellingProduct(
     @Body request: CrossSellingProductRequest
-  ): Observable<CrossSellingProductItem>
+  ): Observable<List<CrossSellingProduct>>
 
   @POST("Lead/InsertLeadProductMapping")
-  fun postInsertLeadProductMapping(
+  fun insertLeadProductMapping(
     @Body request: InsertLeadProductRequest
-  ): Observable<SaathiCommonResponse<InsertLeadProductItem>>
+  ): Observable<List<LeadProductMappingItem>>
 
   @POST("Stage/GetStageList")
-  fun postStageList(
+  fun getStageList(
     @Body request: StageRequest
-  ): Observable<SaathiCommonResponse<StageItem>>
+  ): Observable<List<StageItem>>
 
   @POST("Stage/GetStageMobileSelectList")
-  fun postStageMobile(
+  fun getStageMobileList(
     @Body request: StageMobileRequest
-  ): Observable<SaathiCommonResponse<StageMobileItem>>
+  ): Observable<List<StageMobileItem>>
 
   @POST("Client/GetClientViewByCommand")
-  fun postClientDetail(
+  fun getClientDetail(
     @Body request: ClientDetailRequest
   ): Observable<ClientDetailItem>
 
   @POST("Client/SaveClientProfile")
-  fun postSaveClientProfile(
+  fun saveClientProfile(
     @Body request: ClientProfileRequest
-  ): Observable<SaathiCommonResponse<ClientProfileItem>>
+  ): Observable<ClientProfileResponse>
 
   @POST("Lead/SaveLeadCrossSellingProduct")
-  fun postSaveLeadCrossSellingProduct(
+  fun saveLeadCrossSellingProduct(
     @Body request: SaveLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<SaveLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/DeleteLeadProductMapping")
-  fun postDeleteLeadCrossSellingProduct(
+  fun deleteLeadCrossSellingProduct(
     @Body request: DeleteLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<DeleteLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
-  fun postStageWiseConfigurationByStatus(
+  fun getStageWiseConfigurationByStatus(
     @Body request: ConfigurationByStatusRequest
-  ): Observable<SaathiCommonResponse<Any>>
+  ): Observable<List<StageWiseConfiguration>>
+
+  @POST("Lead/UpdateLeadProductMapping")
+  fun updateLeadProductMapping(
+    @Body request: Map<String, Any>
+  ): Observable<List<LeadProductMappingItem>>
+
+  @GET
+  @ExcludeWrapper
+  fun getClientSummary(
+    @Url url: String,
+    @Query("Userid") userId: String,
+    @Query("ClientUCID") ucid: String
+  ): Observable<ClientSummaryResponse>
+
+  @GET
+  @ExcludeWrapper
+  fun getClientGainLossSummary(
+    @Url url: String,
+    @Query("Userid") userId: String,
+    @Query("ClientUCID") ucid: String
+  ): Observable<ClientGainLossSummaryResponse>
 
   //===================== Create Lead=========================
 
   @POST("Source/GetSourceList")
-  fun postSourceList(
+  fun getSourceList(
     @Body request: SourceListRequest
-  ): Observable<SaathiCommonResponse<SourceListItem>>
+  ): Observable<List<SourceListItem>>
+
+  @POST("LeadSource/GetLeadSourceList")
+  fun getLeadSourceList(
+    @Body request: LeadSourceListRequest
+  ): Observable<List<LeadSourceItem>>
+
+  @POST("Lead/TransferLeadCaughtInC2")
+  fun transferLead(
+    @Body request: TransferLeadRequest
+  ): Observable<SaathiCommonResponse<TransferLeadResponse>>
+
+  @POST("Lead/AddUpdateLead")
+  fun addUpdateLead(
+    @Body request: Any
+  ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
   // ==================== Query ===========================
 

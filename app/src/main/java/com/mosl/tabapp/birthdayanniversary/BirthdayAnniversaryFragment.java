@@ -184,7 +184,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
 
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrProfile.add(new RowData(i + 1, lookUpId, lookUpName));
             }

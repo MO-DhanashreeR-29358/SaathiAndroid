@@ -3,30 +3,17 @@ package com.mosl.saathi.api.model.createlead
 import com.google.gson.annotations.SerializedName
 
 data class SourceListItem(
-
-  @SerializedName("Status") @JvmField val status: Int,
-
-  @SerializedName("CreationDate") @JvmField val creationDate: String,
-
-  @SerializedName("LastModifiedBy") @JvmField val lastModifiedBy: Any,
-
-  @SerializedName("CreatedBy") @JvmField val createdBy: String,
-
-  @SerializedName("IdentifierPropertyName") @JvmField val identifierPropertyName: String,
-
-  @SerializedName("SourceID") @JvmField val sourceID: Int,
-
-  @SerializedName("BusinessUnitID") @JvmField val businessUnitID: Int,
-
-  @SerializedName("SourceName") @JvmField val sourceName: String,
-
-  @SerializedName("Sequence") @JvmField val sequence: Int,
-
-  @SerializedName("InApproval") @JvmField val inApproval: Boolean,
-
-  @SerializedName("ApprovalFieldList") @JvmField val approvalFieldList: Any,
-
-  @SerializedName("LastModificationDate") @JvmField val lastModificationDate: Any,
-
-  @SerializedName("EntityStatus") @JvmField val entityStatus: Int
+  @JvmField @SerializedName("Status") val status: Int,
+  @JvmField @SerializedName("CreationDate") val creationDate: String,
+  @JvmField @SerializedName("LastModifiedBy") val lastModifiedBy: Any,
+  @JvmField @SerializedName("CreatedBy") val createdBy: String,
+  @JvmField @SerializedName("IdentifierPropertyName") val identifierPropertyName: String,
+  @JvmField @SerializedName("SourceID") val sourceID: Int,
+  @JvmField @SerializedName("BusinessUnitID") val businessUnitID: Int,
+  @JvmField @SerializedName("SourceName") val sourceName: String,
+  @JvmField @SerializedName("Sequence") val sequence: Int,
+  @JvmField @SerializedName("InApproval") val inApproval: Boolean,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
+  @JvmField @SerializedName("LastModificationDate") val lastModificationDate: Any,
+  @JvmField @SerializedName("EntityStatus") val entityStatus: Int
 )
