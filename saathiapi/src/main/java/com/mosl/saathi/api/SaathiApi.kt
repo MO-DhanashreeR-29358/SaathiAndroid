@@ -75,6 +75,11 @@ import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
+import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
+import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
+import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
@@ -110,6 +115,7 @@ import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface SaathiApi {
 
@@ -265,6 +271,21 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  //===================== Lead View Activities=========================
+
+  @POST("Meeting/GetMeeting")
+  @ExtraDataWrapper
+  fun getMeetings(@Body request: MeetingRequest): Observable<List<MeetingResponse>>
+
+  @POST("Meeting/GetAppointment")
+  @ExtraDataWrapper
+  fun getAppointments(@Body request: AppointmentRequest): Observable<List<AppointmentResponse>>
+
+  @POST("Meeting/{action}")
+  fun deleteAppointments(
+    @Path("action") action: String,
+    @Body request: DeleteAppointmentRequest
+  ): Observable<String>
   @POST("Lead/GetAddressByLeadId")
   fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
