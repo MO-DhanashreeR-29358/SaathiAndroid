@@ -2,7 +2,6 @@ package com.mosl.tabapp.leadViewDetail;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,33 +16,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.ui.CustomDialog;
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
+import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest;
+import com.mosl.saathi.api.model.leadviewactivities.Filter;
+import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest;
+import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse;
+import com.mosl.saathi.api.model.leadviewactivities.Request;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.NO;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.YES;
-import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -55,26 +52,17 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
     private TextView tvAppointment, tvMeeting, tvNoAppointment, tvNoMeeting;
     private LinearLayout llAppointment, llMeeting;
     private RecyclerView rvAppointment, rvMeeting;
-    private ArrayList<LeadActivitiesAppointModel> appointmentList;
+    private ArrayList<LeadActivitiesAppointModel> appointmentList = new ArrayList<>();
+    private ArrayList<LeadActivitiesMeetingModel> meetingList = new ArrayList<>();
     private AppointmentAdapter appointmentAdapter;
-    private ArrayList<LeadActivitiesMeetingModel> meetingList;
     private MeetingAdapter meetingAdapter;
     private static String leadId;
     Context mContext;
     ViewPager viewPager;
     private static String mUcid;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activitiesView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_lead_activities);
-        setUpView(activitiesView);
-        setUserVisibleHint(true);
-        return activitiesView;
-    }
-
-
-    public static LeadViewActivitiesFragment newInstance(int position, String type, String leadID, String ucid) {
+    public static LeadViewActivitiesFragment newInstance(int position, String type, String leadID,
+        String ucid) {
         LeadViewActivitiesFragment fragment = new LeadViewActivitiesFragment();
         leadId = leadID;
         mUcid = ucid;
@@ -85,6 +73,16 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         args.putString(UCID, ucid);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
+        activitiesView = super.onCreateView(inflater, container, savedInstanceState);
+        attachLayout(R.layout.frag_lead_activities);
+        setUpView(activitiesView);
+        setUserVisibleHint(true);
+        return activitiesView;
     }
 
     public void setViewPager(ViewPager viewPager) {
@@ -107,7 +105,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         tvMeeting.setOnClickListener(this);
         setIcon(llAppointment, tvAppointment);
         setIcon(llMeeting, tvMeeting);
-
     }
 
     @Override
@@ -132,7 +129,6 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && activitiesView != null && viewPager.getCurrentItem() == 1) {
                 appointments();
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,371 +139,142 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
 
     private void meeting() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-//            customProgress.setVisibility(View.VISIBLE);
-            /*{"LeadID":6028,"PageSize":10,"Page":1,"CalculatedPage":0,"TotalCount":0}*/
-            Map inputMap = new HashMap<>();
-            inputMap.put("LeadID", leadId);
-            inputMap.put("PageSize", REPORT_PAGE_SIZE);
-            inputMap.put("Page", "0");
-            inputMap.put("CalculatedPage", "0");
-            inputMap.put("TotalCount", "0");
-            inputMap.put(UCID, mUcid);
-
-            String serviceMethod = "Meeting/GetMeeting";
-
-            try {
-                CRMWebServiceHandler.postWithRequestAndFilterObject(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-                                    meetingList = new ArrayList<>();
-
-                                    JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                    JSONArray dataArray = jsonObject.getJSONArray(DATA);
-                                   /* "Status": 1,
-                                            "MeetingID": 2004,
-                                            "LeadID": 6028,
-                                            "Name": "MS Dhoni",
-                                            "EMAIL": "msdhoni@gmail.com",
-                                            "MOBNO": "8798798797",
-                                            "DATE": "2012-12-22",
-                                            "TIME": "09:55",
-                                            "AttendeeEmp": null,
-                                            "Product": "Offline",
-                                            "StatusName": "Wrong registration - Survey",
-                                            "ActivityType": "Personal Meeting",
-                                            "MeetingReason": "Introduction and Customer Profiling",
-                                            "MeetingDuration": "15 min",
-                                            "Category": null,
-                                            "Actionable": null,
-                                            "Comments": "Tis si si",
-                                            "Stage": "",
-                                            "Callback": "",
-                                            "QueryDesc": "",*/
-
-                                    if (dataArray.length() > 0) {
-                                        for (int i = 0; i < dataArray.length(); i++) {
-                                            JSONObject objDetail = dataArray.getJSONObject(i);
-                                            String Status = (objDetail.isNull(STATUS) || objDetail.getString(STATUS).equals("")) ? "" : objDetail.getString(STATUS);
-                                            String MeetingID = (objDetail.isNull("MeetingID") || objDetail.getString("MeetingID").equals("")) ? "" : objDetail.getString("MeetingID");
-                                            String LeadID = (objDetail.isNull("LeadID") || objDetail.getString("LeadID").equals("")) ? "" : objDetail.getString("LeadID");
-                                            String Name = (objDetail.isNull(NAME) || objDetail.getString(NAME).equals("")) ? "" : objDetail.getString(NAME);
-                                            String EMAIL = (objDetail.isNull("EMAIL") || objDetail.getString("EMAIL").equals("")) ? "" : objDetail.getString("EMAIL");
-                                            String mobNo = (objDetail.isNull(MOBNO) || objDetail.getString(MOBNO).equals("")) ? "" : objDetail.getString(MOBNO);
-                                            String date = (objDetail.isNull("DATE") || objDetail.getString("DATE").equals("")) ? "" : objDetail.getString("DATE");
-                                            String time = (objDetail.isNull("TIME") || objDetail.getString("TIME").equals("")) ? "" : objDetail.getString("TIME");
-                                            String AttendeeEmp = (objDetail.isNull("AttendeeEmp") || objDetail.getString("AttendeeEmp").equals("")) ? "" : objDetail.getString("AttendeeEmp");
-                                            String Product = (objDetail.isNull("Product") || objDetail.getString("Product").equals("")) ? "" : objDetail.getString("Product");
-                                            String StatusName = (objDetail.isNull("StatusName") || objDetail.getString("StatusName").equals("")) ? "" : objDetail.getString("StatusName");
-                                            String ActivityType = (objDetail.isNull("ActivityType") || objDetail.getString("ActivityType").equals("")) ? "" : objDetail.getString("ActivityType");
-                                            String MeetingReason = (objDetail.isNull("MeetingReason") || objDetail.getString("MeetingReason").equals("")) ? "" : objDetail.getString("MeetingReason");
-                                            String MeetingDuration = (objDetail.isNull("MeetingDuration") || objDetail.getString("MeetingDuration").equals("")) ? "" : objDetail.getString("MeetingDuration");
-                                            String Category = (objDetail.isNull("Category") || objDetail.getString("Category").equals("")) ? "" : objDetail.getString("Category");
-                                            String Actionable = (objDetail.isNull("Actionable") || objDetail.getString("Actionable").equals("")) ? "" : objDetail.getString("Actionable");
-                                            String Comments = (objDetail.isNull("Comments") || objDetail.getString("Comments").equals("")) ? "" : objDetail.getString("Comments");
-                                            String Stage = (objDetail.isNull("Stage") || objDetail.getString("Stage").equals("")) ? "" : objDetail.getString("Stage");
-                                            String CSR = (objDetail.isNull("CustomerServiceRemark") || objDetail.getString("CustomerServiceRemark").equals("")) ? "" : objDetail.getString("CustomerServiceRemark");
-                                            String QueryDesc = (objDetail.isNull("QueryDesc") || objDetail.getString("QueryDesc").equals("")) ? "" : objDetail.getString("QueryDesc");
-                                            String MeetingAddress = (objDetail.isNull("MeetingAddress") || objDetail.getString("MeetingAddress").equals("")) ? "" : objDetail.getString("MeetingAddress");
-                                            String Pincode = (objDetail.isNull("Pincode") || objDetail.getString("Pincode").equals("")) ? "" : objDetail.getString("Pincode");
-                                            String TravellingMode = (objDetail.isNull("TravellingMode") || objDetail.getString("TravellingMode").equals("")) ? "" : objDetail.getString("TravellingMode");
-
-                                            String Amount = (objDetail.isNull("Amount") || objDetail.getString("Amount").equals("")) ? "" : objDetail.getString("Amount");
-//                                            String GeoTag = (objDetail.isNull("GeoTag") || objDetail.getString("GeoTag").equals("")) ? "" : objDetail.getString("GeoTag");
-
-                                            String location = (objDetail.isNull("MeetingAddressType") || objDetail.getString("MeetingAddressType").equals("")) ? "" : objDetail.getString("MeetingAddressType");
-                                            String geoMeetingLocation = (objDetail.isNull("Location") || objDetail.getString("Location").equals("")) ? "" : objDetail.getString("Location");
-                                            meetingList.add(new LeadActivitiesMeetingModel(Status, MeetingID, LeadID, Name, EMAIL, mobNo, CRMMOSLCommon.formatMonth(date), time, AttendeeEmp
-                                                    , Product, StatusName, ActivityType, MeetingReason, MeetingDuration, Category, Actionable, Comments, Stage, CSR, QueryDesc, MeetingAddress, Pincode, TravellingMode, Amount, "", location, geoMeetingLocation));
-                                        }
-                                        meetingAdapter = new MeetingAdapter(meetingList);
-                                        RecyclerView.LayoutManager meetingLayoutManager = new LinearLayoutManager(getActivity());
-                                        rvMeeting.setLayoutManager(meetingLayoutManager);
-                                        rvMeeting.setAdapter(meetingAdapter);
-                                        tvNoMeeting.setVisibility(View.GONE);
-                                    } else {
-                                        tvNoMeeting.setVisibility(View.VISIBLE);
-                                    }
-                                } else {
-                                    tvNoMeeting.setVisibility(View.VISIBLE);
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                tvNoMeeting.setVisibility(View.VISIBLE);
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            tvNoMeeting.setVisibility(View.VISIBLE);
-                            e.printStackTrace();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                tvNoMeeting.setVisibility(View.VISIBLE);
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            MeetingRequest request =
+                new MeetingRequest(new Request(leadId, REPORT_PAGE_SIZE, "0", "0", "0", mUcid),
+                    new Filter(null, null, null, null, null, null, null), true);
+            Disposable subscribe = saathiApi.getMeetings(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderMeetings);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
+        }
+    }
 
+    private void renderMeetings(UiModel<List<MeetingResponse>> uiModel) throws ParseException {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+            tvNoMeeting.setVisibility(View.VISIBLE);
+        }
+        List<MeetingResponse> data = uiModel.data;
+        if (data != null) {
+            meetingList.clear();
+            for (int i = 0; i < data.size(); i++) {
+                MeetingResponse item = data.get(i);
+                String status = stringOrEmpty(item.status);
+                String meetingId = stringOrEmpty(item.meetingID);
+                String leadId = stringOrEmpty(item.leadID);
+                String name = stringOrEmpty(item.name);
+                String email = stringOrEmpty(item.eMAIL);
+                String mobNo = stringOrEmpty(item.mOBNO);
+                String date = stringOrEmpty(item.dATE);
+                String time = stringOrEmpty(item.tIME);
+                String attendeeEmp = stringOrEmpty(item.attendeeEmp);
+                String product = stringOrEmpty(item.product);
+                String statusName = stringOrEmpty(item.statusName);
+                String activityType = stringOrEmpty(item.activityType);
+                String meetingReason = stringOrEmpty(item.meetingReason);
+                String meetingDuration = stringOrEmpty(item.meetingDuration);
+                String category = stringOrEmpty(item.category);
+                String actionable = stringOrEmpty(item.actionable);
+                String comments = stringOrEmpty(item.comments);
+                String stage = stringOrEmpty(item.stage);
+                String customerServiceRemark = stringOrEmpty(item.customerServiceRemark);
+                String queryDesc = stringOrEmpty(item.queryDesc);
+                String meetingAddress = stringOrEmpty(item.meetingAddress);
+                String pincode = stringOrEmpty(item.pincode);
+                String travellingMode = stringOrEmpty(item.travellingMode);
+                String amount = stringOrEmpty(item.amount);
+                String location = stringOrEmpty(item.meetingAddressType);
+                String geoMeetingLocation = stringOrEmpty(item.location);
+
+                meetingList.add(
+                    new LeadActivitiesMeetingModel(status, meetingId, leadId, name, email, mobNo,
+                        CRMMOSLCommon.formatMonth(date), time, attendeeEmp
+                        , product, statusName, activityType, meetingReason, meetingDuration,
+                        category, actionable, comments, stage, customerServiceRemark, queryDesc,
+                        meetingAddress, pincode, travellingMode, amount, "", location,
+                        geoMeetingLocation));
+            }
+            meetingAdapter = new MeetingAdapter(meetingList);
+            RecyclerView.LayoutManager meetingLayoutManager =
+                new LinearLayoutManager(getActivity());
+            rvMeeting.setLayoutManager(meetingLayoutManager);
+            rvMeeting.setAdapter(meetingAdapter);
+            tvNoMeeting.setVisibility(View.GONE);
+            if (data.isEmpty()) {
+                tvNoMeeting.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     private void appointments() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put("LeadID", leadId);
-            inputMap.put("PageSize", REPORT_PAGE_SIZE);
-            inputMap.put("Page", "1");
-            inputMap.put("CalculatedPage", "0");
-            inputMap.put("TotalCount", "0");
-            inputMap.put(UCID, mUcid);
-            String serviceMethod = "Meeting/GetAppointment";
-
-            try {
-                CRMWebServiceHandler.postWithRequestAndFilterObject(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                meeting();
-                                if (status.equalsIgnoreCase("true")) {
-                                    appointmentList = new ArrayList<>();
-
-                                    JSONObject jsonObject = response.getJSONObject(RESPONSE);
-                                    JSONArray dataArray = jsonObject.getJSONArray(DATA);
-                                    String repeatOnCode = "";
-                                    if (dataArray.length() > 0) {
-                                        for (int i = 0; i < dataArray.length(); i++) {
-                                            JSONObject objDetail = dataArray.getJSONObject(i);
-                                            String Status = (objDetail.isNull(STATUS) || objDetail.getString(STATUS).equals("")) ? "" : objDetail.getString(STATUS);
-                                            String MeetingID = (objDetail.isNull("MeetingID") || objDetail.getString("MeetingID").equals("")) ? "" : objDetail.getString("MeetingID");
-                                            String LeadID = (objDetail.isNull("LeadID") || objDetail.getString("LeadID").equals("")) ? "" : objDetail.getString("LeadID");
-                                            String Name = (objDetail.isNull(NAME) || objDetail.getString(NAME).equals("")) ? "" : objDetail.getString(NAME);
-                                            String EMAIL = (objDetail.isNull("EMAIL") || objDetail.getString("EMAIL").equals("")) ? "" : objDetail.getString("EMAIL");
-                                            String mobNo = (objDetail.isNull(MOBNO) || objDetail.getString(MOBNO).equals("")) ? "" : objDetail.getString(MOBNO);
-                                            String date = (objDetail.isNull("DATE") || objDetail.getString("DATE").equals("")) ? "" : objDetail.getString("DATE");
-                                            String time = (objDetail.isNull("TIME") || objDetail.getString("TIME").equals("")) ? "" : objDetail.getString("TIME");
-                                            String AttendeeEmp = (objDetail.isNull("AttendeeEmp") || objDetail.getString("AttendeeEmp").equals("")) ? "" : objDetail.getString("AttendeeEmp");
-                                            String Product = (objDetail.isNull("Product") || objDetail.getString("Product").equals("")) ? "" : objDetail.getString("Product");
-                                            String StatusName = (objDetail.isNull("StatusName") || objDetail.getString("StatusName").equals("")) ? "" : objDetail.getString("StatusName");
-                                            String ActivityType = (objDetail.isNull("ActivityType") || objDetail.getString("ActivityType").equals("")) ? "" : objDetail.getString("ActivityType");
-                                            String ucid = (objDetail.isNull(UCID) || objDetail.getString(UCID).equals("")) ? "" : objDetail.getString(UCID);
-                                            String CreatedBy = (objDetail.isNull("CreatedBy") || objDetail.getString("CreatedBy").equals("")) ? "" : objDetail.getString("CreatedBy");
-                                            if (objDetail.has("repeatOnCode")) {
-                                                repeatOnCode = (objDetail.isNull("repeatOnCode") || objDetail.getString("repeatOnCode").equals("")) ? "" : objDetail.getString("repeatOnCode");
-                                            }
-
-                                            appointmentList.add(new LeadActivitiesAppointModel(CreatedBy, Status, MeetingID, LeadID, Name, EMAIL, mobNo, CRMMOSLCommon.formatMonth(date), time, AttendeeEmp
-                                                    , Product, StatusName, ActivityType, ucid, repeatOnCode));
-                                        }
-                                        appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                                        rvAppointment.setLayoutManager(mLayoutManager);
-                                        rvAppointment.setAdapter(appointmentAdapter);
-                                        tvNoAppointment.setVisibility(View.GONE);
-                                    } else {
-
-                                        tvNoAppointment.setVisibility(View.VISIBLE);
-                                    }
-                                } else {
-                                    tvNoAppointment.setVisibility(View.VISIBLE);
-                                    appointmentList = new ArrayList<>();
-                                    appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                                    rvAppointment.setLayoutManager(mLayoutManager);
-                                    rvAppointment.setAdapter(appointmentAdapter);
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                meeting();
-                                tvNoAppointment.setVisibility(View.VISIBLE);
-                                appointmentList = new ArrayList<>();
-                                appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                                rvAppointment.setLayoutManager(mLayoutManager);
-                                rvAppointment.setAdapter(appointmentAdapter);
-                                hideProgress();
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            meeting();
-                            tvNoAppointment.setVisibility(View.VISIBLE);
-                            appointmentList = new ArrayList<>();
-                            appointmentAdapter = new AppointmentAdapter(appointmentList);
-                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                            rvAppointment.setLayoutManager(mLayoutManager);
-                            rvAppointment.setAdapter(appointmentAdapter);
-                            e.printStackTrace();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                meeting();
-                                tvNoAppointment.setVisibility(View.VISIBLE);
-                                appointmentList = new ArrayList<>();
-                                appointmentAdapter = new AppointmentAdapter(appointmentList);
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-                                rvAppointment.setLayoutManager(mLayoutManager);
-                                rvAppointment.setAdapter(appointmentAdapter);
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            meeting();
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        meeting();
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        meeting();
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                meeting();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
+            AppointmentRequest request =
+                new AppointmentRequest(new Request(leadId, REPORT_PAGE_SIZE, "1", "0", "0", mUcid),
+                    new Filter(null, null, null, null, null, null, null), true);
+            Disposable subscribe = saathiApi.getAppointments(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderAppointments);
         } else {
-            meeting();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                INTERNET_CONNECTION, "OK", true, null);
+        }
+    }
 
+    private void renderAppointments(UiModel<List<AppointmentResponse>> uiModel)
+        throws ParseException {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+            tvNoMeeting.setVisibility(View.VISIBLE);
+        }
+        List<AppointmentResponse> data = uiModel.data;
+        if (data != null) {
+            meeting();
+            appointmentList.clear();
+            for (int i = 0; i < data.size(); i++) {
+                AppointmentResponse item = data.get(i);
+
+                String status = stringOrEmpty(item.status);
+                String meetingId = stringOrEmpty(item.meetingID);
+                String leadId = stringOrEmpty(item.leadID);
+                String name = stringOrEmpty(item.name);
+                String email = stringOrEmpty(item.eMAIL);
+                String mobNo = stringOrEmpty(item.mOBNO);
+                String date = stringOrEmpty(item.dATE);
+                String time = stringOrEmpty(item.tIME);
+                String attendeeEmp = stringOrEmpty(item.attendeeEmp);
+                String product = stringOrEmpty(item.product);
+                String statusName = stringOrEmpty(item.statusName);
+                String activityType = stringOrEmpty(item.activityType);
+                String ucid = stringOrEmpty(item.ucid);
+                String createdBy = stringOrEmpty(item.createdBy);
+                String repeatOnCode = stringOrEmpty(item.repeatOnCode);
+
+                appointmentList.add(
+                    new LeadActivitiesAppointModel(createdBy,
+                        status, meetingId, leadId, name, email,
+                        mobNo, CRMMOSLCommon.formatMonth(date),
+                        time, attendeeEmp
+                        , product, statusName, activityType, ucid,
+                        repeatOnCode));
+            }
+            appointmentAdapter =
+                new AppointmentAdapter(appointmentList);
+            RecyclerView.LayoutManager mLayoutManager =
+                new LinearLayoutManager(getActivity());
+            rvAppointment.setLayoutManager(mLayoutManager);
+            rvAppointment.setAdapter(appointmentAdapter);
+            tvNoAppointment.setVisibility(View.GONE);
+            if (data.isEmpty()) {
+                tvNoAppointment.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -521,93 +288,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 toggleSectionExpansion(llMeeting, tvMeeting);
                 break;
         }
-
     }
-
-
-    public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.MyViewHolder1> {
-
-        private List<LeadActivitiesAppointModel> appointmentList;
-
-        public class MyViewHolder1 extends RecyclerView.ViewHolder {
-            public TextView tvAppointmentType, tvMonthName, tvMonthDate, tvMonthYear, tvTimeRange, tvAttFirstName, tvAttSecondName, tvAttThirdName;
-            public ImageView ivRightArrow;
-            RelativeLayout relativeLayout;
-
-            public MyViewHolder1(View view) {
-                super(view);
-                tvMonthName = (TextView) view.findViewById(R.id.tvMonthName);
-                tvMonthDate = (TextView) view.findViewById(R.id.tvMonthDate);
-                tvMonthYear = (TextView) view.findViewById(R.id.tvMonthYear);
-                tvTimeRange = (TextView) view.findViewById(R.id.tvTimeRange);
-                tvAttFirstName = (TextView) view.findViewById(R.id.tvAttFirstName);
-                tvAttSecondName = (TextView) view.findViewById(R.id.tvAttSecondName);
-                tvAttThirdName = (TextView) view.findViewById(R.id.tvAttThirdName);
-                ivRightArrow = (ImageView) view.findViewById(R.id.ivRightArrow);
-                relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
-                tvAppointmentType = (TextView) view.findViewById(R.id.tvAppointmentType);
-            }
-        }
-
-
-        public AppointmentAdapter(List<LeadActivitiesAppointModel> appointmentList) {
-            this.appointmentList = appointmentList;
-        }
-
-        @Override
-        public AppointmentAdapter.MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_meetings, parent, false);
-
-            return new MyViewHolder1(itemView);
-        }
-
-        @Override
-        public void onBindViewHolder(MyViewHolder1 holder, int position) {
-            final LeadActivitiesAppointModel appointmentModel = appointmentList.get(position);
-            String metadataArray[] = appointmentModel.getDate().toString().split(" ");
-            holder.tvMonthName.setText(metadataArray[1]);
-            holder.tvMonthDate.setText(metadataArray[0]);
-            holder.tvMonthYear.setText(metadataArray[2]);
-            holder.tvTimeRange.setText(appointmentModel.getTime());
-            holder.tvAttFirstName.setText(appointmentModel.getAttendeeEmp());
-            holder.tvAppointmentType.setText("Appointment for " + appointmentModel.getProduct());
-            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (AccountDetails.getEmployeeCode().equalsIgnoreCase(appointmentModel.getCreatedBy())) {
-                        leadViewDialog(appointmentModel);
-                    }
-
-                }
-            });
-
-        }
-
-        public LeadActivitiesAppointModel getDocumentById(String meetingId) {
-            for (LeadActivitiesAppointModel model : appointmentList) {
-                if (model.getMeetingid().equals(meetingId)) {
-                    return model;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public int getItemCount() {
-            return appointmentList.size();
-        }
-
-        public void deleteAppointment(String meetingId) {
-            LeadActivitiesAppointModel model = getDocumentById(meetingId);
-            appointmentList.remove(model);
-            notifyDataSetChanged();
-            if (appointmentList.size() == 0) {
-                tvNoAppointment.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
 
     private void leadViewDialog(final LeadActivitiesAppointModel appointmentModel) {
         final Dialog dialog = new Dialog(getMainActivity());
@@ -615,7 +296,8 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_appointments);
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
 
         ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
@@ -628,7 +310,8 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         Date apptDate = CRMAppUtil.getDate(dateStr + " " + timeStr, "dd MMM yyyy h:mma");
 
         if (CRMAppUtil.isBeforeDate(apptDate)) {
-            ivUpdateMeeting.setVisibility(View.VISIBLE);//updaet meeting allowed only when appointment date is less than current date
+            ivUpdateMeeting.setVisibility(
+                View.VISIBLE);//updaet meeting allowed only when appointment date is less than current date
         } else {
             ivUpdateMeeting.setVisibility(View.GONE);
         }
@@ -649,37 +332,38 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             @Override
             public void onClick(View view) {
                 if (CRMAppUtil.isBlank(appointmentModel.getRepeatOnCode())) {
-                    CustomDialog addSelDialog = new CustomDialog(getContext(), "Are you sure you want to cancel this appointment ?", true, true, true, "Cancel Appointment", YES, NO, new CustomDialog.CustomDialogListener() {
+                    CustomDialog addSelDialog = new CustomDialog(getContext(),
+                        "Are you sure you want to cancel this appointment ?", true, true, true,
+                        "Cancel Appointment", YES, NO, new CustomDialog.CustomDialogListener() {
                         @Override
                         public void dialogAction(MOSLCommon.Action action, Object... data) {
                             if (action == MOSLCommon.Action.OK) {
-                                deleteAppintments(appointmentModel.getMeetingid(), "DeactivateMeeting");
-
-
+                                deleteAppintments(appointmentModel.getMeetingid(),
+                                    "DeactivateMeeting");
                             }
                         }
                     });
                     dialog.dismiss();
                     addSelDialog.show();
                 } else {
-                    CustomDialog addSelDialog = new CustomDialog(getContext(), "Are you sure you want to cancel this appointment ?", true, true, true, "Cancel Appointment", "Current", "All", new CustomDialog.CustomDialogListener() {
-                        @Override
-                        public void dialogAction(MOSLCommon.Action action, Object... data) {
-                            if (action == MOSLCommon.Action.OK) {
-                                deleteAppintments(appointmentModel.getMeetingid(), "DeactivateMeeting");
-
-                            } else if (action == MOSLCommon.Action.NO) {
-                                deleteAppintments(appointmentModel.getMeetingid(), "DeactivateALLMeeting");
-
-
+                    CustomDialog addSelDialog = new CustomDialog(getContext(),
+                        "Are you sure you want to cancel this appointment ?", true, true, true,
+                        "Cancel Appointment", "Current", "All",
+                        new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void dialogAction(MOSLCommon.Action action, Object... data) {
+                                if (action == MOSLCommon.Action.OK) {
+                                    deleteAppintments(appointmentModel.getMeetingid(),
+                                        "DeactivateMeeting");
+                                } else if (action == MOSLCommon.Action.NO) {
+                                    deleteAppintments(appointmentModel.getMeetingid(),
+                                        "DeactivateALLMeeting");
+                                }
                             }
-                        }
-                    });
+                        });
                     dialog.dismiss();
                     addSelDialog.show();
-
                 }
-
 
                 //deleteAppintments(appointmentModel.getMeetingid());
                 //dialog.dismiss();
@@ -723,148 +407,133 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             }
         });
         dialog.show();
-
     }
 
     public void deleteAppintments(final String meetingId, String url) {
         //login parameters
-
-        if (CRMAppUtil.isNetworkEnabled(getActivity())) {
-            showProgress();
-
-            String serviceMethod = "Meeting/" + url;
-            String tmpReq = String.format(ID_OBJECT, meetingId);
-
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject json) {
-                        super.onSuccess(statusCode, headers, json);
-
-                        if (statusCode == 200) {
-                            try {
-                                String status = json.getString(STATUS);
-                                hideProgress();
-                                if (!isBlank(status) && status.equalsIgnoreCase("true")) {
-                                    appointmentAdapter.deleteAppointment(meetingId);
-                                    alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), APPT_CANCELLED, "OK", true, new MSFDialog.DialogListener() {
-                                        @Override
-                                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                            if (action == MSFDialog.Action.OK) {
-
-                                            }
-                                        }
-                                    });
-
-                                } else {
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(json);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-                            } catch (Exception ex) {
-                                hideProgress();
-                                ex.printStackTrace();
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                            }
-                        } else {
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            DeleteAppointmentRequest request =
+                new DeleteAppointmentRequest(meetingId);
+            Disposable subscribe = saathiApi.deleteAppointments(url, request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(uiModel -> {
+                    renderDeleteAppointments(uiModel, meetingId);
                 });
-            } catch (Exception e) {
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
-
         } else {
             hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
+            MSFDialog.alertDialog(getMainActivity(), 0,
+                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+                null);
         }
     }
 
+    private void renderDeleteAppointments(UiModel<String> uiModel, String meetingId) {
+        toggleProgress(uiModel.inProgress);
 
-    public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder1> {
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
 
-        private List<LeadActivitiesMeetingModel> meetingList;
+        String data = uiModel.data;
+        if (data != null) {
+            appointmentAdapter.deleteAppointment(meetingId);
+            alertDialog(getActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
+                APPT_CANCELLED, "OK", true,
+                (action, data1) -> {
+                    if (action == MSFDialog.Action.OK) {
+
+                    }
+                });
+        }
+    }
+
+    public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.MyViewHolder1> {
+
+        private List<LeadActivitiesAppointModel> appointmentList;
+
+        public AppointmentAdapter(List<LeadActivitiesAppointModel> appointmentList) {
+            this.appointmentList = appointmentList;
+        }
+
+        @Override
+        public AppointmentAdapter.MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_meetings, parent, false);
+
+            return new MyViewHolder1(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(MyViewHolder1 holder, int position) {
+            final LeadActivitiesAppointModel appointmentModel = appointmentList.get(position);
+            String metadataArray[] = appointmentModel.getDate().toString().split(" ");
+            holder.tvMonthName.setText(metadataArray[1]);
+            holder.tvMonthDate.setText(metadataArray[0]);
+            holder.tvMonthYear.setText(metadataArray[2]);
+            holder.tvTimeRange.setText(appointmentModel.getTime());
+            holder.tvAttFirstName.setText(appointmentModel.getAttendeeEmp());
+            holder.tvAppointmentType.setText("Appointment for " + appointmentModel.getProduct());
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (AccountDetails.getEmployeeCode()
+                        .equalsIgnoreCase(appointmentModel.getCreatedBy())) {
+                        leadViewDialog(appointmentModel);
+                    }
+                }
+            });
+        }
+
+        public LeadActivitiesAppointModel getDocumentById(String meetingId) {
+            for (LeadActivitiesAppointModel model : appointmentList) {
+                if (model.getMeetingid().equals(meetingId)) {
+                    return model;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public int getItemCount() {
+            return appointmentList.size();
+        }
+
+        public void deleteAppointment(String meetingId) {
+            LeadActivitiesAppointModel model = getDocumentById(meetingId);
+            appointmentList.remove(model);
+            notifyDataSetChanged();
+            if (appointmentList.size() == 0) {
+                tvNoAppointment.setVisibility(View.VISIBLE);
+            }
+        }
 
         public class MyViewHolder1 extends RecyclerView.ViewHolder {
-            public TextView tvMonthName, tvMonthDate, tvMonthYear, tvAppointmentType, tvTimeRange, tvAttFirstName, tvAttSecondName, tvAttThirdName;
+            public TextView tvAppointmentType, tvMonthName, tvMonthDate, tvMonthYear, tvTimeRange,
+                tvAttFirstName, tvAttSecondName, tvAttThirdName;
             public ImageView ivRightArrow;
-            public RelativeLayout relativeLayout;
+            RelativeLayout relativeLayout;
 
             public MyViewHolder1(View view) {
                 super(view);
                 tvMonthName = (TextView) view.findViewById(R.id.tvMonthName);
                 tvMonthDate = (TextView) view.findViewById(R.id.tvMonthDate);
                 tvMonthYear = (TextView) view.findViewById(R.id.tvMonthYear);
-                tvAppointmentType = (TextView) view.findViewById(R.id.tvAppointmentType);
                 tvTimeRange = (TextView) view.findViewById(R.id.tvTimeRange);
                 tvAttFirstName = (TextView) view.findViewById(R.id.tvAttFirstName);
                 tvAttSecondName = (TextView) view.findViewById(R.id.tvAttSecondName);
                 tvAttThirdName = (TextView) view.findViewById(R.id.tvAttThirdName);
                 ivRightArrow = (ImageView) view.findViewById(R.id.ivRightArrow);
                 relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
+                tvAppointmentType = (TextView) view.findViewById(R.id.tvAppointmentType);
             }
         }
+    }
 
+    public class MeetingAdapter extends RecyclerView.Adapter<MeetingAdapter.MyViewHolder1> {
+
+        private List<LeadActivitiesMeetingModel> meetingList;
 
         public MeetingAdapter(List<LeadActivitiesMeetingModel> meetingList) {
             this.meetingList = meetingList;
@@ -873,7 +542,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         @Override
         public MyViewHolder1 onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_meetings, parent, false);
+                .inflate(R.layout.list_meetings, parent, false);
 
             return new MyViewHolder1(itemView);
         }
@@ -917,12 +586,32 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                     args.putString("Pincode", meetingModel.getPincode());
                     args.putString("TravellingMode", meetingModel.getTravellingMode());
                     args.putString("Amount", meetingModel.getAmount());
-//                    args.putString("GeoTagStatus", meetingModel.getGeoTagStatus());
+                    //                    args.putString("GeoTagStatus", meetingModel.getGeoTagStatus());
                     args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
                     navigateTo(NAV_TO_LEAD_ACTIVITIES_DETAIL, args, getFragmentManager(), true);
                 }
             });
+        }
 
+        public class MyViewHolder1 extends RecyclerView.ViewHolder {
+            public TextView tvMonthName, tvMonthDate, tvMonthYear, tvAppointmentType, tvTimeRange,
+                tvAttFirstName, tvAttSecondName, tvAttThirdName;
+            public ImageView ivRightArrow;
+            public RelativeLayout relativeLayout;
+
+            public MyViewHolder1(View view) {
+                super(view);
+                tvMonthName = (TextView) view.findViewById(R.id.tvMonthName);
+                tvMonthDate = (TextView) view.findViewById(R.id.tvMonthDate);
+                tvMonthYear = (TextView) view.findViewById(R.id.tvMonthYear);
+                tvAppointmentType = (TextView) view.findViewById(R.id.tvAppointmentType);
+                tvTimeRange = (TextView) view.findViewById(R.id.tvTimeRange);
+                tvAttFirstName = (TextView) view.findViewById(R.id.tvAttFirstName);
+                tvAttSecondName = (TextView) view.findViewById(R.id.tvAttSecondName);
+                tvAttThirdName = (TextView) view.findViewById(R.id.tvAttThirdName);
+                ivRightArrow = (ImageView) view.findViewById(R.id.ivRightArrow);
+                relativeLayout = (RelativeLayout) view.findViewById(R.id.relativeLayout);
+            }
         }
 
         @Override
@@ -930,6 +619,4 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             return meetingList.size();
         }
     }
-
-
 }
