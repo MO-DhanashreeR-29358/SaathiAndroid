@@ -1026,9 +1026,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderMeetingById);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1074,9 +1072,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderCategory(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1124,10 +1120,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderProduct(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1181,9 +1174,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderSubcategory(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1232,9 +1223,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderMeetingDuration(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1277,9 +1266,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderMeetingObjective);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1330,9 +1317,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderActivityType(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1383,9 +1368,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderMeetingReason(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1427,9 +1410,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderBaClient);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1472,9 +1453,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderOutStation);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1523,9 +1502,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     renderActionables(uiModelList, id);
                 });
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1855,9 +1832,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                                     return filterResults;
                                 }
                             } else {
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
@@ -2000,10 +1975,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                                     filterResults.count = modelList.size();
                                 }
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true,
-                                    null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
