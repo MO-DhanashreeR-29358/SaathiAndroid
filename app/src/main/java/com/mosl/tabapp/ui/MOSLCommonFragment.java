@@ -3,6 +3,7 @@ package com.mosl.tabapp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import com.google.gson.Gson;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.core.rx.Dispatchers;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -34,7 +36,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.smt.SMTFragment;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.AppProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
 import timber.log.Timber;
@@ -45,7 +47,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     private FrameLayout mLinearContainerView;
     public CompositeDisposable compositeDisposable;
     public final Dispatchers dispatchers = DispatchersKt.RxDispatchers;
-    public final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
+    public final SaathiApi saathiApi = AppProvider.getSaathiApi();
+    public final Gson gson = AppProvider.getGson();
 
     public MOSLCommonFragment() {
         super();
@@ -205,13 +208,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         }
     }
 
-    public String getErrorOnFailure(Throwable t) {
-        if (t instanceof ServiceFailureException) {
-            return ((ServiceFailureException) t).errorMessage;
-        } else {
-            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
-        }
-    }
+
 
     public void showOnFailurePopup(Throwable t) {
         Timber.e(t);
@@ -220,11 +217,25 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
             getErrorOnFailure(t), "OK", true, null);
     }
 
+    public String getErrorOnFailure(Throwable t) {
+        if (t instanceof ServiceFailureException) {
+            return ((ServiceFailureException) t).errorMessage;
+        } else {
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+    }
+
+    @NonNull
     public String stringOrEmpty(@Nullable String input) {
+        return stringOrDefault(input, "");
+    }
+
+    @NonNull
+    public String stringOrDefault(@Nullable String input, @NonNull String defaultVal) {
         if (input != null) {
             return input;
         } else {
-            return "";
+            return defaultVal;
         }
     }
 

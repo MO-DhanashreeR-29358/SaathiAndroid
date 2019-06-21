@@ -1154,8 +1154,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
     private void getClientDetail(String ucid) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             ClientDetailRequest request =
-                new ClientDetailRequest(ucid);
-            Disposable subscribe = saathiApi.postClientDetail(request)
+                new ClientDetailRequest(Integer.valueOf(ucid));
+            Disposable subscribe = saathiApi.getClientDetail(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
@@ -1195,7 +1195,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
-            Disposable subscribe = saathiApi.postLeadView(request)
+            Disposable subscribe = saathiApi.getLeadView(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
@@ -1214,7 +1214,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         }
         LeadViewItem data = uiModel.data;
         if (data != null) {
-            String leadId = stringOrEmpty(data.leadID);
+            String leadId = stringOrEmpty(String.valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
             Contact contact = data.contact;
             String name = stringOrEmpty(contact.name);
@@ -1226,8 +1226,8 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 LeadProductMappingItem item = leadProductMapping.get(i);
                 String clientCode = stringOrEmpty(item.clientCode);
                 String stageName = stringOrEmpty(item.stageName);
-                String isDefault = stringOrEmpty(item.isDefault);
-                String pendingDays = stringOrEmpty(item.pendingDays);
+                String isDefault = stringOrEmpty(String.valueOf(item.isDefault));
+                String pendingDays = stringOrEmpty(String.valueOf(item.pendingDays));
                 if (isDefault.equalsIgnoreCase("true")) {
                     tvClientCode.setText(clientCode);
                     tvCurrentStage.setText(stageName);
@@ -1269,7 +1269,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrCategory.add(new RowData(0, "-1", SELECT_CATEGORY));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrCategory.add(new RowData(i + 1, lookUpId, lookUpName));
             }
@@ -1311,7 +1311,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrMeetingObjective.add(new RowData(0, "-1", SELECT_MEETING_OBJECTIVE));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
 
                 arrMeetingObjective.add(
@@ -1365,7 +1365,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             }
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
 
                 arrSubCategory.add(
@@ -1411,7 +1411,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrSelectProduct.add(new RowData(0, "-1", SELECT_PRODUCT));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrSelectProduct.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1455,7 +1455,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrMeetingDuration.add(new RowData(0, "-1", SELECT_MEETING_DURATION));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrMeetingDuration.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1501,7 +1501,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrActivityType.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1547,7 +1547,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrMeetingReason.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1593,7 +1593,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrBAClient.add(new RowData(0, "-1", SELECT_BA_CLIENT_MEETING));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrBAClient.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1638,7 +1638,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrOutStation.add(new RowData(0, "-1", SELECT_BA_CLIENT_MEETING));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrOutStation.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1683,7 +1683,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrActionables.add(new RowData(0, "-1", SELECT_ACTIONABLES));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrActionables.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1728,7 +1728,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             arrMeetingLocation.add(new RowData(0, "-1", SELECT_MEETING_LOCATION));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrMeetingLocation.add(
                     new RowData(i + 1, lookUpId, lookUpName));
@@ -1800,7 +1800,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 new RowData(0, "-1", SELECT_TRAVELLING_MODE));
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
-                String lookUpId = stringOrEmpty(item.lookUpid);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrTravellingMode.add(
                     new RowData(i + 1, lookUpId, lookUpName));

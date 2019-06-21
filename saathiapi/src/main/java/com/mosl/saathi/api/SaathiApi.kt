@@ -12,23 +12,25 @@ import com.mosl.saathi.api.model.calender.CalenderItem
 import com.mosl.saathi.api.model.calender.CalenderRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
-import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.LeadSourceItem
+import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
-import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
-import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
@@ -52,12 +54,16 @@ import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
 import com.mosl.saathi.api.model.documents.UploadDocumentItem
 import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
+import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
+import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
+import com.mosl.saathi.api.model.lead.ClientSummaryResponse
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
 import com.mosl.saathi.api.model.lead.CountryItem
-import com.mosl.saathi.api.model.lead.InsertLeadProductItem
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -66,12 +72,13 @@ import com.mosl.saathi.api.model.lead.StageItem
 import com.mosl.saathi.api.model.lead.StageMobileItem
 import com.mosl.saathi.api.model.lead.StageMobileRequest
 import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StageWiseConfiguration
 import com.mosl.saathi.api.model.lead.StateProvinceItem
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
 import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
-import com.mosl.saathi.api.model.lead.UpdateLeadItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
@@ -109,7 +116,10 @@ import com.mosl.saathi.api.model.splash.VersionResponse
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface SaathiApi {
 
@@ -129,17 +139,17 @@ interface SaathiApi {
   //========================== Lead View Details ==========================
 
   @POST("Country/GetCountryList")
-  fun postCountryList(): Observable<List<CountryItem>>
+  fun getCountries(): Observable<List<CountryItem>>
 
   @POST("StateProvince/GetStateProvinceList")
-  fun postStateProvinceList(
+  fun getStateProvinces(
     @Body request: StateProvinceRequest
-  ): Observable<SaathiCommonResponse<StateProvinceItem>>
+  ): Observable<List<StateProvinceItem>>
 
   @POST("City/GetCityList")
-  fun postCityList(
+  fun getCityList(
     @Body request: CityListRequest
-  ): Observable<SaathiCommonResponse<CityItem>>
+  ): Observable<List<CityItem>>
 
   @POST("Master/GetAllLookup")
   fun getAllLookup(
@@ -147,81 +157,117 @@ interface SaathiApi {
   ): Observable<List<LookupItem>>
 
   @POST("LeadStatus/GetStatusList")
-  fun postStatusList(
+  fun getStatusList(
     @Body request: StatusRequest
-  ): Observable<SaathiCommonResponse<StatusItem>>
+  ): Observable<List<StatusItem>>
 
   @POST("Lead/GetLeadView")
-  fun postLeadView(
+  fun getLeadView(
     @Body request: LeadViewRequest
   ): Observable<LeadViewItem>
 
   @POST("Lead/UpdateLead")
-  fun postUpdateLead(
+  fun updateLead(
     @Body request: UpdateLeadRequest
-  ): Observable<SaathiCommonResponse<UpdateLeadItem>>
+  ): Observable<UpdateLeadResponse>
 
   @POST("UserApi/AutoCompleteProductSpecialist")
-  fun postProductSpecialist(
+  fun getProductSpecialist(
     @Body request: ProductSpecialistRequest
-  ): Observable<SaathiCommonResponse<ProductSpecialistItem>>
+  ): Observable<List<ProductSpecialistItem>>
 
   @POST("UserApi/GetUserBusinesprofile")
-  fun postUserBusinessProfile(
+  fun getUserBusinessProfile(
     @Body request: UserBusinessProfileRequest
-  ): Observable<SaathiCommonResponse<Any>>
+  ): Observable<List<BusinessProfile>>
 
   @POST("CrossSellingProductMapping/GetCrossSellingProduct")
-  fun postCrossSellingProduct(
+  fun getCrossSellingProduct(
     @Body request: CrossSellingProductRequest
-  ): Observable<CrossSellingProductItem>
+  ): Observable<List<CrossSellingProduct>>
 
   @POST("Lead/InsertLeadProductMapping")
-  fun postInsertLeadProductMapping(
+  fun insertLeadProductMapping(
     @Body request: InsertLeadProductRequest
-  ): Observable<SaathiCommonResponse<InsertLeadProductItem>>
+  ): Observable<List<LeadProductMappingItem>>
 
   @POST("Stage/GetStageList")
-  fun postStageList(
+  fun getStageList(
     @Body request: StageRequest
-  ): Observable<SaathiCommonResponse<StageItem>>
+  ): Observable<List<StageItem>>
 
   @POST("Stage/GetStageMobileSelectList")
-  fun postStageMobile(
+  fun getStageMobileList(
     @Body request: StageMobileRequest
-  ): Observable<SaathiCommonResponse<StageMobileItem>>
+  ): Observable<List<StageMobileItem>>
 
   @POST("Client/GetClientViewByCommand")
-  fun postClientDetail(
+  fun getClientDetail(
     @Body request: ClientDetailRequest
   ): Observable<ClientDetailItem>
 
   @POST("Client/SaveClientProfile")
-  fun postSaveClientProfile(
+  fun saveClientProfile(
     @Body request: ClientProfileRequest
-  ): Observable<SaathiCommonResponse<ClientProfileItem>>
+  ): Observable<ClientProfileResponse>
 
   @POST("Lead/SaveLeadCrossSellingProduct")
-  fun postSaveLeadCrossSellingProduct(
+  fun saveLeadCrossSellingProduct(
     @Body request: SaveLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<SaveLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/DeleteLeadProductMapping")
-  fun postDeleteLeadCrossSellingProduct(
+  fun deleteLeadCrossSellingProduct(
     @Body request: DeleteLeadCrossSellingProductRequest
-  ): Observable<SaathiCommonResponse<DeleteLeadCrossSellingProductItem>>
+  ): Observable<Any>
 
   @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
-  fun postStageWiseConfigurationByStatus(
+  fun getStageWiseConfigurationByStatus(
     @Body request: ConfigurationByStatusRequest
-  ): Observable<SaathiCommonResponse<Any>>
+  ): Observable<List<StageWiseConfiguration>>
+
+  @POST("Lead/UpdateLeadProductMapping")
+  fun updateLeadProductMapping(
+    @Body request: Map<String, Any>
+  ): Observable<List<LeadProductMappingItem>>
+
+  @GET
+  @ExcludeWrapper
+  fun getClientSummary(
+    @Url url: String,
+    @Query("Userid") userId: String,
+    @Query("ClientUCID") ucid: String
+  ): Observable<ClientSummaryResponse>
+
+  @GET
+  @ExcludeWrapper
+  fun getClientGainLossSummary(
+    @Url url: String,
+    @Query("Userid") userId: String,
+    @Query("ClientUCID") ucid: String
+  ): Observable<ClientGainLossSummaryResponse>
 
   //===================== Create Lead=========================
 
   @POST("Source/GetSourceList")
-  fun postSourceList(
+  fun getSourceList(
     @Body request: SourceListRequest
-  ): Observable<SaathiCommonResponse<SourceListItem>>
+  ): Observable<List<SourceListItem>>
+
+  @POST("LeadSource/GetLeadSourceList")
+  fun getLeadSourceList(
+    @Body request: LeadSourceListRequest
+  ): Observable<List<LeadSourceItem>>
+
+  @POST("Lead/TransferLeadCaughtInC2")
+  fun transferLead(
+    @Body request: TransferLeadRequest
+  ): Observable<SaathiCommonResponse<TransferLeadResponse>>
+
+  @POST("Lead/AddUpdateLead")
+  fun addUpdateLead(
+    @Body request: Any
+  ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
   // ==================== Query ===========================
 
