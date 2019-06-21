@@ -3035,15 +3035,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             getJsonSafeString(etAdd1.getText().toString().trim()),
             getJsonSafeString(etAdd2.getText().toString().trim()),
             getJsonSafeString(etAdd3.getText().toString().trim()), countryCodeStr,
-            ((RowData) spState.getSelectedItem()).getKey(),
-            ((RowData) spCity.getSelectedItem()).getKey(), etPincode.getText().toString().trim(),
+            stateCodeStr,
+            cityCodeStr, etPincode.getText().toString().trim(),
             cbPrimaryAddress.isChecked(), AccountDetails.getBusinessUnitId()));
         addressDetailList.add(new AddressDetailModel(OFFICEADDRESS,
             getJsonSafeString(etOffAdd1.getText().toString().trim()),
             getJsonSafeString(etOffAdd2.getText().toString().trim()),
             getJsonSafeString(etOffAdd3.getText().toString().trim()), offCountryCodeStr,
-            ((RowData) spOffState.getSelectedItem()).getKey(),
-            ((RowData) spOffCity.getSelectedItem()).getKey(),
+            stateCodeStr,
+            cityCodeStr,
             etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
             AccountDetails.getBusinessUnitId()));
 
