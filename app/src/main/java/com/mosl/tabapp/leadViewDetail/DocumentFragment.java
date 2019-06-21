@@ -430,10 +430,6 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                     return;
                 }
             }
-            Map headerMap = getUploadHeader(getContext());
-            headerMap.put("LeadId", leadId);
-            headerMap.put(UCID, ucid);
-            headerMap.put("filename", fileName.replace(":", "a"));
 
             String strData = getBase64String(is).toString();
             if (CRMAppUtil.isSizeAbove(strData.length())) {
@@ -480,10 +476,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                     renderUpdatedocuments(uiModel, id, documentName);
                 });
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -517,10 +510,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                     renderDeleteDocument(uiModel, id);
                 });
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
