@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Vijay on 10/03/2017.
@@ -209,9 +208,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -221,6 +218,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         Throwable error = uiModel.error;
         if (error != null) {
             showOnFailurePopup(error);
+            CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
         }
         String data = uiModel.data;
         if (data != null) {
@@ -242,9 +240,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientViewByCommand);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -282,9 +278,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -522,9 +516,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderSuggestMe);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
