@@ -4,36 +4,25 @@ import com.google.gson.annotations.SerializedName
 
 data class LookupItem(
 
-  @SerializedName("ParentId")
-  @JvmField val parentId: Int,
+  @JvmField @SerializedName("ParentId") val parentId: Int,
 
-  @SerializedName("Status")
-  @JvmField val status: Int,
+  @JvmField @SerializedName("Status") val status: Int,
 
-  @SerializedName("SysName")
-  @JvmField val sysName: Any,
+  @JvmField @SerializedName("SysName") val sysName: Any,
 
-  @SerializedName("Active")
-  @JvmField val active: Boolean,
+  @JvmField @SerializedName("Active") val active: Boolean,
 
-  @SerializedName("LookupType")
-  @JvmField val lookupType: Int,
+  @JvmField @SerializedName("LookupType") val lookupType: Int,
 
-  @SerializedName("LookUpid")
-  @JvmField val lookUpid: String?,
+  @JvmField @SerializedName("LookUpid") val lookUpid: String?,
 
-  @SerializedName("LookUpName")
-  @JvmField val lookUpName: String?,
+  @JvmField @SerializedName("LookUpName") val lookUpName: String?,
 
-  @SerializedName("BusinessUnitId")
-  @JvmField val businessUnitId: Int,
+  @JvmField @SerializedName("BusinessUnitId") val businessUnitId: Int,
 
-  @SerializedName("Sequence")
-  @JvmField val sequence: Int,
+  @JvmField @SerializedName("Sequence") val sequence: Int,
 
-  @SerializedName("IgnoreBusinessUnit")
-  @JvmField val ignoreBusinessUnit: Boolean,
+  @JvmField @SerializedName("IgnoreBusinessUnit") val ignoreBusinessUnit: Boolean,
 
-  @SerializedName("LookupTypeId")
-  @JvmField val lookupTypeId: Int
+  @JvmField @SerializedName("LookupTypeId") val lookupTypeId: Int
 )

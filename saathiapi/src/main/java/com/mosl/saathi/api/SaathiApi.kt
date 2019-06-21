@@ -1,6 +1,8 @@
 package com.mosl.saathi.api
 
 import com.mosl.app.core.annotation.ExcludeWrapper
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
+import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
@@ -16,6 +18,12 @@ import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductItem
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductItem
@@ -93,6 +101,7 @@ import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
 import io.reactivex.Observable
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -127,7 +136,7 @@ interface SaathiApi {
   ): Observable<SaathiCommonResponse<CityItem>>
 
   @POST("Master/GetAllLookup")
-  fun postAllLookup(
+  fun getAllLookup(
     @Body request: LookupRequest
   ): Observable<List<LookupItem>>
 
@@ -179,7 +188,7 @@ interface SaathiApi {
   @POST("Client/GetClientViewByCommand")
   fun postClientDetail(
     @Body request: ClientDetailRequest
-  ): Observable<SaathiCommonResponse<ClientDetailItem>>
+  ): Observable<ClientDetailItem>
 
   @POST("Client/SaveClientProfile")
   fun postSaveClientProfile(
@@ -250,6 +259,25 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
+  @POST("Lead/GetAddressByLeadId")
+  fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
+
+  @POST("UserApi/AutoCompleteAttendee")
+  fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
+  @POST("UserApi/AutoCompleteSplAttendee")
+  fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
+  @POST("Meeting/GetMeetingByID")
+  fun getMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+
+  //================================Add Update Meeting======================================
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>
   //===================== Lead View Main=========================
 
   @POST("Client/GetClientImage")

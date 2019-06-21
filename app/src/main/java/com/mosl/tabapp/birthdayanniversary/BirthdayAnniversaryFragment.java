@@ -199,8 +199,8 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
     private void getProfile() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE);
-            Disposable subscribe = saathiApi.postAllLookup(request)
+                new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
+            Disposable subscribe = saathiApi.getAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderAllLookUp);
         } else {
