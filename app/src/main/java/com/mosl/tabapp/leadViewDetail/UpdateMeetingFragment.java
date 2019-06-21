@@ -1654,9 +1654,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderUpdateMeetingSave);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
