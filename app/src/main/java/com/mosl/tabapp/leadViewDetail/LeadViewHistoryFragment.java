@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
@@ -17,18 +16,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.TextHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest;
+import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import cz.msebera.android.httpclient.Header;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +37,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -135,27 +134,24 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
         switch (parent.getSelectedItem().toString()) {
             case "Lead Detail History": {
                 serviceUrl = "Lead/GetLeadHistoryByLeadId";
-                String tmpReq = String.format(LEAD_HISTORY_FILTER, leadId);
                 if (isTabClick) {
-                    getHistoryMapping(serviceUrl, tmpReq);
+                    getHistoryMapping(serviceUrl, leadId);
                 }
 
             }
             break;
             case "Lead Product Mapping History": {
                 serviceUrl = "Lead/GetLeadProductHistoryByLeadId";
-                String tmpReq = String.format(LEAD_HISTORY_FILTER, leadId);
-                getHistoryMapping(serviceUrl, tmpReq);
+                getHistoryMapping(serviceUrl, leadId);
             }
             break;
             case "Client Current Mapping": {
                 serviceUrl = "Client/GetCurrentMapping";
-                String tmpReq = String.format(CLIENT_HISTORY_FILTER, mUcid);
                 if (!leadId.equalsIgnoreCase("0") && !mUcid.equalsIgnoreCase("0")) {
-                    getHistoryMapping(serviceUrl, tmpReq);
+                    getHistoryMapping(serviceUrl, mUcid);
                 } else {
                     if (isTabClick) {
-                        getHistoryMapping(serviceUrl, tmpReq);
+                        getHistoryMapping(serviceUrl, mUcid);
                     }
                 }
 
@@ -163,43 +159,10 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
             break;
             case "Client Mapping History": {
                 serviceUrl = "Client/GetMappingHistory";
-                String tmpReq = String.format(CLIENT_HISTORY_FILTER, mUcid);
-                getHistoryMapping(serviceUrl, tmpReq);
+                getHistoryMapping(serviceUrl, mUcid);
             }
             break;
         }
-        /*switch (position) {
-            case 0: {
-                serviceUrl = "Lead/GetLeadHistoryByLeadId";
-                String tmpReq = String.format(LEAD_HISTORY_FILTER, leadId);
-                if (isTabClick) {
-
-                    getHistoryMapping(serviceUrl, tmpReq);
-                }
-
-            }
-            break;
-            case 1: {
-                serviceUrl = "Lead/GetLeadProductHistoryByLeadId";
-                String tmpReq = String.format(LEAD_HISTORY_FILTER, leadId);
-                getHistoryMapping(serviceUrl, tmpReq);
-            }
-            break;
-            case 2: {
-                serviceUrl = "Client/GetCurrentMapping";
-                String tmpReq = String.format(CLIENT_HISTORY_FILTER, mUcid);
-                getHistoryMapping(serviceUrl, tmpReq);
-
-            }
-            break;
-            case 3: {
-                serviceUrl = "Client/GetMappingHistory";
-                String tmpReq = String.format(CLIENT_HISTORY_FILTER, mUcid);
-                getHistoryMapping(serviceUrl, tmpReq);
-            }
-            break;
-        }*/
-
     }
 
     @Override
@@ -227,13 +190,11 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
                 spHistory.setOnItemSelectedListener(LeadViewHistoryFragment.this);
                 if (!leadId.equalsIgnoreCase("0")) {
                     serviceUrl = "Lead/GetLeadHistoryByLeadId";
-                    String tmpReq = String.format(LEAD_HISTORY_FILTER, leadId);
-                    getHistoryMapping(serviceUrl, tmpReq);
+                    getHistoryMapping(serviceUrl, leadId);
                     isTabClick = false;
                 } else if (!mUcid.equalsIgnoreCase("0")) {
                     serviceUrl = "Client/GetCurrentMapping";
-                    String tmpReq = String.format(CLIENT_HISTORY_FILTER, mUcid);
-                    getHistoryMapping(serviceUrl, tmpReq);
+                    getHistoryMapping(serviceUrl, mUcid);
                     isTabClick = false;
                 }
 
@@ -249,169 +210,169 @@ public class LeadViewHistoryFragment extends MOSLCommonFragment implements Adapt
         this.viewPager = viewPager;
     }
 
+    private void renderTable(List<Map<String, Object>> tableList) {
+        secondClickTableAdapter = new SecondClickTableAdapter(getActivity(), new ArrayList<>());
+        table.setAdapter(secondClickTableAdapter);
+        ArrayList<String> columns = new ArrayList<>();
+        ArrayList<String> columnsHeader = new ArrayList<>();
+        if (tableList.size() != 0) {
+            for (int y = 0; y < tableList.size(); y++) {
+                Map<String, Object> objDetail =
+                    tableList.get(y);
 
-    private void getHistoryMapping(String serviceMethod, String request) {
-        isTabClick = true;
-        /*addedAttendeeModelList;
-        addedSplAttendeeModelList;*/
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            // customProgress.setVisibility(View.VISIBLE);
+                if (columns.size() == 0) {
+                    for (Object columnName : objDetail.keySet()) {
+                        columns.add(columnName.toString());
+                        if (columnName.toString()
+                            .equalsIgnoreCase("lead_id")) {
+                            columnName = columnName.toString()
+                                .toUpperCase();
+                        }
+                        columnsHeader.add(getRefreshColumnName(
+                            columnName.toString()));
+                    }
+                    String[] stockArr =
+                        new String[columnsHeader.size()];
+                    stockArr = columnsHeader.toArray(stockArr);
+                    secondClickTableAdapter.setHeaders(
+                        stockArr);
+                }
+                LinkedHashMap<String, String> hm =
+                    new LinkedHashMap<>();
+                for (String column : columns) {
+                    String columnData =
+                        (objDetail.get(column) == null
+                            || objDetail.get(column).toString()
+                            == null) ? ""
+                            : objDetail.get(column).toString();
 
+                    if (objDetail.get(
+                        column) instanceof Number) {
+                        String strValue = objDetail.get(column)
+                            .toString()
+                            .trim();
 
-            //  String serviceMethod = "Meeting/AddUpdateMeeting";
-            showProgress();
+                        if (strValue.indexOf(".") > -1
+                            && !strValue.endsWith(".0")
+                            && !strValue.endsWith(".00")) {
+                            columnData = String.format("%.2f",
+                                Double.parseDouble(
+                                    objDetail.get(column)
+                                        .toString()));
+                        } else {
+                            columnData = String.format("%.0f",
+                                Double.parseDouble(
+                                    objDetail.get(column)
+                                        .toString()));
+                        }
+                    }
+                    if (columnData.contains("T")) {
+                        columnData =
+                            CRMAppUtil.getDateStrT(columnData, mFormat, DATE_FORMAT_TO_DISPLAY);
+                    }
+
+                    if (column.equalsIgnoreCase("lead_id")) {
+                        column = column.toUpperCase();
+                    }
+
+                    hm.put(
+                        CRMAppUtil.getRefreshColumnName(column),
+                        columnData.trim());
+                }
+                secondClickTableAdapter.add(hm);
+            }
+            secondClickTableAdapter.notifyDataSetChanged();
+            dataFoundFlag = true;
+            table.setVisibility(View.VISIBLE);
+            tvNochart.setVisibility(View.GONE);
+        } else {
+            dataFoundFlag = false;
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void render(UiModel<List<Map<String, Object>>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            error.printStackTrace();
+            table.setVisibility(View.GONE);
+            dataFoundFlag = false;
+            tvNochart.setVisibility(View.VISIBLE);
+            showOnFailurePopup(error);
+        }
+
+        List<Map<String, Object>> data = uiModel.data;
+        if (data != null) {
             try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), request, new TextHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseS) {
-                        //super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                Gson mGson = new Gson();
-                                Type type = new TypeToken<HashMap<String, Object>>() {
-                                }.getType();
-                                HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                                if (response.size() != 0) {
-                                    String status = response.get(STATUS).toString();
-                                    if (status.equalsIgnoreCase("true")) {
-                                        hideProgress();
-                                        secondClickTableAdapter = new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
-                                        table.setAdapter(secondClickTableAdapter);
-                                        //  JSONObject responseJSONObject = response.getJSONObject("Response");
-                                        Map<String, Object> responseJSONObject =
-                                            (Map<String, Object>) response.get("Response");
-                                        // JSONArray arrayDetail = responseJSONObject.getJSONArray("Data");
-                                        List<Map<String, Object>> arrayDetail =
-                                            (List<Map<String, Object>>) responseJSONObject.get(
-                                                "Data");
-                                        ArrayList<String> columns = new ArrayList<String>();
-                                        ArrayList<String> columnsHeader = new ArrayList<String>();
-
-                                        if (arrayDetail.size() != 0) {
-                                            for (int y = 0; y < arrayDetail.size(); y++) {
-                                                Map<String, Object> objDetail = arrayDetail.get(y);
-                                                if (columns.size() == 0) {
-                                                    //  Iterator iter = objDetail.keys();
-                                                    for (Object columnName : objDetail.keySet()) {
-                                                        //  String columnName = iter.next().toString();
-                                                        columns.add(columnName.toString());
-                                                        if (columnName.toString().equalsIgnoreCase("lead_id")) {
-                                                            columnName = columnName.toString().toUpperCase();
-                                                        }
-                                                        columnsHeader.add(getRefreshColumnName(columnName.toString()));
-                                                    }
-                                                    String[] stockArr = new String[columnsHeader.size()];
-                                                    stockArr = columnsHeader.toArray(stockArr);
-                                                    secondClickTableAdapter.setHeaders(stockArr);
-                                                }
-                                                LinkedHashMap<String, String> hm = new LinkedHashMap<>();
-                                                for (String column : columns) {
-                                                    // String columnData = (objDetail.isNull(column) || objDetail.getString(column).equals("")) ? "" : objDetail.getString(column);
-                                                    String columnData = (objDetail.get(column) == null || objDetail.get(column).toString() == null) ? "" : objDetail.get(column).toString();
-                                                    if (column.equalsIgnoreCase("MOBILE")) {
-                                                        mobileNo = columnData;
-                                                    }
-                                                    if (objDetail.get(column) instanceof Number) {
-                                                        String strValue = objDetail.get(column).toString().trim();
-
-                                                        if (strValue.indexOf(".") > -1 && !strValue.endsWith(".0") && !strValue.endsWith(".00")) {
-                                                            columnData = String.format("%.2f", Double.parseDouble(objDetail.get(column).toString()));
-                                                        } else {
-                                                            columnData = String.format("%.0f", Double.parseDouble(objDetail.get(column).toString()));
-                                                        }
-                                                    }
-                                                    if (columnData.contains("T")) {
-                                                        columnData = CRMAppUtil.getDateStrT(columnData, mFormat, DATE_FORMAT_TO_DISPLAY);
-                                                    }
-
-                                                    if (column.equalsIgnoreCase("lead_id")) {
-                                                        column = column.toUpperCase();
-                                                    }
-                                                    hm.put(getRefreshColumnName(column), columnData.trim());
-                                                }
-                                                secondClickTableAdapter.add(hm);
-                                            }
-                                            secondClickTableAdapter.notifyDataSetChanged();
-                                            dataFoundFlag = true;
-                                            table.setVisibility(View.VISIBLE);
-                                            tvNochart.setVisibility(View.GONE);
-                                        } else {
-                                            dataFoundFlag = false;
-                                            table.setVisibility(View.GONE);
-                                            tvNochart.setVisibility(View.VISIBLE);
-                                        }
-                                    } else {
-                                        hideProgress();
-                                        String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(new JSONObject(responseS));
-                                        table.setVisibility(View.GONE);
-                                        dataFoundFlag = false;
-                                        tvNochart.setVisibility(View.VISIBLE);
-                                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                    }
-                                } else {
-                                    dataFoundFlag = false;
-                                    table.setVisibility(View.GONE);
-                                    tvNochart.setVisibility(View.VISIBLE);
-                                }
-
-                            } else {
-                                dataFoundFlag = false;
-                                table.setVisibility(View.GONE);
-                                tvNochart.setVisibility(View.VISIBLE);
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            dataFoundFlag = false;
-                            table.setVisibility(View.GONE);
-                            tvNochart.setVisibility(View.VISIBLE);
-                        }
-                        hideProgress();
-                    }
-
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                        try {
-                            JSONObject errorResponse = new JSONObject(responseString);
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            // MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-
-                });
+                renderTable(data);
             } catch (Exception e) {
                 e.printStackTrace();
+                dataFoundFlag = false;
+                table.setVisibility(View.GONE);
+                tvNochart.setVisibility(View.VISIBLE);
+                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+        }
+    }
 
+    private void getHistoryMapping(String serviceMethod, String id) {
+        isTabClick = true;
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            Observable<String> historyObservable;
+            switch (serviceMethod) {
+                case "Lead/GetLeadHistoryByLeadId": {
+                    LeadHistoryRequest request = new LeadHistoryRequest();
+                    request.request.leadID = id;
+                    historyObservable = saathiApi.getLeadHistoryByLeadId(request);
+                    break;
+                }
+                case "Lead/GetLeadProductHistoryByLeadId": {
+                    LeadHistoryRequest request = new LeadHistoryRequest();
+                    request.request.leadID = id;
+                    historyObservable = saathiApi.getLeadProductHistoryByLeadId(request);
+                    break;
+                }
+
+                case "Client/GetCurrentMapping": {
+                    ClientHistoryRequest request = new ClientHistoryRequest();
+                    request.request.uCID = id;
+                    historyObservable = saathiApi.getCurrentMapping(request);
+                    break;
+                }
+                default: {
+                    ClientHistoryRequest request = new ClientHistoryRequest();
+                    request.request.uCID = id;
+                    historyObservable = saathiApi.getMappingHistory(request);
+                }
+            }
+
+            Disposable subscribe = historyObservable
+                .map(responseS -> {
+                    Gson mGson = new Gson();
+                    Type type = new TypeToken<HashMap<String, Object>>() {
+                    }.getType();
+                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                    Map<String, Object> responseJsonObj =
+                        (Map<String, Object>) response.get("Response");
+                    List<Map<String, Object>> tableResponseList =
+                        (List<Map<String, Object>>) responseJsonObj.get(
+                            "Data");
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return tableResponseList;
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::render);
+        } else {
+            noInternetConnectionDialog();
         }
     }
 

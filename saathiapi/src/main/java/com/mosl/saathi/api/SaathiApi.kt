@@ -14,6 +14,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileItem
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
@@ -80,6 +81,7 @@ import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
+import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
@@ -463,6 +465,32 @@ interface SaathiApi {
   @POST("Lead/DeleteLeadDocuments")
   fun postDeleteDocuments(
     @Body request: DeleteDocumentRequest
+  ): Observable<String>
+
+  // ================== Lead View History ========================
+
+  @ExcludeWrapper
+  @POST("Lead/GetLeadHistoryByLeadId")
+  fun getLeadHistoryByLeadId(
+    @Body request: LeadHistoryRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Lead/GetLeadProductHistoryByLeadId")
+  fun getLeadProductHistoryByLeadId(
+    @Body request: LeadHistoryRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Client/GetCurrentMapping")
+  fun getCurrentMapping(
+    @Body request: ClientHistoryRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Client/GetMappingHistory")
+  fun getMappingHistory(
+    @Body request: ClientHistoryRequest
   ): Observable<String>
 
 }
