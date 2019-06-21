@@ -77,7 +77,6 @@ import okhttp3.RequestBody;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Piyush on 04-03-2017.
@@ -620,9 +619,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderAddUpdate);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -805,9 +802,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -838,8 +833,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -883,9 +877,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -930,9 +922,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderProduct(uiModel, id));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1339,9 +1329,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderWeekDay(uiModel, id));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1519,9 +1507,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderMeetingById);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1680,9 +1666,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderRepeatMode(uiModel, id));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1731,9 +1715,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderWeek(uiModel, id));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1877,9 +1859,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                                     return filterResults;
                                 }
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
@@ -2020,10 +2000,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                                     return filterResults;
                                 }
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true,
-                                    null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
