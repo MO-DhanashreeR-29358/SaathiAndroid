@@ -16,18 +16,25 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
+import com.mosl.saathi.api.model.common.NotEncrypted
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.AddUpdateLeadItem
+import com.mosl.saathi.api.model.createlead.AddUpdateLeadRequest
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
+import com.mosl.saathi.api.model.createlead.LeadSourceListItem
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadItem
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.createmeeting.ClientByCommandItem
+import com.mosl.saathi.api.model.createmeeting.ClientByCommandRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
@@ -553,5 +560,37 @@ interface SaathiApi {
   @ExtraDataWrapper
   @POST("Event/GetEventSeminarAttendedList")
   fun getSeminarEvent(@Body request: LeadInteractionRequest): Observable<String>
+
+  @POST("LeadSource/GetLeadSourceList")
+  fun postLeadSourceList(
+    @Body request: LeadSourceListRequest
+  ): Observable<SaathiCommonResponse<LeadSourceListItem>>
+
+  @POST("Lead/AddUpdateLead")
+  fun postAddUpdateLead(
+    @Body request: AddUpdateLeadRequest
+  ): Observable<SaathiCommonResponse<AddUpdateLeadItem>>
+
+  @POST("Lead/TransferLeadCaughtInC2")
+  fun postTransferLead(
+    @Body request: TransferLeadRequest
+  ): Observable<SaathiCommonResponse<TransferLeadItem>>
+
+  @NotEncrypted
+  @POST("Client/GetClientImage")
+  fun postClientImage(
+    @Body request: ClientImageRequest
+  ): Observable<SaathiCommonResponse<String>>
+
+  @POST("Client/GetClientViewByCommand")
+  fun postClientViewByCommand(@Body request: ClientByCommandRequest): Observable<SaathiCommonResponse<ClientByCommandItem>>
+
+  //===================== Update meeting =========================
+
+  @POST("Meeting/GetMeetingByID")
+  fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+
+  @POST("Meeting/AddUpdateMeeting")
+  fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
 
 }
