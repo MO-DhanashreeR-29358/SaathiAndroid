@@ -204,7 +204,6 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
                 new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(calendarAdapter);
-            CalenderModel.setCalenderList(calenderList);
         }
 
         List<CalenderItem> data = uiModel.data;
@@ -259,7 +258,6 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
                     new LinearLayoutManager(getActivity());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setAdapter(calendarAdapter);
-                CalenderModel.setCalenderList(calenderList);
             }
         }
     }
