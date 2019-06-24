@@ -60,6 +60,7 @@ public class CrmApp extends MultiDexApplication {
             Timber.plant(new CrashReportingTree());
         }
 
+        CRMWebServiceHandler.initSaathiApi(this);
         appDatabase = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME)
                 .build();
