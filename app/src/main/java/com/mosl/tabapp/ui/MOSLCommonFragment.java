@@ -233,7 +233,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         if (input != null) {
             return input;
         } else {
-            return "";
+            return defaultVal;
         }
     }
 

@@ -1925,7 +1925,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     public void renderContact(Contact contact, String leadCategoryText) {
         cbSameAs.setChecked(contact.isSameAsAbove);
-        int ucid = Integer.valueOf(contact.uCID);
+        int ucid = Integer.valueOf(stringOrZero(contact.uCID));
         if (ucid > 0) {
             llClient.setVisibility(View.VISIBLE);
             llClientPortfolioDetails.setVisibility(View.VISIBLE);
