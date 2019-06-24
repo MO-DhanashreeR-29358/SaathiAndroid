@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.mosl.tabapp.database.AppDatabase;
+import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
