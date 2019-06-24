@@ -100,7 +100,6 @@ import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 3/7/2017.
@@ -1125,9 +1124,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1159,9 +1156,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1199,9 +1194,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, OK, true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1248,9 +1241,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderCategory);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1291,9 +1282,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingObjective);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1338,9 +1327,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::rendrerSubCategory);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1391,9 +1378,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProduct);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1435,9 +1420,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingDuration);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1480,9 +1463,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderActivityType);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1527,9 +1508,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingReason);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1573,9 +1552,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderBaClient);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1618,9 +1595,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderOutStation);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1663,9 +1638,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderActionables);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1708,9 +1681,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderMeetingLocation);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1753,9 +1724,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderAddressByLeadId);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2235,9 +2204,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                     return filterResults;
                                 }
                             } else {
-                                alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true, null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
@@ -2366,10 +2333,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
                                     filterResults.count = modelList.size();
                                 }
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0,
-                                    getResources().getString(R.string.motilal_oswal),
-                                    INTERNET_CONNECTION, "OK", true,
-                                    null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {

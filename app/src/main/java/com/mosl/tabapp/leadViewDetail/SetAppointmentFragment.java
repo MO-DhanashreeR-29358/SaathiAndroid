@@ -1453,9 +1453,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderActivityType(uiModel, id));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 

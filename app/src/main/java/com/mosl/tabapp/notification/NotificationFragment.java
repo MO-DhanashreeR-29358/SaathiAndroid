@@ -22,7 +22,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.model.NotificationModel;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -124,9 +123,7 @@ public class NotificationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderNotifications);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 

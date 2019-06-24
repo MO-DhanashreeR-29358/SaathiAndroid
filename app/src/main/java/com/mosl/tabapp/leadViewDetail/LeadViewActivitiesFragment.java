@@ -146,8 +146,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderMeetings);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -220,8 +219,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderAppointments);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -420,10 +418,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                     renderDeleteAppointments(uiModel, meetingId);
                 });
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 

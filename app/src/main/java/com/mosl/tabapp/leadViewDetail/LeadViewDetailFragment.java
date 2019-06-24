@@ -1311,9 +1311,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderCountries);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1354,9 +1352,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderStates(uiModel, type, value));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1447,9 +1443,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderCities(uiModel, type, value));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1548,9 +1542,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProfession);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1591,8 +1583,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderInterests);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1632,8 +1623,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProductTypes);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1670,8 +1660,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderStatus(uiModel, spStatus));
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1718,9 +1707,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderLeads);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2120,9 +2107,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderUpdateLead);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2159,8 +2144,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderLeadProfile);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2483,9 +2467,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         }
                     });
         } else {
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2545,9 +2527,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     }
                 });
         } else {
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2573,10 +2553,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderInsertLeadMapping);
         } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION,
-                "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -3121,9 +3098,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout));
         } else {
-            progressLayout.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -3175,9 +3150,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout));
         } else {
-            progressLayout.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -3316,8 +3289,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .compose(applyUiModel())
                     .subscribe(this::renderClientDetail);
         } else {
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -3424,9 +3396,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderClientSummary);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -3594,10 +3564,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderGainLossSummary);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
-            hideProgress();
+            noInternetConnectionDialog();
         }
     }
 
@@ -3832,9 +3799,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         .compose(applyUiModel())
                         .subscribe(this::renderUpdateProfile);
                 } else {
-                    MSFDialog.alertDialog(getMainActivity(), 0,
-                        getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK",
-                        true, null);
+                    noInternetConnectionDialog();
                 }
                 dialog.dismiss();
             }
@@ -4069,10 +4034,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                 }
                                             });
                                 } else {
-                                    hideProgress();
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        INTERNET_CONNECTION, "OK", true, null);
+                                    noInternetConnectionDialog();
                                 }
 
                                 dialog.dismiss();
@@ -4208,10 +4170,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                 }
                                             });
                                 } else {
-                                    hideProgress();
-                                    alertDialog(getMainActivity(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        INTERNET_CONNECTION, "OK", true, null);
+                                    noInternetConnectionDialog();
                                 }
 
                                 dialog.dismiss();
@@ -4269,11 +4228,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                         .subscribe(
                                                             this::renderDeleteCrossSellingProduct);
                                             } else {
-                                                hideProgress();
-                                                alertDialog(getMainActivity(), 0,
-                                                    getResources().getString(
-                                                        R.string.motilal_oswal),
-                                                    INTERNET_CONNECTION, "OK", true, null);
+                                                noInternetConnectionDialog();
                                             }
                                         }
                                     }
@@ -4372,8 +4327,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout));
             } else {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+                noInternetConnectionDialog();
             }
         }
 
@@ -4424,8 +4378,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .subscribe(uiModel ->
                         renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout));
             } else {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+                noInternetConnectionDialog();
             }
         }
 
@@ -4477,9 +4430,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .subscribe(
                         uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout));
             } else {
-                progressLayout.setVisibility(View.GONE);
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+                noInternetConnectionDialog();
             }
         }
 
@@ -4531,8 +4482,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
                         llLowMarginAdd, isDefault));
             } else {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    INTERNET_CONNECTION, "OK", true, null);
+                noInternetConnectionDialog();
             }
         }
 
@@ -4899,10 +4849,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest));
             } else {
-                hideProgress();
-                alertDialog(getMainActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION,
-                    "OK", true, null);
+                noInternetConnectionDialog();
             }
         }
 

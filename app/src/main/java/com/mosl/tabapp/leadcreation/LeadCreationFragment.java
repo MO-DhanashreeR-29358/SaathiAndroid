@@ -1324,9 +1324,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     }
                 });
         } else {
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1383,9 +1381,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderLeadCategories);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1429,9 +1425,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProfession);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1472,9 +1466,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderInterests);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1518,9 +1510,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderProductTypes);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1560,9 +1550,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     .compose(applyUiModel())
                     .subscribe(this::renderSourceList);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1603,9 +1591,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     .compose(applyUiModel())
                     .subscribe(this::renderLeadSourceList);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1646,9 +1632,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderStage);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1688,9 +1672,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderStatus);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1729,9 +1711,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderCountryList);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1769,9 +1749,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderStates(uiModel, type, value));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1833,10 +1811,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderCities(uiModel, type, value));
         } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -1953,9 +1928,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(this::renderUpdateLead);
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
@@ -2469,9 +2442,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderTransferLead(leadId, uiModel));
         } else {
-            MSFDialog.alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
-                null);
+            noInternetConnectionDialog();
         }
     }
 
