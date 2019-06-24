@@ -256,10 +256,6 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 getMainActivity().getIntent());
     }
 
-    public void gotoEkycVersionCheck(int gotoEkyc, Map hashMap) {
-        ((MOSLCommonActivity) getMainActivity()).ekycVersionCheck(gotoEkyc, hashMap);
-    }
-
     public void gotoEkycPage(int gotoEkyc, Map hashMap) {
         ((MOSLCommonActivity) getMainActivity()).gotoEkycPage(gotoEkyc, hashMap);
     }

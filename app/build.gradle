@@ -133,7 +133,6 @@ dependencies {
   implementation deps.mpChart
   implementation deps.glide
   implementation deps.calendarView
-  implementation deps.asyncHttp
   implementation deps.smoothProgressbar
   implementation deps.dialogPlus
   implementation deps.floatingButton

@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,7 +52,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
@@ -61,9 +59,7 @@ import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.mobile.ekyc.model.RowData;
 import com.mosl.mobile.ekyc.register.RegisterActivity;
-import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
-import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest;
@@ -107,7 +103,6 @@ import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
-import cz.msebera.android.httpclient.Header;
 import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -123,27 +118,9 @@ import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.getAppVersionCode;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.loadCountryArray;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.APP_LOGIN_ID;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.BINDCOUNTRY;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.BOBRANCH;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.BOSUBBROKER;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.BOTRADERS;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRMBRANCH;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.GETCRMROLEDETAILS;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.LOGIN;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.LOGINUSERID;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.ROLEID;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.ROLEMAPPINGID;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.ROLE_MAPPING_ID;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.SELECT_ROLE;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.SIGNUP;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.TEAMID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
@@ -219,7 +196,6 @@ public class MOSLCommonActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 roleID = ((RowData) spRoleSel.getSelectedItem()).getKey();
-                getRoleDetails(roleID);
             }
 
             @Override
@@ -729,8 +705,6 @@ public class MOSLCommonActivity extends AppCompatActivity
                             map.put(TOKENKEY, AccountDetails.getToken());
                             map.put(ISAUFSB, AccountDetails.isAufsb());
                             newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(MOSL_MENU_FRESH_REGISTRATION, new HashMap());
                         }
                     } else if (childPosition == MOSL_MENU_EXISTINGS_APPLICATIONS) {
                         if (AccountDetails.isNewEkyc()) {
@@ -744,8 +718,6 @@ public class MOSLCommonActivity extends AppCompatActivity
                             map.put(TOKENKEY, AccountDetails.getToken());
                             map.put(ISAUFSB, AccountDetails.isAufsb());
                             newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(MOSL_MENU_EXISTINGS_APPLICATIONS, new HashMap());
                         }
                     }
                 }
@@ -1044,126 +1016,6 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
     }
 
-    public void getRoleDetails(String roleID) {
-        if (MOSLCommon.isNetworkEnabled(this)) {
-            Map inputMap = new HashMap<>();
-            inputMap.put(APP_LOGIN_ID, getAppLoginID());
-            inputMap.put(ROLE_MAPPING_ID, roleID);
-
-            String flag = GETCRMROLEDETAILS;
-            String category = LOGIN;
-            progressLayout.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap,
-                new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        if (response != null) {
-                            try {
-                                JSONArray jsonArray = response.getJSONArray("CRMROLE");
-                                if (jsonArray.length() != 0) {
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject object = jsonArray.getJSONObject(i);
-
-                                        String boBranch =
-                                            (object.isNull("BOBRANCH") || object.getString(
-                                                "BOBRANCH").equals("")) ? ""
-                                                : object.getString("BOBRANCH");
-                                        String boSubBroker =
-                                            (object.isNull("BOSUBBROKER") || object.getString(
-                                                "BOSUBBROKER").equals("")) ? ""
-                                                : object.getString("BOSUBBROKER");
-                                        String boTraders =
-                                            (object.isNull("BOTRADERS") || object.getString(
-                                                "BOTRADERS").equals("")) ? ""
-                                                : object.getString("BOTRADERS");
-                                        String crmBranch =
-                                            (object.isNull("CRMBRANCH") || object.getString(
-                                                "CRMBRANCH").equals("")) ? ""
-                                                : object.getString("CRMBRANCH");
-                                        String loginUserID =
-                                            (object.isNull("LOGINUSERID") || object.getString(
-                                                "LOGINUSERID").equals("")) ? ""
-                                                : object.getString("LOGINUSERID");
-                                        String roleMappingID =
-                                            (object.isNull("ROLEMAPPINGID") || object.getString(
-                                                "ROLEMAPPINGID").equals("")) ? ""
-                                                : object.getString("ROLEMAPPINGID");
-                                        String businessUnitID =
-                                            (object.isNull("BUSINESSUNITID") || object.getString(
-                                                "BUSINESSUNITID").equals("")) ? ""
-                                                : object.getString("BUSINESSUNITID");
-                                        String teamID =
-                                            (object.isNull("TEAMID") || object.getString("TEAMID")
-                                                .equals("")) ? "" : object.getString("TEAMID");
-                                        String roleID =
-                                            (object.isNull("ROLEID") || object.getString("ROLEID")
-                                                .equals("")) ? "" : object.getString("ROLEID");
-                                        SharedPreferences.Editor editor =
-                                            MOSLCommon.getPrefs(MOSLCommonActivity.this).edit();
-                                        SharedPreferences.Editor editor1 =
-                                            editor.putString(BOBRANCH, boBranch);
-                                        editor.putString(BOSUBBROKER, boSubBroker);
-                                        editor.putString(BOTRADERS, boTraders);
-                                        editor.putString(CRMBRANCH, crmBranch);
-                                        editor.putString(LOGINUSERID, loginUserID);
-                                        editor.putString(ROLEMAPPINGID, roleMappingID);
-                                        editor.putString(BUSINESSUNITID, businessUnitID);
-                                        editor.putString(TEAMID, teamID);
-                                        editor.putString(ROLEID, roleID);
-
-                                        editor.commit();
-                                        roleSelectionModel =
-                                            new RoleSelectionModel(boBranch, boSubBroker, boTraders,
-                                                crmBranch, loginUserID, roleMappingID,
-                                                businessUnitID, teamID, roleID);
-                                        progressLayout.setVisibility(View.GONE);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            progressLayout.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String responseString,
-                        Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        progressLayout.setVisibility(View.GONE);
-                        commonMsgDialog(MOSLCommonActivity.this, SOME_ERROR_OCCURED_PLEASE_RETRY,
-                            false, "");
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                        JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                        JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                    }
-                });
-        } else {
-            MOSLCommon.alertDInternet(this);
-        }
-    }
-
     //region login methods
 
     public void showRoleDialog(Context context, ArrayList<RowData> arrRoleSel, final int tab) {
@@ -1399,263 +1251,6 @@ public class MOSLCommonActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
         unbindService(mServiceConnection);
         mBound = false;
-    }
-
-    public void ekycVersionCheck(final int gotoEkyc, final Map hashMap) {
-        Map inputMap = new HashMap<>();
-        inputMap.put("_ApplicationType", NEW_CRM);//For UAT
-        inputMap.put("_Version", getAppVersionCode(this));
-
-        String flag = "APPVERSIONCHECK";
-        String category = "LOGIN";
-
-        WebServiceHandler.post(this, flag, category, inputMap, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                //after success code goes here
-                try {
-                    if (statusCode == 200) {
-                        if (response.length() != 0) {
-                            String success = response.getString("_Status");
-                            String msg = response.getString("_msg");
-                            if (success.equals("0")) {
-                                CustomDialog dialogMsg =
-                                    new CustomDialog(MOSLCommonActivity.this, msg, true, false,
-                                        false, "", "UPDATE NOW", "",
-                                        new CustomDialog.CustomDialogListener() {
-                                            @Override
-                                            public void dialogAction(MOSLCommon.Action action,
-                                                Object... data) {
-                                                if (action == MOSLCommon.Action.OK) {
-                                                    Intent i = new Intent(
-                                                        android.content.Intent.ACTION_VIEW);
-                                                    i.setData(Uri.parse(
-                                                        "https://play.google.com/store/apps/details?id=com.mosl.tabapp"));
-                                                    startActivity(i);
-                                                    finish();
-                                                } else if (action == MOSLCommon.Action.CANCEL) {
-                                                }
-                                            }
-                                        });
-                                dialogMsg.show();
-                            } else if (success.equals("2")) {
-                                CustomDialog dialogMsg =
-                                    new CustomDialog(MOSLCommonActivity.this, msg, true, false,
-                                        false, "", OK, "",
-                                        new CustomDialog.CustomDialogListener() {
-                                            @Override
-                                            public void dialogAction(MOSLCommon.Action action,
-                                                Object... data) {
-
-                                            }
-                                        });
-                                dialogMsg.show();
-                            } else {
-                                SharedPreferences prefs = getSharedPreferences(BINDCOUNTRY, 0);
-                                int countrySize = prefs.getInt(BINDCOUNTRY + "_size", 0);
-                                if (countrySize != 0) {
-                                    gotoEkycPage(gotoEkyc, hashMap);
-                                } else {
-                                    countryAPI(gotoEkyc, hashMap);
-                                }
-                            }
-                        } else {
-                            MOSLCommon.showToastMsg(MOSLCommonActivity.this, EKYC_SERVER_DOWN);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    MOSLCommon.commonMsgDialog(MOSLCommonActivity.this, EKYC_SERVER_DOWN, false,
-                        "");
-                }
-            }
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-            }
-
-            @Override
-            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                String responseString) {
-                super.onSuccess(statusCode, headers, responseString);
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers,
-                String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                MOSLCommon.showToastMsg(MOSLCommonActivity.this, responseString);
-            }
-        });
-    }
-
-    public ArrayList countryAPI(final int gotoEkyc, final Map hashMap) {
-        SharedPreferences prefs = getSharedPreferences(BINDCOUNTRY, 0);
-        int countrySize = prefs.getInt(BINDCOUNTRY + "_size", 0);
-        if (countrySize == 0) {
-            Map inputMap = new HashMap<>();
-            inputMap.put("", "");
-
-            String flag = BINDCOUNTRY;
-            String category = SIGNUP;
-
-            if (MOSLCommon.isNetworkEnabled(MOSLCommonActivity.this)) {
-
-                WebServiceHandler.post(MOSLCommonActivity.this, flag, category, inputMap,
-                    new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers,
-                            JSONObject response) {
-                            super.onSuccess(statusCode, headers, response);
-                            if (response != null) {
-                                try {
-                                    String countryDetails =
-                                        (response.isNull("CountryDetails") || response.getString(
-                                            "CountryDetails").equals("")) ? ""
-                                            : response.getString("CountryDetails");
-                                    JSONArray jsonArray = new JSONArray(countryDetails);
-                                    array.clear();
-                                    array.add("Select");
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject countryObj = jsonArray.getJSONObject(i);
-
-                                        String country =
-                                            (countryObj.isNull("Country") || countryObj.getString(
-                                                "Country").equals("")) ? ""
-                                                : countryObj.getString("Country");
-                                        array.add(country);
-                                    }
-                                    if (array.size() != 0) {
-                                        SharedPreferences prefs =
-                                            getSharedPreferences(BINDCOUNTRY, 0);
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putInt(BINDCOUNTRY + "_size", array.size());
-                                        for (int i = 0; i < array.size(); i++) {
-                                            editor.putString(BINDCOUNTRY + "_" + i,
-                                                array.get(i).toString());
-                                        }
-                                        editor.commit();
-                                        gotoEkycPage(gotoEkyc, hashMap);
-                                    } else {
-                                        CustomDialog dialogMsg =
-                                            new CustomDialog(MOSLCommonActivity.this,
-                                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "",
-                                                OK, "", new CustomDialog.CustomDialogListener() {
-                                                @Override
-                                                public void dialogAction(MOSLCommon.Action action,
-                                                    Object... data) {
-                                                    if (action == MOSLCommon.Action.OK) {
-                                                        finish();
-                                                    } else if (action == MOSLCommon.Action.CANCEL) {
-                                                        finish();
-                                                    }
-                                                }
-                                            });
-                                        dialogMsg.show();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers,
-                            JSONArray response) {
-                            super.onSuccess(statusCode, headers, response);
-                        }
-
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers,
-                            String responseString) {
-                            super.onSuccess(statusCode, headers, responseString);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers,
-                            String responseString, Throwable throwable) {
-                            super.onFailure(statusCode, headers, responseString, throwable);
-                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
-                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
-                                new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action,
-                                        Object... data) {
-                                        if (action == MOSLCommon.Action.OK) {
-                                            finish();
-                                        } else if (action == MOSLCommon.Action.CANCEL) {
-                                            finish();
-                                        }
-                                    }
-                                });
-                            dialogMsg.show();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                            JSONObject errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
-                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
-                                new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action,
-                                        Object... data) {
-                                        if (action == MOSLCommon.Action.OK) {
-                                            finish();
-                                        } else if (action == MOSLCommon.Action.CANCEL) {
-                                            finish();
-                                        }
-                                    }
-                                });
-                            dialogMsg.show();
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                            JSONArray errorResponse) {
-                            super.onFailure(statusCode, headers, throwable, errorResponse);
-                            CustomDialog dialogMsg = new CustomDialog(MOSLCommonActivity.this,
-                                SOME_SERVER_ERROR_OCCURRED, true, false, false, "", OK, "",
-                                new CustomDialog.CustomDialogListener() {
-                                    @Override
-                                    public void dialogAction(MOSLCommon.Action action,
-                                        Object... data) {
-                                        if (action == MOSLCommon.Action.OK) {
-                                            finish();
-                                        } else if (action == MOSLCommon.Action.CANCEL) {
-                                            finish();
-                                        }
-                                    }
-                                });
-                            dialogMsg.show();
-                        }
-                    });
-            } else {
-                MOSLCommon.alertDInternet(MOSLCommonActivity.this);
-            }
-            fatcaArray = new ArrayList<>(array);
-            return array;
-        } else {
-            return loadCountryArray(MOSLCommonActivity.this);
-        }
     }
 
     public void gotoEkycPage(int xyz, Map hashMap) {
@@ -1961,8 +1556,6 @@ public class MOSLCommonActivity extends AppCompatActivity
                         inpuMap.put(INTRESTEDIN, searchResultModel.getInterestedIn());
                         if (AccountDetails.isNewEkyc()) {
                             gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
-                        } else {
-                            ekycVersionCheck(CALL_CONVERT_EKYC, inpuMap);
                         }
                     }
                 });
@@ -1986,8 +1579,6 @@ public class MOSLCommonActivity extends AppCompatActivity
                             map.put(TOKENKEY, AccountDetails.getToken());
                             map.put(ISAUFSB, AccountDetails.isAufsb());
                             newEkyc(getInputBody(map));
-                        } else {
-                            ekycVersionCheck(CALL_PROSPECT_DETAILS, hashMap);
                         }
                     }
                 });

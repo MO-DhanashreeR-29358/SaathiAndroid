@@ -392,8 +392,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                     map.put(TOKENKEY, AccountDetails.getToken());
                     map.put(ISAUFSB, AccountDetails.isAufsb());
                     gotoNewEkyc(getInputBody(map));
-                } else {
-                    gotoEkycVersionCheck(CALL_PROSPECT_DETAILS, inpuMap);
                 }
             }
         });
@@ -412,8 +410,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 inpuMap.put(ISAUFSB, AccountDetails.isAufsb());
                 if (AccountDetails.isNewEkyc()) {
                     gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
-                } else {
-                    gotoEkycVersionCheck(CALL_CONVERT_EKYC, inpuMap);
                 }
             }
         });
