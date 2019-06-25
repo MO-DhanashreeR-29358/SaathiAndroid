@@ -77,7 +77,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
 import com.mosl.tabapp.calendar.CalendarFragment;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
-import com.mosl.tabapp.common.CRMSecurityUtil;
+import com.mosl.tabapp.common.EkycSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.NetworkStateReceiver;
 import com.mosl.tabapp.constants.MOSLConstants;
@@ -783,6 +783,13 @@ public class MOSLCommonActivity extends AppCompatActivity
                             bundle.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL);
                             fragment.setArguments(bundle);
                             addFragment(R.id.activityFrameLayout, fragment, true, false);
+                        } else if (position == MOSL_MENU_SALES_STADIUM_PITCH) {
+                            WebViewFragment fragment = new WebViewFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString(URL_PATH,
+                                CRMWebServiceHandler.SALES_STADIUM_PITCH_URL);
+                            fragment.setArguments(bundle);
+                            addFragment(R.id.activityFrameLayout, fragment, true, false);
                         } else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
                             setupFragment(new BirthdayAnniversaryFragment());
                         }
@@ -795,9 +802,9 @@ public class MOSLCommonActivity extends AppCompatActivity
                                 logoutCustomer();
                             }
                         } else {
-                            if (position == 7) {
+                            if (position == 8) {
                                 setupFragment(new QueryFragment());
-                            } else if (position == 8) {
+                            } else if (position == 9) {
                                 logoutCustomer();
                             }
                         }
@@ -1293,7 +1300,7 @@ public class MOSLCommonActivity extends AppCompatActivity
             Intent launchIntent =
                 getPackageManager().getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME);
             launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            launchIntent.putExtra(OUTPUT, CRMSecurityUtil.encrypt(body));
+            launchIntent.putExtra(OUTPUT, EkycSecurityUtil.encrypt(body));
             startActivity(launchIntent);
         } catch (Exception e) {
             if (isBlank(AccountDetails.getEkycUrl())) {
@@ -1501,6 +1508,11 @@ public class MOSLCommonActivity extends AppCompatActivity
                         holderView.rlOpenAccount.setVisibility(View.GONE);
                         holderView.rlOAOForm.setVisibility(View.GONE);
                     }
+                }
+
+                if (isAufsb()) {
+                    holderView.rlSetAppointment.setVisibility(View.GONE);
+                    holderView.rlCrateMeeting.setVisibility(View.GONE);
                 }
 
                 holderView.rlSetAppointment.setOnClickListener(new View.OnClickListener() {

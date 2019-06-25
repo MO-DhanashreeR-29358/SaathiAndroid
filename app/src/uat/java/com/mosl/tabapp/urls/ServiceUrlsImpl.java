@@ -1,7 +1,6 @@
 package com.mosl.tabapp.urls;
 
 import android.support.annotation.NonNull;
-
 import org.jetbrains.annotations.Contract;
 
 public class ServiceUrlsImpl {
@@ -9,7 +8,7 @@ public class ServiceUrlsImpl {
     @Contract(pure = true)
     public static String CRM_BASE_URL()  {
         return
-            "http://122.184.137.226:83/api/";
+            "https://saathiuat.motilaloswal.com:1023/api/";
 
     }
     @NonNull
@@ -24,6 +23,12 @@ public class ServiceUrlsImpl {
     public static String CRM_COLLATERAL_URL()  {
         return
             "http://web20.motilaloswal.com:8000/Brochure/index.html";
+    }
 
+    @NonNull
+    @Contract(pure = true)
+    public static String SALES_STADIUM_PITCH_URL() {
+        return
+            "https://saathi.motilaloswal.com/Stadium-Pitch-Objection-Handling/English/Stadium-Pitch/Index.html";
     }
 }

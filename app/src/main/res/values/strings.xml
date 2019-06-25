@@ -4,7 +4,7 @@
     <string name="SS_SEARCH">Search</string>
     <string name="ATTENDEE_SEARCH_HINT_TXT"><font size="14">Select Employee Name/Code</font></string>
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
-    <string name="MOSL_MENU_EKYC_TXT">EKYC (Open an Account)</string>
+  <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
@@ -13,6 +13,7 @@
     <string name="MOSL_MENU_CALENDAR_TXT">Calendar</string>
     <string name="MOSL_MENU_QUERY_TXT">Query</string>
     <string name="MOSL_MENU_KNOWLEDGE_CENTRE_TXT">Sales Brochure</string>
+  <string name="MOSL_MENU_SALES_STADIUM_PITCH_TXT">Sales Stadium Pitch</string>
     <string name="MOSL_MENU_PENDING_APPROVALS_TXT">My Pending Approvals</string>
     <string name="MOSL_MENU_LOGOUT_TXT">Logout</string>
     <string name="MOSL">Motilal Oswal</string>
@@ -45,6 +46,13 @@
     <string name="PROSPECT_REFEREE_NAME_HINT_TXT">Prospect Referee Name</string>
     <string name="PROSPECT_REFEREE_MOBILE_HINT_TXT">Prospect Referee Mobile</string>
     <string name="PROSPECT_REFEREE_EMAIL_HINT_TXT">Prospect Referee Email</string>
+  <string name="OPEN_AN_ACCOUNT">Open An Account</string>
+  <string name="TXT_QUERY">For any query:</string>
+  <string name="TXT_AUFSB_GMAIL">au@motilaloswal.com</string>
+  <string name="TXT_AUFSB_TELEPHONE1">022&#8211;62126688</string>
+  <string name="TXT_AUFSB_TELEPHONE2">022&#8211;40548488</string>
+  <string name="TXT_FRESH_REGISTRATION">New client account opening process</string>
+  <string name="TXT_EXISTING_APPLICATION">Resume previously saved application to complete the account opening process</string>
 
 
     <string-array name="meetingDuration">

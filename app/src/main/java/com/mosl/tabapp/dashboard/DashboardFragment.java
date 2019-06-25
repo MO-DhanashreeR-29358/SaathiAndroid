@@ -109,6 +109,7 @@ import org.json.JSONObject;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
+import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -121,10 +122,10 @@ public class DashboardFragment extends MOSLCommonFragment
     Bundle args = new Bundle();
     private String businessProfileIdForDashboard, productId, employeeCode, dashboardId = "";
     private View dashAdvisoryView;
-    private TextView txtClients, txtTarget, tvMain;
+    private TextView txtClients, txtTarget, tvMain, txtTelephoneNo1, txtTelephoneNo2;
     private LinearLayout llClient, llTarget, llPerformanceAndIncentives, llBusinessSnapshotHead,
         llClientsLeads, llTargetAchievementADV, llTeamTargetAchievement,
-        llPerformanceAndIncentivesHeader;
+        llPerformanceAndIncentivesHeader, lldashboardAufsb;
     private ImageView ivActionableInsights, ivClientLeads, ivTargetAchievementADV,
         ivTeamTargetAchievement, ivMonthOnMonth, ivBusinessSnapshotHead,
         ivPerformanceAndIncentivesHeader;
@@ -136,7 +137,8 @@ public class DashboardFragment extends MOSLCommonFragment
     private FloatingActionsMenu floatingActionsMenu;
     private FloatingActionButton leadcreation;
     private RelativeLayout llMain, rlClientLeads, rlTargetAchievementADV, rlTeamTargetAchievement,
-        rlMonthOnMonth, rlBusinessSnapshotHead, rlPerformanceAndIncentivesHeader;
+        rlMonthOnMonth, rlBusinessSnapshotHead, rlPerformanceAndIncentivesHeader,
+        rlFreshRegistration, rlExisting;
     private Dialog dialog;
     //Team
     private LinearLayout llTeamTarget;
@@ -167,7 +169,7 @@ public class DashboardFragment extends MOSLCommonFragment
         new ArrayList<HashMap<String, String>>();
     private LinearLayout llIncentive, llCurrentQuaterStatusThree, llCurrentQuaterStatusFour,
         llCurrentQuaterStatusFirst, llCurrentQuaterStatusSecond, llCurrentQuarterStatusAdviosory,
-        llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp;
+        llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp, llEmail;
     private ScrollView scrollView;
 
     private XAxis xAxis;
@@ -233,6 +235,8 @@ public class DashboardFragment extends MOSLCommonFragment
         txtClients = dashAdvisoryView.findViewById(R.id.txtClients);
         txtTarget = dashAdvisoryView.findViewById(R.id.txtTarget);
         txtTeamTarget = dashAdvisoryView.findViewById(R.id.txtTeamTarget);
+        txtTelephoneNo1 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo1);
+        txtTelephoneNo2 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo2);
         tvPerformanceAndIncentivesHeader =
             dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
         tvMain = dashAdvisoryView.findViewById(R.id.tvMain);
@@ -243,6 +247,7 @@ public class DashboardFragment extends MOSLCommonFragment
         btnClient = dashAdvisoryView.findViewById(R.id.btnClient);
 
         llClient = dashAdvisoryView.findViewById(R.id.llClient);
+        lldashboardAufsb = dashAdvisoryView.findViewById(R.id.lldashboardAufsb);
         llClientsLeads = dashAdvisoryView.findViewById(R.id.llClientsLeads);
         llTargetAchievementADV =
             dashAdvisoryView.findViewById(R.id.llTargetAchievementADV);
@@ -251,6 +256,8 @@ public class DashboardFragment extends MOSLCommonFragment
         llPerformanceAndIncentivesHeader =
             dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
         rlClientLeads = dashAdvisoryView.findViewById(R.id.rlClientLeads);
+        rlExisting = dashAdvisoryView.findViewById(R.id.rlExisting);
+        rlFreshRegistration = dashAdvisoryView.findViewById(R.id.rlFreshRegistration);
         rlTargetAchievementADV =
             dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
         rlTeamTargetAchievement =
@@ -333,6 +340,11 @@ public class DashboardFragment extends MOSLCommonFragment
                 }
             });
         llMain.setOnClickListener(this);
+        rlFreshRegistration.setOnClickListener(this);
+        rlExisting.setOnClickListener(this);
+        txtTelephoneNo2.setOnClickListener(this);
+        txtTelephoneNo1.setOnClickListener(this);
+        llEmail.setOnClickListener(this);
 
         ShapeDrawable drawable = new ShapeDrawable(new OvalShape());
         drawable.getPaint().setColor(getResources().getColor(R.color.black));
@@ -507,7 +519,7 @@ public class DashboardFragment extends MOSLCommonFragment
         float barWidth = 0.35f;
         List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
         for (int i = 0; i < table1Items.size(); i++) {
-                ChartDataModel model = new ChartDataModel();
+            ChartDataModel model = new ChartDataModel();
             com.mosl.saathi.api.model.dashboard.incentive.Table1Item item = table1Items.get(i);
             String Name = stringOrEmpty(item.name);
             String Q1 = stringOrZero(item.q1);
@@ -517,25 +529,24 @@ public class DashboardFragment extends MOSLCommonFragment
             String WidgetType = stringOrEmpty(item.widgetType);
             if (item.yTD != null) {
                 ytd = stringOrZero(item.yTD);
-                    yDataGraphArrAdv.add(ytd);
-                }
-                yDataGraphArrAdv.add(Name);
-                yDataGraphArrAdv.add(Q1);
-                yDataGraphArrAdv.add(Q2);
-                yDataGraphArrAdv.add(Q3);
-                yDataGraphArrAdv.add(Q4);
-                yDataGraphArrAdv.add(WidgetType);
-                model.getMonthData().put("Q1", Float.parseFloat(Q1));
-                model.getMonthData().put("Q2", Float.parseFloat(Q2));
-                model.getMonthData().put("Q3", Float.parseFloat(Q3));
-                model.getMonthData().put("Q4", Float.parseFloat(Q4));
+                yDataGraphArrAdv.add(ytd);
+            }
+            yDataGraphArrAdv.add(Name);
+            yDataGraphArrAdv.add(Q1);
+            yDataGraphArrAdv.add(Q2);
+            yDataGraphArrAdv.add(Q3);
+            yDataGraphArrAdv.add(Q4);
+            yDataGraphArrAdv.add(WidgetType);
+            model.getMonthData().put("Q1", Float.parseFloat(Q1));
+            model.getMonthData().put("Q2", Float.parseFloat(Q2));
+            model.getMonthData().put("Q3", Float.parseFloat(Q3));
+            model.getMonthData().put("Q4", Float.parseFloat(Q4));
 
             if (item.yTD != null) {
-                    model.getMonthData().put("YTD", Float.parseFloat(ytd));
-                }
-                dataList.add(model);
+                model.getMonthData().put("YTD", Float.parseFloat(ytd));
             }
-
+            dataList.add(model);
+        }
 
         if (generateBarData(dataList) != null) {
             mChartAdv.setData(generateBarData(dataList));
@@ -652,6 +663,63 @@ public class DashboardFragment extends MOSLCommonFragment
             } else if (id == R.id.rlPerformanceAndIncentivesHeader) {
                 toggleSectionExpansion(llPerformanceAndIncentivesHeader,
                     ivPerformanceAndIncentivesHeader);
+            } else if (id == R.id.rlFreshRegistration) {
+                Map<String, String> map = new HashMap();
+                map.put(NEW_USERID, "");
+                map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+                map.put(COMMANDTYPE, "NEW");
+                map.put(APPLICATIONTYPE, "CRM");
+                map.put(OSTYPE, "ANDROID");
+                map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                map.put(TOKENKEY, AccountDetails.getToken());
+                map.put(ISAUFSB, String.valueOf(AccountDetails.isAufsb()));
+                gotoNewEkyc(getInputBody(map));
+            } else if (id == R.id.rlExisting) {
+                HashMap<String, String> map = new HashMap();
+                map.put(NEW_USERID, "");
+                map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+                map.put(COMMANDTYPE, "RESUME");
+                map.put(APPLICATIONTYPE, "CRM");
+                map.put(OSTYPE, "ANDROID");
+                map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+                map.put(TOKENKEY, AccountDetails.getToken());
+                map.put(ISAUFSB, String.valueOf(AccountDetails.isAufsb()));
+                gotoNewEkyc(getInputBody(map));
+            } else if (id == R.id.txtTelephoneNo1) {
+                MSFDialog.alertDialog(getActivity(), 0,
+                    getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",
+                    "No", true, new MSFDialog.DialogListener() {
+                        @Override
+                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + "02239982515"));
+                                startActivity(callIntent);
+                            }
+                        }
+                    });
+            } else if (id == R.id.txtTelephoneNo2) {
+                MSFDialog.alertDialog(getActivity(), 0,
+                    getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",
+                    "No", true, new MSFDialog.DialogListener() {
+                        @Override
+                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + "02239982515"));
+                                startActivity(callIntent);
+                            }
+                        }
+                    });
+            } else if (id == R.id.llEmail) {
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL, "rggupta72@gmail.com");
+                email.putExtra(Intent.EXTRA_SUBJECT, "");
+                email.putExtra(Intent.EXTRA_TEXT, "");
+                email.setType("message/rfc822");
+                email = Intent.createChooser(email, "Choose an Email");
+                email.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(email);
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
@@ -841,7 +909,14 @@ public class DashboardFragment extends MOSLCommonFragment
                     }
                     dashboardBtnList.clear();
                     dashboardList.clear();
-                    loadDashboardMetaData();
+                    if (isAufsb()) {
+                        lldashboardAufsb.setVisibility(View.VISIBLE);
+                        ivActionableInsights.setVisibility(View.GONE);
+                        tvMain.setVisibility(View.GONE);
+                    } else {
+                        lldashboardAufsb.setVisibility(View.GONE);
+                        loadDashboardMetaData();
+                    }
                 }
             }
         } catch (Exception e) {

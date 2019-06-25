@@ -36,10 +36,11 @@ public interface MOSLConstants extends LabelConfig {
     int MOSL_MENU_CALENDAR = 3;
     int MOSL_MENU_PENDING_APPROVALS = 4;
     int MOSL_MENU_KNOWLEDGE_CENTRE = 5;
-    int MOSL_MENU_BIRTHDAY_ANIVERSARY = 6;
-    int MOSL_MENU_SUGGEST_ME = 7;
-    int MOSL_MENU_QUERY = 8;
-    int MOSL_MENU_LOGOUT = 9;
+    int MOSL_MENU_SALES_STADIUM_PITCH = 6;
+    int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
+    int MOSL_MENU_SUGGEST_ME = 8;
+    int MOSL_MENU_QUERY = 9;
+    int MOSL_MENU_LOGOUT = 10;
     int LOGOUT_CODE = 4;
     int CALL_PROSPECT_DETAILS = 2;
     int CALL_CONVERT_EKYC = 3;

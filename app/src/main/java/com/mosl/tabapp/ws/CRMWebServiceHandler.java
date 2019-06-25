@@ -44,6 +44,7 @@ public class CRMWebServiceHandler {
     public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
     public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
     public static String COLLATERAL_URL = ServiceUrlsImpl.CRM_COLLATERAL_URL();
+    public static String SALES_STADIUM_PITCH_URL = ServiceUrlsImpl.SALES_STADIUM_PITCH_URL();
 
     public static String getJsonString(Map param) {
         return getJsonString(param, false);
