@@ -37,6 +37,7 @@ import com.mosl.app.core.data.UiModelHelper;
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem;
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest;
 import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
@@ -806,16 +807,17 @@ public class SetAppointmentFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderClientImage(UiModel<String> uiModel) {
+    private void renderClientImage(UiModel<SaathiCommonResponse<String>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
         if (error != null) {
             showOnFailurePopup(error);
         }
-        String data = uiModel.data;
+        SaathiCommonResponse<String> data = uiModel.data;
         if (data != null) {
-            byte[] byt = Base64.decode(data, Base64.DEFAULT);
+            String response = data.response;
+            byte[] byt = Base64.decode(response, Base64.DEFAULT);
             if (byt != null) {
                 CRMAppUtil.setImage(byt, ivLead, getMainActivity());
             } else {

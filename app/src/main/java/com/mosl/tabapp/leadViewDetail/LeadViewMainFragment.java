@@ -18,20 +18,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
+import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.lead.Contact;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LeadViewItem;
 import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
-import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest;
-import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse;
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest;
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineResponse;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.LockedViewPager;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.model.LeadClientDetails;
+import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
@@ -212,7 +213,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         }
     }
 
-    private void renderClientImage(UiModel<String> uiModel) {
+    private void renderClientImage(UiModel<SaathiCommonResponse<String>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -220,9 +221,10 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             showOnFailurePopup(error);
             CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
         }
-        String data = uiModel.data;
+        SaathiCommonResponse<String> data = uiModel.data;
         if (data != null) {
-            byte[] byt = Base64.decode(data, Base64.DEFAULT);
+            String response = data.response;
+            byte[] byt = Base64.decode(response, Base64.DEFAULT);
             if (byt != null) {
                 CRMAppUtil.setImage(byt, ivLead, getMainActivity());
             } else {
@@ -234,9 +236,9 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
 
     private void getClientDetail(final String ucid) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            ClientViewByCommandRequest request =
-                new ClientViewByCommandRequest(ucid);
-            Disposable subscribe = saathiApi.getClientViewByCommand(request)
+            ClientDetailRequest request =
+                new ClientDetailRequest(Integer.parseInt(ucid));
+            Disposable subscribe = saathiApi.getClientDetail(request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(this::renderClientViewByCommand);
         } else {
@@ -244,28 +246,28 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         }
     }
 
-    private void renderClientViewByCommand(UiModel<ClientViewByCommandResponse> uiModel) {
+    private void renderClientViewByCommand(UiModel<ClientDetailItem> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
         if (error != null) {
             showOnFailurePopup(error);
         }
-        ClientViewByCommandResponse data = uiModel.data;
+        ClientDetailItem data = uiModel.data;
         if (data != null) {
-            new LeadClientDetails(data);
-            tvName.setText(LeadClientDetails.getName());
-            setTitle(LeadClientDetails.getName());
-            tvLeadId.setText(LeadClientDetails.getLeadId());
-            tvCurrentStage.setText(LeadClientDetails.getCurrentStage());
-            if (!LeadClientDetails.getCurrentStageSince().isEmpty()) {
+            new ClientDetail(data);
+            tvName.setText(ClientDetail.getName());
+            setTitle(ClientDetail.getName());
+            tvLeadId.setText(ClientDetail.getLeadId());
+            tvCurrentStage.setText(ClientDetail.getCurrentStage());
+            if (!ClientDetail.getCurrentStageSince().isEmpty()) {
                 tvCurrentStageSince.setText(
-                    LeadClientDetails.getCurrentStageSince() + " Days");
+                    ClientDetail.getCurrentStageSince() + " Days");
             }
-            tvClientCode.setText(LeadClientDetails.getClientCode());
-            tvBranchCode.setText(LeadClientDetails.getBranchCode());
-            mobileNo = LeadClientDetails.getMobile();
-            oaoUserId = LeadClientDetails.getOaoUserId();
+            tvClientCode.setText(ClientDetail.getClientCode());
+            tvBranchCode.setText(ClientDetail.getBranchCode());
+            mobileNo = ClientDetail.getMobile();
+            oaoUserId = ClientDetail.getOaoUserId();
             searchType = SEARCH_TYPE_CLIENT;
         }
     }

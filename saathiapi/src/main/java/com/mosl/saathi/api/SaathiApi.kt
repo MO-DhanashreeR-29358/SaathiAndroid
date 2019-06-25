@@ -16,7 +16,6 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
-import com.mosl.saathi.api.model.common.NotEncrypted
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.AddUpdateLeadItem
 import com.mosl.saathi.api.model.createlead.AddUpdateLeadRequest
@@ -33,8 +32,6 @@ import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
-import com.mosl.saathi.api.model.createmeeting.ClientByCommandItem
-import com.mosl.saathi.api.model.createmeeting.ClientByCommandRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
@@ -98,8 +95,6 @@ import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
-import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandRequest
-import com.mosl.saathi.api.model.leadviewmain.ClientViewByCommandResponse
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineResponse
 import com.mosl.saathi.api.model.login.LoginRequest
@@ -363,12 +358,6 @@ interface SaathiApi {
   fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>
   //===================== Lead View Main=========================
 
-  @POST("Client/GetClientImage")
-  fun getClientImage(@Body request: ClientImageRequest): Observable<String>
-
-  @POST("Client/GetClientViewByCommand/")
-  fun getClientViewByCommand(@Body request: ClientViewByCommandRequest): Observable<ClientViewByCommandResponse>
-
   @POST("Prospect/SMT_RegisterProspectOnline/")
   fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
   //==================== Lead Profile ===========================
@@ -576,14 +565,10 @@ interface SaathiApi {
     @Body request: TransferLeadRequest
   ): Observable<SaathiCommonResponse<TransferLeadItem>>
 
-  @NotEncrypted
   @POST("Client/GetClientImage")
-  fun postClientImage(
+  fun getClientImage(
     @Body request: ClientImageRequest
   ): Observable<SaathiCommonResponse<String>>
-
-  @POST("Client/GetClientViewByCommand")
-  fun postClientViewByCommand(@Body request: ClientByCommandRequest): Observable<SaathiCommonResponse<ClientByCommandItem>>
 
   //===================== Update meeting =========================
 
