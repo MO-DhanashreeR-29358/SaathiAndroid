@@ -251,9 +251,12 @@ public class MOSLCommonActivity extends AppCompatActivity
         Map headerMap = getHeader(context);
 
         FcmTokenRequest request = new FcmTokenRequest(token, deviceId);
-        //Disposable subscribe =
-        //    CRMWebServiceHandler.getSaathiApi(this).updateFCMToken(request).subscribe(o ->
-        //        Timber.d("Token Res %s", o.toString()));
+        Disposable subscribe =
+            CRMWebServiceHandler.getSaathiApi().updateFCMToken(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> {
+                    Timber.d("Token Res %s", uiModel.data);
+                });
     }
 
     public static String getInputBody(Map param) {
@@ -853,7 +856,7 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
     }
 
-    private void renderLogout(UiModel<Object> uiModel) {
+    private void renderLogout(UiModel<String> uiModel) {
         toggleProgress(uiModel.inProgress);
         Throwable error = uiModel.error;
         if (error != null) {

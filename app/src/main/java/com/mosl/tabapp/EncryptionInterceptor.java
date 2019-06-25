@@ -30,12 +30,21 @@ public class EncryptionInterceptor implements Interceptor {
 
         Response response = chain.proceed(request);
         if (isEncrypted && response.body() != null) {
-            String strResponse = response.body().string();
-            ResponseBody decryptedBody = ResponseBody.create(
-                MediaType.parse("application/json"),
-                CRMSecurityUtil.decrypt(strResponse)
-            );
-            return response.newBuilder().body(decryptedBody).build();
+            try {
+                String strResponse = response.body().string();
+                byte[] decrypted = CRMSecurityUtil.decrypt(strResponse);
+                if (decrypted != null) {
+                    ResponseBody decryptedBody = ResponseBody.create(
+                        MediaType.parse("application/json"),
+                        decrypted
+                    );
+                    return response.newBuilder().body(decryptedBody).build();
+                } else {
+                    return response;
+                }
+            } catch (Exception e) {
+                return response;
+            }
         } else {
             return response;
         }
