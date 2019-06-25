@@ -864,13 +864,16 @@ public class MOSLCommonActivity extends AppCompatActivity
             showOnFailurePopup(error);
         }
 
-        stopService(new Intent(MOSLCommonActivity.this,
-            ForegroundService.class));
-        mWorkManager.cancelWorkById(compressionWorkId);
-        Intent i = new Intent(MOSLCommonActivity.this,
-            ImageSliderActivity.class);
-        startActivity(i);
-        finish();
+        String data = uiModel.data;
+        if (data != null) {
+            stopService(new Intent(MOSLCommonActivity.this,
+                ForegroundService.class));
+            mWorkManager.cancelWorkById(compressionWorkId);
+            Intent i = new Intent(MOSLCommonActivity.this,
+                ImageSliderActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     public void showOnFailurePopup(Throwable t) {
