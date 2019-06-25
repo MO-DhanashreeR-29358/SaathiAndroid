@@ -17,15 +17,12 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
-import com.mosl.saathi.api.model.createlead.AddUpdateLeadItem
-import com.mosl.saathi.api.model.createlead.AddUpdateLeadRequest
+import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
-import com.mosl.saathi.api.model.createlead.LeadSourceListItem
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
-import com.mosl.saathi.api.model.createlead.TransferLeadItem
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
@@ -277,7 +274,7 @@ interface SaathiApi {
 
   @POST("Lead/AddUpdateLead")
   fun addUpdateLead(
-    @Body request: Any
+    @Body request: CreateLeadRequest
   ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
   // ==================== Query ===========================
@@ -469,10 +466,10 @@ interface SaathiApi {
   fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>
 
   @POST("Auth/Logout")
-  fun logout(@Body logoutRequest: LogoutRequest): Observable<Any>
+  fun logout(@Body logoutRequest: LogoutRequest): Observable<String>
 
   @POST("Auth/UpdateFCMToken")
-  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<Any>
+  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<String>
 
   @POST("Prospect/RegisterProspectOnline")
   fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
@@ -549,21 +546,6 @@ interface SaathiApi {
   @ExtraDataWrapper
   @POST("Event/GetEventSeminarAttendedList")
   fun getSeminarEvent(@Body request: LeadInteractionRequest): Observable<String>
-
-  @POST("LeadSource/GetLeadSourceList")
-  fun postLeadSourceList(
-    @Body request: LeadSourceListRequest
-  ): Observable<SaathiCommonResponse<LeadSourceListItem>>
-
-  @POST("Lead/AddUpdateLead")
-  fun postAddUpdateLead(
-    @Body request: AddUpdateLeadRequest
-  ): Observable<SaathiCommonResponse<AddUpdateLeadItem>>
-
-  @POST("Lead/TransferLeadCaughtInC2")
-  fun postTransferLead(
-    @Body request: TransferLeadRequest
-  ): Observable<SaathiCommonResponse<TransferLeadItem>>
 
   @POST("Client/GetClientImage")
   fun getClientImage(
