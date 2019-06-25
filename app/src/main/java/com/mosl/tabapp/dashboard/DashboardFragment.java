@@ -1505,10 +1505,10 @@ public class DashboardFragment extends MOSLCommonFragment
     private void renderStatus(UiModel<JSONObject> uiModel) {
         toggleProgress(uiModel.inProgress);
 
-        Throwable error = uiModel.error;
+        /*Throwable error = uiModel.error;
         if (error != null) {
-            showOnFailurePopup(error);
-        }
+            //showOnFailurePopup(error);
+        }*/
 
         JSONObject data = uiModel.data;
         if (data != null) {
