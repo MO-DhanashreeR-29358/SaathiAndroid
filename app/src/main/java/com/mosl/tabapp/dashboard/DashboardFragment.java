@@ -295,6 +295,7 @@ public class DashboardFragment extends MOSLCommonFragment
             dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
         llAdvPerformance = dashAdvisoryView.findViewById(R.id.llAdvPerformance);
         llTeamPerformance = dashAdvisoryView.findViewById(R.id.llTeamPerformance);
+        llEmail = dashAdvisoryView.findViewById(R.id.llEmail);
 
         rlClientLeads.setOnClickListener(this);
         rlTargetAchievementADV.setOnClickListener(this);
