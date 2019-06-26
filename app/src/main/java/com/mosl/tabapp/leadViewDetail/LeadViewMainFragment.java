@@ -320,7 +320,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             }
 
             if (contact != null) {
-                mUCID = stringOrEmpty(contact.uCID);
+                mUCID = stringOrZero(contact.uCID);
                 mobileNo = stringOrEmpty(contact.mobile);
                 email = stringOrEmpty(contact.emailId);
                 String name = stringOrEmpty(contact.name);

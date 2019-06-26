@@ -4845,7 +4845,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     actAssignTo,
                     dataMap
                 );
-                Disposable disposable = saathiApi.updateLeadProductMapping(mappingRequest.toMap())
+                Disposable disposable = saathiApi.updateLeadProductMapping(mappingRequest)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest));
             } else {

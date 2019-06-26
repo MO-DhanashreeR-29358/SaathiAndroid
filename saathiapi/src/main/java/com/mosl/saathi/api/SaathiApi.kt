@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
+import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
@@ -236,7 +237,7 @@ interface SaathiApi {
 
   @POST("Lead/UpdateLeadProductMapping")
   fun updateLeadProductMapping(
-    @Body request: Map<String, Any>
+    @Body request: UpdateLeadMappingRequest
   ): Observable<List<LeadProductMappingItem>>
 
   @GET

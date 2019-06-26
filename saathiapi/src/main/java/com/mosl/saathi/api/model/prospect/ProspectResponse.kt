@@ -8,6 +8,6 @@ data class ProspectResponse(
   @JvmField @SerializedName("EncryptedURL") val encryptedUrl: String
 ) {
   fun isRegistrationAllowed(): Boolean {
-    return registrationAllowed.equals(true)
+    return registrationAllowed.equals("true")
   }
 }
