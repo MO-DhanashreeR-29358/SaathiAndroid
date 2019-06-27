@@ -122,7 +122,7 @@ public class LoginActivity extends FragmentActivity
         } else {
             message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
         }
-        MSFDialog.alertDialog(getApplicationContext(), 0,
+        MSFDialog.alertDialog(LoginActivity.this, 0,
             getResources().getString(R.string.motilal_oswal),
             message, "OK", true, null);
     }
