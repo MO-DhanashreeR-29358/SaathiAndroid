@@ -31,10 +31,6 @@ import java.util.List;
 import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
-import static com.mosl.mobile.ekyc.model.CommonModel.setUserType;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getAppVersionCode;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -51,8 +47,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 			new MyExceptionHandler(this, SplashActivity.class));
 		new Handler().postDelayed(new Runnable() {
 			@Override public void run() {
-				setAppType(CRM);
-				setUserType("");
+                AccountDetails.setUserType("");
 				versionCheck();
 			}
 		}, SPLASH_TIME_OUT);
@@ -81,9 +76,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
             String token = stringOrEmpty(user.token);
             String email = stringOrEmpty(user.email);
             String userTypeSequence = stringOrEmpty(user.userTypeSequence);
-
-            setAppLoginID(employeeCode);
-            setAppType(CRM);
 
             String branchCode = stringOrEmpty(user.defaultBusinessProfile.branchCode);
             String businessProfileId = stringOrEmpty(user.currentBusinessProfile.businessProfileId);

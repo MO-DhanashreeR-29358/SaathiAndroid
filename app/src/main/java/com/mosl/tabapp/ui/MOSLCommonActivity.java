@@ -1,6 +1,5 @@
 package com.mosl.tabapp.ui;
 
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -30,12 +29,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Filter;
@@ -54,13 +49,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
-import com.mosl.mobile.ekyc.common.MOSLCommon;
-import com.mosl.mobile.ekyc.model.CommonModel;
-import com.mosl.mobile.ekyc.model.RoleSelectionModel;
-import com.mosl.mobile.ekyc.model.RowData;
-import com.mosl.mobile.ekyc.register.RegisterActivity;
-import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
-import com.mosl.mobile.ekyc.ui.PostLoginActivity;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest;
 import com.mosl.saathi.api.model.login.LoginRequest;
@@ -118,14 +106,23 @@ import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.SELECT_ROLE;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
-import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+/*import com.mosl.mobile.ekyc.common.MOSLCommon;
+import com.mosl.mobile.ekyc.model.CommonModel;
+import com.mosl.mobile.ekyc.model.RoleSelectionModel;
+import com.mosl.mobile.ekyc.model.RowData;
+import com.mosl.mobile.ekyc.register.RegisterActivity;
+import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
+import com.mosl.mobile.ekyc.ui.PostLoginActivity;*/
+//import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
+//import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
+//import static com.mosl.mobile.ekyc.constants.MOSLConstants.SELECT_ROLE;
+//import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
+//import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
+//import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 
 public class MOSLCommonActivity extends AppCompatActivity
     implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
@@ -156,9 +153,7 @@ public class MOSLCommonActivity extends AppCompatActivity
     //setting default
     private String searchType = SEARCH_TYPE_LEAD;
     private String ekycMenuType = SEARCH_TYPE_LEAD;
-    private ArrayAdapter<RowData> arrAdapRoleSel;
     private Spinner spRoleSel;
-    private RoleSelectionModel roleSelectionModel;
     private boolean mBound = false;
     private ForegroundService mService = null;
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -191,18 +186,7 @@ public class MOSLCommonActivity extends AppCompatActivity
     private CreateMeetingFragment createMeetingFragment;
     private LeadViewMainFragment leadViewMainFragment;
     private boolean searchFoundFlag;
-    private AdapterView.OnItemSelectedListener roleListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                roleID = ((RowData) spRoleSel.getSelectedItem()).getKey();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1029,51 +1013,6 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
     }
 
-    //region login methods
-
-    public void showRoleDialog(Context context, ArrayList<RowData> arrRoleSel, final int tab) {
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        dialog.setContentView(com.mosl.mobile.ekyc.R.layout.dialog_role_selection);
-        dialog.getWindow()
-            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCanceledOnTouchOutside(false);
-        spRoleSel = (Spinner) dialog.findViewById(com.mosl.mobile.ekyc.R.id.spRoleSel);
-        Button btnGoToEkyc = (Button) dialog.findViewById(com.mosl.mobile.ekyc.R.id.btnGoToEkyc);
-
-        arrAdapRoleSel = new ArrayAdapter<RowData>(MOSLCommonActivity.this,
-            com.mosl.mobile.ekyc.R.layout.simple_spinner_item, arrRoleSel);
-        arrAdapRoleSel.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spRoleSel.setAdapter(arrAdapRoleSel);
-        spRoleSel.setOnItemSelectedListener(roleListener);
-        progressLayout.setVisibility(View.GONE);
-
-        btnGoToEkyc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (RoleSelectionModel.getRoleMappingID() != null
-                    && !RoleSelectionModel.getRoleMappingID().equals("")) {
-                    if (tab == 1) {
-                        Intent intent = new Intent(MOSLCommonActivity.this,
-                            com.mosl.mobile.ekyc.ui.PostLoginActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(MOSLCommonActivity.this,
-                            com.mosl.mobile.ekyc.register.RegisterActivity.class);
-                        intent.putExtra(ISSAATHIAUFSB, isAufsb());
-                        startActivity(intent);
-                    }
-                } else {
-                    MOSLCommon.showToastMsg(MOSLCommonActivity.this, SELECT_ROLE);
-                }
-
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
     /**
      * this does Login ofuser from stored password
      */
@@ -1129,10 +1068,6 @@ public class MOSLCommonActivity extends AppCompatActivity
             String token = stringOrEmpty(user.token);
             String email = stringOrEmpty(user.email);
             String userTypeSequence = stringOrEmpty(user.userTypeSequence);
-
-            setAppLoginID(employeeCode);
-            setAppType(CRM);
-
             String branchCode = stringOrEmpty(user.defaultBusinessProfile.branchCode);
             String businessProfileId = stringOrEmpty(user.currentBusinessProfile.businessProfileId);
             String businessProfileName = stringOrEmpty(user.currentBusinessProfile.name);
@@ -1267,30 +1202,13 @@ public class MOSLCommonActivity extends AppCompatActivity
     }
 
     public void gotoEkycPage(int xyz, Map hashMap) {
-        CommonModel.setSaathiAufsb(isAufsb());
         switch (xyz) {
-            case MOSL_MENU_FRESH_REGISTRATION:
-                Intent registerIntent = new Intent(MOSLCommonActivity.this, RegisterActivity.class);
-                registerIntent.putExtra(ISSAATHIAUFSB, isAufsb());
-                startActivity(registerIntent);
-                break;
-            case MOSL_MENU_EXISTINGS_APPLICATIONS:
-                Intent postLoginIntent =
-                    new Intent(MOSLCommonActivity.this, PostLoginActivity.class);
-                startActivity(postLoginIntent);
-                break;
             case CALL_CONVERT_EKYC:
                 ConvertEkycApi(hashMap.get(MOBILE).toString(), hashMap.get(EMAIL).toString(),
                     hashMap.get(LEAD_OWNER).toString(), hashMap.get(SOURCENAME).toString(),
                     hashMap.get(PROSPECT_SOURCENAME).toString(),
                     hashMap.get(PROSPECT_SOURCEDETAIL).toString(),
                     hashMap.get(INTRESTEDIN).toString());
-                break;
-            case CALL_PROSPECT_DETAILS:
-                Intent intent =
-                    new Intent(MOSLCommonActivity.this, BranchResumeApplicationActivity.class);
-                intent.putExtra("UserId", hashMap.get(USERID).toString());
-                startActivity(intent);
                 break;
         }
     }

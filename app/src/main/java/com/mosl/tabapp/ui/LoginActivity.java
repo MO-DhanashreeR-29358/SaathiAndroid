@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
-import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.login.LoginRequest;
 import com.mosl.saathi.api.model.login.LoginResponse;
@@ -34,9 +33,6 @@ import io.reactivex.disposables.Disposable;
 import java.util.List;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getDeviceID;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
@@ -67,7 +63,6 @@ public class LoginActivity extends FragmentActivity
 		if (!CRMAppUtil.isBlank(empCode)) {
 			etEmpCode.setText(empCode.trim());
 		}
-		setAppType(CRM);
 		btnLogin.setOnClickListener(LoginActivity.this);
 	}
 
@@ -150,9 +145,6 @@ public class LoginActivity extends FragmentActivity
             String email = stringOrEmpty(user.email);
             String userTypeSequence = stringOrEmpty(user.userTypeSequence);
 
-            setAppLoginID(employeeCode);
-            setAppType(CRM);
-
             String branchCode = stringOrEmpty(user.defaultBusinessProfile.branchCode);
             String rmId = stringOrEmpty(user.defaultBusinessProfile.userId);
             String businessProfileId = stringOrEmpty(user.currentBusinessProfile.businessProfileId);
@@ -178,9 +170,6 @@ public class LoginActivity extends FragmentActivity
             loginData.setSmtEnabled(smtEnabled);
             loginData.setAufsb(aufsb);
             loginData.setEkycRevemp(ekycRevamp);
-
-            new RoleSelectionModel("", "", "", "", employeeCode.trim(),
-                rmId.trim(), businessUnitId.trim(), "",/*roleId*/"");
 
             storeLoginPrefData(loginData);
         }

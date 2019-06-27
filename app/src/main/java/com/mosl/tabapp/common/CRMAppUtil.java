@@ -716,4 +716,14 @@ public class CRMAppUtil {
         return isMock;
     }
 
+    public static boolean validateOnlyAlphabetAndNumberWithoutSplChar(String input) {
+        String CODE_PATTERN = "^[a-zA-Z0-9 ]*$";
+
+        if (isBlank(input)) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(CODE_PATTERN);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
 }
