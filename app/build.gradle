@@ -113,7 +113,7 @@ android {
 
 dependencies {
   implementation project(':TabLibrary')
-  implementation project(':eKYC')
+//  implementation project(':eKYC')
   implementation project(':saathiapi')
   implementation project(':data')
   implementation(deps.crashlytics) {
@@ -156,7 +156,7 @@ dependencies {
   implementation deps.location
   //workmanager
   implementation deps.work
-  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
+//  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
 
   implementation deps.retrofit.core
   implementation deps.okHttp.core

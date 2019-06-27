@@ -18,8 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.data.UiModelHelper;
-import com.mosl.mobile.ekyc.common.MOSLCommon;
-import com.mosl.mobile.ekyc.ui.CustomDialog;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest;
@@ -33,6 +31,7 @@ import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
+import com.mosl.tabapp.ui.CustomDialog;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
@@ -334,8 +333,8 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                         "Are you sure you want to cancel this appointment ?", true, true, true,
                         "Cancel Appointment", YES, NO, new CustomDialog.CustomDialogListener() {
                         @Override
-                        public void dialogAction(MOSLCommon.Action action, Object... data) {
-                            if (action == MOSLCommon.Action.OK) {
+                        public void dialogAction(MSFDialog.Action action, Object... data) {
+                            if (action == MSFDialog.Action.OK) {
                                 deleteAppintments(appointmentModel.getMeetingid(),
                                     "DeactivateMeeting");
                             }
@@ -349,11 +348,11 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                         "Cancel Appointment", "Current", "All",
                         new CustomDialog.CustomDialogListener() {
                             @Override
-                            public void dialogAction(MOSLCommon.Action action, Object... data) {
-                                if (action == MOSLCommon.Action.OK) {
+                            public void dialogAction(MSFDialog.Action action, Object... data) {
+                                if (action == MSFDialog.Action.OK) {
                                     deleteAppintments(appointmentModel.getMeetingid(),
                                         "DeactivateMeeting");
-                                } else if (action == MOSLCommon.Action.NO) {
+                                } else if (action == MSFDialog.Action.CANCEL) {
                                     deleteAppintments(appointmentModel.getMeetingid(),
                                         "DeactivateALLMeeting");
                                 }

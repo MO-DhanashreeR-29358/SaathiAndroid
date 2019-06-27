@@ -33,7 +33,6 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
-import com.mosl.mobile.ekyc.common.ValidationRule;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails;
@@ -93,7 +92,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.mobile.ekyc.constants.MOSLConstants.ErrorMsgName;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -818,7 +816,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     tvNameError.setVisibility(View.GONE);
 
                     //format check
-                    if (!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+                    if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
                         etName.getText().toString().trim())) {
                         tvNameError.setText(ErrorMsgName);
                         tvNameError.setVisibility(View.VISIBLE);
@@ -844,7 +842,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                     tvProspectRefereeNameError.setVisibility(View.GONE);
 
                     //format check
-                    if (!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+                    if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
                         etProspectRefereeName.getText().toString().trim())) {
                         tvProspectRefereeNameError.setText(ErrorMsgName);
                         tvProspectRefereeNameError.setVisibility(View.VISIBLE);
@@ -868,7 +866,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             @Override public void afterTextChanged(Editable s) {
                 if (!isBlank(etContactPerson.getText().toString().trim())) {
                     tvContactPersonError.setVisibility(View.GONE);
-                    if (!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+                    if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
                         etContactPerson.getText().toString().trim())) {
                         tvContactPersonError.setText(ErrorMsgName);
                         tvContactPersonError.setVisibility(View.VISIBLE);
@@ -1989,7 +1987,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             tvNameError.requestFocus();
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
-        } else if (!ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+        } else if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
             etName.getText().toString().trim())) {
             tvNameError.setText(ErrorMsgName);
             tvNameError.setVisibility(View.VISIBLE);
@@ -2002,7 +2000,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             openSectionExpansion(llPersonalInformation, tvPersonalInfo);
             return false;
         } else if (!isIndividualsFlag
-            && !ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+            && !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
             etContactPerson.getText().toString().trim())) {
             tvContactPersonError.setText(ErrorMsgName);
             tvContactPersonError.setVisibility(View.VISIBLE);
@@ -2116,7 +2114,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
             etRefreeCode.requestFocus();
             return false;
         } else if (!isBlank(etProspectRefereeName.getText().toString().trim()) &&
-            !ValidationRule.validateOnlyAlphabetAndNumberWithoutSplChar(
+            !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
                 etProspectRefereeName.getText().toString().trim())) {
             tvProspectRefereeNameError.setText(ErrorMsgName);
             tvProspectRefereeNameError.setVisibility(View.VISIBLE);

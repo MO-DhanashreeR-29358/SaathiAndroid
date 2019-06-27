@@ -123,6 +123,7 @@ public interface MOSLConstants extends LabelConfig {
     String UNAUTHORIZE_USER = "Session is expired, relogin is required";
     String CONFIRM_LEAD = "Are you sure want to create lead ?";
     String CONFIRM_LEAD_UPDATE = "Are you sure want to update lead ?";
+    String ErrorMsgName = "Only alphabets are allowed";
     int UNAUTHORIZE_STATUS_CODE = 401;
 
     String CLIENT_INFO = "Android";
