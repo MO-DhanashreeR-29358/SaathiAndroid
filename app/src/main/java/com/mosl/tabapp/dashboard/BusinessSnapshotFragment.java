@@ -266,7 +266,8 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(getMainActivity(), 0,
+                    context.getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
