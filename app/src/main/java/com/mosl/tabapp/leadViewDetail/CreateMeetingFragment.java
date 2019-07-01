@@ -3601,7 +3601,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
         timePicker.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
 
         Calendar cal = Calendar.getInstance();
-        cal.add(cal.DAY_OF_MONTH, -3);
+		cal.add(cal.DAY_OF_MONTH, -1);
         dpFromDate.setMinDate(cal.getTimeInMillis());
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
 

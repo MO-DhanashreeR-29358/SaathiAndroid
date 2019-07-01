@@ -6,30 +6,30 @@ package com.mosl.tabapp.service;
 
 import android.content.SharedPreferences;
 import android.os.Looper;
-import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.mosl.tabapp.ui.MOSLCommonActivity;
+import timber.log.Timber;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
 public class CRMAppInstanceIDListenerService extends FirebaseInstanceIdService {
-  private String TAG = CRMAppInstanceIDListenerService.class.getCanonicalName();
+	private String TAG = CRMAppInstanceIDListenerService.class.getCanonicalName();
 
-  @Override
-  public void onTokenRefresh() {
-    try {
-      String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+	@Override
+	public void onTokenRefresh() {
+		try {
+			String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
-      SharedPreferences.Editor editor = getPrefs(this).edit();
-      editor.putString("TOKEN_ID", refreshedToken);
-      editor.apply();
+			SharedPreferences.Editor editor = getPrefs(this).edit();
+			editor.putString("TOKEN_ID", refreshedToken);
+			editor.apply();
 
-      Looper.prepare();
-      MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
-      Log.d(TAG, "New firebase token: " + refreshedToken);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-  }
+			Looper.prepare();
+			MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
+			Timber.tag(TAG).d("New firebase token: " + refreshedToken);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 }
