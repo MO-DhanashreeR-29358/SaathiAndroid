@@ -471,10 +471,11 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 
 			inputMap.put("ApplicationType", NEW_CRM);
 			inputMap.put("AppVersion", "" + getAppVersionCode(SplashActivity.this));
-			//  inputMap.put("AppVersion", "" + 136);
 			inputMap.put("RequestSource", "Android");
 			inputMap.put("DisplayVersion", "");
-			Map headerMap = null;
+			Map headerMap = new HashMap();
+			headerMap.put("macaddress",
+				CRMMOSLCommon.getDeviceID(SplashActivity.this, getContentResolver()));
 			String serviceMethod = "Common/GetAppVersion";
 
 			try {
