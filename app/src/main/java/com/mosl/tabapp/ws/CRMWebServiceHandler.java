@@ -96,7 +96,7 @@ public class CRMWebServiceHandler {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
             new OkHttpClient.Builder()
-                .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new HeaderInterceptor(context))
                 .addInterceptor(new AuthorizationInterceptor(context))
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new EncryptionInterceptor())

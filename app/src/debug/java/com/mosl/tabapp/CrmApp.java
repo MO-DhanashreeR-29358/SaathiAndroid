@@ -8,6 +8,7 @@ import android.util.Log;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 import com.mosl.tabapp.database.AppDatabase;
+import com.mosl.tabapp.ws.AppProvider;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -44,6 +45,7 @@ public class CrmApp extends MultiDexApplication {
         }
 
         CRMWebServiceHandler.initSaathiApi(this);
+        AppProvider.initSaathiApi(this);
 
         appDatabase = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME)

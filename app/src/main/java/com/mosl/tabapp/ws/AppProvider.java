@@ -1,5 +1,6 @@
 package com.mosl.tabapp.ws;
 
+import android.content.Context;
 import com.google.gson.Gson;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
@@ -23,7 +24,7 @@ public class AppProvider {
         return gson;
     }
 
-    public static SaathiApi buildSaathiApi() {
+    public static SaathiApi buildSaathiApi(Context context) {
         RxJava2CallAdapterFactory callAdapterFactory =
             RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
 
@@ -31,7 +32,7 @@ public class AppProvider {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
             new OkHttpClient.Builder()
-                .addInterceptor(new HeaderInterceptor())
+                .addInterceptor(new HeaderInterceptor(context))
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(new EncryptionInterceptor())
                 .build();
@@ -46,9 +47,9 @@ public class AppProvider {
             .create(SaathiApi.class);
     }
 
-    public static SaathiApi getSaathiApi() {
+    public static SaathiApi initSaathiApi(Context context) {
         if (saathiApi == null) {
-            saathiApi = buildSaathiApi();
+            saathiApi = buildSaathiApi(context);
         }
         return saathiApi;
     }
