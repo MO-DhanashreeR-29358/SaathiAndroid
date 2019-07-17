@@ -97,6 +97,8 @@ android {
       multiDexEnabled true
       multiDexKeepFile file('multidex-config.txt')
       debuggable true
+      ext.enableCrashlytics = false
+      ext.alwaysUpdateBuildId = false
     }
   }
 

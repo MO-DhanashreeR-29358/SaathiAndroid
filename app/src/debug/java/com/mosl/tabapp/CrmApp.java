@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
 import com.mosl.tabapp.database.AppDatabase;
 import com.mosl.tabapp.ws.AppProvider;
@@ -30,7 +31,10 @@ public class CrmApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        Fabric.with(this, new Crashlytics());
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+            .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+            .build();
+        Fabric.with(this, crashlyticsKit);
         Stetho.initializeWithDefaults(this);
         initImageLoader(context);
         if (BuildConfig.DEBUG) {
