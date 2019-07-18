@@ -32,7 +32,6 @@ import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
-import com.mosl.tabapp.ui.MSFDialog;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +52,6 @@ public class ForegroundService extends Service {
 	int NOTIFICATION_ID = 12345;
 	private LocationRequest mLocationRequest;
 	private FusedLocationProviderClient mFusedLocation;
-
 	private Runnable runnableCode = new Runnable() {
 		@Override public void run() {
 			try {
@@ -150,25 +148,14 @@ public class ForegroundService extends Service {
 					locationData.setEmpCode(
 						getPrefs(getApplicationContext()).getString("EmployeeCode", null));
 					locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
+					locationData.setMockLocation(
+						isLocationFromMockProvider(getApplicationContext(), mCurrentLocation) ? 1
+							: 0);
 					locationData.setDeviceId(
 						getPrefs(getApplicationContext()).getString("macaddress", null));
-					if (isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
-						MSFDialog.alertDialog(getApplicationContext(), 0,
-							getResources().getString(R.string.motilal_oswal),
-							"Mocked location enabled. Please uninstall mock location apps to continue ",
-							"OK",
-							true, new MSFDialog.DialogListener() {
-								@Override
-								public void alertDialogAction(MSFDialog.Action action,
-									Object... data) {
-									if (action == MSFDialog.Action.OK) {
-									}
-								}
-							});
-					} else {
-						CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
-						Timber.tag("Location Data entered").d(locationData.toString());
-					}
+
+					CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
+					Timber.tag("Location Data entered").d(locationData.toString());
 				} else {
 					getCurrentLocation();
 					refreshHandler.postDelayed(runnableCode, 10000);
