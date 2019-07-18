@@ -32,12 +32,14 @@ import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
+import com.mosl.tabapp.ui.MSFDialog;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import timber.log.Timber;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static java.util.Objects.requireNonNull;
 
@@ -150,9 +152,23 @@ public class ForegroundService extends Service {
 					locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
 					locationData.setDeviceId(
 						getPrefs(getApplicationContext()).getString("macaddress", null));
-
-					CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
-					Timber.tag("Location Data entered").d(locationData.toString());
+					if (isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+						MSFDialog.alertDialog(getApplicationContext(), 0,
+							getResources().getString(R.string.motilal_oswal),
+							"Mocked location enabled. Please uninstall mock location apps to continue ",
+							"OK",
+							true, new MSFDialog.DialogListener() {
+								@Override
+								public void alertDialogAction(MSFDialog.Action action,
+									Object... data) {
+									if (action == MSFDialog.Action.OK) {
+									}
+								}
+							});
+					} else {
+						CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
+						Timber.tag("Location Data entered").d(locationData.toString());
+					}
 				} else {
 					getCurrentLocation();
 					refreshHandler.postDelayed(runnableCode, 10000);
