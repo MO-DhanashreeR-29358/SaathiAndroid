@@ -1,5 +1,6 @@
 package com.mosl.tabapp.ui;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -10,11 +11,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +56,9 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.model.CommonModel;
@@ -132,6 +139,7 @@ import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
 import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -348,9 +356,14 @@ public class MOSLCommonActivity extends AppCompatActivity
 		}
 	}
 
+	private FusedLocationProviderClient fusedLocationClient;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		mockLocationCheck();
+
 		if (isBlank(getPrefs(this).getString("PASSWORD", ""))) {
 			Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivity.class);
 			startActivity(intentLogin);
@@ -382,6 +395,41 @@ public class MOSLCommonActivity extends AppCompatActivity
 		} else {
 			initView();
 		}
+	}
+
+	private void mockLocationCheck() {
+		fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+			!= PackageManager.PERMISSION_GRANTED
+			&& ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+			!= PackageManager.PERMISSION_GRANTED) {
+			return;
+		}
+		fusedLocationClient.getLastLocation()
+			.addOnSuccessListener(this, new OnSuccessListener<Location>() {
+				@Override
+				public void onSuccess(Location location) {
+					if (location != null) {
+						if (isLocationFromMockProvider(MOSLCommonActivity.this,
+							location)) {
+							MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+								getResources().getString(R.string.motilal_oswal),
+								MOCK_LOCATION_ENABLED_MSG, "OK",
+								true, new MSFDialog.DialogListener() {
+									@Override
+									public void alertDialogAction(MSFDialog.Action action,
+										Object... data) {
+										if (action == MSFDialog.Action.OK) {
+											finish();
+										}
+									}
+								}).setCancelable(false);
+							;
+						}
+					}
+				}
+			});
 	}
 
 	/**
