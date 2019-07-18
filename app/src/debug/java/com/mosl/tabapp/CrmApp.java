@@ -1,6 +1,8 @@
 package com.mosl.tabapp;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Room;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
@@ -28,6 +30,14 @@ public class CrmApp extends MultiDexApplication {
         return INSTANCE;
     }
 
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE LocationData"
+                + " ADD COLUMN mockLocation INTEGER");
+        }
+    };
+
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
@@ -53,10 +63,10 @@ public class CrmApp extends MultiDexApplication {
 
         appDatabase = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME)
+            .addMigrations(MIGRATION_1_2)
                 .build();
         INSTANCE = this;
     }
-
     private static class CrashReportingTree extends Timber.Tree {
         @Override
         protected void log(int priority, String tag, String message, Throwable t) {
