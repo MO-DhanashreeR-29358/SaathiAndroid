@@ -25,7 +25,9 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.ui.MOSLCommonActivity;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
+import timber.log.Timber;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
@@ -35,7 +37,7 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    Log.d(TAG, "onMessageReceived");
+    Timber.tag(TAG).d("onMessageReceived");
     super.onMessageReceived(remoteMessage);
     sendNotification(remoteMessage.getData());
   }
@@ -70,7 +72,8 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
       Intent notificationIntent = new Intent(this, MOSLCommonActivity.class);
       notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       notificationIntent.setAction("Mosl_" + m);
-      notificationIntent.putExtra(MOSLConstants.SOURCE, MOSLConstants.FCM_NOTIFICATION_SOURCE);
+      notificationIntent.putExtra(MOSLConstants.SOURCE,
+          MOSLConstants.FCM_NOTIFICATION_SOURCE);
       notificationIntent.putExtra(MOSLConstants.FCM_NOTIFICATION_CATEGORY, category);
       PendingIntent pendingIntent =
           PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
@@ -116,13 +119,14 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         channel.setDescription(description);
 
-        notificationManager.createNotificationChannel(channel);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
       }
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         notificationBuilder.setChannelId(CHANNEL_ID); // Channel ID
       }
       //endregion
-      notificationManager.notify(m /* ID of notification */, notificationBuilder.build());
+      Objects.requireNonNull(notificationManager)
+          .notify(m /* ID of notification */, notificationBuilder.build());
     }
   }
 }

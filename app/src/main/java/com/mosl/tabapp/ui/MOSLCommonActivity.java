@@ -1255,7 +1255,7 @@ public class MOSLCommonActivity extends AppCompatActivity
     }
 
     private void startWorkManager() {
-        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 15,
+        PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 30,
             TimeUnit.MINUTES).setConstraints(networkConstraints()).build();
         mWorkManager.enqueue(periodicWork);
 

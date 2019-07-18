@@ -6,6 +6,7 @@ data class VersionRequest(
   @JvmField @SerializedName("ApplicationType") val applicationType: String,
   @JvmField @SerializedName("AppVersion") val appVersion: Int,
   @JvmField @SerializedName("RequestSource") val requestSource: String,
-  @JvmField @SerializedName("DisplayVersion") val displayVersion: String
+  @JvmField @SerializedName("DisplayVersion") val displayVersion: String,
+  @JvmField @SerializedName("macaddress") val macAddress: String
 
 )

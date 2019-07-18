@@ -212,7 +212,8 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	private void versionCheck() {
         if (CRMAppUtil.isNetworkEnabled(SplashActivity.this)) {
             VersionRequest request =
-                new VersionRequest(NEW_CRM, getAppVersionCode(SplashActivity.this), "Android", "");
+                new VersionRequest(NEW_CRM, getAppVersionCode(SplashActivity.this), "Android", "",
+                    CRMMOSLCommon.getDeviceID(SplashActivity.this, getContentResolver()));
             Disposable subscribe = CRMWebServiceHandler.getSaathiApi().appVersion(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderStartup);
