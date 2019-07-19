@@ -826,7 +826,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             mCurrentLocation)) {
             MSFDialog.alertDialog(getActivity(), 0,
                 getResources().getString(R.string.motilal_oswal),
-                "Mocked location enabled. Please uninstall mock location apps to continue ", "OK",
+                MOCK_LOCATION_ENABLED_MSG, "OK",
                 true, new MSFDialog.DialogListener() {
                     @Override
                     public void alertDialogAction(MSFDialog.Action action, Object... data) {

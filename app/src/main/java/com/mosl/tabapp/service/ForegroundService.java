@@ -52,6 +52,7 @@ public class ForegroundService extends Service {
 	int NOTIFICATION_ID = 12345;
 	private LocationRequest mLocationRequest;
 	private FusedLocationProviderClient mFusedLocation;
+
 	private Runnable runnableCode = new Runnable() {
 		@Override public void run() {
 			try {
@@ -148,14 +149,12 @@ public class ForegroundService extends Service {
 					locationData.setEmpCode(
 						getPrefs(getApplicationContext()).getString("EmployeeCode", null));
 					locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
-					locationData.setMockLocation(
-						isLocationFromMockProvider(getApplicationContext(), mCurrentLocation) ? 1
-							: 0);
 					locationData.setDeviceId(
 						getPrefs(getApplicationContext()).getString("macaddress", null));
-
-					CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
-					Timber.tag("Location Data entered").d(locationData.toString());
+					if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+						CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
+						Timber.tag("Location Data entered").d(locationData.toString());
+					}
 				} else {
 					getCurrentLocation();
 					refreshHandler.postDelayed(runnableCode, 10000);

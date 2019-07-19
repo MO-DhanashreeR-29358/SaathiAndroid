@@ -130,7 +130,6 @@ public class DataSyncWorker extends Worker {
 			json += ",\"DeviceId\":\"" + model.getDeviceId() + "\"";
 			json += ",\"Accuracy\":\"" + model.getAccuracy() + "\"";
 			json += ",\"Id\":\"" + 0 + "\"";
-			json += ",\"MockLocation\":\"" + model.getMockLocation() + "\"";
 			json += ",\"GeoPinCode\":\"" + model.getGeoPincode() + "\"";
 
 			json += "},";

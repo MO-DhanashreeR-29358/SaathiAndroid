@@ -6,104 +6,94 @@ import android.support.annotation.NonNull;
 
 @Entity
 public class LocationData {
-	@NonNull
-	@PrimaryKey(autoGenerate = true)
-	public int id;
-	private String latitude;
-	private String longitude;
-	private String deviceId;
-	private String empCode;
-	private String time;
-	private String accuracy;
-	private String geoArea;
-	private String geoPincode;
-	private int mockLocation;
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+    private String latitude;
+    private String longitude;
+    private String deviceId;
+    private String empCode;
+    private String time;
+    private String accuracy;
+    private String geoArea;
+    private String geoPincode;
 
-	public int getMockLocation() {
-		return mockLocation;
-	}
+    public String getLatitude() {
+        return latitude;
+    }
 
-	public void setMockLocation(int mockLocation) {
-		this.mockLocation = mockLocation;
-	}
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
-	public String getLatitude() {
-		return latitude;
-	}
+    public String getLongitude() {
+        return longitude;
+    }
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
-	public String getLongitude() {
-		return longitude;
-	}
+    public String getDeviceId() {
+        return deviceId;
+    }
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
-	public String getDeviceId() {
-		return deviceId;
-	}
+    public String getEmpCode() {
+        return empCode;
+    }
 
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
-	}
+    public void setEmpCode(String empCode) {
+        this.empCode = empCode;
+    }
 
-	public String getEmpCode() {
-		return empCode;
-	}
+    public String getTime() {
+        return time;
+    }
 
-	public void setEmpCode(String empCode) {
-		this.empCode = empCode;
-	}
+    public void setTime(String time) {
+        this.time = time;
+    }
 
-	public String getTime() {
-		return time;
-	}
+    public String getAccuracy() {
+        return accuracy;
+    }
 
-	public void setTime(String time) {
-		this.time = time;
-	}
+    public void setAccuracy(String accuracy) {
+        this.accuracy = accuracy;
+    }
 
-	public String getAccuracy() {
-		return accuracy;
-	}
+    public String getGeoArea() {
+        return geoArea;
+    }
 
-	public void setAccuracy(String accuracy) {
-		this.accuracy = accuracy;
-	}
+    public void setGeoArea(String geoArea) {
+        this.geoArea = geoArea;
+    }
 
-	public String getGeoArea() {
-		return geoArea;
-	}
+    public String getGeoPincode() {
+        return geoPincode;
+    }
 
-	public void setGeoArea(String geoArea) {
-		this.geoArea = geoArea;
-	}
+    public void setGeoPincode(String geoPincode) {
+        this.geoPincode = geoPincode;
+    }
 
-	public String getGeoPincode() {
-		return geoPincode;
-	}
-
-	public void setGeoPincode(String geoPincode) {
-		this.geoPincode = geoPincode;
-	}
-
-	@Override
-	public String toString() {
-		return "LocationData{" +
-			"id=" + id +
-			", lat='" + latitude + '\'' +
-			", Long='" + longitude + '\'' +
-			", deviceId='" + deviceId + '\'' +
-			", empCode='" + empCode + '\'' +
-			", time='" + time + '\'' +
-			", accuracy='" + accuracy + '\'' +
-			", geoArea='" + geoArea + '\'' +
-			", mockLocation='" + mockLocation + '\'' +
-			", geoPincode='" + geoPincode + '\'' +
-			'}';
-	}
+    @Override
+    public String toString() {
+        return "LocationData{" +
+            "id=" + id +
+            ", lat='" + latitude + '\'' +
+            ", Long='" + longitude + '\'' +
+            ", deviceId='" + deviceId + '\'' +
+            ", empCode='" + empCode + '\'' +
+            ", time='" + time + '\'' +
+            ", accuracy='" + accuracy + '\'' +
+            ", geoArea='" + geoArea + '\'' +
+            ", geoPincode='" + geoPincode + '\'' +
+            '}';
+    }
 }

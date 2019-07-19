@@ -604,5 +604,7 @@ public interface MOSLConstants extends LabelConfig {
     String PROSPECTREFERENAME = "ProspectRefereName";
     String PROSPECTREFEREMOBILE = "ProspectRefereMobile";
     String PROSPECTREFEREEMAIL = "ProspectRefereEmail";
+    String MOCK_LOCATION_ENABLED_MSG =
+        "Mocked location enabled. Please uninstall mock location apps to continue ";
 }
 

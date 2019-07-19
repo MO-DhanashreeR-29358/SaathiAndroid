@@ -1,5 +1,6 @@
 package com.mosl.tabapp.ui;
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -8,12 +9,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -47,6 +51,9 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
@@ -107,6 +114,7 @@ import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -300,10 +308,14 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
     }
 
+    private FusedLocationProviderClient fusedLocationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //new CRMWebServiceHandler().setAuthorization(this);
+
+        mockLocationCheck();
 
         if (isBlank(getPrefs(this).getString("PASSWORD", ""))) {
             Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivity.class);
@@ -338,6 +350,40 @@ public class MOSLCommonActivity extends AppCompatActivity
         }
     }
 
+    private void mockLocationCheck() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+            .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        if (isLocationFromMockProvider(MOSLCommonActivity.this,
+                            location)) {
+                            MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                MOCK_LOCATION_ENABLED_MSG, "OK",
+                                true, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action,
+                                        Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            finish();
+                                        }
+                                    }
+                                }).setCancelable(false);
+                            ;
+                        }
+                    }
+                }
+            });
+    }
     /**
      * this Method does Init of activity
      */
