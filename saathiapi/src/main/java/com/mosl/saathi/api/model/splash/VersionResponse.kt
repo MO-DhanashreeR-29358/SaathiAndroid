@@ -10,7 +10,7 @@ data class VersionResponse(
   @JvmField @SerializedName("NEWEKYCURL") val newEkycUrl: String
 ) {
   fun hasUrl(): Boolean {
-    return url.isNullOrEmpty() && url.isNullOrBlank()
+    return !url.isNullOrEmpty() && !url.isNullOrBlank()
   }
 
   fun isNewEkyc(): Boolean {
