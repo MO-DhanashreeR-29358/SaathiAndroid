@@ -400,7 +400,9 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
             DashboardSecondLevelRequest request = new DashboardSecondLevelRequest(
                 parameterMap, widgetSystemName, DASHBOARD_REPORT_PAGE_SIZE, "1"
             );
-
+            hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
+            hierarchyMap.put("PageSize", DASHBOARD_REPORT_PAGE_SIZE);
+            hierarchyMap.put("Page", "1");
             Disposable subscribe = saathiApi.getDashboardSecondLevel(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
