@@ -34,7 +34,6 @@ import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
 import com.mosl.tabapp.ui.CustomDialog;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
-import io.reactivex.disposables.Disposable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -141,9 +140,9 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             MeetingRequest request =
                 new MeetingRequest(new Request(leadId, REPORT_PAGE_SIZE, "0", "0", "0", mUcid),
                     new Filter(null, null, null, null, null, null, null), true);
-            Disposable subscribe = saathiApi.getMeetings(request)
+            compositeDisposable.add(saathiApi.getMeetings(request)
                 .compose(UiModelHelper.applyUiModel())
-                .subscribe(this::renderMeetings);
+                .subscribe(this::renderMeetings));
         } else {
             noInternetConnectionDialog();
         }
@@ -214,9 +213,9 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             AppointmentRequest request =
                 new AppointmentRequest(new Request(leadId, REPORT_PAGE_SIZE, "1", "0", "0", mUcid),
                     new Filter(null, null, null, null, null, null, null), true);
-            Disposable subscribe = saathiApi.getAppointments(request)
+            compositeDisposable.add(saathiApi.getAppointments(request)
                 .compose(UiModelHelper.applyUiModel())
-                .subscribe(this::renderAppointments);
+                .subscribe(this::renderAppointments));
         } else {
             noInternetConnectionDialog();
         }
@@ -411,11 +410,11 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             DeleteAppointmentRequest request =
                 new DeleteAppointmentRequest(meetingId);
-            Disposable subscribe = saathiApi.deleteAppointments(url, request)
+            compositeDisposable.add(saathiApi.deleteAppointments(url, request)
                 .compose(UiModelHelper.applyUiModel())
                 .subscribe(uiModel -> {
                     renderDeleteAppointments(uiModel, meetingId);
-                });
+                }));
         } else {
             noInternetConnectionDialog();
         }

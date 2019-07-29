@@ -42,7 +42,6 @@ import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYes
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
-import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest
 import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
@@ -433,7 +432,7 @@ interface SaathiApi {
   @ExcludeWrapper
   @POST("Dashboard/LoaddetailsWidgeAsync")
   fun getDashboardHierarchy(
-    @Body request: DashboardHierarchyRequest
+    @Body request: DashboardSecondLevelRequest
   ): Observable<String>
 
   @POST("Dashboard/GetIncentivePolicy")

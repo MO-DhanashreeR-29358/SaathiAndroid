@@ -415,6 +415,10 @@ public class MOSLCommonActivity extends AppCompatActivity
         });
     }
 
+    @Override public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     public void showProgress() {
         if (progressLayout != null) progressLayout.setVisibility(View.VISIBLE);
     }

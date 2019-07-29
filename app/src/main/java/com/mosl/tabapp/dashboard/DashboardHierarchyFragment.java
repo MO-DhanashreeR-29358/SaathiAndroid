@@ -12,7 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
-import com.mosl.saathi.api.model.dashboard.hierarchy.DashboardHierarchyRequest;
+import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
@@ -183,8 +183,9 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
             String widgetSystemName = (String) hierarchyMap.get("WidgetSystemName");
             Map<String, String> parameterMap =
                 (Map<String, String>) hierarchyMap.get("AddtionalParameters");
-            DashboardHierarchyRequest request =
-                new DashboardHierarchyRequest(parameterMap, widgetSystemName);
+            DashboardSecondLevelRequest request =
+                new DashboardSecondLevelRequest(parameterMap, widgetSystemName,
+                    (String) hierarchyMap.get("PageSize"), (String) hierarchyMap.get("Page"));
             Disposable subscribe = saathiApi.getDashboardHierarchy(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();

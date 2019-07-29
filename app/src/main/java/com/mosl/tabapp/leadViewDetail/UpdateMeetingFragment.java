@@ -686,6 +686,9 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             }
         } catch (Exception e) {
             e.printStackTrace();
+            hideProgress();
+            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
         }
     }
 
