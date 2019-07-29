@@ -117,7 +117,6 @@ import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1305,9 +1304,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getCountry() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getCountries()
+            compositeDisposable.add(saathiApi.getCountries()
                 .compose(applyUiModel())
-                .subscribe(this::renderCountries);
+                .subscribe(this::renderCountries));
         } else {
             noInternetConnectionDialog();
         }
@@ -1346,9 +1345,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getState(String id, final String type, final String value) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getStateProvinces(new StateProvinceRequest(id))
+            compositeDisposable.add(saathiApi.getStateProvinces(new StateProvinceRequest(id))
                 .compose(applyUiModel())
-                .subscribe(uiModel -> renderStates(uiModel, type, value));
+                .subscribe(uiModel -> renderStates(uiModel, type, value)));
         } else {
             noInternetConnectionDialog();
         }
@@ -1437,9 +1436,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getCity(String id, final String type, final String value) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getCityList(new CityListRequest(id))
+            compositeDisposable.add(saathiApi.getCityList(new CityListRequest(id))
                 .compose(applyUiModel())
-                .subscribe(uiModel -> renderCities(uiModel, type, value));
+                .subscribe(uiModel -> renderCities(uiModel, type, value)));
         } else {
             noInternetConnectionDialog();
         }
@@ -1536,9 +1535,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), PROFESSIONID, null, null);
-            Disposable disposable = saathiApi.getAllLookup(request)
+            compositeDisposable.add(saathiApi.getAllLookup(request)
                 .compose(applyUiModel())
-                .subscribe(this::renderProfession);
+                .subscribe(this::renderProfession));
         } else {
             noInternetConnectionDialog();
         }
@@ -1577,9 +1576,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
-            Disposable disposable = saathiApi.getAllLookup(request)
+            compositeDisposable.add(saathiApi.getAllLookup(request)
                 .compose(applyUiModel())
-                .subscribe(this::renderInterests);
+                .subscribe(this::renderInterests));
         } else {
             noInternetConnectionDialog();
         }
@@ -1617,9 +1616,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest lookupRequest =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), PRODUCTTYPE, productId, null);
-            Disposable disposable = saathiApi.getAllLookup(lookupRequest)
+            compositeDisposable.add(saathiApi.getAllLookup(lookupRequest)
                 .compose(applyUiModel())
-                .subscribe(this::renderProductTypes);
+                .subscribe(this::renderProductTypes));
         } else {
             noInternetConnectionDialog();
         }
@@ -1654,9 +1653,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getStatus(final Spinner spStatus, String productId) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getStatusList(new StatusRequest(productId, "1"))
+            compositeDisposable.add(saathiApi.getStatusList(new StatusRequest(productId, "1"))
                 .compose(applyUiModel())
-                .subscribe(uiModel -> renderStatus(uiModel, spStatus));
+                .subscribe(uiModel -> renderStatus(uiModel, spStatus)));
         } else {
             noInternetConnectionDialog();
         }
@@ -1701,9 +1700,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getLeadDetail() {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getLeadView(new LeadViewRequest(mLeadId))
+            compositeDisposable.add(saathiApi.getLeadView(new LeadViewRequest(mLeadId))
                 .compose(applyUiModel())
-                .subscribe(this::renderLeads);
+                .subscribe(this::renderLeads));
         } else {
             noInternetConnectionDialog();
         }
@@ -2101,9 +2100,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 contactRequest,
                 model.getLeadFieldValueModels()
             );
-            Disposable disposable = saathiApi.updateLead(updateLeadRequest)
+            compositeDisposable.add(saathiApi.updateLead(updateLeadRequest)
                 .compose(applyUiModel())
-                .subscribe(this::renderUpdateLead);
+                .subscribe(this::renderUpdateLead));
         } else {
             noInternetConnectionDialog();
         }
@@ -2138,9 +2137,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
-            Disposable disposable = saathiApi.getAllLookup(request)
+            compositeDisposable.add(saathiApi.getAllLookup(request)
                 .compose(applyUiModel())
-                .subscribe(this::renderLeadProfile);
+                .subscribe(this::renderLeadProfile));
         } else {
             noInternetConnectionDialog();
         }
@@ -2422,7 +2421,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable =
+            compositeDisposable.add(
                 saathiApi.getProductSpecialist(specialistRequest)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> {
@@ -2463,7 +2462,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 new AttendeeAdapter(getMainActivity(), modelList);
                             productSpecialistDialog.setAdapter(mYAdapter);
                         }
-                    });
+                    }));
         } else {
             noInternetConnectionDialog();
         }
@@ -2482,7 +2481,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return;
         }
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getUserBusinessProfile(request)
+            compositeDisposable.add(saathiApi.getUserBusinessProfile(request)
                 .compose(applyUiModel())
                 .subscribe(uiModel -> {
                     if (uiModel.inProgress) {
@@ -2523,7 +2522,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             new AttendeeAdapter(getMainActivity(), modelList);
                         searchList.setAdapter(mYAdapter);
                     }
-                });
+                }));
         } else {
             noInternetConnectionDialog();
         }
@@ -2547,9 +2546,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 statusId,
                 productMapping
             );
-            Disposable disposable = saathiApi.insertLeadProductMapping(leadProductRequest)
+            compositeDisposable.add(saathiApi.insertLeadProductMapping(leadProductRequest)
                 .compose(applyUiModel())
-                .subscribe(this::renderInsertLeadMapping);
+                .subscribe(this::renderInsertLeadMapping));
         } else {
             noInternetConnectionDialog();
         }
@@ -3091,10 +3090,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             String stageID = isBlank(stageId) ? null : stageId;
-            Disposable disposable = saathiApi.getStageList(
+            compositeDisposable.add(saathiApi.getStageList(
                 new StageRequest(AccountDetails.getBusinessUnitId(), stageID))
                 .compose(applyUiModel())
-                .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout));
+                .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout)));
         } else {
             noInternetConnectionDialog();
         }
@@ -3144,9 +3143,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             String stageID = isBlank(stageId) ? null : stageId;
             StageMobileRequest mobileRequest =
                 new StageMobileRequest(AccountDetails.getBusinessUnitId(), stageID);
-            Disposable disposable = saathiApi.getStageMobileList(mobileRequest)
+            compositeDisposable.add(saathiApi.getStageMobileList(mobileRequest)
                 .compose(applyUiModel())
-                .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout));
+                .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
         } else {
             noInternetConnectionDialog();
         }
@@ -3282,10 +3281,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private void getClientDetail(int uCid) {
         if (uCid <= 0) return;
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable =
+            compositeDisposable.add(
                 saathiApi.getClientDetail(new ClientDetailRequest(uCid))
                     .compose(applyUiModel())
-                    .subscribe(this::renderClientDetail);
+                    .subscribe(this::renderClientDetail));
         } else {
             noInternetConnectionDialog();
         }
@@ -3388,11 +3387,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     public void webServiceportfolioSnapshot(String ucid) {
         if (MSFStatistics.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getClientSummary(
+            compositeDisposable.add(saathiApi.getClientSummary(
                 "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
                 AccountDetails.getUserId(), ucid)
                 .compose(applyUiModel())
-                .subscribe(this::renderClientSummary);
+                .subscribe(this::renderClientSummary));
         } else {
             noInternetConnectionDialog();
         }
@@ -3556,11 +3555,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     public void webServicePL(String ucid) {
         if (MSFStatistics.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getClientGainLossSummary(
+            compositeDisposable.add(saathiApi.getClientGainLossSummary(
                 "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
                 AccountDetails.getUserId(), ucid)
                 .compose(applyUiModel())
-                .subscribe(this::renderGainLossSummary);
+                .subscribe(this::renderGainLossSummary));
         } else {
             noInternetConnectionDialog();
         }
@@ -3793,9 +3792,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         false,
                         tvUCID.getText().toString().trim()
                     );
-                    Disposable disposable = saathiApi.saveClientProfile(profileRequest)
+                    compositeDisposable.add(saathiApi.saveClientProfile(profileRequest)
                         .compose(applyUiModel())
-                        .subscribe(this::renderUpdateProfile);
+                        .subscribe(this::renderUpdateProfile));
                 } else {
                     noInternetConnectionDialog();
                 }
@@ -4005,7 +4004,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                             mSection.getLeadCrossSellingProductId()
                                         );
 
-                                    Disposable disposable =
+                                    compositeDisposable.add(
                                         saathiApi.saveLeadCrossSellingProduct(productRequest)
                                             .compose(applyUiModel())
                                             .subscribe(uiModel -> {
@@ -4030,7 +4029,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             }
                                                         });
                                                 }
-                                            });
+                                            }));
                                 } else {
                                     noInternetConnectionDialog();
                                 }
@@ -4139,7 +4138,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                             ((RowData) spStatusDialog.getSelectedItem()).getKey(),
                                             ((RowData) spProductIdDialog.getSelectedItem()).getKey()
                                         );
-                                    Disposable disposable =
+                                    compositeDisposable.add(
                                         saathiApi.saveLeadCrossSellingProduct(productRequest)
                                             .compose(applyUiModel())
                                             .subscribe(uiModel -> {
@@ -4166,7 +4165,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                             }
                                                         });
                                                 }
-                                            });
+                                            }));
                                 } else {
                                     noInternetConnectionDialog();
                                 }
@@ -4219,12 +4218,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                                         leadDetailAddProductModel.getStageId(),
                                                         leadDetailAddProductModel.getStatusId()
                                                     );
-                                                Disposable disposable =
+                                                compositeDisposable.add(
                                                     saathiApi.deleteLeadCrossSellingProduct(
                                                         productRequest)
                                                         .compose(applyUiModel())
                                                         .subscribe(
-                                                            this::renderDeleteCrossSellingProduct);
+                                                            this::renderDeleteCrossSellingProduct));
                                             } else {
                                                 noInternetConnectionDialog();
                                             }
@@ -4321,9 +4320,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
             final LinearLayout progressLayout) {
             if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                Disposable disposable = saathiApi.getStatusList(new StatusRequest(productId, "1"))
+                compositeDisposable.add(saathiApi.getStatusList(new StatusRequest(productId, "1"))
                     .compose(applyUiModel())
-                    .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout));
+                    .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
@@ -4371,10 +4370,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
                 CrossSellingProductRequest request =
                     new CrossSellingProductRequest(AccountDetails.getBusinessUnitId(), intrestedIn);
-                Disposable disposable = saathiApi.getCrossSellingProduct(request)
+                compositeDisposable.add(saathiApi.getCrossSellingProduct(request)
                     .compose(applyUiModel())
                     .subscribe(uiModel ->
-                        renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout));
+                        renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
@@ -4423,10 +4422,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
                 LookupRequest lookupRequest =
                     new LookupRequest(AccountDetails.getBusinessUnitId(), 111, null, null);
-                Disposable disposable = saathiApi.getAllLookup(lookupRequest)
+                compositeDisposable.add(saathiApi.getAllLookup(lookupRequest)
                     .compose(applyUiModel())
                     .subscribe(
-                        uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout));
+                        uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
@@ -4475,10 +4474,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
                 ConfigurationByStatusRequest request =
                     new ConfigurationByStatusRequest(productId);
-                Disposable disposable = saathiApi.getStageWiseConfigurationByStatus(request)
+                compositeDisposable.add(saathiApi.getStageWiseConfigurationByStatus(request)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
-                        llLowMarginAdd, isDefault));
+                        llLowMarginAdd, isDefault)));
             } else {
                 noInternetConnectionDialog();
             }
@@ -4843,9 +4842,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     actAssignTo,
                     dataMap
                 );
-                Disposable disposable = saathiApi.updateLeadProductMapping(mappingRequest)
+                compositeDisposable.add(saathiApi.updateLeadProductMapping(mappingRequest)
                     .compose(applyUiModel())
-                    .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest));
+                    .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
             } else {
                 noInternetConnectionDialog();
             }
