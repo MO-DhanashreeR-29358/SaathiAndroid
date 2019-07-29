@@ -408,7 +408,6 @@ public class MeetingApptModel implements Serializable {
 
         if (meetingType.equalsIgnoreCase(MEETING_TYPE_MEETING)) {
             json += "\"meetingAttendee\":" + getAttendeeJson();
-            json += ",\"Products\":" + getProductJson();
             json += ",\"ActivityTypeID\":" + getActivityTypeID();
             json += ",\"MeetingDate\":\"" + getMeetingDate() + "\"";
             json += ",\"MeetingReasonID\":" + getMeetingReason();
@@ -448,6 +447,7 @@ public class MeetingApptModel implements Serializable {
             json += ",\"MeetingAddress\":\"" + getMeetingAddress() + "\"";
             json += ",\"TravellingModeIds\":\"" + getTravellingJson() + "\"";
             json += ",\"Amount\":\"" + getAmount() + "\"";
+            json += ",\"Products\":" + getProductJson();
             json += ",\"GeoArea\":\"" + getGeoArea() + "\"";
             json += ",\"GeoLongitude\":\"" + getGeoLatitude() + "\"";
             json += ",\"GeoLatitude\":\"" + getGeoLatitude() + "\"";
