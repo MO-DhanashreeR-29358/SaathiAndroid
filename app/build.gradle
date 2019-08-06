@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 def gitSha() {
@@ -27,6 +29,11 @@ android {
 
   Properties versionProps = new Properties()
   versionProps.load(new FileInputStream(file('../version.properties')))
+
+  dataBinding {
+    enabled = true
+  }
+
   defaultConfig {
     applicationId 'com.mosl.tabapp'
     minSdkVersion 17
@@ -154,7 +161,9 @@ dependencies {
   debugImplementation deps.stetho.okhttp
   // Room
   implementation deps.room.roomRuntime
-  annotationProcessor deps.room.roomCompiler
+  kapt deps.room.roomCompiler
+  kapt deps.dataBindCompiler
+  implementation deps.kotlin
   implementation deps.location
   //workmanager
   implementation deps.work

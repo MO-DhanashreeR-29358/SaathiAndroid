@@ -4,6 +4,7 @@ import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -560,4 +561,12 @@ interface SaathiApi {
   @POST("Meeting/AddUpdateMeeting")
   fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
 
+  //=======================AU Bank Meeting==========================
+  @POST("BankMeeting/GetBankList")
+  fun getBankList(): Observable<String>
+
+  @POST("Master/GetAllLookupMaster")
+  fun getAllLookupMaster(
+    @Body request: LookupRequest
+  ): Observable<List<MeetingTypeResponse>>
 }

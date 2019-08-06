@@ -68,6 +68,7 @@ import com.mosl.saathi.api.model.prospect.SuggestMeRequest;
 import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.actionbar.CRMAppActionBar;
+import com.mosl.tabapp.bankmeeting.BankMeetingFragment;
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
 import com.mosl.tabapp.calendar.CalendarFragment;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -832,6 +833,8 @@ public class MOSLCommonActivity extends AppCompatActivity
                                 getSuggestMe();
                             } else if (position == MOSL_MENU_QUERY) {
                                 setupFragment(new QueryFragment());
+                            } else if (position == MOSL_MENU_AU_BANK_MEETING) {
+                                setupFragment(new BankMeetingFragment());
                             } else if (position == MOSL_MENU_LOGOUT) {
                                 logoutCustomer();
                             }
@@ -839,6 +842,8 @@ public class MOSLCommonActivity extends AppCompatActivity
                             if (position == 8) {
                                 setupFragment(new QueryFragment());
                             } else if (position == 9) {
+                                setupFragment(new BankMeetingFragment());
+                            } else if (position == 10) {
                                 logoutCustomer();
                             }
                         }

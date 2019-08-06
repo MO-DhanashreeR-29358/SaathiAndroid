@@ -53,6 +53,12 @@ public class DrawerMenu implements MOSLConstants {
 			}
 			groupList.add(new ScreenDetails(R.drawable.ic_new_query,
 				context.getString(R.string.MOSL_MENU_QUERY_TXT), MOSL_MENU_QUERY_TXT, false));
+			if (AccountDetails.getBusinessProfileId().equals("1142")) {
+				groupList.add(new ScreenDetails(R.drawable.ic_menu_suggest_me_tool,
+						context.getString(R.string.MOSL_MENU_AU_BANK_MEETING_TXT),
+						MOSL_MENU_AU_BANK_MEETING_TXT,
+						false));
+			}
 			groupList.add(new ScreenDetails(R.drawable.ic_new_logout,
 				context.getString(R.string.MOSL_MENU_LOGOUT_TXT), MOSL_MENU_LOGOUT_TXT, false));
 		}
@@ -88,7 +94,7 @@ public class DrawerMenu implements MOSLConstants {
 				.equals(context.getString(R.string.MOSL_MENU_MY_REPORTS_TXT))) {
                 subMenuCollections.put(scrdts.getTitle(), reportSubMenu);
             } else {
-                subMenuCollections.put(scrdts.getTitle(), new Vector<SubMenu>());
+							subMenuCollections.put(scrdts.getTitle(), new Vector<>());
             }
         }
         return subMenuCollections;

@@ -40,7 +40,9 @@ public interface MOSLConstants extends LabelConfig {
     int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
     int MOSL_MENU_SUGGEST_ME = 8;
     int MOSL_MENU_QUERY = 9;
-    int MOSL_MENU_LOGOUT = 10;
+  int MOSL_MENU_AU_BANK_MEETING = 10;
+  //int NAV_TO_AU_BANK_MEETING = 10;
+  int MOSL_MENU_LOGOUT = 11;
     int LOGOUT_CODE = 4;
     int CALL_PROSPECT_DETAILS = 2;
     int CALL_CONVERT_EKYC = 3;
@@ -82,6 +84,7 @@ public interface MOSLConstants extends LabelConfig {
     int SUBCATEGORY = 22;
     int LEADMODE = 12;
     int LEADPROFILE = 23;
+  int BANKMEETINGTYPE = 128;
     int WEEKS = 24;
     int DAYS = 25;
     int REPEATMODE = 26;

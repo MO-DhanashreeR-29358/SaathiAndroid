@@ -11,7 +11,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath "com.android.tools.build:gradle:$android_plugin_version"
+    classpath "com.android.tools.build:gradle:${android_plugin_version}"
     classpath "com.google.gms:google-services:$google_services_version"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath 'io.fabric.tools:gradle:1.29.0'
@@ -42,6 +42,7 @@ ext.versions = ["compileSdkVersion"   : 28,
                 'retrofit'            : '2.5.0',
                 'rxJava'              : '2.2.8',
                 'rxBinding'           : '2.1.1',
+                'groupie'             : '2.3.0',
                 'room'                : '1.1.0'
 
 ]
@@ -53,7 +54,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
                                      'drawable'    : "com.android.support:support-vector-drawable:${versions.supportLibrary}",
                                      'recyclerview': "com.android.support:recyclerview-v7:${versions.supportLibrary}",
                                      'support'     : "com.android.support:support-v4:${versions.supportLibrary}"],
-            'constraintLayout'    : "com.android.support.constraint:constraint-layout:1.1.2",
+            'constraintLayout'    : "com.android.support.constraint:constraint-layout:1.1.3",
 
             'testing'             : ['espresso': ['core': "com.android.support.test.espresso:espresso-core:${versions.espresso}"],
                                      'junit'   : 'junit:junit:4.12',
@@ -102,6 +103,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",
             'mofslArtifacts'      : ['validator'    : "MofslArtifacts:validator:1.0.6",
                                     'annotation'   : "MofslArtifacts:annotations:1.0.1"],
+            'dataBindCompiler'       : "androidx.databinding:databinding-compiler:${android_plugin_version}",
             'javax'               : "javax.annotation:jsr250-api:1.0",
 
 ]
