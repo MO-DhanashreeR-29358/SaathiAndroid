@@ -8,6 +8,7 @@ import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
 import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
+import com.mosl.saathi.api.model.aubankmeeting.SubBrokerResponse
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -579,5 +580,5 @@ interface SaathiApi {
   @POST("BankMeeting/AutoCompleteBankBranchSubBroker")
   fun getSubBroker(
     @Body request: SubBrokerRequest
-  ): Observable<List<String>>
+  ): Observable<List<SubBrokerResponse>>
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <ScrollView
@@ -253,7 +254,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/barrier_branch"
                 >
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_sub_broker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -287,6 +288,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
+                tools:visibility="visible"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
                 il_sub_broker,il_bank_employee"
                 />
