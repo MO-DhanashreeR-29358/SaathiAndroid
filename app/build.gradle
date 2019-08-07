@@ -177,6 +177,7 @@ dependencies {
   implementation deps.rx.java
   implementation deps.rxBinding.core
   implementation deps.rxBinding.V4
+  implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
   implementation deps.retrofit.scalar

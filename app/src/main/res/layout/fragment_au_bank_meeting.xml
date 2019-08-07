@@ -244,7 +244,6 @@
                 app:constraint_referenced_ids="sp_branch,tv_branch_error"
                 />
 
-
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/il_sub_broker"
                 android:layout_width="match_parent"
@@ -283,12 +282,40 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.constraint.Group
+                android:id="@+id/group_bank_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
+                il_sub_broker,il_bank_employee"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/il_bank_employee"
+                >
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/et_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz _-"
+                    android:hint="@string/text_hint_label_enter_subject"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
             <android.support.constraint.Barrier
                 android:id="@+id/barrier_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="il_bank_employee,il_meeting_description, il_sub_broker"
+                app:constraint_referenced_ids="il_bank_employee,il_meeting_description,
+                 il_sub_broker,il_subject"
                 />
 
             <Button

@@ -341,6 +341,8 @@ public interface MOSLConstants extends LabelConfig {
     String DOCUMENT_DELETED = "Document deleted successfully";
     String APPT_CANCELLED = "Appointment cancelled successfully";
     String SELECT_MEETING_DURATION = "Select Meeting Duration";
+  String SELECT_BANK = "Select Bank";
+  String SELECT_BRANCH = "Select Bank Branch";
     String SELECT_MEETING_REASON = "Select Meeting Reason";
     String SELECT_PRODUCT = "Select Product";
     String SELECT_PROFILE = "Select Profile";
