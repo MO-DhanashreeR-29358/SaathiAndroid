@@ -258,9 +258,11 @@
                     android:id="@+id/actv_sub_broker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:focusable="false"
                     android:hint="@string/text_hint_label_enter_sub_broker"
-                    android:inputType="textNoSuggestions"
+                    android:inputType="none"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -273,13 +275,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
                 >
 
-                <android.support.v7.widget.AppCompatAutoCompleteTextView
+                <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_bank_employee"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:focusable="false"
                     android:hint="@string/text_hint_label_enter_bank_employee"
-                    android:inputType="textNoSuggestions"
+                    android:inputType="none"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -288,9 +292,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
                 il_sub_broker,il_bank_employee"
+                tools:visibility="visible"
                 />
 
             <android.support.design.widget.TextInputLayout
