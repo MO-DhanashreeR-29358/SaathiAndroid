@@ -21,7 +21,7 @@ public class EncryptionInterceptor implements Interceptor {
             oldBody.writeTo(buffer);
             String strOldBody = buffer.readUtf8();
 
-            MediaType mediaType = MediaType.parse("text/plain; charset=utf-8");
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
             String strNewBody = CRMSecurityUtil.encrypt(strOldBody);
             RequestBody body = RequestBody.create(mediaType, strNewBody);
             request = request.newBuilder().method(request.method(), body).build();

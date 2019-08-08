@@ -13,8 +13,10 @@ import android.widget.Toast
 import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.data.applyUiModel
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
+import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
+import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
 import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -67,6 +69,16 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
     binding.actvBankEmployee.setOnClickListener {
       searchDialog("BankEmployee")
+    }
+
+    binding.apply {
+      btnReset.setOnClickListener {
+        resetFields()
+      }
+
+      btnSave.setOnClickListener {
+        submitCalled()
+      }
     }
   }
 
@@ -170,11 +182,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
       }
       meetingTypeAdapter = ArrayAdapter(mainActivity, layout.simple_spinner_item, arrMeetingType)
       meetingTypeAdapter.setDropDownViewResource(layout.mdropdown)
-      binding.apply {
-        spMeetingType.apply {
-          adapter = meetingTypeAdapter
-          onItemSelectedListener = meetingTypeListener
-        }
+      binding.spMeetingType.apply {
+        adapter = meetingTypeAdapter
+        onItemSelectedListener = meetingTypeListener
       }
       meetingDuration()
     }
@@ -227,16 +237,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
   private fun callBankList() {
     if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
-      val request =
-        BankRequest(
-          null,
-          null,
-          null,
-          null,
-          null,
-          true,
-          null
-        )
+      val request = BankRequest()
       val subscribe = saathiApi.getBankList(request)
         .compose(applyUiModel())
         .subscribe { this.renderBank(it) }
@@ -245,8 +246,34 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
   }
 
-  private fun renderBank(it: UiModel<String>) {
-    Toast.makeText(requireContext(), it.data, Toast.LENGTH_SHORT).show()
+  private fun renderBank(uiModel: UiModel<List<BankListResponse>>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      arrBank.clear()
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrBank.clear()
+      arrBank.add(RowData(0, "-1", MOSLConstants.SELECT_BANK))
+      for (i in data.indices) {
+        val (bankName, bankId, _, _, _, _) = data[i]
+        val id = stringOrEmpty(bankId.toString())
+        val name = stringOrEmpty(bankName)
+        arrBank.add(RowData(i + 1, id, name))
+      }
+      bankAdapter = ArrayAdapter(
+        mainActivity,
+        layout.simple_spinner_item, arrBank
+      )
+      bankAdapter.setDropDownViewResource(layout.mdropdown)
+      binding.spBank.apply {
+        adapter = bankAdapter
+        onItemSelectedListener = bankListener
+      }
+    }
   }
 
   private fun callBranchList() {
@@ -441,12 +468,77 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
   }
 
+  private fun getMeetingType(): RowData {
+    return binding.spMeetingType.selectedItem as RowData
+  }
+
+  private fun getMeetingDuration(): RowData {
+    return binding.spMeetingDuration.selectedItem as RowData
+  }
+
+  private fun getMeetingDescription(): String {
+    return binding.etMeetingDescription.text.toString()
+  }
+
   private fun getSelectedBank(): RowData {
     return binding.spBank.selectedItem as RowData
   }
 
   private fun getSelectedBranch(): RowData {
     return binding.spBranch.selectedItem as RowData
+  }
+
+  private fun getSubBroker(): String {
+    return binding.actvSubBroker.text.toString()
+  }
+
+  private fun getSubject(): String {
+    return binding.etSubject.text.toString()
+  }
+
+  private fun getBankEmployee(): String {
+    return binding.actvBankEmployee.text.toString()
+  }
+
+  private fun submitCalled() {
+    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+      val request = MeetingSaveRequest(
+        meetingTypeId = getMeetingType().key,
+        bankId = getSelectedBank().key,
+        bankBranchId = getSelectedBranch().key,
+        bankMeetingId = "",
+        clientName = getBankEmployee(),
+        meetingDate = "",
+        meetingDescription = getMeetingDescription(),
+        meetingDurationId = getMeetingDuration().key,
+        noOfClient = "",
+        subBrokerId = getSubBroker(),
+        subject = getSubject()
+      )
+      val subscribe = saathiApi.inserBankMeeting(request)
+        .compose(applyUiModel())
+        .subscribe { this.render(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun render(uiModel: UiModel<String>?) {
+    Toast.makeText(requireContext(), "Render", Toast.LENGTH_SHORT).show()
+  }
+
+  private fun resetFields() {
+    binding.apply {
+      etMeetingDescription.setText("")
+      tvDate.text = ""
+      spMeetingType.setSelection(0)
+      spMeetingDuration.setSelection(0)
+      spBank.setSelection(0)
+      spBranch.setSelection(0)
+      actvSubBroker.setText("")
+      actvBankEmployee.setText("")
+      etSubject.setText("")
+    }
   }
 
   companion object {

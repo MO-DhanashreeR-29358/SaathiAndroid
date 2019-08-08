@@ -6,8 +6,10 @@ import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeResponse
+import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
+import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
 import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerResponse
@@ -570,7 +572,7 @@ interface SaathiApi {
 
   //=======================AU Bank Meeting==========================
   @POST("BankMeeting/GetBankList")
-  fun getBankList(@Body request: BankRequest): Observable<String>
+  fun getBankList(@Body request: BankRequest): Observable<List<BankListResponse>>
 
   @POST("BankMeeting/GetBankBranchList")
   fun getBankBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
@@ -589,4 +591,9 @@ interface SaathiApi {
   fun getBankEmployee(
     @Body request: BankEmployeeRequest
   ): Observable<List<BankEmployeeResponse>>
+
+  @POST("BankMeeting/InserBankMeeting")
+  fun inserBankMeeting(
+    @Body request: MeetingSaveRequest
+  ): Observable<String>
 }
