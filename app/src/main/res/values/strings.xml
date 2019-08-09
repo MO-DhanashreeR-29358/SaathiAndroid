@@ -228,4 +228,16 @@
     <string name="text_hint_label_enter_sub_broker">Enter SubBroker*</string>
     <string name="text_hint_label_enter_bank_employee">Enter Bank Employee*</string>
     <string name="text_hint_label_enter_subject">Enter Subject*</string>
+
+    <!--AU Bank Meeting Validation Message-->
+    <string name="validate_meeting_type">Enter Meeting Type</string>
+    <string name="validate_meeting_date">Enter Meeting Date</string>
+    <string name="validate_meeting_duration">Enter Meeting Duration</string>
+    <string name="validate_meeting_description">Enter Meeting Description</string>
+    <string name="validate_bank">Enter Bank</string>
+    <string name="validate_bank_branch">Enter Bank Branch</string>
+    <string name="validate_bank_employee">Enter Bank Employee</string>
+    <string name="validate_sub_broker">Enter SubBroker</string>
+    <string name="validate_subject">Enter Subject</string>
+    <string name="validate_client_name">Enter Client Name</string>
 </resources>

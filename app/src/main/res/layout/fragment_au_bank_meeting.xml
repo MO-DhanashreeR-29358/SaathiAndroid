@@ -56,6 +56,27 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_date_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/ll_date"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_meeting_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="ll_date,tv_date_error"
+                />
+
+            <TextView
                 android:id="@+id/tv_meeting_type_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +84,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/text_label_meeting_type"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/ll_date"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_date"
                 />
 
             <Spinner
@@ -155,13 +176,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
                 >
 
-                <android.support.v7.widget.AppCompatEditText
+                <EditText
                     android:id="@+id/et_meeting_description"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"
                     android:hint="@string/text_hint_label_enter_meeting_description"
                     android:maxLength="1000"
                     android:maxLines="5"
+                    style="@style/CRMEdittextLeadSelector"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -263,6 +285,7 @@
                     android:focusable="false"
                     android:hint="@string/text_hint_label_enter_sub_broker"
                     android:inputType="none"
+                    style="@style/CRMEdittextLeadSelector"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -284,6 +307,7 @@
                     android:focusable="false"
                     android:hint="@string/text_hint_label_enter_bank_employee"
                     android:inputType="none"
+                    style="@style/CRMEdittextLeadSelector"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -301,9 +325,11 @@
                 android:id="@+id/il_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/il_bank_employee"
+                tools:visibility="visible"
                 >
 
                 <android.support.v7.widget.AppCompatEditText
@@ -312,6 +338,7 @@
                     android:layout_height="wrap_content"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz _-"
                     android:hint="@string/text_hint_label_enter_subject"
+                    style="@style/CRMEdittextLeadSelector"
                     />
             </android.support.design.widget.TextInputLayout>
 

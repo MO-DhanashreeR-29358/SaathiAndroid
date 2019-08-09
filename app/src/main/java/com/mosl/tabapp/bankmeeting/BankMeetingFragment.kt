@@ -1,28 +1,29 @@
 package com.mosl.tabapp.bankmeeting
 
+import android.app.DatePickerDialog
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable.Factory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.data.applyUiModel
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
-import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
 import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.RowData
@@ -35,7 +36,10 @@ import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MOSLCommonFragment
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
 import java.util.ArrayList
+import java.util.Calendar
+import java.util.Locale
 
 class BankMeetingFragment : MOSLCommonFragment() {
   private lateinit var binding: FragmentAuBankMeetingBinding
@@ -64,16 +68,23 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private fun setUpView() {
     getProfile()
     binding.actvSubBroker.setOnClickListener {
-      searchDialog("SubBroker")
+      if (((binding.spBranch.selectedItem as RowData).value) != "Other")
+        searchDialog("SubBroker")
     }
 
     binding.actvBankEmployee.setOnClickListener {
-      searchDialog("BankEmployee")
+      if (((binding.spBranch.selectedItem as RowData).value) != "Other")
+        searchDialog("BankEmployee")
     }
 
     binding.apply {
+      tvDate.setOnClickListener {
+        openDatePicker()
+      }
+
       btnReset.setOnClickListener {
         resetFields()
+        resetError()
       }
 
       btnSave.setOnClickListener {
@@ -112,6 +123,32 @@ class BankMeetingFragment : MOSLCommonFragment() {
     override fun onNothingSelected(parent: AdapterView<*>) {
 
     }
+  }
+
+  private fun openDatePicker() {
+    val cal = Calendar.getInstance()
+    val y = cal.get(Calendar.YEAR)
+    val m = cal.get(Calendar.MONTH)
+    val d = cal.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+      requireContext(), DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+
+        val dateStr = "$dayOfMonth/$monthOfYear/$year"
+        val pattern = "dd/MM/yyyy"
+        val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
+        val date = simpleDateFormat.parse(dateStr)
+        binding.tvDate.text = Factory.getInstance()
+          .newEditable(simpleDateFormat.format(date))
+
+      }, y, m, d
+    )
+
+    val minDate = Calendar.getInstance()
+    minDate.add(Calendar.DATE, -3)
+    datePickerDialog.datePicker.maxDate = cal.timeInMillis
+    datePickerDialog.datePicker.minDate = minDate.timeInMillis
+    datePickerDialog.show()
   }
 
   private fun searchDialog(type: String) {
@@ -313,11 +350,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
         layout.simple_spinner_item, arrBranch
       )
       branchAdapter.setDropDownViewResource(layout.mdropdown)
-      binding.apply {
-        spBranch.adapter = branchAdapter
-//      spMeetingDuration.setOnItemSelectedListener(selectMeetingDurationListener)
+      binding.spBranch.apply {
+        adapter = branchAdapter
       }
-      branchAdapter.notifyDataSetChanged()
     }
   }
 
@@ -468,6 +503,10 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
   }
 
+  private fun getMeetingDate(): String {
+    return binding.tvDate.text.toString()
+  }
+
   private fun getMeetingType(): RowData {
     return binding.spMeetingType.selectedItem as RowData
   }
@@ -501,30 +540,30 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun submitCalled() {
+    resetError()
     if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
-      val request = MeetingSaveRequest(
-        meetingTypeId = getMeetingType().key,
-        bankId = getSelectedBank().key,
-        bankBranchId = getSelectedBranch().key,
-        bankMeetingId = "",
-        clientName = getBankEmployee(),
-        meetingDate = "",
-        meetingDescription = getMeetingDescription(),
-        meetingDurationId = getMeetingDuration().key,
-        noOfClient = "",
-        subBrokerId = getSubBroker(),
-        subject = getSubject()
-      )
-      val subscribe = saathiApi.inserBankMeeting(request)
-        .compose(applyUiModel())
-        .subscribe { this.render(it) }
+      if (getFormInput().validateForm(binding)) {
+        val subscribe = saathiApi.inserBankMeeting(transformInput(getFormInput()))
+          .compose(applyUiModel())
+          .subscribe { this.render(it) }
+      }
     } else {
       noInternetConnectionDialog()
     }
   }
 
-  private fun render(uiModel: UiModel<String>?) {
-    Toast.makeText(requireContext(), "Render", Toast.LENGTH_SHORT).show()
+  private fun render(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      arrBranch.clear()
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+
+    }
   }
 
   private fun resetFields() {
@@ -538,6 +577,37 @@ class BankMeetingFragment : MOSLCommonFragment() {
       actvSubBroker.setText("")
       actvBankEmployee.setText("")
       etSubject.setText("")
+    }
+  }
+
+  private fun resetError() {
+    binding.apply {
+      tvDateError.toggleTextView(false)
+      tvMeetingTypeError.toggleTextView(false)
+      tvMeetingDurationError.toggleTextView(false)
+      ilMeetingDescription.setErrorMessages()
+      tvBankError.toggleTextView(false)
+      tvBranchError.toggleTextView(false)
+      ilSubBroker.setErrorMessages()
+      ilBankEmployee.setErrorMessages()
+      ilSubject.setErrorMessages()
+    }
+  }
+
+  private fun getFormInput(): BankMeetingInput {
+    binding.apply {
+      return BankMeetingInput(
+        meetingDate = getMeetingDate(),
+        meetingTypeId = getMeetingType().key,
+        meetingDurationId = getMeetingDuration().key,
+        meetingDescription = getMeetingDescription(),
+        bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "Select",
+        bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "Select",
+        subBrokerId = getSubBroker(),
+        bankEmployeeCode = getBankEmployee(),
+        subject = getSubject(),
+        isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training")
+      )
     }
   }
 
