@@ -40,9 +40,10 @@ public interface MOSLConstants extends LabelConfig {
     int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
     int MOSL_MENU_SUGGEST_ME = 8;
     int MOSL_MENU_QUERY = 9;
-  int MOSL_MENU_AU_BANK_MEETING = 10;
+  int MOSL_MENU_AU_BANK_MEETING = 0;
+  int MOSL_MENU_AU_BANK_MEETING_REPORT = 1;
   //int NAV_TO_AU_BANK_MEETING = 10;
-  int MOSL_MENU_LOGOUT = 11;
+  int MOSL_MENU_LOGOUT = 10;
     int LOGOUT_CODE = 4;
     int CALL_PROSPECT_DETAILS = 2;
     int CALL_CONVERT_EKYC = 3;
@@ -259,6 +260,7 @@ public interface MOSLConstants extends LabelConfig {
     String BRANCHCODE_DEFAULT_BUSINESS_PROFILE = "BranchCode";
     String CURRENT_BUSINESS_PROFILE_NAME = "Name";
     String BUSINESS_UNIT_ID = "BusinessUnitId";
+  String AU_BANK_SALES_SUPPORT = "1142";
 
     //GetAllLookup API
     String LOOKUPID = "LookUpid";

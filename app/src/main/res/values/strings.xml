@@ -13,6 +13,7 @@
     <string name="MOSL_MENU_CALENDAR_TXT">Calendar</string>
     <string name="MOSL_MENU_QUERY_TXT">Query</string>
     <string name="MOSL_MENU_AU_BANK_MEETING_TXT">Bank Meeting</string>
+    <string name="MOSL_MENU_AU_BANK_MEETING_REPORT_TXT">Bank Meeting Report</string>
     <string name="MOSL_MENU_KNOWLEDGE_CENTRE_TXT">Sales Brochure</string>
     <string name="MOSL_MENU_SALES_STADIUM_PITCH_TXT">Sales Stadium Pitch</string>
     <string name="MOSL_MENU_PENDING_APPROVALS_TXT">My Pending Approvals</string>
