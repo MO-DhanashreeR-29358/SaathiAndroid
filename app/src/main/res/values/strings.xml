@@ -241,4 +241,6 @@
     <string name="validate_sub_broker">Enter SubBroker</string>
     <string name="validate_subject">Enter Subject</string>
     <string name="validate_client_name">Enter Client Name</string>
+    <string name="text_label_from_date">From Date</string>
+    <string name="text_label_to_date">To Date</string>
 </resources>
