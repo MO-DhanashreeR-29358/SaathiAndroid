@@ -25,6 +25,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -34,6 +35,7 @@ import com.mosl.tabapp.model.bankmeeting.BankEmployeeData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MOSLCommonFragment
+import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
@@ -51,6 +53,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private lateinit var meetingDurationAdapter: ArrayAdapter<RowData>
   private lateinit var bankAdapter: ArrayAdapter<RowData>
   private lateinit var branchAdapter: ArrayAdapter<RowData>
+  private var subBrokerId = 0
+  private var employeeId = 0
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -68,17 +72,19 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private fun setUpView() {
     getProfile()
     binding.actvSubBroker.setOnClickListener {
+      binding.actvSubBroker.setText("")
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
         searchDialog("SubBroker")
     }
 
     binding.actvBankEmployee.setOnClickListener {
+      binding.actvBankEmployee.setText("")
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
         searchDialog("BankEmployee")
     }
 
     binding.apply {
-      tvDate.setOnClickListener {
+      llDate.setOnClickListener {
         openDatePicker()
       }
 
@@ -166,12 +172,14 @@ class BankMeetingFragment : MOSLCommonFragment() {
             return
           }
           binding.actvSubBroker.setText(clientModel.subBrokerName)
+          subBrokerId = clientModel.bankSubBrokerId
         } else {
           val clientModel = data as BankEmployeeData
           if (clientModel.isNoData) {
             return
           }
           binding.actvBankEmployee.setText(clientModel.employeeName)
+          employeeId = clientModel.employeeCode.toInt()
         }
         searchList.dismiss()
       }
@@ -504,7 +512,11 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getMeetingDate(): String {
-    return binding.tvDate.text.toString()
+    return getDateFromString(
+      binding.tvDate.text.toString(),
+      "dd/MM/yyyy",
+      "dd-MMM-yyyy"
+    )
   }
 
   private fun getMeetingType(): RowData {
@@ -527,8 +539,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
     return binding.spBranch.selectedItem as RowData
   }
 
-  private fun getSubBroker(): String {
-    return binding.actvSubBroker.text.toString()
+  private fun getSubBroker(): Int {
+    return subBrokerId
   }
 
   private fun getSubject(): String {
@@ -536,7 +548,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getBankEmployee(): String {
-    return binding.actvBankEmployee.text.toString()
+    return employeeId.toString()
   }
 
   private fun submitCalled() {
@@ -562,7 +574,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
     val data = uiModel.data
     if (data != null) {
-
+      alertDialog(
+        requireContext(), 0,
+        resources.getString(R.string.motilal_oswal), "Process Completed Successfully",
+        "OK", true, null
+      )
+      resetFields()
     }
   }
 
@@ -603,6 +620,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
         meetingDescription = getMeetingDescription(),
         bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "Select",
         bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "Select",
+        disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().key != "Other" else false,
         subBrokerId = getSubBroker(),
         bankEmployeeCode = getBankEmployee(),
         subject = getSubject(),

@@ -29,11 +29,11 @@ fun BankMeetingInput.validateForm(binding: FragmentAuBankMeetingBinding): Boolea
       binding.showValidationMsg(5)
       return false
     }
-    this.subBrokerId.isEmpty() -> {
+    !this.disabledFields && this.subBrokerId == 0 -> {
       binding.showValidationMsg(6)
       return false
     }
-    this.bankEmployeeCode.isEmpty() -> {
+    !this.disabledFields && this.bankEmployeeCode.isEmpty() -> {
       binding.showValidationMsg(7)
       return false
     }

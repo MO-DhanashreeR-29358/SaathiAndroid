@@ -301,5 +301,10 @@
 
     </style>
 
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/red_textcolor</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <!-- PopUpAnimation end -->
 </resources>

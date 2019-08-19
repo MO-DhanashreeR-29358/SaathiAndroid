@@ -171,6 +171,7 @@
                 android:id="@+id/il_meeting_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
@@ -183,7 +184,7 @@
                     android:hint="@string/text_hint_label_enter_meeting_description"
                     android:maxLength="1000"
                     android:maxLines="5"
-                    style="@style/CRMEdittextLeadSelector"
+                    style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -271,6 +272,7 @@
                 android:id="@+id/il_sub_broker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/barrier_branch"
@@ -285,7 +287,7 @@
                     android:focusable="false"
                     android:hint="@string/text_hint_label_enter_sub_broker"
                     android:inputType="none"
-                    style="@style/CRMEdittextLeadSelector"
+                    style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -293,6 +295,7 @@
                 android:id="@+id/il_bank_employee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
@@ -307,7 +310,7 @@
                     android:focusable="false"
                     android:hint="@string/text_hint_label_enter_bank_employee"
                     android:inputType="none"
-                    style="@style/CRMEdittextLeadSelector"
+                    style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -326,6 +329,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/il_bank_employee"
@@ -338,9 +342,15 @@
                     android:layout_height="wrap_content"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz _-"
                     android:hint="@string/text_hint_label_enter_subject"
-                    style="@style/CRMEdittextLeadSelector"
+                    style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
+
+            <!--<include
+                layout="@layout/include_layout_bank_meeting_client_name"
+                android:id="@+id/include_client1"
+                app:layout_constraintTop_toBottomOf="@+id/il_subject"
+                />-->
 
             <android.support.constraint.Barrier
                 android:id="@+id/barrier_button"
