@@ -43,7 +43,7 @@ fun transformInput(data: BankMeetingInput): MeetingSaveRequest {
 //    meetingTypeId = data.meetingTypeId,
     bankId = data.bankId.toInt(),
     bankBranchId = data.bankBranchId.toInt(),
-    clientName = "",
+    clientName = data.clientName,
     meetingDate = data.meetingDate,
     meetingDescription = data.meetingDescription,
     meetingDurationId = data.meetingDurationId.toInt(),
@@ -96,6 +96,10 @@ fun FragmentAuBankMeetingBinding.showValidationMsg(msg: Int) {
     8 -> {
       ilSubject.error = context.getString(R.string.validate_subject)
       etSubject.requestFocus()
+    }
+    9 -> {
+      ilClientName.error = context.getString(R.string.validate_client_name)
+      etClientName.requestFocus()
     }
   }
 

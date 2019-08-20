@@ -352,6 +352,47 @@
                 android:id="@+id/include_client1"
                 app:layout_constraintTop_toBottomOf="@+id/il_subject"
                 />-->
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_client_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="il_bank_employee,il_meeting_description,
+                 il_sub_broker,il_subject"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name"
+                tools:visibility="visible"
+                >
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/et_client_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
+                    android:hint="@string/text_hint_label_enter_client"
+                    android:imeActionLabel="@string/text_label_add"
+                    android:imeOptions="actionDone"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/il_client_name"
+                tools:visibility="visible"
+                />
 
             <android.support.constraint.Barrier
                 android:id="@+id/barrier_button"
@@ -359,7 +400,7 @@
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="il_bank_employee,il_meeting_description,
-                 il_sub_broker,il_subject"
+                 il_sub_broker,il_subject,il_client_name,rv_client_name"
                 />
 
             <Button

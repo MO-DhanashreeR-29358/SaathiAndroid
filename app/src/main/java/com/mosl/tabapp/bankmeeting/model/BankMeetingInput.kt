@@ -12,6 +12,7 @@ data class BankMeetingInput(
   @JvmField val subject: String,
   @JvmField val isSubjectVisible: Boolean,
   @JvmField val noOfClient: String = "0",
-  @JvmField val clientName: String = "",
+  @JvmField val clientName: String,
+  @JvmField val isClientNameVisible: Boolean,
   @JvmField val bankEmployeeCode: String
 )

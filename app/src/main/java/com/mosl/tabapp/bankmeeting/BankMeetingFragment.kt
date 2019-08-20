@@ -4,11 +4,13 @@ import android.app.DatePickerDialog
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Parcelable
+import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable.Factory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.mosl.app.core.data.UiModel
@@ -23,7 +25,9 @@ import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.bankmeeting.adapter.ClientNameAdapter
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
+import com.mosl.tabapp.bankmeeting.model.MeetingClientName
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
@@ -55,6 +59,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private lateinit var branchAdapter: ArrayAdapter<RowData>
   private var subBrokerId = 0
   private var employeeId = 0
+  private lateinit var clientNameList: ArrayList<MeetingClientName>
+  private lateinit var clientNameAdapter: ClientNameAdapter
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -83,6 +89,13 @@ class BankMeetingFragment : MOSLCommonFragment() {
         searchDialog("BankEmployee")
     }
 
+    clientNameList = ArrayList()
+    clientNameAdapter = ClientNameAdapter(clientNameList, getContext())
+    binding.rvClientName.apply {
+      layoutManager = LinearLayoutManager(requireContext())
+      adapter = clientNameAdapter
+    }
+
     binding.apply {
       llDate.setOnClickListener {
         openDatePicker()
@@ -95,6 +108,26 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
       btnSave.setOnClickListener {
         submitCalled()
+      }
+
+      etClientName.imeOptions = EditorInfo.IME_ACTION_DONE
+      etClientName.setOnEditorActionListener { v, actionId, event ->
+        val enterText = etClientName.text.toString()
+        if (!enterText.isBlank()) {
+          if (clientNameList.size < 5) {
+            clientNameAdapter.addProduct(
+              MeetingClientName(clientName = enterText)
+            )
+          } else {
+            alertDialog(
+              requireContext(), 0,
+              resources.getString(R.string.motilal_oswal), "Maximum of 5 client can be added",
+              "OK", true, null
+            )
+          }
+          etClientName.setText("")
+        }
+        false
       }
     }
   }
@@ -121,6 +154,26 @@ class BankMeetingFragment : MOSLCommonFragment() {
       try {
         binding.tvBankError.visibility = View.GONE
         callBranchList()
+      } catch (ex: Exception) {
+        ex.printStackTrace()
+      }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>) {
+
+    }
+  }
+
+  private val bankBranchListener = object : AdapterView.OnItemSelectedListener {
+    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+      try {
+        binding.tvBranchError.visibility = View.GONE
+        if (getSelectedBranch().value == "Other") {
+          binding.etClientName.isEnabled = false
+          clientNameList.clear()
+        } else {
+          binding.etClientName.isEnabled = true
+        }
       } catch (ex: Exception) {
         ex.printStackTrace()
       }
@@ -360,30 +413,41 @@ class BankMeetingFragment : MOSLCommonFragment() {
       branchAdapter.setDropDownViewResource(layout.mdropdown)
       binding.spBranch.apply {
         adapter = branchAdapter
+        onItemSelectedListener = bankBranchListener
       }
     }
   }
 
   private fun meetingTypeSpinnerChange() {
     binding.apply {
+      clientNameList.clear()
       when (spMeetingType.getMeetingType()) {
         PERSONAL_MEETING -> {
           groupBankBranch.toggelVisibility(true)
+          ilSubject.toggelInputLayoutVisibility(false)
+          ilClientName.toggelInputLayoutVisibility(false)
+          rvClientName.visibility = View.GONE
           callBankList()
         }
         TRAINING -> {
           groupBankBranch.toggelVisibility(true)
           ilSubject.toggelInputLayoutVisibility(true)
+          ilClientName.toggelInputLayoutVisibility(false)
+          rvClientName.visibility = View.GONE
           callBankList()
         }
         JOINT_MEETING -> {
           groupBankBranch.toggelVisibility(true)
           ilSubject.toggelInputLayoutVisibility(false)
+          ilClientName.toggelInputLayoutVisibility(true)
+          rvClientName.visibility = View.VISIBLE
           callBankList()
         }
         else -> {
           groupBankBranch.toggelVisibility(false)
           ilSubject.toggelInputLayoutVisibility(false)
+          ilClientName.toggelInputLayoutVisibility(false)
+          rvClientName.visibility = View.GONE
         }
       }
     }
@@ -594,6 +658,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
       actvSubBroker.setText("")
       actvBankEmployee.setText("")
       etSubject.setText("")
+      etClientName.setText("")
+      clientNameList.clear()
     }
   }
 
@@ -612,19 +678,28 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getFormInput(): BankMeetingInput {
+    var clientNameValue = ""
+    for (a in clientNameAdapter.listProduct) {
+      clientNameValue += if (clientNameValue.isBlank())
+        a.clientName
+      else
+        "," + a.clientName
+    }
     binding.apply {
       return BankMeetingInput(
         meetingDate = getMeetingDate(),
         meetingTypeId = getMeetingType().key,
         meetingDurationId = getMeetingDuration().key,
         meetingDescription = getMeetingDescription(),
-        bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "Select",
-        bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "Select",
-        disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().key != "Other" else false,
+        bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "-1",
+        bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
+        disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().value == "Other" else false,
         subBrokerId = getSubBroker(),
         bankEmployeeCode = getBankEmployee(),
         subject = getSubject(),
-        isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training")
+        isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training"),
+        isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Joint Meeting"),
+        clientName = clientNameValue
       )
     }
   }
