@@ -13,6 +13,7 @@ import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
 import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
 import com.mosl.saathi.api.model.aubankmeeting.SubBrokerResponse
+import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -595,5 +596,10 @@ interface SaathiApi {
   @POST("BankMeeting/InserBankMeeting")
   fun inserBankMeeting(
     @Body request: MeetingSaveRequest
+  ): Observable<String>
+
+  @POST("BankMeeting/GetBankMeetingReport")
+  fun postBankMeetingReport(
+    @Body request: MeetingReportRequest
   ): Observable<String>
 }

@@ -340,8 +340,9 @@
                     android:id="@+id/et_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz _-"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
                     android:hint="@string/text_hint_label_enter_subject"
+                    android:maxLength="100"
                     style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
