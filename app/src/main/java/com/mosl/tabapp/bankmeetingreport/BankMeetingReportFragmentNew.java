@@ -205,7 +205,7 @@ public class BankMeetingReportFragmentNew extends MOSLCommonFragment {
 
     HashMap<String, Object> data = uiModel.data;
     if (data != null) {
-      alertDialog(getMainActivity(), 0, "Motilal Oswal", "Process Completed Successfully",
+      alertDialog(getMainActivity(), 0, "Motilal Oswal", "Email Send Successfully",
           "OK", true, null);
     }
   }

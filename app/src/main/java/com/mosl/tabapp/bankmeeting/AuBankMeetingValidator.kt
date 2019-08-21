@@ -29,7 +29,7 @@ fun BankMeetingInput.validateForm(binding: FragmentAuBankMeetingBinding): Boolea
       binding.showValidationMsg(5)
       return false
     }
-    !this.disabledFields && this.subBrokerId == 0 -> {
+    !this.disabledFields && this.subBrokerId == -1 -> {
       binding.showValidationMsg(6)
       return false
     }

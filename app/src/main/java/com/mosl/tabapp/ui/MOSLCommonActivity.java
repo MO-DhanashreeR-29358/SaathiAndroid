@@ -435,7 +435,12 @@ public class MOSLCommonActivity extends AppCompatActivity
 		if (fragments != null) {
 			for (Fragment fragment : fragments) {
 				if (fragment != null && fragment.isVisible()) {
-					if (fragment instanceof DashboardFragment) return true;
+					if (fragment instanceof DashboardFragment) {
+						return true;
+					} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT) &&
+							fragment instanceof BankMeetingFragment) {
+						return true;
+					}
 				}
 			}
 		}
@@ -535,17 +540,19 @@ public class MOSLCommonActivity extends AppCompatActivity
 			if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.ADD_QUERY")) {
 				setupFragment(new QueryFragment());
 			} else if (strAction.trim()
-				.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
+					.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
 				setupFragment(new CalendarFragment());
 			} else if (strAction.trim()
-				.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
+					.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
 				setupFragment(new BirthdayAnniversaryFragment());
 			} else if (strAction.trim()
-				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
+					.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
 				setupFragment(new LeadCreationFragment());
 			} else {
 				setupFragment(new DashboardFragment());
 			}
+		} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT)) {
+			setupFragment(new BankMeetingFragment());
 		} else {
 			setupFragment(new DashboardFragment());
 		}
@@ -864,8 +871,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 							if (position == 8) {
 								setupFragment(new QueryFragment());
 							} else if (position == 9) {
-								setupFragment(new BankMeetingFragment());
-							} else if (position == 10) {
 								logoutCustomer();
 							}
 						}

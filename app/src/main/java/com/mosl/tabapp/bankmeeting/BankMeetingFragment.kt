@@ -57,8 +57,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private lateinit var meetingDurationAdapter: ArrayAdapter<RowData>
   private lateinit var bankAdapter: ArrayAdapter<RowData>
   private lateinit var branchAdapter: ArrayAdapter<RowData>
-  private var subBrokerId = 0
-  private var employeeId = 0
+  private var subBrokerId = -1
+  private var employeeId = ""
   private lateinit var clientNameList: ArrayList<MeetingClientName>
   private lateinit var clientNameAdapter: ClientNameAdapter
 
@@ -84,13 +84,13 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
 
     binding.actvBankEmployee.setOnClickListener {
-      binding.actvBankEmployee.setText("")
+      //      binding.actvBankEmployee.setText("")
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
         searchDialog("BankEmployee")
     }
 
     clientNameList = ArrayList()
-    clientNameAdapter = ClientNameAdapter(clientNameList, getContext())
+    clientNameAdapter = ClientNameAdapter(clientNameList, requireContext())
     binding.rvClientName.apply {
       layoutManager = LinearLayoutManager(requireContext())
       adapter = clientNameAdapter
@@ -169,7 +169,13 @@ class BankMeetingFragment : MOSLCommonFragment() {
       try {
         binding.tvBranchError.visibility = View.GONE
         if (getSelectedBranch().value == "Other") {
-          binding.etClientName.isEnabled = false
+          binding.apply {
+            etClientName.isEnabled = false
+            etClientName.setText("")
+            actvSubBroker.setText("")
+            actvBankEmployee.setText("")
+            resetError()
+          }
           clientNameList.clear()
         } else {
           binding.etClientName.isEnabled = true
@@ -232,7 +238,10 @@ class BankMeetingFragment : MOSLCommonFragment() {
             return
           }
           binding.actvBankEmployee.setText(clientModel.employeeName)
-          employeeId = clientModel.employeeCode.toInt()
+          employeeId += if (employeeId.isBlank())
+            clientModel.employeeCode
+          else
+            "," + clientModel.employeeCode
         }
         searchList.dismiss()
       }
@@ -612,7 +621,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getBankEmployee(): String {
-    return employeeId.toString()
+    return employeeId
   }
 
   private fun submitCalled() {
@@ -640,7 +649,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
     if (data != null) {
       alertDialog(
         requireContext(), 0,
-        resources.getString(R.string.motilal_oswal), "Process Completed Successfully",
+        resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
         "OK", true, null
       )
       resetFields()

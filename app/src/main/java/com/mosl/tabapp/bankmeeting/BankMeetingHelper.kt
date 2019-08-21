@@ -50,7 +50,7 @@ fun transformInput(data: BankMeetingInput): MeetingSaveRequest {
     noOfClient = 0,
     subBrokerId = data.subBrokerId,
     subject = data.subject,
-    bankEmployeeCode = data.bankEmployeeCode
+    bankEmployeeCode = data.bankEmployeeCode.toString()
   )
 }
 
