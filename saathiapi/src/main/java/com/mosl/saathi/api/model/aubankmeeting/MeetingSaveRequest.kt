@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class MeetingSaveRequest(
 //  @JvmField @SerializedName("BankMeetingId") val bankMeetingId: String,
-//  @JvmField @SerializedName("MeetingTypeId") val meetingTypeId: String,
+  @JvmField @SerializedName("MeetingTypeId") val meetingTypeId: String,
   @JvmField @SerializedName("MeetingDate") val meetingDate: String,
   @JvmField @SerializedName("MeetingDurationId") val meetingDurationId: Int,
   @JvmField @SerializedName("MeetingDescription") val meetingDescription: String,

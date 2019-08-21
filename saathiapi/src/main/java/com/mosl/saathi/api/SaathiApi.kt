@@ -598,7 +598,7 @@ interface SaathiApi {
     @Body request: MeetingSaveRequest
   ): Observable<String>
 
-  @POST("BankMeeting/GetBankMeetingReport")
+  @POST("BankMeeting/GetBankMeetingReportForMobile")
   fun postBankMeetingReport(
     @Body request: MeetingReportRequest
   ): Observable<String>

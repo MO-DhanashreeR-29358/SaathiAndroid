@@ -40,7 +40,7 @@ fun TextInputLayout.toggelInputLayoutVisibility(visible: Boolean) {
 
 fun transformInput(data: BankMeetingInput): MeetingSaveRequest {
   return MeetingSaveRequest(
-//    meetingTypeId = data.meetingTypeId,
+    meetingTypeId = data.meetingTypeId,
     bankId = data.bankId.toInt(),
     bankBranchId = data.bankBranchId.toInt(),
     clientName = data.clientName,
