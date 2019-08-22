@@ -8,11 +8,14 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.mosl.tabapp.R
-import com.mosl.tabapp.bankmeeting.model.BankEmployeeModel
+import com.mosl.tabapp.bankmeeting.BankMeetingFragment
+import com.mosl.tabapp.bankmeeting.model.AddedBankEmployeeModel
+import java.util.ArrayList
 
 class AddedBankEmployeeAdapter(
   private val context: Context,
-  private var resultList: MutableList<BankEmployeeModel>
+  private var resultList: ArrayList<AddedBankEmployeeModel>,
+  private val fragment: BankMeetingFragment
 ) : BaseAdapter() {
 
   private var inflater = LayoutInflater.from(context)
@@ -34,8 +37,8 @@ class AddedBankEmployeeAdapter(
 
     holderView.tvAttendeeName.text = attendeeModel.employeeName
     holderView.ivDelete.setOnClickListener {
-      //      addedAttendeeCount--
-//      setCount(addedAttendeeCount)
+      val count = attendeeModel.employeeCount - 1
+      fragment.setCount(count)
       resultList.removeAt(position)
       notifyDataSetChanged()
     }

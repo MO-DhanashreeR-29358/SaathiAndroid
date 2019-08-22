@@ -17,10 +17,11 @@ import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.data.applyUiModel
-import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
@@ -30,6 +31,8 @@ import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.bankmeeting.adapter.AddedBankEmployeeAdapter
+import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.bankmeeting.adapter.ClientNameAdapter
 import com.mosl.tabapp.bankmeeting.model.AddedBankEmployeeModel
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
@@ -41,9 +44,7 @@ import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
-import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.model.AccountDetails
-import com.mosl.tabapp.model.bankmeeting.BankEmployeeData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MOSLCommonFragment
@@ -66,10 +67,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private lateinit var bankAdapter: ArrayAdapter<RowData>
   private lateinit var branchAdapter: ArrayAdapter<RowData>
   private var subBrokerId = -1
-  private var employeeId = ""
   private lateinit var clientNameList: ArrayList<MeetingClientName>
   private lateinit var clientNameAdapter: ClientNameAdapter
   private var addedEmployeeCount: Int = 0
+  private lateinit var bankEmployeeAdapter: BankEmployeeAdapter
+  private lateinit var addedBankEmployeeAdapter: AddedBankEmployeeAdapter
+  private var addedBankEmployeeList = ArrayList<AddedBankEmployeeModel>()
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -94,7 +97,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
     binding.ibBankEmployee.setOnClickListener {
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
-        searchDialog("BankEmployee")
+//        searchDialog("BankEmployee")
+        dialogBankEmployee()
+    }
+
+    binding.tvBankEmployeeCount.setOnClickListener {
+      dialogAddedEmployee()
     }
 
     clientNameList = ArrayList()
@@ -181,7 +189,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
             etClientName.isEnabled = false
             etClientName.setText("")
             actvSubBroker.setText("")
-            actvBankEmployee.setText("")
+            setCount(0)
+            addedBankEmployeeList.clear()
+//            actvBankEmployee.setText("")
             resetError()
           }
           clientNameList.clear()
@@ -207,7 +217,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
     val datePickerDialog = DatePickerDialog(
       requireContext(), DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
 
-        val dateStr = "$dayOfMonth/$monthOfYear/$year"
+        val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year"
         val pattern = "dd/MM/yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
         val date = simpleDateFormat.parse(dateStr)
@@ -233,32 +243,17 @@ class BankMeetingFragment : MOSLCommonFragment() {
     searchList.setCustomTitle(resources.getString(R.string.str_search))
     val assingViewListner = object : CustomListPickerDialog.ListPickerListneable {
       override fun onListItemSelect(data: Parcelable) {
-        if (type == "SubBroker") {
-          val clientModel = data as SubBrokerData
-          if (clientModel.isNoData) {
-            return
-          }
-          binding.actvSubBroker.setText(clientModel.subBrokerName)
-          subBrokerId = clientModel.bankSubBrokerId
-        } else {
-          val clientModel = data as BankEmployeeData
-          if (clientModel.isNoData) {
-            return
-          }
-          binding.actvBankEmployee.setText(clientModel.employeeName)
-          employeeId += if (employeeId.isBlank())
-            clientModel.employeeCode
-          else
-            "," + clientModel.employeeCode
+        val clientModel = data as SubBrokerData
+        if (clientModel.isNoData) {
+          return
         }
+        binding.actvSubBroker.setText(clientModel.subBrokerName)
+        subBrokerId = clientModel.bankSubBrokerId
         searchList.dismiss()
       }
 
       override fun onSearchTextChanged(constraint: CharSequence) {
-        if (type == "SubBroker")
-          searchSubBranch(constraint, searchList)
-        else
-          searchBankEmployee(constraint, searchList)
+        searchSubBranch(constraint, searchList)
       }
     }
     searchList.setmListner(assingViewListner)
@@ -268,42 +263,47 @@ class BankMeetingFragment : MOSLCommonFragment() {
     val dialogAttendeeList = Dialog(getContext()!!)
     dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialogAttendeeList.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-    dialogAttendeeList.setContentView(R.layout.dialog_attendee_list)
+    dialogAttendeeList.setContentView(layout.dialog_attendee_list)
     dialogAttendeeList.window!!
       .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     dialogAttendeeList.setCanceledOnTouchOutside(true)
     val etSearchAttendee =
       dialogAttendeeList.findViewById<DelayAutoCompleteTextView>(R.id.etSearchAttendee)
     etSearchAttendee.imeOptions = EditorInfo.IME_ACTION_DONE
-    etSearchAttendee.setOnEditorActionListener(this)
+    etSearchAttendee.setOnEditorActionListener { v, actionId, event ->
+      hideKeyboard(v)
+      false
+    }
     etSearchAttendee.threshold = 3
-    attendeeAdapter = AttendeeAdapter(requireContext())
-    etSearchAttendee.setAdapter<AttendeeAdapter>(attendeeAdapter)
+    bankEmployeeAdapter = BankEmployeeAdapter(requireContext(), this)
+    etSearchAttendee.setAdapter<BankEmployeeAdapter>(bankEmployeeAdapter)
     etSearchAttendee.setLoadingIndicator(
       dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
     )
     etSearchAttendee.onItemClickListener =
       AdapterView.OnItemClickListener { parent, view, position, id ->
-        val clientModel = attendeeAdapter.getItem(position)
-        val has = listHasAttende(
-          addedAttendeeModelList, addedSplAttendeeModelList,
-          clientModel.getAttendeeCode()
+        val clientModel = bankEmployeeAdapter.getItem(position)
+        val has = listHasEmployee(
+          addedBankEmployeeList,
+//          clientModel.employeeCode
+          clientModel.employeeName
         )
         if (!has) {
-          if (clientModel.isNoData()) {
+          if (clientModel.noData) {
             return@OnItemClickListener
           }
-          addedAttendeeModelList.add(
+          addedEmployeeCount++
+          addedBankEmployeeList.add(
             AddedBankEmployeeModel(
-              clientModel.getAttendeeName(),
-              clientModel.getAttendeeCode()
+              clientModel.employeeCode,
+              clientModel.employeeName,
+              addedEmployeeCount
             )
           )
-          addedEmployeeCount++
           setCount(addedEmployeeCount)
           dialogAttendeeList.dismiss()
         } else {
-          Toast.makeText(mainActivity, MOSLConstants.ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
+          Toast.makeText(mainActivity, MOSLConstants.EMPLOYEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
             .show()
           etSearchAttendee.setText("")
         }
@@ -312,12 +312,31 @@ class BankMeetingFragment : MOSLCommonFragment() {
     dialogAttendeeList.show()
   }
 
-  private fun setCount(cnt: Int) {
+  private fun dialogAddedEmployee() {
+    val dialogAddedAttendee = Dialog(getContext()!!)
+    dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialogAddedAttendee.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialogAddedAttendee.setContentView(layout.dialog_added_bank_employee_list)
+    val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
+    dialogAddedAttendee.window!!
+      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    dialogAddedAttendee.setCanceledOnTouchOutside(true)
+    val lvAttendee = dialogAddedAttendee.findViewById<View>(R.id.lvAttendee) as ListView
+    lvAttendee.emptyView = tvEmpty
+    addedBankEmployeeAdapter =
+      AddedBankEmployeeAdapter(requireContext(), addedBankEmployeeList, this)
+    lvAttendee.adapter = addedBankEmployeeAdapter
+    addedBankEmployeeAdapter.notifyDataSetChanged()
+    dialogAddedAttendee.show()
+  }
+
+  fun setCount(cnt: Int) {
     if (cnt <= 0) {
       binding.tvBankEmployeeCount.text = ""
     } else {
       binding.tvBankEmployeeCount.text = "($cnt)"
     }
+    addedEmployeeCount = cnt
   }
 
   private fun getProfile() {
@@ -587,67 +606,6 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
   }
 
-  private fun searchBankEmployee(
-    constraint: CharSequence?,
-    searchList: CustomListPickerDialog
-  ) {
-    if (constraint == null) return
-    val request: BankEmployeeRequest
-    try {
-      request = BankEmployeeRequest(
-        URLEncoder.encode(AccountDetails.getEmployeeCode(), "utf-8"),
-        URLEncoder.encode(constraint.toString(), "utf-8"),
-        URLEncoder.encode(AccountDetails.getBusinessUnitId(), "utf-8"),
-        URLEncoder.encode(AccountDetails.getBusinessProfileId(), "utf-8"),
-        URLEncoder.encode(AccountDetails.getBranchCode(), "utf-8")
-      )
-    } catch (e: UnsupportedEncodingException) {
-      return
-    }
-
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
-      val disposable = saathiApi.getBankEmployee(request)
-        .compose(applyUiModel())
-        .subscribe { uiModel ->
-          if (uiModel.inProgress) {
-            hideKeyboard(binding.actvBankEmployee)
-            searchList.showProgress(View.VISIBLE)
-          } else {
-            searchList.showProgress(View.GONE)
-          }
-
-          val error = uiModel.error
-          if (error != null) {
-            val modelList = ArrayList<BankEmployeeData>()
-            modelList.add(BankEmployeeData.getNoData(getErrorOnFailure(error)))
-            val myAssineeAdapter = BankEmployeeSearchAdapter(mainActivity, modelList)
-            searchList.setAdapter(myAssineeAdapter)
-          }
-
-          val data = uiModel.data
-          if (data != null) {
-            val modelList = ArrayList<BankEmployeeData>()
-            for (datum in data) {
-              modelList.add(
-                BankEmployeeData(
-                  stringOrEmpty(datum.employeeName),
-                  datum.employeeCode,
-                  false
-                )
-              )
-            }
-            if (modelList.isEmpty()) {
-              modelList.add(BankEmployeeData.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE))
-            }
-            val myAssineeAdapter = BankEmployeeSearchAdapter(mainActivity, modelList)
-            searchList.setAdapter(myAssineeAdapter)
-          }
-        }
-    } else {
-      noInternetConnectionDialog()
-    }
-  }
-
   private fun getMeetingDate(): String {
     return getDateFromString(
       binding.tvDate.text.toString(),
@@ -685,6 +643,13 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getBankEmployee(): String {
+    var employeeId = ""
+    for (a in addedBankEmployeeList) {
+      employeeId += if (employeeId.isBlank())
+        a.employeeCode
+      else
+        "," + a.employeeCode
+    }
     return employeeId
   }
 
@@ -729,10 +694,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
       spBank.setSelection(0)
       spBranch.setSelection(0)
       actvSubBroker.setText("")
-      actvBankEmployee.setText("")
+//      actvBankEmployee.setText("")
+      setCount(0)
       etSubject.setText("")
       etClientName.setText("")
       clientNameList.clear()
+      addedBankEmployeeList.clear()
     }
   }
 
@@ -745,7 +712,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
       tvBankError.toggleTextView(false)
       tvBranchError.toggleTextView(false)
       ilSubBroker.setErrorMessages()
-      ilBankEmployee.setErrorMessages()
+//      ilBankEmployee.setErrorMessages()
+      tvBankEmployeeError.toggleTextView(false)
       ilSubject.setErrorMessages()
     }
   }
@@ -784,6 +752,27 @@ class BankMeetingFragment : MOSLCommonFragment() {
     const val PersonalMeeting = "Personal Meeting"
     const val TrainingValue = "Training"
     const val JointMeeting = "Joint Meeting"
+
+    fun listHasEmployee(
+      addedAttendeeModelList: List<AddedBankEmployeeModel>?,
+      empID: String
+    ): Boolean {
+      //    addedAttendeeModelList
+      var has = false
+      if (addedAttendeeModelList != null) {
+        for (atten in addedAttendeeModelList) {
+          if (atten.employeeCode.trim { it <= ' ' }.equals(
+              empID.trim { it <= ' ' },
+              ignoreCase = true
+            )
+          ) {
+            has = true
+            break
+          }
+        }
+      }
+      return has
+    }
   }
 }
 

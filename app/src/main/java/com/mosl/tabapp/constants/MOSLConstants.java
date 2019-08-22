@@ -370,6 +370,7 @@ public interface MOSLConstants extends LabelConfig {
     String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
     String INVALID_PINCODE_NUMBER = "Invalid pincode number";
     String ATTENDEE_ALREADY_ADDED = "Attendee already added";
+  String EMPLOYEE_ALREADY_ADDED = "Employee already added";
     String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";
     String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
     String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";
