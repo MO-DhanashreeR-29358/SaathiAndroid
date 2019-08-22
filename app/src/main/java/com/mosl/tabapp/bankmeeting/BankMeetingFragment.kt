@@ -1,7 +1,10 @@
 package com.mosl.tabapp.bankmeeting
 
 import android.app.DatePickerDialog
+import android.app.Dialog
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
@@ -9,10 +12,12 @@ import android.text.Editable.Factory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.data.applyUiModel
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
@@ -26,14 +31,17 @@ import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.bankmeeting.adapter.ClientNameAdapter
+import com.mosl.tabapp.bankmeeting.model.AddedBankEmployeeModel
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
 import com.mosl.tabapp.bankmeeting.model.MeetingClientName
+import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.model.bankmeeting.BankEmployeeData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
@@ -61,6 +69,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
   private var employeeId = ""
   private lateinit var clientNameList: ArrayList<MeetingClientName>
   private lateinit var clientNameAdapter: ClientNameAdapter
+  private var addedEmployeeCount: Int = 0
 
   override fun onCreateView(
     inflater: LayoutInflater,
@@ -83,8 +92,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
         searchDialog("SubBroker")
     }
 
-    binding.actvBankEmployee.setOnClickListener {
-      //      binding.actvBankEmployee.setText("")
+    binding.ibBankEmployee.setOnClickListener {
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
         searchDialog("BankEmployee")
     }
@@ -254,6 +262,62 @@ class BankMeetingFragment : MOSLCommonFragment() {
       }
     }
     searchList.setmListner(assingViewListner)
+  }
+
+  private fun dialogBankEmployee() {
+    val dialogAttendeeList = Dialog(getContext()!!)
+    dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialogAttendeeList.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialogAttendeeList.setContentView(R.layout.dialog_attendee_list)
+    dialogAttendeeList.window!!
+      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    dialogAttendeeList.setCanceledOnTouchOutside(true)
+    val etSearchAttendee =
+      dialogAttendeeList.findViewById<DelayAutoCompleteTextView>(R.id.etSearchAttendee)
+    etSearchAttendee.imeOptions = EditorInfo.IME_ACTION_DONE
+    etSearchAttendee.setOnEditorActionListener(this)
+    etSearchAttendee.threshold = 3
+    attendeeAdapter = AttendeeAdapter(requireContext())
+    etSearchAttendee.setAdapter<AttendeeAdapter>(attendeeAdapter)
+    etSearchAttendee.setLoadingIndicator(
+      dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
+    )
+    etSearchAttendee.onItemClickListener =
+      AdapterView.OnItemClickListener { parent, view, position, id ->
+        val clientModel = attendeeAdapter.getItem(position)
+        val has = listHasAttende(
+          addedAttendeeModelList, addedSplAttendeeModelList,
+          clientModel.getAttendeeCode()
+        )
+        if (!has) {
+          if (clientModel.isNoData()) {
+            return@OnItemClickListener
+          }
+          addedAttendeeModelList.add(
+            AddedBankEmployeeModel(
+              clientModel.getAttendeeName(),
+              clientModel.getAttendeeCode()
+            )
+          )
+          addedEmployeeCount++
+          setCount(addedEmployeeCount)
+          dialogAttendeeList.dismiss()
+        } else {
+          Toast.makeText(mainActivity, MOSLConstants.ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
+            .show()
+          etSearchAttendee.setText("")
+        }
+      }
+
+    dialogAttendeeList.show()
+  }
+
+  private fun setCount(cnt: Int) {
+    if (cnt <= 0) {
+      binding.tvBankEmployeeCount.text = ""
+    } else {
+      binding.tvBankEmployeeCount.text = "($cnt)"
+    }
   }
 
   private fun getProfile() {

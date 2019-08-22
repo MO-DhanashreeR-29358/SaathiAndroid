@@ -291,7 +291,71 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <RelativeLayout
+                android:id="@+id/ll_bank_employee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
+                >
+
+                <TextView
+                    android:id="@+id/tv_bank_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:text="@string/text_hint_label_enter_bank_employee"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_bank_employee_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_toEndOf="@+id/tv_bank_employee"
+                    android:layout_toStartOf="@+id/ib_bank_employee"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/ib_bank_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_plus"
+                    />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_bank_employee_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/ll_bank_employee"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_bank_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="ll_bank_employee,tv_bank_employee_error"
+                />
+            <!--<android.support.design.widget.TextInputLayout
                 android:id="@+id/il_bank_employee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -312,7 +376,7 @@
                     android:inputType="none"
                     style="@style/Widget.AppCompat.EditText"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>-->
 
             <android.support.constraint.Group
                 android:id="@+id/group_bank_branch"
@@ -320,7 +384,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
-                il_sub_broker,il_bank_employee"
+                il_sub_broker,barrier_bank_employee"
                 tools:visibility="visible"
                 />
 
@@ -332,7 +396,7 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/il_bank_employee"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_bank_employee"
                 tools:visibility="visible"
                 >
 
@@ -357,7 +421,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="il_bank_employee,il_meeting_description,
+                app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
                  il_sub_broker,il_subject"
                 />
 
@@ -399,7 +463,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="il_bank_employee,il_meeting_description,
+                app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
                  il_sub_broker,il_subject,il_client_name,rv_client_name"
                 />
 
