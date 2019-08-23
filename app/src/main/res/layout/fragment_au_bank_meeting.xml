@@ -184,6 +184,7 @@
                     android:hint="@string/text_hint_label_enter_meeting_description"
                     android:maxLength="1000"
                     android:maxLines="5"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
                     style="@style/Widget.AppCompat.EditText"
                     />
             </android.support.design.widget.TextInputLayout>
