@@ -167,6 +167,7 @@ dependencies {
   //workmanager
   implementation deps.work
   //  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
+  debugImplementation deps.leakCanary.debug
 
   implementation deps.retrofit.core
   implementation deps.okHttp.core

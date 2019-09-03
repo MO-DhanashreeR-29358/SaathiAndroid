@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.squareup.leakcanary.LeakCanary;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -29,6 +30,12 @@ public class CrmApp extends MultiDexApplication {
     }
 
     public void onCreate() {
+		if (LeakCanary.isInAnalyzerProcess(this)) {
+			//This process is dedicated to LeakCanary for heap analysis.
+			//You should not init your app in this process.
+			return;
+		}
+		LeakCanary.install(this);
         super.onCreate();
         context = getApplicationContext();
         Crashlytics crashlyticsKit = new Crashlytics.Builder()

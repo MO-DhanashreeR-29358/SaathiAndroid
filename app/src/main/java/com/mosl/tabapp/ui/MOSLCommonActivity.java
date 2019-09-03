@@ -1,6 +1,7 @@
 package com.mosl.tabapp.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -27,7 +28,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,7 +43,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
@@ -76,7 +75,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.EkycSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
-import com.mosl.tabapp.common.NetworkStateReceiver;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
@@ -106,6 +104,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
@@ -120,37 +119,18 @@ import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-/*import com.mosl.mobile.ekyc.common.MOSLCommon;
-import com.mosl.mobile.ekyc.model.CommonModel;
-import com.mosl.mobile.ekyc.model.RoleSelectionModel;
-import com.mosl.mobile.ekyc.model.RowData;
-import com.mosl.mobile.ekyc.register.RegisterActivity;
-import com.mosl.mobile.ekyc.ui.BranchResumeApplicationActivity;
-import com.mosl.mobile.ekyc.ui.PostLoginActivity;*/
-//import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
-//import static com.mosl.mobile.ekyc.constants.MOSLConstants.CRM;
-//import static com.mosl.mobile.ekyc.constants.MOSLConstants.SELECT_ROLE;
-//import static com.mosl.mobile.ekyc.model.CommonModel.setAppLoginID;
-//import static com.mosl.mobile.ekyc.model.CommonModel.setAppType;
-//import static com.mosl.mobile.ekyc.model.RoleSelectionModel.roleID;
-
 public class MOSLCommonActivity extends AppCompatActivity
 	implements MOSLConstants, View.OnClickListener, QuickAction.OnActionItemClickListener {
-	private static final int ID_LEAD = 1;
-	private static final int ID_CLEINT = 2;
-	private static final int ID_EMP = 3;
-	private static final String SEARCH_TYPE_LEAD = "Lead";
-	private static final String SEARCH_TYPE_CLIENT = "Client";
-	private static final String SEARCH_TYPE_EMP = "Employee";
-	static TextView tvPartnerName, tvBusinessProfileName;
-	static ImageView ivPartnerImage, ivCloseImage;
+	private final int ID_LEAD = 1;
+	private final int ID_CLEINT = 2;
+	private final int ID_EMP = 3;
+	private String SEARCH_TYPE_LEAD = "Lead";
+	private String SEARCH_TYPE_CLIENT = "Client";
+	private String SEARCH_TYPE_EMP = "Employee";
+	private ImageView ivPartnerImage;
 	//Ekyc Country
-	private static ArrayList<String> array = new ArrayList();
-	private static ArrayList<String> fatcaArray = new ArrayList<>();
 	private final HashMap<String, String> globalTitles = new HashMap<>();
-	private final Bundle args = new Bundle();
-	Boolean value = false;
-	UUID compressionWorkId;
+	private UUID compressionWorkId;
 	private DrawerLayout drawerLayout;
 	private final View.OnClickListener menuslide = new View.OnClickListener() {
 
@@ -162,9 +142,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 	};
 	//setting default
 	private String searchType = SEARCH_TYPE_LEAD;
-	private String ekycMenuType = SEARCH_TYPE_LEAD;
-	private Spinner spRoleSel;
-	private boolean mBound = false;
 	private ForegroundService mService = null;
 	private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
@@ -172,13 +149,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			ForegroundService.LocalBinder binder = (ForegroundService.LocalBinder) service;
 			mService = binder.getService();
-			mBound = true;
 		}
 
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			mService = null;
-			mBound = false;
 		}
 	};
 	private WorkManager mWorkManager;
@@ -188,9 +163,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private MenuAdapter menuAdapter;
 	private int lastExpandedPosition = -1;
 	private String currentPage = "";
-	//network monitor
-	private NetworkStateReceiver networkStateReceiver;
-	private IntentFilter intentFilter;
+
 	private AutoCompleteAdapter autoCompleteAdapter;
 	private SetAppointmentFragment setAppointmentFragment;
 	private CreateMeetingFragment createMeetingFragment;
@@ -203,7 +176,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 			actionBar.updateMsgCount(1);
 		}
 	};
-	private FusedLocationProviderClient fusedLocationClient;
 
 	public static Map getHeader(Context context) {
 		Map headerMap = new HashMap<>();
@@ -240,12 +212,10 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private static void sendToken(Context context, ContentResolver resolver) throws Exception {
 		String token = getPrefs(context).getString("TOKEN_ID", null);
 
-		String deviceId = Settings.Secure.getString(resolver, Settings.Secure.ANDROID_ID);
+		@SuppressLint("HardwareIds") String deviceId =
+			Settings.Secure.getString(resolver, Settings.Secure.ANDROID_ID);
 
-		Map requestMap = new HashMap();
-		Map headerMap = getHeader(context);
-
-		FcmTokenRequest request = new FcmTokenRequest(token, deviceId);
+		FcmTokenRequest request = new FcmTokenRequest(Objects.requireNonNull(token), deviceId);
 		Disposable subscribe =
 			CRMWebServiceHandler.getSaathiApi().updateFCMToken(request)
 				.compose(applyUiModel())
@@ -255,21 +225,22 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	public static String getInputBody(Map param) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		if (param != null && param.size() > 0) {
 			//      result += "{";
-			Set<String> keys = param.keySet();
-			for (String key : keys) {
-				String value = param.get(key) == null ? null : param.get(key).toString();
+			Set keys = param.keySet();
+			for (Object key : keys) {
+				String value = param.get(key) == null ? null : Objects.requireNonNull(
+					param.get(key)).toString();
 				if (value == null) {
-					result += key + "=" + "" + "&";
+					result.append(key).append("=").append("&");
 				} else {
-					result += key + "=" + value + "&";
+					result.append(key).append("=").append(value).append("&");
 				}
 			}
-			result = result.substring(0, result.length() - 1);
+			result = new StringBuilder(result.substring(0, result.length() - 1));
 		}
-		return result;
+		return result.toString();
 	}
 
 	public void hideKeyboard(View view) {
@@ -352,7 +323,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	private void mockLocationCheck() {
-		fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+		FusedLocationProviderClient fusedLocationClient =
+			LocationServices.getFusedLocationProviderClient(this);
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 			!= PackageManager.PERMISSION_GRANTED
@@ -394,9 +366,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 		progressLayout = findViewById(R.id.customProgress);
 		actionBar.setHomeAction(menuslide);
 
-		networkStateReceiver = new NetworkStateReceiver();
-		intentFilter = new IntentFilter("mobile.mosl.com.crm.common.SOME_ACTION");
-
 		Intent intent = new Intent("mobile.mosl.com.crm.common.SOME_ACTION");
 		sendBroadcast(intent);
 
@@ -426,21 +395,19 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	public void hideProgress() {
-		progressLayout.setVisibility(View.GONE);
+		if (progressLayout != null) progressLayout.setVisibility(View.GONE);
 	}
 
 	public boolean isDashBoardVisible() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		List<Fragment> fragments = fragmentManager.getFragments();
-		if (fragments != null) {
-			for (Fragment fragment : fragments) {
-				if (fragment != null && fragment.isVisible()) {
-					if (fragment instanceof DashboardFragment) {
-						return true;
-					} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT) &&
-							fragment instanceof BankMeetingFragment) {
-						return true;
-					}
+		for (Fragment fragment : fragments) {
+			if (fragment != null && fragment.isVisible()) {
+				if (fragment instanceof DashboardFragment) {
+					return true;
+				} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT)
+					&& fragment instanceof BankMeetingFragment) {
+					return true;
 				}
 			}
 		}
@@ -465,11 +432,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 	public boolean isNotificationVisible() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		List<Fragment> fragments = fragmentManager.getFragments();
-		if (fragments != null) {
-			for (Fragment fragment : fragments) {
-				if (fragment != null && fragment.isVisible()) {
-					if (fragment instanceof NotificationFragment) return true;
-				}
+		for (Fragment fragment : fragments) {
+			if (fragment != null && fragment.isVisible()) {
+				if (fragment instanceof NotificationFragment) return true;
 			}
 		}
 		return false;
@@ -478,8 +443,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Log.d("Called", "on Back Press Also" + keyCode);
-			value = false;
+			Timber.d("on Back Press Also%s", keyCode);
 			if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
 				drawerLayout.closeDrawer(GravityCompat.START);
 				return false;
@@ -532,7 +496,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 		String strAction = data.getAction();
 
 		if (source != null && source.equalsIgnoreCase(FCM_NOTIFICATION_SOURCE)) {
-			String nData = getIntent().getExtras().getString(FCM_NOTIFICATION_CATEGORY, "");
+			String nData = Objects.requireNonNull(getIntent().getExtras())
+				.getString(FCM_NOTIFICATION_CATEGORY, "");
 
 			navigateToFromNotification(nData);
 			setIntent(new Intent());
@@ -540,13 +505,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 			if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.ADD_QUERY")) {
 				setupFragment(new QueryFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
+				.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
 				setupFragment(new CalendarFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
+				.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
 				setupFragment(new BirthdayAnniversaryFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
+				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
 				setupFragment(new LeadCreationFragment());
 			} else {
 				setupFragment(new DashboardFragment());
@@ -572,12 +537,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 	@Override
 	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.srchImg:
-				//Search image on click
-				openSearchOptions(v);
-				hideKeyboard(v);
-				break;
+		if (v.getId() == R.id.srchImg) {//Search image on click
+			openSearchOptions(v);
+			hideKeyboard(v);
 		}
 	}
 
@@ -589,7 +551,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 		String tag = backEntry.getName();
 		MOSLCommonFragment closingFragment =
 			(MOSLCommonFragment) fragmentManager.findFragmentByTag(tag);
-		closingFragment.onFragmentPause();
+		Objects.requireNonNull(closingFragment).onFragmentPause();
 		fragmentManager.popBackStackImmediate();
 
 		if (fragmentManager.getBackStackEntryCount() != 0) {
@@ -606,7 +568,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 				((PendingApprovalFragment) currentFragment).getAprovalList();
 			}
 		}
-		getLastTitle(currentFragment.getClass().toString());
+		getLastTitle(Objects.requireNonNull(currentFragment).getClass().toString());
 	}
 
 	public void addFragment(int containerViewId, Fragment fragment, boolean addStack,
@@ -617,7 +579,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	public void addFragment(int containerViewId, Fragment fragment, boolean addStack,
 		boolean isReplace) {
 		if (fragment == null) {
-			Log.e("MOSLCommonActivity", "Fragment is null.");
+			Timber.e("Fragment is null.");
 			return;
 		}
 
@@ -633,7 +595,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 			MOSLCommonFragment currentFragment =
 				(MOSLCommonFragment) fragmentManager.findFragmentByTag(backEntry.getName());
 
-			currentFragment.onFragmentPause();
+			Objects.requireNonNull(currentFragment).onFragmentPause();
 		} else {
 			MOSLCommonFragment currentFragment =
 				(MOSLCommonFragment) fragmentManager.findFragmentById(containerViewId);
@@ -658,8 +620,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 		if (addStack) {
 			fragmentTransaction.addToBackStack(tag);
-		} else {
-
 		}
 		fragmentTransaction.commit();
 		fragmentManager.executePendingTransactions();
@@ -672,10 +632,10 @@ public class MOSLCommonActivity extends AppCompatActivity
 		LinearLayout pageHeaderLayout = findViewById(R.id.pageHeaderLayout);
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		pageHeaderLayout.setOnClickListener(null);
-		tvPartnerName = findViewById(R.id.tvPartnerName);
-		tvBusinessProfileName = findViewById(R.id.tvBusinessProfileName);
+		TextView tvPartnerName = findViewById(R.id.tvPartnerName);
+		TextView tvBusinessProfileName = findViewById(R.id.tvBusinessProfileName);
 		ivPartnerImage = findViewById(R.id.ivPartnerImage);
-		ivCloseImage = findViewById(R.id.ivCloseImage);
+		ImageView ivCloseImage = findViewById(R.id.ivCloseImage);
 		ivCloseImage.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -726,17 +686,14 @@ public class MOSLCommonActivity extends AppCompatActivity
 			@Override
 			public boolean onChildClick(final ExpandableListView parent, View view,
 				final int position, final int childPosition, long id) {
-				value = false;
 				drawerLayout.closeDrawers();
-				final boolean[] setMenuSelection = { false };
 				String clickedPosDetails = "";
 				Vector<SubMenu> sub = subMenuCollections.get(groupList.get(position).getTitle());
-				if (sub.size() > 0) {
+				if (Objects.requireNonNull(sub).size() > 0) {
 					clickedPosDetails = sub.get(childPosition).getDetails();
 				}
 				menuAdapter.setChildMenuSelection(lastExpandedPosition, childPosition);
 				if (position == MOSL_MENU_DASHBOARD) {
-					setMenuSelection[0] = true;
 					performMenuAction(clickedPosDetails);
 				} else if (position == MOSL_MENU_EKYC) {
 					if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
@@ -790,7 +747,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 			public boolean onGroupClick(ExpandableListView expandableListView, View view,
 				int position, long l) {
 				boolean clickHandled = false;
-				value = false;
 				if (isAufsb()) {
 					if (position == MOSL_MENU_EKYC) {
 						clickHandled = false;
@@ -1012,7 +968,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 		SaathiCommonResponse<List<ProspectResponse>> data = uiModel.data;
 		if (data != null) {
-			ProspectResponse prospectResponse = uiModel.data.response.get(0);
+			ProspectResponse prospectResponse =
+				Objects.requireNonNull(uiModel.data.response).get(0);
 			if (prospectResponse.isRegistrationAllowed()) {
 				String ekycUserID = prospectResponse.ekycUserID;
 				if (AccountDetails.isNewEkyc()) {
@@ -1082,9 +1039,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 			case ID_CLEINT: {
 				searchType = SEARCH_TYPE_CLIENT;
 				actionBar.setSearchHint(SEARCH_TYPE_CLIENT_HINT);
-               /* OneTimeWorkRequest periodicWork = new OneTimeWorkRequest.Builder(Worker.class)
-                        .setConstraints(networkConstraints()).build();
-                mWorkManager.enqueue(periodicWork);*/
 			}
 			break;
 			case ID_EMP: {
@@ -1188,7 +1142,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 	//endregion
 
-	private void clearLoginPrefData() {
+	@SuppressLint("CommitPrefEdits") private void clearLoginPrefData() {
 
 		getPrefs(this).edit().remove("EmployeeCode");
 		getPrefs(this).edit().remove("PASSWORD");
@@ -1245,7 +1199,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 			|| ev.getAction() == MotionEvent.ACTION_MOVE)
 			&& view instanceof EditText
 			&& !view.getClass().getName().startsWith("android.webkit.")) {
-			int scrcoords[] = new int[2];
+			int[] scrcoords = new int[2];
 			view.getLocationOnScreen(scrcoords);
 			float x = ev.getRawX() + view.getLeft() - scrcoords[0];
 			float y = ev.getRawY() + view.getTop() - scrcoords[1];
@@ -1280,18 +1234,18 @@ public class MOSLCommonActivity extends AppCompatActivity
 		super.onStop();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
 		unbindService(mServiceConnection);
-		mBound = false;
 	}
 
 	public void gotoEkycPage(int xyz, Map hashMap) {
-		switch (xyz) {
-			case CALL_CONVERT_EKYC:
-				ConvertEkycApi(hashMap.get(MOBILE).toString(), hashMap.get(EMAIL).toString(),
-					hashMap.get(LEAD_OWNER).toString(), hashMap.get(SOURCENAME).toString(),
-					hashMap.get(PROSPECT_SOURCENAME).toString(),
-					hashMap.get(PROSPECT_SOURCEDETAIL).toString(),
-					hashMap.get(INTRESTEDIN).toString());
-				break;
+		if (xyz == CALL_CONVERT_EKYC) {
+			ConvertEkycApi(
+				Objects.requireNonNull(hashMap.get(MOBILE)).toString(), Objects.requireNonNull(
+					hashMap.get(EMAIL)).toString(),
+				Objects.requireNonNull(hashMap.get(LEAD_OWNER)).toString(),
+				Objects.requireNonNull(hashMap.get(SOURCENAME)).toString(),
+				Objects.requireNonNull(hashMap.get(PROSPECT_SOURCENAME)).toString(),
+				Objects.requireNonNull(hashMap.get(PROSPECT_SOURCEDETAIL)).toString(),
+				Objects.requireNonNull(hashMap.get(INTRESTEDIN)).toString());
 		}
 	}
 
@@ -1299,7 +1253,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 		try {
 			Intent launchIntent =
 				getPackageManager().getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME);
-			launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			Objects.requireNonNull(launchIntent)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 			launchIntent.putExtra(OUTPUT, EkycSecurityUtil.encrypt(body));
 			startActivity(launchIntent);
 		} catch (Exception e) {
@@ -1331,9 +1286,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	}
 
 	private Constraints networkConstraints() {
-		Constraints constraints =
-			new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
-		return constraints;
+		return new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 	}
 
 	private void startWorkManager() {
@@ -1383,12 +1336,12 @@ public class MOSLCommonActivity extends AppCompatActivity
 		private LayoutInflater inflater;
 		private List<SearchResultModel> resultList = new ArrayList<>();
 
-		public AutoCompleteAdapter(Context context) {
+		AutoCompleteAdapter(Context context) {
 			this.inflater = LayoutInflater.from(context);
 			this.context = context;
 		}
 
-		public void clearAll() {
+		void clearAll() {
 			resultList.clear();
 			notifyDataSetChanged();
 		}
@@ -1462,9 +1415,10 @@ public class MOSLCommonActivity extends AppCompatActivity
 							actionBar.clearSearchText();
 						}
 					});
-					holderView.tvClientName.setText("Name :" + name);
-					holderView.tvClientID.setText("Emp Id: " + empCode);
-					holderView.tvUCID.setText("Business Profile: " + businessProfileName);
+					holderView.tvClientName.setText(String.format("Name :%s", name));
+					holderView.tvClientID.setText(String.format("Emp Id: %s", empCode));
+					holderView.tvUCID.setText(
+						String.format("Business Profile: %s", businessProfileName));
 
 					holderView.tvError.setVisibility(View.GONE);
 					searchFoundFlag = false;
@@ -1479,11 +1433,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 				holderView.tvClientName.setText(name);
 				if (!resultList.get(position).getClientCode().equalsIgnoreCase("0")) {
 					holderView.tvClientID.setText(
-						"Lead Id/Client Code: " + resultList.get(position).getClientCode());
+						String.format("Lead Id/Client Code: %s",
+							resultList.get(position).getClientCode()));
 				} else {
-					holderView.tvClientID.setText("Lead Id/Client Code: " + leadID);
+					holderView.tvClientID.setText(String.format("Lead Id/Client Code: %s", leadID));
 				}
-				holderView.tvUCID.setText("UCID: " + ucid);
+				holderView.tvUCID.setText(String.format("UCID: %s", ucid));
+				String ekycMenuType = SEARCH_TYPE_LEAD;
 				if (!resultList.get(position).getUCID().equalsIgnoreCase("0")) {
 					ekycMenuType = SEARCH_TYPE_CLIENT;
 				} else {
@@ -1910,7 +1866,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 			LinearLayout llDropDownMenuLayout, llExpand;
 			RelativeLayout rlSetAppointment, rlCrateMeeting, rlViewDetail, rlOpenAccount, rlOAOForm;
 
-			public HolderView(View parent) {
+			HolderView(View parent) {
 				tvClientName = parent.findViewById(R.id.tvClientname);
 				tvClientID = parent.findViewById(R.id.tvClientID);
 				tvUCID = parent.findViewById(R.id.tvUCID);

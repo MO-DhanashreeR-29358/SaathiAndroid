@@ -94,9 +94,9 @@ public class ForegroundService extends Service {
 			// Set the Notification Channel for the Notification Manager.
 			requireNonNull(mNotificationManager).createNotificationChannel(mChannel);
 		}
-		if (serviceIsRunningInForeground(this)) {
-			requireNonNull(mNotificationManager).notify(NOTIFICATION_ID, getNotification());
-		}
+		//if (serviceIsRunningInForeground(this)) {
+		//	requireNonNull(mNotificationManager).notify(NOTIFICATION_ID, getNotification());
+		//}
 		startLocationUpdates();
 
 		refreshHandler.postDelayed(runnableCode, 10000);
@@ -198,7 +198,7 @@ public class ForegroundService extends Service {
 
 	@Override public boolean onUnbind(Intent intent) {
 		Timber.tag(TAG).i("Last client unbound from service");
-		startForeground(NOTIFICATION_ID, getNotification());
+		//startForeground(NOTIFICATION_ID, getNotification());
 		return true;
 	}
 

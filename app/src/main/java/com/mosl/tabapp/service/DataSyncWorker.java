@@ -1,8 +1,10 @@
 package com.mosl.tabapp.service;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
@@ -27,6 +29,11 @@ import static java.util.Objects.requireNonNull;
 public class DataSyncWorker extends Worker {
 	private static final String TAG = "MyWorker";
 
+	public DataSyncWorker(@NonNull Context context,
+		@NonNull WorkerParameters workerParams) {
+		super(context, workerParams);
+	}
+
 	@NonNull
 	@Override
 	public Result doWork() {
@@ -41,11 +48,11 @@ public class DataSyncWorker extends Worker {
 					}
 				}
 			}
-			return Result.SUCCESS;
+			return Result.success();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Timber.d(e.toString());
-			return Result.RETRY;
+			return Result.retry();
 		}
 	}
 
