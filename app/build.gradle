@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
 def gitSha() {
@@ -27,6 +29,11 @@ android {
 
   Properties versionProps = new Properties()
   versionProps.load(new FileInputStream(file('../version.properties')))
+
+  dataBinding {
+    enabled = true
+  }
+
   defaultConfig {
     applicationId 'com.mosl.tabapp'
     minSdkVersion 17
@@ -36,7 +43,6 @@ android {
     buildConfigField 'long', 'GIT_TIMESTAMP', "${gitTimestamp()}L"
     vectorDrawables.useSupportLibrary = true
   }
-
 
   signingConfigs {
     internal {
@@ -89,6 +95,7 @@ android {
       proguardFile 'proguard-library.pro'
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
+      proguardFile 'proguard-slidingpanel.pro'
       proguardFile 'proguard-saxparser.pro'
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
@@ -96,15 +103,9 @@ android {
       multiDexEnabled true
       multiDexKeepFile file('multidex-config.txt')
       debuggable true
+      ext.enableCrashlytics = false
+      ext.alwaysUpdateBuildId = false
     }
-  }
-
-
-  packagingOptions {
-    exclude 'META-INF/rxjava.properties'
-  }
-  dexOptions {
-    javaMaxHeapSize "4g"
   }
 
   android.applicationVariants.all { variant ->
@@ -120,9 +121,11 @@ android {
 
 dependencies {
   implementation project(':TabLibrary')
-  implementation project(':eKYC')
+  //  implementation project(':eKYC')
+  implementation project(':saathiapi')
+  implementation project(':data')
   implementation(deps.crashlytics) {
-    transitive = true;
+    transitive = true
   }
   implementation deps.support.design
   implementation deps.support.cardview
@@ -138,7 +141,6 @@ dependencies {
   implementation deps.mpChart
   implementation deps.glide
   implementation deps.calendarView
-  implementation deps.asyncHttp
   implementation deps.smoothProgressbar
   implementation deps.dialogPlus
   implementation deps.floatingButton
@@ -158,11 +160,13 @@ dependencies {
   debugImplementation deps.stetho.okhttp
   // Room
   implementation deps.room.roomRuntime
-  annotationProcessor deps.room.roomCompiler
+  kapt deps.room.roomCompiler
+  kapt deps.dataBindCompiler
+  implementation deps.kotlin
   implementation deps.location
   //workmanager
   implementation deps.work
-  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
+  //  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
 
   implementation deps.retrofit.core
   implementation deps.okHttp.core
@@ -172,9 +176,11 @@ dependencies {
   implementation deps.rx.java
   implementation deps.rxBinding.core
   implementation deps.rxBinding.V4
+  implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
-
+  implementation deps.retrofit.scalar
+  implementation deps.mofslArtifacts.validator
 }
 
 apply plugin: 'com.google.gms.google-services'

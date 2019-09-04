@@ -1,9 +1,7 @@
 package com.mosl.tabapp.leadViewDetail;
 
-
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -34,13 +32,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
+import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
+import com.mosl.saathi.api.model.common.SaathiCommonResponse;
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem;
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest;
+import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem;
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest;
+import com.mosl.saathi.api.model.lead.Contact;
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
+import com.mosl.saathi.api.model.lead.LeadViewItem;
+import com.mosl.saathi.api.model.lead.LeadViewRequest;
+import com.mosl.saathi.api.model.lead.LookupItem;
+import com.mosl.saathi.api.model.lead.LookupRequest;
+import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
-import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddedAttendeeModel;
@@ -53,31 +65,25 @@ import com.mosl.tabapp.model.SetAddAttendeeModel;
 import com.mosl.tabapp.model.SetAttendeeModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.model.SplSetAttendeeModel;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-import com.mosl.tabapp.ws.WebServiceDirectCall;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
-import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Piyush on 04-03-2017.
  */
-public class SetAppointmentFragment extends MOSLCommonFragment implements View.OnClickListener, TextView.OnEditorActionListener {
+public class SetAppointmentFragment extends MOSLCommonFragment
+    implements View.OnClickListener, TextView.OnEditorActionListener {
 
     View setAppointmentView, llRepeteOnDaysPannel;
     // private SwitchCompat SwitchRepeateOn;
@@ -85,7 +91,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
 
     private TextView tvProductTypeSpError, tvRepeatTypeSpError, tvRepeatWeekdayError;
     private Spinner spSelectProduct, spRepeateWeek, spSelectWeekDay, spActivityType, spRepeateOn;
-    private TextView tvCurrentStageSince, tvCurrentStage, tvEndDateTimeDisplay, tvEndDateTime, tvBranchCode, tvLeadId, tvClientCode, tvName, tvSplAttendeeCount, tvSplAttendee, tvAttendee, tvAttendeeCount, tvApppointmentDateTimeDisplay, tvApppointmentDateTime, tvStartDateTimeDisplay, tvStartDateTime;
+    private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
     private TextView tvActivityTypeError, tvNewAppointment;
     private View rlDate;
     private ImageButton ibAttendee, ibSplAttendee;
@@ -104,20 +110,20 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
     //  private RadioButton rbDays;
     private String productCodeStr;//, productNameStr;
     private ArrayAdapter<RowData> arrAdapSelectProduct;
-    private ArrayList<RowData> arrSelectProduct;
+    private final ArrayList<RowData> arrSelectWeek = new ArrayList<>();
     private ArrayList<AddedAttendeeModel> addedAttendeeModelList = new ArrayList<>();
     private AttendeeAdapter attendeeAdapter;
     private ArrayList<AddedSplAttendeeModel> addedSplAttendeeModelList = new ArrayList<>();
     private SplAttendeeAdapter splAttendeeAdapter;
     private AddedAttendeeAdapter addedAttendeeAdapter;
     private AddedSplAttendeeAdapter addedSplAttendeeAdapter;
-    private ArrayList<RowData> arrSelectWeek;
+    private final ArrayList<RowData> arrSelectWeekDay = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectWeek;
     private String weekCodeStr, weekNameStr, weekDayCodeStr, weekDayNameStr;
-    private ArrayList<RowData> arrSelectWeekDay;
+    private final ArrayList<RowData> arrActivityType = new ArrayList<>();
     private ArrayAdapter<RowData> arrAdapSelectWeekDay;
     private ArrayAdapter<RowData> arrAdapActivityType;
-    private ArrayList<RowData> arrActivityType;
+    private final ArrayList<RowData> arrRepeatMode = new ArrayList<>();
     //date picker variable
     private Calendar today;
     private Dialog dialogDateTime;
@@ -141,21 +147,170 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
     private String meetingId = "";
     private boolean createMode = true;
     private ArrayAdapter<RowData> arrAdapRepeteMode;
-    private ArrayList<RowData> arrRepeteMode;
+    private TextView tvCurrentStageSince, tvCurrentStage, tvEndDateTimeDisplay, tvEndDateTime,
+        tvBranchCode, tvLeadId, tvClientCode, tvName, tvSplAttendeeCount, tvSplAttendee, tvAttendee,
+        tvAttendeeCount, tvApppointmentDateTimeDisplay, tvApppointmentDateTime,
+        tvStartDateTimeDisplay, tvStartDateTime;
     private String mUCID = "0";
     private ScrollView scrollView;
     private TextView tvStartDateError, tvEndDateError;
     private TextView tvAPPDateError;
+    private AdapterView.OnItemSelectedListener selectProductListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    tvProductTypeSpError.setVisibility(View.GONE);
+
+                    productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
+                    //   productNameStr = ((RowData) spSelectProduct.getSelectedItem()).getValue();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    //weekDayCodeStr,weekDayNameStr
+    private AdapterView.OnItemSelectedListener selectWeekDayListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    tvRepeatWeekdayError.setVisibility(View.GONE);
+                    weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
+                    weekDayNameStr = ((RowData) spSelectWeekDay.getSelectedItem()).getValue();
+                    //                productType(interestInCodeStr);
+                    //                etPermStateError.setVisibility(View.GONE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private AdapterView.OnItemSelectedListener selectActivityTypeListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
+                    activityTypeNameStr = ((RowData) spActivityType.getSelectedItem()).getValue();
+                    tvActivityTypeError.setVisibility(View.GONE);
+                    //                productType(interestInCodeStr);
+                    //                etPermStateError.setVisibility(View.GONE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    //endregion
+    //region DropDown listner
+    private AdapterView.OnItemSelectedListener selectWeekListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    tvRepeatTypeSpError.setVisibility(View.GONE);
+                    weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
+                    weekNameStr = ((RowData) spRepeateWeek.getSelectedItem()).getValue();
+                    //                productType(interestInCodeStr);
+                    //                etPermStateError.setVisibility(View.GONE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+    private AdapterView.OnItemSelectedListener selectRepeteModeListener =
+        new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+
+                    if (position > 0) {
+                        llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
+                    } else {
+                        llRepeteOnDaysPannel.setVisibility(View.GONE);
+                    }
+               /* Object tmp = parent.getSelectedItem();
+                if (tmp instanceof RowData) {
+                    RowData mData = (RowData) tmp;
+
+                    if (mData.getValue().contentEquals("Days")) {
+                        llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
+                    } else {
+                        llRepeteOnDaysPannel.setVisibility(View.GONE);
+                    }
+                } else {
+                    llRepeteOnDaysPannel.setVisibility(View.GONE);
+                }*/
+
+                    //                productType(interestInCodeStr);
+                    //                etPermStateError.setVisibility(View.GONE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+
+    //endregion
+    //deos dedup on list
+    public static boolean listHasAttende(List<AddedAttendeeModel> addedAttendeeModelList,
+        List<AddedSplAttendeeModel> addedSplAttendeeModelList, String empID) {
+        //    addedAttendeeModelList
+        boolean has = false;
+        if (addedAttendeeModelList != null) {
+            for (AddedAttendeeModel atten : addedAttendeeModelList) {
+                if (atten.getAttendeeEmplyeeCode().trim().equalsIgnoreCase(empID.trim())) {
+                    has = true;
+                    break;
+                }
+            }
+        }
+        if (addedSplAttendeeModelList != null) {
+            for (AddedSplAttendeeModel atten : addedSplAttendeeModelList) {
+                if (atten.getAttendeeEmplyeeCode().trim().equalsIgnoreCase(empID.trim())) {
+                    has = true;
+                    break;
+                }
+            }
+        }
+        return has;
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        Bundle savedInstanceState) {
         setAppointmentView = super.onCreateView(inflater, container, savedInstanceState);
         attachLayout(R.layout.frag_set_appiontment);
         setAppTitle(getClass().toString(), "Set Appointment");
         // getting look up from server
 
         try {
-            mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0" : this.getArguments().getString(UCID, "0");
+            mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0"
+                : this.getArguments().getString(UCID, "0");
             str_LeadID = this.getArguments().getString(LEAD_ID, "0");
             meetingId = this.getArguments().getString(MEETING_ID, "0");
             if (meetingId != null && !meetingId.equalsIgnoreCase("0")) {
@@ -169,7 +324,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 getRepeatMode("");
                 selectWeek("");
                 selectWeekDay("");
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,7 +332,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         if (!mUCID.equalsIgnoreCase("0")) {
             getClientDetail(mUCID);
             setProfileImage(mUCID);
-
         } else {
             getLeadByIdFromServer(str_LeadID);
         }
@@ -210,8 +363,10 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         tvSplAttendee = (TextView) setAppointmentView.findViewById(R.id.tvSplAttendee);
         tvAttendeeCount = (TextView) setAppointmentView.findViewById(R.id.tvAttendeeCount);
         tvAttendee = (TextView) setAppointmentView.findViewById(R.id.tvAttendee);
-        tvApppointmentDateTime = (TextView) setAppointmentView.findViewById(R.id.tvApppointmentDateTime);
-        tvApppointmentDateTimeDisplay = (TextView) setAppointmentView.findViewById(R.id.tvApppointmentDateTimeDisplay);
+        tvApppointmentDateTime =
+            (TextView) setAppointmentView.findViewById(R.id.tvApppointmentDateTime);
+        tvApppointmentDateTimeDisplay =
+            (TextView) setAppointmentView.findViewById(R.id.tvApppointmentDateTimeDisplay);
 
         // spMeetingType = (Spinner) setAppointmentView.findViewById(R.id.spMeetingType);
         spSelectProduct = (Spinner) setAppointmentView.findViewById(R.id.spSelectProduct);
@@ -219,10 +374,12 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         spSelectWeekDay = (Spinner) setAppointmentView.findViewById(R.id.spSelectWeekDay);
         spActivityType = (Spinner) setAppointmentView.findViewById(R.id.spActivityType);
         spRepeateOn = (Spinner) setAppointmentView.findViewById(R.id.spRepeateOn);
-        tvProductTypeSpError = (TextView) setAppointmentView.findViewById(R.id.tvselectproducterror);
+        tvProductTypeSpError =
+            (TextView) setAppointmentView.findViewById(R.id.tvselectproducterror);
         // tvRepeatTypeSpError
         tvRepeatTypeSpError = (TextView) setAppointmentView.findViewById(R.id.tvRepeatTypeSpError);
-        tvRepeatWeekdayError = (TextView) setAppointmentView.findViewById(R.id.tvRepeatWeekdayError);
+        tvRepeatWeekdayError =
+            (TextView) setAppointmentView.findViewById(R.id.tvRepeatWeekdayError);
         tvActivityTypeError = (TextView) setAppointmentView.findViewById(R.id.tvActivityTypeError);
         tvNewAppointment = (TextView) setAppointmentView.findViewById(R.id.tvNewAppointment);
 
@@ -232,9 +389,11 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         ibSplAttendee = (ImageButton) setAppointmentView.findViewById(R.id.ibSplAttendee);
         // rbDays = (RadioButton) setAppointmentView.findViewById(R.id.rbDays);
         tvStartDateTime = (TextView) setAppointmentView.findViewById(R.id.tvStartDateTime);
-        tvStartDateTimeDisplay = (TextView) setAppointmentView.findViewById(R.id.tvStartDateTimeDisplay);
+        tvStartDateTimeDisplay =
+            (TextView) setAppointmentView.findViewById(R.id.tvStartDateTimeDisplay);
         tvEndDateTime = (TextView) setAppointmentView.findViewById(R.id.tvEndDateTime);
-        tvEndDateTimeDisplay = (TextView) setAppointmentView.findViewById(R.id.tvEndDateTimeDisplay);
+        tvEndDateTimeDisplay =
+            (TextView) setAppointmentView.findViewById(R.id.tvEndDateTimeDisplay);
         tvStartDateError = (TextView) setAppointmentView.findViewById(R.id.tvStartDateError);
         tvEndDateError = (TextView) setAppointmentView.findViewById(R.id.tvEndDateError);
         tvAPPDateError = (TextView) setAppointmentView.findViewById(R.id.tvAPPDateError);
@@ -257,7 +416,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 }
             }
         });*/
-
 
         ibAttendee.setOnClickListener(this);
         ibSplAttendee.setOnClickListener(this);
@@ -325,9 +483,14 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 meetingApptModel.setLeadId(str_LeadID);
                 meetingApptModel.setUcid(mUCID);
                 // meetingApptModel.setMeetingDate(CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
-                meetingApptModel.setMeetingDate(CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
-                meetingApptModel.setAppointmentStartTime(CRMAppUtil.getDBDate(currentYearStartDate, monthStartDate, dayStartDate, hourStartDate, minuteStartDate));
-                meetingApptModel.setAppointmentEndTime(CRMAppUtil.getDBDate(currentYearEndDate, monthEndDate, dayEndDate, hourEndDate, minuteEndDate));
+                meetingApptModel.setMeetingDate(
+                    CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
+                meetingApptModel.setAppointmentStartTime(
+                    CRMAppUtil.getDBDate(currentYearStartDate, monthStartDate, dayStartDate,
+                        hourStartDate, minuteStartDate));
+                meetingApptModel.setAppointmentEndTime(
+                    CRMAppUtil.getDBDate(currentYearEndDate, monthEndDate, dayEndDate, hourEndDate,
+                        minuteEndDate));
                 meetingApptModel.setMeetingAttendee(addedAttendeeModelList);
                 meetingApptModel.setSplMeetingAttendee(addedSplAttendeeModelList);
                 meetingApptModel.setProduct(productCodeStr);
@@ -350,19 +513,14 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 }
                 createAppointmentSave(meetingApptModel);
             }
-
         } else if (id == R.id.btnReset) {
             Log.v(TAG, "Reset called");
             resetForm();
         }//btnReset
-
     }
 
     /**
      * form validation
-     *
-     * @param
-     * @return
      */
     private boolean validateForm() {
         try {
@@ -371,22 +529,28 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             String splitEndDate = stringArray(tvEndDateTime.getText().toString());
             String[] newEndDate = splitEndDate.split("-");
 
-
             Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute + 5);
             Date NewMeetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
-            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]), Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate, minuteEndDate);
-            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hourStartDate, minuteStartDate);
+            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                minuteEndDate);
+            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hourStartDate,
+                minuteStartDate);
 
             //For e
-            Date startDateEQ = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), 0, 0);
-            Date endDateEQ = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]), Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), 0, 0);
+            Date startDateEQ = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), 0, 0);
+            Date endDateEQ = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), 0, 0);
             // Log.v("String",spSelectProduct.getSelectedItem().toString());
             //Added on 9/6/2017 sanket
-            if (spActivityType.getSelectedItem().toString().equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
+            if (spActivityType.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
                 tvActivityTypeError.setVisibility(View.VISIBLE);
                 tvActivityTypeError.setText(SELECT_ACTIVITY_TYPE);
                 tvActivityTypeError.requestFocus();
-
 
                 return false;
             }
@@ -398,13 +562,14 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 tvAPPDateError.setText(SELECT_APPT_DATE_TYPE);
                 tvAPPDateError.requestFocus();
                 return false;
-            } else if (spSelectProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT)) {
+            } else if (spSelectProduct.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase(SELECT_PRODUCT)) {
                 tvProductTypeSpError.setVisibility(View.VISIBLE);
                 tvProductTypeSpError.setText(SELECT_PRODUCT);
                 tvProductTypeSpError.requestFocus();
                 return false;
             }
-
 
             //Do this only if you select repete <code></code>
             if (spRepeateOn.getSelectedItemPosition() > 0) {
@@ -413,7 +578,9 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                     tvRepeatTypeSpError.setText(SELECT_WEEK);
                     tvRepeatTypeSpError.requestFocus();
                     return false;
-                } else if (spSelectWeekDay.getSelectedItem().toString().equalsIgnoreCase(SELECT_WEEK_DAYS)) {
+                } else if (spSelectWeekDay.getSelectedItem()
+                    .toString()
+                    .equalsIgnoreCase(SELECT_WEEK_DAYS)) {
                     tvRepeatWeekdayError.setVisibility(View.VISIBLE);
                     tvRepeatWeekdayError.setText(SELECT_WEEK_DAYS);
                     tvRepeatWeekdayError.requestFocus();
@@ -436,7 +603,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 }
             }
 
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -448,137 +614,57 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         /*addedAttendeeModelList;
         addedSplAttendeeModelList;*/
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            // customProgress.setVisibility(View.VISIBLE);
-
-            String requestJson = meetingApptModel.getJson();
-            String serviceMethod = "Meeting/AddUpdateMeeting";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), requestJson, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        try {
-                            if (statusCode == 200) {
-                                hideProgress();
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-//
-
-                                    MSFDialog.alertDialog(getActivity(), 0, getResources().getString(R.string.motilal_oswal), (createMode) ? SET_APPOINTMENTS : UPDATE_APPOINTMENTS, "OK", true, new MSFDialog.DialogListener() {
-                                        @Override
-                                        public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                            if (action == MSFDialog.Action.OK) {
-                                                Bundle bundle = new Bundle();
-                                                bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
-                                                bundle.putString(UCID, getArguments().getString(UCID));
-                                                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(), false);
-
-                                            }
-                                        }
-                                    });
-
-
-                                } else {
-
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            // e.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                            return;
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            RequestBody request =
+                RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.getJson());
+            Disposable subscribe = saathiApi.setAppointmentMeeting(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderAddUpdate);
         } else {
-//            customProgress.setVisibility(View.GONE);
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+            noInternetConnectionDialog();
+        }
+    }
 
+    private void renderAddUpdate(UiModel<SetAppointmentResponse> uiModel) {
+        toggleProgress(uiModel.inProgress);
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        SetAppointmentResponse data = uiModel.data;
+        if (data != null) {
+            MSFDialog.alertDialog(getActivity(), 0,
+                getResources().getString(R.string.motilal_oswal),
+                (createMode) ? SET_APPOINTMENTS : UPDATE_APPOINTMENTS,
+                "OK", true, new MSFDialog.DialogListener() {
+                    @Override
+                    public void alertDialogAction(
+                        MSFDialog.Action action, Object... data) {
+                        if (action == MSFDialog.Action.OK) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(LEAD_ID,
+                                getArguments().getString(LEAD_ID));
+                            bundle.putString(UCID,
+                                getArguments().getString(UCID));
+                            navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle,
+                                getFragmentManager(), false);
+                        }
+                    }
+                });
         }
     }
 
     private void dialogAddedSplAttendee() {
         final Dialog dialogAddedSplAttendee = new Dialog(getContext());
         dialogAddedSplAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogAddedSplAttendee.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogAddedSplAttendee.getWindow()
+            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedSplAttendee.setContentView(R.layout.dialog_addedd_spl_attendee_list);
-        dialogAddedSplAttendee.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogAddedSplAttendee.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAddedSplAttendee.setCanceledOnTouchOutside(true);
         ListView lvAttendee = (ListView) dialogAddedSplAttendee.findViewById(R.id.lvAttendee);
-        addedSplAttendeeAdapter = new AddedSplAttendeeAdapter(getActivity(), addedSplAttendeeModelList);
+        addedSplAttendeeAdapter =
+            new AddedSplAttendeeAdapter(getActivity(), addedSplAttendeeModelList);
         lvAttendee.setAdapter(addedSplAttendeeAdapter);
         addedSplAttendeeAdapter.notifyDataSetChanged();
         dialogAddedSplAttendee.show();
@@ -590,7 +676,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dialogAddedAttendee.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedAttendee.setContentView(R.layout.dialog_addedd_attendee_list);
         TextView tvEmpty = (TextView) dialogAddedAttendee.findViewById(R.id.tvEmpty);
-        dialogAddedAttendee.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogAddedAttendee.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAddedAttendee.setCanceledOnTouchOutside(true);
         ListView lvAttendee = (ListView) dialogAddedAttendee.findViewById(R.id.lvAttendee);
         lvAttendee.setEmptyView(tvEmpty);
@@ -605,41 +692,46 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogAttendeeList.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAttendeeList.setContentView(R.layout.dialog_attendee_list);
-        dialogAttendeeList.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogAttendeeList.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogAttendeeList.setCanceledOnTouchOutside(true);
         ListView lvAttendee = (ListView) dialogAttendeeList.findViewById(R.id.lvAttendee);
-        final DelayAutoCompleteTextView etSearchAttendee = (DelayAutoCompleteTextView) dialogAttendeeList.findViewById(R.id.etSearchAttendee);
+        final DelayAutoCompleteTextView etSearchAttendee =
+            (DelayAutoCompleteTextView) dialogAttendeeList.findViewById(R.id.etSearchAttendee);
         etSearchAttendee.setThreshold(3);
         etSearchAttendee
-                .setImeOptions(EditorInfo.IME_ACTION_DONE);
+            .setImeOptions(EditorInfo.IME_ACTION_DONE);
         etSearchAttendee.setOnEditorActionListener(this);
         attendeeAdapter = new AttendeeAdapter(getContext());
         etSearchAttendee.setAdapter(attendeeAdapter);
-        etSearchAttendee.setLoadingIndicator((ProgressBar) dialogAttendeeList.findViewById(R.id.pbLoadingIndicator));
+        etSearchAttendee.setLoadingIndicator(
+            (ProgressBar) dialogAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 EmployeeModel clientModel = attendeeAdapter.getItem(position);
-                boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList, clientModel.getAttendeeCode());
+                boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList,
+                    clientModel.getAttendeeCode());
                 if (!has) {
                     if (clientModel.isNoData()) {
                         return;
                     }
                     String attendeeType = "R"; //todo //R=Regular  & S=special
-                    addedAttendeeModelList.add(new AddedAttendeeModel(attendeeType, true, clientModel.getAttendeeName(), clientModel.getAttendeeCode(), clientModel.getMeetingAttendeeCode()));
+                    addedAttendeeModelList.add(
+                        new AddedAttendeeModel(attendeeType, true, clientModel.getAttendeeName(),
+                            clientModel.getAttendeeCode(), clientModel.getMeetingAttendeeCode()));
                     addedAttendeeCount++;
                     //  tvAttendeeCount.setText("(" + String.valueOf(addedAttendeeCount) + ")");
                     setCount(addedAttendeeCount);
                     dialogAttendeeList.dismiss();
                 } else {
                     //clear It
-                    Toast.makeText(getMainActivity(), ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getMainActivity(), ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
+                        .show();
                     etSearchAttendee.setText("");
                 }
-
             }
-
         });
 
         dialogAttendeeList.show();
@@ -648,597 +740,53 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
     private void dialogSplAttendee() {
         final Dialog dialogSplAttendeeList = new Dialog(getContext());
         dialogSplAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogSplAttendeeList.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogSplAttendeeList.getWindow()
+            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogSplAttendeeList.setContentView(R.layout.dialog_attendee_list);
-        dialogSplAttendeeList.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogSplAttendeeList.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialogSplAttendeeList.setCanceledOnTouchOutside(true);
         ListView lvAttendee = (ListView) dialogSplAttendeeList.findViewById(R.id.lvAttendee);
 
-        final DelayAutoCompleteTextView etSearchAttendee = (DelayAutoCompleteTextView) dialogSplAttendeeList.findViewById(R.id.etSearchAttendee);
+        final DelayAutoCompleteTextView etSearchAttendee =
+            (DelayAutoCompleteTextView) dialogSplAttendeeList.findViewById(R.id.etSearchAttendee);
         etSearchAttendee.setThreshold(3);
         splAttendeeAdapter = new SplAttendeeAdapter(getContext());
         etSearchAttendee.setAdapter(splAttendeeAdapter);
-        etSearchAttendee.setLoadingIndicator((ProgressBar) dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
+        etSearchAttendee.setLoadingIndicator(
+            (ProgressBar) dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SplAttendeeModel clientModel = splAttendeeAdapter.getItem(position);
-                boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList, clientModel.getAttendeeCode());
+                boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList,
+                    clientModel.getAttendeeCode());
 
                 if (!has) {
                     if (clientModel.isNoData()) {
                         return;
                     }
                     String attendeeType = "S"; //todo //R=Regular  & S=special
-                    addedSplAttendeeModelList.add(new AddedSplAttendeeModel(attendeeType, true, clientModel.getAttendeeName(), clientModel.getAttendeeCode()));
+                    addedSplAttendeeModelList.add(
+                        new AddedSplAttendeeModel(attendeeType, true, clientModel.getAttendeeName(),
+                            clientModel.getAttendeeCode()));
                     // etSearchAttendee.setText(clientModel.getAttendeeName());
                     addedSplAttendeeCount++;
                     tvSplAttendeeCount.setText("(" + String.valueOf(addedSplAttendeeCount) + ")");
                     dialogSplAttendeeList.dismiss();
                 } else {
                     //clear It
-                    Toast.makeText(getMainActivity(), SPL_ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getMainActivity(), SPL_ATTENDEE_ALREADY_ADDED,
+                        Toast.LENGTH_SHORT).show();
                     etSearchAttendee.setText("");
                 }
-
             }
-
         });
 
         dialogSplAttendeeList.show();
     }
 
-    private void setProfileImage(String ucid) {
-
-
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-
-            String serviceMethod = "Client/GetClientImage";
-            String tmpReq = String.format(ID_OBJECT, ucid);
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-
-                        try {
-
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    String objDetail = response.getString(RESPONSE);
-
-                                    byte[] byt = Base64.decode(objDetail, Base64.DEFAULT);
-                                    if (byt != null) {
-                                        CRMAppUtil.setImage(byt, ivLead, getMainActivity());
-                                    } else {
-                                        CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
-                                    }
-
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                hideProgress();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-        }
-
-    }
-
-
-    private void getClientDetail(String ucid) {
-
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            showProgress();
-            Map inputMap = new HashMap<>();
-            inputMap.put(UCID, ucid);
-//            inputMap.put("Id", this.getArguments().getString(LEAD_ID));
-
-            String serviceMethod = "Client/GetClientViewByCommand/";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-
-                        try {
-
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject objDetail = response.getJSONObject(RESPONSE);
-                                    new ClientDetail(objDetail);
-                                    tvLeadId.setText(ClientDetail.getLeadId());
-                                    tvCurrentStage.setText(ClientDetail.getCurrentStage());
-                                    if (!ClientDetail.getCurrentStageSince().isEmpty()) {
-                                        tvCurrentStageSince.setText(ClientDetail.getCurrentStageSince() + " Days");
-                                    }
-                                    tvName.setText(ClientDetail.getName());
-                                    tvClientCode.setText(ClientDetail.getClientCode());
-                                    tvBranchCode.setText(ClientDetail.getBranchCode());
-
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-                                hideProgress();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            hideProgress();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                hideProgress();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        } else {
-            hideProgress();
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-        }
-    }
-
-    //@add by sanket on 30/03/2017
-    // calls web service takes lead id as parameter
-    //@param strLeadId Lead id
-    private void getLeadByIdFromServer(CharSequence strLeadId) {
-        CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            //TODO call progress bar
-//            customProgress.setVisibility(View.VISIBLE);
-            //  Map inputMap = new HashMap<>();
-            //  inputMap.put("LookupTypeId", INTERESTEDIN);
-            //inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-
-            String serviceMethod = "Lead/GetLeadView";
-            String tmpReq = String.format(ID_OBJECT, strLeadId);
-
-            showProgress();
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        //    arrInterested = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject Response_obj = response.getJSONObject(RESPONSE);
-                                    String leadID = (Response_obj.isNull(LEADID) || Response_obj.getString(LEADID).equals("")) ? "" : Response_obj.getString(LEADID);
-                                    String branchcode = (Response_obj.isNull(BRANCHCODE) || Response_obj.getString(BRANCHCODE).equals("")) ? "" : Response_obj.getString(BRANCHCODE);
-                                    JSONObject contact_obj = Response_obj.getJSONObject(CONTACT);
-                                    String Name = (contact_obj.isNull(NAME) || contact_obj.getString(NAME).equals("")) ? "" : contact_obj.getString(NAME);
-                                    JSONArray leadProductMapping = Response_obj.getJSONArray(LEADPRODUCTMAPPING);
-                                    for (int leadProductMapping_i = 0; leadProductMapping_i < leadProductMapping.length(); leadProductMapping_i++) {
-                                        JSONObject leadProductMappingObj = leadProductMapping.getJSONObject(leadProductMapping_i);
-                                        String clientCode = (leadProductMappingObj.isNull(CLIENTCODE) || leadProductMappingObj.getString(CLIENTCODE).equals("")) ? "" : leadProductMappingObj.getString(CLIENTCODE);
-                                        String StageName = (leadProductMappingObj.isNull(STAGENAME) || leadProductMappingObj.getString(STAGENAME).equals("")) ? "" : leadProductMappingObj.getString(STAGENAME);
-                                        String isDefault = (leadProductMappingObj.isNull(IS_DEFAULT) || leadProductMappingObj.getString(IS_DEFAULT).equals("")) ? "" : leadProductMappingObj.getString(IS_DEFAULT);
-                                        String pendingDays = (leadProductMappingObj.isNull(PENDING_DAYS) || leadProductMappingObj.getString(PENDING_DAYS).equals("")) ? "" : leadProductMappingObj.getString(PENDING_DAYS);
-                                        if (isDefault.equalsIgnoreCase("true")) {
-                                            tvClientCode.setText(clientCode);
-                                            tvCurrentStage.setText(StageName);
-                                            tvCurrentStageSince.setText(pendingDays + " Days");
-                                        }
-
-                                    }
-                                    tvName.setText(Name);
-                                    tvLeadId.setText(leadID);
-                                    tvBranchCode.setText(branchcode);
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-
-                            }
-                            hideProgress();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                            Log.e(TAG, e.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, e.toString());
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-        }
-    }
-
-    private AdapterView.OnItemSelectedListener selectProductListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                tvProductTypeSpError.setVisibility(View.GONE);
-
-                productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
-                //   productNameStr = ((RowData) spSelectProduct.getSelectedItem()).getValue();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private void selectProduct(final String id) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-//            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", INTERESTEDIN);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            final String serviceMethod = "Master/GetAllLookup";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        arrSelectProduct = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-//                                    customProgress.setVisibility(View.GONE);
-                                    arrSelectProduct.add(new RowData(0, "-1", SELECT_PRODUCT));
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject objDetail = jsonArray.getJSONObject(i);
-                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
-                                        arrSelectProduct.add(new RowData(i + 1, lookUpId, lookUpName));
-                                    }
-                                    arrAdapSelectProduct = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrSelectProduct);
-                                    arrAdapSelectProduct.setDropDownViewResource(R.layout.mdropdown);
-                                    spSelectProduct.setAdapter(arrAdapSelectProduct);
-                                    spSelectProduct.setOnItemSelectedListener(selectProductListener);
-                                    arrAdapSelectProduct.notifyDataSetChanged();
-                                    arrAdapSelectProduct.setNotifyOnChange(true);
-
-                                    RowData productData = getSpinnerRowDataById(id, arrAdapSelectProduct);
-                                    if (productData != null) {
-                                        spSelectProduct.setSelection(productData.getPosition());
-                                    }
-                                    //adding to cache
-                                    //LruCacheManager.getInstance().put(serviceMethod + PRODUCT, response);
-                                } else {
-//                                    customProgress.setVisibility(View.GONE);
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.v(TAG, e.toString());
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getMainActivity());
-//            builder.setTitle(getResources().getString(R.string.motilal_oswal));
-//            builder.setMessage("Operation could not be completed. Please check your network connections.");
-//            builder.setPositiveButton("OK",
-//                    new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogDateTime,
-//                                            int which) {
-//                            dialogDateTime.dismiss();
-//                        }
-//                    });
-//            builder.show();
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-            return;
-
-        }
-    }
-
-
     //Date picker start
-
 
     public String prefix(int input) {
         if (Integer.toString(input).length() == 1) {
@@ -1247,6 +795,181 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         return input + "";
     }
 
+    private void setProfileImage(String ucid) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            ClientImageRequest request =
+                new ClientImageRequest(ucid);
+            Disposable subscribe = saathiApi.getClientImage(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderClientImage);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderClientImage(UiModel<SaathiCommonResponse<String>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        SaathiCommonResponse<String> data = uiModel.data;
+        if (data != null) {
+            String response = data.response;
+            byte[] byt = Base64.decode(response, Base64.DEFAULT);
+            if (byt != null) {
+                CRMAppUtil.setImage(byt, ivLead, getMainActivity());
+            } else {
+                CRMAppUtil.setImage(new byte[0], ivLead,
+                    getMainActivity());
+            }
+        }
+    }
+
+    private void getClientDetail(String ucid) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            ClientDetailRequest request =
+                new ClientDetailRequest(Integer.valueOf(ucid));
+            Disposable subscribe = saathiApi.getClientDetail(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderClientDetails);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderClientDetails(UiModel<ClientDetailItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        ClientDetailItem data = uiModel.data;
+        if (data != null) {
+            new ClientDetail(data);
+            tvLeadId.setText(ClientDetail.getLeadId());
+            tvCurrentStage.setText(ClientDetail.getCurrentStage());
+            if (!ClientDetail.getCurrentStageSince().isEmpty()) {
+                tvCurrentStageSince.setText(
+                    ClientDetail.getCurrentStageSince() + " Days");
+            }
+            tvName.setText(ClientDetail.getName());
+            tvClientCode.setText(ClientDetail.getClientCode());
+            tvBranchCode.setText(ClientDetail.getBranchCode());
+        }
+    }
+
+    private String stringArray(String date) {
+        String[] spaceString = date.split(" ");
+
+        return spaceString[0];
+    }
+
+    //@add by sanket on 30/03/2017
+    // calls web service takes lead id as parameter
+    //@param strLeadId Lead id
+    private void getLeadByIdFromServer(CharSequence strLeadId) {
+        CRMAppUtil.setImage(new byte[0], ivLead, getMainActivity());
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LeadViewRequest request =
+                new LeadViewRequest(String.valueOf(strLeadId));
+            Disposable subscribe = saathiApi.getLeadView(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderLeadView);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderLeadView(UiModel<LeadViewItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        LeadViewItem data = uiModel.data;
+        if (data != null) {
+            String leadId = stringOrEmpty(String.valueOf(data.leadID));
+            String branchCode = stringOrEmpty(data.branchcode);
+            Contact contact = data.contact;
+            String name = stringOrEmpty(contact.name);
+
+            List<LeadProductMappingItem> leadProductMapping = data.leadProductMapping;
+            for (int i = 0; i < leadProductMapping.size(); i++) {
+                LeadProductMappingItem item = leadProductMapping.get(i);
+                String clientCode = stringOrEmpty(item.clientCode);
+                String stageName = stringOrEmpty(item.stageName);
+                String isDefault = stringOrEmpty(String.valueOf(item.isDefault));
+                String pendingDays = stringOrEmpty(String.valueOf(item.pendingDays));
+                if (isDefault.equalsIgnoreCase("true")) {
+                    tvClientCode.setText(clientCode);
+                    tvCurrentStage.setText(stageName);
+                    tvCurrentStageSince.setText(pendingDays + " Days");
+                }
+                tvName.setText(name);
+                tvLeadId.setText(leadId);
+                tvBranchCode.setText(branchCode);
+            }
+        }
+    }
+
+    private void selectProduct(final String id) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderProduct(uiModel, id));
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderProduct(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrSelectProduct.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrSelectProduct.clear();
+            arrSelectProduct.add(new RowData(0, "-1", SELECT_PRODUCT));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrSelectProduct.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapSelectProduct = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrSelectProduct);
+            arrAdapSelectProduct.setDropDownViewResource(
+                R.layout.mdropdown);
+            spSelectProduct.setAdapter(arrAdapSelectProduct);
+            spSelectProduct.setOnItemSelectedListener(
+                selectProductListener);
+            arrAdapSelectProduct.notifyDataSetChanged();
+            arrAdapSelectProduct.setNotifyOnChange(true);
+
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapSelectProduct);
+            if (productData != null) {
+                spSelectProduct.setSelection(productData.getPosition());
+            }
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        hideKeyboard(textView);
+        return false;
+    }
 
     public void selectDateAppointment() {
         today = Calendar.getInstance();
@@ -1255,7 +978,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dialogDateTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialogDateTime.setContentView(R.layout.date_picker);
-        dialogDateTime.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialogDateTime.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         dpFromDate = (DatePicker) dialogDateTime.findViewById(R.id.datePickerFromDate);
 
@@ -1266,25 +990,31 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dpFromDate.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDate != null) {
             String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYear = year;
-                    month = monthOfYear + 1;
-                    day = dayOfMonth;
-                }
-            });
+            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYear = year;
+                        month = monthOfYear + 1;
+                        day = dayOfMonth;
+                    }
+                });
         } else {
-            dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYear = year;
-                    month = monthOfYear + 1;
-                    day = dayOfMonth;
-                }
-            });
+            dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYear = year;
+                        month = monthOfYear + 1;
+                        day = dayOfMonth;
+                    }
+                });
         }
 
         final TimePicker timePicker = (TimePicker) dialogDateTime.findViewById(R.id.timePicker);
@@ -1302,14 +1032,13 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             @Override
             public void onTimeChanged(TimePicker arg0, int arg1, int arg2) {
                 // TODO Auto-generated method stub
-//                hour = arg0.getHour();
-//                minute = arg0.getMinute();
+                //                hour = arg0.getHour();
+                //                minute = arg0.getMinute();
 
                 hour = arg1;
                 minute = arg2;
             }
         });
-
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1326,17 +1055,24 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                     fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
                     fromPostingDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd");
                     //  tvApppointmentDateTime.setText(fromPostingDate + "T" + hour + ":" + minute + ":" + "00");
-                    tvApppointmentDateTime.setText(fromPostingDate + " " + hour + ":" + minute + ":" + "00");//Replaced with  T>> -
+                    tvApppointmentDateTime.setText(fromPostingDate
+                        + " "
+                        + hour
+                        + ":"
+                        + minute
+                        + ":"
+                        + "00");//Replaced with  T>> -
                     tvAPPDateError.setVisibility(View.GONE);
                 }
                 String meetingDate = stringArray(tvApppointmentDateTime.getText().toString());
                 String[] newstartDate = meetingDate.split("-");
-                tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour, minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+                tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
+                        minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
 
                 dialogDateTime.dismiss();
                 tvStartDateError.setVisibility(View.GONE);
-
-
             }
         });
 
@@ -1349,7 +1085,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogDateTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
-        dialogDateTime.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialogDateTime.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         dpFromDateStartTime = (DatePicker) dialogDateTime.findViewById(R.id.datePickerFromDate);
 
@@ -1361,25 +1098,32 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dpFromDateStartTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateStartDate != null) {
             String[] dateSplit = mainFromDateStartDate.split("-");
-            dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDateStartDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYearStartDate = year;
-                    monthStartDate = monthOfYear + 1;
-                    dayStartDate = dayOfMonth;
-                }
-            });
+            dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]),
+                Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDateStartDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYearStartDate = year;
+                        monthStartDate = monthOfYear + 1;
+                        dayStartDate = dayOfMonth;
+                    }
+                });
         } else {
-            dpFromDateStartTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDateStartDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYearStartDate = year;
-                    monthStartDate = monthOfYear + 1;
-                    dayStartDate = dayOfMonth;
-                }
-            });
+            dpFromDateStartTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDateStartDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYearStartDate = year;
+                        monthStartDate = monthOfYear + 1;
+                        dayStartDate = dayOfMonth;
+                    }
+                });
         }
 
         final TimePicker timePicker = (TimePicker) dialogDateTime.findViewById(R.id.timePicker);
@@ -1400,7 +1144,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             }
         });
 
-
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1415,18 +1158,30 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 if (mainFromDateStartDate != null) {
                     fromDat = CRMAppUtil.getDate(mainFromDateStartDate, "yyyy-MM-dd");
                     fromPostingDateStartDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd");
-                    tvStartDateTime.setText(fromPostingDateStartDate + "-" + hourStartDate + ":" + minuteStartDate + ":" + "00");
+                    tvStartDateTime.setText(fromPostingDateStartDate
+                        + "-"
+                        + hourStartDate
+                        + ":"
+                        + minuteStartDate
+                        + ":"
+                        + "00");
                 }
                 String splitstartDate = stringArray(tvStartDateTime.getText().toString());
                 String[] newstartDate = splitstartDate.split("-");
                 String splitEndDate = stringArray(tvEndDateTime.getText().toString());
                 String[] newEndDate = splitEndDate.split("-");
-                tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
-
+                tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                        hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
 
                 Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
-                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]), Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate, minuteEndDate);
-                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hourStartDate, minuteStartDate);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                    minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                    hourStartDate, minuteStartDate);
                 if (startDate.before(endDate)) {
                     tvEndDateError.setVisibility(View.GONE);
                 }
@@ -1438,17 +1193,10 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                     tvStartDateError.setVisibility(View.GONE);
                     dialogDateTime.dismiss();
                 }
-
             }
         });
 
         dialogDateTime.show();
-    }
-
-    private String stringArray(String date) {
-        String[] spaceString = date.split(" ");
-
-        return spaceString[0];
     }
 
     public void selectDateAppointmentEndTime() {
@@ -1457,7 +1205,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogDateTime.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
-        dialogDateTime.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        dialogDateTime.getWindow()
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         dpFromDateEndTime = (DatePicker) dialogDateTime.findViewById(R.id.datePickerFromDate);
 
@@ -1469,25 +1218,32 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         dpFromDateEndTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateEndDate != null) {
             String[] dateSplit = mainFromDateEndDate.split("-");
-            dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDateEndDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYearEndDate = year;
-                    monthEndDate = monthOfYear + 1;
-                    dayEndDate = dayOfMonth;
-                }
-            });
+            dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]),
+                Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDateEndDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYearEndDate = year;
+                        monthEndDate = monthOfYear + 1;
+                        dayEndDate = dayOfMonth;
+                    }
+                });
         } else {
-            dpFromDateEndTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDateEndDate = year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    currentYearEndDate = year;
-                    monthEndDate = monthOfYear + 1;
-                    dayEndDate = dayOfMonth;
-                }
-            });
+            dpFromDateEndTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                today.get(Calendar.DATE), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
+                        int dayOfMonth) {
+                        mainFromDateEndDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        currentYearEndDate = year;
+                        monthEndDate = monthOfYear + 1;
+                        dayEndDate = dayOfMonth;
+                    }
+                });
         }
 
         final TimePicker timePicker = (TimePicker) dialogDateTime.findViewById(R.id.timePicker);
@@ -1509,7 +1265,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             }
         });
 
-
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1525,18 +1280,30 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 if (mainFromDateEndDate != null) {
                     fromDat = CRMAppUtil.getDate(mainFromDateEndDate, "yyyy-MM-dd");
                     fromPostingDateEndDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd");
-                    tvEndDateTime.setText(fromPostingDateEndDate + " " + hourEndDate + ":" + minuteEndDate + ":" + "00");
+                    tvEndDateTime.setText(fromPostingDateEndDate
+                        + " "
+                        + hourEndDate
+                        + ":"
+                        + minuteEndDate
+                        + ":"
+                        + "00");
                 }
                 String splitstartDate = stringArray(tvStartDateTime.getText().toString());
                 String[] newstartDate = splitstartDate.split("-");
                 String splitEndDate = stringArray(tvEndDateTime.getText().toString());
                 String[] newEndDate = splitEndDate.split("-");
-                tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]), Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
-
+                tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                    CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                        Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]),
+                        hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
 
                 Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
-                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]), Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate, minuteEndDate);
-                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]), Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hourStartDate, minuteStartDate);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                    minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                    hourStartDate, minuteStartDate);
 
                 if (startDate.after(endDate)) {
                     Toast.makeText(getActivity(), END_TIME_ERROR, Toast.LENGTH_SHORT).show();
@@ -1547,182 +1314,443 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 if (endDate.getTime() > startDate.getTime()) {
                     tvEndDateError.setVisibility(View.GONE);
                 }
-
-
             }
         });
 
         dialogDateTime.show();
     }
 
-
     //select week day
     // selectDateAppointmentEndTime
     // Date picker end
     private void selectWeekDay(final String id) {
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-//            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", DAYS);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            final String serviceMethod = "Master/GetAllLookup";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        arrSelectWeekDay = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-//                                    customProgress.setVisibility(View.GONE);
-                                    arrSelectWeekDay.add(new RowData(0, "-1", SELECT_WEEK_DAYS));
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject objDetail = jsonArray.getJSONObject(i);
-                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
-
-                                        arrSelectWeekDay.add(new RowData(i + 1, lookUpId, lookUpName));
-                                        ///   Log.v(TAG, "Week Day:" + lookUpName);
-                                    }
-                                    arrAdapSelectWeekDay = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrSelectWeekDay);
-                                    arrAdapSelectWeekDay.setDropDownViewResource(R.layout.mdropdown);
-                                    spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
-                                    spSelectWeekDay.setOnItemSelectedListener(selectWeekDayListener);
-                                    arrAdapSelectWeekDay.notifyDataSetChanged();
-                                    RowData productData = getSpinnerRowDataById(id, arrAdapSelectWeekDay);
-                                    if (productData != null) {
-                                        spSelectWeekDay.setSelection(productData.getPosition());
-                                    }
-                                    ///adding to cache
-                                    //LruCacheManager.getInstance().put(serviceMethod + DAYS, response);
-                                } else {
-//                                    customProgress.setVisibility(View.GONE);
-                                    String message = response.getString(MESSAGE);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), message, "Ok", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        hideProgress();
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                // Log.v(TAG, e.toString());
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-
-            }
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), DAYS, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderWeekDay(uiModel, id));
         } else {
-
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-            return;
-
+            noInternetConnectionDialog();
         }
     }
 
-    //weekDayCodeStr,weekDayNameStr
-    private AdapterView.OnItemSelectedListener selectWeekDayListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                tvRepeatWeekdayError.setVisibility(View.GONE);
-                weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
-                weekDayNameStr = ((RowData) spSelectWeekDay.getSelectedItem()).getValue();
-//                productType(interestInCodeStr);
-//                etPermStateError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    private void renderWeekDay(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrSelectWeekDay.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrSelectWeekDay.clear();
+            arrSelectWeekDay.add(
+                new RowData(0, "-1", SELECT_WEEK_DAYS));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrSelectWeekDay.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapSelectWeekDay = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrSelectWeekDay);
+            arrAdapSelectWeekDay.setDropDownViewResource(
+                R.layout.mdropdown);
+            spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
+            spSelectWeekDay.setOnItemSelectedListener(
+                selectWeekDayListener);
+            arrAdapSelectWeekDay.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapSelectWeekDay);
+            if (productData != null) {
+                spSelectWeekDay.setSelection(productData.getPosition());
             }
         }
+    }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
+    /*
+    * lokup days 26
+    {
+      "Response": [
+        {
+          "LookUpid": 121,
+          "LookUpName": "Days",
+          "ParentId": 0,
+          "LookupTypeId": 26,
+          "LookupType": 26,
+          "BusinessUnitId": 3,
+          "Sequence": 1,
+          "Status": 1,
+          "Active": true,
+          "SysName": null
+        },
+        {
+          "LookUpid": 165,
+          "LookUpName": "Days",
+          "ParentId": 0,
+          "LookupTypeId": 26,
+          "LookupType": 26,
+          "BusinessUnitId": 4,
+          "Sequence": 1,
+          "Status": 1,
+          "Active": true,
+          "SysName": null
         }
-    };
+      ],
+      "Message": "Process Completed Successfull",
+      "Status": true,
+      "Erros": []
+    }
+    * */
 
-    @Override
-    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        hideKeyboard(textView);
-        return false;
+    private void resetForm() {
+        spSelectProduct.setSelection(0, true);
+        spActivityType.setSelection(0, true);
+        spRepeateOn.setSelection(0, true);
+        spSelectWeekDay.setSelection(0, true);
+        spRepeateWeek.setSelection(0, true);
+        addedAttendeeModelList.clear();
+        tvAttendeeCount.setText("");
+        setCallenderDate();
+    }
+
+    private void setCallenderDate() {
+        mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
+
+        String dateArray[] = mainFromDate.split("-");
+        currentYear = ((Integer.parseInt(dateArray[0])));
+
+        currentYearStartDate = currentYear;
+        currentYearEndDate = currentYear;
+        month = ((Integer.parseInt(dateArray[1])));
+        day = ((Integer.parseInt(dateArray[2])));
+
+        mainFromDateEndDate = mainFromDate;
+        mainFromDateStartDate = mainFromDate;
+        Calendar calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
+        hourEndDate = hour;
+        minuteEndDate = minute;
+        hourStartDate = hour;
+        minuteStartDate = minute;
+        tvEndDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
+        tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
+        tvStartDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
+        tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
+        tvApppointmentDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
+
+        tvApppointmentDateTimeDisplay.setText(
+            CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+    }
+
+    private void activityType(final String id) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderActivityType(uiModel, id));
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderActivityType(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrActivityType.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrActivityType.clear();
+            arrActivityType.add(
+                new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrActivityType.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapActivityType = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrActivityType);
+            arrAdapActivityType.setDropDownViewResource(
+                R.layout.mdropdown);
+            spActivityType.setAdapter(arrAdapActivityType);
+            spActivityType.setOnItemSelectedListener(
+                selectActivityTypeListener);
+            arrAdapActivityType.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapActivityType);
+            if (productData != null) {
+                spActivityType.setSelection(productData.getPosition());
+            }
+        }
+    }
+
+    //region Update mode
+    //@add by sanket on 30/03/2017
+    // calls web service takes meeting id as parameter
+    //@param  strMeetingId
+    private void getAppointmentDetailsFromServer(CharSequence strMeetingId) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            MeetingByIdRequest request =
+                new MeetingByIdRequest(meetingId);
+            Disposable subscribe = saathiApi.getMeetingById(request)
+                .compose(UiModelHelper.applyUiModel())
+                .subscribe(this::renderMeetingById);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderMeetingById(UiModel<MeetingByIdItem> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+        }
+        MeetingByIdItem data = uiModel.data;
+        if (data != null) {
+            MeetingApptModel mModel = getAppointmentDet(data);
+            setCallenderDateFrom(mModel);
+            selectProduct(mModel.getProduct());
+            activityType(mModel.getActivityTypeID());
+            getRepeatMode(mModel.getRepeatOnCode());
+            selectWeek(mModel.getRepeatEveryWeekCode());
+            selectWeekDay(mModel.getRepeatEveryDayCode());
+        }
+    }
+
+    private MeetingApptModel getAppointmentDet(MeetingByIdItem response) {
+        MeetingApptModel mModel = new MeetingApptModel();
+        //        response.get(MEETING_ID);
+
+        mModel.setMeetingType(stringOrEmpty(response.meetingType));
+        mModel.setDisplayType("A");
+        mModel.setMeetingID(stringOrEmpty(response.meetingID));
+        // mModel.setLeadId(response.getInt(LEADID) == null ? "" : response.getString(LEADID));
+        // mModel.setLeadId(String.valueOf(response.getInt(LEADID)));
+        mModel.setLeadId(String.valueOf(response.leadId));
+        //TODO LEAD ID IS DIFFRENT
+        mModel.setMeetingDate(stringOrEmpty(response.meetingDate));
+        mModel.setActivityTypeID(stringOrEmpty(response.activityTypeID));
+        mModel.setProduct(stringOrEmpty(response.productTypeID));
+        //REPEATATIONSTARTON
+        mModel.setAppointmentStartTime(stringOrEmpty(response.repeatationStartOn));
+        // REPEATATION_END_SON
+        mModel.setAppointmentEndTime(stringOrEmpty(response.repeatationEndsOn));
+
+        //String str_repeatEveryWeekCode = response.getString(TAG_REPEATEVERYWEEKCODE);
+        mModel.setRepeatEveryWeekCode(
+            stringOrEmpty(response.repeatEveryWeekCode)
+        );
+        //   String str_repeatEveryDayCode = response.getString(TAG_REPEATEVERYDAYCODE);
+        mModel.setRepeatEveryDayCode(stringOrEmpty(response.repeatEveryDayCode));
+
+        // String str_ParentID = response.getString(TAG_PARENTID);
+
+        //        String str_repeatationStartOn = response.getString(TAG_REPEATATIONSTARTON);
+        mModel.setRepeatOnCode(
+            stringOrEmpty(response.repeatOnCode));
+        String str_repeatationEndsOn = response.repeatEveryWeekCode;
+        String str_AttendeeName = response.attendeeName;
+
+        //REPEATONCODE
+        //   String str_repeatOnCode = response.getString((response.isNull(REPEATONCODE)||response.getString(REPEATONCODE) == null) ? "" : response.getString(REPEATONCODE));
+
+        List<MeetingAttendeeItem> meetingAttendee = response.meetingAttendee;
+        for (int meetingAttendee_i = 0; meetingAttendee_i < meetingAttendee.size();
+            meetingAttendee_i++) {
+            MeetingAttendeeItem meetingAttendee_obj = meetingAttendee.get(meetingAttendee_i);
+            String str_AttendeeType = meetingAttendee_obj.attendeeType;
+
+            String str_AttendeeEmpcode = meetingAttendee_obj.attendeeEmpcode;
+
+            String str_AttendeeEmpName = meetingAttendee_obj.attendeeEmpName;
+            String str_meetingAttendeeCode = meetingAttendee_obj.meetingAttendeeID;
+
+            boolean attended = meetingAttendee_obj.attended;
+
+            boolean defaultAttendee = meetingAttendee_obj.defaultAttendee;
+            int status = meetingAttendee_obj.status;
+            if (status == 1) {
+                if (!defaultAttendee) {
+                    //TODO ignore self object
+                    if (str_AttendeeType.trim().equalsIgnoreCase("R")) {
+                        AddedAttendeeModel attendTmp =
+                            new AddedAttendeeModel(str_AttendeeType, attended, str_AttendeeEmpName,
+                                str_AttendeeEmpcode, str_meetingAttendeeCode);
+                        addedAttendeeModelList.add(attendTmp);
+                        addedAttendeeCount++;
+                    } else {
+                        //Its special attendee
+                        //AddedSplAttendeeModel
+                        AddedSplAttendeeModel tempSpAttendee =
+                            new AddedSplAttendeeModel(str_AttendeeType, attended,
+                                str_AttendeeEmpName, str_AttendeeEmpcode);
+                        addedSplAttendeeModelList.add(tempSpAttendee);
+                        addedSplAttendeeCount++;
+                    }
+                }
+            }
+        }
+        tvSplAttendeeCount.setText("(" + String.valueOf(addedSplAttendeeCount) + ")");
+        //  tvAttendeeCount.setText("(" + String.valueOf(addedAttendeeCount) + ")");
+        setCount(addedAttendeeCount);
+        mModel.setMeetingAttendee(addedAttendeeModelList);
+        mModel.setSplMeetingAttendee(addedSplAttendeeModelList);
+        //        addedAttendeeAdapter.notifyDataSetChanged();
+        //        addedSplAttendeeAdapter.notifyDataSetChanged();
+
+        return mModel;
+    }
+
+    private void setCallenderDateFrom(MeetingApptModel mModel) {
+        //   mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
+
+        Date mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getMeetingDate());
+        tvApppointmentDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
+        tvApppointmentDateTimeDisplay.setText(
+            CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(mMeetingDate);
+        currentYear = cal.get(Calendar.YEAR);
+        month = cal.get(Calendar.MONTH) + 1;//Adding one onth
+        day = cal.get(Calendar.DAY_OF_MONTH);
+        minute = cal.get(Calendar.MINUTE);
+        hour = cal.get(Calendar.HOUR_OF_DAY);
+        mainFromDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
+
+        //Start date
+        mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getAppointmentStartTime());
+        tvStartDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
+        tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
+
+        cal.setTime(mMeetingDate);
+        currentYearStartDate = cal.get(Calendar.YEAR);
+        monthStartDate = cal.get(Calendar.MONTH) + 1;//Adding one onth
+        dayStartDate = cal.get(Calendar.DAY_OF_MONTH);
+        minuteStartDate = cal.get(Calendar.MINUTE);
+        hourStartDate = cal.get(Calendar.HOUR_OF_DAY);
+        mainFromDateStartDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
+        //end Date
+        mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getAppointmentEndTime());
+        tvEndDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
+        tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
+
+        cal.setTime(mMeetingDate);
+        currentYearEndDate = cal.get(Calendar.YEAR);
+        monthEndDate = cal.get(Calendar.MONTH) + 1;//Adding one onth
+        dayEndDate = cal.get(Calendar.DAY_OF_MONTH);
+        minuteEndDate = cal.get(Calendar.MINUTE);
+        hourEndDate = cal.get(Calendar.HOUR_OF_DAY);
+        mainFromDateEndDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
+    }
+
+    //endregion
+    //region Lookups call
+    private void getRepeatMode(final String id) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), REPEATMODE, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderRepeatMode(uiModel, id));
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderRepeatMode(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrRepeatMode.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrRepeatMode.clear();
+            arrRepeatMode.add(new RowData(0, "-1", "Repeat On"));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrRepeatMode.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapRepeteMode = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrRepeatMode);
+            arrAdapRepeteMode.setDropDownViewResource(
+                R.layout.mdropdown);
+            spRepeateOn.setAdapter(arrAdapRepeteMode);
+            spRepeateOn.setOnItemSelectedListener(
+                selectRepeteModeListener);
+            arrAdapRepeteMode.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapRepeteMode);
+            if (productData != null) {
+                spRepeateOn.setSelection(productData.getPosition());
+            }
+        }
+    }
+
+    // selectDateAppointmentEndTime
+    // Date picker end
+    private void selectWeek(final String id) {
+        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            LookupRequest request =
+                new LookupRequest(AccountDetails.getBusinessUnitId(), WEEKS, null, null);
+            Disposable disposable = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe(uiModel -> renderWeek(uiModel, id));
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderWeek(UiModel<List<LookupItem>> uiModel, String id) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrSelectWeek.clear();
+            showOnFailurePopup(error);
+        }
+        List<LookupItem> data = uiModel.data;
+        if (data != null) {
+            arrSelectWeek.clear();
+            arrSelectWeek.add(new RowData(0, "-1", SELECT_WEEK));
+            for (int i = 0; i < data.size(); i++) {
+                LookupItem item = data.get(i);
+                String lookUpId = stringOrEmpty(String.valueOf(item.lookUpid));
+                String lookUpName = stringOrEmpty(item.lookUpName);
+                arrSelectWeek.add(
+                    new RowData(i + 1, lookUpId, lookUpName));
+            }
+            arrAdapSelectWeek = new ArrayAdapter<>(getMainActivity(),
+                R.layout.simple_spinner_item, arrSelectWeek);
+            arrAdapSelectWeek.setDropDownViewResource(
+                R.layout.mdropdown);
+            spRepeateWeek.setAdapter(arrAdapSelectWeek);
+            spRepeateWeek.setOnItemSelectedListener(selectWeekListener);
+            arrAdapSelectWeek.notifyDataSetChanged();
+            RowData productData =
+                getSpinnerRowDataById(id, arrAdapSelectWeek);
+            if (productData != null) {
+                spRepeateWeek.setSelection(productData.getPosition());
+            }
+        }
     }
 
     public class AttendeeAdapter extends BaseAdapter implements Filterable {
@@ -1762,7 +1790,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             final AttendeeAdapter.HolderView holderView;
             final EmployeeModel clientModel = resultList.get(position);
             if (convertView == null) {
-                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                inflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.item_list_attendee, parent, false);
                 holderView = new AttendeeAdapter.HolderView(convertView);
                 convertView.setTag(holderView);
@@ -1776,13 +1805,17 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 holderView.tvAttendeeName.setText(clientModel.getAttendeeName());
                 holderView.linaerLayout.setOnClickListener(null);
             } else {
-                holderView.tvAttendeeName.setText(clientModel.getAttendeeCode() + "-" + clientModel.getAttendeeName() + "-" + clientModel.getBranchcode());
-//                holderView.tvAttendeeName.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                    }
-//                });
+                holderView.tvAttendeeName.setText(clientModel.getAttendeeCode()
+                    + "-"
+                    + clientModel.getAttendeeName()
+                    + "-"
+                    + clientModel.getBranchcode());
+                //                holderView.tvAttendeeName.setOnClickListener(new View.OnClickListener() {
+                //                    @Override
+                //                    public void onClick(View view) {
+                //
+                //                    }
+                //                });
             }
             return convertView;
         }
@@ -1796,69 +1829,37 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                     ArrayList<EmployeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
-                            // String url = "ClientSearch?Userid=" + AccountDetails.getLoginId().trim() + "&SearchText=" + URLEncoder.encode(constraint.toString(), "utf-8");
-
-                            Map requestMap = new HashMap();
-                            requestMap.put("EmployeeName", URLEncoder.encode(constraint.toString(), "utf-8"));
-                            requestMap.put("EmployeeCode", URLEncoder.encode(constraint.toString(), "utf-8"));
-
-
-                            String serviceMethod = "UserApi/AutoCompleteAttendee";
-
-                            if (MSFStatistics.isNetworkEnabled(getContext())) {
-                                JSONObject response = WebServiceDirectCall.getData(serviceMethod, getHeader(), requestMap);
-
-                                if (response == null) {
-                                    return null;
-                                }
-
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    //  JSONArray jsonArray = objDetail.getJSONArray(DATA);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                     /*   "Id": 0,
-                                                "BusinessUnitName": "Retail",
-                                                "EmployeeName": "Ramnarayan  ",
-                                                "UserType": 1,
-                                                "UserId": 15256,
-                                                "EmployeeCode": "6508",
-                                                "BusinessChannelId": 1,
-                                                "ChannelName": "Direct",
-                                                "BusinessUnitId": 3,
-                                                "BusinessUnit": null,
-                                                "BusinessProfileId": 3,
-                                                "BusinessProfileName": "OAO TeleSales",*/
-                                        String employeeName = jsonObject.getString(EMPLOYEE_NAME) == null ? "" : jsonObject.getString(EMPLOYEE_NAME);
-                                        String employeeCode = jsonObject.getString(EMPLOYEE_CODE) == null ? "" : jsonObject.getString(EMPLOYEE_CODE);
-                                        String BranchCode = jsonObject.getString("BranchCode") == null ? "" : jsonObject.getString("BranchCode");
-//region Check self Empcode and don't add to list
-                                        if (employeeCode.equalsIgnoreCase(AccountDetails.getEmployeeCode())) {
+                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                AutoCompleteAttendeeRequest request =
+                                    new AutoCompleteAttendeeRequest(
+                                        URLEncoder.encode(constraint.toString(), "utf-8"),
+                                        URLEncoder.encode(constraint.toString(), "utf-8")
+                                    );
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
+                                        if (employeeCode.equalsIgnoreCase(
+                                            AccountDetails.getEmployeeCode())) {
                                             continue;
                                         }
-//endregion
-                                        modelList.add(new EmployeeModel(employeeName, employeeCode, BranchCode, false));
-
-                                        // Assign the data to the FilterResults
+                                        modelList.add(new EmployeeModel(employeeName, employeeCode,
+                                            BranchCode, false));
                                         filterResults.values = modelList;
                                         filterResults.count = modelList.size();
-
                                     }
-                                } else {
-
-                                    hideProgress();
-                                    modelList.add(EmployeeModel.getNoData(CRMMOSLCommon.getErrorMsgFromResponse(response)));
-                                    // modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
-                                    // Assign the data to the FilterResults
+                                } catch (Exception e) {
+                                    modelList.add(EmployeeModel.getNoData(getErrorOnFailure(e)));
                                     filterResults.values = modelList;
                                     filterResults.count = modelList.size();
                                     return filterResults;
-
                                 }
-
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
@@ -1884,7 +1885,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             };
         }
 
-
         private void viewColor(int position, View convertView) {
             if (position % 2 == 1) {
                 convertView.setBackgroundColor(Color.parseColor("#F5F5F5"));
@@ -1900,11 +1900,9 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             public HolderView(View parent) {
                 tvAttendeeName = (TextView) parent.findViewById(R.id.tvAttendeeName);
                 linaerLayout = (LinearLayout) parent.findViewById(R.id.linaerLayout);
-
             }
         }
     }
-
 
     public class SplAttendeeAdapter extends BaseAdapter implements Filterable {
         private LayoutInflater inflater;
@@ -1931,13 +1929,13 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             return position;
         }
 
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             final SplAttendeeAdapter.HolderView holderView;
             final SplAttendeeModel clientModel = attendeeModelList.get(position);
             if (convertView == null) {
-                inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                inflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.item_list_attendee, parent, false);
                 holderView = new SplAttendeeAdapter.HolderView(convertView);
                 convertView.setTag(holderView);
@@ -1950,7 +1948,11 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             if (clientModel.isNoData()) {
                 holderView.tvAttendeeName.setText(clientModel.getAttendeeName());
             } else {
-                holderView.tvAttendeeName.setText(clientModel.getAttendeeCode() + "-" + clientModel.getAttendeeName() + "-" + clientModel.getBranchCode());
+                holderView.tvAttendeeName.setText(clientModel.getAttendeeCode()
+                    + "-"
+                    + clientModel.getAttendeeName()
+                    + "-"
+                    + clientModel.getBranchCode());
               /*  holderView.tvAttendeeName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1968,76 +1970,46 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     final FilterResults filterResults = new FilterResults();
+                    ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
                     try {
                         if (constraint != null) {
-                            // String url = "ClientSearch?Userid=" + AccountDetails.getLoginId().trim() + "&SearchText=" + URLEncoder.encode(constraint.toString(), "utf-8");
-
-                            Map requestMap = new HashMap();
-                            requestMap.put("EmployeeName", URLEncoder.encode(constraint.toString(), "utf-8"));
-                            requestMap.put("EmployeeCode", URLEncoder.encode(constraint.toString(), "utf-8"));
-
-
-                            String serviceMethod = "UserApi/AutoCompleteSplAttendee";
-
-                            if (MSFStatistics.isNetworkEnabled(getContext())) {
-                                JSONObject response = WebServiceDirectCall.getData(serviceMethod, getHeader(), requestMap);
-
-                                if (response == null) {
-                                    return null;
-                                }
-                                ArrayList<SplAttendeeModel> modelList = new ArrayList<>();
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    //  JSONArray jsonArray = objDetail.getJSONArray(DATA);
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                     /*   "Id": 0,
-                                                "BusinessUnitName": "Retail",
-                                                "EmployeeName": "Ramnarayan  ",
-                                                "UserType": 1,
-                                                "UserId": 15256,
-                                                "EmployeeCode": "6508",
-                                                "BusinessChannelId": 1,
-                                                "ChannelName": "Direct",
-                                                "BusinessUnitId": 3,
-                                                "BusinessUnit": null,
-                                                "BusinessProfileId": 3,
-                                                "BusinessProfileName": "OAO TeleSales",*/
-                                        String employeeName = jsonObject.getString(EMPLOYEE_NAME) == null ? "" : jsonObject.getString(EMPLOYEE_NAME);
-                                        String employeeCode = jsonObject.getString(EMPLOYEE_CODE) == null ? "" : jsonObject.getString(EMPLOYEE_CODE);
-                                        String BranchCode = jsonObject.getString("BranchCode") == null ? "" : jsonObject.getString("BranchCode");
-                                        modelList.add(new SplAttendeeModel(employeeName, employeeCode, BranchCode));
-
-                                        // Assign the data to the FilterResults
+                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                AutoCompleteAttendeeRequest request =
+                                    new AutoCompleteAttendeeRequest(
+                                        URLEncoder.encode(constraint.toString(), "utf-8"),
+                                        URLEncoder.encode(constraint.toString(), "utf-8")
+                                    );
+                                try {
+                                    List<AutoCompleteAttendeeItem> dataList =
+                                        saathiApi.getAutoCompleteSplAttendee(request)
+                                            .blockingFirst();
+                                    for (AutoCompleteAttendeeItem item : dataList) {
+                                        String employeeName = stringOrEmpty(item.employeeName);
+                                        String employeeCode = stringOrEmpty(item.employeeCode);
+                                        String BranchCode = stringOrEmpty(item.branchCode);
+                                        modelList.add(
+                                            new SplAttendeeModel(employeeName, employeeCode,
+                                                BranchCode));
                                         filterResults.values = modelList;
                                         filterResults.count = modelList.size();
-
                                     }
-                                } else {
-
-                                    hideProgress();
-
-//                                        final String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-//                                        modelList.add( EmployeeModel.getNoData(errorMsg));
-//                                        // Assign the data to the FilterResults
-//                                        filterResults.values = modelList;
-//                                        filterResults.count = modelList.size();
-//                                        return filterResults;
-                                    modelList.add(SplAttendeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
-                                    // Assign the data to the FilterResults
+                                } catch (Exception e) {
+                                    modelList.add(SplAttendeeModel.getNoData(getErrorOnFailure(e)));
                                     filterResults.values = modelList;
                                     filterResults.count = modelList.size();
                                     return filterResults;
-
                                 }
-
                             } else {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
+                                noInternetConnectionDialog();
                             }
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                    }
+                    if (filterResults.count == 0) {
+                        modelList.add(SplAttendeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
+                        filterResults.values = modelList;
+                        filterResults.count = modelList.size();
                     }
                     return filterResults;
                 }
@@ -2069,8 +2041,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
                 tvAttendeeName = (TextView) parent.findViewById(R.id.tvAttendeeName);
             }
         }
-
-
     }
 
     public class AddedAttendeeAdapter extends BaseAdapter {
@@ -2083,7 +2053,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             inflater = LayoutInflater.from(c);
             mContext = c;
             this.attendeeModelList = attendeeModelList;
-
         }
 
         @Override
@@ -2101,7 +2070,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             return position;
         }
 
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -2114,7 +2082,8 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             holder.tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
             holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
-            holder.tvAttendeeName.setText(attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
+            holder.tvAttendeeName.setText(
+                attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
             holder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -2129,7 +2098,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             return view;
         }
 
-
         class Holder {
             TextView tvAttendeeName, tvProfileName;
             ImageView ivDelete;
@@ -2141,11 +2109,11 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
         Context mContext;
         List<AddedSplAttendeeModel> attendeeModelList;
 
-        public AddedSplAttendeeAdapter(Context c, List<AddedSplAttendeeModel> attendeeModelList) {
+        public AddedSplAttendeeAdapter(Context c,
+            List<AddedSplAttendeeModel> attendeeModelList) {
             inflater = LayoutInflater.from(c);
             mContext = c;
             this.attendeeModelList = attendeeModelList;
-
         }
 
         @Override
@@ -2163,7 +2131,6 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             return position;
         }
 
-
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -2176,12 +2143,14 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             holder.tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
             holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
-            holder.tvAttendeeName.setText(attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
+            holder.tvAttendeeName.setText(
+                attendeeModel.getAttendeeEmplyeeCode() + "-" + attendeeModel.getAttendeeName());
             holder.ivDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     addedSplAttendeeCount--;
-                    tvSplAttendeeCount.setText("(" + String.valueOf(addedSplAttendeeCount) + ")");
+                    tvSplAttendeeCount.setText(
+                        "(" + String.valueOf(addedSplAttendeeCount) + ")");
                     attendeeModelList.remove(position);
                     notifyDataSetChanged();
                 }
@@ -2190,857 +2159,10 @@ public class SetAppointmentFragment extends MOSLCommonFragment implements View.O
             return view;
         }
 
-
         class Holder {
             TextView tvAttendeeName, tvProfileName;
             ImageView ivDelete;
         }
-
-
-    }
-
-    /*
-    * lokup days 26
-    {
-      "Response": [
-        {
-          "LookUpid": 121,
-          "LookUpName": "Days",
-          "ParentId": 0,
-          "LookupTypeId": 26,
-          "LookupType": 26,
-          "BusinessUnitId": 3,
-          "Sequence": 1,
-          "Status": 1,
-          "Active": true,
-          "SysName": null
-        },
-        {
-          "LookUpid": 165,
-          "LookUpName": "Days",
-          "ParentId": 0,
-          "LookupTypeId": 26,
-          "LookupType": 26,
-          "BusinessUnitId": 4,
-          "Sequence": 1,
-          "Status": 1,
-          "Active": true,
-          "SysName": null
-        }
-      ],
-      "Message": "Process Completed Successfull",
-      "Status": true,
-      "Erros": []
-    }
-    * */
-
-
-    private void resetForm() {
-        spSelectProduct.setSelection(0, true);
-        spActivityType.setSelection(0, true);
-        spRepeateOn.setSelection(0, true);
-        spSelectWeekDay.setSelection(0, true);
-        spRepeateWeek.setSelection(0, true);
-        addedAttendeeModelList.clear();
-        tvAttendeeCount.setText("");
-        setCallenderDate();
-    }
-
-    private void setCallenderDate() {
-        mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
-
-
-        String dateArray[] = mainFromDate.split("-");
-        currentYear = ((Integer.parseInt(dateArray[0])));
-
-        currentYearStartDate = currentYear;
-        currentYearEndDate = currentYear;
-        month = ((Integer.parseInt(dateArray[1])));
-        day = ((Integer.parseInt(dateArray[2])));
-
-
-        mainFromDateEndDate = mainFromDate;
-        mainFromDateStartDate = mainFromDate;
-        Calendar calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        minute = calendar.get(Calendar.MINUTE);
-        hourEndDate = hour;
-        minuteEndDate = minute;
-        hourStartDate = hour;
-        minuteStartDate = minute;
-        tvEndDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
-        tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
-        tvStartDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
-        tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
-        tvApppointmentDateTime.setText(CRMAppUtil.getCurrentDisplayDate());
-
-        tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
-
-    }
-
-    private AdapterView.OnItemSelectedListener selectActivityTypeListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                activityTypeNameStr = ((RowData) spActivityType.getSelectedItem()).getValue();
-                tvActivityTypeError.setVisibility(View.GONE);
-//                productType(interestInCodeStr);
-//                etPermStateError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    private void activityType(final String id) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-//            meetingReason(MeetingReasonID);
-            showProgress();
-//            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", ACTIVITYTYPE);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            String serviceMethod = "Master/GetAllLookup";
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        arrActivityType = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-//                                    customProgress.setVisibility(View.GONE);
-                                    arrActivityType.add(new RowData(0, "-1", SELECT_ACTIVITY_TYPE));
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject objDetail = jsonArray.getJSONObject(i);
-                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
-                                        arrActivityType.add(new RowData(i + 1, lookUpId, lookUpName));
-                                    }
-                                    arrAdapActivityType = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrActivityType);
-                                    arrAdapActivityType.setDropDownViewResource(R.layout.mdropdown);
-                                    spActivityType.setAdapter(arrAdapActivityType);
-                                    spActivityType.setOnItemSelectedListener(selectActivityTypeListener);
-                                    arrAdapActivityType.notifyDataSetChanged();
-                                    RowData productData = getSpinnerRowDataById(id, arrAdapActivityType);
-                                    if (productData != null) {
-                                        spActivityType.setSelection(productData.getPosition());
-                                    }
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            hideProgress();
-                            e.printStackTrace();
-                            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                hideProgress();
-                e.printStackTrace();
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-
-        }
-    }
-
-    //region Update mode
-    //@add by sanket on 30/03/2017
-    // calls web service takes meeting id as parameter
-    //@param  strMeetingId
-    private void getAppointmentDetailsFromServer(CharSequence strMeetingId) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-
-            String serviceMethod = "Meeting/GetMeetingByID";// + strMeetingId;
-            String tmpReq = String.format(ID_OBJECT, meetingId);
-            showProgress();
-
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), tmpReq, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        //    arrInterested = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                hideProgress();
-                                if (status.equalsIgnoreCase("true")) {
-                                    JSONObject Response_obj = response.getJSONObject(RESPONSE);
-                                    MeetingApptModel mModel = getAppointmentDet(Response_obj);
-                                    setCallenderDateFrom(mModel);
-
-                                    //edit mode start
-                                    selectProduct(mModel.getProduct());
-                                    activityType(mModel.getActivityTypeID());
-                                    getRepeatMode(mModel.getRepeatOnCode());
-                                    selectWeek(mModel.getRepeatEveryWeekCode());
-                                    selectWeekDay(mModel.getRepeatEveryDayCode());
-                                    //edit mode end
-
-                                } else {
-
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-
-                            }
-                            hideProgress();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                            Log.e(TAG, e.toString());
-                            hideProgress();
-                        }
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG, e.toString());
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-                hideProgress();
-            }
-        } else {
-//            customProgress.setVisibility(View.GONE);
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-        }
-    }
-
-    private MeetingApptModel getAppointmentDet(JSONObject response) throws JSONException {
-        MeetingApptModel mModel = new MeetingApptModel();
-//        response.get(MEETING_ID);
-
-        mModel.setMeetingType(response.getString(MEETINGTYPE) == null ? "" : response.getString(MEETINGTYPE));
-        mModel.setDisplayType("A");
-        mModel.setMeetingID(response.getString(MEETING_ID) == null ? "" : response.getString(MEETING_ID));
-        // mModel.setLeadId(response.getInt(LEADID) == null ? "" : response.getString(LEADID));
-        // mModel.setLeadId(String.valueOf(response.getInt(LEADID)));
-        mModel.setLeadId(String.valueOf(response.getInt("LeadId")));
-        //TODO LEAD ID IS DIFFRENT
-        mModel.setMeetingDate(response.getString(MeetingDate) == null ? "" : response.getString(MeetingDate));
-        mModel.setActivityTypeID(response.getString(ActivityTypeID) == null ? "" : response.getString(ActivityTypeID));
-        mModel.setProduct(response.getString(ProductTypeID) == null ? "" : response.getString(ProductTypeID));
-        //REPEATATIONSTARTON
-        mModel.setAppointmentStartTime(response.getString(REPEATATIONSTARTON) == null ? "" : response.getString(REPEATATIONSTARTON));
-        // REPEATATION_END_SON
-        mModel.setAppointmentEndTime(response.getString(REPEATATION_END_SON) == null ? "" : response.getString(REPEATATION_END_SON));
-
-
-        //String str_repeatEveryWeekCode = response.getString(TAG_REPEATEVERYWEEKCODE);
-        mModel.setRepeatEveryWeekCode(
-                response.getString(REPEATEVERYWEEKCODE) == null ? "" : response.getString(REPEATEVERYWEEKCODE)
-        );
-        //   String str_repeatEveryDayCode = response.getString(TAG_REPEATEVERYDAYCODE);
-        mModel.setRepeatEveryDayCode(response.getString(REPEATEVERYDAYCODE) == null ? "" : response.getString(REPEATEVERYDAYCODE));
-
-        // String str_ParentID = response.getString(TAG_PARENTID);
-
-//        String str_repeatationStartOn = response.getString(TAG_REPEATATIONSTARTON);
-        mModel.setRepeatOnCode(response.getString(REPEATONCODE) == null ? "" : response.getString(REPEATONCODE));
-        String str_repeatationEndsOn = response.getString(REPEATEVERYWEEKCODE);
-        String str_AttendeeName = response.getString(TAG_ATTENDEENAME);
-
-//REPEATONCODE
-        //   String str_repeatOnCode = response.getString((response.isNull(REPEATONCODE)||response.getString(REPEATONCODE) == null) ? "" : response.getString(REPEATONCODE));
-
-
-        JSONArray meetingAttendee = response.getJSONArray(MEETING_ATTENDEE);
-        for (int meetingAttendee_i = 0; meetingAttendee_i < meetingAttendee.length(); meetingAttendee_i++) {
-            JSONObject meetingAttendee_obj = meetingAttendee.getJSONObject(meetingAttendee_i);
-            String str_AttendeeType = meetingAttendee_obj.getString(ATTENDEETYPE);
-
-            String str_AttendeeEmpcode = meetingAttendee_obj.getString(ATTENDEE_EMPCODE);
-
-            String str_AttendeeEmpName = meetingAttendee_obj.getString(ATTENDEE_EMPNAME);
-            String str_meetingAttendeeCode = meetingAttendee_obj.getString(MEETING_ATTENDEE_CODE);
-
-            boolean attended = meetingAttendee_obj.getBoolean(IS_ATTENDED);
-
-            boolean defaultAttendee = meetingAttendee_obj.getBoolean(DEFAULTATTENDEE);
-            int status = meetingAttendee_obj.getInt(STATUS);
-            if (status == 1) {
-                if (!defaultAttendee) {
-                    //TODO ignore self object
-                    if (str_AttendeeType.trim().equalsIgnoreCase("R")) {
-                        AddedAttendeeModel attendTmp = new AddedAttendeeModel(str_AttendeeType, attended, str_AttendeeEmpName, str_AttendeeEmpcode, str_meetingAttendeeCode);
-                        addedAttendeeModelList.add(attendTmp);
-                        addedAttendeeCount++;
-                    } else {
-                        //Its special attendee
-                        //AddedSplAttendeeModel
-                        AddedSplAttendeeModel tempSpAttendee = new AddedSplAttendeeModel(str_AttendeeType, attended, str_AttendeeEmpName, str_AttendeeEmpcode);
-                        addedSplAttendeeModelList.add(tempSpAttendee);
-                        addedSplAttendeeCount++;
-                    }
-                }
-            }
-
-        }
-        tvSplAttendeeCount.setText("(" + String.valueOf(addedSplAttendeeCount) + ")");
-        //  tvAttendeeCount.setText("(" + String.valueOf(addedAttendeeCount) + ")");
-        setCount(addedAttendeeCount);
-        mModel.setMeetingAttendee(addedAttendeeModelList);
-        mModel.setSplMeetingAttendee(addedSplAttendeeModelList);
-//        addedAttendeeAdapter.notifyDataSetChanged();
-//        addedSplAttendeeAdapter.notifyDataSetChanged();
-
-        return mModel;
-    }
-
-    private void setCallenderDateFrom(MeetingApptModel mModel) {
-        //   mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
-
-        Date mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getMeetingDate());
-        tvApppointmentDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
-        tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(mMeetingDate);
-        currentYear = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH) + 1;//Adding one onth
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        minute = cal.get(Calendar.MINUTE);
-        hour = cal.get(Calendar.HOUR_OF_DAY);
-        mainFromDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
-
-//Start date
-        mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getAppointmentStartTime());
-        tvStartDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
-        tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
-
-        cal.setTime(mMeetingDate);
-        currentYearStartDate = cal.get(Calendar.YEAR);
-        monthStartDate = cal.get(Calendar.MONTH) + 1;//Adding one onth
-        dayStartDate = cal.get(Calendar.DAY_OF_MONTH);
-        minuteStartDate = cal.get(Calendar.MINUTE);
-        hourStartDate = cal.get(Calendar.HOUR_OF_DAY);
-        mainFromDateStartDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
-        //end Date
-        mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.getAppointmentEndTime());
-        tvEndDateTime.setText(CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace));
-        tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY));
-
-        cal.setTime(mMeetingDate);
-        currentYearEndDate = cal.get(Calendar.YEAR);
-        monthEndDate = cal.get(Calendar.MONTH) + 1;//Adding one onth
-        dayEndDate = cal.get(Calendar.DAY_OF_MONTH);
-        minuteEndDate = cal.get(Calendar.MINUTE);
-        hourEndDate = cal.get(Calendar.HOUR_OF_DAY);
-        mainFromDateEndDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash);
-
-
-    }
-
-    //endregion
-    //region Lookups call
-    private void getRepeatMode(final String id) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-//            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", REPEATMODE);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            final String serviceMethod = "Master/GetAllLookup";
-            hideProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        arrRepeteMode = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-                                    arrRepeteMode.add(new RowData(0, "-1", "Repeat On"));
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject objDetail = jsonArray.getJSONObject(i);
-
-                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
-                                        //  String parentId = (objDetail.isNull(PARENTID) || objDetail.getString(PARENTID).equals("")) ? "" : objDetail.getString(PARENTID);
-                                        arrRepeteMode.add(new RowData(i + 1, lookUpId, lookUpName));
-
-//                                          if (lookUpName.equalsIgnoreCase("Days")) {
-//                                            //TODO submiut it on repeatOnCode
-//                                            lookUpIdRepeatMode = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-//                                            //   Log.v(TAG, "Lookup id:" + lookUpIdRepeatMode);
-//                                        } else {
-//                                            Log.v(TAG, "Lookup id: Not found");
-//                                        }
-
-                                    }
-
-                                    arrAdapRepeteMode = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrRepeteMode);
-                                    arrAdapRepeteMode.setDropDownViewResource(R.layout.mdropdown);
-                                    spRepeateOn.setAdapter(arrAdapRepeteMode);
-                                    spRepeateOn.setOnItemSelectedListener(selectRepeteModeListener);
-                                    arrAdapRepeteMode.notifyDataSetChanged();
-                                    RowData productData = getSpinnerRowDataById(id, arrAdapRepeteMode);
-                                    if (productData != null) {
-                                        spRepeateOn.setSelection(productData.getPosition());
-                                    }
-                                    //LruCacheManager.getInstance().put(serviceMethod + REPEATMODE, response);
-                                } else {
-                                    hideProgress();
-                                    String errorMsg = CRMMOSLCommon.getErrorMsgFromResponse(response);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), errorMsg, "OK", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        hideProgress();
-
-
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.v(TAG, e.toString());
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-
-            }
-        } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-            return;
-
-        }
-    }
-
-    // selectDateAppointmentEndTime
-    // Date picker end
-    private void selectWeek(final String id) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-//            customProgress.setVisibility(View.VISIBLE);
-            Map inputMap = new HashMap<>();
-            inputMap.put("LookupTypeId", WEEKS);
-            inputMap.put("BusinessUnitId", AccountDetails.getBusinessUnitId());
-
-            final String serviceMethod = "Master/GetAllLookup";
-            showProgress();
-            try {
-                CRMWebServiceHandler.post(getMainActivity(), serviceMethod, getHeader(), inputMap, new JsonHttpResponseHandler() {
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
-                        super.onSuccess(statusCode, headers, response);
-                        //after success code goes here
-                        arrSelectWeek = new ArrayList<>();
-                        try {
-                            if (statusCode == 200) {
-                                String status = response.getString(STATUS);
-                                if (status.equalsIgnoreCase("true")) {
-//                                    customProgress.setVisibility(View.GONE);
-                                    arrSelectWeek.add(new RowData(0, "-1", SELECT_WEEK));
-                                    JSONArray jsonArray = response.getJSONArray(RESPONSE);
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject objDetail = jsonArray.getJSONObject(i);
-                                        String lookUpId = (objDetail.isNull(LOOKUPID) || objDetail.getString(LOOKUPID).equals("")) ? "" : objDetail.getString(LOOKUPID);
-                                        String lookUpName = (objDetail.isNull(LOOKUPNAME) || objDetail.getString(LOOKUPNAME).equals("")) ? "" : objDetail.getString(LOOKUPNAME);
-                                        String parentId = (objDetail.isNull(PARENTID) || objDetail.getString(PARENTID).equals("")) ? "" : objDetail.getString(PARENTID);
-                                        arrSelectWeek.add(new RowData(i + 1, lookUpId, lookUpName));
-
-                                    }
-                                    arrAdapSelectWeek = new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrSelectWeek);
-                                    arrAdapSelectWeek.setDropDownViewResource(R.layout.mdropdown);
-                                    spRepeateWeek.setAdapter(arrAdapSelectWeek);
-                                    spRepeateWeek.setOnItemSelectedListener(selectWeekListener);
-                                    arrAdapSelectWeek.notifyDataSetChanged();
-                                    RowData productData = getSpinnerRowDataById(id, arrAdapSelectWeek);
-                                    if (productData != null) {
-                                        spRepeateWeek.setSelection(productData.getPosition());
-                                    }
-
-                                } else {
-//                                    customProgress.setVisibility(View.GONE);
-                                    String message = response.getString(MESSAGE);
-                                    MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), message, "Ok", true, null);
-                                }
-
-                            } else {
-//                                customProgress.setVisibility(View.GONE);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONArray response) {
-                        super.onSuccess(statusCode, headers, response);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString) {
-                        super.onSuccess(statusCode, headers, responseString);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-                        try {
-                            hideProgress();
-                            if (statusCode == UNAUTHORIZE_STATUS_CODE) {
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), UNAUTHORIZE_USER, "OK", false, new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            Intent i = new Intent(getMainActivity(), LoginActivity.class);
-                                            startActivity(i);
-                                            getActivity().finish();
-                                        }
-                                    }
-                                });
-                                return;
-                            } else {
-                                String error = CRMMOSLCommon.getErrorMsgFromResponse(errorResponse);
-                                if (CRMAppUtil.isBlank(error)) {
-                                    error = SOME_SERVER_ERROR_OCCURRED;
-                                }
-                                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), error, "OK", true, null);
-                                return;
-                            }
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                        super.onFailure(statusCode, headers, throwable, errorResponse);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, String responseString, Throwable throwable) {
-                        super.onFailure(statusCode, headers, responseString, throwable);
-//                        customProgress.setVisibility(View.GONE);
-                        hideProgress();
-                        MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK", true, null);
-                    }
-
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.v(TAG, e.toString());
-                hideProgress();
-                MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-
-            }
-        } else {
-            hideProgress();
-            MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
-            return;
-
-        }
-    }
-
-    //endregion
-    //region DropDown listner
-    private AdapterView.OnItemSelectedListener selectWeekListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-                tvRepeatTypeSpError.setVisibility(View.GONE);
-                weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
-                weekNameStr = ((RowData) spRepeateWeek.getSelectedItem()).getValue();
-//                productType(interestInCodeStr);
-//                etPermStateError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-    private AdapterView.OnItemSelectedListener selectRepeteModeListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            try {
-
-                if (position > 0) {
-                    llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
-                } else {
-                    llRepeteOnDaysPannel.setVisibility(View.GONE);
-                }
-               /* Object tmp = parent.getSelectedItem();
-                if (tmp instanceof RowData) {
-                    RowData mData = (RowData) tmp;
-
-                    if (mData.getValue().contentEquals("Days")) {
-                        llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
-                    } else {
-                        llRepeteOnDaysPannel.setVisibility(View.GONE);
-                    }
-                } else {
-                    llRepeteOnDaysPannel.setVisibility(View.GONE);
-                }*/
-
-//                productType(interestInCodeStr);
-//                etPermStateError.setVisibility(View.GONE);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
-    };
-
-    //endregion
-//deos dedup on list
-    public static boolean listHasAttende(List<AddedAttendeeModel> addedAttendeeModelList, List<AddedSplAttendeeModel> addedSplAttendeeModelList, String empID) {
-//    addedAttendeeModelList
-        boolean has = false;
-        if (addedAttendeeModelList != null) {
-            for (AddedAttendeeModel atten : addedAttendeeModelList) {
-                if (atten.getAttendeeEmplyeeCode().trim().equalsIgnoreCase(empID.trim())) {
-                    has = true;
-                    break;
-                }
-            }
-        }
-        if (addedSplAttendeeModelList != null) {
-            for (AddedSplAttendeeModel atten : addedSplAttendeeModelList) {
-                if (atten.getAttendeeEmplyeeCode().trim().equalsIgnoreCase(empID.trim())) {
-                    has = true;
-                    break;
-                }
-            }
-        }
-        return has;
     }
 
     //Attende count

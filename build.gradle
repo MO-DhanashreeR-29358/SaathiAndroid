@@ -1,22 +1,27 @@
 buildscript {
-  ext.google_services_version = '4.0.1'
-  ext.android_plugin_version = '3.2.1'
+  ext.google_services_version = '4.2.0'
+  ext.android_plugin_version = '3.4.1'
+  ext.kotlin_version = '1.3.31'
   repositories {
     google()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven {
+      url 'http://192.168.103.116:9090/artifactory/libs-release-local'
+    }
   }
   dependencies {
-    classpath "com.android.tools.build:gradle:3.2.1"
+    classpath "com.android.tools.build:gradle:${android_plugin_version}"
     classpath "com.google.gms:google-services:$google_services_version"
-    classpath 'io.fabric.tools:gradle:1.26.1'
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath 'io.fabric.tools:gradle:1.29.0'
   }
 }
 
-ext.versions = ["compileSdkVersion"   : 27,
-                "targetSdkVersion"    : 27,
+ext.versions = ["compileSdkVersion"   : 28,
+                "targetSdkVersion"    : 28,
                 "buildToolsVersion"   : "28.0.3",
-                'supportLibrary'      : '27.1.1',
+                'supportLibrary'      : '28.0.0',
                 'multidex'            : '1.0.3',
                 'pagerslidingtabstrip': '1.0.1',
                 'sdp'                 : '1.0.3',
@@ -26,17 +31,18 @@ ext.versions = ["compileSdkVersion"   : 27,
                 'asyncHttp'           : '1.4.9',
                 'smoothprogressbar'   : '1.1.0',
                 'floatingbutton'      : '1.10.1',
-                'firebase'            : '11.8.0',
+                'firebase'            : '17.3.4',
                 'espresso'            : '3.0.2',
                 'timber'              : '4.7.1',
                 'imageLoader'         : '1.9.5',
                 'circleIndicator'     : '1.2.2',
-                'okhttp'              : '3.11.0',
+                'okhttp'              : '3.12.3',
                 'stetho'              : '1.5.0',
-                'gson'                : '2.8.2',
-                'retrofit'            : '2.4.0',
-                'rxJava'              : '2.1.16',
+                'gson'                : '2.8.5',
+                'retrofit'            : '2.5.0',
+                'rxJava'              : '2.2.8',
                 'rxBinding'           : '2.1.1',
+                'groupie'             : '2.3.0',
                 'room'                : '1.1.0'
 
 ]
@@ -48,7 +54,7 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
                                      'drawable'    : "com.android.support:support-vector-drawable:${versions.supportLibrary}",
                                      'recyclerview': "com.android.support:recyclerview-v7:${versions.supportLibrary}",
                                      'support'     : "com.android.support:support-v4:${versions.supportLibrary}"],
-            'constraintLayout'    : "com.android.support.constraint:constraint-layout:1.1.2",
+            'constraintLayout'    : "com.android.support.constraint:constraint-layout:1.1.3",
 
             'testing'             : ['espresso': ['core': "com.android.support.test.espresso:espresso-core:${versions.espresso}"],
                                      'junit'   : 'junit:junit:4.12',
@@ -75,12 +81,15 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'retrofit'            : ['core'  : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
                                      'mock'  : "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
                                      'gson'  : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+                                      'scalar': "com.squareup.retrofit2:converter-scalars:${versions.retrofit}",
                                      'rxJava': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}"],
             'rx'                  : ['java'       : "io.reactivex.rxjava2:rxjava:${versions.rxJava}",
                                      'android'    : "io.reactivex.rxjava2:rxandroid:2.0.2",
                                      'preferences': "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"],
             'rxBinding'           : ['core': "com.jakewharton.rxbinding2:rxbinding:${versions.rxBinding}",
-                                     'V4'  : "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}"],
+                                     'V4'  : "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}",
+                                     'platform': "com.jakewharton.rxbinding3:rxbinding:3.0.0-alpha2",],
+            'kotlin'              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlin_version}",
             'gson'                : "com.google.code.gson:gson:${versions.gson}",
             'commonsLang'         : "org.apache.commons:commons-lang3:3.4",
             'segmented'           : "info.hoang8f:android-segmented:1.0.6",
@@ -89,10 +98,13 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'slidinguppanel'      : "com.sothree.slidinguppanel:library:3.1.1",
             'okHttp'              : ['core'  : "com.squareup.okhttp3:okhttp:${versions.okhttp}",
                                      'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"],
-            'playService'         : "com.google.android.gms:play-services:${versions.firebase}",
+            'playService'         : "com.google.android.gms:play-services-base:16.1.0",
             'compressor'          : "id.zelory:compressor:2.1.0",
-            'location'            : "com.google.android.gms:play-services-location:11.8.0",
+            'location'            : "com.google.android.gms:play-services-location:16.0.0",
             'work'                : "android.arch.work:work-runtime:1.0.0-alpha08",
+            'mofslArtifacts'      : ['validator'    : "MofslArtifacts:validator:1.0.6",
+                                    'annotation'   : "MofslArtifacts:annotations:1.0.1"],
+            'dataBindCompiler'       : "androidx.databinding:databinding-compiler:${android_plugin_version}",
             'javax'               : "javax.annotation:jsr250-api:1.0",
 
 ]
@@ -105,6 +117,9 @@ allprojects {
     maven {
       url 'https://maven.google.com/'
       name 'Google'
+    }
+    maven {
+      url 'http://192.168.103.116:9090/artifactory/libs-release-local'
     }
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }

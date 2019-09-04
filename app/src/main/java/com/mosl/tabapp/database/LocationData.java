@@ -18,7 +18,6 @@ public class LocationData {
     private String geoArea;
     private String geoPincode;
 
-
     public String getLatitude() {
         return latitude;
     }
@@ -67,7 +66,6 @@ public class LocationData {
         this.accuracy = accuracy;
     }
 
-
     public String getGeoArea() {
         return geoArea;
     }
@@ -87,15 +85,15 @@ public class LocationData {
     @Override
     public String toString() {
         return "LocationData{" +
-                "id=" + id +
-                ", lat='" + latitude + '\'' +
-                ", Long='" + longitude + '\'' +
-                ", deviceId='" + deviceId + '\'' +
-                ", empCode='" + empCode + '\'' +
-                ", time='" + time + '\'' +
-                ", accuracy='" + accuracy + '\'' +
-                ", geoArea='" + geoArea + '\'' +
-                ", geoPincode='" + geoPincode + '\'' +
-                '}';
+            "id=" + id +
+            ", lat='" + latitude + '\'' +
+            ", Long='" + longitude + '\'' +
+            ", deviceId='" + deviceId + '\'' +
+            ", empCode='" + empCode + '\'' +
+            ", time='" + time + '\'' +
+            ", accuracy='" + accuracy + '\'' +
+            ", geoArea='" + geoArea + '\'' +
+            ", geoPincode='" + geoPincode + '\'' +
+            '}';
     }
 }

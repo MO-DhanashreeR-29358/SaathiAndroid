@@ -3,6 +3,8 @@ package com.mosl.tabapp.ui;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,7 +14,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
+import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.core.rx.Dispatchers;
+import com.mosl.app.core.rx.DispatchersKt;
+import com.mosl.saathi.api.SaathiApi;
+import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
@@ -28,17 +34,19 @@ import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-
 import com.mosl.tabapp.smt.SMTFragment;
-import java.util.Map;
-
+import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
+import java.util.Map;
+import timber.log.Timber;
 
 public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     public MOSLCommonFragment previousFragment;
     protected FragmentActivity context;
     private FrameLayout mLinearContainerView;
     public CompositeDisposable compositeDisposable;
+    public final Dispatchers dispatchers = DispatchersKt.RxDispatchers;
+    public final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
 
     public MOSLCommonFragment() {
         super();
@@ -190,13 +198,62 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         if (getMainActivity() != null) ((MOSLCommonActivity) getMainActivity()).hideProgress();
     }
 
+    public void toggleProgress(boolean show) {
+        if (show) {
+            showProgress();
+        } else {
+            hideProgress();
+        }
+    }
+
+
+
+    public void showOnFailurePopup(Throwable t) {
+        Timber.e(t);
+        MSFDialog.alertDialog(getMainActivity(), 0,
+            getResources().getString(R.string.motilal_oswal),
+            getErrorOnFailure(t), "OK", true, null);
+    }
+
+    public String getErrorOnFailure(Throwable t) {
+        if (t instanceof ServiceFailureException) {
+            return ((ServiceFailureException) t).errorMessage;
+        } else {
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+        }
+    }
+
+    @NonNull
+    public String stringOrEmpty(@Nullable String input) {
+        return stringOrDefault(input, "");
+    }
+
+    @NonNull
+    public String stringOrDefault(@Nullable String input, @NonNull String defaultVal) {
+        if (input != null) {
+            return input;
+        } else {
+            return defaultVal;
+        }
+    }
+
+    public String stringOrZero(@Nullable String input) {
+        if (input != null && !input.equals("")) {
+            return input;
+        } else {
+            return "0";
+        }
+    }
+
+    public void noInternetConnectionDialog() {
+        MSFDialog.alertDialog(getMainActivity(), 0,
+            getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true,
+            null);
+    }
+
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
                 getMainActivity().getIntent());
-    }
-
-    public void gotoEkycVersionCheck(int gotoEkyc, Map hashMap) {
-        ((MOSLCommonActivity) getMainActivity()).ekycVersionCheck(gotoEkyc, hashMap);
     }
 
     public void gotoEkycPage(int gotoEkyc, Map hashMap) {
@@ -288,8 +345,10 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     @Override
     @CallSuper
     public void onDestroyView() {
-        compositeDisposable.dispose();
         super.onDestroyView();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
     }
 }
 

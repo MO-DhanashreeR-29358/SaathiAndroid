@@ -1,7 +1,6 @@
 package com.mosl.tabapp.calendar;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,29 +15,22 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.mosl.app.core.data.UiModel;
+import com.mosl.saathi.api.model.calender.CalenderItem;
+import com.mosl.saathi.api.model.calender.CalenderRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.CalenderModel;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
-import com.mosl.tabapp.ui.LoginActivity;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
-import com.mosl.tabapp.ui.MSFDialog;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
 
 /**
@@ -199,12 +191,95 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
         return input + "";
     }
 
+    private void renderCalender(UiModel<List<CalenderItem>> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            showOnFailurePopup(error);
+            tvNochart.setVisibility(View.VISIBLE);
+            calenderList = new ArrayList<>();
+            calendarAdapter = new ClientMeetingAdapter(calenderList);
+            RecyclerView.LayoutManager mLayoutManager =
+                new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setAdapter(calendarAdapter);
+        }
+
+        List<CalenderItem> data = uiModel.data;
+
+        if (data != null) {
+            calenderList = new ArrayList<>();
+            if (data.size() > 0) {
+                for (int i = 0; i < data.size(); i++) {
+                    CalenderItem item = data.get(i);
+                    String status = stringOrEmpty(item.status);
+                    String meetingId = stringOrEmpty(item.meetingID);
+                    String leadId = stringOrEmpty(item.leadId);
+                    String name = stringOrEmpty(item.name);
+                    String email = stringOrEmpty(item.email);
+                    String mobNo = stringOrEmpty(item.mobNo);
+                    String meetingDate = stringOrEmpty(item.meetingDate);
+                    String attendeeEmp = stringOrEmpty(item.attendeeEmp);
+                    String product = stringOrEmpty(item.product);
+                    String statusName = stringOrEmpty(item.statusName);
+                    String activityType = stringOrEmpty(item.activityType);
+                    String meetingReason = stringOrEmpty(item.meetingReason);
+                    String meetingDuration = stringOrEmpty(item.meetingDuration);
+                    String category = stringOrEmpty(item.category);
+                    String actionable = stringOrEmpty(item.actionable);
+                    String comments = stringOrEmpty(item.comments);
+                    String stage = stringOrEmpty(item.stage);
+                    String customerServiceRemark = stringOrEmpty(item.customerServiceRemark);
+                    String queryDesc = stringOrEmpty(item.queryDesc);
+                    String dateDisplay = stringOrEmpty(item.dateDisplay);
+
+                    calenderList.add(
+                        new LeadActivitiesAppointModel(status,
+                            meetingId, leadId, name, email, mobNo,
+                            dateDisplay, meetingDate, attendeeEmp
+                            , product, statusName, activityType,
+                            meetingReason, meetingDuration, category,
+                            actionable, comments, stage, customerServiceRemark,
+                            queryDesc));
+                }
+
+                calendarAdapter = new ClientMeetingAdapter(calenderList);
+                RecyclerView.LayoutManager mLayoutManager =
+                    new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(calendarAdapter);
+                CalenderModel.setCalenderList(calenderList);
+                tvNochart.setVisibility(View.GONE);
+            } else {
+                tvNochart.setVisibility(View.VISIBLE);
+                calendarAdapter = new ClientMeetingAdapter(calenderList);
+                RecyclerView.LayoutManager mLayoutManager =
+                    new LinearLayoutManager(getActivity());
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setAdapter(calendarAdapter);
+            }
+        }
+    }
+
 
     private void appointments(String selectionDate) {
+
         if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+            CalenderRequest request =
+                new CalenderRequest(selectionDate, "A", AccountDetails.getEmployeeCode());
+            Disposable subscribe = saathiApi.postCalenderByDate(request)
+                .compose(applyUiModel())
+                .subscribe(this::renderCalender);
+        } else {
+            noInternetConnectionDialog();
+        }
+
+
+        /*if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
             showProgress();
 //            customProgress.setVisibility(View.VISIBLE);
-            /*{"LeadID":6028,"PageSize":10,"Page":1,"CalculatedPage":0,"TotalCount":0}*/
+            *//*{"LeadID":6028,"PageSize":10,"Page":1,"CalculatedPage":0,"TotalCount":0}*//*
             Map inputMap = new HashMap<>();
 
             inputMap.put("AttendeeCode", AccountDetails.getEmployeeCode());
@@ -230,7 +305,7 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
 
                                     //  JSONObject jsonObject = response.getJSONObject(RESPONSE);
                                     JSONArray dataArray = response.getJSONArray(RESPONSE);
-                                   /* "Status": 1,
+                                   *//* "Status": 1,
                                             "MeetingID": 2004,
                                             "LeadID": 6028,
                                             "Name": "MS Dhoni",
@@ -249,7 +324,7 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
                                             "Comments": "Tis si si",
                                             "Stage": "",
                                             "Callback": "",
-                                            "QueryDesc": "",*/
+                                            "QueryDesc": "",*//*
 
                                     if (dataArray.length() > 0) {
                                         for (int i = 0; i < dataArray.length(); i++) {
@@ -414,7 +489,7 @@ public class CalendarAppointsListFragment extends MOSLCommonFragment implements 
         } else {
             MSFDialog.alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, "OK", true, null);
 
-        }
+        }*/
     }
 
 

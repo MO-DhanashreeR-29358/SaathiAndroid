@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_6sdp"
+            >
+
+            <TextView
+                android:id="@+id/tv_meeting_date_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_label_meeting_date"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/list_bacground"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_date_label"
+                >
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".8"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <ImageView
+                    android:id="@+id/ivDatePicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:src="@drawable/ic_calendar"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_date_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/ll_date"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_meeting_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="ll_date,tv_date_error"
+                />
+
+            <TextView
+                android:id="@+id/tv_meeting_type_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_label_meeting_type"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_date"
+                />
+
+            <Spinner
+                android:id="@+id/sp_meeting_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_type_label"
+                />
+
+            <TextView
+                android:id="@+id/tv_meeting_type_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_type"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_meeting_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sp_meeting_type,tv_meeting_type_error"
+                />
+
+            <TextView
+                android:id="@+id/tv_meeting_duration_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_label_meeting_duration"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_type"
+                />
+
+            <Spinner
+                android:id="@+id/sp_meeting_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_duration_label"
+                />
+
+            <TextView
+                android:id="@+id/tv_meeting_duration_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_duration"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_meeting_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sp_meeting_duration,tv_meeting_duration_error"
+                />
+
+            <TextView
+                android:id="@+id/tv_meeting_description_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_hint_label_enter_meeting_description"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_duration"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_meeting_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
+                >
+
+                <EditText
+                    android:id="@+id/et_meeting_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_70sdp"
+                    android:hint="@string/text_hint_label_enter_meeting_description"
+                    android:maxLength="1000"
+                    android:maxLines="5"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_bank_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_label_bank"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/il_meeting_description"
+                />
+
+            <Spinner
+                android:id="@+id/sp_bank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bank_label"
+                />
+
+            <TextView
+                android:id="@+id/tv_bank_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/sp_bank"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sp_bank,tv_bank_error"
+                />
+
+            <TextView
+                android:id="@+id/tv_branch_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/text_label_branch"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_bank"
+                />
+
+            <Spinner
+                android:id="@+id/sp_branch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_branch_label"
+                />
+
+            <TextView
+                android:id="@+id/tv_branch_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/sp_branch"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sp_branch,tv_branch_error"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_sub_broker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_branch"
+                >
+
+                <org.droidparts.widget.ClearableEditText
+                    android:id="@+id/actv_sub_broker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:focusable="false"
+                    android:hint="@string/text_hint_label_enter_sub_broker"
+                    android:inputType="none"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:id="@+id/ll_bank_employee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
+                tools:visibility="visible"
+                >
+
+                <TextView
+                    android:id="@+id/tv_bank_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:text="@string/text_hint_label_enter_bank_employee"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_bank_employee_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_toEndOf="@+id/tv_bank_employee"
+                    android:layout_toStartOf="@+id/ib_bank_employee"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <ImageButton
+                    android:id="@+id/ib_bank_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ic_plus"
+                    />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_bank_employee_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/ll_bank_employee"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_bank_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="ll_bank_employee,tv_bank_employee_error"
+                />
+            <!--<android.support.design.widget.TextInputLayout
+                android:id="@+id/il_bank_employee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
+                >
+
+                <org.droidparts.widget.ClearableEditText
+                    android:id="@+id/actv_bank_employee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                    android:focusable="false"
+                    android:hint="@string/text_hint_label_enter_bank_employee"
+                    android:inputType="none"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>-->
+
+            <android.support.constraint.Group
+                android:id="@+id/group_bank_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
+                il_sub_broker,ll_bank_employee"
+                tools:visibility="visible"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_bank_employee"
+                tools:visibility="visible"
+                >
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/et_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
+                    android:hint="@string/text_hint_label_enter_subject"
+                    android:maxLength="100"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--<include
+                layout="@layout/include_layout_bank_meeting_client_name"
+                android:id="@+id/include_client1"
+                app:layout_constraintTop_toBottomOf="@+id/il_subject"
+                />-->
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_client_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
+                 il_sub_broker,il_subject"
+                />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/il_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name"
+                tools:visibility="visible"
+                >
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/et_client_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
+                    android:hint="@string/text_hint_label_enter_client"
+                    android:imeActionLabel="@string/text_label_add"
+                    android:imeOptions="actionDone"
+                    style="@style/Widget.AppCompat.EditText"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_client_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/il_client_name"
+                tools:visibility="visible"
+                />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
+                 il_sub_broker,il_subject,il_client_name,rv_client_name"
+                />
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/button_highlight"
+                android:text="@string/button_label_save"
+                app:layout_constraintEnd_toStartOf="@+id/btn_reset"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_button"
+                />
+
+            <Button
+                android:id="@+id/btn_reset"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@drawable/button_highlight"
+                android:text="@string/button_label_reset"
+                app:layout_constraintBaseline_toBaselineOf="@+id/btn_save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/btn_save"
+                />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>

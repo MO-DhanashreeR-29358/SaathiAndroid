@@ -6,8 +6,11 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
 import com.mosl.tabapp.database.AppDatabase;
+import com.mosl.tabapp.ws.AppProvider;
+import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -28,7 +31,10 @@ public class CrmApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        Fabric.with(this, new Crashlytics());
+        Crashlytics crashlyticsKit = new Crashlytics.Builder()
+            .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+            .build();
+        Fabric.with(this, crashlyticsKit);
         Stetho.initializeWithDefaults(this);
         initImageLoader(context);
         if (BuildConfig.DEBUG) {
@@ -41,6 +47,9 @@ public class CrmApp extends MultiDexApplication {
         } else {
             Timber.plant(new CrashReportingTree());
         }
+
+        CRMWebServiceHandler.initSaathiApi(this);
+        AppProvider.initSaathiApi(this);
 
         appDatabase = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME)

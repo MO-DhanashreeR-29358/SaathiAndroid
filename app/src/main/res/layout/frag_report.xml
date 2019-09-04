@@ -141,7 +141,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_toRightOf="@+id/tvMeetingDate"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
 
@@ -172,7 +171,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_toRightOf="@+id/tvMeetingDate"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
 
@@ -204,7 +202,6 @@
             android:id="@+id/table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/spHistory"
             android:layout_marginTop="@dimen/_5sdp" />
 
         <TextView

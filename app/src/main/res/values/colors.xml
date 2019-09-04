@@ -237,6 +237,6 @@
 
     <color name="contact_number">#FFA96602</color>
     <color name="mosl_web_color">#F9AF29</color>
-
+    <color name="grey_text">#c1c1c1</color>
 
 </resources>

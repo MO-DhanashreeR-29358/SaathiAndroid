@@ -10,11 +10,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -23,7 +25,11 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.ui.MOSLCommonActivity;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
+import timber.log.Timber;
+
+import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
 public class MessageReceiverIntentService extends FirebaseMessagingService {
   private static final String CHANNEL_ID = "saathi";
@@ -31,9 +37,23 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    Log.d(TAG, "onMessageReceived");
+    Timber.tag(TAG).d("onMessageReceived");
     super.onMessageReceived(remoteMessage);
     sendNotification(remoteMessage.getData());
+  }
+
+  @Override public void onNewToken(String refreshedToken) {
+    try {
+      SharedPreferences.Editor editor = getPrefs(this).edit();
+      editor.putString("TOKEN_ID", refreshedToken);
+      editor.apply();
+
+      Looper.prepare();
+      MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
+      Log.d(TAG, "New firebase token: " + refreshedToken);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
   }
 
   private void sendNotification(Map data) {
@@ -52,7 +72,8 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
       Intent notificationIntent = new Intent(this, MOSLCommonActivity.class);
       notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
       notificationIntent.setAction("Mosl_" + m);
-      notificationIntent.putExtra(MOSLConstants.SOURCE, MOSLConstants.FCM_NOTIFICATION_SOURCE);
+      notificationIntent.putExtra(MOSLConstants.SOURCE,
+          MOSLConstants.FCM_NOTIFICATION_SOURCE);
       notificationIntent.putExtra(MOSLConstants.FCM_NOTIFICATION_CATEGORY, category);
       PendingIntent pendingIntent =
           PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
@@ -98,13 +119,14 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
         channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
         channel.setDescription(description);
 
-        notificationManager.createNotificationChannel(channel);
+        Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
       }
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         notificationBuilder.setChannelId(CHANNEL_ID); // Channel ID
       }
       //endregion
-      notificationManager.notify(m /* ID of notification */, notificationBuilder.build());
+      Objects.requireNonNull(notificationManager)
+          .notify(m /* ID of notification */, notificationBuilder.build());
     }
   }
 }

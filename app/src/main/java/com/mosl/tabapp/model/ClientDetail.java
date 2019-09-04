@@ -1,9 +1,9 @@
 package com.mosl.tabapp.model;
 
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
+import com.mosl.saathi.api.model.clientdetail.ProductsItem;
 import com.mosl.tabapp.constants.MOSLConstants;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.List;
 
 /**
  * Created by Sanket Gurav on 8/14/2017.
@@ -11,14 +11,13 @@ import org.json.JSONObject;
 
 public class ClientDetail implements MOSLConstants {
     //region members
-    private static String name="";
-    private static String branchCode="";
-    private static String clientCode="";
-    private static String currentStage="";
-    private static String currentStageSince="";
-    private static String leadId="";
-    private static String mobile="";
-
+    private static String name = "";
+    private static String branchCode = "";
+    private static String clientCode = "";
+    private static String currentStage = "";
+    private static String currentStageSince = "";
+    private static String leadId = "";
+    private static String mobile = "";
 
     public static Integer getOaoUserId() {
         return oaoUserId;
@@ -35,38 +34,35 @@ public class ClientDetail implements MOSLConstants {
     public ClientDetail() {
     }
 
-    public ClientDetail(JSONObject objDetail) {
-
+    public ClientDetail(ClientDetailItem response) {
 
         try {
-
-            JSONArray productsArray = objDetail.getJSONArray(PRODUCTS);
-            for (int productsI = 0; productsI < productsArray.length(); productsI++) {
-                if (productsI > 0) {
+            List<ProductsItem> products = response.products;
+            for (int i = 0; i < products.size(); i++) {
+                if (i > 0) {
                     break;
                 }
-                JSONObject productsObj = productsArray.getJSONObject(productsI);
-                branchCode = (productsObj.isNull(BRANCH_Code) || productsObj.getString(BRANCH_Code) == null) ? "" : productsObj.getString(BRANCH_Code);
-                clientCode = (productsObj.isNull("HoldingNumber") || productsObj.getString("HoldingNumber") == null) ? "" : productsObj.getString("HoldingNumber");
+                ProductsItem item = products.get(i);
+                branchCode = item.branchCode;
+                clientCode = item.holdingNumber;
             }
 
-            name = (objDetail.isNull(CLIENT_NAME) || objDetail.getString(CLIENT_NAME) == null) ? "" : objDetail.getString(CLIENT_NAME);
-            mobile = (objDetail.isNull("Mobile") || objDetail.getString("Mobile") == null) ? "" : objDetail.getString("Mobile");
-            if (objDetail.has("LeadID")) {
-                leadId = (objDetail.isNull("LeadID") || objDetail.getString("LeadID") == null) ? "" : objDetail.getString("LeadID");
-
+            name = response.clientName;
+            mobile = response.mobile;
+            if (String.valueOf(response.leadID) != null) {
+                leadId = String.valueOf(response.leadID);
             }
-            if (objDetail.has("StageName")) {
-                currentStage = (objDetail.isNull("StageName") || objDetail.getString("StageName") == null) ? "" : objDetail.getString("StageName");
 
+            if (response.stageName != null) {
+                currentStage = response.stageName;
             }
-            if (objDetail.has("PendingDays")) {
-                currentStageSince = (objDetail.isNull("PendingDays") || objDetail.getString("PendingDays") == null) ? "" : objDetail.getString("PendingDays");
 
+            if (response.pendingDays != null) {
+                currentStageSince = response.pendingDays;
             }
-            oaoUserId = objDetail.has("OAOUserid") && !objDetail.isNull("OAOUserid") ? objDetail.getInt("OAOUserid") : 0;
 
-        } catch (JSONException e) {
+            oaoUserId = response.oAOUserid;
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

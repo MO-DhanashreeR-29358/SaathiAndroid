@@ -6,6 +6,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import static okhttp3.internal.Util.UTF_8;
+
 /**
  * Created by pramod on 31/10/17.
  */
@@ -72,6 +74,19 @@ public class CRMSecurityUtil {
             Cipher c = Cipher.getInstance(new String(Base64.decode(CIPHER_ALGORITHM, Base64.DEFAULT)));
             c.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
             return (c.doFinal(decryptedValue));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String decryptVal(String data) {
+        try {
+            byte[] decryptedValue = Base64.decode(data, Base64.DEFAULT);
+            Cipher c =
+                Cipher.getInstance(new String(Base64.decode(CIPHER_ALGORITHM, Base64.DEFAULT)));
+            c.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
+            return new String(c.doFinal(decryptedValue), UTF_8);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
