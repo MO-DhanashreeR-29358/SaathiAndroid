@@ -85,9 +85,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         ((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
     }
 
-    public FragmentActivity getMainActivity() {
+    public Context getMainActivity() {
         if (context != null) {
-            return context;
+            return requireContext();
         } else {
             return super.requireActivity();
         }
@@ -110,9 +110,9 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                            final boolean addStack) {
         InputMethodManager inputManager =
                 (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputManager.isAcceptingText() && getMainActivity().getCurrentFocus() != null) {
+        if (inputManager.isAcceptingText() && requireActivity().getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(
-                    getMainActivity().getCurrentFocus().getWindowToken(),
+                requireActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
         MOSLCommonFragment fragment = null;
@@ -253,7 +253,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
-                getMainActivity().getIntent());
+            requireActivity().getIntent());
     }
 
     public void gotoEkycPage(int gotoEkyc, Map hashMap) {
