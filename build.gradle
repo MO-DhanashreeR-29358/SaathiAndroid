@@ -43,7 +43,7 @@ ext.versions = ["compileSdkVersion"   : 28,
                 'rxJava'              : '2.2.8',
                 'rxBinding'           : '2.1.1',
                 'groupie'             : '2.3.0',
-                'room'                : '1.1.0',
+                'room'                : '1.1.1',
                 'leakCanary'       : '1.6.3',
                 ]
 

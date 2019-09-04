@@ -43,9 +43,9 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  */
 public class LoginActivity extends FragmentActivity
 	implements MOSLConstants, TextView.OnEditorActionListener, View.OnClickListener {
-	Button btnLogin;
-	EditText etEmpCode, etPassword;
-	LinearLayout customProgress;
+	private Button btnLogin;
+	private EditText etEmpCode, etPassword;
+	private LinearLayout customProgress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
