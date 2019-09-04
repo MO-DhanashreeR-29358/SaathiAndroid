@@ -1,16 +1,5 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Light.NoTitleBar.Fullscreen">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 
     <style name="DrawerItem" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/black</item>
@@ -24,7 +13,6 @@
         <item name="android:textSize">13sp</item>
     </style>
 
-    <style name="MyAutoCompleteTextView" parent="android:Widget.Holo.Light.AutoCompleteTextView" />
 
     <style name="CRMMOSLTheme" parent="CRMAppTheme.Base">
         <item name="colorAccent">#FF959595</item>
@@ -179,31 +167,6 @@
         <item name="android:textSize">@dimen/_11sdp</item>
     </style>
 
-    <style name="TextViewLeft" parent="@android:style/TextAppearance">
-        <item name="android:textSize">@dimen/_10sdp</item>
-        <item name="android:textColor">@color/tv_color</item>
-    </style>
-
-    <style name="TextViewRight" parent="@android:style/TextAppearance">
-        <item name="android:textSize">@dimen/_10sdp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="TextViewHeader" parent="@android:style/TextAppearance">
-        <item name="android:textSize">@dimen/_12sdp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
-    <style name="TextViewAddProductLeft" parent="@android:style/TextAppearance">
-        <item name="android:textSize">@dimen/_11sdp</item>
-        <item name="android:textColor">@color/tv_color</item>
-    </style>
-
-    <style name="TextViewAddProductRight" parent="@android:style/TextAppearance">
-        <item name="android:textSize">@dimen/_11sdp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
-
     <style name="DateDialogCustom" parent="@android:style/Theme.Holo.Dialog">
         <item name="android:textColorPrimary">#000000</item>
     </style>
@@ -225,11 +188,6 @@
         <item name="android:textSize">@dimen/_11sdp</item>
     </style>
 
-    <style name="MySwitch" parent="Theme.AppCompat.Light">
-        <item name="colorControlActivated">@color/switch_on</item>
-        <item name="colorSwitchThumbNormal">@color/switch_off</item>
-        <item name="android:colorForeground">@color/colorPrimary</item>
-    </style>
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -291,14 +249,6 @@
     <style name="Animations.PopUpMenu.Reflect">
         <item name="android:windowEnterAnimation">@anim/pump_bottom</item>
         <item name="android:windowExitAnimation">@anim/disappear</item>
-    </style>
-
-    <style name="TableHead" parent="android:Theme.Light">
-        <item name="android:minHeight">20dp</item>
-        <item name="android:minWidth">20dp</item>
-        <item name="android:maxHeight">20dp</item>
-        <item name="android:maxWidth">20dp</item>
-
     </style>
 
     <style name="error_appearance" parent="@android:style/TextAppearance">

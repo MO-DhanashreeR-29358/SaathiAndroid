@@ -1103,14 +1103,14 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             && ActivityCompat.checkSelfPermission(getMainActivity(),
             Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            setPermisson(getMainActivity(), getMainActivity());
+			setPermisson(requireActivity(), getMainActivity());
             return false;
         } else if (enableLocationGroup
             && !((LocationManager) getActivity().getSystemService(
             Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
             && hasGPSDevice(getMainActivity())) {
 
-            enableLoc(getMainActivity());
+			enableLoc(requireActivity());
 
             return false;
         }

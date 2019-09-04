@@ -2061,7 +2061,6 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             AddedAttendeeModel attendeeModel = attendeeModelList.get(position);
 
             holder.tvAttendeeName = (TextView) view.findViewById(R.id.tvAttendeeName);
-            holder.tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
             holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
             holder.tvAttendeeName.setText(
@@ -2081,7 +2080,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
 
         class Holder {
-            TextView tvAttendeeName, tvProfileName;
+            TextView tvAttendeeName;
             ImageView ivDelete;
         }
     }
@@ -2121,7 +2120,6 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             AddedSplAttendeeModel attendeeModel = attendeeModelList.get(position);
 
             holder.tvAttendeeName = (TextView) view.findViewById(R.id.tvAttendeeName);
-            holder.tvProfileName = (TextView) view.findViewById(R.id.tvProfileName);
             holder.ivDelete = (ImageView) view.findViewById(R.id.ivDelete);
 
             holder.tvAttendeeName.setText(
@@ -2141,7 +2139,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
 
         class Holder {
-            TextView tvAttendeeName, tvProfileName;
+            TextView tvAttendeeName;
             ImageView ivDelete;
         }
     }
