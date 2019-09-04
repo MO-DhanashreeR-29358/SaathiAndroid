@@ -91,6 +91,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
     getProfile()
     binding.actvSubBroker.setOnClickListener {
       binding.actvSubBroker.setText("")
+      subBrokerId = -1
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
         searchDialog("SubBroker")
     }
@@ -189,6 +190,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
             etClientName.isEnabled = false
             etClientName.setText("")
             actvSubBroker.setText("")
+            subBrokerId = -1
             setCount(0)
             addedBankEmployeeList.clear()
 //            actvBankEmployee.setText("")
@@ -694,6 +696,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
       spBank.setSelection(0)
       spBranch.setSelection(0)
       actvSubBroker.setText("")
+      subBrokerId = -1
 //      actvBankEmployee.setText("")
       setCount(0)
       etSubject.setText("")
