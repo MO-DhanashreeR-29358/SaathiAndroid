@@ -4,6 +4,16 @@ import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
+import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeResponse
+import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
+import com.mosl.saathi.api.model.aubankmeeting.BankRequest
+import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
+import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
+import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
+import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
+import com.mosl.saathi.api.model.aubankmeeting.SubBrokerResponse
+import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -334,6 +344,7 @@ interface SaathiApi {
     @Path("action") action: String,
     @Body request: DeleteAppointmentRequest
   ): Observable<String>
+
   @POST("Lead/GetAddressByLeadId")
   fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
@@ -357,6 +368,7 @@ interface SaathiApi {
 
   @POST("Prospect/SMT_RegisterProspectOnline/")
   fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
+
   //==================== Lead Profile ===========================
   @POST("Lead/GetLeadProfileParameters")
   fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
@@ -365,7 +377,6 @@ interface SaathiApi {
   fun postLeadProfile(
     @Body request: List<SaveLeadProfileRequest>
   ): Observable<String>
-
 
   //================= Pending For Approval ====================
 
@@ -560,4 +571,35 @@ interface SaathiApi {
   @POST("Meeting/AddUpdateMeeting")
   fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
 
+  //=======================AU Bank Meeting==========================
+  @POST("BankMeeting/GetBankList")
+  fun getBankList(@Body request: BankRequest): Observable<List<BankListResponse>>
+
+  @POST("BankMeeting/GetBankBranchList")
+  fun getBankBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
+
+  @POST("Master/GetAllLookupMaster")
+  fun getAllLookupMaster(
+    @Body request: LookupRequest
+  ): Observable<List<MeetingTypeResponse>>
+
+  @POST("BankMeeting/AutoCompleteBankBranchSubBroker")
+  fun getSubBroker(
+    @Body request: SubBrokerRequest
+  ): Observable<List<SubBrokerResponse>>
+
+  @POST("BankMeeting/AutoCompleteBankEmployee")
+  fun getBankEmployee(
+    @Body request: BankEmployeeRequest
+  ): Observable<List<BankEmployeeResponse>>
+
+  @POST("BankMeeting/InserBankMeeting")
+  fun inserBankMeeting(
+    @Body request: MeetingSaveRequest
+  ): Observable<String>
+
+  @POST("BankMeeting/GetBankMeetingReportForMobile")
+  fun postBankMeetingReport(
+    @Body request: MeetingReportRequest
+  ): Observable<String>
 }

@@ -40,7 +40,10 @@ public interface MOSLConstants extends LabelConfig {
     int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
     int MOSL_MENU_SUGGEST_ME = 8;
     int MOSL_MENU_QUERY = 9;
-    int MOSL_MENU_LOGOUT = 10;
+  int MOSL_MENU_AU_BANK_MEETING = 0;
+  int MOSL_MENU_AU_BANK_MEETING_REPORT = 1;
+  //int NAV_TO_AU_BANK_MEETING = 10;
+  int MOSL_MENU_LOGOUT = 10;
     int LOGOUT_CODE = 4;
     int CALL_PROSPECT_DETAILS = 2;
     int CALL_CONVERT_EKYC = 3;
@@ -82,6 +85,7 @@ public interface MOSLConstants extends LabelConfig {
     int SUBCATEGORY = 22;
     int LEADMODE = 12;
     int LEADPROFILE = 23;
+  int BANKMEETINGTYPE = 128;
     int WEEKS = 24;
     int DAYS = 25;
     int REPEATMODE = 26;
@@ -256,6 +260,7 @@ public interface MOSLConstants extends LabelConfig {
     String BRANCHCODE_DEFAULT_BUSINESS_PROFILE = "BranchCode";
     String CURRENT_BUSINESS_PROFILE_NAME = "Name";
     String BUSINESS_UNIT_ID = "BusinessUnitId";
+  String AU_BANK_SALES_SUPPORT = "1142";
 
     //GetAllLookup API
     String LOOKUPID = "LookUpid";
@@ -338,6 +343,8 @@ public interface MOSLConstants extends LabelConfig {
     String DOCUMENT_DELETED = "Document deleted successfully";
     String APPT_CANCELLED = "Appointment cancelled successfully";
     String SELECT_MEETING_DURATION = "Select Meeting Duration";
+  String SELECT_BANK = "Select Bank";
+  String SELECT_BRANCH = "Select Bank Branch";
     String SELECT_MEETING_REASON = "Select Meeting Reason";
     String SELECT_PRODUCT = "Select Product";
     String SELECT_PROFILE = "Select Profile";
@@ -363,6 +370,7 @@ public interface MOSLConstants extends LabelConfig {
     String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
     String INVALID_PINCODE_NUMBER = "Invalid pincode number";
     String ATTENDEE_ALREADY_ADDED = "Attendee already added";
+  String EMPLOYEE_ALREADY_ADDED = "Employee already added";
     String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";
     String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
     String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";

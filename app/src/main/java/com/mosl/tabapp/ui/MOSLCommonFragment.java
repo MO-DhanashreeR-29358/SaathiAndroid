@@ -345,8 +345,10 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     @Override
     @CallSuper
     public void onDestroyView() {
-        compositeDisposable.dispose();
         super.onDestroyView();
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+        }
     }
 }
 
