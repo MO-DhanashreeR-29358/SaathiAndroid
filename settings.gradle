@@ -1,1 +1,2 @@
-include ':app', ':TabLibrary', ':eKYC', ':emendate', ':digio-esign2', ':saathiapi', ':data'
+include ':app', ':TabLibrary', ':eKYC', ':emendate', ':digio-esign2', ':saathiapi', ':data',
+    ':shared'

@@ -44,6 +44,7 @@ ext.versions = ["compileSdkVersion"   : 28,
                 'rxBinding'           : '2.1.1',
                 'groupie'             : '2.3.0',
                 'room'                : '1.1.1',
+                'dagger'              : '2.22.1',
                 'leakCanary'       : '1.6.3',
                 ]
 
@@ -105,8 +106,13 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
             'location'            : "com.google.android.gms:play-services-location:16.0.0",
             'work'                : "android.arch.work:work-runtime:1.0.1",
             'mofslArtifacts'      : ['validator'    : "MofslArtifacts:validator:1.0.6",
-                                    'annotation'   : "MofslArtifacts:annotations:1.0.1"],
+                                    'annotation'   : "MofslArtifacts:annotations:1.0.1",
+                                    'appcore': "MofslArtifacts:appcore:1.0.62-alpha13"],
             'dataBindCompiler'       : "androidx.databinding:databinding-compiler:${android_plugin_version}",
+            'dagger'              : ['core': "com.google.dagger:dagger:${versions.dagger}",
+                                    'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
+                                    'android': "com.google.dagger:dagger-android-support:${versions.dagger}",
+                                    'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}"],
             'javax'               : "javax.annotation:jsr250-api:1.0",
 
 ]
