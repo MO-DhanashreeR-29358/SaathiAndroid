@@ -12,10 +12,8 @@ import com.mosl.mobile.user.model.transform
 import com.mosl.mobile.user.model.transformReportData
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
-import com.mosl.saathi.api.model.login.LoginResponseData
 import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.splash.VersionRequest
-import com.mosl.saathi.api.model.splash.VersionResponseData
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
 import com.mosl.shared.util.getLocalIpAddress
@@ -36,7 +34,7 @@ class AppUserRepositoryImpl @Inject constructor(
             macAddress = getDeviceID(context.contentResolver)
         )
     )
-        .map { response: LoginResponseData -> response.transform() }
+        .map { response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform() }
   }
 
   override fun versionCheck(versionInfo: VersionInfo): Observable<VersionResponse> {
@@ -47,8 +45,8 @@ class AppUserRepositoryImpl @Inject constructor(
             versionInfo.displayVersion
         )
     )
-        .filter { t: List<VersionResponseData> -> !t.isEmpty() }
-        .map { response: List<VersionResponseData> ->
+        .filter { t: List<com.mosl.saathi.api.model.splash.VersionResponse> -> !t.isEmpty() }
+        .map { response: List<com.mosl.saathi.api.model.splash.VersionResponse> ->
           response.get(0)
               .transform()
         }

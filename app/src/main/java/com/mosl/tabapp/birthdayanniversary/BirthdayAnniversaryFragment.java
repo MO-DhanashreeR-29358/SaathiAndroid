@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
@@ -47,7 +48,6 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.saathi.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -358,7 +358,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
 
     private String getErrorMessage(SaathiCommonResponse<?> response) {
         if (response.errors.isEmpty()) {
-            return SERVER_ERROR_OCCURRED;
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
         } else {
             return response.errors.get(0).message;
         }

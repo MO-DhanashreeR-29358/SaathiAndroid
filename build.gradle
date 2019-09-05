@@ -45,7 +45,8 @@ ext.versions = ["compileSdkVersion"   : 28,
                 'groupie'             : '2.3.0',
                 'room'                : '1.1.1',
                 'dagger'              : '2.22.1',
-                'leakCanary'       : '1.6.3',
+                'leakCanary'          : '1.6.3',
+                'okHttp'              : '3.12.3'
                 ]
 
 ext.deps = ['support'             : ['design'      : "com.android.support:design:${versions.supportLibrary}",
@@ -115,6 +116,9 @@ ext.deps = ['support'             : ['design'      : "com.android.support:design
                                     'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
                                     'android': "com.google.dagger:dagger-android-support:${versions.dagger}",
                                     'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}"],
+            'okhttp'              : ['okio': "com.squareup.okio:okio:${versions.okIo}",
+                                  'core': "com.squareup.okhttp3:okhttp:${versions.okHttp}",
+                                  'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"],
             'javax'               : "javax.annotation:jsr250-api:1.0",
 
 ]

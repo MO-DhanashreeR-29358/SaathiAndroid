@@ -1,4 +1,4 @@
-package com.mosl.saathi.data;
+package com.mosl.app.core.data;
 
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.annotation.ExcludeWrapper;
@@ -9,6 +9,7 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import javax.inject.Inject;
 import okhttp3.ResponseBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.Converter;
@@ -22,6 +23,9 @@ public class MOSLResponseWrapper extends Converter.Factory {
 
     public static final String SERVER_ERROR_OCCURRED =
         "Something went wrong while getting response from server. Please try again.";
+
+    @Inject public MOSLResponseWrapper() {
+    }
 
     @NotNull protected static Class<?> getRawType(Type type) {
         if (type instanceof ParameterizedType) {

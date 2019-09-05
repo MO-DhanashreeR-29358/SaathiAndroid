@@ -1,6 +1,7 @@
 package com.mosl.saathi.api
 
 import com.mosl.app.core.annotation.ExcludeWrapper
+import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
@@ -134,6 +135,7 @@ import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -602,4 +604,18 @@ interface SaathiApi {
   fun postBankMeetingReport(
     @Body request: MeetingReportRequest
   ): Observable<String>
+
+  /*==================================================*/
+  @POST("Auth/$LoginEndPoint")
+  fun login(
+    @Header("EmployeeCode") employeeCode: String, @Body loginRequest: LoginRequest
+  ): Observable<LoginResponse>
+
+  @POST("Common/${ApiEndpoints.AppVersionEndPoint}")
+  @ExtraDataWrapper
+  fun appVersion(
+    @Header(
+        "macaddress"
+    ) macAddress: String, @Body versionRequest: VersionRequest
+  ): Observable<List<VersionResponse>>
 }

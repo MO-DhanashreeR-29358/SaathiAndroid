@@ -1,16 +1,23 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-  compileSdkVersion 28
+  compileSdkVersion rootProject.ext.versions.compileSdkVersion
+  buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 28
+    targetSdkVersion rootProject.ext.versions.targetSdkVersion
     versionCode 1
     versionName "1.0"
 
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    javaCompileOptions {
+      annotationProcessorOptions {
+        includeCompileClasspath = true
+      }
+    }
   }
 
   buildTypes {
@@ -36,7 +43,24 @@ dependencies {
   implementation project(':saathiapi')
   implementation deps.rx.java
   implementation deps.rx.android
+  implementation deps.rx.kotlin
   implementation deps.gson
   implementation deps.retrofit.core
+  implementation deps.retrofit.gson
+  implementation deps.retrofit.rxJava
   implementation deps.kotlin
+  api deps.mofslArtifacts.appcore
+
+  implementation deps.dagger.core
+  kapt deps.dagger.compiler
+  implementation deps.dagger.android
+  kapt deps.dagger.androidCompiler
+
+  implementation deps.okhttp.core
+  implementation deps.okhttp.logger
+
+  implementation project(':saathiapi')
+  implementation project(':appuser')
+  implementation project(':shared')
+  implementation project(':domain')
 }

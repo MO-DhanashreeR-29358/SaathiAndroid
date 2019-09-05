@@ -2,14 +2,13 @@ package com.mosl.mobile.user.model
 
 import com.mosl.saathi.api.model.login.BusinessProfile
 import com.mosl.saathi.api.model.login.CurrentBusinessProfile
-import com.mosl.saathi.api.model.login.LoginResponseData
-import com.mosl.saathi.api.model.login.UserProfile
+import com.mosl.saathi.api.model.login.LoginResponse
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
-import com.mosl.saathi.api.model.splash.VersionResponseData
+import com.mosl.saathi.api.model.splash.VersionResponse
 
-fun LoginResponseData.transform(
-): LoginResponse {
-  val userProfile = userInfo
+fun LoginResponse.transform(
+): com.mosl.mobile.user.model.LoginResponse {
+  val userProfile = user
   return LoginResponse(
       user = userProfile.transformUser(smtEnabled, ekycRevamp),
       smtEnabled = smtEnabled,
@@ -17,10 +16,10 @@ fun LoginResponseData.transform(
   )
 }
 
-fun VersionResponseData.transform(
-): VersionResponse {
+fun VersionResponse.transform(
+): com.mosl.mobile.user.model.VersionResponse {
 
-  return VersionResponse(
+  return com.mosl.mobile.user.model.VersionResponse(
       statusCode = statusCode,
       msg = msg,
       url = url,
@@ -28,7 +27,8 @@ fun VersionResponseData.transform(
       newEkycUrl = newEkycUrl
   )
 }
-fun UserProfile.transformUser(
+
+fun com.mosl.saathi.api.model.login.User.transformUser(
   smtEnabled: String,
   ekycRevamp: String
 

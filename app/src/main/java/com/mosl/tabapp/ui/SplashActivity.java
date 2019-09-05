@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
@@ -17,7 +18,6 @@ import com.mosl.saathi.api.model.splash.ChildMenu;
 import com.mosl.saathi.api.model.splash.ReportTypeResponse;
 import com.mosl.saathi.api.model.splash.VersionRequest;
 import com.mosl.saathi.api.model.splash.VersionResponse;
-import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
@@ -212,8 +212,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 	private void versionCheck() {
 		if (CRMAppUtil.isNetworkEnabled(SplashActivity.this)) {
 			VersionRequest request =
-				new VersionRequest(NEW_CRM, getAppVersionCode(SplashActivity.this), "Android", "",
-					CRMMOSLCommon.getDeviceID(SplashActivity.this, getContentResolver()));
+				new VersionRequest(NEW_CRM, getAppVersionCode(SplashActivity.this), "Android", "");
 			Disposable subscribe = CRMWebServiceHandler.getSaathiApi().appVersion(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderStartup);

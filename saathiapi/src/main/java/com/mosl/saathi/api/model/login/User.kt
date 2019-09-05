@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class User(
   @SerializedName("Id") @JvmField val userId: String,
-  @SerializedName("EmployeeCode") @JvmField val employeeCode: String?,
-  @SerializedName("FirstName") @JvmField val firstName: String?,
+  @SerializedName("EmployeeCode") @JvmField val employeeCode: String,
+  @SerializedName("FirstName") @JvmField val firstName: String,
   @SerializedName("LastName") @JvmField val lastName: String?,
   @SerializedName("ImageUrl") @JvmField val imageUrl: String?,
   @SerializedName("Mobile") @JvmField val mobile: String?,

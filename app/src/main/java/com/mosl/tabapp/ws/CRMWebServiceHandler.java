@@ -1,9 +1,9 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
+import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
-import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
