@@ -3,7 +3,6 @@ package com.mosl.tabapp.leadViewDetail;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import com.viewpagerindicator.IconPagerAdapter;
 import java.util.ArrayList;
 
 /**

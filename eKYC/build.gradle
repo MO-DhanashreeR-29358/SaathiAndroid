@@ -26,7 +26,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation files('libs/simple-xml-2.7.1.jar')
     implementation files('libs/protobuf_2_4_1.jar')
-    implementation project(':TabLibrary')
+//    implementation project(':TabLibrary')
     testImplementation deps.testing.junit
     androidTestImplementation(deps.testing.espresso.core)
     implementation deps.sdpAndroid

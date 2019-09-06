@@ -120,7 +120,7 @@ android {
 }
 
 dependencies {
-  implementation project(':TabLibrary')
+//  implementation project(':TabLibrary')
   //  implementation project(':eKYC')
   implementation project(':saathiapi')
   implementation project(':data')

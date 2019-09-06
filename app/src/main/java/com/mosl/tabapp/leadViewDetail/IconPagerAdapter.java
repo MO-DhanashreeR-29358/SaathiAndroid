@@ -1,6 +1,7 @@
-package com.viewpagerindicator;
+package com.mosl.tabapp.leadViewDetail;
 
 public interface IconPagerAdapter {
+
     /**
      * Get icon representing the page at {@code index} in the adapter.
      */
