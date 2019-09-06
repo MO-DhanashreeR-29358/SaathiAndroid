@@ -271,7 +271,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 							Object... data) {
 							if (action == MSFDialog.Action.OK) {
 								Intent i = new Intent(
-									android.content.Intent.ACTION_VIEW);
+                                    Intent.ACTION_VIEW);
 								i.setData(
 									Uri.parse(url));
 								startActivity(i);
@@ -290,7 +290,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 							Object... data) {
 							if (action == MSFDialog.Action.OK) {
 								Intent i = new Intent(
-									android.content.Intent.ACTION_VIEW);
+                                    Intent.ACTION_VIEW);
 								i.setData(
 									Uri.parse(url));
 								startActivity(i);

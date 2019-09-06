@@ -42,6 +42,7 @@ dependencies {
   kapt deps.dagger.compiler
   implementation deps.kotlin
   implementation deps.retrofit.gson
+  implementation deps.timber
 
   implementation project (':saathiapi')
   implementation project (':shared')

@@ -124,7 +124,7 @@
                  android:text="Net-worth in Rs."
                  android:textSize="@dimen/title_11sp"
                  android:textStyle="bold" />-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_netWorth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                     android:maxLength="15"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etNetWorthError"
@@ -174,7 +174,7 @@
                 android:textColor="@color/upload_red"
                 android:textSize="@dimen/_1sdp" />
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_NWDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -190,7 +190,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etNWDateError"
@@ -284,7 +284,7 @@
                 android:orientation="vertical">
 
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutMFPEPRemark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -298,7 +298,7 @@
                         android:inputType="text"
                         android:lines="3"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
                 <!--<EditText
                     android:id="@+id/etMFPEPRemark"
                     android:layout_width="match_parent"
@@ -786,7 +786,7 @@
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_commOther"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -801,7 +801,7 @@
                     android:inputType="text"
                     android:maxLength="40"
                     android:visibility="gone" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -1083,7 +1083,7 @@
                 android:text="Broker Name"
                 android:textSize="@dimen/title_11sp"
                 android:textStyle="bold"/>-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_brokerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1097,7 +1097,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etBrokerNameError"
@@ -1119,7 +1119,7 @@
                  android:text="Client Code"
                  android:textSize="@dimen/title_11sp"
                  android:textStyle="bold"/>-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_clientCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1133,7 +1133,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etClientCodeError"
@@ -1163,7 +1163,7 @@
                 android:text="Electronic Contract Note will be mailed to"
                 android:textSize="@dimen/title_11sp"
                 android:textColor="@color/text_color_personal" />-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_electronicNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1177,7 +1177,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -1252,7 +1252,7 @@
                 android:text="Specify your action"
                 android:textSize="@dimen/title_11sp"
                 android:textStyle="bold"/>-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_sebiAuthority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1267,7 +1267,7 @@
                     android:maxLength="40"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -1341,7 +1341,7 @@
                 android:text="Specify your action"
                 android:textSize="@dimen/title_11sp"
                 android:textStyle="bold"/>-->
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_fmcSebiAuthority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -1356,7 +1356,7 @@
                     android:maxLength="40"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <TextView

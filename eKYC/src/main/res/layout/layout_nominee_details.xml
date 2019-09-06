@@ -47,7 +47,7 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:entries="@array/title" />-->
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
                             android:hint="First Name"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/etNomineeFirstNameError"
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutNomineeMiddleName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -99,7 +99,7 @@
                                 android:hint="Middle Name"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etNomineeMiddleNameError"
@@ -120,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/inputLayoutNomineeLastName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
@@ -132,7 +132,7 @@
                                 android:hint="Last Name"
                                 android:maxLines="1"
                                 android:singleLine="true" />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/etNomineeLastNameError"
@@ -149,7 +149,7 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineePAN"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                         android:maxLength="10"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etNomineePANError"
@@ -180,7 +180,7 @@
                     android:visibility="gone" />
 
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeAadhaar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
                         android:maxLength="12"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tvNomineeAadharError"
@@ -222,7 +222,7 @@
                     android:textColor="@color/upload_red"
                     android:textSize="@dimen/_1sdp" />
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeDob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -237,7 +237,7 @@
                         android:inputType="date"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <CheckBox
                     android:id="@+id/cbNomineeSameAsPrimaryCorrespondence"
@@ -246,7 +246,7 @@
                     android:button="@drawable/checkbox"
                     android:text=" Same as primary applicants correspondence address" />
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeBldgNameCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -261,9 +261,9 @@
                         android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeFlatNoCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -278,9 +278,9 @@
                         android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeAreaCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -295,10 +295,10 @@
                         android:maxLength="50"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineePincodeCorres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -314,7 +314,7 @@
                         android:maxLength="6"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etNomineePincodeCorresError"
@@ -402,7 +402,7 @@
                     android:enabled="false"
                     android:visibility="gone" />
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeCorresCityOther"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -416,7 +416,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:visibility="gone" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -451,7 +451,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeSTD"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -468,9 +468,9 @@
                             android:maxLength="5"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputLayoutNomineeTelNo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -487,7 +487,7 @@
                             android:maxLength="8"
                             android:maxLines="1"
                             android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <TextView
@@ -503,7 +503,7 @@
                     android:textSize="@dimen/_10sdp"
                     android:visibility="gone" />
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineeEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -518,7 +518,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/etNomineeEmailError"
@@ -560,7 +560,7 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginBottom="@dimen/_2sdp" />
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/inputLayoutNomineesRelationship"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -576,24 +576,24 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:visibility="gone" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
-                <!--<android.support.design.widget.TextInputLayout
-                    android:id="@+id/inputLayoutNomineePrimaryApplicantsRelationship"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+              <!--<com.google.android.material.textfield.TextInputLayout
+                  android:id="@+id/inputLayoutNomineePrimaryApplicantsRelationship"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/etNomineePrimaryApplicantsRelationship"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_weight="1"
-                        android:hint="Primary Applicants Relationship with Nominees"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textColor="@color/text_color_personal" />
-                </android.support.design.widget.TextInputLayout>-->
+                  <EditText
+                      android:id="@+id/etNomineePrimaryApplicantsRelationship"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="@dimen/_2sdp"
+                      android:layout_weight="1"
+                      android:hint="Primary Applicants Relationship with Nominees"
+                      android:maxLines="1"
+                      android:singleLine="true"
+                      android:textColor="@color/text_color_personal" />
+              </com.google.android.material.textfield.TextInputLayout>-->
 
             </LinearLayout>
 

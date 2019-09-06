@@ -6,11 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
@@ -37,7 +32,12 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.jakewharton.rxbinding2.widget.RxTextView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.textfield.TextInputLayout;
+import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.clientdetail.AdvisorsItem;
@@ -179,7 +179,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments,
         etProspectRefereeName, etProspectRefereerMobile, etProspectRefereerEmail;
     private Spinner spProfile, spCountry, spOffCountry, spProfession, spPmsProduct;
-    private org.droidparts.widget.ClearableEditText etDob, etAnniversary;
+    private ClearableEditText etDob, etAnniversary;
     private TextView tvAnniversaryError;
     private TextView tvspIntrestError, tvspStatusError, tvCrossSellingProductIdError,
         tvCrossSellingStatusError, tvspStageError;

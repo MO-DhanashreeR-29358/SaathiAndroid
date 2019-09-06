@@ -17,17 +17,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -44,6 +33,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
@@ -1259,7 +1259,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 			startActivity(launchIntent);
 		} catch (Exception e) {
 			if (isBlank(AccountDetails.getEkycUrl())) {
-				Intent i = new Intent(android.content.Intent.ACTION_VIEW);
+				Intent i = new Intent(Intent.ACTION_VIEW);
 				i.setData(
 					Uri.parse(
 						"https://play.google.com/store/apps/details?id=" + NEWEKYC_PACKAGE_NAME));
@@ -1274,7 +1274,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							Object... data) {
 							if (action == MSFDialog.Action.OK) {
 								Intent i = new Intent(
-									android.content.Intent.ACTION_VIEW);
+									Intent.ACTION_VIEW);
 								i.setData(
 									Uri.parse(AccountDetails.getEkycUrl()));
 								startActivity(i);

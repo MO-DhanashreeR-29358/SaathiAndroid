@@ -5,7 +5,7 @@ dependencies {
     implementation deps.rx.java
     implementation deps.dagger.core
     implementation deps.kotlin
-    implementation deps.support.annotation
+    implementation deps.androidx.annotation
 }
 
 sourceCompatibility = "1.8"

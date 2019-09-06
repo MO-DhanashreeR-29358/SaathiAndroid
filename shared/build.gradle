@@ -30,6 +30,6 @@ android {
 dependencies {
   implementation deps.dagger.core
   kapt deps.dagger.compiler
-  implementation deps.support.appcompat
+  implementation deps.androidx.appcompat
   api deps.mofslArtifacts.appcore
 }

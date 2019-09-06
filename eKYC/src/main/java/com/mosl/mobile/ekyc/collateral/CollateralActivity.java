@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.widget.LinearLayout;
 
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.CollateralAdapter;
 import com.mosl.mobile.ekyc.common.CustomViewPager;
@@ -26,9 +25,6 @@ import static com.mosl.mobile.ekyc.common.MOSLCommon.setPermisson;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.COLLATERAL_SECTION_PRODUCT;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.COLLATERAL_SECTION_RESEARCH;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.COLLATERAL_SECTION_TECHNOLOGY;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
-
 
 /**
  * Created by Owner on 7/18/2016.
