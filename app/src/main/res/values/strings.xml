@@ -50,6 +50,8 @@
     <string name="TXT_FRESH_REGISTRATION">New client account opening process</string>
     <string name="TXT_EXISTING_APPLICATION">Resume previously saved application to complete the account opening process</string>
 
+    <string name="hint_text_employee_code">Employee Code</string>
+    <string name="hint_text_password">Password</string>
 
     <!--franchise-lead & lead creation-->
 
@@ -150,4 +152,25 @@
     <string name="validate_client_name">Enter Client Name</string>
     <string name="text_label_from_date">From Date</string>
     <string name="text_label_to_date">To Date</string>
+
+    <string name="button_label_retrieve">Retrieve</string>
+    <string name="button_label_exit">Exit</string>
+
+    <!--QUERY-->
+    <string name="text_label_query_description">Query Description</string>
+    <string name="text_label_partner_name">Partner Name</string>
+    <string name="text_label_email_address">Email Address</string>
+    <string name="text_label_mobile_number">Mobile Number</string>
+    <string name="text_label_branch_code">Branch Code</string>
+    <string name="btn_reset">Reset</string>
+    <string name="btn_submit">Submit</string>
+    <string name="text_label_contact_us">Contact Us</string>
+    <string name="text_label_support_queries">Support Related Queries</string>
+    <string name="text_label_tele_phone_1">91&#8211;22&#8211;39982515 /</string>
+    <string name="text_label_tele_phone_2">91&#8211;22&#8211;67490600</string>
+    <string name="error_message_empty_query">Please enter query description</string>
+    <string name="page_title_query">Insert Your Query</string>
+    <string name="text_label_no">No</string>
+    <string name="text_label_yes">Yes</string>
+    <string name="call_alert_message">"Do you want to call?"</string>
 </resources>

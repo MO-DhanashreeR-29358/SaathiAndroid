@@ -1,0 +1,68 @@
+package com.mosl.mobile.saathi.query
+
+import com.mosl.app.core.base.BasePresenter
+import com.mosl.mobile.domain.query.QueryRepository
+import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_1
+import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_2
+import com.mosl.tabapp.query.QueryValidator
+import com.mosl.tabapp.query.QueryView
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.addTo
+import javax.inject.Inject
+
+class QueryPresenter @Inject constructor(
+  view: QueryView,
+  val repository: QueryRepository
+) : BasePresenter<QueryView>(view) {
+  protected val validator: QueryValidator = QueryValidator()
+  override fun start() {
+
+    view.onSubmitBtnClick()
+        .map {
+          view.getFormInput()
+        }
+        .switchMap { input ->
+          validator.validate(input)
+              .compose(applyUiModel())
+        }
+        .subscribe { view.onSubmitDialogOpen(it) }
+        .addTo(disposable)
+
+
+    Observable.merge(view.onSubmitConfirmClicked(), onRetryCalled())
+        .map { view.getQueryMessgae() }
+        .switchMap {
+          repository.getUserInsertQuery(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderSubmit)
+        .addTo(disposable)
+
+
+
+
+    view.onResetBtnClick()
+        .subscribe { view.reset() }
+        .addTo(disposable)
+
+    view.onTelePhoneNoOneClicked()
+        .subscribe {
+          view.showAlertForCall(TELE_PHONE_1)
+        }
+        .addTo(disposable)
+
+    view.onTelePhoneNoTwoClicked()
+        .subscribe {
+          view.showAlertForCall(TELE_PHONE_2)
+        }
+        .addTo(disposable)
+  }
+}
+
+fun QueryView.getFormInput(): String {
+  return getQueryMessgae()
+}
+
+sealed class QueryUiEvent {
+  object OnSubmitConfirmClick : QueryUiEvent()
+}

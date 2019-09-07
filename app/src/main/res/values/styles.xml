@@ -9,6 +9,7 @@
         <item name="android:padding">10dp</item>
     </style>
 
+    <style name="SaathiTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="DrawerItem.Child">
         <item name="android:textSize">13sp</item>
     </style>
@@ -254,6 +255,18 @@
     <style name="error_appearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/red_textcolor</item>
         <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="edittextSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="colorControlNormal">#FF959595</item>
+        <item name="colorControlActivated">#FF646464</item>
+        <item name="colorControlHighlight">#FF646464</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:colorBackground">@drawable/edittext_background_color</item>
+        <item name="android:textColor">@drawable/edittext_color</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
     <!-- PopUpAnimation end -->

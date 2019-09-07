@@ -120,10 +120,12 @@ android {
 }
 
 dependencies {
-//  implementation project(':TabLibrary')
   //  implementation project(':eKYC')
   implementation project(':saathiapi')
   implementation project(':data')
+  implementation project (':appuser')
+  implementation project (':shared')
+  implementation project (':domain')
   implementation(deps.crashlytics) {
     transitive = true
   }
@@ -175,13 +177,16 @@ dependencies {
   implementation deps.retrofit.gson
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
+  implementation deps.rx.kotlin
   implementation deps.rxBinding.core
   implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
   implementation deps.retrofit.scalar
-  implementation deps.mofslArtifacts.validator
+  api deps.mofslArtifacts.validator
+  api deps.mofslArtifacts.appcore
+  api deps.mofslArtifacts.appcoreui
 }
 
 apply plugin: 'com.google.gms.google-services'
