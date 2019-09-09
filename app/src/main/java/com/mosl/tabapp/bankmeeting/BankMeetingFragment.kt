@@ -2,12 +2,10 @@ package com.mosl.tabapp.bankmeeting
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.databinding.DataBindingUtil
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable.Factory
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +18,8 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.data.applyUiModel
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse

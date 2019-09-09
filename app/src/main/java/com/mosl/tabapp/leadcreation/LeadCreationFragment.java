@@ -981,8 +981,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
         });
 
         Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefreeName)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
+            .filter(event -> event.getView().isFocused())
+            .map(query -> query.getEditable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
         compositeDisposable.add(
@@ -1012,8 +1012,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
             }));
 
         Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefreeCode)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
+            .filter(event -> event.getView().isFocused())
+            .map(query -> query.getEditable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
 
