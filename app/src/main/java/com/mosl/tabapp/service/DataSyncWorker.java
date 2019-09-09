@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import com.mosl.tabapp.CrmApp;
+import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
@@ -43,7 +43,7 @@ public class DataSyncWorker extends Worker {
 				getPrefs(
 					getApplicationContext()).getString("EmployeeCode", null)).isEmpty()) {
 				if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
-					if (CrmApp.get().getDB().daoAccess().getLocationList().size() != 0) {
+					if (SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
 						SaveGeoLocation();
 					}
 				}
@@ -58,7 +58,8 @@ public class DataSyncWorker extends Worker {
 
 	private void SaveGeoLocation() {
 		OkHttpClient client = new OkHttpClient();
-		List<LocationData> locationDataList = CrmApp.get().getDB().daoAccess().getLocationList();
+		List<LocationData> locationDataList =
+			SaathiAppNew.get().getDB().daoAccess().getLocationList();
 		SharedPreferences prefs = getPrefs(getApplicationContext());
 		MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 		String url = CRMWebServiceHandler.CALL_BASE_URL;
@@ -113,7 +114,7 @@ public class DataSyncWorker extends Worker {
 					requireNonNull(CRMSecurityUtil.decrypt(new String(res)))));
 				String status = jsonObject.getString(STATUS);
 				if (status.equalsIgnoreCase("true")) {
-					CrmApp.get().getDB().daoAccess().deleteAll();
+					SaathiAppNew.get().getDB().daoAccess().deleteAll();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

@@ -20,6 +20,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.login.LoginActivityNew
+import com.mosl.tabapp.ui.MOSLCommonActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -201,7 +202,7 @@ class SplashActivityNew : LeanBaseActivity() {
   }
 
   private fun openCommonActivity() {
-    val intent = Intent(this@SplashActivityNew, CommonActivity::class.java)
+    val intent = Intent(this@SplashActivityNew, MOSLCommonActivity::class.java)
     startActivity(intent)
     finish()
   }

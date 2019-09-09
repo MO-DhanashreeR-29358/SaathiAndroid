@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.mosl.tabapp.R;
+import com.mosl.tabapp.splash.SplashActivityNew;
 import me.relex.circleindicator.CircleIndicator;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
@@ -36,7 +37,7 @@ public class ImageSliderActivity extends FragmentActivity {
         String password = getPrefs(this).getString("PASSWORD", null);
 
         if (empCode != null && password != null) {
-            Intent intent = new Intent(ImageSliderActivity.this, SplashActivity.class);
+			Intent intent = new Intent(ImageSliderActivity.this, SplashActivityNew.class);
             startActivity(intent);
             finish();
         }
@@ -91,7 +92,7 @@ public class ImageSliderActivity extends FragmentActivity {
 
 
     private void launchHomeScreen() {
-        Intent intent = new Intent(ImageSliderActivity.this, SplashActivity.class);
+		Intent intent = new Intent(ImageSliderActivity.this, SplashActivityNew.class);
         startActivity(intent);
         finish();
     }

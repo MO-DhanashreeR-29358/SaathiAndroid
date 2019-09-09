@@ -28,8 +28,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
-import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.R;
+import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
 import java.io.IOException;
@@ -152,7 +152,7 @@ public class ForegroundService extends Service {
 					locationData.setDeviceId(
 						getPrefs(getApplicationContext()).getString("macaddress", null));
 					if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
-						CrmApp.get().getDB().daoAccess().insertLocationList(locationData);
+						SaathiAppNew.get().getDB().daoAccess().insertLocationList(locationData);
 						Timber.tag("Location Data entered").d(locationData.toString());
 					}
 				} else {

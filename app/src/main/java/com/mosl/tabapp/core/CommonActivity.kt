@@ -18,7 +18,6 @@ import com.mosl.mobile.user.login.user
 import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
-import com.mosl.navigator.FragmentResolver
 import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
@@ -39,8 +38,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var userManager: UserManager
   @Inject
   lateinit var loginRepository: LoginRepositoryImpl
-  @Inject
-  lateinit var fragmentResolver: FragmentResolver
+  //  @Inject
+//  lateinit var fragmentResolver: FragmentResolver
   var globalTitles = HashMap<String, AppTitle>()
 
   override fun getLayout(): Int {
@@ -184,7 +183,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun getFragment(pageId: Int): Fragment? {
-    return fragmentResolver.resolve(pageId)
+//    return fragmentResolver.resolve(pageId)
+    return null
   }
 
   override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
