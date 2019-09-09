@@ -1,8 +1,7 @@
 package com.mosl.tabapp.common;
 
-import android.support.design.widget.TextInputLayout;
 import android.widget.EditText;
-
+import com.google.android.material.textfield.TextInputLayout;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

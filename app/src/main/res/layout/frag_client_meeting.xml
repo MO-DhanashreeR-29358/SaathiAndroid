@@ -23,7 +23,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp" />
 
-        <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivDatePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:visibility="gone" />
 
 
-    <android.support.v7.widget.RecyclerView
+  <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -53,6 +53,6 @@
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginRight="@dimen/_10sdp">
 
-    </android.support.v7.widget.RecyclerView>
+  </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>

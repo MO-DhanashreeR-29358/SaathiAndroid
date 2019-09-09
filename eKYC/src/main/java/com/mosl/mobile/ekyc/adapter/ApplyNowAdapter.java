@@ -1,12 +1,10 @@
 package com.mosl.mobile.ekyc.adapter;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.mosl.mobile.ekyc.R;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.viewpagerindicator.IconPagerAdapter;
-
 import java.util.ArrayList;
 
 /**
@@ -25,7 +23,8 @@ public class ApplyNowAdapter extends FragmentStatePagerAdapter implements IconPa
     private final String[] pageTitles;
     private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
-    public ApplyNowAdapter(FragmentManager fm, ArrayList<Fragment> fragmentList, String[] pageTitles, int[] icons) {
+    public ApplyNowAdapter(FragmentManager fm, ArrayList<Fragment> fragmentList,
+        String[] pageTitles, int[] icons) {
         super(fm);
         this.fragmentList = fragmentList;
         this.pageTitles = pageTitles;

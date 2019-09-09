@@ -1,13 +1,11 @@
 package com.mosl.mobile.ekyc.bankdetail;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -18,12 +16,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.CustomViewPager;
@@ -33,8 +34,10 @@ import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
 import com.mosl.mobile.ekyc.ui.CustomDatePickerDialog;
 import com.mosl.mobile.ekyc.ui.DatePickerListener;
-import com.viewpagerindicator.TabPageIndicator;
-import cz.msebera.android.httpclient.Header;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,27 +45,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 import static com.mosl.mobile.ekyc.common.MOSLCommon.commonMsgDialog;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.disableField;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.isBlank;
 import static com.mosl.mobile.ekyc.common.MOSLCommon.removeKeyboard;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
-import static com.mosl.mobile.ekyc.model.CommonModel.getBankTab;
-import static com.mosl.mobile.ekyc.model.CommonModel.getInterestedInMF;
-import static com.mosl.mobile.ekyc.model.CommonModel.getIsAadharVerified;
-import static com.mosl.mobile.ekyc.model.CommonModel.getIsCommoditySelected;
-import static com.mosl.mobile.ekyc.model.CommonModel.getIsDerivativeSelected;
-import static com.mosl.mobile.ekyc.model.CommonModel.getIsEquitySelected;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUploadTab;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
-import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityFundTransfered;
-import static com.mosl.mobile.ekyc.model.CommonModel.isCommodityOriginal;
-import static com.mosl.mobile.ekyc.model.CommonModel.isEquityFundTransfered;
-import static com.mosl.mobile.ekyc.model.CommonModel.setIsCommodityFundTransfered;
-import static com.mosl.mobile.ekyc.model.CommonModel.setIsEquityFundTransfered;
+import static com.mosl.mobile.ekyc.model.CommonModel.*;
 import static com.mosl.mobile.ekyc.ui.EkycMainActivity.customProgress;
 
 /**
@@ -100,7 +90,6 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
     int eqPaymentId, commPaymentId;
     boolean showDefalutDate;
     String date = "";
-    private boolean auSmall;
 
     public void setTabPageIndicator(TabPageIndicator tabPageIndicator) {
         this.tabPageIndicator = tabPageIndicator;
@@ -238,9 +227,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etEquFundTransferred.getText().toString())) {
                     input_layout_equFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP)
-                        && !auSmall
-                        && etEquFundTransferred.length() < 4) {
+                    if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
                         etEquFundTransferredError.setVisibility(View.VISIBLE);
                         etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etEquFundTransferred.requestFocus();
@@ -274,9 +261,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etCommFundTransferred.getText().toString())) {
                     input_layout_commFundTransferred.setErrorEnabled(false);
-                    if (!getAppType().equalsIgnoreCase(PP)
-                        && !auSmall
-                        && etCommFundTransferred.length() < 4) {
+                    if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
                         etCommFundTransferredError.setVisibility(View.VISIBLE);
                         etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                         etCommFundTransferred.requestFocus();
@@ -313,7 +298,17 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             llCommodityCheque.setVisibility(View.VISIBLE);
             etCommFundTransferred.setText(commMargin);
         }
-        showSkipPaymentButton();
+        if (getAppType().equals(PP)) {
+            rlEquSkipPayment.setVisibility(View.VISIBLE);
+            rlCommSkipPayment.setVisibility(View.VISIBLE);
+            etEquFundTransferred.setEnabled(true);
+            etCommFundTransferred.setEnabled(true);
+        } else {
+            rlEquSkipPayment.setVisibility(View.GONE);
+            rlCommSkipPayment.setVisibility(View.GONE);
+            etEquFundTransferred.setEnabled(false);
+            etCommFundTransferred.setEnabled(false);
+        }
 
         if (mEquStatus == 0) {
             showEquitypending();
@@ -563,19 +558,6 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
         });
     }
 
-    private void showSkipPaymentButton() {
-        if (getAppType().equals(PP) || auSmall) {
-            rlEquSkipPayment.setVisibility(View.VISIBLE);
-            rlCommSkipPayment.setVisibility(View.VISIBLE);
-            etEquFundTransferred.setEnabled(true);
-            etCommFundTransferred.setEnabled(true);
-        } else {
-            rlEquSkipPayment.setVisibility(View.GONE);
-            rlCommSkipPayment.setVisibility(View.GONE);
-            etEquFundTransferred.setEnabled(false);
-            etCommFundTransferred.setEnabled(false);
-        }
-    }
 
     @Override
     public void onResume() {
@@ -704,20 +686,48 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             return;
         }
         if (MOSLCommon.isNetworkEnabled(mContext)) {
-            Map<String, String> inputMap = new HashMap<>();
+            Map inputMap = new HashMap();
             inputMap.put("_userId", userID);
 
+            String flag = GETUSERPAYMENTDETAILS;
+            String category = FUNDTRANSFER;
             customProgress.setVisibility(View.VISIBLE);
-            WebServiceHandler.post(mContext, GETUSERPAYMENTDETAILS, FUNDTRANSFER, inputMap,
-                new JsonHttpResponseHandler() {
+            WebServiceHandler.post(mContext, flag, category, inputMap, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     if (response != null && response.length() != 0) {
+
                         try {
+
+
+                             /*{
+                                "FUNDTRANSFER":[
+                                {
+                                    "BANK_NAME":"ICICI BANK LTD",
+                                        "BANK_ACC_NO":"112211111111",
+                                        "CHEQUENO":"",
+                                        "CHEQUEDATE":"28 Oct 2016",
+                                        "MARGIN_DEPOSIT":"50000",
+                                        "SCHEME_NAME":"Margin 50,000",
+                                        "AMOUNTREQUESTED":0,
+                                        "PRODUCT":"EQUITY"
+                                },
+                                {
+                                    "BANK_NAME":"ICICI BANK LTD",
+                                        "BANK_ACC_NO":"2222222222222",
+                                        "CHEQUENO":"",
+                                        "CHEQUEDATE":"28 Oct 2016",
+                                        "MARGIN_DEPOSIT":"",
+                                        "SCHEME_NAME":"",
+                                        "AMOUNTREQUESTED":0,
+                                        "PRODUCT":"COMMODITY"
+                                }
+                                ]
+                            }*/
                             if (response.has("FUNDTRANSFER")) {
                                 JSONArray jsonArray = response.getJSONArray("FUNDTRANSFER");
                                 if (jsonArray.length() != 0) {
-                                    String chequeStatus = "", chequeMessage = "";
+
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject object = jsonArray.getJSONObject(i);
 
@@ -730,31 +740,13 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                                         String amtRequested = (object.isNull("AMOUNTREQUESTED") || object.getString("AMOUNTREQUESTED").equals("")) ? "" : object.getString("AMOUNTREQUESTED");
                                         String fundTransferThrough = (object.isNull("FUNDTRANSFERTHROUGH") || object.getString("FUNDTRANSFERTHROUGH").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGH");
                                         String fundTransferThroughId = (object.isNull("FUNDTRANSFERTHROUGHID") || object.getString("FUNDTRANSFERTHROUGHID").equals("")) ? "" : object.getString("FUNDTRANSFERTHROUGHID");
-                                        chequeStatus =
-                                            (object.isNull("CHEQUE_STATUS")
-                                                || object.getString("CHEQUE_STATUS")
-                                                .equals("")) ? ""
-                                                : object.getString("CHEQUE_STATUS");
-                                        chequeMessage =
-                                            (object.isNull("CHEQUE_MESSAGE")
-                                                || object.getString("CHEQUE_MESSAGE")
-                                                .equals("")) ? ""
-                                                : object.getString("CHEQUE_MESSAGE");
-                                        String auStatus =
-                                            (object.isNull("AU_STATUS")
-                                                || object.getString("AU_STATUS")
-                                                .equals("")) ? ""
-                                                : object.getString("AU_STATUS");
-
-                                        auSmall = auStatus.equals("1");
                                         /*
-                                         *  fundTransferThroughId 1 fundTransferThrough Net Banking
-                                         *  fundTransferThroughId 2 fundTransferThrough Debit Card
-                                         *  fundTransferThroughId 3 fundTransferThrough Cheque
-                                         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-                                         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-                                         */
-                                        showSkipPaymentButton();
+                                        *  fundTransferThroughId 1 fundTransferThrough Net Banking
+                                        *  fundTransferThroughId 2 fundTransferThrough Debit Card
+                                        *  fundTransferThroughId 3 fundTransferThrough Cheque
+                                        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+                                        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+                                        */
                                         if (product.equalsIgnoreCase(EQUITY)) {
                                             eqPaymentMode = fundTransferThrough;
                                             eqPaymentId = Integer.parseInt(fundTransferThroughId);
@@ -792,22 +784,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                                             etCommodityChequeDate.setText(EkycAppUtil.getDate(date, "dd/MM/yyyy"));
                                         }
                                     }
-                                    if (Integer.parseInt(chequeStatus) == 1) {
-                                        showView(eqPaymentStatus, commPaymentStatus);
-                                    } else {
-                                        if (getIsCommoditySelected()
-                                            && !getIsEquitySelected()) {
-                                            llCommFundOption.setVisibility(View.GONE);
-                                            llCommPaymentButton.setVisibility(View.GONE);
-                                            tvCommFundTransfered.setVisibility(View.VISIBLE);
-                                            tvCommFundTransfered.setText(chequeMessage);
-                                        } else {
-                                            llEquFundOption.setVisibility(View.GONE);
-                                            llEquPaymentButton.setVisibility(View.GONE);
-                                            tvEquFundTransfered.setVisibility(View.VISIBLE);
-                                            tvEquFundTransfered.setText(chequeMessage);
-                                        }
-                                    }
+                                    showView(eqPaymentStatus, commPaymentStatus);
                                     hideProgress();
                                 }
                             }
@@ -1000,12 +977,12 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
         tvEquFundTransfered.setVisibility(View.VISIBLE);
         tvEquFundTransfered.setText("Fund Transferred - " + eqPaymentMode);
         /*
-         *  fundTransferThroughId 1 fundTransferThrough Net Banking
-         *  fundTransferThroughId 2 fundTransferThrough Debit Card
-         *  fundTransferThroughId 3 fundTransferThrough Cheque
-         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-         */
+        *  fundTransferThroughId 1 fundTransferThrough Net Banking
+        *  fundTransferThroughId 2 fundTransferThrough Debit Card
+        *  fundTransferThroughId 3 fundTransferThrough Cheque
+        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+        */
         if (eqPaymentId == 3) {
             disableField(llEquFundOption);
             llEquPaymentButton.setVisibility(View.GONE);
@@ -1038,12 +1015,12 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
         tvCommFundTransfered.setVisibility(View.VISIBLE);
         tvCommFundTransfered.setText("Fund Transferred - " + commPaymentMode);
         /*
-         *  fundTransferThroughId 1 fundTransferThrough Net Banking
-         *  fundTransferThroughId 2 fundTransferThrough Debit Card
-         *  fundTransferThroughId 3 fundTransferThrough Cheque
-         *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
-         *  fundTransferThroughId 0 fundTransferThrough Payment Pending
-         */
+        *  fundTransferThroughId 1 fundTransferThrough Net Banking
+        *  fundTransferThroughId 2 fundTransferThrough Debit Card
+        *  fundTransferThroughId 3 fundTransferThrough Cheque
+        *  fundTransferThroughId 4 fundTransferThrough Skipped Payment
+        *  fundTransferThroughId 0 fundTransferThrough Payment Pending
+        */
         if (commPaymentId == 3) {
             disableField(llCommFundOption);
             llCommPaymentButton.setVisibility(View.GONE);
@@ -1252,9 +1229,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 etEquCheqNoError.setVisibility(View.GONE);
                 etEquFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP)
-                && !auSmall
-                && etEquFundTransferred.length() < 4) {
+            } else if (!getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
                 etEquFundTransferred.requestFocus();
@@ -1373,7 +1348,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 etEquCheqNoError.setVisibility(View.GONE);
                 etEquFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (isEquityOriginal() && !getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 4) {
+            } else if (isEquityOriginal() && !getAppType().equalsIgnoreCase(PP) && etEquFundTransferred.length() < 5) {
                 etEquFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etEquFundTransferredError.setVisibility(View.VISIBLE);
                 etEquFundTransferred.requestFocus();
@@ -1392,9 +1367,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 etCommCheqNoError.setVisibility(View.GONE);
                 etCommFundTransferred.requestFocus();
                 //  validateEditText(etEquFundTransferred, input_layout_equFundTransferred,);
-            } else if (!getAppType().equalsIgnoreCase(PP)
-                && !auSmall
-                && etCommFundTransferred.length() < 4) {
+            } else if (!getAppType().equalsIgnoreCase(PP) && etCommFundTransferred.length() < 5) {
                 etCommFundTransferredError.setText(getResources().getString(R.string.fund_transfer_error_msg));
                 etCommFundTransferredError.setVisibility(View.VISIBLE);
                 etCommFundTransferred.requestFocus();
@@ -1411,7 +1384,7 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
                 /*if (isEquityOriginal())
                     inputMap.put("_chequeAmount", etEquFundTransferred.getText().toString());
                 else*/
-                inputMap.put("_chequeAmount", etCommFundTransferred.getText().toString());
+                    inputMap.put("_chequeAmount", etCommFundTransferred.getText().toString());
                 inputMap.put("_segmentType", "Commodity");
 
                 String flag = UPDATECHEQUEPAYMENT;
@@ -1546,5 +1519,6 @@ public class FTChequeFragment extends Fragment implements MOSLConstants {
             hideProgressCounter = 0;
             customProgress.setVisibility(View.GONE);
         }
+
     }
 }

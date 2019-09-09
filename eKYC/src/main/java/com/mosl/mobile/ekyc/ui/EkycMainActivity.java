@@ -1,13 +1,14 @@
 package com.mosl.mobile.ekyc.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -498,7 +499,7 @@ public class EkycMainActivity extends FragmentActivity implements MOSLConstants 
         super.onDestroy();
     }
 
-    @Override public boolean dispatchKeyEvent(KeyEvent event) {
+    @SuppressLint("RestrictedApi") @Override public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT
             || event.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
             return true;

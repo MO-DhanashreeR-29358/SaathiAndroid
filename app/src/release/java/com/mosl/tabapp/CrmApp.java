@@ -1,17 +1,18 @@
 package com.mosl.tabapp;
 
-import android.arch.persistence.room.Room;
+
 import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 import android.util.Log;
+import androidx.room.Room;
 import com.crashlytics.android.Crashlytics;
 import com.mosl.tabapp.database.AppDatabase;
-import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -45,9 +46,8 @@ public class CrmApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-
         Fabric.with(this, new Crashlytics());
-		//        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
         initImageLoader(context);
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree() {
@@ -60,7 +60,6 @@ public class CrmApp extends MultiDexApplication {
             Timber.plant(new CrashReportingTree());
         }
 
-        CRMWebServiceHandler.initSaathiApi(this);
         appDatabase = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, DATABASE_NAME)
                 .build();
@@ -83,6 +82,8 @@ public class CrmApp extends MultiDexApplication {
             if (priority == Log.VERBOSE || priority == Log.DEBUG) {
                 return;
             }
+
+
         }
     }
 }

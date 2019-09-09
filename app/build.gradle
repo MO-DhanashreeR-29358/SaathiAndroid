@@ -120,23 +120,30 @@ android {
 }
 
 dependencies {
+//  implementation project(':TabLibrary')
   //  implementation project(':eKYC')
   implementation project(':saathiapi')
   implementation project(':data')
-  implementation project (':appuser')
-  implementation project (':shared')
-  implementation project (':domain')
   implementation(deps.crashlytics) {
     transitive = true
   }
-  implementation deps.support.design
+  /*implementation deps.support.design
   implementation deps.support.cardview
   implementation deps.support.customtabs
   implementation deps.support.support
   implementation deps.support.appcompat
   implementation deps.support.recyclerview
   implementation deps.support.drawable
-  implementation deps.multidex
+  implementation deps.multidex*/
+
+  implementation deps.androidx.material
+  implementation deps.androidx.appcompat
+  implementation deps.androidx.cardview
+  implementation deps.androidx.browser
+  implementation deps.androidx.fragment
+  implementation deps.androidx.recylerview
+  implementation deps.androidx.vectordrawable
+  debugImplementation deps.androidx.multidex
   implementation deps.pagerslidingtabstrip
   implementation deps.sdpAndroid
   implementation deps.circleImageView
@@ -161,9 +168,9 @@ dependencies {
   debugImplementation deps.stetho.stetho
   debugImplementation deps.stetho.okhttp
   // Room
-  implementation deps.room.roomRuntime
-  kapt deps.room.roomCompiler
-  kapt deps.dataBindCompiler
+  implementation deps.room.runtime
+  kapt deps.room.compiler
+//  kapt deps.dataBindCompiler
   implementation deps.kotlin
   implementation deps.location
   //workmanager
@@ -177,16 +184,17 @@ dependencies {
   implementation deps.retrofit.gson
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
-  implementation deps.rx.kotlin
   implementation deps.rxBinding.core
-  implementation deps.rxBinding.V4
+//  implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
-  implementation deps.retrofit.scalar
-  api deps.mofslArtifacts.validator
-  api deps.mofslArtifacts.appcore
-  api deps.mofslArtifacts.appcoreui
+//  implementation deps.retrofit.scalar
+  implementation deps.mofslArtifacts.validator
 }
-
+kapt {
+  javacOptions {
+    option("-Xmaxerrs", 2000)
+  }
+}
 apply plugin: 'com.google.gms.google-services'

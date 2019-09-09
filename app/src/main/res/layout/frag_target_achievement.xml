@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.RecyclerView
+      <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/horizontalRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -213,7 +213,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/_minus10sdp" />
 
-                <android.support.v7.widget.RecyclerView
+              <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/verticalRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -2,7 +2,6 @@ package com.mosl.mobile.ekyc.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,25 +9,21 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-
-
+import androidx.fragment.app.FragmentActivity;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.EkycUtil;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
-import com.mosl.mobile.ekyc.model.CommonModel;
 import com.mosl.mobile.ekyc.model.LeadModel;
 import com.mosl.mobile.ekyc.model.RoleSelectionModel;
 import com.mosl.mobile.ekyc.service.WebServiceDirectCall;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
 import static com.mosl.mobile.ekyc.model.CommonModel.getAppType;
@@ -47,7 +42,6 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable, MOSL
         // this.activity = (FragmentActivity) context;
         this.context = context;
     }
-
 
     @Override
     public int getCount() {
@@ -115,10 +109,12 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable, MOSL
                                         "LEADNAME":"PANKAJ SURESH THAKKARSB OF SUNIL PANDURANG MANTRI "
                                 }]}*/
 
-                            String input = EkycUtil.encrypt(WebServiceHandler.getInputBody(inputMap));
+                            String input =
+                                EkycUtil.encrypt(WebServiceHandler.getInputBody(inputMap));
                             String flag = EkycUtil.encrypt(EXISINGLEADSEARCHRESPONSE);
                             String category = EkycUtil.encrypt(SIGNUP);
-                            JSONObject response = WebServiceDirectCall.getData(input, flag, category);
+                            JSONObject response =
+                                WebServiceDirectCall.getData(input, flag, category);
                             ArrayList<LeadModel> modelList = new ArrayList<>();
                             if (response.length() != 0) {
                                 JSONArray jsonArray = response.getJSONArray(EKYCSEARCHRESPONSE);
@@ -134,18 +130,14 @@ public class AutoCompleteAdapter extends BaseAdapter implements Filterable, MOSL
                                     String leadName = object.getString("DISPLAYTEXT");
                                     LeadModel model = new LeadModel(id, leadName);
                                     modelList.add(model);
-
                                 }
                             }
                             filterResults.values = modelList;
                             filterResults.count = modelList.size();
-
                         } else {
                             MOSLCommon.alertDInternet(context);
                             // MOSLCommon.showToastMsg(context,"No result");
                         }
-
-
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

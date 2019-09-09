@@ -1,10 +1,10 @@
 package com.mosl.tabapp.bankmeeting
 
-import android.support.constraint.Group
-import android.support.design.widget.TextInputLayout
 import android.view.View
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.constraintlayout.widget.Group
+import com.google.android.material.textfield.TextInputLayout
 import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment.Companion.JOINT_MEETING

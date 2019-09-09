@@ -2,8 +2,8 @@ package com.mosl.mobile.user.helper
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.commons.data.UiModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import io.reactivex.ObservableTransformer
 

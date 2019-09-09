@@ -2,7 +2,6 @@ package com.mosl.tabapp.bankmeetingreport;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.databinding.DataBindingUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.data.UiModel;

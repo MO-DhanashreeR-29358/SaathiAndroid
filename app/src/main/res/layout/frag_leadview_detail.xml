@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -502,7 +502,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadID"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -521,9 +521,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -542,7 +542,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <TextView
@@ -564,7 +564,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -584,7 +584,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvNameError"
@@ -599,7 +599,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilDob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -622,7 +622,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAnniversaryError"
@@ -637,7 +637,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAnniversary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -660,9 +660,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreationDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -681,9 +681,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreatedBy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -702,9 +702,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLastModifiedDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -723,9 +723,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -743,9 +743,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -764,9 +764,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -785,9 +785,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProspectSourceDetail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -808,9 +808,9 @@
                             style="@style/CRMEdittextLeadSelector"
                             />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreatedThrough"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -829,7 +829,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -882,7 +882,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilContactPerson"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -903,7 +903,7 @@
                             android:visibility="gone"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvContactPersonError"
@@ -918,7 +918,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -939,9 +939,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -962,7 +962,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateMobileNumberError"
@@ -978,7 +978,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -997,10 +997,10 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLandlineNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1021,7 +1021,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvLandLineError"
@@ -1037,7 +1037,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1058,7 +1058,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvEmailIdError"
@@ -1073,7 +1073,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1094,7 +1094,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateEmailIdError"
@@ -1109,7 +1109,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1129,7 +1129,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvPanNumError"
@@ -1144,7 +1144,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1164,7 +1164,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <TextView
@@ -1185,7 +1185,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1204,7 +1204,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeCode"
@@ -1225,7 +1225,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1245,7 +1245,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeName"
@@ -1261,7 +1261,7 @@
                             />
                     </RelativeLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1281,9 +1281,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1304,9 +1304,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1326,7 +1326,7 @@
 
                             />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                     <TextView
                         android:id="@+id/tvProspectRefereeNameError"
                         android:layout_width="wrap_content"
@@ -1340,7 +1340,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1359,7 +1359,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerMobileError"
@@ -1375,7 +1375,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1394,7 +1394,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerEmailError"
@@ -1447,7 +1447,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1466,7 +1466,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd1Error"
@@ -1481,7 +1481,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1500,7 +1500,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd2Error"
@@ -1516,7 +1516,7 @@
                             />
 
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1535,7 +1535,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvCountry"
@@ -1631,7 +1631,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1652,7 +1652,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvPincodeError"
@@ -1719,7 +1719,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1738,9 +1738,9 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1759,9 +1759,9 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1780,7 +1780,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffCountry"
@@ -1877,7 +1877,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1898,7 +1898,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffPincodeError"
@@ -1915,7 +1915,7 @@
 
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
@@ -1935,7 +1935,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -2095,5 +2095,5 @@
 
             </LinearLayout>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

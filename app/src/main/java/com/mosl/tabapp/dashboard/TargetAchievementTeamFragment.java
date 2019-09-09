@@ -5,12 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +16,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -977,11 +977,11 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
 
         @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_target_achievement_list, parent, false);
 
-            return new HorizontalAdapter.MyViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         public void selectCategory(String name) {
@@ -996,7 +996,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
 
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder,
+        public void onBindViewHolder(final MyViewHolder holder,
             final int position) {
             final WidgetModel widgetModel = widgetModelList.get(position);
             if (widgetModel.isSelected()) {
@@ -1099,16 +1099,16 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
 
         @Override
-        public VerticalAdapterFirst.MyViewHolder onCreateViewHolder(ViewGroup parent,
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
             int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_target_achievement_dynamic_list, parent, false);
 
-            return new VerticalAdapterFirst.MyViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(final VerticalAdapterFirst.MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             try {
                 final TargetAchievementModel widgetModel = targetAchievementModelList.get(position);
                 holder.tvLabel.setText(widgetModel.getLabel());
@@ -1148,16 +1148,16 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
 
         @Override
-        public VerticalAdapterSecond.MyViewHolder onCreateViewHolder(ViewGroup parent,
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
             int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_target_achievement_dynamic_list, parent, false);
 
-            return new VerticalAdapterSecond.MyViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(final VerticalAdapterSecond.MyViewHolder holder,
+        public void onBindViewHolder(final MyViewHolder holder,
             int position) {
             final TargetAchievementModel widgetModel = targetAchievementModelList.get(position);
             holder.tvLabel.setText(widgetModel.getLabel());
@@ -1193,16 +1193,16 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         }
 
         @Override
-        public VerticalAdapterThird.MyViewHolder onCreateViewHolder(ViewGroup parent,
+        public MyViewHolder onCreateViewHolder(ViewGroup parent,
             int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_target_achievement_dynamic_list, parent, false);
 
-            return new VerticalAdapterThird.MyViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         @Override
-        public void onBindViewHolder(final VerticalAdapterThird.MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             final TargetAchievementModel widgetModel = targetAchievementModelList.get(position);
             holder.tvLabel.setText(widgetModel.getLabel());
             holder.tvPercentage.setText(widgetModel.getForrmated());

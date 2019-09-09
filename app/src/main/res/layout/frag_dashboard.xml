@@ -45,7 +45,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -81,7 +81,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -119,7 +119,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -137,7 +137,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivBusinessSnapshotHead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -191,7 +191,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivMonthOnMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -228,7 +228,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -246,7 +246,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivClientLeads"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -369,7 +369,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivTargetAchievementADV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -406,7 +406,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -424,7 +424,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivTeamTargetAchievement"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -461,7 +461,7 @@
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground">
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -479,7 +479,7 @@
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivPerformanceAndIncentivesHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -642,7 +642,7 @@
         android:gravity="right"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivActionableInsights"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

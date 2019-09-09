@@ -1,10 +1,10 @@
 package com.mosl.tabapp;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
+import androidx.room.Room;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;

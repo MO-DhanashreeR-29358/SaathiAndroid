@@ -86,21 +86,21 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <!--<android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_CountryCitizenship"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+          <!--<com.google.android.material.textfield.TextInputLayout
+              android:id="@+id/input_layout_CountryCitizenship"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/etCountryCitizenship"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:hint="Country of citizenship"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>-->
+              <EditText
+                  android:id="@+id/etCountryCitizenship"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_2sdp"
+                  android:hint="Country of citizenship"
+                  android:inputType="text"
+                  android:maxLines="1"
+                  android:singleLine="true" />
+          </com.google.android.material.textfield.TextInputLayout>-->
 
 
             <TextView
@@ -221,24 +221,24 @@
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginBottom="@dimen/_2sdp" />
 
-            <!--<android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_CountryBirth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+          <!--<com.google.android.material.textfield.TextInputLayout
+              android:id="@+id/input_layout_CountryBirth"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/etCountryBirth"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:hint="Country of birth"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>-->
+              <EditText
+                  android:id="@+id/etCountryBirth"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginBottom="@dimen/_2sdp"
+                  android:hint="Country of birth"
+                  android:inputType="text"
+                  android:maxLines="1"
+                  android:singleLine="true" />
+          </com.google.android.material.textfield.TextInputLayout>-->
 
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_PlaceBirth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -252,7 +252,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etPlaceBirthError"
@@ -334,21 +334,21 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <!-- <android.support.design.widget.TextInputLayout
-                 android:id="@+id/input_layout_CountryTax"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content">
+          <!-- <com.google.android.material.textfield.TextInputLayout
+               android:id="@+id/input_layout_CountryTax"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
 
-                 <EditText
-                     android:id="@+id/etCountryTax"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="@dimen/_2sdp"
-                     android:hint="Country of tax residency"
-                     android:inputType="text"
-                     android:maxLines="1"
-                     android:singleLine="true" />
-             </android.support.design.widget.TextInputLayout>-->
+               <EditText
+                   android:id="@+id/etCountryTax"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginBottom="@dimen/_2sdp"
+                   android:hint="Country of tax residency"
+                   android:inputType="text"
+                   android:maxLines="1"
+                   android:singleLine="true" />
+           </com.google.android.material.textfield.TextInputLayout>-->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -377,7 +377,7 @@
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginBottom="@dimen/_2sdp" />
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_TAXIdentificationNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -391,7 +391,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:singleLine="true" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/etTAXIdentificationNumError"

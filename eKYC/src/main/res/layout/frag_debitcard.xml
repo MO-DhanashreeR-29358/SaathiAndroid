@@ -190,7 +190,7 @@
                                 android:layout_weight="1.8"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                              <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_equFundTransferred"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -206,7 +206,7 @@
                                         android:singleLine="true"
                                         android:text=""
                                         android:textSize="@dimen/_18sdp" />
-                                </android.support.design.widget.TextInputLayout>
+                              </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etEquFundTransferredError"
@@ -472,7 +472,7 @@
                                 android:layout_weight="1.8"
                                 android:orientation="vertical">
 
-                                <android.support.design.widget.TextInputLayout
+                              <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/input_layout_commFundTransferred"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -488,7 +488,7 @@
                                         android:singleLine="true"
                                         android:text=""
                                         android:textSize="@dimen/_18sdp" />
-                                </android.support.design.widget.TextInputLayout>
+                              </com.google.android.material.textfield.TextInputLayout>
 
                                 <TextView
                                     android:id="@+id/etCommFundTransferredError"

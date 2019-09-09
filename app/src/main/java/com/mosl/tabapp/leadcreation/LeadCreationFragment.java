@@ -1,14 +1,12 @@
 package com.mosl.tabapp.leadcreation;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -30,7 +28,9 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.jakewharton.rxbinding2.widget.RxTextView;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputLayout;
+import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
@@ -129,7 +129,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         spInterestIn, spProductType, spCountry, spOffCountry, spProfession;
     private SearchableSpinner spState, spCity, spOffState, spOffCity;
     private TextInputLayout ilName, ilRefereeCode;
-    private org.droidparts.widget.ClearableEditText actAssignTo;
+    private ClearableEditText actAssignTo;
     private CheckBox cbPrimaryAddress, cbSameAs, cbOffPrimaryAddress;
     private Button btnCreate, btnCancel;
     private LinearLayout llResAdd, llOffAdd;
@@ -981,8 +981,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
         });
 
         Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefreeName)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
+            .filter(event -> event.getView().isFocused())
+            .map(query -> query.getEditable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
         compositeDisposable.add(
@@ -1012,8 +1012,8 @@ public class LeadCreationFragment extends MOSLCommonFragment
             }));
 
         Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefreeCode)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
+            .filter(event -> event.getView().isFocused())
+            .map(query -> query.getEditable().toString().trim())
             .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
             .share();
 

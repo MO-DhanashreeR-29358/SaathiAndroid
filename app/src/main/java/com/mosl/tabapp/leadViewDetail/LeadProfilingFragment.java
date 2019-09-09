@@ -1,8 +1,6 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.ViewPager;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest;

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -271,7 +271,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 							Object... data) {
 							if (action == MSFDialog.Action.OK) {
 								Intent i = new Intent(
-									android.content.Intent.ACTION_VIEW);
+                                    Intent.ACTION_VIEW);
 								i.setData(
 									Uri.parse(url));
 								startActivity(i);
@@ -290,7 +290,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 							Object... data) {
 							if (action == MSFDialog.Action.OK) {
 								Intent i = new Intent(
-									android.content.Intent.ACTION_VIEW);
+                                    Intent.ACTION_VIEW);
 								i.setData(
 									Uri.parse(url));
 								startActivity(i);
