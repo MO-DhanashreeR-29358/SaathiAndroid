@@ -122,8 +122,11 @@ android {
 dependencies {
 //  implementation project(':TabLibrary')
   //  implementation project(':eKYC')
-  implementation project(':saathiapi')
-  implementation project(':data')
+  implementation project (':appuser')
+  implementation project (':data')
+  implementation project (':saathiapi')
+  implementation project (':shared')
+  implementation project (':domain')
   implementation(deps.crashlytics) {
     transitive = true
   }
@@ -177,20 +180,30 @@ dependencies {
   implementation deps.work
   //  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
   debugImplementation deps.leakCanary.debug
-
+  kapt deps.dataBinding
   implementation deps.retrofit.core
   implementation deps.okHttp.core
   implementation deps.okHttp.logger
   implementation deps.retrofit.gson
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
+  implementation deps.rx.kotlin
   implementation deps.rxBinding.core
 //  implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
-//  implementation deps.retrofit.scalar
-  implementation deps.mofslArtifacts.validator
+  implementation deps.retrofit.scalar
+  api deps.mofslArtifacts.appcore
+  api deps.mofslArtifacts.appcoreui
+  api deps.mofslArtifacts.validator
+
+  // Dagger
+
+  implementation deps.dagger.core
+  kapt deps.dagger.compiler
+  implementation deps.dagger.android
+  kapt deps.dagger.androidCompiler
 }
 kapt {
   javacOptions {

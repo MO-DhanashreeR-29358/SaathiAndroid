@@ -20,8 +20,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.mosl.app.core.data.UiModel
-import com.mosl.app.core.data.applyUiModel
+import com.mosl.app.core.rx.applyUiModel
+import com.mosl.commons.data.UiModel
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse

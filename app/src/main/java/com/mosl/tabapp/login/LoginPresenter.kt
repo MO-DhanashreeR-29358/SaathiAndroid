@@ -1,9 +1,8 @@
-package com.mosl.mobile.saathi.login
+package com.mosl.tabapp.login
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.saathi.core.LoginNavigator
 import com.mosl.mobile.user.login.LoginRepository
-import com.mosl.tabapp.login.LoginActivityNew
 import io.reactivex.Observable
 import javax.inject.Inject
 

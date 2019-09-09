@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest;
@@ -22,7 +22,7 @@ import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 
 /**
  * Created by sun on 3/8/2017.

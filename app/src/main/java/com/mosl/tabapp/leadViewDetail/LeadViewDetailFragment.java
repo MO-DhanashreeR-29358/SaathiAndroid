@@ -38,7 +38,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.clientdetail.AdvisorsItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -131,7 +131,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;

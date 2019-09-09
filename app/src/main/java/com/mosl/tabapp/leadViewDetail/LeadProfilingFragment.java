@@ -17,7 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest;
 import com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem;
@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**

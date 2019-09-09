@@ -16,8 +16,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
+
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest;
@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -141,7 +142,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 new MeetingRequest(new Request(leadId, REPORT_PAGE_SIZE, "0", "0", "0", mUcid),
                     new Filter(null, null, null, null, null, null, null), true);
             compositeDisposable.add(saathiApi.getMeetings(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderMeetings));
         } else {
             noInternetConnectionDialog();
@@ -214,7 +215,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
                 new AppointmentRequest(new Request(leadId, REPORT_PAGE_SIZE, "1", "0", "0", mUcid),
                     new Filter(null, null, null, null, null, null, null), true);
             compositeDisposable.add(saathiApi.getAppointments(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderAppointments));
         } else {
             noInternetConnectionDialog();
@@ -411,7 +412,7 @@ public class LeadViewActivitiesFragment extends MOSLCommonFragment implements Vi
             DeleteAppointmentRequest request =
                 new DeleteAppointmentRequest(meetingId);
             compositeDisposable.add(saathiApi.deleteAppointments(url, request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModel -> {
                     renderDeleteAppointments(uiModel, meetingId);
                 }));

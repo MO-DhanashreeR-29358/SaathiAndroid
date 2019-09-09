@@ -5,11 +5,10 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.mosl.app.core.data.MOSLResponseWrapper
-import com.mosl.app.core.data.applyUiModel
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.mobile.user.LogoutInfo
@@ -180,7 +179,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun getContainerViewId(): Int {
-    return id.activityFrameLayout
+//    return id.activityFrameLayout
+    return 0
   }
 
   override fun getFragment(pageId: Int): Fragment? {

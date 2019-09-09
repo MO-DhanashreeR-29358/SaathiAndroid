@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.calender.CalenderItem;
 import com.mosl.saathi.api.model.calender.CalenderRequest;
 import com.mosl.tabapp.R;
@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
 
 /**

@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest;
 import com.mosl.tabapp.R;
@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 

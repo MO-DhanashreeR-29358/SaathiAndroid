@@ -16,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.tabs.TabLayout;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
+
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 
 /**
@@ -206,7 +207,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             ClientImageRequest request =
                 new ClientImageRequest(ucid);
             Disposable subscribe = saathiApi.getClientImage(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
             noInternetConnectionDialog();
@@ -239,7 +240,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             ClientDetailRequest request =
                 new ClientDetailRequest(Integer.parseInt(ucid));
             Disposable subscribe = saathiApi.getClientDetail(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientViewByCommand);
         } else {
             noInternetConnectionDialog();
@@ -277,7 +278,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
             Disposable subscribe = saathiApi.getLeadView(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
             noInternetConnectionDialog();
@@ -516,7 +517,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             RegisterProspectOnlineRequest request =
                 new RegisterProspectOnlineRequest(this.getArguments().getString(LEAD_ID), mUCID);
             Disposable subscribe = saathiApi.getRegisterProspectOnline(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderSuggestMe);
         } else {
             noInternetConnectionDialog();

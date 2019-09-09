@@ -37,8 +37,8 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
+
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest;
 import com.mosl.saathi.api.model.documents.DocumentsRequest;
 import com.mosl.saathi.api.model.documents.FilterRequest;
@@ -73,6 +73,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -346,7 +347,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
                 new DocumentsRequest(new LeadDocumentsRequest(leadId, ucid, "10", "1", "0", "0"),
                     new FilterRequest(null, null, null, null, null, null, null), true);
             Disposable subscribe = saathiApi.getLeadDocuments(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderLeadDocuments);
         } else {
             noInternetConnectionDialog();
@@ -441,7 +442,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
             UploadDocumentsRequest request =
                 new UploadDocumentsRequest(leadId, ucid, fileName.replace(":", "a"), strData);
             Disposable subscribe = saathiApi.postUploadDocuments(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderUploadDocument);
         } else {
             noInternetConnectionDialog();
@@ -471,7 +472,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
             UpdateDocumentsRequest request =
                 new UpdateDocumentsRequest(id, documentName);
             Disposable subscribe = saathiApi.postUpdateDocuments(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModel -> {
                     renderUpdatedocuments(uiModel, id, documentName);
                 });
@@ -505,7 +506,7 @@ public class DocumentFragment extends MOSLCommonFragment implements View.OnClick
             DeleteDocumentRequest request =
                 new DeleteDocumentRequest(id);
             Disposable subscribe = saathiApi.postDeleteDocuments(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModel -> {
                     renderDeleteDocument(uiModel, id);
                 });

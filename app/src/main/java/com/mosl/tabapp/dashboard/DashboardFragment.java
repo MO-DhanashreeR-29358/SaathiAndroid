@@ -51,7 +51,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
@@ -107,7 +107,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;

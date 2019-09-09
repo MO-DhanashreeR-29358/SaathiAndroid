@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest;
@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.Objects;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;

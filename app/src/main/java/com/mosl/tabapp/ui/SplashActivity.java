@@ -8,7 +8,7 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.mosl.app.core.data.MOSLResponseWrapper;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.login.LoginRequest;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getAppVersionCode;
 import static com.mosl.tabapp.model.AccountDetails.setEkycUrl;

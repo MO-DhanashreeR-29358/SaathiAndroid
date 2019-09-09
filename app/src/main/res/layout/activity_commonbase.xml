@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     >
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,7 +12,7 @@
         tools:openDrawer="start"
         >
 
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/root_coordinator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,7 +46,7 @@
                 android:theme="@style/SaathiTheme.AppBarOverlay"
                 >
 
-                <com.mosl.mobile.saathi.views.ActionBar
+                <com.mosl.tabapp.actionbar.CRMAppActionBar
                     android:id="@+id/action_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.mosl.app.coreui.views.NonConsumingScrimInsetsFrameLayout
             android:layout_width="@dimen/drawerWidth"
@@ -66,12 +66,12 @@
             app:insetForeground="#4000"
             >
 
-            <com.mosl.mobile.saathi.drawermenu.DrawerMenuView
-                android:id="@+id/drawer_menu"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+<!--            <com.mosl.mobile.saathi.drawermenu.DrawerMenuView-->
+<!--                android:id="@+id/drawer_menu"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                />-->
 
         </com.mosl.app.coreui.views.NonConsumingScrimInsetsFrameLayout>
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

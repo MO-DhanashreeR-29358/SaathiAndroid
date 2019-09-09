@@ -1,7 +1,7 @@
-package com.mosl.mobile.saathi.login
+package com.mosl.tabapp.login
 
-import com.mosl.mobile.saathi.R
 import com.mosl.mobile.user.model.LoginInfo
+import com.mosl.tabapp.R
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 

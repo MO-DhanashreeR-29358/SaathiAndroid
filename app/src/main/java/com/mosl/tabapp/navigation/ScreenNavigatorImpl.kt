@@ -1,8 +1,10 @@
-package com.mosl.tabapp.menu
+package com.mosl.tabapp.navigation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mosl.annotations.ActivityScoped
+import com.mosl.app.core.utils.toast
 import com.mosl.navigator.ActivityNavigationEntry
 import com.mosl.navigator.BaseNavigator
 import com.mosl.navigator.FragmentNavigationEntry

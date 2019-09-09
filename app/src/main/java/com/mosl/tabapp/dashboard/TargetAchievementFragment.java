@@ -34,7 +34,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.target.Table1Item;
 import com.mosl.saathi.api.model.dashboard.target.TableItem;
@@ -58,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 
 /**
  * Created by raju on 2/16/2017.

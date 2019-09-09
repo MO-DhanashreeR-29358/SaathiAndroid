@@ -31,7 +31,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
@@ -91,7 +91,7 @@ import org.droidparts.widget.ClearableEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;

@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientItem;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.client.Table1Item;
@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 
 /**
  * Created by raju on 2/14/2017.

@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.mosl.app.core.data.MOSLResponseWrapper;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest;
@@ -47,7 +47,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 

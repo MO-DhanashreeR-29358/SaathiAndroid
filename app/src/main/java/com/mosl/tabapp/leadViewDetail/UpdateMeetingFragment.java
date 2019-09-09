@@ -34,8 +34,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
+
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem;
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest;
 import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem;
@@ -64,7 +64,7 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -1026,14 +1026,14 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             MeetingByIdRequest request =
                 new MeetingByIdRequest(meetingId);
             Disposable subscribe = saathiApi.postMeetingById(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderMeetingById);
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    private void renderCategory(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderCategory(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1070,7 +1070,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), CATEGORY, null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderCategory(uiModelList, id);
                 });
@@ -1079,7 +1079,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderProduct(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderProduct(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1118,7 +1118,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderProduct(uiModelList, id);
                 });
@@ -1127,7 +1127,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderSubcategory(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderSubcategory(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1173,7 +1173,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 new LookupRequest(AccountDetails.getBusinessUnitId(), SUBCATEGORY, categoryCodeStr,
                     null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderSubcategory(uiModelList, id);
                 });
@@ -1182,7 +1182,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderMeetingDuration(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderMeetingDuration(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1222,7 +1222,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGDURATION, null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderMeetingDuration(uiModelList, id);
                 });
@@ -1231,7 +1231,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderMeetingObjective(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel) {
+    private void renderMeetingObjective(UiModel<List<LookupItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1267,14 +1267,14 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGOBJECTIVE, null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderMeetingObjective);
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    private void renderActivityType(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderActivityType(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1316,7 +1316,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
             LookupRequest request =
                 new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderActivityType(uiModelList, id);
                 });
@@ -1325,7 +1325,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderMeetingReason(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderMeetingReason(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1368,7 +1368,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     MEETINGREASON,
                     activityTypeCodeStr, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderMeetingReason(uiModelList, id);
                 });
@@ -1377,7 +1377,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
         }
     }
 
-    private void renderBaClient(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel) {
+    private void renderBaClient(UiModel<List<LookupItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1413,14 +1413,14 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     BACLIENTMEETING,
                     null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderBaClient);
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    private void renderOutStation(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel) {
+    private void renderOutStation(UiModel<List<LookupItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1457,14 +1457,14 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                     OUTSTATIONMEETING,
                     null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderOutStation);
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    private void renderActionables(com.mosl.app.core.data.UiModel<List<LookupItem>> uiModel,
+    private void renderActionables(UiModel<List<LookupItem>> uiModel,
         String id) {
         toggleProgress(uiModel.inProgress);
 
@@ -1504,7 +1504,7 @@ public class UpdateMeetingFragment extends MOSLCommonFragment
                 new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIONABLES,
                     null, null);
             Disposable subscribe = saathiApi.getAllLookup(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(uiModelList -> {
                     renderActionables(uiModelList, id);
                 });

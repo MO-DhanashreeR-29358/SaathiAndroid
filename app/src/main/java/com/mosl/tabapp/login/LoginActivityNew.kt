@@ -6,12 +6,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActions
-import com.mosl.app.core.data.UiModel
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.base.BaseActivity
-import com.mosl.mobile.saathi.login.LoginPresenter
-import com.mosl.mobile.saathi.login.LoginView
+import com.mosl.commons.data.UiModel
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.model.User
 import com.mosl.navigator.AppTitle

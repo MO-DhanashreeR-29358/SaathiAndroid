@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem;
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.TableItem;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 
 /**
  * Created by Sanket Gurav on 7/5/2017.

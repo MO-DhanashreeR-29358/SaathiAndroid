@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest;
@@ -49,7 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 

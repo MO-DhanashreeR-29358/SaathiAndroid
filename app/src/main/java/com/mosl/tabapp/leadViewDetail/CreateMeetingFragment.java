@@ -49,8 +49,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
@@ -91,7 +90,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -1122,7 +1121,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             ClientImageRequest request =
                 new ClientImageRequest(ucid);
             Disposable subscribe = saathiApi.getClientImage(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
             noInternetConnectionDialog();
@@ -1155,7 +1154,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             ClientDetailRequest request =
                 new ClientDetailRequest(Integer.valueOf(ucid));
             Disposable subscribe = saathiApi.getClientDetail(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
             noInternetConnectionDialog();
@@ -1193,7 +1192,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
             Disposable subscribe = saathiApi.getLeadView(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
             noInternetConnectionDialog();
@@ -1723,7 +1722,7 @@ public class CreateMeetingFragment extends MOSLCommonFragment
             AddressByLeadIdRequest request =
                 new AddressByLeadIdRequest(tvLeadId.getText().toString(), meetingId);
             Disposable subscribe = saathiApi.getAddressByLeadId(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderAddressByLeadId);
         } else {
             noInternetConnectionDialog();

@@ -18,7 +18,7 @@ import android.widget.TextView;
 import androidx.databinding.DataBindingUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest;
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingRequest;
@@ -39,7 +39,8 @@ import java.util.List;
 import java.util.Map;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static androidx.databinding.DataBindingUtil.inflate;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -54,7 +55,7 @@ public class BankMeetingReportFragmentNew extends MOSLCommonFragment {
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    binding = DataBindingUtil.inflate(
+    binding = inflate(
         inflater, R.layout.fragment_bank_meeting_report, container, false
     );
     setUpView();

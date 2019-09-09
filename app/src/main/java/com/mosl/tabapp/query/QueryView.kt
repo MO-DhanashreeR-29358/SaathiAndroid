@@ -1,8 +1,8 @@
 package com.mosl.tabapp.query
 
 import com.mosl.app.core.base.BaseView
-import com.mosl.app.core.data.UiModel
-import com.mosl.mobile.saathi.query.QueryUiEvent.OnSubmitConfirmClick
+import com.mosl.commons.data.UiModel
+import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.tabapp.R
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult

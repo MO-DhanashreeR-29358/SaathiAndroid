@@ -54,8 +54,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.mosl.app.core.data.MOSLResponseWrapper;
-import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest;
 import com.mosl.saathi.api.model.login.LoginRequest;
@@ -113,7 +113,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;

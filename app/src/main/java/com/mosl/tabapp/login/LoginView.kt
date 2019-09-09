@@ -1,7 +1,7 @@
-package com.mosl.mobile.saathi.login
+package com.mosl.tabapp.login
 
 import com.mosl.app.core.base.BaseView
-import com.mosl.app.core.data.UiModel
+import com.mosl.commons.data.UiModel
 import com.mosl.mobile.user.model.User
 import io.reactivex.Observable
 

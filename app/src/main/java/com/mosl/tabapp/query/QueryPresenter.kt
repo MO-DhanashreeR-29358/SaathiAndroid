@@ -1,11 +1,9 @@
-package com.mosl.mobile.saathi.query
+package com.mosl.tabapp.query
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.query.QueryRepository
 import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_1
 import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_2
-import com.mosl.tabapp.query.QueryValidator
-import com.mosl.tabapp.query.QueryView
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject

@@ -12,7 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.notification.NotificationRequest;
 import com.mosl.saathi.api.model.notification.NotificationResponse;
 import com.mosl.saathi.domain.DateFormatUtils;
@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 
 /**

@@ -5,10 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import com.mosl.app.core.data.UiModel
-import com.mosl.app.core.data.applyUiModel
 import com.mosl.app.core.network.isNetworkConnected
+import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
+import com.mosl.commons.data.UiModel
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.model.VersionInfo

@@ -37,6 +37,8 @@
 
     </style>
 
+    <style name="SaathiTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <style name="CRMEdittextSelector" parent="Base.Widget.AppCompat.EditText">
         <item name="android:background">@drawable/lead_creation_txt_border</item>
         <item name="android:layout_width">match_parent</item>

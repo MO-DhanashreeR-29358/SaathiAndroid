@@ -32,8 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import com.mosl.app.core.data.UiModel;
-import com.mosl.app.core.data.UiModelHelper;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
@@ -75,8 +74,7 @@ import java.util.Date;
 import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 
 /**
@@ -800,7 +798,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             ClientImageRequest request =
                 new ClientImageRequest(ucid);
             Disposable subscribe = saathiApi.getClientImage(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientImage);
         } else {
             noInternetConnectionDialog();
@@ -832,7 +830,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             ClientDetailRequest request =
                 new ClientDetailRequest(Integer.valueOf(ucid));
             Disposable subscribe = saathiApi.getClientDetail(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderClientDetails);
         } else {
             noInternetConnectionDialog();
@@ -876,7 +874,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             LeadViewRequest request =
                 new LeadViewRequest(String.valueOf(strLeadId));
             Disposable subscribe = saathiApi.getLeadView(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderLeadView);
         } else {
             noInternetConnectionDialog();
@@ -1504,7 +1502,7 @@ public class SetAppointmentFragment extends MOSLCommonFragment
             MeetingByIdRequest request =
                 new MeetingByIdRequest(meetingId);
             Disposable subscribe = saathiApi.getMeetingById(request)
-                .compose(UiModelHelper.applyUiModel())
+                .compose(applyUiModel())
                 .subscribe(this::renderMeetingById);
         } else {
             noInternetConnectionDialog();
