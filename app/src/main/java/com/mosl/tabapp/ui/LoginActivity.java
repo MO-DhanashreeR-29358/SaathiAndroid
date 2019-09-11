@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.mosl.app.core.data.MOSLResponseWrapper;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.login.LoginRequest;
 import com.mosl.saathi.api.model.login.LoginResponse;
@@ -133,7 +133,6 @@ public class LoginActivity extends FragmentActivity
 		LoginResponse data = uiModel.data;
 		if (data != null) {
 			boolean smtEnabled = data.isSMTEnabled();
-			boolean ekycRevamp = data.isEkycRevamp();
 			User user = data.user;
 			String userId = stringOrEmpty(user.userId);
 			String employeeCode = stringOrEmpty(user.employeeCode);
@@ -168,8 +167,6 @@ public class LoginActivity extends FragmentActivity
 			loginData.setUserType(userTypeSequence.trim());
 			loginData.setSmtEnabled(smtEnabled);
 			loginData.setAufsb(aufsb);
-			loginData.setEkycRevemp(ekycRevamp);
-
 			storeLoginPrefData(loginData);
 		}
 	}
@@ -197,7 +194,7 @@ public class LoginActivity extends FragmentActivity
 			loginData.getEmail(), loginData.getBusinessProfileId(),
 			loginData.getBusinessProfileName(), loginData.getEmployeeCode(), loginData.getToken(),
 			loginData.getBusinessUnitId(), loginData.getBranchCode(), loginData.getUserType(),
-			loginData.isSmtEnabled(), loginData.isAufsb(), loginData.isEkycRevemp());
+			loginData.isSmtEnabled(), loginData.isAufsb());
 		try {
 			MOSLCommonActivity.sendRegistrationToServer(LoginActivity.this, getContentResolver(),
 				false);

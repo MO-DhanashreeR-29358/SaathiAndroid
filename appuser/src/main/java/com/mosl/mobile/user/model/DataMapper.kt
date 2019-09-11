@@ -10,9 +10,8 @@ fun LoginResponse.transform(
 ): com.mosl.mobile.user.model.LoginResponse {
   val userProfile = user
   return LoginResponse(
-      user = userProfile.transformUser(smtEnabled, ekycRevamp),
-      smtEnabled = smtEnabled,
-      ekycRevamp = ekycRevamp
+      user = userProfile.transformUser(smtEnabled),
+      smtEnabled = smtEnabled
   )
 }
 
@@ -29,8 +28,7 @@ fun VersionResponse.transform(
 }
 
 fun com.mosl.saathi.api.model.login.User.transformUser(
-  smtEnabled: String,
-  ekycRevamp: String
+  smtEnabled: String
 
 ): User {
   val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
@@ -38,10 +36,9 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
 
   return User(
       smtEnabled = smtEnabled,
-      ekycRevamp = ekycRevamp,
-      userId = userId,
-      employeeCode = employeeCode,
-      firstName = firstName,
+      userId = userId ?: "0",
+      employeeCode = employeeCode ?: "0",
+      firstName = firstName ?: "",
       lastName = lastName ?: "",
       imageUrl = imageUrl ?: "",
       mobile = mobile ?: "0",

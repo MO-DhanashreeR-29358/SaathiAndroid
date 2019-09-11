@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.tabs.TabLayout;
 import com.mosl.commons.data.UiModel;
-
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
@@ -387,9 +386,6 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Map inpuMap = new HashMap();
-                inpuMap.put(USERID, oaoUserId.toString());
-                if (AccountDetails.isNewEkyc()) {
                     HashMap map = new HashMap();
                     map.put(NEW_USERID, oaoUserId.toString());
                     map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
@@ -400,7 +396,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                     map.put(TOKENKEY, AccountDetails.getToken());
                     map.put(ISAUFSB, AccountDetails.isAufsb());
                     gotoNewEkyc(getInputBody(map));
-                }
+
             }
         });
         ivOpenAccount.setOnClickListener(new View.OnClickListener() {
@@ -416,9 +412,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
                 inpuMap.put(INTRESTEDIN, intrestedIn);
                 inpuMap.put(ISAUFSB, AccountDetails.isAufsb());
-                if (AccountDetails.isNewEkyc()) {
-                    gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
-                }
+                gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
             }
         });
         ivCreateMeeting.setOnClickListener(new View.OnClickListener() {

@@ -5,13 +5,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
+import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.VersionInfo
 import com.mosl.mobile.user.model.VersionResponse
 import com.mosl.shared.util.MSFDialog
@@ -20,6 +26,8 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.login.LoginActivityNew
+import com.mosl.tabapp.model.AccountDetails
+import com.mosl.tabapp.model.AccountDetails.setEkycUrl
 import com.mosl.tabapp.ui.MOSLCommonActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -107,14 +115,22 @@ class SplashActivityNew : LeanBaseActivity() {
     }
   }
 
+  private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
+    uiModel.onSuccess {
+      AccountDetails.setMenuReportList(it[0].childMenuList)
+    }
+    openCommonActivity()
+  }
+
   private fun renderVersionData(uiModel: UiModel<VersionResponse>) {
     toggleProgressBar(uiModel.inProgress)
 
-    uiModel.data.let {
-      val data = uiModel.data
-      if (data != null) {
-        val msg = data.msg;
-        when (data.statusCode) {
+    uiModel.onSuccess {
+      if (it != null) {
+        val msg = it.msg;
+        val newEkycUrl = it.newEkycUrl
+        setEkycUrl(newEkycUrl.replace(" ".toRegex(), "%20"))
+        when (it.statusCode) {
           0 -> MSFDialog.alertDialog(this@SplashActivityNew, 0,
               resources.getString(R.string.MOSL), msg,
               UPDATE, false, object : MSFDialog.DialogListener {
@@ -166,29 +182,79 @@ class SplashActivityNew : LeanBaseActivity() {
       }
     }
 
-    uiModel.error?.let {
+    uiModel.onFailure {
+      Timber.d("message %s", it.message!!)
+      val error = uiModel.error
+      if (error != null) {
+        infoDialog(error)
+      }
+    }
+    /*uiModel.error?.let {
       Timber.d("message %s", it.message!!)
       infoDialog(uiModel.data!!.msg)
-    }
+    }*/
   }
 
   private fun fetchReportTypes() {
-    disposables.add(loginRepository.fetchReportTypes().subscribe())
+    disposables.add(
+        loginRepository.fetchReportTypes().compose(applyUiModel())
+            .subscribe(this::renderFetchReportData)
+    )
   }
 
   fun handleStartup() {
     if (userManager.isLoggedIn()) {
-//      if (userManager.user.isAufsb()) {
-      openCommonActivity()
-//      } else {
-//        fetchReportTypes()
-//      }
+      setUserPreferenceData()
     } else {
       openLogin()
     }
   }
 
-  fun infoDialog(errorMessage: String) {
+  fun setUserPreferenceData() {
+
+    val user = userManager.user
+    val smtEnabled = user.isSMTEnabled()
+    val userId = user.userId
+    val employeeCode = user.employeeCode
+    val firstName = user.firstName
+    val lastName = user.lastName
+    val imageUrl = user.imageUrl
+    val mobile = user.mobile
+    val token = user.token
+    val email = user.email
+    val userTypeSequence = user.userTypeSequence
+
+    val branchCode = user.defaultBusinessProfile.branchCode
+    val businessProfileId = user.currentBusinessProfile.businessProfileId
+    val businessProfileName = user.currentBusinessProfile.name
+    val businessUnitId = user.currentBusinessProfile.businessUnitId
+    AccountDetails(
+        userId,
+        firstName, lastName,
+        imageUrl.replace(" ".toRegex(), "%20"),
+        mobile, email,
+        businessProfileId,
+        businessProfileName,
+        employeeCode, token,
+        businessUnitId,
+        branchCode, userTypeSequence,
+        smtEnabled, user.isAufsb()
+    )
+    if (user.isAufsb()) {
+      openCommonActivity()
+    } else {
+      fetchReportTypes()
+    }
+
+  }
+
+  fun infoDialog(t: Throwable) {
+    val errorMessage: String
+    if (t is ServiceFailureException) {
+      errorMessage = (t as ServiceFailureException).errorMessage
+    } else {
+      errorMessage = MOSLResponseWrapper.SERVER_ERROR_OCCURRED
+    }
     actionableAlert(errorMessage, false) {
       finish()
       Unit

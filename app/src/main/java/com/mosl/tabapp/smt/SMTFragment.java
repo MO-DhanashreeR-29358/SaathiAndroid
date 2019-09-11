@@ -73,7 +73,6 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
         }
 
     @Override public void openEkyc(String OAOUserId) {
-        if (AccountDetails.isNewEkyc()) {
             HashMap<String, String> map = new HashMap();
             map.put(NEW_USERID, OAOUserId);
             map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
@@ -83,11 +82,6 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
             map.put(APPLOGINID, AccountDetails.getEmployeeCode());
             map.put(TOKENKEY, AccountDetails.getToken());
             gotoNewEkyc(getInputBody(map));
-        } else {
-            HashMap<String, String> hashMap = new HashMap();
-            hashMap.put(USERID, OAOUserId);
-            gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
-        }
     }
 
     public class WebViewClient extends android.webkit.WebViewClient {

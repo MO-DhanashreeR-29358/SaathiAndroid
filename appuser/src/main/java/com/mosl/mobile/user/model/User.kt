@@ -5,7 +5,6 @@ package com.mosl.mobile.user.model
  */
 data class User(
   @JvmField val smtEnabled: String,
-  @JvmField val ekycRevamp: String,
   @JvmField val userId: String,
   @JvmField val employeeCode: String,
   @JvmField val firstName: String,
@@ -22,4 +21,9 @@ data class User(
   fun isAufsb(): Boolean {
     return userTypeSequence.equals("9")
   }
+
+  fun isSMTEnabled(): Boolean {
+    return smtEnabled.equals("1")
+  }
+
 }

@@ -8,8 +8,8 @@ import android.os.Handler;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.mosl.app.core.data.MOSLResponseWrapper;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.login.LoginRequest;
 import com.mosl.saathi.api.model.login.LoginResponse;
@@ -34,7 +34,6 @@ import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.common.CRMMOSLCommon.getAppVersionCode;
 import static com.mosl.tabapp.model.AccountDetails.setEkycUrl;
-import static com.mosl.tabapp.model.AccountDetails.setNewEkyc;
 import static com.mosl.tabapp.model.AccountDetails.setUserType;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -64,7 +63,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 		LoginResponse data = uiModel.data;
 		if (data != null) {
 			boolean smtEnabled = data.isSMTEnabled();
-			boolean ekycRevamp = data.isEkycRevamp();
 			User user = data.user;
 			String userId = stringOrEmpty(user.userId);
 			String employeeCode = stringOrEmpty(user.employeeCode);
@@ -91,7 +89,7 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 				employeeCode, token,
 				businessUnitId,
 				branchCode, userTypeSequence,
-				smtEnabled, aufsb, ekycRevamp);
+				smtEnabled, aufsb);
 
 			if (aufsb) {
 				openMainActivity();
@@ -252,12 +250,6 @@ public class SplashActivity extends FragmentActivity implements MOSLConstants {
 
 			String newEkycUrl = stringOrEmpty(response.newEkycUrl);
 			setEkycUrl(newEkycUrl.replaceAll(" ", "%20"));
-			if (response.isNewEkyc()) {
-				setNewEkyc(true);
-			} else {
-				setNewEkyc(false);
-			}
-
 			String msg = stringOrEmpty(response.msg);
 			if (statusCode == 1) {
 				handleStartupPage();

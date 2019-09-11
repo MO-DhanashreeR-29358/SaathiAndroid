@@ -669,7 +669,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private void setMenuController() {
 		final List<ScreenDetails> groupList = DrawerMenu.createGroupList(this);
 		final Map<String, Vector<SubMenu>> subMenuCollections =
-			DrawerMenu.createCollection(this, groupList);
+			DrawerMenu.createCollection(this, groupList, AccountDetails.getMenuReportList());
 		menuAdapter = new MenuAdapter(this, groupList, subMenuCollections);
 		menuList.setAdapter(menuAdapter);
 		menuList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
@@ -697,31 +697,27 @@ public class MOSLCommonActivity extends AppCompatActivity
 					performMenuAction(clickedPosDetails);
 				} else if (position == MOSL_MENU_EKYC) {
 					if (childPosition == MOSL_MENU_FRESH_REGISTRATION) {
-						if (AccountDetails.isNewEkyc()) {
-							Map map = new HashMap();
-							map.put(NEW_USERID, "");
-							map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-							map.put(COMMANDTYPE, "NEW");
-							map.put(APPLICATIONTYPE, "CRM");
-							map.put(OSTYPE, "ANDROID");
-							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-							map.put(TOKENKEY, AccountDetails.getToken());
-							map.put(ISAUFSB, AccountDetails.isAufsb());
-							newEkyc(getInputBody(map));
-						}
+						Map map = new HashMap();
+						map.put(NEW_USERID, "");
+						map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+						map.put(COMMANDTYPE, "NEW");
+						map.put(APPLICATIONTYPE, "CRM");
+						map.put(OSTYPE, "ANDROID");
+						map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+						map.put(TOKENKEY, AccountDetails.getToken());
+						map.put(ISAUFSB, AccountDetails.isAufsb());
+						newEkyc(getInputBody(map));
 					} else if (childPosition == MOSL_MENU_EXISTINGS_APPLICATIONS) {
-						if (AccountDetails.isNewEkyc()) {
-							Map map = new HashMap();
-							map.put(NEW_USERID, "");
-							map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-							map.put(COMMANDTYPE, "RESUME");
-							map.put(APPLICATIONTYPE, "CRM");
-							map.put(OSTYPE, "ANDROID");
-							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-							map.put(TOKENKEY, AccountDetails.getToken());
-							map.put(ISAUFSB, AccountDetails.isAufsb());
-							newEkyc(getInputBody(map));
-						}
+						Map map = new HashMap();
+						map.put(NEW_USERID, "");
+						map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+						map.put(COMMANDTYPE, "RESUME");
+						map.put(APPLICATIONTYPE, "CRM");
+						map.put(OSTYPE, "ANDROID");
+						map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+						map.put(TOKENKEY, AccountDetails.getToken());
+						map.put(ISAUFSB, AccountDetails.isAufsb());
+						newEkyc(getInputBody(map));
 					}
 				}
 
@@ -730,9 +726,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 						ReportFragment reportFragment = new ReportFragment();
 						Bundle bund = new Bundle();
 						bund.putString(SYSTEM_NAME,
-							SplashActivity.menuReportArrayList.get(childPosition).getSystemsName());
+							AccountDetails.getMenuReportList().get(childPosition).systemName);
 						bund.putString(NAME,
-							SplashActivity.menuReportArrayList.get(childPosition).getMenuName());
+							AccountDetails.getMenuReportList().get(childPosition).name);
 						reportFragment.setArguments(bund);
 						setupFragment(reportFragment);
 					}
@@ -972,24 +968,18 @@ public class MOSLCommonActivity extends AppCompatActivity
 				Objects.requireNonNull(uiModel.data.response).get(0);
 			if (prospectResponse.isRegistrationAllowed()) {
 				String ekycUserID = prospectResponse.ekycUserID;
-				if (AccountDetails.isNewEkyc()) {
-					HashMap map = new HashMap();
-					map.put(NEW_USERID, ekycUserID);
-					map.put(BRANCHEMPCODE,
-						AccountDetails.getEmployeeCode());
-					map.put(COMMANDTYPE, "RESUME");
-					map.put(APPLICATIONTYPE, "CRM");
-					map.put(OSTYPE, "ANDROID");
-					map.put(APPLOGINID,
-						AccountDetails.getEmployeeCode());
-					map.put(TOKENKEY, AccountDetails.getToken());
-					map.put(ISAUFSB, AccountDetails.isAufsb());
-					newEkyc(getInputBody(map));
-				} else {
-					HashMap<String, String> hashMap = new HashMap();
-					hashMap.put(USERID, ekycUserID);
-					gotoEkycPage(CALL_PROSPECT_DETAILS, hashMap);
-				}
+				HashMap map = new HashMap();
+				map.put(NEW_USERID, ekycUserID);
+				map.put(BRANCHEMPCODE,
+					AccountDetails.getEmployeeCode());
+				map.put(COMMANDTYPE, "RESUME");
+				map.put(APPLICATIONTYPE, "CRM");
+				map.put(OSTYPE, "ANDROID");
+				map.put(APPLOGINID,
+					AccountDetails.getEmployeeCode());
+				map.put(TOKENKEY, AccountDetails.getToken());
+				map.put(ISAUFSB, AccountDetails.isAufsb());
+				newEkyc(getInputBody(map));
 			} else {
 				MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
 					getResources().getString(R.string.motilal_oswal),
@@ -1093,7 +1083,6 @@ public class MOSLCommonActivity extends AppCompatActivity
 		LoginResponse data = uiModel.data;
 		if (data != null) {
 			boolean smtEnabled = data.isSMTEnabled();
-			boolean ekycRevamp = data.isEkycRevamp();
 			User user = data.user;
 			String userId = stringOrEmpty(user.userId);
 			String employeeCode = stringOrEmpty(user.employeeCode);
@@ -1119,7 +1108,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 				employeeCode, token,
 				businessUnitId,
 				branchCode, userTypeSequence,
-				smtEnabled, aufsb, ekycRevamp);
+				smtEnabled, aufsb);
 
 			initView();
 		}
@@ -1528,9 +1517,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 						inpuMap.put(PROSPECT_SOURCEDETAIL,
 							searchResultModel.getProspectSourceDetails());
 						inpuMap.put(INTRESTEDIN, searchResultModel.getInterestedIn());
-						if (AccountDetails.isNewEkyc()) {
-							gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
-						}
+						gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
 					}
 				});
 				holderView.rlOAOForm.setOnClickListener(new View.OnClickListener() {
@@ -1540,20 +1527,16 @@ public class MOSLCommonActivity extends AppCompatActivity
 						autoCompleteAdapter.clearAll();
 						hideKeyboard(actionBar.getSearchBoxView());
 						actionBar.clearSearchText();
-						Map hashMap = new HashMap();
-						hashMap.put(USERID, searchResultModel.getOaoUserId().toString());
-						if (AccountDetails.isNewEkyc()) {
-							HashMap map = new HashMap();
-							map.put(NEW_USERID, searchResultModel.getOaoUserId().toString());
-							map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-							map.put(COMMANDTYPE, "RESUME");
-							map.put(APPLICATIONTYPE, "CRM");
-							map.put(OSTYPE, "ANDROID");
-							map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-							map.put(TOKENKEY, AccountDetails.getToken());
-							map.put(ISAUFSB, AccountDetails.isAufsb());
-							newEkyc(getInputBody(map));
-						}
+						HashMap map = new HashMap();
+						map.put(NEW_USERID, searchResultModel.getOaoUserId().toString());
+						map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+						map.put(COMMANDTYPE, "RESUME");
+						map.put(APPLICATIONTYPE, "CRM");
+						map.put(OSTYPE, "ANDROID");
+						map.put(APPLOGINID, AccountDetails.getEmployeeCode());
+						map.put(TOKENKEY, AccountDetails.getToken());
+						map.put(ISAUFSB, AccountDetails.isAufsb());
+						newEkyc(getInputBody(map));
 					}
 				});
 
