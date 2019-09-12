@@ -165,7 +165,6 @@ dependencies {
   implementation deps.imageLoader
   implementation deps.commonsLang
   implementation deps.segmented
-  implementation deps.circleIndicator
   implementation deps.htmlTextview
   // stetho
   debugImplementation deps.stetho.stetho
