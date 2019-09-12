@@ -56,7 +56,7 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   }
 
   override fun getEmpCode(): String {
-    return binding.edEmpCode.text.trim()
+    return binding.edEmpCode.text?.trim()
         .toString()
   }
 
