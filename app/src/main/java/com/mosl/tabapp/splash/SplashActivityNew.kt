@@ -202,12 +202,10 @@ class SplashActivityNew : LeanBaseActivity() {
   private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
     uiModel.onSuccess {
       if (it.size > 0) {
-        for (i in it.indices) {
-          val reportTypeResponse = it.get(i)
+        for (reportTypeResponse in it) {
           if (reportTypeResponse.isPreDefinedReports()) {
             val childMenuList = reportTypeResponse.childMenuList
-            for (j in childMenuList.indices) {
-              val childMenu = childMenuList.get(i)
+            for (childMenu in childMenuList) {
               if (childMenu.isBasicReports()) {
                 AccountDetails.setMenuReportList(childMenu.ChildMenuList)
                 openCommonActivity()
