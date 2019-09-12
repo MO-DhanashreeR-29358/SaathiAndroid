@@ -6,11 +6,11 @@ import androidx.appcompat.app.AlertDialog
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
-import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
+import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentQueryNewBinding
+import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.tabapp.util.initiateCall
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
@@ -138,9 +138,9 @@ class QueryFragmentNew : CommonFragment(), QueryView {
     }
   }
 
-  private fun toggleProgress(inProgress: Boolean) {
+  /*fun toggleProgress(inProgress: Boolean) {
 //    binding.viewState.toggleProgress(inProgress)
-  }
+  }*/
 
   companion object {
     const val TELE_PHONE_1 = "02239982515"

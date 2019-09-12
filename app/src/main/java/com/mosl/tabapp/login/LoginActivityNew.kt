@@ -21,9 +21,9 @@ import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
 import com.mosl.tabapp.R
+import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
 import com.mosl.tabapp.model.AccountDetails
-import com.mosl.tabapp.ui.MOSLCommonActivity
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -97,7 +97,7 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   }
 
   private fun openCommonActivity() {
-    val intent = Intent(this, MOSLCommonActivity::class.java)
+    val intent = Intent(this, CommonActivity::class.java)
     startActivity(intent)
     finish()
   }

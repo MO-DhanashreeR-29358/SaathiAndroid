@@ -1,4 +1,4 @@
-package com.mosl.mobile.data.interceptor
+package com.mosl.app.core.data.interceptor
 
 import android.content.Context
 import com.mosl.mobile.user.login.UserManager

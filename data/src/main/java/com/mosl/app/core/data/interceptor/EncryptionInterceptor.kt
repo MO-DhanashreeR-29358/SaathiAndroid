@@ -1,4 +1,4 @@
-package com.mosl.mobile.data.interceptor
+package com.mosl.app.core.data.interceptor
 
 import com.mosl.shared.Encryptor.AESEncryptor
 import okhttp3.Interceptor

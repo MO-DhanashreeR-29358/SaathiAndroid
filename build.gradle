@@ -95,7 +95,7 @@ ext.deps = ['androidx': [
         'moslcommons': "MofslArtifacts:moslcommons:1.1.0-alpha4",
         'appcore': "MofslArtifacts:appcore:1.1.0-alpha6",
         'navigator': "MofslArtifacts:navigator:1.0.7",
-        'appcoreui': "MofslArtifacts:appcoreui:1.1.0-alpha3",
+        'appcoreui': "MofslArtifacts:appcoreui:1.0.33",
         'tokenmanager': "MofslArtifacts:tokenmanager:1.1.0",
         'groupie': "MofslArtifacts:groupie_extensions:1.0.8",
         'tableview': "MofslArtifacts:tableview:1.1.0",

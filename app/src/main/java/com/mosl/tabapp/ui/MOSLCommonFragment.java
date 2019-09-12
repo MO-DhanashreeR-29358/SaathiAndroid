@@ -22,7 +22,6 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
@@ -82,7 +81,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void hideAppTitle(String className) {
-        ((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
+        //((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
     }
 
     public Context getMainActivity() {
@@ -166,8 +165,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_ADVISORY_DASHBOARD:
-                fragment = new DashboardFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_REPORT:
                 fragment = new SecondLevelReportFragment();

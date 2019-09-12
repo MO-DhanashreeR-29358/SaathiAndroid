@@ -51,8 +51,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item;
@@ -73,6 +73,7 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -81,7 +82,6 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import io.reactivex.disposables.Disposable;
@@ -109,14 +109,13 @@ import org.json.JSONObject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
-import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/7/2017.
  */
 
-public class DashboardFragment extends MOSLCommonFragment
+public class DashboardFragment extends CommonFragment
     implements View.OnClickListener, MOSLConstants {
     private final int itemcount = 4;
     Bundle args = new Bundle();
@@ -178,13 +177,16 @@ public class DashboardFragment extends MOSLCommonFragment
     // Progress Dialog
     private ProgressDialog pDialog;
 
+    @Override protected int getLayout() {
+        return R.layout.frag_dashboard;
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         dashAdvisoryView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_dashboard);
         setUpView(dashAdvisoryView);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
 
         try {
             //CHECK IF CALLED FROM SEARCH RESULT
@@ -380,7 +382,7 @@ public class DashboardFragment extends MOSLCommonFragment
         String[] quarterArray = getActivity().getResources().getStringArray(R.array.SelectQuarter);
         ArrayList<String> arrEventType = new ArrayList<String>(Arrays.asList(quarterArray));
         ArrayAdapter<String> arrAdapEventType =
-            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrEventType);
+            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
         spQuarter.setAdapter(arrAdapEventType);
         tvIncentives = dashAdvisoryView.findViewById(R.id.tvIncentives);
@@ -647,7 +649,7 @@ public class DashboardFragment extends MOSLCommonFragment
             } else if (id == R.id.leadcreation) {
                 hideKeyboard(view);
                 floatingActionsMenu.collapse();
-                navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
+                //navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
             } else if (id == R.id.llMain) {
                 floatingActionsMenu.collapse();
                 llMain.setVisibility(View.GONE);
@@ -674,7 +676,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 map.put(APPLOGINID, AccountDetails.getEmployeeCode());
                 map.put(TOKENKEY, AccountDetails.getToken());
                 map.put(ISAUFSB, String.valueOf(AccountDetails.isAufsb()));
-                gotoNewEkyc(getInputBody(map));
+                //gotoNewEkyc(getInputBody(map));
             } else if (id == R.id.rlExisting) {
                 HashMap<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
@@ -685,7 +687,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 map.put(APPLOGINID, AccountDetails.getEmployeeCode());
                 map.put(TOKENKEY, AccountDetails.getToken());
                 map.put(ISAUFSB, String.valueOf(AccountDetails.isAufsb()));
-                gotoNewEkyc(getInputBody(map));
+                //gotoNewEkyc(getInputBody(map));
             } else if (id == R.id.txtTelephoneNo1) {
                 MSFDialog.alertDialog(getActivity(), 0,
                     getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",
@@ -868,7 +870,7 @@ public class DashboardFragment extends MOSLCommonFragment
     private void actionableInsightDialog() {
         if (currentDashboard == null) return;
 
-        dialog = new Dialog(getMainActivity());
+        dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
@@ -902,7 +904,7 @@ public class DashboardFragment extends MOSLCommonFragment
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && dashAdvisoryView != null) {
                 if (AccountDetails.getToken() == null) {
-                    Intent intent = new Intent(getMainActivity(), SplashActivity.class);
+                    Intent intent = new Intent(requireContext(), SplashActivity.class);
                     startActivity(intent);
                 } else {
                     for (FloatingActionButton sFab : dashboardBtnList) {
@@ -950,21 +952,21 @@ public class DashboardFragment extends MOSLCommonFragment
                     renderDashboard();
                 }
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void loadDashboardMetaData() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             DashboardMetaDataRequest request = new DashboardMetaDataRequest(
                 businessProfileIdForDashboard,
                 productId,
                 employeeCode
             );
 
-            Disposable subscribe = saathiApi.getDashboardMetaData(request)
+            Disposable subscribe = getSaathiApi().getDashboardMetaData(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMetaData);
         } else {
@@ -1025,7 +1027,7 @@ public class DashboardFragment extends MOSLCommonFragment
             } catch (Exception e) {
                 currentDashboard.setActionableCount(systemName, "",
                     new ArrayList<TypeActionableFilterModel>());
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -1033,12 +1035,12 @@ public class DashboardFragment extends MOSLCommonFragment
 
     private void loadActionableCount(final String systemName) {
         if (currentDashboard == null) return;
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ActionableCountRequest request = new ActionableCountRequest(
                 getAddtionalParameterMapActionable(),
                 systemName
             );
-            Disposable subscribe = saathiApi.getActionableCount(request)
+            Disposable subscribe = getSaathiApi().getActionableCount(request)
                 .compose(applyUiModel())
                 .subscribe(uiModel -> {
                     this.renderActionableCount(uiModel, systemName);
@@ -1555,14 +1557,14 @@ public class DashboardFragment extends MOSLCommonFragment
                     advLoadChart(table1Items);
                 }
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void incentiveWebServiceCall(final String widgetSystemName) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ClientRequest request = new ClientRequest(
                 businessProfileIdForDashboard,
                 getAddtionalParameterMap(),
@@ -1570,7 +1572,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 productId,
                 employeeCode
             );
-            Disposable subscribe = saathiApi.getIncentive(request)
+            Disposable subscribe = getSaathiApi().getIncentive(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderIncentive);
         } else {
@@ -1591,14 +1593,14 @@ public class DashboardFragment extends MOSLCommonFragment
             try {
                 renderCurrentQuarterStatus(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ClientRequest request = new ClientRequest(
                 businessProfileIdForDashboard,
                 getAddtionalParameterMap(),
@@ -1607,7 +1609,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 employeeCode
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
                     JSONObject response = new JSONObject(responseS);
                     String status = response.get(STATUS).toString();
@@ -2138,7 +2140,7 @@ public class DashboardFragment extends MOSLCommonFragment
             try {
                 String filePath = stringOrEmpty(data.filePath);
                 if (filePath.isEmpty()) {
-                    alertDialog(getMainActivity(), 0,
+                    alertDialog(requireContext(), 0,
                         getResources().getString(
                             R.string.motilal_oswal), MISSING_FILE, OK,
                         true, null);
@@ -2147,20 +2149,20 @@ public class DashboardFragment extends MOSLCommonFragment
                         filePath.replaceAll(" ", "%20"));
                 }
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     public void webServiceInceniveSlab(String dashboardId) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             IncentivePolicyRequest request = new IncentivePolicyRequest(
                 businessProfileIdForDashboard,
                 AccountDetails.getEmployeeCode(),
                 dashboardId
             );
-            Disposable subscribe = saathiApi.getIncentivePolicy(request)
+            Disposable subscribe = getSaathiApi().getIncentivePolicy(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderIncentivePolicy);
         } else {
@@ -2185,11 +2187,11 @@ public class DashboardFragment extends MOSLCommonFragment
 
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0,
+            MSFDialog.alertDialog(requireContext(), 0,
                 getResources().getString(R.string.motilal_oswal),
                 MISSING_FILE_VIEWER + localFilePath.getAbsolutePath(), OK, true, null);
         } catch (Exception ex) {
-            MSFDialog.alertDialog(getMainActivity(), 0,
+            MSFDialog.alertDialog(requireContext(), 0,
                 getResources().getString(R.string.motilal_oswal),
                 SOME_ERROR_OCCURED_PLEASE_RETRY, OK, true, null);
         }
@@ -2294,7 +2296,8 @@ public class DashboardFragment extends MOSLCommonFragment
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                resource);
                         holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
                     }
                 });
@@ -2330,7 +2333,7 @@ public class DashboardFragment extends MOSLCommonFragment
                     }
                     if (!advisoryActionableInsightModel.getActionableCount()
                         .equalsIgnoreCase("0")) {
-                        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                        //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
                         dialog.dismiss();
                     }
                 }
@@ -2399,7 +2402,7 @@ public class DashboardFragment extends MOSLCommonFragment
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
                 // Output stream to write file
-                File baseFolder = new File(context.getFilesDir(), "crmdocs");
+                File baseFolder = new File(requireContext().getFilesDir(), "crmdocs");
 
                 if (!baseFolder.exists()) {
                     baseFolder.mkdir();
@@ -2450,11 +2453,11 @@ public class DashboardFragment extends MOSLCommonFragment
         protected void onPostExecute(Boolean response) {
             pDialog.dismiss();
             if (response) {
-                File baseFolder = new File(context.getFilesDir(), "crmdocs");
+                File baseFolder = new File(requireContext().getFilesDir(), "crmdocs");
                 final File localFile = new File(baseFolder, fileName);
                 showDownloadFile(localFile);
             } else {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_SERVER_ERROR_OCCURRED, OK, true, null);
             }
         }

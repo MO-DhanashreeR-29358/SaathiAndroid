@@ -18,11 +18,13 @@ import com.mosl.mobile.user.login.user
 import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
+import com.mosl.navigator.FragmentResolver
 import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.splash.SplashActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
@@ -38,9 +40,11 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var userManager: UserManager
   @Inject
   lateinit var loginRepository: LoginRepositoryImpl
-  //  @Inject
-//  lateinit var fragmentResolver: FragmentResolver
+  @Inject
+  lateinit var fragmentResolver: FragmentResolver
   var globalTitles = HashMap<String, AppTitle>()
+  @Inject
+  lateinit var screenNavigator: ScreenNavigatorImpl
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -56,6 +60,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     hideAppTitle()
 //    setupMenuDrawer()
     if (savedInstanceState == null) {
+      screenNavigator.openHome()
 //      activityNavHelper.loadIntent(intent)
     } else {
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
@@ -178,13 +183,11 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun getContainerViewId(): Int {
-//    return id.activityFrameLayout
-    return 0
+    return R.id.activityFrameLayout
   }
 
   override fun getFragment(pageId: Int): Fragment? {
-//    return fragmentResolver.resolve(pageId)
-    return null
+    return fragmentResolver.resolve(pageId)
   }
 
   override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {

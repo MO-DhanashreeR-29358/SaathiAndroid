@@ -517,12 +517,12 @@ public class MOSLCommonActivity extends AppCompatActivity
 				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
 				setupFragment(new LeadCreationFragment());
 			} else {
-				setupFragment(new DashboardFragment());
+				//setupFragment(new DashboardFragment());
 			}
 		} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT)) {
 			setupFragment(new BankMeetingFragment());
 		} else {
-			setupFragment(new DashboardFragment());
+			//setupFragment(new DashboardFragment());
 		}
 	}
 
@@ -755,7 +755,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 						if (position == MOSL_MENU_DASHBOARD) {
 							searchType = SEARCH_TYPE_LEAD;
 							actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
-							setupFragment(new DashboardFragment());
+							//setupFragment(new DashboardFragment());
 						} else if (position == 2) {
 							logoutCustomer();
 						}
@@ -793,7 +793,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 						if (position == MOSL_MENU_DASHBOARD) {
 							searchType = SEARCH_TYPE_LEAD;
 							actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
-							setupFragment(new DashboardFragment());
+							//setupFragment(new DashboardFragment());
 						} else if (position == MOSL_MENU_CALENDAR) {
 							setupFragment(new CalendarFragment());
 						} else if (position == MOSL_MENU_PENDING_APPROVALS) {
@@ -1146,7 +1146,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	public void navigateToFromNotification(String dataStr) {
 		if (dataStr == null || dataStr.length() < 1) {
 			//Noproper data goto dsh board
-			setupFragment(new DashboardFragment());
+			//setupFragment(new DashboardFragment());
 		}
 		NotificationData data = new NotificationData(dataStr);
 		if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
@@ -1177,9 +1177,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 		}
 		//DASHBOARD
 		else if (data.getPage().equalsIgnoreCase("DASHBOARD")) {
-			setupFragment(new DashboardFragment());
+			//setupFragment(new DashboardFragment());
 		} else {
-			setupFragment(new DashboardFragment());
+			//setupFragment(new DashboardFragment());
 		}
 	}
 
@@ -1402,7 +1402,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							bund.putString(PRODUCT_ID, searchResultModel.getProductId());
 							bund.putString(EMPLOYEE_CODE, searchResultModel.getEmpCode());
 							mDashBoard.setArguments(bund);
-							setupFragment(mDashBoard);
+							//setupFragment(mDashBoard);
 							autoCompleteAdapter.clearAll();
 							actionBar.clearSearchText();
 						}
