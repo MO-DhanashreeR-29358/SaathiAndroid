@@ -56,6 +56,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest;
 import com.mosl.saathi.api.model.login.LoginRequest;
@@ -81,6 +82,7 @@ import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
+import com.mosl.tabapp.login.LoginActivityNew;
 import com.mosl.tabapp.menu.DrawerMenu;
 import com.mosl.tabapp.menu.MenuAdapter;
 import com.mosl.tabapp.menu.MenuGetter;
@@ -109,6 +111,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import timber.log.Timber;
@@ -169,7 +172,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private CreateMeetingFragment createMeetingFragment;
 	private LeadViewMainFragment leadViewMainFragment;
 	private boolean searchFoundFlag;
-
+	@Inject
+	UserManager userManager;
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -286,11 +290,10 @@ public class MOSLCommonActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//new CRMWebServiceHandler().setAuthorization(this);
-
 		mockLocationCheck();
 
-		if (isBlank(getPrefs(this).getString("PASSWORD", ""))) {
-			Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivity.class);
+		if (isBlank(Objects.requireNonNull(userManager.getUser()).firstName)) {
+			Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivityNew.class);
 			startActivity(intentLogin);
 			finish();
 		}
@@ -1125,7 +1128,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private void handleLoginError() {
 
 		clearLoginPrefData();
-		Intent i = new Intent(MOSLCommonActivity.this, LoginActivity.class);
+		Intent i = new Intent(MOSLCommonActivity.this, LoginActivityNew.class);
 		startActivity(i);
 		finish();
 	}

@@ -30,7 +30,11 @@ class LoginPresenter @Inject constructor(
           view.renderLogin(it)
 
           if (it.isSuccess) {
-            navigator.openDashboard()
+            disposable.add(loginRepository.fetchReportTypes().compose(applyUiModel())
+                .subscribe {
+                  view.renderReportsData(it)
+                }
+            )
           }
 //          it.onSuccess {
 //            navigator.openDashboard()

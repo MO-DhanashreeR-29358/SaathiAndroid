@@ -1,5 +1,6 @@
 package com.mosl.tabapp.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -10,7 +11,10 @@ import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
 import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
@@ -18,6 +22,8 @@ import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
+import com.mosl.tabapp.model.AccountDetails
+import com.mosl.tabapp.ui.MOSLCommonActivity
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -66,6 +72,36 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
     if (error != null) {
       error.showOnFailurePopup()
     }
+  }
+
+  override fun renderReportsData(uiModel: UiModel<List<ReportType>>) {
+
+    uiModel.onSuccess {
+      if (it.size > 0) {
+        for (i in it.indices) {
+          val reportTypeResponse = it.get(i)
+          if (reportTypeResponse.isPreDefinedReports()) {
+            val childMenuList = reportTypeResponse.childMenuList
+            for (j in childMenuList.indices) {
+              val childMenu = childMenuList.get(i)
+              if (childMenu.isBasicReports()) {
+                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
+                openCommonActivity()
+              }
+            }
+          }
+        }
+      }
+    }
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+  }
+
+  private fun openCommonActivity() {
+    val intent = Intent(this, MOSLCommonActivity::class.java)
+    startActivity(intent)
+    finish()
   }
 
   fun Throwable.showOnFailurePopup() {

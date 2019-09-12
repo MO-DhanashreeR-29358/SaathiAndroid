@@ -4,4 +4,8 @@ data class ReportType(
   @JvmField val name: String,
   @JvmField val systemName: String,
   @JvmField val childMenuList: List<ChildMenu>
-)
+) {
+  fun isPreDefinedReports(): Boolean {
+    return systemName.equals("PRE-DEFINED_REPORTS")
+  }
+}

@@ -115,12 +115,7 @@ class SplashActivityNew : LeanBaseActivity() {
     }
   }
 
-  private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
-    uiModel.onSuccess {
-      AccountDetails.setMenuReportList(it[0].childMenuList)
-    }
-    openCommonActivity()
-  }
+
 
   private fun renderVersionData(uiModel: UiModel<VersionResponse>) {
     toggleProgressBar(uiModel.inProgress)
@@ -198,8 +193,31 @@ class SplashActivityNew : LeanBaseActivity() {
   private fun fetchReportTypes() {
     disposables.add(
         loginRepository.fetchReportTypes().compose(applyUiModel())
-            .subscribe(this::renderFetchReportData)
+            .subscribe {
+              renderFetchReportData(it)
+            }
     )
+  }
+
+  private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
+    uiModel.onSuccess {
+      if (it.size > 0) {
+        for (i in it.indices) {
+          val reportTypeResponse = it.get(i)
+          if (reportTypeResponse.isPreDefinedReports()) {
+            val childMenuList = reportTypeResponse.childMenuList
+            for (j in childMenuList.indices) {
+              val childMenu = childMenuList.get(i)
+              if (childMenu.isBasicReports()) {
+                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
+                openCommonActivity()
+              }
+            }
+          }
+        }
+      }
+    }
+
   }
 
   fun handleStartup() {

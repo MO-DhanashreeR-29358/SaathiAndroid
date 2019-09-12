@@ -1,6 +1,6 @@
 package com.mosl.tabapp.model;
 
-import com.mosl.mobile.user.model.ChildMenu;
+import com.mosl.saathi.api.model.splash.ChildMenu;
 import com.mosl.tabapp.constants.MOSLConstants;
 import java.io.Serializable;
 import java.util.List;

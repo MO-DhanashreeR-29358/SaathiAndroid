@@ -1,7 +1,7 @@
 package com.mosl.tabapp.menu;
 
 import android.content.Context;
-import com.mosl.mobile.user.model.ChildMenu;
+import com.mosl.saathi.api.model.splash.ChildMenu;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
