@@ -22,7 +22,6 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
@@ -32,7 +31,6 @@ import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
-import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
@@ -82,7 +80,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void hideAppTitle(String className) {
-        ((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
+        //((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
     }
 
     public Context getMainActivity() {
@@ -158,7 +156,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_APPROVAL:
-                fragment = new PendingApprovalFragment();
+                //fragment = new PendingApprovalFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_FOR_APPROVAL:
@@ -166,8 +164,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_ADVISORY_DASHBOARD:
-                fragment = new DashboardFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_REPORT:
                 fragment = new SecondLevelReportFragment();

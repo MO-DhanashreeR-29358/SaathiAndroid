@@ -1,0 +1,44 @@
+package com.mosl.tabapp.navigation
+
+import androidx.fragment.app.Fragment
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
+import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
+import com.mosl.tabapp.query.QueryFragmentNew
+
+object MenuGetterNew {
+  @JvmStatic
+  fun getFragment(@NavigationConstants pageId: Int): Fragment? {
+    return when (pageId) {
+      NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
+      NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
+      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
+      NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
+      NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
+      NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
+      NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragmentNew()
+      else -> null
+    }
+  }
+
+  @JvmStatic
+  fun isHandled(@NavigationConstants pageId: Int): Boolean {
+    return when (pageId) {
+      NavigationConstants.NAVIGATE_TO_DASHBOARD -> true
+      NavigationConstants.NAVIGATE_TO_FRESH_REG -> true
+      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> true
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> true
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> true
+      NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true
+      NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> true
+      NavigationConstants.NAVIGATE_TO_CALENDAR -> true
+      NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> true
+      NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> true
+      NavigationConstants.NAVIGATE_TO_QUERY -> true
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
+      NavigationConstants.NAVIGATE_TO_LOGOUT -> true
+      else -> return false
+    }
+  }
+}

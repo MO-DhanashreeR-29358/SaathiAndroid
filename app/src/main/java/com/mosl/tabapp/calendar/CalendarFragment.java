@@ -15,10 +15,10 @@ import com.mosl.saathi.api.model.calender.CalenderItem;
 import com.mosl.saathi.api.model.calender.CalenderRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.CalenderModel;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -31,12 +31,16 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.DATE;
+import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING;
+import static com.mosl.tabapp.constants.MOSLConstants.NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TIME;
 
 /**
  * Created by raju on 3/9/2017.
  */
 
-public class CalendarFragment extends MOSLCommonFragment implements OnDateSelectedListener {
+public class CalendarFragment extends CommonFragment implements OnDateSelectedListener {
     private View calendarView;
     // private static final DateFormat FORMATTER = SimpleDateFormat.getDateInstance();
     private static final DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
@@ -54,11 +58,14 @@ public class CalendarFragment extends MOSLCommonFragment implements OnDateSelect
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         calendarView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_calendar);
-        setAppTitle(getClass().toString(), "Calendar");
+        setAppTitle("Calendar");
         setUpView(calendarView);
         setUserVisibleHint(true);
         return calendarView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_calendar;
     }
 
     private void setUpView(View calendarView) {
@@ -211,10 +218,10 @@ public class CalendarFragment extends MOSLCommonFragment implements OnDateSelect
 
         ////////////////////////////////////////////////////////////
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             CalenderRequest request =
                 new CalenderRequest(selectionDate, "A", AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postCalenderByDate(request)
+            Disposable subscribe = getSaathiApi().postCalenderByDate(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderCalender);
         } else {
@@ -266,7 +273,7 @@ public class CalendarFragment extends MOSLCommonFragment implements OnDateSelect
                     args.putString(DATE, selectionDate);
                     args.putString(NAME, calendarModel.getName());
                     args.putString(TIME, calendarModel.getTime());
-                    navigateTo(NAV_TO_CLIENT_MEETING, args, getFragmentManager(), true);
+                    //navigateTo(NAV_TO_CLIENT_MEETING, args, getFragmentManager(), true);
                 }
             });
         }

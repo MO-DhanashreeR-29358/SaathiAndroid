@@ -1,8 +1,8 @@
 package com.mosl.app.core.data;
 
+import com.mosl.app.core.data.interceptor.EncryptionInterceptor;
+import com.mosl.app.core.data.interceptor.HeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
-import com.mosl.mobile.data.interceptor.EncryptionInterceptor;
-import com.mosl.mobile.data.interceptor.HeaderInterceptor;
 import dagger.Module;
 import dagger.Provides;
 import java.util.concurrent.TimeUnit;

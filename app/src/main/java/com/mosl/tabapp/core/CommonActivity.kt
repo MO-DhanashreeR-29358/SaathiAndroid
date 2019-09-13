@@ -1,10 +1,12 @@
 package com.mosl.tabapp.core
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.exception.ServiceFailureException
@@ -18,13 +20,18 @@ import com.mosl.mobile.user.login.user
 import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
+import com.mosl.navigator.FragmentResolver
+import com.mosl.navigator.NavigationHelper
 import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.navigation.NavigationConstants
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.splash.SplashActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
@@ -32,15 +39,19 @@ import javax.inject.Inject
 class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
   lateinit var binding: ActivityCommonbaseBinding
-  //  @Inject
-//  lateinit var activityNavHelper: ActivityNavHelper
+  @Inject
+  lateinit var activityNavHelper: ActivityNavigationHelper
   @Inject
   lateinit var userManager: UserManager
   @Inject
   lateinit var loginRepository: LoginRepositoryImpl
-  //  @Inject
-//  lateinit var fragmentResolver: FragmentResolver
+  @Inject
+  lateinit var fragmentResolver: FragmentResolver
   var globalTitles = HashMap<String, AppTitle>()
+  @Inject
+  lateinit var screenNavigator: ScreenNavigatorImpl
+  @Inject
+  lateinit var navigationHelper: NavigationHelper
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -52,11 +63,12 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     super.onCreate(savedInstanceState)
     binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
 
-//    binding.actionBar.setHomeAction(View.OnClickListener { openMenuDrawer() })
+    binding.actionBar.setHomeAction({ openMenuDrawer() })
     hideAppTitle()
-//    setupMenuDrawer()
+    setupMenuDrawer()
     if (savedInstanceState == null) {
-//      activityNavHelper.loadIntent(intent)
+//      screenNavigator.openHome()
+      activityNavHelper.loadIntent(intent)
     } else {
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
     }
@@ -66,39 +78,39 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     binding.drawerLayout.openDrawer(GravityCompat.START)
   }
 
-//  private fun setupMenuDrawer() {
-//    binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-//      override fun onDrawerSlide(
-//        drawerView: View,
-//        slideOffset: Float
-//      ) {
-//      }
-//
-//      override fun onDrawerOpened(drawerView: View) {}
-//
-//      @SuppressLint("SwitchIntDef")
-//      override fun onDrawerClosed(drawerView: View) {
-////        activityNavHelper.handlePendingMenuAction()
-//      }
-//
-//      override fun onDrawerStateChanged(newState: Int) {
-//
-//      }
-//    })
-//    binding.drawerMenu.onMenuClicked()
-//        .subscribe { menu ->
-//          if (menu.pageId == NavigationConstants.NAVIGATE_TO_LOGOUT) {
-//            logoutCustomer()
-//            binding.drawerLayout.closeDrawers()
-//          }
-//
-////          activityNavHelper.onMenuClicked(menu)
-//
-//          binding.drawerMenu.selectItem(menu)
-//          binding.drawerLayout.closeDrawers()
-//        }
-//        .addTo(disposable)
-//  }
+  private fun setupMenuDrawer() {
+    binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+      override fun onDrawerSlide(
+        drawerView: View,
+        slideOffset: Float
+      ) {
+      }
+
+      override fun onDrawerOpened(drawerView: View) {}
+
+      @SuppressLint("SwitchIntDef")
+      override fun onDrawerClosed(drawerView: View) {
+        activityNavHelper.handlePendingMenuAction()
+      }
+
+      override fun onDrawerStateChanged(newState: Int) {
+
+      }
+    })
+    binding.drawerMenu.onMenuClicked()
+        .subscribe { menu ->
+          if (menu.pageId == NavigationConstants.NAVIGATE_TO_LOGOUT) {
+            logoutCustomer()
+            binding.drawerLayout.closeDrawers()
+          }
+
+          activityNavHelper.onMenuClicked(menu)
+
+          binding.drawerMenu.selectItem(menu)
+          binding.drawerLayout.closeDrawers()
+        }
+        .addTo(disposable)
+  }
 
   internal fun logoutCustomer() {
     MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
@@ -178,13 +190,11 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun getContainerViewId(): Int {
-//    return id.activityFrameLayout
-    return 0
+    return R.id.activityFrameLayout
   }
 
   override fun getFragment(pageId: Int): Fragment? {
-//    return fragmentResolver.resolve(pageId)
-    return null
+    return fragmentResolver.resolve(pageId)
   }
 
   override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
@@ -192,7 +202,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun hideAppTitle() {
-//    binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
+    binding.actionBar.setTitleVisibility(View.GONE)
   }
 
   override fun hideProgress() {
@@ -236,6 +246,40 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     TODO(
         "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
+  }
+
+  override fun onBackPressed() {
+    if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+      binding.drawerLayout.closeDrawers()
+      return
+    }
+
+    if (binding.progressBar.visibility == View.VISIBLE) {
+      binding.progressBar.visibility = View.GONE
+      return
+    }
+
+    if (navigationHelper.onBackPressed()) {
+      return
+    }
+
+    if (navigationHelper.canGoBack()) {
+      screenNavigator.goBack()
+      return
+    }
+    exitPopup()
+  }
+
+  fun exitPopup() {
+    MSFDialog.alertDialog(
+        this, 0, getString(R.string.motilal_oswal),
+        "Do you want to exit the application?", "Yes",
+        "No", true
+    ) { action, _ ->
+      if (action == Action.OK) {
+        finish()
+      }
+    }
   }
 
   companion object {
