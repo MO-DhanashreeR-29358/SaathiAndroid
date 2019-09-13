@@ -6,7 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 
 @Module public abstract class QueryModule {
-	//@Binds abstract QueryView provideQueryContractView(QueryFragmentNew fragment);
+	@Binds abstract QueryView provideQueryContractView(QueryFragmentNew fragment);
 
 	@Binds abstract QueryRepository provideQueryRepository(QueryRepositoryImpl repository);
 }

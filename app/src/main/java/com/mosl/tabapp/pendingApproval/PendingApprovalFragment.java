@@ -14,21 +14,23 @@ import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.PendingApprovalModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.ENTITY_FIELD;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_SERVER_ERROR_OCCURRED;
 
 /**
  * Created by sun on 3/8/2017.
  */
 
-public class PendingApprovalFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class PendingApprovalFragment extends CommonFragment implements View.OnClickListener {
     View pendingApprovalView;
     TextView tvApproved, tvApprovedValue, tvPendingApproval, tvPendingApprovalValue;
     private RecyclerView RvPendApproval;
@@ -41,11 +43,14 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_pending_approvals);
-        setAppTitle(getClass().toString(), "Pending Approvals");
+        setAppTitle("Pending Approvals");
         setUpView(pendingApprovalView);
         setUserVisibleHint(true);
         return pendingApprovalView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_pending_approvals;
     }
 
     private void setUpView(View pendingApprovalView) {
@@ -87,10 +92,10 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
     }
 
     public void getAprovalCoutSummary() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
                 new PendingApprovalRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postApprovalSummaryCount(request)
+            Disposable subscribe = getSaathiApi().postApprovalSummaryCount(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryCount);
         } else {
@@ -130,10 +135,10 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
 
     public void getAprovalList() {
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
                 new PendingApprovalRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.postApprovalSummaryByEmployee(request)
+            Disposable subscribe = getSaathiApi().postApprovalSummaryByEmployee(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryByCount);
         } else {
@@ -150,7 +155,7 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
                 getAprovalList();
             }
         } catch (Exception e) {
-            MSFDialog.alertDialog(getMainActivity(), 0,
+            MSFDialog.alertDialog(requireContext(), 0,
                 getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK",
                 true, null);
         }
@@ -197,7 +202,7 @@ public class PendingApprovalFragment extends MOSLCommonFragment implements View.
                 public void onClick(View v) {
                     Bundle args = new Bundle();
                     args.putString(ENTITY_FIELD, pendingApprovalModel.getEntityField());
-                    navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
+                    //navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
                 }
             });
         }
