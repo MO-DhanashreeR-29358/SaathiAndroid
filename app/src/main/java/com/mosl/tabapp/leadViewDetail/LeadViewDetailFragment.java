@@ -39,6 +39,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.clientdetail.AdvisorsItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -126,6 +127,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import org.droidparts.widget.ClearableEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -253,6 +255,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private boolean stateFlag, officeStateFlag;
     private String leadOwner = "";
     private ArrayList<String> arrPmsProduct;
+	@Inject UserManager userManager;
     private boolean leadEditable = true, isPotentialPMSProduct = false, isPMSProductStageStatus;
     private AdapterView.OnItemSelectedListener profileListener =
         new AdapterView.OnItemSelectedListener() {
@@ -1192,7 +1195,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 inputMap.put("SearchType", "ByName");
                 inputMap.put("SearchHint", query);
                 return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
+					"Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName, userManager)
                     .compose(applyUiModel());
             }).subscribe(uiModel -> {
                 JSONObject data1 = uiModel.data;
@@ -1224,7 +1227,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 inputMap.put("SearchType", "ByCode");
                 inputMap.put("SearchHint", query);
                 return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
+					"Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode, userManager)
                     .compose(applyUiModel());
             }).subscribe(uiModel -> {
                 JSONObject data1 = uiModel.data;

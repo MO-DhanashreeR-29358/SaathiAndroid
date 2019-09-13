@@ -28,16 +28,19 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.database.LocationData;
+import dagger.android.AndroidInjection;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import javax.inject.Inject;
 import timber.log.Timber;
 
-import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static java.util.Objects.requireNonNull;
@@ -51,15 +54,11 @@ public class ForegroundService extends Service {
 	Handler refreshHandler = new Handler();
 	int NOTIFICATION_ID = 12345;
 	private LocationRequest mLocationRequest;
-	private FusedLocationProviderClient mFusedLocation;
-
+	@Inject UserManager userManager;
 	private Runnable runnableCode = new Runnable() {
 		@Override public void run() {
 			try {
-				if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null
-					|| !requireNonNull(
-					getPrefs(getApplicationContext()).getString("EmployeeCode", null))
-					.isEmpty()) {
+				if (userManager.isLoggedIn()) {
 					LocationManager manager =
 						(LocationManager) getApplicationContext().getSystemService(
 							Context.LOCATION_SERVICE);
@@ -77,6 +76,7 @@ public class ForegroundService extends Service {
 	};
 
 	@Override public void onCreate() {
+		AndroidInjection.inject(this);
 		super.onCreate();
 	}
 
@@ -147,12 +147,13 @@ public class ForegroundService extends Service {
 					locationData.setLongitude(mCurrentLocation.getLongitude() + "");
 					locationData.setAccuracy(mCurrentLocation.getAccuracy() + "");
 					locationData.setEmpCode(
-						getPrefs(getApplicationContext()).getString("EmployeeCode", null));
+						requireNonNull(userManager.getUser()).employeeCode);
 					locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
 					locationData.setDeviceId(
-						getPrefs(getApplicationContext()).getString("macaddress", null));
+						getDeviceID(getApplicationContext().getContentResolver()));
 					if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
-						SaathiAppNew.get().getDB().daoAccess().insertLocationList(locationData);
+						requireNonNull(SaathiAppNew.get().getDB()).daoAccess()
+							.insertLocationList(locationData);
 						Timber.tag("Location Data entered").d(locationData.toString());
 					}
 				} else {
@@ -217,7 +218,8 @@ public class ForegroundService extends Service {
 
 		SettingsClient settingsClient = LocationServices.getSettingsClient(this);
 		settingsClient.checkLocationSettings(locationSettingsRequest);
-		mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+		FusedLocationProviderClient mFusedLocation =
+			LocationServices.getFusedLocationProviderClient(this);
 		getCurrentLocation();
 	}
 

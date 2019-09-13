@@ -1,10 +1,12 @@
 package com.mosl.tabapp.service;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import com.mosl.app.core.utils.Injector;
+import com.mosl.mobile.saathi.AppComponent;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
@@ -12,6 +14,7 @@ import com.mosl.tabapp.database.LocationData;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import java.io.IOException;
 import java.util.List;
+import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,28 +25,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
 
-import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
+import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
+import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static java.util.Objects.requireNonNull;
 
 public class DataSyncWorker extends Worker {
 	private static final String TAG = "MyWorker";
+	@Inject UserManager userManager;
 
 	public DataSyncWorker(@NonNull Context context,
 		@NonNull WorkerParameters workerParams) {
 		super(context, workerParams);
+		Injector.obtain(getApplicationContext(), AppComponent.class).inject(this);
 	}
 
 	@NonNull
 	@Override
 	public Result doWork() {
 		try {
-			if (getPrefs(getApplicationContext()).getString("EmployeeCode", null) != null
-				|| !requireNonNull(
-				getPrefs(
-					getApplicationContext()).getString("EmployeeCode", null)).isEmpty()) {
+			if (userManager.isLoggedIn()) {
 				if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
-					if (SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
+					if (requireNonNull(SaathiAppNew.get().getDB()).daoAccess()
+						.getLocationList()
+						.size() != 0) {
 						SaveGeoLocation();
 					}
 				}
@@ -60,7 +65,6 @@ public class DataSyncWorker extends Worker {
 		OkHttpClient client = new OkHttpClient();
 		List<LocationData> locationDataList =
 			SaathiAppNew.get().getDB().daoAccess().getLocationList();
-		SharedPreferences prefs = getPrefs(getApplicationContext());
 		MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 		String url = CRMWebServiceHandler.CALL_BASE_URL;
 		String serviceMethod = "GeoLocation/SaveGeoLocation";
@@ -76,19 +80,21 @@ public class DataSyncWorker extends Worker {
 			.addHeader("clientinfo", requireNonNull(CRMSecurityUtil.encrypt("android")))
 			.addHeader("EmployeeCode",
 				requireNonNull(
-					CRMSecurityUtil.encrypt(prefs.getString("EmployeeCode", null))))
+					CRMSecurityUtil.encrypt(requireNonNull(userManager.getUser()).employeeCode)))
 			.addHeader("token",
-				requireNonNull(CRMSecurityUtil.encrypt(prefs.getString("token", null))))
+				requireNonNull(CRMSecurityUtil.encrypt(userManager.getUser().token)))
 			.addHeader("userid",
-				requireNonNull(CRMSecurityUtil.encrypt(prefs.getString("userid", null))))
+				requireNonNull(CRMSecurityUtil.encrypt(userManager.getUser().userId)))
 			.addHeader("ipaddress",
-				requireNonNull(CRMSecurityUtil.encrypt(prefs.getString("ipaddress", null))))
+				requireNonNull(CRMSecurityUtil.encrypt(getLocalIpAddress())))
 			.addHeader("BusinessUnitId",
 				requireNonNull(
-					CRMSecurityUtil.encrypt(prefs.getString("BusinessUnitId", null))))
+					CRMSecurityUtil.encrypt(
+						userManager.getUser().currentBusinessProfile.businessUnitId)))
 			.addHeader("macaddress",
 				requireNonNull(
-					CRMSecurityUtil.encrypt(prefs.getString("macaddress", null))))
+					CRMSecurityUtil.encrypt(
+						getDeviceID(getApplicationContext().getContentResolver()))))
 			.build();
 		Timber.tag("Location Data Request").d(request.toString());
 		Buffer buffer = new Buffer();
@@ -114,7 +120,7 @@ public class DataSyncWorker extends Worker {
 					requireNonNull(CRMSecurityUtil.decrypt(new String(res)))));
 				String status = jsonObject.getString(STATUS);
 				if (status.equalsIgnoreCase("true")) {
-					SaathiAppNew.get().getDB().daoAccess().deleteAll();
+					requireNonNull(SaathiAppNew.get().getDB()).daoAccess().deleteAll();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();

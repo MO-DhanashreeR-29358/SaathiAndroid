@@ -292,11 +292,12 @@ public class MOSLCommonActivity extends AppCompatActivity
 		//new CRMWebServiceHandler().setAuthorization(this);
 		mockLocationCheck();
 
-		if (isBlank(Objects.requireNonNull(userManager.getUser()).firstName)) {
-			Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivityNew.class);
-			startActivity(intentLogin);
-			finish();
-		}
+		//if (isBlank(Objects.requireNonNull(userManager.getUser()).firstName)) {
+		//	Intent intentLogin = new Intent(MOSLCommonActivity.this, LoginActivityNew.class);
+		//	startActivity(intentLogin);
+		//	finish();
+		//}
+
 		setContentView(R.layout.crm_activity_main);
 		mWorkManager = WorkManager.getInstance();
 		startWorkManager();

@@ -31,8 +31,9 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.common.SaathiCommonResponse;
 import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails;
@@ -76,6 +77,7 @@ import com.mosl.tabapp.model.LeadCreationProductMapping;
 import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
+import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -87,6 +89,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import org.droidparts.widget.ClearableEditText;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -159,6 +162,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
     private boolean isIndividualsFlag;
     private String RefereeCode, RefereeName;
     private boolean isRefreeCode;
+    @Inject UserManager userManager;
     private ProgressBar pbLoadingIndicatorRefreeCode, pbLoadingIndicatorRefreeName;
     private AdapterView.OnItemSelectedListener categoryInListener =
         new AdapterView.OnItemSelectedListener() {
@@ -474,6 +478,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
         setAppTitle(getClass().toString(), "Lead Creation");
         setUpView(leadCreationView);
         setUserVisibleHint(true);
+        AndroidInjection.inject(requireActivity());
         return leadCreationView;
     }
 
@@ -1001,7 +1006,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 inputMap.put("SearchType", "ByName");
                 inputMap.put("SearchHint", query);
                 return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
+                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName, userManager)
                     .compose(applyUiModel());
             }).subscribe(data -> {
                 UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;
@@ -1034,7 +1039,7 @@ public class LeadCreationFragment extends MOSLCommonFragment
                 inputMap.put("SearchType", "ByCode");
                 inputMap.put("SearchHint", query);
                 return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
+                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode, userManager)
                     .compose(applyUiModel());
             }).subscribe(data -> {
                 UiModel<JSONObject> uiModel = (UiModel<JSONObject>) data;

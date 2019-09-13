@@ -24,7 +24,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
 import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.ui.MOSLCommonActivity
-import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -42,7 +41,6 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    AndroidInjection.inject(this)
     binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
     presenter.start()
   }
@@ -97,6 +95,10 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   }
 
   private fun openCommonActivity() {
+    MOSLCommonActivity.sendRegistrationToServer(
+        this, getContentResolver(),
+        false
+    );
     val intent = Intent(this, MOSLCommonActivity::class.java)
     startActivity(intent)
     finish()

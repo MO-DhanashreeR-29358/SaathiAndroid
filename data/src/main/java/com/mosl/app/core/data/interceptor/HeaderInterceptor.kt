@@ -1,13 +1,13 @@
 package com.mosl.mobile.data.interceptor
 
 import android.content.Context
+import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.ApiEndpoints.AppVersionEndPoint
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
-import com.mosl.shared.util.getLocalIpAddress
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
