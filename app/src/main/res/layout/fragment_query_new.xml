@@ -12,7 +12,7 @@
             android:background="@color/background_color_query"
 
             >
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_large"
@@ -228,7 +228,7 @@
                     app:layout_constraintStart_toEndOf="@id/txt_tele_phone_1"
                     app:layout_constraintTop_toBottomOf="@+id/txt_support_quotes"
                     />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
         <!--<com.mosl.partnersapp.views.InlineStateView
             android:id="@+id/view_state"

@@ -70,8 +70,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.actionbar.CRMAppActionBar;
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment;
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew;
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment;
-import com.mosl.tabapp.calendar.CalendarFragment;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.EkycSecurityUtil;
@@ -92,7 +90,6 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.notification.NotificationFragment;
-import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
 import com.mosl.tabapp.service.DataSyncWorker;
 import com.mosl.tabapp.service.ForegroundService;
 import com.mosl.tabapp.smt.SMTFragment;
@@ -509,10 +506,10 @@ public class MOSLCommonActivity extends AppCompatActivity
 				setupFragment(new QueryFragment());
 			} else if (strAction.trim()
 				.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
-				setupFragment(new CalendarFragment());
+				//setupFragment(new CalendarFragment());
 			} else if (strAction.trim()
 				.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
-				setupFragment(new BirthdayAnniversaryFragment());
+				//setupFragment(new BirthdayAnniversaryFragment());
 			} else if (strAction.trim()
 				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
 				setupFragment(new LeadCreationFragment());
@@ -565,11 +562,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 		} else {
 			currentFragment =
 				(MOSLCommonFragment) fragmentManager.findFragmentById(R.id.activityFrameLayout);
-			if (currentFragment instanceof PendingApprovalFragment) {
+/*			if (currentFragment instanceof PendingApprovalFragment) {
 
 				((PendingApprovalFragment) currentFragment).getAprovalCoutSummary();
 				((PendingApprovalFragment) currentFragment).getAprovalList();
-			}
+			}*/
 		}
 		getLastTitle(Objects.requireNonNull(currentFragment).getClass().toString());
 	}
@@ -795,9 +792,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 							actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT);
 							//setupFragment(new DashboardFragment());
 						} else if (position == MOSL_MENU_CALENDAR) {
-							setupFragment(new CalendarFragment());
+							//setupFragment(new CalendarFragment());
 						} else if (position == MOSL_MENU_PENDING_APPROVALS) {
-							setupFragment(new PendingApprovalFragment());
+							//setupFragment(new PendingApprovalFragment());
 						} else if (position == MOSL_MENU_KNOWLEDGE_CENTRE) {
 							WebViewFragment fragment = new WebViewFragment();
 							Bundle bundle = new Bundle();
@@ -812,7 +809,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 							fragment.setArguments(bundle);
 							addFragment(R.id.activityFrameLayout, fragment, true, false);
 						} else if (position == MOSL_MENU_BIRTHDAY_ANIVERSARY) {
-							setupFragment(new BirthdayAnniversaryFragment());
+							//setupFragment(new BirthdayAnniversaryFragment());
 						}
 						if (AccountDetails.isSmtEnabled()) {
 							if (position == MOSL_MENU_SUGGEST_ME) {
@@ -1166,14 +1163,14 @@ public class MOSLCommonActivity extends AppCompatActivity
 		}
 		//PENDINGAPPROVAL
 		else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {
-			MOSLCommonFragment fragment = new PendingApprovalFragment();
+			//MOSLCommonFragment fragment = new PendingApprovalFragment();
 			Bundle bundle = new Bundle();
-			fragment.setArguments(bundle);
-			setupFragment(fragment);
+			//fragment.setArguments(bundle);
+			//setupFragment(fragment);
 		}
 		//BIRTHDAY
 		else if (data.getPage().equalsIgnoreCase("BIRTHDAY")) {
-			setupFragment(new BirthdayAnniversaryFragment());
+			//setupFragment(new BirthdayAnniversaryFragment());
 		}
 		//DASHBOARD
 		else if (data.getPage().equalsIgnoreCase("DASHBOARD")) {
