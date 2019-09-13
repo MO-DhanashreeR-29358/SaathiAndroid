@@ -52,7 +52,7 @@ public class AccountDetails implements MOSLConstants, Serializable {
 	}
 
 	public static List<ChildMenu> getMenuReportList() {
-		return menuReportList;
+		return AccountDetails.menuReportList;
 	}
 
 	public static void setMenuReportList(List<ChildMenu> menuReportList) {

@@ -8,6 +8,8 @@ object MenuGetterNew {
   fun getFragment(@NavigationConstants pageId: Int): Fragment? {
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
+      NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
+      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
       else -> null
     }
   }
@@ -16,6 +18,18 @@ object MenuGetterNew {
   fun isHandled(@NavigationConstants pageId: Int): Boolean {
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> true
+      NavigationConstants.NAVIGATE_TO_FRESH_REG -> true
+      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> true
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> true
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> true
+      NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true
+      NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> true
+      NavigationConstants.NAVIGATE_TO_CALENDAR -> true
+      NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> true
+      NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> true
+      NavigationConstants.NAVIGATE_TO_QUERY -> true
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
+      NavigationConstants.NAVIGATE_TO_LOGOUT -> true
       else -> return false
     }
   }

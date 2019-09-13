@@ -204,6 +204,12 @@ dependencies {
   kapt deps.dagger.compiler
   implementation deps.dagger.android
   kapt deps.dagger.androidCompiler
+
+  //groupie
+  implementation deps.groupie.core
+  implementation deps.groupie.dataBinding
+
+  implementation deps.picasso
 }
 kapt {
   javacOptions {
