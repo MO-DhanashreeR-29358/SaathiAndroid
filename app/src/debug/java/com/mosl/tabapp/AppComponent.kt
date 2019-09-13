@@ -1,7 +1,8 @@
-package com.mosl.mobile.saathi
+package com.mosl.tabapp
 
-import com.mosl.tabapp.SaathiAppImpl
-import com.mosl.tabapp.SaathiAppNew
+import com.mosl.mobile.saathi.DebugActivityBuilder
+import com.mosl.mobile.saathi.DebugModule
+import com.mosl.tabapp.drawermenu.DrawerMenuView
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -16,7 +17,7 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   override fun inject(instance: SaathiAppImpl)
 
-//  fun inject(target: DrawerMenuView)
+  fun inject(target: DrawerMenuView)
 
 //  fun inject(target: ActionBar)
 

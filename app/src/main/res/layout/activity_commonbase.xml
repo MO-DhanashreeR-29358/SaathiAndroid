@@ -66,11 +66,11 @@
             app:insetForeground="#4000"
             >
 
-<!--            <com.mosl.mobile.saathi.drawermenu.DrawerMenuView-->
-<!--                android:id="@+id/drawer_menu"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                />-->
+            <com.mosl.tabapp.drawermenu.DrawerMenuView
+                android:id="@+id/drawer_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
 
         </com.mosl.app.coreui.views.NonConsumingScrimInsetsFrameLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
