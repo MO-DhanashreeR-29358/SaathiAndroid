@@ -34,15 +34,11 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun openHome() {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, false)
   }
 
   override fun openPage(entry: NavigationEntry) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    processNavigation(entry)
   }
 
   override fun openPage(request: NavigationRequest) {
@@ -120,9 +116,7 @@ class ScreenNavigatorImpl @Inject constructor(
     pageId: Int,
     addToStack: Boolean
   ) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    openPage(FragmentNavigationEntry(pageId, Bundle.EMPTY, addToStack))
   }
 
   override fun pageNotAccessible() {

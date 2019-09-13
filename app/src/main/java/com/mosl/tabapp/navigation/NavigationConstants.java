@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.SOURCE) @IntDef({
 	NavigationConstants.NAVIGATE_TO_LOGOUT,
-	NavigationConstants.NAVIGATE_TO_NONE
+	NavigationConstants.NAVIGATE_TO_NONE,
+	NavigationConstants.NAVIGATE_TO_DASHBOARD
 })
 public @interface NavigationConstants {
 	int NAVIGATE_TO_NONE = -1;

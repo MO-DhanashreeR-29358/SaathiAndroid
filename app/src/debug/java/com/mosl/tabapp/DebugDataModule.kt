@@ -1,8 +1,8 @@
 package com.mosl.mobile.saathi
 
+import com.mosl.app.core.data.interceptor.EncryptionInterceptor
+import com.mosl.app.core.data.interceptor.HeaderInterceptor
 import com.mosl.app.core.data.meta.InternalAPIClient
-import com.mosl.mobile.data.interceptor.EncryptionInterceptor
-import com.mosl.mobile.data.interceptor.HeaderInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache

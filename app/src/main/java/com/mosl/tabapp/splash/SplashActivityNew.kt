@@ -28,7 +28,6 @@ import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.login.LoginActivityNew
 import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.model.AccountDetails.setEkycUrl
-import com.mosl.tabapp.ui.MOSLCommonActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -216,6 +215,10 @@ class SplashActivityNew : LeanBaseActivity() {
       }
     }
 
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+
   }
 
   fun handleStartup() {
@@ -284,7 +287,7 @@ class SplashActivityNew : LeanBaseActivity() {
   }
 
   private fun openCommonActivity() {
-    val intent = Intent(this@SplashActivityNew, MOSLCommonActivity::class.java)
+    val intent = Intent(this@SplashActivityNew, CommonActivity::class.java)
     startActivity(intent)
     finish()
   }
