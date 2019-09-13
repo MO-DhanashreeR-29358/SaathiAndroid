@@ -79,7 +79,6 @@ import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
-import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.login.LoginActivityNew;
 import com.mosl.tabapp.menu.DrawerMenu;
 import com.mosl.tabapp.menu.MenuAdapter;
@@ -513,7 +512,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 				//setupFragment(new BirthdayAnniversaryFragment());
 			} else if (strAction.trim()
 				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
-				setupFragment(new LeadCreationFragment());
+				//setupFragment(new LeadCreationFragment());
 			} else {
 				//setupFragment(new DashboardFragment());
 			}

@@ -82,6 +82,7 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ui.SplashActivity;
 import io.reactivex.disposables.Disposable;
@@ -103,12 +104,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_CREATION;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -176,7 +179,7 @@ public class DashboardFragment extends CommonFragment
     ////////////////////
     // Progress Dialog
     private ProgressDialog pDialog;
-
+    @Inject ScreenNavigatorImpl screenNavigator;
     @Override protected int getLayout() {
         return R.layout.frag_dashboard;
     }
@@ -650,6 +653,7 @@ public class DashboardFragment extends CommonFragment
                 hideKeyboard(view);
                 floatingActionsMenu.collapse();
                 //navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
+                screenNavigator.openPage(NAVIGATE_TO_LEAD_CREATION, true);
             } else if (id == R.id.llMain) {
                 floatingActionsMenu.collapse();
                 llMain.setVisibility(View.GONE);

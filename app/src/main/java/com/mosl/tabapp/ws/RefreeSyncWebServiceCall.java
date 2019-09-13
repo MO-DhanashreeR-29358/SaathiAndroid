@@ -69,7 +69,8 @@ public class RefreeSyncWebServiceCall {
 					CRMSecurityUtil.encrypt(getLocalIpAddress())))
 				.addHeader("BusinessUnitId",
 					Objects.requireNonNull(
-						CRMSecurityUtil.encrypt(prefs.getString("BusinessUnitId", null))))
+						CRMSecurityUtil.encrypt(
+							userManager.getUser().currentBusinessProfile.businessUnitId)))
 				.addHeader("macaddress",
 					Objects.requireNonNull(
 						CRMSecurityUtil.encrypt(getDeviceID(context.getContentResolver()))))

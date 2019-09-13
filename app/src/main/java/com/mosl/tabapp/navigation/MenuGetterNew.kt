@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 
@@ -18,6 +19,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragmentNew()
+      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       else -> null
     }
   }
@@ -38,6 +40,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_QUERY -> true
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
       else -> return false
     }
   }
