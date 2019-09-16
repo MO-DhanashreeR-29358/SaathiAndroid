@@ -1,10 +1,12 @@
 package com.mosl.tabapp.navigation
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mosl.annotations.ActivityScoped
 import com.mosl.app.core.utils.toast
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.ActivityNavigationEntry
 import com.mosl.navigator.BaseNavigator
 import com.mosl.navigator.FragmentNavigationEntry
@@ -13,14 +15,42 @@ import com.mosl.navigator.NavigationHelper
 import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
 import com.mosl.navigator.asFragmentEntry
+import com.mosl.tabapp.common.EkycSecurityUtil
+import com.mosl.tabapp.ekyc.EkycNavigator
+import com.mosl.tabapp.ekyc.NEW
+import com.mosl.tabapp.ekyc.NEWEKYC_PACKAGE_NAME
+import com.mosl.tabapp.ekyc.OUTPUT
+import com.mosl.tabapp.ekyc.PLAY_STORE_URL
+import com.mosl.tabapp.ekyc.RESUME
+import com.mosl.tabapp.ekyc.getDataForEkyc
 import javax.inject.Inject
 
 @ActivityScoped
 class ScreenNavigatorImpl @Inject constructor(
   val activity: AppCompatActivity,
   protected val navigationHelper: NavigationHelper,
+  val userManager: UserManager,
   val navigator: Navigator
-) : BaseNavigator {
+) : BaseNavigator, EkycNavigator {
+  override fun openNewEkycApp(isExistingUser: Boolean) {
+    val commandType = if (isExistingUser) RESUME else NEW
+    try {
+      val launchIntentForPackage =
+        activity.packageManager.getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME)
+      launchIntentForPackage?.setFlags(
+          Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+      )
+      launchIntentForPackage?.putExtra(
+          OUTPUT, EkycSecurityUtil.encrypt(userManager.getDataForEkyc(commandType))
+      )
+      activity.startActivity(launchIntentForPackage)
+    } catch (e: Exception) {
+      val intent = Intent(Intent.ACTION_VIEW)
+      intent.setData(Uri.parse(PLAY_STORE_URL + NEWEKYC_PACKAGE_NAME))
+      activity.startActivity(intent)
+    }
+  }
+
   override fun goBack() {
     TODO(
         "not implemented"
@@ -107,9 +137,7 @@ class ScreenNavigatorImpl @Inject constructor(
     args: Bundle,
     addToStack: Boolean
   ) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    openPage(FragmentNavigationEntry(pageId, args, addToStack))
   }
 
   override fun openPage(

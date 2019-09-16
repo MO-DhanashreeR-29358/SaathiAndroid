@@ -8,6 +8,7 @@ import com.mosl.navigator.BaseNavigator
 import com.mosl.navigator.NavigationRequest
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
+import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @ActivityScoped
 class ActivityNavigationHelper @Inject constructor(
   internal val screenNavigator: BaseNavigator,
+  internal val ekycNavigator: EkycNavigator,
   internal val userManager: UserManagerImpl
 ) {
   private var pendingMenuAction: AppMenu? = null
@@ -62,8 +64,14 @@ class ActivityNavigationHelper @Inject constructor(
   fun handleNavigation(appMenu: AppMenu) {
     val target = appMenu.pageId
     when (target) {
+      NavigationConstants.NAVIGATE_TO_FRESH_REG -> openEkycApp(false)
+      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> openEkycApp(true)
       else -> loadFragment(target)
     }
+  }
+
+  private fun openEkycApp(isExistingOrNewUser: Boolean) {
+    ekycNavigator.openNewEkycApp(isExistingOrNewUser)
   }
 
   companion object {
