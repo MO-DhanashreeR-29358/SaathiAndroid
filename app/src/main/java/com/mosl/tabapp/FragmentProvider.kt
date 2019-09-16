@@ -15,9 +15,13 @@ import com.mosl.tabapp.dashboard.ProductivityFragment
 import com.mosl.tabapp.dashboard.TargetAchievementFragment
 import com.mosl.tabapp.dashboard.TargetAchievementTeamFragment
 import com.mosl.tabapp.dashboard.TrendsTabFragment
+import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
+import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.ui.ReportFragment
+import com.mosl.tabapp.ui.SecondLevelReportFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -80,4 +84,16 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideTrendsFragmentFactory(): TrendsTabFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideNotificationFragmentFactory(): NotificationFragment
+
+  @ContributesAndroidInjector
+  abstract fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideReportFragmentFactory(): ReportFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
 }

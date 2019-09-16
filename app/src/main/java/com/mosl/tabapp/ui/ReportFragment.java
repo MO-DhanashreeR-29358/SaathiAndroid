@@ -20,8 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest;
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest;
@@ -29,7 +29,9 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import io.reactivex.disposables.Disposable;
@@ -47,13 +49,20 @@ import timber.log.Timber;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY;
+import static com.mosl.tabapp.constants.MOSLConstants.INVALID_DATE_RANGE;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Bhavesh on 09-10-2017.
  */
 
-public class ReportFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ReportFragment extends CommonFragment implements View.OnClickListener {
 	private TableFixHeaders table;
 	private TextView tvNochart;
 	private String widgetSystemName;
@@ -119,13 +128,16 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View reportView = super.onCreateView(inflater, container, savedInstanceState);
-		attachLayout(R.layout.frag_report);
 
 		setUpView(Objects.requireNonNull(reportView));
 		hideAppTitle();
 		setUserVisibleHint(true);
 
 		return reportView;
+	}
+
+	@Override protected int getLayout() {
+		return R.layout.frag_report;
 	}
 
 	public void renderAssignedLeadReports(UiModel<List<AssignedLeadReportItem>> uiModel) {
@@ -147,7 +159,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 				arrSelectBranch.add(
 					new RowData(i + 1, businessUnitId, branchCode));
 			}
-			ArrayAdapter<RowData> arrAdapSelectBranch = new ArrayAdapter<>(getMainActivity(),
+			ArrayAdapter<RowData> arrAdapSelectBranch = new ArrayAdapter<>(requireContext(),
 				R.layout.simple_spinner_item, arrSelectBranch);
 			arrAdapSelectBranch.setDropDownViewResource(
 				R.layout.mdropdown);
@@ -159,9 +171,9 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 	}
 
 	private void selectBranch() {
-		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			AssignedLeadReportRequest request = new AssignedLeadReportRequest("-1");
-			Disposable subscribe = saathiApi.postAssignedLeadReport(request)
+			Disposable subscribe = getSaathiApi().postAssignedLeadReport(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderAssignedLeadReports);
 		} else {
@@ -185,14 +197,14 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 	}
 
 	private void getReport() {
-		if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LeadReportRequest
 				request =
 				new LeadReportRequest(0, CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd"), false,
 					AccountDetails.getEmployeeCode(),
 					REPORT_PAGE_SIZE, 0, 0, 0, widgetSystemName, "-1",
 					CRMAppUtil.getDateStr(toDate, "yyyy-MM-dd"), branchCode);
-			Disposable subscribe = saathiApi.postLeadReport(request)
+			Disposable subscribe = getSaathiApi().postLeadReport(request)
 				.map(responseS -> {
 					Gson mGson = new Gson();
 					Type type = new TypeToken<HashMap<String, Object>>() {
@@ -292,7 +304,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 
 	public void selectDate() {
 		today = Calendar.getInstance();
-		dialog = new Dialog(context);
+		dialog = new Dialog(requireContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		Objects.requireNonNull(dialog.getWindow())
 			.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -364,7 +376,7 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 				fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
 				toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
 				if (fromDat.after(toDate)) {
-					alertDialog(getMainActivity(), 0, "Motilal Oswal", INVALID_DATE_RANGE,
+					alertDialog(requireContext(), 0, "Motilal Oswal", INVALID_DATE_RANGE,
 						"OK", true, null);
 				} else {
 					if (mainFromDate != null) {
@@ -511,7 +523,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 									ReportFragment.this.getArguments())
 									.getString(MOSLConstants.NAME);
 								bundle.putString(SecondLevelReportFragment.STRING_TITLE, nextTitle);
-								navigateTo(NAV_TO_SECOND_LEVEL_REPORT, bundle, getFragmentManager(),
+								navigator.openPage(
+									NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, bundle,
 									true);
 							} else {
 
@@ -533,8 +546,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 								Bundle bundle = new Bundle();
 								bundle.putString(LEAD_ID, leadId);
 								bundle.putString(UCID, ucid);
-								navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-									true);
+								//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+								//	true);
 							}
 						}
 					});
@@ -552,7 +565,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 									ReportFragment.this.getArguments())
 									.getString(MOSLConstants.NAME);
 								bundle.putString(SecondLevelReportFragment.STRING_TITLE, nextTitle);
-								navigateTo(NAV_TO_SECOND_LEVEL_REPORT, bundle, getFragmentManager(),
+								navigator.openPage(
+									NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
 									true);
 							} else {
 
@@ -574,8 +588,8 @@ public class ReportFragment extends MOSLCommonFragment implements View.OnClickLi
 								Bundle bundle = new Bundle();
 								bundle.putString(LEAD_ID, leadId);
 								bundle.putString(UCID, ucid);
-								navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-									true);
+								//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+								//	true);
 							}
 						}
 					});

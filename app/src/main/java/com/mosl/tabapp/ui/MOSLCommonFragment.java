@@ -29,7 +29,6 @@ import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.leadcreation.LeadCreationFragment;
-import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
@@ -158,16 +157,16 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_FOR_APPROVAL:
-                fragment = new PendingForApprovalFragment();
-                fragment.setArguments(bundle);
+                //fragment = new PendingForApprovalFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_ADVISORY_DASHBOARD:
                 //fragment = new DashboardFragment();
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_REPORT:
-                fragment = new SecondLevelReportFragment();
-                fragment.setArguments(bundle);
+                //fragment = new SecondLevelReportFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_WEB_VIEW:
                 fragment = new SMTFragment();
