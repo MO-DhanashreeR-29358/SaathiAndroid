@@ -15,7 +15,7 @@ import com.mosl.tabapp.ws.CRMWebServiceHandler
 
 object MenuGetterNew {
   @JvmStatic
-  fun getFragment(@NavigationConstants pageId: Int): Fragment? {
+  fun getFragment(pageId: Int): Fragment? {
     val args = Bundle()
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
@@ -54,6 +54,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> true
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> true
       else -> return false
     }
   }

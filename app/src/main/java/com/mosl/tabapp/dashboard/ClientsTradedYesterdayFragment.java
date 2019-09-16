@@ -13,11 +13,12 @@ import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYes
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.TableItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,12 +27,18 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 
 /**
  * Created by Sanket Gurav on 7/5/2017.
  */
 
-public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
+public class ClientsTradedYesterdayFragment extends CommonFragment
     implements View.OnClickListener {
     private View clientYesterdayView;
     static Context mContext;
@@ -52,11 +59,14 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         clientYesterdayView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_client_traded);
         setUpView(clientYesterdayView);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUserVisibleHint(true);
         return clientYesterdayView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_client_traded;
     }
 
     public static ClientsTradedYesterdayFragment newInstance(Context context) {
@@ -148,7 +158,7 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
     }
 
     private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -157,7 +167,7 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
                 dashboardModel.getProductId(),
                 dashboardModel.getEmployeeCode()
             );
-            Disposable subscribe = saathiApi.getClientsTradedYesterday(request)
+            Disposable subscribe = getSaathiApi().getClientsTradedYesterday(request)
                 .compose(applyUiModel())
                 .subscribe(this::render);
         } else {
@@ -200,7 +210,9 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
                             args.putString(LABEL, groupName);
                             args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                             if (!tvNoOfClients.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                navigator.openPage(
+                                    NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                                    true);
                             }
                         }
                     });
@@ -218,7 +230,9 @@ public class ClientsTradedYesterdayFragment extends MOSLCommonFragment
                                 .toString()
                                 .trim()
                                 .equalsIgnoreCase("0")) {
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                navigator.openPage(
+                                    NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                                    true);
                             }
                         }
                     });

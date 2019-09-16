@@ -2,10 +2,19 @@ package com.mosl.tabapp
 
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
+import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
+import com.mosl.tabapp.dashboard.ClientsFragment
+import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
 import com.mosl.tabapp.dashboard.ClientsLeadsFragment
+import com.mosl.tabapp.dashboard.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.dashboard.ProductivityFragment
 import com.mosl.tabapp.dashboard.TargetAchievementFragment
+import com.mosl.tabapp.dashboard.TargetAchievementTeamFragment
+import com.mosl.tabapp.dashboard.TrendsTabFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.query.QueryModule
@@ -43,5 +52,32 @@ abstract class FragmentProvider {
   abstract fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
 
   @ContributesAndroidInjector
+  abstract fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
+
+  @ContributesAndroidInjector
   abstract fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideBusinessSnapFragmentFactory(): BusinessSnapshotFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideBusinessSnapAdvFragmentFactory(): BusSnapshotAdvFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideClientsFragmentFactory(): ClientsFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideClientLeadFragmentFactory(): ClientsLeadShowFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideProductivityFragmentFactory(): ProductivityFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideTargetAchievementTeamFragmentFactory(): TargetAchievementTeamFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideTrendsFragmentFactory(): TrendsTabFragment
 }

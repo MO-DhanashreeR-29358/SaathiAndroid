@@ -14,15 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -34,13 +35,26 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/15/2017.
  */
 
-public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ClientsLeadShowFragment extends CommonFragment implements View.OnClickListener {
     private String TAG = ClientsLeadShowFragment.class.getCanonicalName();
 
     private View leadShowView;
@@ -60,10 +74,13 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         leadShowView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_table_lead_show);
         setUpView(leadShowView);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         return leadShowView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_table_lead_show;
     }
 
     public static ClientsLeadShowFragment newInstance(Context context) {
@@ -164,7 +181,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
             try {
                 renderLeadTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -172,7 +189,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
 
     private void newWebServiceCall(String systemName,
         Map<String, String> getAddtionalParameterMap) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -182,7 +199,7 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -346,7 +363,9 @@ public class ClientsLeadShowFragment extends MOSLCommonFragment implements View.
                             String columnData = lMap.get(columnName).toString();
                             if (columnData != null) {
                                 if (!columnData.trim().equalsIgnoreCase("0")) {
-                                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(),
+                                    navigator.openPage(
+                                        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+                                        args,
                                         true);
                                 }
                             }
