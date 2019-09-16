@@ -22,8 +22,6 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.DocumentFragment;
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
@@ -116,8 +114,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
         MOSLCommonFragment fragment = null;
         switch (id) {
             case SECOND_CLICK_DASHBORD:
-                fragment = new DashboardSecondLevelFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardSecondLevelFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_CREATE_MEETING:
                 fragment = new CreateMeetingFragment();
@@ -140,8 +138,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT:
-                fragment = new DashboardHierarchyFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardHierarchyFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_CREATION:
                 fragment = new LeadCreationFragment();

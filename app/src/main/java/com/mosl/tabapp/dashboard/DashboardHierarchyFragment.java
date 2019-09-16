@@ -10,14 +10,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -26,15 +28,24 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.constants.MOSLConstants.ADDITIONAL_MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.HIERARCHY_MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Raju on 24-07-2018.
  */
-public class DashboardHierarchyFragment extends MOSLCommonFragment {
+public class DashboardHierarchyFragment extends CommonFragment {
   static Context mContext;
   ArrayList<HashMap<String, String>> hierarchyMapList;
   private View secondClickView;
@@ -46,19 +57,23 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
   private String leadId = "0", ucid = "0";
   private String mobileNo;
   private boolean dataFoundFlag;
+    @Inject ScreenNavigatorImpl navigator;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
     secondClickView = super.onCreateView(inflater, container, savedInstanceState);
-    attachLayout(R.layout.frag_dashboard_second_click);
     setUpView(secondClickView);
-    hideAppTitle(getClass().toString());
+      hideAppTitle();
     setUserVisibleHint(true);
     return secondClickView;
   }
 
-  private void setUpView(View secondClickView) {
+    @Override protected int getLayout() {
+        return R.layout.frag_dashboard_second_click;
+    }
+
+    private void setUpView(View secondClickView) {
     table = (TableFixHeaders) secondClickView.findViewById(R.id.table);
     tvNochart = (TextView) secondClickView.findViewById(R.id.tvNochart);
     txtLables = (TextView) secondClickView.findViewById(R.id.txtLables);
@@ -100,7 +115,7 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -179,14 +194,14 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
     }
 
     private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String widgetSystemName = (String) hierarchyMap.get("WidgetSystemName");
             Map<String, String> parameterMap =
                 (Map<String, String>) hierarchyMap.get("AddtionalParameters");
             DashboardSecondLevelRequest request =
                 new DashboardSecondLevelRequest(parameterMap, widgetSystemName,
                     (String) hierarchyMap.get("PageSize"), (String) hierarchyMap.get("Page"));
-            Disposable subscribe = saathiApi.getDashboardHierarchy(request)
+            Disposable subscribe = getSaathiApi().getDashboardHierarchy(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -366,15 +381,16 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
                   bundle.putSerializable(HIERARCHY_MAP, (Serializable) hierarchyMap);
                   bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                   bundle.putString(LABEL, txtLables.getText().toString());
-                  navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(),
-                      true);
+                    navigator.openPage(
+                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle,
+                        true);
                 }
               }
               Bundle bundle = new Bundle();
               bundle.putString(LEAD_ID, leadId);
               bundle.putString(UCID, ucid);
               if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
-                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(), true);
+                  //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(), true);
               }
             }
           });
@@ -409,15 +425,16 @@ public class DashboardHierarchyFragment extends MOSLCommonFragment {
                   bundle.putSerializable(HIERARCHY_MAP, (Serializable) hierarchyMap);
                   bundle.putSerializable(ADDITIONAL_MAP, (Serializable) addtionalParameterMap);
                   bundle.putString(LABEL, txtLables.getText().toString());
-                  navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle, getFragmentManager(),
-                      true);
+                    navigator.openPage(
+                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle,
+                        true);
                 }
               }
               Bundle bundle = new Bundle();
               bundle.putString(LEAD_ID, leadId);
               bundle.putString(UCID, ucid);
               if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
-                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(), true);
+                  //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(), true);
               }
             }
           });

@@ -27,19 +27,21 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMValueFormatter;
 import com.mosl.tabapp.common.FilterRowData;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -48,16 +50,31 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/14/2017.
  */
 
-public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ClientsLeadsFragment extends CommonFragment implements View.OnClickListener {
     static Context mContext;
     private View leadsView;
     private HorizontalBarChart mChart;
@@ -68,6 +85,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     private String widgetSystemName;
     private Map addtionalParameterMap = new HashMap<>();
     private String filterFirst = "", filterSecond = "", filterThird = "";
+    @Inject ScreenNavigatorImpl navigator;
 
     public static ClientsLeadsFragment newInstance(Context context) {
         ClientsLeadsFragment fragment = new ClientsLeadsFragment();
@@ -81,10 +99,13 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         leadsView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_lead);
         setUpView(leadsView);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         return leadsView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_lead;
     }
 
     private void setUpView(View leadsView) {
@@ -410,14 +431,14 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
             try {
                 renderLeadStackedBarChart(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             Map<String, String> additionalMap = getAddtionalParameterMap();
 
@@ -429,7 +450,7 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -542,10 +563,12 @@ public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnC
                 if (lableString[h.getStackIndex()].equalsIgnoreCase("Assigned")) {
                     if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
                         .equalsIgnoreCase("0.0")) {
-                        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                        navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+                            args, true);
                     }
                 } else {
-                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                    navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                        true);
                 }
             }
 

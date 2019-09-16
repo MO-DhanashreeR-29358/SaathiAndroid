@@ -2,7 +2,10 @@ package com.mosl.tabapp
 
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.dashboard.ClientsLeadsFragment
 import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.dashboard.TargetAchievementFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.query.QueryModule
@@ -32,4 +35,13 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideWebviewFragmentFactory(): WebViewFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
 }

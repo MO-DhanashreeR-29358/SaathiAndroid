@@ -43,6 +43,7 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.common.LockedPieChart;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.TargetAchievementModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
@@ -50,21 +51,31 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TEAM_TARGET_TITLE;
+import static com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE;
 
 /**
  * Created by raju on 2/16/2017.
  */
 
-public class TargetAchievementFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class TargetAchievementFragment extends CommonFragment implements View.OnClickListener {
 
     private View targetView;
     private TextView txtRightValue, txtRightStr, txtCenterValue, txtCenterStr, txtLeftStr,
@@ -100,6 +111,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
     private LinearLayout linearLayoutRight, linearLayoutCenter, linearLayoutLeft;
     private List<WidgetType> widgetTypeList = new ArrayList<>();
     private String widgetName;
+    @Inject ScreenNavigatorImpl navigator;
 
     public static void smoothScrollToUserSelectedPosition(final RecyclerView scrollView,
         int destination) {
@@ -122,9 +134,12 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         targetView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_target_achievement);
         setUpView(targetView);
         return targetView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_target_achievement;
     }
 
     private void secondClickTarget(Map addtionalParameterMap) {
@@ -133,7 +148,8 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         args.putString(SYSTEM_NAME, widgetSystemName);
         args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+        navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true);
+        //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
     }
 
     public void setUpView(View targetView) {
@@ -200,7 +216,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             });
         horizontalAdapter = new HorizontalAdapter(widgetModelList);
         LinearLayoutManager horizontalLayoutManagaer =
-            new LinearLayoutManager(getMainActivity(), LinearLayoutManager.HORIZONTAL, false);
+            new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         horizontalRecyclerView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
@@ -354,7 +370,9 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 args.putString(SYSTEM_NAME, widgetSystemName);
                 args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
                 args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                    true);
+                //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
             }
 
             private void pieChartDetail(float sliceIndex) {
@@ -382,7 +400,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         populateTotalClientPieChartBroking(targetAchievementModels);
         tvError.setVisibility(View.GONE);
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -391,7 +409,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 dashboardModel.getProductId(),
                 dashboardModel.getEmployeeCode()
             );
-            Disposable subscribe = saathiApi.getTargetAchievement(request)
+            Disposable subscribe = getSaathiApi().getTargetAchievement(request)
                 .compose(applyUiModel())
                 .subscribe(this::render);
         } else {
@@ -421,14 +439,14 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                         new TargetAchievementModel(label, formatted, value, null));
                 }
                 verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerView.setAdapter(verticalAdapter);
                 verticalAdapter.notifyDataSetChanged();
                 populateTotalClientPieChartBroking(targetAchievementModels);
             } else {
                 tvError.setVisibility(View.VISIBLE);
                 verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerView.setAdapter(verticalAdapter);
                 verticalAdapter.notifyDataSetChanged();
                 populateTotalClientPieChartBroking(targetAchievementModels);
@@ -436,7 +454,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         } else {
             tvError.setVisibility(View.VISIBLE);
             verticalAdapter = new VerticalAdapter(targetAchievementModels);
-            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+            verticalRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
             verticalRecyclerView.setAdapter(verticalAdapter);
             verticalAdapter.notifyDataSetChanged();
             populateTotalClientPieChartBroking(targetAchievementModels);
@@ -560,7 +578,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
             tvError.setVisibility(View.VISIBLE);
             tvUniqueLeads.setText("");
             verticalAdapter = new VerticalAdapter(targetAchievementModels);
-            verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+            verticalRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
             verticalRecyclerView.setAdapter(verticalAdapter);
             verticalAdapter.notifyDataSetChanged();
             populateTotalClientPieChartBroking(targetAchievementModels);
@@ -575,7 +593,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                 tvError.setVisibility(View.VISIBLE);
                 tvUniqueLeads.setText("");
                 verticalAdapter = new VerticalAdapter(targetAchievementModels);
-                verticalRecyclerView.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+                verticalRecyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerView.setAdapter(verticalAdapter);
                 verticalAdapter.notifyDataSetChanged();
                 populateTotalClientPieChartBroking(targetAchievementModels);
@@ -664,7 +682,7 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
         }
 
         public void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(context)
+            Glide.with(requireContext())
                 .load(imageUrl)
                 //remove Chache
                 .asBitmap()
@@ -676,7 +694,8 @@ public class TargetAchievementFragment extends MOSLCommonFragment implements Vie
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                resource);
                         //circularBitmapDrawable.setCircular(true);
                         imageView.setImageDrawable(circularBitmapDrawable);
                     }

@@ -21,17 +21,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
+import com.mosl.tabapp.navigation.NavigationConstants;
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -42,16 +44,39 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.constants.MOSLConstants.ACTIONABLE;
+import static com.mosl.tabapp.constants.MOSLConstants.ADDITIONAL_MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_REPORT_PAGE_SIZE;
+import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTER_LIST;
+import static com.mosl.tabapp.constants.MOSLConstants.FLT_DATE;
+import static com.mosl.tabapp.constants.MOSLConstants.FLT_DATE_TIME;
+import static com.mosl.tabapp.constants.MOSLConstants.HIERARCHY_MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.NEWDATE_FORMAT_OF_DD_MMM_YYYY;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.SPINNER_LIST;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
+import static com.mosl.tabapp.constants.MOSLConstants.WIDGETNAME;
+import static com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 6/21/2017.
  */
 
-public class DashboardSecondLevelFragment extends MOSLCommonFragment
+public class DashboardSecondLevelFragment extends CommonFragment
     implements View.OnClickListener {
     static Context mContext;
     boolean dateFlag;
@@ -85,12 +110,16 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
     private String mainFromDate, mainToDate, fromPostingDate, dateType, isActionable;
     private ImageView ivDatePicker;
     private boolean spinnerDataFlag;
+    @Inject ScreenNavigatorImpl navigator;
+
+    @Override protected int getLayout() {
+        return R.layout.frag_dashboard_second_click;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         secondClickView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_dashboard_second_click);
         setUpView(secondClickView);
         if (getArguments().containsKey(FILTER_LIST) && getArguments().containsKey(SPINNER_LIST)) {
             spinnerDataFlag = true;
@@ -100,7 +129,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
         if (getArguments().containsKey(LABEL)) {
             isActionable = this.getArguments().getString(LABEL);
         }
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUserVisibleHint(true);
         return secondClickView;
     }
@@ -270,7 +299,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -389,7 +418,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
             addtionalParameterMap.put(WIDGETTYPE, typeFilterString);
         }
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             Map<String, String> parameterMap;
             if (addtionalParameterMap != null && !addtionalParameterMap.isEmpty()) {
                 parameterMap = addtionalParameterMap;
@@ -403,7 +432,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
             hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
             hierarchyMap.put("PageSize", DASHBOARD_REPORT_PAGE_SIZE);
             hierarchyMap.put("Page", "1");
-            Disposable subscribe = saathiApi.getDashboardSecondLevel(request)
+            Disposable subscribe = getSaathiApi().getDashboardSecondLevel(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -440,7 +469,7 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
     public void selectDate() {
         today = Calendar.getInstance();
 
-        dialog = new Dialog(context);
+        dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker);
@@ -717,17 +746,17 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
                                     bundle.putSerializable(ADDITIONAL_MAP,
                                         (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
-                                    navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle,
-                                        getFragmentManager(),
-                                        true);
+                                    navigator.openPage(
+                                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
+                                        bundle, true);
                                 }
                             }
                             Bundle bundle = new Bundle();
                             bundle.putString(LEAD_ID, leadId);
                             bundle.putString(UCID, ucid);
                             if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
-                                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-                                    true);
+                                //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+                                //    true);
                             }
                         }
                     });
@@ -771,17 +800,17 @@ public class DashboardSecondLevelFragment extends MOSLCommonFragment
                                     bundle.putSerializable(ADDITIONAL_MAP,
                                         (Serializable) addtionalParameterMap);
                                     bundle.putString(LABEL, txtLables.getText().toString());
-                                    navigateTo(NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT, bundle,
-                                        getFragmentManager(),
-                                        true);
+                                    navigator.openPage(
+                                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
+                                        bundle, true);
                                 }
                             }
                             Bundle bundle = new Bundle();
                             bundle.putString(LEAD_ID, leadId);
                             bundle.putString(UCID, ucid);
                             if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
-                                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-                                    true);
+                                //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+                                //    true);
                             }
                         }
                     });

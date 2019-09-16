@@ -52,15 +52,11 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun goBack() {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    openPage(FragmentNavigationEntry.goBack())
   }
 
   override fun goBack(result: Bundle) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    openPage(FragmentNavigationEntry.goBackWithResult(result))
   }
 
   override fun openHome() {
