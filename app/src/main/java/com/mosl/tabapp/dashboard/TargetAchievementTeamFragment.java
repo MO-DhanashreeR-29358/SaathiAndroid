@@ -43,6 +43,7 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.common.LockedPieChart;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.TargetAchievementModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
@@ -50,7 +51,7 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,12 +61,20 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TEAM_TARGET_TITLE;
+import static com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE;
 
 /**
  * Created by raju on 2/20/2017.
  */
 
-public class TargetAchievementTeamFragment extends MOSLCommonFragment
+public class TargetAchievementTeamFragment extends CommonFragment
     implements View.OnClickListener {
     static DashboardFragment parent;
     private View targetView;
@@ -115,10 +124,13 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         targetView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_target_achievement_team);
         setUpView(targetView);
 
         return targetView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_target_achievement_team;
     }
 
     public static TargetAchievementTeamFragment newInstance(Context context) {
@@ -228,7 +240,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
 
         horizontalAdapter = new HorizontalAdapter(subWidgetModelList);
         LinearLayoutManager horizontalLayoutManagaer =
-            new LinearLayoutManager(getMainActivity(), LinearLayoutManager.HORIZONTAL, false);
+            new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         horizontalRecyclerView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
@@ -609,7 +621,8 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         args.putString(SYSTEM_NAME, widgetSystemName);
         args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+        navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+            true);
     }
 
     private Map<String, String> getAddtionalParameterMap() {
@@ -689,7 +702,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         verticalAdapterFirst =
             new VerticalAdapterFirst(targetAchievementModelsFirst);
         verticalRecyclerViewFirst.setLayoutManager(
-            new GridLayoutManager(getMainActivity(), 3));
+            new GridLayoutManager(requireContext(), 3));
         verticalRecyclerViewFirst.setAdapter(verticalAdapterFirst);
         verticalAdapterFirst.notifyDataSetChanged();
         populatePieChartFirst(targetAchievementModelsFirst);
@@ -699,7 +712,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         verticalAdapterSecond =
             new VerticalAdapterSecond(targetAchievementModelsSecond);
         verticalRecyclerViewSecond.setLayoutManager(
-            new GridLayoutManager(getMainActivity(), 3));
+            new GridLayoutManager(requireContext(), 3));
         verticalRecyclerViewSecond.setAdapter(verticalAdapterSecond);
         verticalAdapterSecond.notifyDataSetChanged();
         populatePieChartSecond(targetAchievementModelsSecond);
@@ -709,7 +722,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         verticalAdapterThird =
             new VerticalAdapterThird(targetAchievementModelsThird);
         verticalRecyclerViewThird.setLayoutManager(
-            new GridLayoutManager(getMainActivity(), 3));
+            new GridLayoutManager(requireContext(), 3));
         verticalRecyclerViewThird.setAdapter(verticalAdapterThird);
         verticalAdapterThird.notifyDataSetChanged();
         populatePieChartThird(targetAchievementModelsThird);
@@ -735,7 +748,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
         populatePieChartSecond(targetAchievementModelsSecond);
         populatePieChartThird(targetAchievementModelsThird);
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -744,7 +757,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
                 dashboardModel.getProductId(),
                 dashboardModel.getEmployeeCode()
             );
-            Disposable subscribe = saathiApi.getTargetAchievementTeam(request)
+            Disposable subscribe = getSaathiApi().getTargetAchievementTeam(request)
                 .compose(applyUiModel())
                 .subscribe(this::render);
         } else {
@@ -877,7 +890,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
             tvUniqueLeadsFirst.setText(widgetTypeList.get(0).getTitle());
             verticalAdapterFirst = new VerticalAdapterFirst(targetAchievementModelsFirst);
             verticalRecyclerViewFirst.setLayoutManager(
-                new GridLayoutManager(getMainActivity(), 3));
+                new GridLayoutManager(requireContext(), 3));
             verticalRecyclerViewFirst.setAdapter(verticalAdapterFirst);
             verticalAdapterFirst.notifyDataSetChanged();
             populatePieChartFirst(targetAchievementModelsFirst);
@@ -888,7 +901,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
                 tvUniqueLeadsFirst.setText(widgetTypeList.get(0).getTitle());
                 verticalAdapterFirst = new VerticalAdapterFirst(targetAchievementModelsFirst);
                 verticalRecyclerViewFirst.setLayoutManager(
-                    new GridLayoutManager(getMainActivity(), 3));
+                    new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerViewFirst.setAdapter(verticalAdapterFirst);
                 verticalAdapterFirst.notifyDataSetChanged();
                 populatePieChartFirst(targetAchievementModelsFirst);
@@ -905,7 +918,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
             tvUniqueLeadsSecond.setText(widgetTypeList.get(1).getTitle());
             verticalAdapterSecond = new VerticalAdapterSecond(targetAchievementModelsSecond);
             verticalRecyclerViewSecond.setLayoutManager(
-                new GridLayoutManager(getMainActivity(), 3));
+                new GridLayoutManager(requireContext(), 3));
             verticalRecyclerViewSecond.setAdapter(verticalAdapterSecond);
             verticalAdapterSecond.notifyDataSetChanged();
             populatePieChartSecond(targetAchievementModelsSecond);
@@ -917,7 +930,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
                 verticalAdapterSecond =
                     new VerticalAdapterSecond(targetAchievementModelsSecond);
                 verticalRecyclerViewSecond.setLayoutManager(
-                    new GridLayoutManager(getMainActivity(), 3));
+                    new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerViewSecond.setAdapter(verticalAdapterSecond);
                 verticalAdapterSecond.notifyDataSetChanged();
                 populatePieChartSecond(targetAchievementModelsSecond);
@@ -934,7 +947,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
             tvUniqueLeadsThird.setText(widgetTypeList.get(2).getTitle());
             verticalAdapterThird = new VerticalAdapterThird(targetAchievementModelsThird);
             verticalRecyclerViewThird.setLayoutManager(
-                new GridLayoutManager(getMainActivity(), 3));
+                new GridLayoutManager(requireContext(), 3));
             verticalRecyclerViewThird.setAdapter(verticalAdapterThird);
             verticalAdapterThird.notifyDataSetChanged();
             populatePieChartThird(targetAchievementModelsThird);
@@ -945,7 +958,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
                 tvUniqueLeadsThird.setText(widgetTypeList.get(2).getTitle());
                 verticalAdapterThird = new VerticalAdapterThird(targetAchievementModelsThird);
                 verticalRecyclerViewThird.setLayoutManager(
-                    new GridLayoutManager(getMainActivity(), 3));
+                    new GridLayoutManager(requireContext(), 3));
                 verticalRecyclerViewThird.setAdapter(verticalAdapterThird);
                 verticalAdapterThird.notifyDataSetChanged();
                 populatePieChartThird(targetAchievementModelsThird);
@@ -1053,7 +1066,7 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
 
         public void setImage(String imageUrl, final ImageView imageView) {
 
-            Glide.with(context)
+            Glide.with(requireContext())
                 .load(imageUrl)
                 .asBitmap()
                 .placeholder(R.drawable.ic_white)
@@ -1064,7 +1077,8 @@ public class TargetAchievementTeamFragment extends MOSLCommonFragment
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                resource);
                         //circularBitmapDrawable.setCircular(true);
                         imageView.setImageDrawable(circularBitmapDrawable);
                     }

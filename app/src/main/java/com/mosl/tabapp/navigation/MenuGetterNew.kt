@@ -6,17 +6,21 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
+import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
+import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
+import com.mosl.tabapp.ui.ReportFragment
+import com.mosl.tabapp.ui.SecondLevelReportFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 
 object MenuGetterNew {
   @JvmStatic
-  fun getFragment(@NavigationConstants pageId: Int): Fragment? {
+  fun getFragment(pageId: Int): Fragment? {
     val args = Bundle()
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
@@ -37,6 +41,10 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> SecondLevelReportFragment()
+      NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
+      NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
+      NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       else -> null
     }
   }
@@ -56,6 +64,11 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> true
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> true
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> true
+      NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> true
+      NavigationConstants.NAVIGATE_TO_NOTIFICATION -> true
+      NavigationConstants.NAVIGATE_TO_REPORTS -> true
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
       else -> return false
     }

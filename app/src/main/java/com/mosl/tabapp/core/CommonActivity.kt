@@ -64,6 +64,10 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
 
     binding.actionBar.setHomeAction({ openMenuDrawer() })
+    binding.actionBar.showNotification({
+      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
+      binding.actionBar.updateCnt(0)
+    })
     hideAppTitle()
     setupMenuDrawer()
     if (savedInstanceState == null) {

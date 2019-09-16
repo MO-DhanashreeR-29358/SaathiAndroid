@@ -14,11 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import io.reactivex.disposables.Disposable;
@@ -33,8 +34,12 @@ import timber.log.Timber;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 
-public class SecondLevelReportFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class SecondLevelReportFragment extends CommonFragment implements View.OnClickListener {
     private View reportView;
     private TableFixHeaders table;
     private SecondLevelReportFragment.SecondClickTableAdapter secondClickTableAdapter;
@@ -49,7 +54,6 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         reportView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_second_level_report);
         mMap = (Map<String, String>) getArguments().getSerializable(STRING_MAP);
         widgetSystemName = getArguments().getString(STRING_TITLE);
         setUpView(reportView);
@@ -66,6 +70,10 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
         return reportView;
     }
 
+    @Override protected int getLayout() {
+        return R.layout.frag_second_level_report;
+    }
+
     private void setUpView(View reportView) {
         tvNochart = (TextView) reportView.findViewById(R.id.tvNochart);
         txtLables = (TextView) reportView.findViewById(R.id.txtLables);
@@ -75,14 +83,14 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
     }
 
     private void getReport() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LeadReportRequest
                 request =
                 new LeadReportRequest(0, mMap.get("Period_From"), false,
                     mMap.get("EmployeeCode"),
                     mMap.get("PageSize"), 0, 0, 0, mMap.get("ReportTypeSystemName"), "-1",
                     mMap.get("Period_To"), mMap.get("BranchCode"));
-            Disposable subscribe = saathiApi.postLeadReport(request)
+            Disposable subscribe = getSaathiApi().postLeadReport(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -298,8 +306,8 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
                                 Bundle bundle = new Bundle();
                                 bundle.putString(LEAD_ID, leadId);
                                 bundle.putString(UCID, ucid);
-                                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-                                    true);
+                                //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+                                //    true);
                             }
                         }
                     });
@@ -330,8 +338,8 @@ public class SecondLevelReportFragment extends MOSLCommonFragment implements Vie
                                 Bundle bundle = new Bundle();
                                 bundle.putString(LEAD_ID, leadId);
                                 bundle.putString(UCID, ucid);
-                                navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-                                    true);
+                                //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+                                //    true);
                             }
                         }
                     });

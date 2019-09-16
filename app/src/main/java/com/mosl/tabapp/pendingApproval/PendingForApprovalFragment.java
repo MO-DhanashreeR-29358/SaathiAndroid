@@ -19,8 +19,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.mosl.commons.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem;
@@ -30,10 +30,10 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class PendingForApprovalFragment extends MOSLCommonFragment
+public class PendingForApprovalFragment extends CommonFragment
     implements View.OnClickListener, MOSLConstants {
 
     private View pendingForApprovalView;
@@ -188,11 +188,14 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_pending_for_approval);
-        setAppTitle(getClass().toString(), "Pending For Approvals");
+        setAppTitle("Pending For Approvals");
         setUpView(pendingForApprovalView);
         setUserVisibleHint(true);
         return pendingForApprovalView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_pending_for_approval;
     }
 
     @Override
@@ -262,7 +265,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
 
     public void selectDate() {
         today = Calendar.getInstance();
-        dialog = new Dialog(context);
+        dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
@@ -340,7 +343,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
                 toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
                 if (fromDat.after(toDate)) {
-                    MSFDialog.alertDialog(getMainActivity(), 0,
+                    MSFDialog.alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal), INVALID_DATE_RANGE, "OK",
                         true, null);
                 } else {
@@ -392,7 +395,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 arrProfile.add(new RowData(i, lookUpId, lookUpName));
             }
             arrAdapProfile =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrProfile);
+                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfileChange.setAdapter(arrAdapProfile);
             spProfileChange.setOnItemSelectedListener(selectProfileListener);
@@ -408,10 +411,10 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     }
 
     private void getApprovelReqestFieldList(final String entityField) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
                 new ApprovelRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.getApprovalFieldList(request)
+            Disposable subscribe = getSaathiApi().getApprovalFieldList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalField);
         } else {
@@ -438,7 +441,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 String lookUpName = stringOrEmpty(item.name);
                 arrEmployee.add(new RowData(i, lookUpId, lookUpName));
             }
-            arrAdapEmployee = new ArrayAdapter<>(getMainActivity(),
+            arrAdapEmployee = new ArrayAdapter<>(requireContext(),
                 R.layout.simple_spinner_item, arrEmployee);
             arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
             spSelectEmployee.setAdapter(arrAdapEmployee);
@@ -449,10 +452,10 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     }
 
     private void getApprovelReqestUserList() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
                 new ApprovelRequest(AccountDetails.getEmployeeCode());
-            Disposable subscribe = saathiApi.getApprovalUserList(request)
+            Disposable subscribe = getSaathiApi().getApprovalUserList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalUser);
         } else {
@@ -477,7 +480,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -601,7 +604,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     }
 
     private void webServiceCall(String emoloyeeStr, String profileStr) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String updatedStartDate = tvStartDate.getText().toString() + " 00:00:00";
             String updatedEndDate = tvEndDate.getText().toString() + " 00:00:00";
 
@@ -609,7 +612,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
                 new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
                     AccountDetails.getEmployeeCode(), "0", updatedStartDate, updatedEndDate,
                     profileStr);
-            Disposable subscribe = saathiApi.getApprovalRequestList(request)
+            Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
                 .map(responseS -> {
                     JSONObject response = new JSONObject(responseS);
                     Boolean status = response.getBoolean(STATUS);
@@ -673,7 +676,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
     }
 
     private void sendUpdateAppoovalWebService(String status) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String approvalRequestId = "";
             for (String approvalId : selectedRowList) {
                 if (approvalRequestId.equals("")) {
@@ -685,7 +688,7 @@ public class PendingForApprovalFragment extends MOSLCommonFragment
 
             MultiUpdateApprovalRequest request =
                 new MultiUpdateApprovalRequest(status, approvalRequestId);
-            Disposable subscribe = saathiApi.postMultiUpdateApproval(request)
+            Disposable subscribe = getSaathiApi().postMultiUpdateApproval(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMultiUpdate);
         } else {
