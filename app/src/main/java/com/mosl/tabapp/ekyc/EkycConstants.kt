@@ -1,0 +1,17 @@
+package com.mosl.tabapp.ekyc
+
+const val NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao"
+const val OUTPUT = "output"
+const val NEW_USERID = "USERID"
+const val COMMANDTYPE = "COMMANDTYPE"
+const val BRANCHEMPCODE = "BRANCHEMPCODE"
+const val APPLICATIONTYPE = "APPLICATIONTYPE"
+const val OSTYPE = "OSTYPE"
+const val APPLOGINID = "APPLOGINID"
+const val TOKENKEY = "TOKENKEY"
+const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id="
+const val RESUME = "RESUME"
+const val NEW = "NEW"
+const val ANDROID = "ANDROID"
+const val CRM = "CRM"
+const val ISAUFSB = "isAufsb"

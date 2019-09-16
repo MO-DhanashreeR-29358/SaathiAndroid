@@ -13,13 +13,14 @@ import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
+import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
-public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants {
+public class WebViewFragment extends CommonFragment implements MOSLConstants {
     private View view;
     private WebView webView;
     private ProgressBar progressBar;
@@ -28,11 +29,14 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_webview);
         hideAppTitle();
         setUpView(this.getArguments().getString(URL_PATH));
 
         return view;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_webview;
     }
 
     private void setUpView(String url) {
@@ -97,5 +101,8 @@ public class WebViewFragment extends MOSLCommonFragment implements MOSLConstants
 
     }
 
-
+    @Override public void onFragmentReopened(@NotNull Bundle args) {
+        super.onFragmentReopened(args);
+        webView.loadUrl(args.getString(URL_PATH));
+    }
 }

@@ -1,15 +1,20 @@
 package com.mosl.tabapp.navigation
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
+import com.mosl.tabapp.ui.WebViewFragment
+import com.mosl.tabapp.ws.CRMWebServiceHandler
 
 object MenuGetterNew {
   @JvmStatic
   fun getFragment(@NavigationConstants pageId: Int): Fragment? {
+    val args = Bundle()
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
@@ -18,6 +23,14 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragmentNew()
+      NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebViewFragment().apply {
+        args.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL)
+        arguments = args
+      }
+      NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> WebViewFragment().apply {
+        args.putString(URL_PATH, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
+        arguments = args
+      }
       else -> null
     }
   }
@@ -26,8 +39,6 @@ object MenuGetterNew {
   fun isHandled(@NavigationConstants pageId: Int): Boolean {
     return when (pageId) {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> true
-      NavigationConstants.NAVIGATE_TO_FRESH_REG -> true
-      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> true
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> true
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> true
       NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true

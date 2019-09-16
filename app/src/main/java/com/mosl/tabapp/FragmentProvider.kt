@@ -6,6 +6,7 @@ import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -28,4 +29,7 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector(modules = [QueryModule::class])
   abstract fun provideQueryFragmentFactory(): QueryFragmentNew
+
+  @ContributesAndroidInjector
+  abstract fun provideWebviewFragmentFactory(): WebViewFragment
 }
