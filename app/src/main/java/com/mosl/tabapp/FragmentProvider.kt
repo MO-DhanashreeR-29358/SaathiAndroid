@@ -4,6 +4,8 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.dashboard.ClientsLeadsFragment
 import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
 import com.mosl.tabapp.dashboard.TargetAchievementFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -15,8 +17,12 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class FragmentProvider {
-//  @ContributesAndroidInjector(modules = [QueryModule::class])
-//  abstract fun provideQueryFragmentFactory(): QueryFragmentNew
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadCreationFragment(): LeadCreationFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadViewDetailFragment(): LeadViewDetailFragment
 
   @ContributesAndroidInjector
   abstract fun provideDashboardFragmentFactory(): DashboardFragment

@@ -21,6 +21,8 @@ import java.lang.annotation.RetentionPolicy;
 	NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT,
 	NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
 	NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
+	NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT,
+	NavigationConstants.NAVIGATE_TO_LEAD_CREATION
 
 })
 public @interface NavigationConstants {
@@ -38,6 +40,7 @@ public @interface NavigationConstants {
 	int NAVIGATE_TO_QUERY = 11;
 	int NAVIGATE_TO_AU_BANK_MEETING = 12;
 	int NAVIGATE_TO_AU_BANK_MEETING_REPORT = 13;
+	int NAVIGATE_TO_LEAD_CREATION = 14;
 	int NAVIGATE_TO_SECOND_CLICK_DASHBOARD = 25;
 	int NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT = 26;
 }

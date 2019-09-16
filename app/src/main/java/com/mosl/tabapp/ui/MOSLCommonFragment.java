@@ -28,7 +28,6 @@ import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
-import com.mosl.tabapp.leadcreation.LeadCreationFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
@@ -142,8 +141,8 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_CREATION:
-                fragment = new LeadCreationFragment();
-                fragment.setArguments(bundle);
+                //fragment = new LeadCreationFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_ACTIVITIES_DETAIL:
                 fragment = new LeadActivitiesDetailFragment();
