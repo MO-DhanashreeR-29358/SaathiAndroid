@@ -177,4 +177,7 @@
 
     <string name="msg_username_empty">Username cannot be empty</string>
     <string name="msg_password_empty">Password cannot be empty</string>
+    <string name="text_label_cancel">Cancel</string>
+    <string name="text_label_take_photo">Take photo</string>
+    <string name="text_label_add_from_device">Add From Device</string>
 </resources>

@@ -32,7 +32,10 @@ class ScreenNavigatorImpl @Inject constructor(
   val userManager: UserManager,
   val navigator: Navigator
 ) : BaseNavigator, EkycNavigator {
-  override fun openNewEkycApp(isExistingUser: Boolean) {
+  override fun openNewEkycApp(
+    isExistingUser: Boolean,
+    userId: String
+  ) {
     val commandType = if (isExistingUser) RESUME else NEW
     try {
       val launchIntentForPackage =
@@ -41,7 +44,7 @@ class ScreenNavigatorImpl @Inject constructor(
           Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
       )
       launchIntentForPackage?.putExtra(
-          OUTPUT, EkycSecurityUtil.encrypt(userManager.getDataForEkyc(commandType))
+          OUTPUT, EkycSecurityUtil.encrypt(userManager.getDataForEkyc(commandType, userId))
       )
       activity.startActivity(launchIntentForPackage)
     } catch (e: Exception) {

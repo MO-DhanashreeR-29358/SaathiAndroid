@@ -5,10 +5,11 @@ import com.mosl.mobile.user.login.user
 import timber.log.Timber
 
 fun UserManager.getDataForEkyc(
-  commandType: String
+  commandType: String,
+  userId: String
 ): String {
   val map = mapOf(
-      NEW_USERID to "", BRANCHEMPCODE to user.employeeCode, COMMANDTYPE to commandType,
+      NEW_USERID to userId, BRANCHEMPCODE to user.employeeCode, COMMANDTYPE to commandType,
       APPLICATIONTYPE to CRM,
       OSTYPE to ANDROID, APPLOGINID to user.employeeCode, TOKENKEY to user.token,
       ISAUFSB to user.isAufsb()

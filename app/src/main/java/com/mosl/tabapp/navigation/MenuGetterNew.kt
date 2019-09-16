@@ -6,11 +6,15 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.leadViewDetail.DocumentFragment
+import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
+import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
+import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 
@@ -37,6 +41,10 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
+      NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
+      NavigationConstants.NAVIGATE_TO_SMT -> SMTFragment()
       else -> null
     }
   }
@@ -57,6 +65,10 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> true
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
+      NavigationConstants.NAVIGATE_TO_DOCUMENT -> true
+      NavigationConstants.NAVIGATE_TO_SMT -> true
       else -> return false
     }
   }

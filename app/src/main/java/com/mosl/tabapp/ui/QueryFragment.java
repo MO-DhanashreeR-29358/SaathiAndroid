@@ -28,7 +28,8 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 /**
  * Created by Raju on 3/10/2017.
  */
-public class QueryFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class
+QueryFragment extends MOSLCommonFragment implements View.OnClickListener {
     View queryView;
     Button btnSubmit, btnReset;
     EditText edttxtYourName, edttxtEmailAddress, edttxtMobileNo, edttxtBranchCode, edQueryText;

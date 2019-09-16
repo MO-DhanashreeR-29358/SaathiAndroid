@@ -71,7 +71,7 @@ class ActivityNavigationHelper @Inject constructor(
   }
 
   private fun openEkycApp(isExistingOrNewUser: Boolean) {
-    ekycNavigator.openNewEkycApp(isExistingOrNewUser)
+    ekycNavigator.openNewEkycApp(isExistingOrNewUser, "")
   }
 
   companion object {

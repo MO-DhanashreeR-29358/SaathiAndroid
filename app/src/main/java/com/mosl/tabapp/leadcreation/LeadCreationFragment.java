@@ -128,6 +128,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.WEBSITE_CLIENT_REFERRAL;
 import static com.mosl.tabapp.constants.MOSLConstants.WEBSITE_PROSPECT_REFERRAL;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class LeadCreationFragment extends CommonFragment
@@ -2518,6 +2519,7 @@ public class LeadCreationFragment extends CommonFragment
 								//navigateTo(NAV_TO_LEAD_VIEW_MAIN,
 								//    bundle, getFragmentManager(),
 								//    false);
+								screenNavigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 							}
 						});
 				alertDialog.setCancelable(false);

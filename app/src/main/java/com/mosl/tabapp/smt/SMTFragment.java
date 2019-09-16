@@ -1,5 +1,6 @@
 package com.mosl.tabapp.smt;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,31 +16,35 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import java.util.HashMap;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
-import static com.mosl.tabapp.ui.MOSLCommonActivity.getInputBody;
 
-public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMTCallBack {
+public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCallBack {
         private View view;
-        private WebView webView;
-        private ProgressBar progressBar;
+    private ProgressBar progressBar;
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    @Override protected int getLayout() {
+        return R.layout.frag_webview;
+    }
+
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
             view = super.onCreateView(inflater, container, savedInstanceState);
-            attachLayout(R.layout.frag_webview);
+        //attachLayout(R.layout.frag_webview);
             hideAppTitle();
-            setUpView(this.getArguments().getString(URL_PATH));
+        setUpView(Objects.requireNonNull(this.getArguments()).getString(URL_PATH));
 
             return view;
         }
 
-        private void setUpView(String url) {
-            webView = view.findViewById(R.id.webView);
+    @SuppressLint("SetJavaScriptEnabled") private void setUpView(String url) {
+        WebView webView = view.findViewById(R.id.webView);
             progressBar = view.findViewById(R.id.progressBar);
 
             webView.getSettings().setJavaScriptEnabled(true);
@@ -61,7 +66,8 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
                     request.setNotificationVisibility(
                         DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     DownloadManager dm =
-                        (DownloadManager) getContext().getSystemService(DOWNLOAD_SERVICE);
+                        (DownloadManager) Objects.requireNonNull(getContext())
+                            .getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
                     progressBar.setVisibility(View.GONE);
                 }
@@ -81,7 +87,7 @@ public class SMTFragment extends MOSLCommonFragment implements MOSLConstants,SMT
             map.put(OSTYPE, "ANDROID");
             map.put(APPLOGINID, AccountDetails.getEmployeeCode());
             map.put(TOKENKEY, AccountDetails.getToken());
-            gotoNewEkyc(getInputBody(map));
+        //gotoNewEkyc(getInputBody(map));
     }
 
     public class WebViewClient extends android.webkit.WebViewClient {
