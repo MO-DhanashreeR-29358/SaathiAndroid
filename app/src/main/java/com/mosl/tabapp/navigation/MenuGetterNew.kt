@@ -6,6 +6,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.ui.WebViewFragment
@@ -31,6 +32,7 @@ object MenuGetterNew {
         args.putString(URL_PATH, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
         arguments = args
       }
+      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       else -> null
     }
   }
@@ -49,6 +51,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_QUERY -> true
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
       else -> return false
     }
   }

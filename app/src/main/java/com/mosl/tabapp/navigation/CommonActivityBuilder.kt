@@ -24,4 +24,5 @@ abstract class CommonActivityBuilder {
   @ActivityScoped
   @ContributesAndroidInjector(modules = [SliderActivityModule::class])
   internal abstract fun bindSliderActivity(): SliderActivity
+
 }

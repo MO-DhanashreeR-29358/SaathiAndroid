@@ -2,6 +2,7 @@ package com.mosl.mobile.user.login
 
 import android.content.Context
 import android.util.Log
+import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.LoginResponse
@@ -16,7 +17,6 @@ import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
-import com.mosl.shared.util.getLocalIpAddress
 import io.reactivex.Observable
 import javax.inject.Inject
 
