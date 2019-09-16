@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITIES;
@@ -71,6 +72,8 @@ import static com.mosl.tabapp.model.ClientDetail.getLeadId;
 import static com.mosl.tabapp.model.ClientDetail.getMobile;
 import static com.mosl.tabapp.model.ClientDetail.getName;
 import static com.mosl.tabapp.model.ClientDetail.getOaoUserId;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CREATE_MEETING;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SMT;
 
 public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener {
@@ -96,7 +99,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View leadViewMainView = super.onCreateView(inflater, container, savedInstanceState);
 		//attachLayout(R.layout.frag_leadview_main);
@@ -432,6 +435,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
 			//navigateTo(NAV_TO_CREATE_MEETING, bundle, getFragmentManager(), true);
+			screenNavigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true);
 			dialog.dismiss();
 		});
 		ivSetAppointment.setOnClickListener(view -> {
@@ -439,6 +443,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
 			//navigateTo(NAV_TO_SET_APPOINTMENT, bundle, getFragmentManager(), true);
+			screenNavigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
 			dialog.dismiss();
 		});
 		ivCall.setOnClickListener(view -> {

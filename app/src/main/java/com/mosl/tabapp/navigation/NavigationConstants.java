@@ -25,7 +25,11 @@ import java.lang.annotation.RetentionPolicy;
 	NavigationConstants.NAVIGATE_TO_DOCUMENT,
 	NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
 	NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-	NavigationConstants.NAVIGATE_TO_SMT
+	NavigationConstants.NAVIGATE_TO_SMT,
+	NavigationConstants.NAVIGATE_TO_UPDATE_MEETING,
+	NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS,
+	NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT,
+	NavigationConstants.NAVIGATE_TO_CREATE_MEETING
 
 })
 public @interface NavigationConstants {
@@ -48,6 +52,10 @@ public @interface NavigationConstants {
 	int NAVIGATE_TO_LEAD_VIEW_DETAIL = 16;
 	int NAVIGATE_TO_DOCUMENT = 17;
 	int NAVIGATE_TO_SMT = 18;
+	int NAVIGATE_TO_UPDATE_MEETING = 19;
+	int NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS = 20;
+	int NAVIGATE_TO_SET_APPOINTMENT = 21;
+	int NAVIGATE_TO_CREATE_MEETING = 22;
 	int NAVIGATE_TO_SECOND_CLICK_DASHBOARD = 25;
 	int NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT = 26;
 }

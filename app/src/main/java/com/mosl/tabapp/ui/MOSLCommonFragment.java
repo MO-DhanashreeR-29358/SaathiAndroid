@@ -22,10 +22,6 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
-import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
-import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
@@ -114,7 +110,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_CREATE_MEETING:
-                fragment = new CreateMeetingFragment();
+                //fragment = new CreateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_CLIENT_MEETING:
@@ -122,11 +118,11 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SET_APPOINTMENT:
-                fragment = new SetAppointmentFragment();
+                //fragment = new SetAppointmentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_UPDATE_MEETING:
-                fragment = new UpdateMeetingFragment();
+                //fragment = new UpdateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_VIEW_MAIN:
@@ -142,7 +138,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_ACTIVITIES_DETAIL:
-                fragment = new LeadActivitiesDetailFragment();
+                //fragment = new LeadActivitiesDetailFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_DOCUMENT:

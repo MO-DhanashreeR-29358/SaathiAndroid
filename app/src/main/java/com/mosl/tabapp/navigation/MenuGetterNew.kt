@@ -8,9 +8,13 @@ import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.DocumentFragment
+import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
+import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
+import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
@@ -45,6 +49,10 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
       NavigationConstants.NAVIGATE_TO_SMT -> SMTFragment()
+      NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
+      NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
+      NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
+      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
       else -> null
     }
   }
@@ -69,6 +77,10 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> true
       NavigationConstants.NAVIGATE_TO_SMT -> true
+      NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> true
+      NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> true
+      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> true
       else -> return false
     }
   }
