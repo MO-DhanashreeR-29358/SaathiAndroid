@@ -8,7 +8,6 @@ import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
-import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
@@ -16,6 +15,8 @@ import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
+import com.mosl.tabapp.leadcreation.LeadCreationFragment
+import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
