@@ -10,6 +10,7 @@ import com.mosl.app.coreui.base.BaseFragment
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
@@ -18,6 +19,8 @@ import javax.inject.Inject
 open class CommonFragment : BaseFragment() {
   @Inject
   internal lateinit var userManager: UserManager
+  @Inject
+  internal lateinit var navigator: ScreenNavigatorImpl
   val saathiApi = CRMWebServiceHandler.getSaathiApi()
   val compositeDisposable = CompositeDisposable();
   protected fun showToast(message: String) {

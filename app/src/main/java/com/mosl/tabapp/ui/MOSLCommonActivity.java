@@ -731,7 +731,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 						bund.putString(NAME,
 							AccountDetails.getMenuReportList().get(childPosition).name);
 						reportFragment.setArguments(bund);
-						setupFragment(reportFragment);
+						//setupFragment(reportFragment);
 					}
 				}
 
