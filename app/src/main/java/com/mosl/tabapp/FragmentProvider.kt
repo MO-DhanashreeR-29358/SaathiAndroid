@@ -1,6 +1,7 @@
 package com.mosl.tabapp
 
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
+import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.dashboard.ClientsLeadsFragment
 import com.mosl.tabapp.dashboard.DashboardFragment
@@ -93,4 +94,7 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideSMTFragmentFactory(): SMTFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
 }

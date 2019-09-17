@@ -3,6 +3,7 @@ package com.mosl.tabapp.navigation
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
+import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
@@ -53,6 +54,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
       NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
+      NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
       else -> null
     }
   }
@@ -81,6 +83,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> true
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> true
       NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> true
+      NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> true
       else -> return false
     }
   }
