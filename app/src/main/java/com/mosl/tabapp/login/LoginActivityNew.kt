@@ -14,6 +14,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
 import com.mosl.navigator.AppTitle
@@ -97,6 +98,35 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   }
 
   private fun openCommonActivity() {
+    val user = userManager.user
+    val smtEnabled = user.isSMTEnabled()
+    val userId = user.userId
+    val employeeCode = user.employeeCode
+    val firstName = user.firstName
+    val lastName = user.lastName
+    val imageUrl = user.imageUrl
+    val mobile = user.mobile
+    val token = user.token
+    val email = user.email
+    val userTypeSequence = user.userTypeSequence
+
+    val branchCode = user.defaultBusinessProfile.branchCode
+    val businessProfileId = user.currentBusinessProfile.businessProfileId
+    val businessProfileName = user.currentBusinessProfile.name
+    val businessUnitId = user.currentBusinessProfile.businessUnitId
+    AccountDetails(
+        userId,
+        firstName, lastName,
+        imageUrl.replace(" ".toRegex(), "%20"),
+        mobile, email,
+        businessProfileId,
+        businessProfileName,
+        employeeCode, token,
+        businessUnitId,
+        branchCode, userTypeSequence,
+        smtEnabled, user.isAufsb()
+    )
+
     val intent = Intent(this, CommonActivity::class.java)
     startActivity(intent)
     finish()
