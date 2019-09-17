@@ -21,6 +21,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.query.QueryFragmentNew
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -89,4 +90,7 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideCreateMeetingFactory(): CreateMeetingFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideSMTFragmentFactory(): SMTFragment
 }

@@ -26,6 +26,7 @@ import static android.content.Context.DOWNLOAD_SERVICE;
 public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCallBack {
 	private View view;
 	private ProgressBar progressBar;
+	private WebView webView;
 
 	@Override protected int getLayout() {
 		return R.layout.frag_webview;
@@ -43,7 +44,7 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	}
 
 	@SuppressLint("SetJavaScriptEnabled") private void setUpView(String url) {
-		WebView webView = view.findViewById(R.id.webView);
+		webView = view.findViewById(R.id.webView);
 		progressBar = view.findViewById(R.id.progressBar);
 
 		webView.getSettings().setJavaScriptEnabled(true);
@@ -110,6 +111,11 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 			super.onPageFinished(view, url);
 			progressBar.setVisibility(View.GONE);
 		}
+	}
+
+	@Override public void onFragmentReopened(@NotNull Bundle args) {
+		super.onFragmentReopened(args);
+		webView.loadUrl(args.getString(URL_PATH) + "&Os=android");
 	}
 }
 
