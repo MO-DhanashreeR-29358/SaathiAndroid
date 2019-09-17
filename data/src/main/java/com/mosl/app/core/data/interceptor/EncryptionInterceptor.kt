@@ -2,7 +2,7 @@ package com.mosl.app.core.data.interceptor
 
 import com.mosl.shared.Encryptor.AESEncryptor
 import okhttp3.Interceptor
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -17,7 +17,7 @@ class EncryptionInterceptor @Inject constructor(
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     var request = chain.request()
-    val oldBody = request.body()
+    val oldBody = request.body
     var isEncrypted = false
 
     if (oldBody != null) {
@@ -25,23 +25,23 @@ class EncryptionInterceptor @Inject constructor(
       oldBody.writeTo(buffer)
       val strOldBody = buffer.readUtf8()
 
-      val mediaType = MediaType.parse("text/plain; charset=utf-8")
+      val mediaType = "text/plain; charset=utf-8".toMediaTypeOrNull()
       val strNewBody = encryptor.encrypt(strOldBody)
       val body = RequestBody.create(mediaType, strNewBody)
       request = request.newBuilder()
-          .method(request.method(), body)
+          .method(request.method, body)
           .build()
       isEncrypted = true
     }
 
     val response = chain.proceed(request)
-    if (isEncrypted && response.body() != null) {
+    if (isEncrypted && response.body != null) {
       try {
-        val strResponse = response.body()
+        val strResponse = response.body
         val decrypted = encryptor.decrypt(strResponse!!.string())
         if (decrypted != null) {
           val decryptedBody = ResponseBody.create(
-              MediaType.parse("application/json"),
+              "application/json".toMediaTypeOrNull(),
               decrypted
           )
           return response.newBuilder()

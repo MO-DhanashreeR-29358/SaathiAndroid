@@ -8,6 +8,8 @@ import dagger.Provides
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.logging.HttpLoggingInterceptor.Level
+import okhttp3.logging.HttpLoggingInterceptor.Logger
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -18,13 +20,15 @@ class DebugDataModule {
   @Provides
   @Singleton
   fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-    return HttpLoggingInterceptor { message ->
-      Timber.tag("OkHttp")
-          .d(message)
-    }.setLevel(
-        HttpLoggingInterceptor.Level.BODY
-    )
+    val httpLoggingInterceptor = HttpLoggingInterceptor(object : Logger {
+      override fun log(message: String) {
+        Timber.tag("OkHttp")
+            .d(message)
+      }
+    })
+    return httpLoggingInterceptor.apply { httpLoggingInterceptor.level = Level.BODY }
   }
+
 
   @Provides
   @Singleton

@@ -70,6 +70,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.WIDGETNAME;
 import static com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -757,6 +758,8 @@ public class DashboardSecondLevelFragment extends CommonFragment
                             if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
                                 //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
                                 //    true);
+								navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+
                             }
                         }
                     });
@@ -811,6 +814,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
                             if (!leadId.equalsIgnoreCase("0") || !ucid.equalsIgnoreCase("0")) {
                                 //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
                                 //    true);
+								navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
                             }
                         }
                     });

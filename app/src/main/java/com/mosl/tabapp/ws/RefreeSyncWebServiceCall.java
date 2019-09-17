@@ -1,7 +1,6 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.ProgressBar;
 import com.mosl.mobile.user.login.UserManager;
@@ -23,7 +22,6 @@ import timber.log.Timber;
 
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
 import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
-import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 import static com.mosl.tabapp.ws.CRMWebServiceHandler.getJsonString;
 
 public class RefreeSyncWebServiceCall {
@@ -43,7 +41,6 @@ public class RefreeSyncWebServiceCall {
 		String url = CRMWebServiceHandler.CALL_BASE_URL;
 		OkHttpClient client = new OkHttpClient();
 		try {
-			SharedPreferences prefs = getPrefs(context);
 			MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
 			RequestBody body =
 				RequestBody.create(MEDIA_TYPE,

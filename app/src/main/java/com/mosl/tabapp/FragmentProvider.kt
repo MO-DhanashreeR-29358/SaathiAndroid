@@ -32,10 +32,15 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentProvider {
 
   @ContributesAndroidInjector
-  abstract fun provideLeadCreationFragment(): LeadCreationFragment
+  abstract fun provideLeadCreationFactory(): LeadCreationFragment
 
   @ContributesAndroidInjector
-  abstract fun provideLeadViewDetailFragment(): LeadViewDetailFragment
+  abstract fun provideLeadViewMainFactory(): LeadViewMainFragment
+  @ContributesAndroidInjector
+  abstract fun provideLeadViewDetailFactory(): LeadViewDetailFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideDocumentFactory(): DocumentFragment
 
   @ContributesAndroidInjector
   abstract fun provideDashboardFragmentFactory(): DashboardFragment
@@ -57,6 +62,9 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
 
   @ContributesAndroidInjector
   abstract fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
@@ -102,4 +110,28 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadProfilingFactory(): LeadProfilingFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
+
+  @ContributesAndroidInjector
+  abstract fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideCreateMeetingFactory(): CreateMeetingFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideSMTFragmentFactory(): SMTFragment
 }

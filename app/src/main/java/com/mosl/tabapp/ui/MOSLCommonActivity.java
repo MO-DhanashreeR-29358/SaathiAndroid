@@ -75,6 +75,7 @@ import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.EkycSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.DashboardFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
@@ -1148,7 +1149,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 		NotificationData data = new NotificationData(dataStr);
 		if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
 			//Goto leadView Detail
-			MOSLCommonFragment fragment = new LeadViewMainFragment();
+			CommonFragment fragment = new LeadViewMainFragment();
 			//BackStack
 			Bundle bundle = new Bundle();
 			String leadId = data.getParamMap().get(LEAD_ID);
@@ -1159,7 +1160,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 			bundle.putString(LEAD_ID, leadId);
 			bundle.putParcelable(NOTIFICATION_DATA, data);
 			fragment.setArguments(bundle);
-			setupFragment(fragment);
+			//setupFragment(fragment);
 		}
 		//PENDINGAPPROVAL
 		else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {

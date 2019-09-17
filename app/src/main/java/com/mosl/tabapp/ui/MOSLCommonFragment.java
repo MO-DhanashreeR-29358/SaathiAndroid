@@ -22,6 +22,7 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
+import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
 import com.mosl.tabapp.leadViewDetail.DocumentFragment;
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
@@ -116,7 +117,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_CREATE_MEETING:
-                fragment = new CreateMeetingFragment();
+                //fragment = new CreateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_CLIENT_MEETING:
@@ -124,15 +125,15 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SET_APPOINTMENT:
-                fragment = new SetAppointmentFragment();
+                //fragment = new SetAppointmentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_UPDATE_MEETING:
-                fragment = new UpdateMeetingFragment();
+                //fragment = new UpdateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_VIEW_MAIN:
-                fragment = new LeadViewMainFragment();
+                //fragment = new LeadViewMainFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT:
@@ -144,11 +145,11 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_ACTIVITIES_DETAIL:
-                fragment = new LeadActivitiesDetailFragment();
+                //fragment = new LeadActivitiesDetailFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_DOCUMENT:
-                fragment = new DocumentFragment();
+                //fragment = new DocumentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_APPROVAL:
@@ -168,7 +169,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 //fragment.setArguments(bundle);
                 break;
             case NAV_TO_WEB_VIEW:
-                fragment = new SMTFragment();
+                //fragment = new SMTFragment();
                 fragment.setArguments(bundle);
                 break;
         }
