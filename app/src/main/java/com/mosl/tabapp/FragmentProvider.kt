@@ -157,4 +157,5 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
+
 }

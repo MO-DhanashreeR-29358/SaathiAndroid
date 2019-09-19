@@ -37,7 +37,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.BirthdayAnniversaryModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import info.hoang8f.android.segmented.SegmentedGroup;
@@ -46,6 +45,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -207,7 +207,10 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private void getProfile() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+					null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderAllLookUp);
@@ -417,7 +420,8 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                 (spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A")
                     + (dayType.equalsIgnoreCase(BELATED_FLAG) ? "-L" : "-T");
             SendEmailRequest request =
-                new SendEmailRequest(null, true, eventType, "E", AccountDetails.getEmployeeCode(),
+				new SendEmailRequest(null, true, eventType, "E", Objects.requireNonNull(
+					userManager.getUser()).employeeCode,
                     filterType);
             Disposable subscribe = getSaathiApi().postSendEmail(request)
                 .compose(applyUiModel())

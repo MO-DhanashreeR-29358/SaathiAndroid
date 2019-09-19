@@ -26,7 +26,6 @@ import com.mosl.tabapp.drawermenu.item.BaseMenuItem
 import com.mosl.tabapp.drawermenu.item.ChildMenuItem
 import com.mosl.tabapp.drawermenu.item.MenuHeaderItem
 import com.mosl.tabapp.drawermenu.item.SelectableMenu
-import com.mosl.tabapp.model.AccountDetails
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
@@ -108,7 +107,7 @@ class DrawerMenuView : FrameLayout {
 
     disposable = CompositeDisposable()
 
-    source.getMenuItems(userManager, AccountDetails.getMenuReportList())
+    source.getMenuItems(userManager, userManager.getReportMenuList())
         .compose(applyUiModel())
         .subscribe(this::render)
         .addTo(disposable)

@@ -16,7 +16,6 @@ import android.widget.ProgressBar;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import java.util.HashMap;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
@@ -77,12 +76,12 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	@Override public void openEkyc(String OAOUserId) {
 		HashMap<String, String> map = new HashMap();
 		map.put(NEW_USERID, OAOUserId);
-		map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
+		map.put(BRANCHEMPCODE, Objects.requireNonNull(userManager.getUser()).employeeCode);
 		map.put(COMMANDTYPE, "RESUME");
 		map.put(APPLICATIONTYPE, "CRM");
 		map.put(OSTYPE, "ANDROID");
-		map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-		map.put(TOKENKEY, AccountDetails.getToken());
+		map.put(APPLOGINID, userManager.getUser().employeeCode);
+		map.put(TOKENKEY, userManager.getUser().token);
 		//gotoNewEkyc(getInputBody(map));
 	}
 

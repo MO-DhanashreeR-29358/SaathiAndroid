@@ -41,4 +41,5 @@ data class User(
   fun isIFA(): Boolean {
     return currentBusinessProfile.businessUnitId.equals("4")
   }
+
 }

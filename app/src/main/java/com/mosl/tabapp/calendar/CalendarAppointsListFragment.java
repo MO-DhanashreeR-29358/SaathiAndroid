@@ -21,7 +21,6 @@ import com.mosl.saathi.api.model.calender.CalenderRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.CalenderModel;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import io.reactivex.disposables.Disposable;
@@ -230,7 +229,8 @@ public class CalendarAppointsListFragment extends CommonFragment
 
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			CalenderRequest request =
-				new CalenderRequest(selectionDate, "A", AccountDetails.getEmployeeCode());
+				new CalenderRequest(selectionDate, "A", Objects.requireNonNull(
+					userManager.getUser()).employeeCode);
 			Disposable subscribe = getSaathiApi().postCalenderByDate(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderCalender);

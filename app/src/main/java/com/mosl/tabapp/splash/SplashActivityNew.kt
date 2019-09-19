@@ -26,8 +26,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.login.LoginActivityNew
-import com.mosl.tabapp.model.AccountDetails
-import com.mosl.tabapp.model.AccountDetails.setEkycUrl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -123,7 +121,7 @@ class SplashActivityNew : LeanBaseActivity() {
       if (it != null) {
         val msg = it.msg;
         val newEkycUrl = it.newEkycUrl
-        setEkycUrl(newEkycUrl.replace(" ".toRegex(), "%20"))
+//        setEkycUrl(newEkycUrl.replace(" ".toRegex(), "%20"))
         when (it.statusCode) {
           0 -> MSFDialog.alertDialog(this@SplashActivityNew, 0,
               resources.getString(R.string.MOSL), msg,
@@ -206,7 +204,8 @@ class SplashActivityNew : LeanBaseActivity() {
             val childMenuList = reportTypeResponse.childMenuList
             for (childMenu in childMenuList) {
               if (childMenu.isBasicReports()) {
-                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
+                userManager.setReportMenuList(childMenu.ChildMenuList)
+//                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
                 openCommonActivity()
               }
             }
@@ -232,33 +231,6 @@ class SplashActivityNew : LeanBaseActivity() {
   fun setUserPreferenceData() {
 
     val user = userManager.user
-    val smtEnabled = user.isSMTEnabled()
-    val userId = user.userId
-    val employeeCode = user.employeeCode
-    val firstName = user.firstName
-    val lastName = user.lastName
-    val imageUrl = user.imageUrl
-    val mobile = user.mobile
-    val token = user.token
-    val email = user.email
-    val userTypeSequence = user.userTypeSequence
-
-    val branchCode = user.defaultBusinessProfile.branchCode
-    val businessProfileId = user.currentBusinessProfile.businessProfileId
-    val businessProfileName = user.currentBusinessProfile.name
-    val businessUnitId = user.currentBusinessProfile.businessUnitId
-    AccountDetails(
-        userId,
-        firstName, lastName,
-        imageUrl.replace(" ".toRegex(), "%20"),
-        mobile, email,
-        businessProfileId,
-        businessProfileName,
-        employeeCode, token,
-        businessUnitId,
-        branchCode, userTypeSequence,
-        smtEnabled, user.isAufsb()
-    )
     if (user.isAufsb()) {
       openCommonActivity()
     } else {

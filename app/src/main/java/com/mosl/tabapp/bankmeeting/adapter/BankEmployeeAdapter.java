@@ -10,6 +10,9 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.mosl.app.core.utils.Injector;
+import com.mosl.mobile.saathi.AppComponent;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.SaathiApi;
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest;
 import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeResponse;
@@ -17,11 +20,12 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.bankmeeting.model.BankEmployeeModel;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import javax.inject.Inject;
 
 public class BankEmployeeAdapter extends BaseAdapter implements Filterable {
 	private final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
@@ -29,11 +33,13 @@ public class BankEmployeeAdapter extends BaseAdapter implements Filterable {
 	private LayoutInflater inflater;
 	private List<BankEmployeeModel> resultList = new ArrayList<>();
 	private CommonFragment fragment;
-
+	@Inject UserManager userManager;
 	public BankEmployeeAdapter(Context context, CommonFragment fragment) {
 		this.inflater = LayoutInflater.from(context);
 		this.context = context;
 		this.fragment = fragment;
+		Injector.obtain(context, AppComponent.class).inject(this);
+
 	}
 
 	public void clearAll() {
@@ -94,12 +100,20 @@ public class BankEmployeeAdapter extends BaseAdapter implements Filterable {
 						if (CRMAppUtil.isNetworkEnabled(context)) {
 							BankEmployeeRequest request =
 								new BankEmployeeRequest(
-									URLEncoder.encode(AccountDetails.getEmployeeCode(), "utf-8"),
-									URLEncoder.encode(constraint.toString(), "utf-8"),
-									URLEncoder.encode(AccountDetails.getBusinessUnitId(), "utf-8"),
-									URLEncoder.encode(AccountDetails.getBusinessProfileId(),
+									URLEncoder.encode(
+										Objects.requireNonNull(userManager.getUser()).employeeCode,
 										"utf-8"),
-									URLEncoder.encode(AccountDetails.getBranchCode(), "utf-8")
+									URLEncoder.encode(constraint.toString(), "utf-8"),
+									URLEncoder.encode(Objects.requireNonNull(
+										Objects.requireNonNull(
+											userManager.getUser()).currentBusinessProfile.businessUnitId),
+										"utf-8"),
+									URLEncoder.encode(
+										userManager.getUser().currentBusinessProfile.businessUnitId,
+										"utf-8"),
+									URLEncoder.encode(
+										userManager.getUser().defaultBusinessProfile.branchCode,
+										"utf-8")
 								);
 							try {
 								List<BankEmployeeResponse> dataList =

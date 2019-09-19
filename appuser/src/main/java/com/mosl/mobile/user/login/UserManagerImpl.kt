@@ -2,6 +2,7 @@ package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.User
+import com.mosl.saathi.api.model.splash.ChildMenu
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +13,9 @@ import javax.inject.Singleton
 class UserManagerImpl @Inject constructor(
   private val userCache: UserCache
 ) : UserManager {
+
   private var user: User?
+  private lateinit var reportMenulist: List<ChildMenu>
 
   init {
     val user = userCache.getUser()
@@ -45,6 +48,13 @@ class UserManagerImpl @Inject constructor(
     return userCache.getCredentials()
   }
 
+  override fun setReportMenuList(reportMenuList: List<ChildMenu>) {
+    this.reportMenulist = reportMenuList
+  }
+
+  override fun getReportMenuList(): List<ChildMenu> {
+    return reportMenulist
+  }
   /*override fun isLoggedIn(): Boolean {
     return user != null
   }*/

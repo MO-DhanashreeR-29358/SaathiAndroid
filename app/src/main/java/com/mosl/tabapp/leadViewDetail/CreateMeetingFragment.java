@@ -70,7 +70,6 @@ import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddedAttendeeModel;
 import com.mosl.tabapp.model.AddedSplAttendeeModel;
 import com.mosl.tabapp.model.ClientDetail;
@@ -112,8 +111,6 @@ import static com.mosl.tabapp.constants.MOSLConstants.BACLIENTMEETING;
 import static com.mosl.tabapp.constants.MOSLConstants.CATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.CREATE_MEETING;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY;
-import static com.mosl.tabapp.constants.MOSLConstants.FRANCHIES;
-import static com.mosl.tabapp.constants.MOSLConstants.IFA;
 import static com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN;
 import static com.mosl.tabapp.constants.MOSLConstants.INVALID_PINCODE_NUMBER;
 import static com.mosl.tabapp.constants.MOSLConstants.INVALID_TIME;
@@ -631,9 +628,10 @@ public class CreateMeetingFragment extends CommonFragment
 		currentYear = ((Integer.parseInt(dateArray[0])));
 		month = ((Integer.parseInt(dateArray[1])));
 		day = ((Integer.parseInt(dateArray[2])));
-		AddedAttendeeModel.setAttendeeUserEmplyeeCode(AccountDetails.getEmployeeCode());
-		if (AccountDetails.getProfileType().equalsIgnoreCase(FRANCHIES)
-			|| AccountDetails.getProfileType().equalsIgnoreCase(IFA)) {
+		AddedAttendeeModel.setAttendeeUserEmplyeeCode(
+			Objects.requireNonNull(userManager.getUser()).employeeCode);
+		if (userManager.getUser().isFranchise()
+			|| userManager.getUser().isIFA()) {
 			linaerLayoutNew.setVisibility(View.VISIBLE);
 			profileType = true;
 		}
@@ -1273,7 +1271,10 @@ public class CreateMeetingFragment extends CommonFragment
 	private void category() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), CATEGORY, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), CATEGORY,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderCategory);
@@ -1314,7 +1315,10 @@ public class CreateMeetingFragment extends CommonFragment
 	private void meetingObjective() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGOBJECTIVE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId),
+					MEETINGOBJECTIVE, null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderMeetingObjective);
@@ -1357,7 +1361,10 @@ public class CreateMeetingFragment extends CommonFragment
 	private void subCategory() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), SUBCATEGORY, categoryCodeStr,
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), SUBCATEGORY,
+					categoryCodeStr,
 					null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
@@ -1409,7 +1416,10 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			meetingDuration();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderProduct);
@@ -1451,7 +1461,10 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			activityType();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGDURATION, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId),
+					MEETINGDURATION, null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderMeetingDuration);
@@ -1493,7 +1506,10 @@ public class CreateMeetingFragment extends CommonFragment
 	private void activityType() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIVITYTYPE,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderActivityType);
@@ -1537,7 +1553,10 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			baClient();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), MEETINGREASON,
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId),
+					MEETINGREASON,
 					activityTypeCodeStr, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
@@ -1581,7 +1600,10 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			outStation();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), BACLIENTMEETING,
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId),
+					BACLIENTMEETING,
 					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
@@ -1624,7 +1646,8 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			actionables();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), OUTSTATIONMEETING,
+				new LookupRequest(Objects.requireNonNull(
+					userManager.getUser().currentBusinessProfile.businessUnitId), OUTSTATIONMEETING,
 					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
@@ -1668,7 +1691,8 @@ public class CreateMeetingFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			category();
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIONABLES, null, null);
+				new LookupRequest(userManager.getUser().currentBusinessProfile.businessUnitId,
+					ACTIONABLES, null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderActionables);
@@ -2207,7 +2231,7 @@ public class CreateMeetingFragment extends CommonFragment
 										String employeeCode = stringOrEmpty(item.employeeCode);
 										String BranchCode = stringOrEmpty(item.branchCode);
 										if (employeeCode.equalsIgnoreCase(
-											AccountDetails.getEmployeeCode())) {
+											userManager.getUser().employeeCode)) {
 											continue;
 										}
 										modelList.add(new EmployeeModel(employeeName, employeeCode,
@@ -2480,8 +2504,7 @@ public class CreateMeetingFragment extends CommonFragment
 		}
 
 		@SuppressLint("ViewHolder") @Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			View view = convertView;
+		public View getView(final int position, View view, ViewGroup parent) {
 			Holder holder = new Holder();
 			view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false);
 

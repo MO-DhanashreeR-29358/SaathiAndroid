@@ -14,12 +14,12 @@ import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.PendingApprovalModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -89,7 +89,8 @@ public class PendingApprovalFragment extends CommonFragment {
 	private void getAprovalCoutSummary() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
-                new PendingApprovalRequest(AccountDetails.getEmployeeCode());
+				new PendingApprovalRequest(
+					Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().postApprovalSummaryCount(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryCount);
@@ -133,7 +134,8 @@ public class PendingApprovalFragment extends CommonFragment {
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
-                new PendingApprovalRequest(AccountDetails.getEmployeeCode());
+				new PendingApprovalRequest(
+					Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().postApprovalSummaryByEmployee(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryByCount);

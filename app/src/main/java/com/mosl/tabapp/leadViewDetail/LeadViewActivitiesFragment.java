@@ -28,7 +28,6 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
 import com.mosl.tabapp.ui.CustomDialog;
@@ -471,7 +470,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 			holder.tvAppointmentType.setText(
 				String.format("Appointment for %s", appointmentModel.getProduct()));
 			holder.relativeLayout.setOnClickListener(view -> {
-				if (AccountDetails.getEmployeeCode()
+				if (Objects.requireNonNull(userManager.getUser()).employeeCode
 					.equalsIgnoreCase(appointmentModel.getCreatedBy())) {
 					leadViewDialog(appointmentModel);
 				}

@@ -31,7 +31,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
@@ -206,7 +205,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 			LeadReportRequest
 				request =
 				new LeadReportRequest(0, CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd"), false,
-					AccountDetails.getEmployeeCode(),
+					Objects.requireNonNull(userManager.getUser()).employeeCode,
 					REPORT_PAGE_SIZE, 0, 0, 0, widgetSystemName, "-1",
 					CRMAppUtil.getDateStr(toDate, "yyyy-MM-dd"), branchCode);
 			Disposable subscribe = getSaathiApi().postLeadReport(request)

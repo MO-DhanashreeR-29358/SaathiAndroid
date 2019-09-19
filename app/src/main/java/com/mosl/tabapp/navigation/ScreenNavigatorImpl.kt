@@ -16,9 +16,9 @@ import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
 import com.mosl.navigator.asFragmentEntry
 import com.mosl.tabapp.common.EkycSecurityUtil
+import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.ekyc.NEW
-import com.mosl.tabapp.ekyc.NEWEKYC_PACKAGE_NAME
 import com.mosl.tabapp.ekyc.OUTPUT
 import com.mosl.tabapp.ekyc.PLAY_STORE_URL
 import com.mosl.tabapp.ekyc.RESUME
@@ -39,7 +39,7 @@ class ScreenNavigatorImpl @Inject constructor(
     val commandType = if (isExistingUser) RESUME else NEW
     try {
       val launchIntentForPackage =
-        activity.packageManager.getLaunchIntentForPackage(NEWEKYC_PACKAGE_NAME)
+        activity.packageManager.getLaunchIntentForPackage(EKYC_PACKAGE_NAME)
       launchIntentForPackage?.setFlags(
           Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
       )
@@ -49,7 +49,7 @@ class ScreenNavigatorImpl @Inject constructor(
       activity.startActivity(launchIntentForPackage)
     } catch (e: Exception) {
       val intent = Intent(Intent.ACTION_VIEW)
-      intent.setData(Uri.parse(PLAY_STORE_URL + NEWEKYC_PACKAGE_NAME))
+      intent.setData(Uri.parse(PLAY_STORE_URL + EKYC_PACKAGE_NAME))
       activity.startActivity(intent)
     }
   }

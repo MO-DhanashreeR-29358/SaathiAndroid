@@ -45,7 +45,6 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
-import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
@@ -361,7 +360,10 @@ class BankMeetingFragment : CommonFragment() {
   private fun getProfile() {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request =
-        LookupRequest(AccountDetails.getBusinessUnitId(), MOSLConstants.BANKMEETINGTYPE, null, null)
+        LookupRequest(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
+            MOSLConstants.BANKMEETINGTYPE, null, null
+        )
       val subscribe = saathiApi.getAllLookupMaster(request)
           .compose(applyUiModel())
           .subscribe { this.renderMeetingType(it) }
@@ -403,7 +405,10 @@ class BankMeetingFragment : CommonFragment() {
   private fun meetingDuration() {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request =
-        LookupRequest(AccountDetails.getBusinessUnitId(), MOSLConstants.MEETINGDURATION, null, null)
+        LookupRequest(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
+            MOSLConstants.MEETINGDURATION, null, null
+        )
       val disposable = saathiApi.getAllLookup(request)
           .compose(applyUiModel())
           .subscribe { this.renderMeetingDuration(it) }

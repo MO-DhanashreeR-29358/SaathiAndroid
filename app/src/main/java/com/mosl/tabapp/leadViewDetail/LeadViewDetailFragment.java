@@ -104,7 +104,6 @@ import com.mosl.tabapp.common.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddressDetailModel;
 import com.mosl.tabapp.model.ContactDetailModel;
 import com.mosl.tabapp.model.EmployeeModel;
@@ -1544,7 +1543,10 @@ public class LeadViewDetailFragment extends CommonFragment
 	private void getProfession() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), PROFESSIONID, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), PROFESSIONID,
+					null, null);
 			getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderProfession));
@@ -1585,7 +1587,10 @@ public class LeadViewDetailFragment extends CommonFragment
 	private void getInterestIn() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+					null, null);
 			getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderInterests));
@@ -1625,7 +1630,10 @@ public class LeadViewDetailFragment extends CommonFragment
 	private void getProductType(String productId) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest lookupRequest =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), PRODUCTTYPE, productId, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), PRODUCTTYPE,
+					productId, null);
 			getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
 				.compose(applyUiModel())
 				.subscribe(this::renderProductTypes));
@@ -2136,7 +2144,10 @@ public class LeadViewDetailFragment extends CommonFragment
 	private void selectProfile() {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+					null, null);
 			getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderLeadProfile));
@@ -2429,7 +2440,7 @@ public class LeadViewDetailFragment extends CommonFragment
 						if (data != null) {
 							final ArrayList<EmployeeModel> modelList = new ArrayList<>();
 							for (ProductSpecialistItem datum : data) {
-								if (AccountDetails.getEmployeeCode()
+								if (Objects.requireNonNull(userManager.getUser()).employeeCode
 									.equalsIgnoreCase(datum.employeeCode)) {
 									continue;
 								}
@@ -2488,7 +2499,7 @@ public class LeadViewDetailFragment extends CommonFragment
 					if (data != null) {
 						final ArrayList<EmployeeModel> modelList = new ArrayList<>();
 						for (BusinessProfile datum : data) {
-							if (AccountDetails.getEmployeeCode()
+							if (userManager.getUser().employeeCode
 								.equalsIgnoreCase(datum.employeeCode)) {
 								continue;
 							}
@@ -2524,7 +2535,7 @@ public class LeadViewDetailFragment extends CommonFragment
 				interestedIn,
 				primaryRMAdd,
 				specialistAdd,
-				AccountDetails.getEmployeeCode(),
+				userManager.getUser().employeeCode,
 				CRMAppUtil.getDBDate(),
 				stageId,
 				statusId,
@@ -2996,7 +3007,8 @@ public class LeadViewDetailFragment extends CommonFragment
 			getJsonSafeString(etAdd3.getText().toString().trim()), countryCodeStr,
 			stateCodeStr,
 			cityCodeStr, etPincode.getText().toString().trim(),
-			cbPrimaryAddress.isChecked(), AccountDetails.getBusinessUnitId()));
+			cbPrimaryAddress.isChecked(), Objects.requireNonNull(
+			Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId)));
 		addressDetailList.add(new AddressDetailModel(OFFICEADDRESS,
 			getJsonSafeString(etOffAdd1.getText().toString().trim()),
 			getJsonSafeString(etOffAdd2.getText().toString().trim()),
@@ -3004,7 +3016,9 @@ public class LeadViewDetailFragment extends CommonFragment
 			stateCodeStr,
 			cityCodeStr,
 			etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
-			AccountDetails.getBusinessUnitId()));
+			Objects.requireNonNull(
+				Objects.requireNonNull(
+					userManager.getUser()).currentBusinessProfile.businessUnitId)));
 
 		LeadDetailModel leadDetailModel = new LeadDetailModel();
 		leadDetailModel.setSameAsAbove(cbSameAs.isChecked());
@@ -3040,7 +3054,8 @@ public class LeadViewDetailFragment extends CommonFragment
 			e.printStackTrace();
 		}
 		leadDetailModel.setLeadID(etLeadID.getText().toString().trim());
-		leadDetailModel.setBusinessUnitID(AccountDetails.getBusinessUnitId());
+		leadDetailModel.setBusinessUnitID(Objects.requireNonNull(
+			Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId));
 		leadDetailModel.setContactPerson(etContactPerson.getText().toString().trim());
 		leadDetailModel.setSourceID(sourceID);
 		leadDetailModel.setLeadSourceID(leadProspetSourceID);
@@ -3076,7 +3091,9 @@ public class LeadViewDetailFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			String stageID = isBlank(stageId) ? null : stageId;
 			getCompositeDisposable().add(getSaathiApi().getStageList(
-				new StageRequest(AccountDetails.getBusinessUnitId(), stageID))
+				new StageRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), stageID))
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout)));
 		} else {
@@ -3127,7 +3144,9 @@ public class LeadViewDetailFragment extends CommonFragment
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			String stageID = isBlank(stageId) ? null : stageId;
 			StageMobileRequest mobileRequest =
-				new StageMobileRequest(AccountDetails.getBusinessUnitId(), stageID);
+				new StageMobileRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), stageID);
 			getCompositeDisposable().add(getSaathiApi().getStageMobileList(mobileRequest)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
@@ -3375,7 +3394,7 @@ public class LeadViewDetailFragment extends CommonFragment
 		if (MSFStatistics.isNetworkEnabled(requireContext())) {
 			getCompositeDisposable().add(getSaathiApi().getClientSummary(
 				"https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
-				AccountDetails.getUserId(), ucid)
+				Objects.requireNonNull(userManager.getUser()).userId, ucid)
 				.compose(applyUiModel())
 				.subscribe(this::renderClientSummary));
 		} else {
@@ -3543,7 +3562,7 @@ public class LeadViewDetailFragment extends CommonFragment
 		if (MSFStatistics.isNetworkEnabled(requireContext())) {
 			getCompositeDisposable().add(getSaathiApi().getClientGainLossSummary(
 				"https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
-				AccountDetails.getUserId(), ucid)
+				Objects.requireNonNull(userManager.getUser()).userId, ucid)
 				.compose(applyUiModel())
 				.subscribe(this::renderGainLossSummary));
 		} else {
@@ -4183,7 +4202,7 @@ public class LeadViewDetailFragment extends CommonFragment
 														leadDetailAddProductModel.getLeadMappingProductId(),
 														leadDetailAddProductModel.getInterestedIn(),
 														leadDetailAddProductModel.getPrimaryRM(),
-														AccountDetails.getEmployeeCode(),
+														userManager.getUser().employeeCode,
 														CRMAppUtil.getDBDate(),
 														leadDetailAddProductModel.getStageId(),
 														leadDetailAddProductModel.getStatusId()
@@ -4337,7 +4356,10 @@ public class LeadViewDetailFragment extends CommonFragment
 			final String statusId, final LinearLayout progressLayout) {
 			if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 				CrossSellingProductRequest request =
-					new CrossSellingProductRequest(AccountDetails.getBusinessUnitId(), intrestedIn);
+					new CrossSellingProductRequest(Objects.requireNonNull(
+						Objects.requireNonNull(
+							userManager.getUser()).currentBusinessProfile.businessUnitId),
+						intrestedIn);
 				getCompositeDisposable().add(getSaathiApi().getCrossSellingProduct(request)
 					.compose(applyUiModel())
 					.subscribe(uiModel ->
@@ -4390,7 +4412,10 @@ public class LeadViewDetailFragment extends CommonFragment
 			final LinearLayout progressLayout) {
 			if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 				LookupRequest lookupRequest =
-					new LookupRequest(AccountDetails.getBusinessUnitId(), 111, null, null);
+					new LookupRequest(Objects.requireNonNull(
+						Objects.requireNonNull(
+							userManager.getUser()).currentBusinessProfile.businessUnitId), 111,
+						null, null);
 				getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
 					.compose(applyUiModel())
 					.subscribe(
@@ -4783,7 +4808,7 @@ public class LeadViewDetailFragment extends CommonFragment
 					interestIn,
 					primaryRM,
 					productSpecialistId,
-					AccountDetails.getEmployeeCode(),
+					userManager.getUser().employeeCode,
 					CRMAppUtil.getDBDate(),
 					newStageCodeStr,
 					newStageNameStr,

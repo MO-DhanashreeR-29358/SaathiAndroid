@@ -2,8 +2,10 @@ package com.mosl.mobile.saathi
 
 import com.mosl.tabapp.SaathiAppImpl
 import com.mosl.tabapp.SaathiAppNew
+import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.DataSyncWorker
+import com.mosl.tabapp.ws.HeaderInterceptor
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -24,6 +26,9 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   fun inject(target: DataSyncWorker)
 
+  fun inject(target: HeaderInterceptor)
+
+  fun inject(target: BankEmployeeAdapter)
   @Component.Builder
   interface Builder {
     @BindsInstance

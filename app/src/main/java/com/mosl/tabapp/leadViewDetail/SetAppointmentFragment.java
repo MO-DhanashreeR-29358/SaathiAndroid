@@ -52,7 +52,6 @@ import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.AddedAttendeeModel;
 import com.mosl.tabapp.model.AddedSplAttendeeModel;
 import com.mosl.tabapp.model.ClientDetail;
@@ -382,7 +381,7 @@ public class SetAppointmentFragment extends CommonFragment
 		btnSave.setOnClickListener(this);
 		btnReset.setOnClickListener(this);
 		setCallenderDate();
-		AddedAttendeeModel.setAttendeeUserEmplyeeCode(AccountDetails.getEmployeeCode());
+		AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser().employeeCode);
 		if (!createMode) {
 			tvNewAppointment.setText(getString(txt_label_reschedule_appointment));
 		}
@@ -844,7 +843,10 @@ public class SetAppointmentFragment extends CommonFragment
 	private void selectProduct(final String id) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderProduct(uiModel, id));
@@ -1176,7 +1178,10 @@ public class SetAppointmentFragment extends CommonFragment
 	private void selectWeekDay(final String id) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), DAYS, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), DAYS, null,
+					null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderWeekDay(uiModel, id));
@@ -1265,7 +1270,10 @@ public class SetAppointmentFragment extends CommonFragment
 	private void activityType(final String id) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), ACTIVITYTYPE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIVITYTYPE,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderActivityType(uiModel, id));
@@ -1455,7 +1463,10 @@ public class SetAppointmentFragment extends CommonFragment
 	private void getRepeatMode(final String id) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), REPEATMODE, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), REPEATMODE,
+					null, null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderRepeatMode(uiModel, id));
@@ -1504,7 +1515,10 @@ public class SetAppointmentFragment extends CommonFragment
 	private void selectWeek(final String id) {
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LookupRequest request =
-				new LookupRequest(AccountDetails.getBusinessUnitId(), WEEKS, null, null);
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), WEEKS, null,
+					null);
 			Disposable disposable = getSaathiApi().getAllLookup(request)
 				.compose(applyUiModel())
 				.subscribe(uiModel -> renderWeek(uiModel, id));
@@ -1637,7 +1651,7 @@ public class SetAppointmentFragment extends CommonFragment
 										String employeeCode = stringOrEmpty(item.employeeCode);
 										String BranchCode = stringOrEmpty(item.branchCode);
 										if (employeeCode.equalsIgnoreCase(
-											AccountDetails.getEmployeeCode())) {
+											userManager.getUser().employeeCode)) {
 											continue;
 										}
 										modelList.add(new EmployeeModel(employeeName, employeeCode,

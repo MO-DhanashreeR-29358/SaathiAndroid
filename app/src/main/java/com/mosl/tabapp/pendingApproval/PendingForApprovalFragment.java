@@ -30,7 +30,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ui.MSFDialog;
@@ -346,7 +345,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestFieldList(final String entityField) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-                new ApprovelRequest(AccountDetails.getEmployeeCode());
+				new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalFieldList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalField);
@@ -387,7 +386,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestUserList() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-                new ApprovelRequest(AccountDetails.getEmployeeCode());
+				new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalUserList(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalUser);
@@ -539,7 +538,8 @@ public class PendingForApprovalFragment extends CommonFragment
 
             ApprovalListRequest request =
                 new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
-                    AccountDetails.getEmployeeCode(), "0", updatedStartDate, updatedEndDate,
+					Objects.requireNonNull(userManager.getUser()).employeeCode, "0",
+					updatedStartDate, updatedEndDate,
                     profileStr);
             Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
                 .map(responseS -> {

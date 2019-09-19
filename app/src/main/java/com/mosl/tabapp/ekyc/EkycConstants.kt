@@ -1,6 +1,6 @@
 package com.mosl.tabapp.ekyc
 
-const val NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao"
+const val EKYC_PACKAGE_NAME = "com.mosl.mobile.modao"
 const val OUTPUT = "output"
 const val NEW_USERID = "USERID"
 const val COMMANDTYPE = "COMMANDTYPE"

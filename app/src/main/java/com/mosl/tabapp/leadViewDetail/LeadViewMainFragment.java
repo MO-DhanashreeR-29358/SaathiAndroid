@@ -32,7 +32,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.LockedViewPager;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
-import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
@@ -373,12 +372,12 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		ImageView ivOpenAccount = dialog.findViewById(R.id.ivOpenAccount);
 		ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
 		ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
-		if (AccountDetails.isAufsb()) {
+		if (Objects.requireNonNull(userManager.getUser()).isAufsb()) {
 			ivCreateMeeting.setVisibility(View.GONE);
 			ivSetAppointment.setVisibility(View.GONE);
 			ivSuggestMe.setVisibility(View.GONE);
 		}
-		if (AccountDetails.isSmtEnabled()) {
+		if (userManager.getUser().isSMTEnabled()) {
 			ivSuggestMe.setVisibility(View.VISIBLE);
 		} else {
 			ivSuggestMe.setVisibility(View.GONE);
@@ -425,7 +424,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			inpuMap.put(PROSPECT_SOURCENAME, prospectSourceName);
 			inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
 			inpuMap.put(INTRESTEDIN, intrestedIn);
-			inpuMap.put(ISAUFSB, AccountDetails.isAufsb());
+			inpuMap.put(ISAUFSB, userManager.getUser().isAufsb());
 			//gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
 		});
 		ivCreateMeeting.setOnClickListener(view -> {
