@@ -20,6 +20,7 @@ import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.shared.util.Utility
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.AU_BANK_SALES_SUPPORT_BUSSINESS_PROFILEID
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.ekyc.EkycNavigator
@@ -51,12 +52,11 @@ class ActivityNavigationHelper @Inject constructor(
     if (isNotification(intent)) {
       val bundle = intent.extras ?: Bundle.EMPTY
 //      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, bundle, false)
+    } else if (isAuBankSalesSupport()) {
+      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
     } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
-        userManager.user.currentBusinessProfile.businessProfileId.equals(
-            "1142"
-        ) -> screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
         pageToOpen == -1 -> screenNavigator.openHome()
         else -> loadFragment(pageToOpen)
       }
@@ -66,6 +66,14 @@ class ActivityNavigationHelper @Inject constructor(
   private fun isNotification(intent: Intent): Boolean {
     val category: String? = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
     if (category == null) return false else return true
+  }
+
+  private fun isAuBankSalesSupport(): Boolean {
+
+    return userManager.user.currentBusinessProfile.businessProfileId.equals(
+        AU_BANK_SALES_SUPPORT_BUSSINESS_PROFILEID
+    )
+
   }
 
   fun loadFragment(@NavigationConstants pageId: Int) {
