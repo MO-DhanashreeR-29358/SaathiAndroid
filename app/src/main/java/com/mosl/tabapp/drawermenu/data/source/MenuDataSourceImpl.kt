@@ -3,8 +3,6 @@ package com.mosl.tabapp.drawermenu.data.source
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
-import com.mosl.tabapp.constants.MOSLConstants
-
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import com.mosl.tabapp.drawermenu.data.ChildMenu
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -22,10 +20,7 @@ class MenuDataSourceImpl @Inject constructor(
       val user = userManager.user
       if (user.isAufsb()) {
         getAufsbUserMenu()
-      } else if (user.currentBusinessProfile.businessProfileId.equals(
-              MOSLConstants.AU_BANK_SALES_SUPPORT_BUSSINESS_PROFILEID
-          )
-      ) {
+      } else if (user.isAuBankSalesSupport()) {
         getAuSalesBank()
       } else if (user.isSMTEnabled()) {
         getSMTUserMenu(menuItems)

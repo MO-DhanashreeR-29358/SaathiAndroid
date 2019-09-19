@@ -26,4 +26,7 @@ data class User(
     return smtEnabled.equals("1")
   }
 
+  fun isAuBankSalesSupport(): Boolean {
+    return currentBusinessProfile.businessProfileId.equals("1142")
+  }
 }
