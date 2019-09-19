@@ -77,7 +77,6 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.io.IOException;
@@ -88,7 +87,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
@@ -169,7 +167,6 @@ public class CreateMeetingFragment extends CommonFragment
 	private final ArrayList<RowData> arrOutStation = new ArrayList<>();
 	private final ArrayList<RowData> arrMeetingLocation = new ArrayList<>();
 	private final ArrayList<RowData> arrTravellingMode = new ArrayList<>();
-	@Inject ScreenNavigatorImpl screenNavigator;
 	private ImageView ivLead;
 	private EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory,
 		etClientCode,
@@ -2063,7 +2060,7 @@ public class CreateMeetingFragment extends CommonFragment
 							Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 						bundle.putString(UCID,
 							getArguments().getString(UCID));
-						screenNavigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 					}
 				});
 		}

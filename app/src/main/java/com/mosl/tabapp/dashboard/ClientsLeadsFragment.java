@@ -41,7 +41,6 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -50,7 +49,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
@@ -85,7 +83,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
     private String widgetSystemName;
     private Map addtionalParameterMap = new HashMap<>();
     private String filterFirst = "", filterSecond = "", filterThird = "";
-    @Inject ScreenNavigatorImpl navigator;
 
     public static ClientsLeadsFragment newInstance(Context context) {
         ClientsLeadsFragment fragment = new ClientsLeadsFragment();

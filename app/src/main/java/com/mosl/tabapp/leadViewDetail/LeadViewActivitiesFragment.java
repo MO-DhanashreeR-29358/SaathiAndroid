@@ -31,7 +31,6 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.CustomDialog;
 import com.mosl.tabapp.ui.MSFDialog;
 import java.text.ParseException;
@@ -39,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -67,7 +65,6 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	private static String leadId;
 	private static String mUcid;
 	Context mContext;
-	@Inject ScreenNavigatorImpl screenNavigator;
 	private View activitiesView;
 	private TextView tvAppointment, tvMeeting, tvNoAppointment, tvNoMeeting;
 	private LinearLayout llAppointment, llMeeting;
@@ -341,7 +338,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 				bundle.putString(MEETING_ID, appointmentModel.getMeetingid());
 				bundle.putString(UCID, mUcid);
 				//navigateTo(NAV_TO_SET_APPOINTMENT, bundle, getFragmentManager(), true);
-				screenNavigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
+				navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
 				dialog.dismiss();
 			}
 		});
@@ -401,7 +398,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 			args.putString("ActivityType", appointmentModel.getActivityType());
 			args.putString(UCID, mUcid);
 			//navigateTo(NAV_TO_UPDATE_MEETING, args, getFragmentManager(), true);
-			screenNavigator.openPage(NAVIGATE_TO_UPDATE_MEETING, args, true);
+			navigator.openPage(NAVIGATE_TO_UPDATE_MEETING, args, true);
 			dialog.dismiss();
 		});
 
@@ -577,7 +574,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 				args.putString("Amount", meetingModel.getAmount());
 				args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
 				//navigateTo(NAV_TO_LEAD_ACTIVITIES_DETAIL, args, getFragmentManager(), true);
-				screenNavigator.openPage(NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true);
+				navigator.openPage(NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true);
 			});
 		}
 

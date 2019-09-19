@@ -52,14 +52,12 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -111,7 +109,6 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
     private LinearLayout linearLayoutRight, linearLayoutCenter, linearLayoutLeft;
     private List<WidgetType> widgetTypeList = new ArrayList<>();
     private String widgetName;
-    @Inject ScreenNavigatorImpl navigator;
 
     public static void smoothScrollToUserSelectedPosition(final RecyclerView scrollView,
         int destination) {

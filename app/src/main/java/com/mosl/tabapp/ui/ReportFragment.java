@@ -1,5 +1,6 @@
 package com.mosl.tabapp.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -44,6 +45,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -55,7 +57,10 @@ import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
 import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
 import static com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.STRING_MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.STRING_TITLE;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -75,7 +80,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 	private ArrayList<RowData> arrSelectBranch = new ArrayList<>();
 	private String branchCode;
 	private String leadId = "0", ucid = "0";
-
+	private TextView txtLables;
 	private AdapterView.OnItemSelectedListener selectBranchListener =
 		new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -103,7 +108,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 			Objects.requireNonNull(this.getArguments()).getString(MOSLConstants.SYSTEM_NAME);
 
 		tvNochart = reportView.findViewById(R.id.tvNochart);
-		TextView txtLables = reportView.findViewById(R.id.txtLables);
+		txtLables = reportView.findViewById(R.id.txtLables);
 		table = reportView.findViewById(R.id.table);
 		tvStartDate = reportView.findViewById(R.id.tvStartDate);
 		tvEndDate = reportView.findViewById(R.id.tvEndDate);
@@ -125,7 +130,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		selectBranch();
 	}
 
-	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	@Override public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View reportView = super.onCreateView(inflater, container, savedInstanceState);
 
@@ -140,7 +145,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		return R.layout.frag_report;
 	}
 
-	public void renderAssignedLeadReports(UiModel<List<AssignedLeadReportItem>> uiModel) {
+	private void renderAssignedLeadReports(UiModel<List<AssignedLeadReportItem>> uiModel) {
 		toggleProgress(uiModel.inProgress);
 
 		Throwable error = uiModel.error;
@@ -225,7 +230,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		}
 	}
 
-	private void renderTable(HashMap<String, Object> response) {
+	@SuppressLint("DefaultLocale") private void renderTable(HashMap<String, Object> response) {
 		hideProgress();
 		SecondClickTableAdapter secondClickTableAdapter =
 			new SecondClickTableAdapter(Objects.requireNonNull(getActivity()),
@@ -265,7 +270,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 						String strValue =
 							Objects.requireNonNull(objDetail.get(column)).toString().trim();
 
-						if (strValue.indexOf(".") > -1
+						if (strValue.contains(".")
 							&& !strValue.endsWith(".0")
 							&& !strValue.endsWith(".00")) {
 							columnData = String.format("%.2f",
@@ -302,7 +307,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		}
 	}
 
-	public void selectDate() {
+	private void selectDate() {
 		today = Calendar.getInstance();
 		dialog = new Dialog(requireContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -322,78 +327,54 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		if (mainFromDate != null) {
 			String[] dateSplit = mainFromDate.split("-");
 			dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-				Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-					@Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
-						int dayOfMonth) {
-						mainFromDate =
-							year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-					}
-				});
+				Integer.parseInt(dateSplit[2]),
+				(view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+					year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
 		} else {
 			dpFromDate.init(today.get(Calendar.YEAR), Calendar.APRIL, today.getFirstDayOfWeek(),
-				new DatePicker.OnDateChangedListener() {
-					@Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
-						int dayOfMonth) {
-						mainFromDate =
-							year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-					}
-				});
+				(view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+					year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
 		}
 
 		if (mainFromDate != null) {
 			String[] dateSplit = mainToDate.split("-");
 			dpToDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-				Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-					@Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
-						int dayOfMonth) {
-
-						mainToDate =
-							year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-					}
-				});
+				Integer.parseInt(dateSplit[2]),
+				(view, year, monthOfYear, dayOfMonth) -> mainToDate =
+					year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
 		} else {
 			dpToDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-				today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-					@Override public void onDateChanged(DatePicker view, int year, int monthOfYear,
-						int dayOfMonth) {
+				today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
 
-						today.set(year, monthOfYear, dayOfMonth);
-						long dayy = today.getActualMaximum(Calendar.DATE);
-						mainToDate =
-							year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-					}
+					today.set(year, monthOfYear, dayOfMonth);
+					mainToDate =
+						year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
 				});
 		}
 
-		close.setOnClickListener(new View.OnClickListener() {
-			@Override public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
+		close.setOnClickListener(v -> dialog.dismiss());
 
-		btnSubmit.setOnClickListener(new View.OnClickListener() {
-			@Override public void onClick(View v) {
-				fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
-				toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-				if (fromDat.after(toDate)) {
-					alertDialog(requireContext(), 0, "Motilal Oswal", INVALID_DATE_RANGE,
-						"OK", true, null);
-				} else {
-					if (mainFromDate != null) {
-						fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
-						fromPostingDate =
-							CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
-						tvStartDate.setText(fromPostingDate);
-					}
-					if (mainToDate != null) {
-						toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-						toPostingDate = CRMAppUtil.getDateStr(toDate, DATE_FORMAT_OF_DD_MMM_YYYY);
-						tvEndDate.setText(toPostingDate);
-					}
-					getReport();
-
-					dialog.dismiss();
+		btnSubmit.setOnClickListener(v -> {
+			fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
+			toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
+			if (fromDat.after(toDate)) {
+				alertDialog(requireContext(), 0, "Motilal Oswal", INVALID_DATE_RANGE,
+					"OK", true, null);
+			} else {
+				if (mainFromDate != null) {
+					fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
+					fromPostingDate =
+						CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
+					tvStartDate.setText(fromPostingDate);
 				}
+				if (mainToDate != null) {
+					toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
+					toPostingDate = CRMAppUtil.getDateStr(toDate, DATE_FORMAT_OF_DD_MMM_YYYY);
+					tvEndDate.setText(toPostingDate);
+				}
+				getReport();
+
+				dialog.dismiss();
 			}
 		});
 
@@ -458,6 +439,14 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		}
 	}
 
+	@Override public void onFragmentReopened(@NotNull Bundle args) {
+		super.onFragmentReopened(args);
+		widgetSystemName =
+			Objects.requireNonNull(args).getString(MOSLConstants.SYSTEM_NAME);
+		txtLables.setText(args.getString(MOSLConstants.NAME));
+		selectBranch();
+	}
+
 	public class SecondClickTableAdapter extends BaseTableAdapter {
 		private final CommonHeader[] commonHeaders;
 		ArrayList<HashMap<String, String>> hashArray;
@@ -513,84 +502,80 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 					break;
 				case 2:
 					view = getFirstBody(row, column, convertView, parent);
-					view.setOnClickListener(new View.OnClickListener() {
-						@Override public void onClick(View view) {
-							if (!isBlank(getValue(row, "EMPLOYEE CODE", "EMPLOYEE_CODE"))) {
-								Bundle bundle = new Bundle();
-								bundle.putSerializable(SecondLevelReportFragment.STRING_MAP,
-									getRespBody(getValue(row, "EMPLOYEE CODE")));
-								String nextTitle = Objects.requireNonNull(
-									ReportFragment.this.getArguments())
-									.getString(MOSLConstants.NAME);
-								bundle.putString(SecondLevelReportFragment.STRING_TITLE, nextTitle);
-								navigator.openPage(
-									NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, bundle,
-									true);
+					view.setOnClickListener(view12 -> {
+						if (!isBlank(getValue(row, "EMPLOYEE CODE", "EMPLOYEE_CODE"))) {
+							Bundle bundle = new Bundle();
+							bundle.putSerializable(STRING_MAP,
+								getRespBody(getValue(row, "EMPLOYEE CODE")));
+							String nextTitle = Objects.requireNonNull(
+								ReportFragment.this.getArguments())
+								.getString(MOSLConstants.NAME);
+							bundle.putString(STRING_TITLE, nextTitle);
+							navigator.openPage(
+								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
+								true);
+						} else {
+
+							if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
+								"LeadId ClientCode", "LEADID/CLIENTCODE"))) {
+								leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
+									"LeadId ClientCode", "LEADID/CLIENTCODE");
 							} else {
-
-								if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-									"LeadId ClientCode", "LEADID/CLIENTCODE"))) {
-									leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-										"LeadId ClientCode", "LEADID/CLIENTCODE");
-								} else {
-									leadId = "0";
-								}
-								if (!isBlank(getValue(row, UCID, "Client UCID", "CLIENT UCID",
-									"Client ucid"))) {
-									ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
-										"Client ucid");
-								} else {
-									ucid = "0";
-								}
-
-								Bundle bundle = new Bundle();
-								bundle.putString(LEAD_ID, leadId);
-								bundle.putString(UCID, ucid);
-								//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-								//	true);
+								leadId = "0";
 							}
+							if (!isBlank(getValue(row, UCID, "Client UCID", "CLIENT UCID",
+								"Client ucid"))) {
+								ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
+									"Client ucid");
+							} else {
+								ucid = "0";
+							}
+
+							Bundle bundle = new Bundle();
+							bundle.putString(LEAD_ID, leadId);
+							bundle.putString(UCID, ucid);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 						}
 					});
 
 					break;
 				case 3:
 					view = getBody(row, column, convertView, parent);
-					view.setOnClickListener(new View.OnClickListener() {
-						@Override public void onClick(View view) {
-							if (!isBlank(getValue(row, "EMPLOYEE CODE", "EMPLOYEE_CODE"))) {
-								Bundle bundle = new Bundle();
-								bundle.putSerializable(SecondLevelReportFragment.STRING_MAP,
-									getRespBody(getValue(row, "EMPLOYEE CODE")));
-								String nextTitle = Objects.requireNonNull(
-									ReportFragment.this.getArguments())
-									.getString(MOSLConstants.NAME);
-								bundle.putString(SecondLevelReportFragment.STRING_TITLE, nextTitle);
-								navigator.openPage(
-									NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
-									true);
+					view.setOnClickListener(view1 -> {
+						if (!isBlank(getValue(row, "EMPLOYEE CODE", "EMPLOYEE_CODE"))) {
+							Bundle bundle = new Bundle();
+							bundle.putSerializable(STRING_MAP,
+								getRespBody(getValue(row, "EMPLOYEE CODE")));
+							String nextTitle = Objects.requireNonNull(
+								ReportFragment.this.getArguments())
+								.getString(MOSLConstants.NAME);
+							bundle.putString(STRING_TITLE, nextTitle);
+							navigator.openPage(
+								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
+								true);
+						} else {
+
+							if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
+								"LeadId ClientCode", "LEADID/CLIENTCODE"))) {
+								leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
+									"LeadId ClientCode", "LEADID/CLIENTCODE");
 							} else {
-
-								if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-									"LeadId ClientCode", "LEADID/CLIENTCODE"))) {
-									leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-										"LeadId ClientCode", "LEADID/CLIENTCODE");
-								} else {
-									leadId = "0";
-								}
-								if (!isBlank(getValue(row, UCID, "Client UCID", "CLIENT UCID",
-									"Client ucid"))) {
-									ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
-										"Client ucid");
-								} else {
-									ucid = "0";
-								}
-
-								Bundle bundle = new Bundle();
-								bundle.putString(LEAD_ID, leadId);
-								bundle.putString(UCID, ucid);
-								//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
-								//	true);
+								leadId = "0";
 							}
+							if (!isBlank(getValue(row, UCID, "Client UCID", "CLIENT UCID",
+								"Client ucid"))) {
+								ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
+									"Client ucid");
+							} else {
+								ucid = "0";
+							}
+
+							Bundle bundle = new Bundle();
+							bundle.putString(LEAD_ID, leadId);
+							bundle.putString(UCID, ucid);
+							//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
+							//	true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 						}
 					});
 					break;

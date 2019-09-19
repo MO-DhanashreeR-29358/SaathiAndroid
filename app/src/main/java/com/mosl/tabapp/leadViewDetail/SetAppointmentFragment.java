@@ -59,7 +59,6 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
@@ -68,7 +67,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
@@ -114,7 +112,6 @@ public class SetAppointmentFragment extends CommonFragment
 	private final ArrayList<RowData> arrSelectWeekDay = new ArrayList<>();
 	private final ArrayList<RowData> arrActivityType = new ArrayList<>();
 	private final ArrayList<RowData> arrRepeatMode = new ArrayList<>();
-	@Inject ScreenNavigatorImpl screenNavigator;
 	private View llRepeteOnDaysPannel;
 	private TextView tvProductTypeSpError, tvRepeatTypeSpError, tvRepeatWeekdayError;
 	private Spinner spSelectProduct, spRepeateWeek, spSelectWeekDay, spActivityType, spRepeateOn;
@@ -583,7 +580,7 @@ public class SetAppointmentFragment extends CommonFragment
 								Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 							bundle.putString(UCID,
 								getArguments().getString(UCID));
-							screenNavigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 						}
 					}
 				});

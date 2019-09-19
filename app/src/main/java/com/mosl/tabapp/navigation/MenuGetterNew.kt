@@ -2,6 +2,8 @@ package com.mosl.tabapp.navigation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.mosl.tabapp.bankmeeting.BankMeetingFragment
+import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
@@ -57,12 +59,15 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
-      NavigationConstants.NAVIGATE_TO_SMT -> SMTFragment()
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> SMTFragment()
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
       NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
+      NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
       else -> null
     }
   }
@@ -79,7 +84,6 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> true
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> true
       NavigationConstants.NAVIGATE_TO_QUERY -> true
-      NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
       NavigationConstants.NAVIGATE_TO_LOGOUT -> true
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> true
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> true
@@ -91,7 +95,8 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> true
-      NavigationConstants.NAVIGATE_TO_SMT -> true
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> true
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> true
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> true
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> true

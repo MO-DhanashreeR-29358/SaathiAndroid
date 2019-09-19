@@ -75,7 +75,6 @@ import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.LeadCreationContact;
 import com.mosl.tabapp.model.LeadCreationModel;
 import com.mosl.tabapp.model.LeadCreationProductMapping;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
 import io.reactivex.Observable;
@@ -148,7 +147,6 @@ public class LeadCreationFragment extends CommonFragment
 	private final ArrayList<RowData> arrOffCity = new ArrayList<>();
 	private final ArrayList<RowData> arrCountry = new ArrayList<>();
 	@Inject UserManager userManager;
-	@Inject ScreenNavigatorImpl screenNavigator;
 	private View leadCreationView;
 	private TextView tvPersonalInfo, tvAdditionalInfo;
 	private LinearLayout llPersonalInformation, llAdditionInfo;
@@ -1995,7 +1993,7 @@ public class LeadCreationFragment extends CommonFragment
 					"OK", true, (action, data1) -> {
 						if (action == MSFDialog.Action.OK) {
 							//dashbordFragment();
-							screenNavigator.openHome();
+							navigator.openHome();
 						}
 					});
 			} else if (response != null) {
@@ -2238,7 +2236,7 @@ public class LeadCreationFragment extends CommonFragment
 					break;
 				case R.id.btnCancel:
 					//dashbordFragment();
-					screenNavigator.openHome();
+					navigator.openHome();
 					break;
 				case R.id.cbSameAs:
 					if (cbSameAs.isChecked()) {
@@ -2455,7 +2453,7 @@ public class LeadCreationFragment extends CommonFragment
 		});
 		btnClose.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View view) {
-				screenNavigator.openPage(NAV_TO_LEAD_CREATION, true);
+				navigator.openPage(NAV_TO_LEAD_CREATION, true);
 				dialog.dismiss();
 			}
 		});
@@ -2519,7 +2517,7 @@ public class LeadCreationFragment extends CommonFragment
 								//navigateTo(NAV_TO_LEAD_VIEW_MAIN,
 								//    bundle, getFragmentManager(),
 								//    false);
-								screenNavigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+								navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 							}
 						});
 				alertDialog.setCancelable(false);

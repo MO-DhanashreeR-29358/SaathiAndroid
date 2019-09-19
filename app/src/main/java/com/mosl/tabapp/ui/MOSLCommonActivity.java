@@ -69,7 +69,6 @@ import com.mosl.saathi.api.model.prospect.SuggestMeRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.actionbar.CRMAppActionBar;
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment;
-import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.EkycSecurityUtil;
@@ -518,7 +517,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 				//setupFragment(new DashboardFragment());
 			}
 		} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT)) {
-			setupFragment(new BankMeetingFragment());
+			//setupFragment(new BankMeetingFragment());
 		} else {
 			//setupFragment(new DashboardFragment());
 		}
@@ -762,9 +761,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 					drawerLayout.closeDrawers();
 					menuAdapter.setGroupMenuSelection(position);
 					if (position == MOSL_MENU_AU_BANK_MEETING) {
-						setupFragment(new BankMeetingFragment());
+						//setupFragment(new BankMeetingFragment());
 					} else if (position == MOSL_MENU_AU_BANK_MEETING_REPORT) {
-						setupFragment(new BankMeetingReportFragmentNew());
+						//setupFragment(new BankMeetingReportFragmentNew());
 					} else if (position == 2) {
 						WebViewFragment fragment = new WebViewFragment();
 						Bundle bundle = new Bundle();

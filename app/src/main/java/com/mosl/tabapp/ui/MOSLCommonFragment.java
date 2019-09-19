@@ -20,16 +20,7 @@ import com.mosl.app.core.rx.Dispatchers;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.R;
-import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
-import com.mosl.tabapp.leadViewDetail.DocumentFragment;
-import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
-import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
-import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
-import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
@@ -121,7 +112,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_CLIENT_MEETING:
-                fragment = new CalendarAppointsListFragment();
+                //fragment = new CalendarAppointsListFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SET_APPOINTMENT:

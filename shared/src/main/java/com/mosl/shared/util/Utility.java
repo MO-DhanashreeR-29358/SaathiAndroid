@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
+import androidx.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,4 +52,12 @@ public class Utility {
         }
         return 0;
     }
+
+	public static String stringOrEmpty(@Nullable String input) {
+		if (input != null) {
+			return input;
+		} else {
+			return "";
+		}
+	}
 }

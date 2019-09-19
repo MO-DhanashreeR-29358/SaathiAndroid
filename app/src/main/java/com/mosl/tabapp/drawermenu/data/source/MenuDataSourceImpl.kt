@@ -23,6 +23,8 @@ class MenuDataSourceImpl @Inject constructor(
         getAufsbUserMenu()
       } else if (user.currentBusinessProfile.businessProfileId.equals("1142")) {
         getAuSalesBank()
+      } else if (user.isSMTEnabled()) {
+        getSMTUserMenu(menuItems)
       } else {
         getUserMenu(menuItems)
       }
@@ -45,6 +47,22 @@ class MenuDataSourceImpl @Inject constructor(
     )
   }
 
+  protected fun getSMTUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+    return listOf(
+        getDashboard(),
+        getOpenAccount(),
+        getReports(list),
+        getCalendar(),
+        getPendingApproval(),
+        getSalesBrochure(),
+        getSalesStadium(),
+        getBirthdayAnniversary(),
+        getSuggestMe(),
+        getQuery(),
+        getLogout()
+    )
+  }
+
   protected fun getAufsbUserMenu(): List<BaseMenu> {
     return listOf(
         getDashboard(),
@@ -57,7 +75,8 @@ class MenuDataSourceImpl @Inject constructor(
         getAUBankMeeting(),
         getAUBankMeetingReport(),
         getSalesBrochure(),
-        getSalesStadium()
+        getSalesStadium(),
+        getLogout()
     )
   }
 
@@ -74,12 +93,16 @@ class MenuDataSourceImpl @Inject constructor(
     return BaseMenu(
         icon = R.drawable.ic_my_reports,
         label = R.string.MOSL_MENU_MY_REPORTS_TXT,
-        enabled = true
-        /*children = listOf(
-            ChildMenu(
-                label =
-            )
-        )*/
+        enabled = true,
+        children = list.map {
+          ChildMenu(
+              label = 0,
+              labelStr = it.name,
+              enabled = true,
+              pageId = NavigationConstants.NAVIGATE_TO_REPORTS,
+              navigateKey = it.systemName
+          )
+        }
     )
   }
 
@@ -110,12 +133,14 @@ class MenuDataSourceImpl @Inject constructor(
             ChildMenu(
                 label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
                 enabled = true,
-                pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG
+                pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+                navigateKey = ""
             ),
             ChildMenu(
                 label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
                 enabled = true,
-                pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP
+                pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+                navigateKey = ""
             )
         )
     )
@@ -180,7 +205,7 @@ class MenuDataSourceImpl @Inject constructor(
         icon = R.drawable.ic_menu_suggest_me_tool,
         label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
         enabled = enabled,
-        pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME
+        pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
     )
   }
 

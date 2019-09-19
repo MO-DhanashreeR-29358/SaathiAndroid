@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +44,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,46 +59,30 @@ public class PendingForApprovalFragment extends CommonFragment
 
     private View pendingForApprovalView;
     private Spinner spProfileChange, spSelectEmployee;
-    private Button btnApprove, btnReject, btnUpdate;
-    private ImageView ivClose;
     private TableFixHeaders table;
     private PendingApprovalTableAdapter pendingApprovalTableAdapter;
-    private TextView tvNochart, tvClientCode, tvName, tvProduct, tvStage, tvStartDate, tvEndDate;
+    private TextView tvNochart, tvStartDate, tvEndDate;
     private LinkedHashMap lMap;
     private String clickedOn = "";
     private int click = 1;
-    private Bundle bundle = this.getArguments();
-    private String ucid;
-    private int source = 0;
-    private boolean dataFoundFlag;
-    boolean isAllChecked = false;
-    boolean isSingleAllChecked = false;
-    static Context mContext;
-    private CheckBox cbClientName, cbClientNameBody;
+    private boolean isAllChecked = false;
+    private boolean isSingleAllChecked = false;
+    private CheckBox cbClientName;
     private ArrayList<String> selectedRowList = new ArrayList<>();
     //will be used to hold the clientid of selected rows by clicking checkboxes
-    private Map<Integer, Boolean> selectedRowMap = new HashMap<>();
-    private ArrayList<RowData> arrEmployee, arrProfile, diagArrProfile;
-    private ArrayAdapter<RowData> arrAdapEmployee, arrAdapProfile, diagArrAdapProfile;
-    private String employeeCodeStr, employeeNameStr, profileCodeStr, profileNameStr,
-        diagProfileCodeStr, diagProfileNameStr;
+    private Map<Integer, Boolean> selectedRowMap = new HashMap<Integer, Boolean>();
+    private String employeeCodeStr, profileCodeStr;
     private String mainFromDate, mainToDate, toPostingDate, fromPostingDate, brFromDate, brToDate;
     private Date fromDat, toDate;
     private Dialog dialog;
     private Calendar today;
-    private DatePicker dpFromDate, dpToDate;
-    private ImageView close;
-    private Button btnSubmit;
     private LinearLayout llButton;
-    private Spinner spProfile;
-    private LinearLayout llStartDate, llEndDate;
     private AdapterView.OnItemSelectedListener selectEmployeeListener =
         new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     employeeCodeStr = ((RowData) spSelectEmployee.getSelectedItem()).getKey();
-                    employeeNameStr = ((RowData) spSelectEmployee.getSelectedItem()).getValue();
                     isDataPresent();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -113,23 +98,23 @@ public class PendingForApprovalFragment extends CommonFragment
     public static PendingForApprovalFragment newInstance(Context context) {
         PendingForApprovalFragment fragment = new PendingForApprovalFragment();
         Bundle args = new Bundle();
-        mContext = context;
         fragment.setArguments(args);
         return fragment;
     }
 
     private void setUpView(View pendingForApprovalView) {
 
-        spProfileChange = (Spinner) pendingForApprovalView.findViewById(R.id.spProfileChange);
-        spSelectEmployee = (Spinner) pendingForApprovalView.findViewById(R.id.spSelectEmployee);
-        btnApprove = (Button) pendingForApprovalView.findViewById(R.id.btnApprove);
-        btnReject = (Button) pendingForApprovalView.findViewById(R.id.btnReject);
-        table = (TableFixHeaders) pendingForApprovalView.findViewById(R.id.table);
+        spProfileChange = pendingForApprovalView.findViewById(R.id.spProfileChange);
+        spSelectEmployee = pendingForApprovalView.findViewById(R.id.spSelectEmployee);
+        Button btnApprove = pendingForApprovalView.findViewById(R.id.btnApprove);
+        Button btnReject = pendingForApprovalView.findViewById(R.id.btnReject);
+        table = pendingForApprovalView.findViewById(R.id.table);
 
-        tvStartDate = (TextView) pendingForApprovalView.findViewById(R.id.tvStartDate);
-        tvEndDate = (TextView) pendingForApprovalView.findViewById(R.id.tvEndDate);
-        llStartDate = (LinearLayout) pendingForApprovalView.findViewById(R.id.llStartDate);
-        llEndDate = (LinearLayout) pendingForApprovalView.findViewById(R.id.llEndDate);
+        tvStartDate = pendingForApprovalView.findViewById(R.id.tvStartDate);
+        tvEndDate = pendingForApprovalView.findViewById(R.id.tvEndDate);
+        LinearLayout llStartDate =
+            pendingForApprovalView.findViewById(R.id.llStartDate);
+        LinearLayout llEndDate = pendingForApprovalView.findViewById(R.id.llEndDate);
         mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd");
         fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
         fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy");
@@ -142,8 +127,8 @@ public class PendingForApprovalFragment extends CommonFragment
         llEndDate.setOnClickListener(this);
         btnApprove.setOnClickListener(this);
         btnReject.setOnClickListener(this);
-        tvNochart = (TextView) pendingForApprovalView.findViewById(R.id.tvNochart);
-        llButton = (LinearLayout) pendingForApprovalView.findViewById(R.id.llButton);
+        tvNochart = pendingForApprovalView.findViewById(R.id.tvNochart);
+        llButton = pendingForApprovalView.findViewById(R.id.llButton);
     }
 
     private AdapterView.OnItemSelectedListener selectProfileListener =
@@ -152,27 +137,7 @@ public class PendingForApprovalFragment extends CommonFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     profileCodeStr = ((RowData) spProfileChange.getSelectedItem()).getKey();
-                    profileNameStr = ((RowData) spProfileChange.getSelectedItem()).getValue();
                     isDataPresent();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-    private AdapterView.OnItemSelectedListener profileInListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    diagProfileCodeStr = ((RowData) spProfile.getSelectedItem()).getKey();
-                    diagProfileNameStr = ((RowData) spProfile.getSelectedItem()).getValue();
-
-                    //                tvCategoryError.setVisibility(View.GONE);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -185,7 +150,7 @@ public class PendingForApprovalFragment extends CommonFragment
         };
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
         setAppTitle("Pending For Approvals");
@@ -204,19 +169,16 @@ public class PendingForApprovalFragment extends CommonFragment
             case R.id.btnApprove:
 
                 if (getSelectedRowCount() > 0 || cbClientName.isChecked()) {
-                    MSFDialog.alertDialog(getActivity(), 0,
+                    MSFDialog.alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         "Are you sure, you want to approve selected request?", "Yes", "No", true,
-                        new MSFDialog.DialogListener() {
-                            @Override
-                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                if (action == MSFDialog.Action.OK) {
-                                    sendUpdateAppoovalWebService("2");
-                                }
+                        (action, data) -> {
+                            if (action == MSFDialog.Action.OK) {
+                                sendUpdateAppoovalWebService("2");
                             }
                         });
                 } else {
-                    MSFDialog.alertDialog(getActivity(), 0,
+                    MSFDialog.alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         "Please select at least one record", "OK", true, null);
                 }
@@ -224,19 +186,16 @@ public class PendingForApprovalFragment extends CommonFragment
             case R.id.btnReject:
 
                 if (getSelectedRowCount() > 0 || cbClientName.isChecked()) {
-                    MSFDialog.alertDialog(getActivity(), 0,
+                    MSFDialog.alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         "Are you sure, you want to reject selected request?", "Yes", "No", true,
-                        new MSFDialog.DialogListener() {
-                            @Override
-                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                if (action == MSFDialog.Action.OK) {
-                                    sendUpdateAppoovalWebService("3");
-                                }
+                        (action, data) -> {
+                            if (action == MSFDialog.Action.OK) {
+                                sendUpdateAppoovalWebService("3");
                             }
                         });
                 } else {
-                    MSFDialog.alertDialog(getActivity(), 0,
+                    MSFDialog.alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         "Please select at least one record", "OK", true, null);
                 }
@@ -256,26 +215,28 @@ public class PendingForApprovalFragment extends CommonFragment
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && pendingForApprovalView != null) {
                 getApprovelReqestUserList();
-                getApprovelReqestFieldList(this.getArguments().getString(ENTITY_FIELD));
+                getApprovelReqestFieldList(
+                    Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void selectDate() {
+    private void selectDate() {
         today = Calendar.getInstance();
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow())
+            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
         dialog.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        dpFromDate = (DatePicker) dialog.findViewById(R.id.datePickerFromDate);
-        dpToDate = (DatePicker) dialog.findViewById(R.id.datePickerToDate);
-        close = (ImageView) dialog.findViewById(R.id.ibtnClose);
-        btnSubmit = (Button) dialog.findViewById(R.id.btnSubmit);
+        DatePicker dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
+        DatePicker dpToDate = dialog.findViewById(R.id.datePickerToDate);
+        ImageView close = dialog.findViewById(R.id.ibtnClose);
+        Button btnSubmit = dialog.findViewById(R.id.btnSubmit);
 
         dpToDate.setMaxDate(System.currentTimeMillis() - 1000);
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
@@ -283,86 +244,57 @@ public class PendingForApprovalFragment extends CommonFragment
         if (mainFromDate != null) {
             String[] dateSplit = mainFromDate.split("-");
             dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
-                        int dayOfMonth) {
-                        mainFromDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    }
-                });
+                Integer.parseInt(dateSplit[2]),
+                (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.getFirstDayOfWeek(), new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
-                        int dayOfMonth) {
-                        mainFromDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    }
-                });
+                today.getFirstDayOfWeek(), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         }
 
         if (mainFromDate != null) {
             String[] dateSplit = mainToDate.split("-");
             dpToDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                Integer.parseInt(dateSplit[2]), new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
-                        int dayOfMonth) {
-
-                        mainToDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    }
-                });
+                Integer.parseInt(dateSplit[2]),
+                (view, year, monthOfYear, dayOfMonth) -> mainToDate =
+                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         } else {
             dpToDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
-                    @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear,
-                        int dayOfMonth) {
+                today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
 
-                        today.set(year, monthOfYear, dayOfMonth);
-                        long dayy = today.getActualMaximum(Calendar.DATE);
-                        mainToDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    }
+                    today.set(year, monthOfYear, dayOfMonth);
+                    long dayy = today.getActualMaximum(Calendar.DATE);
+                    mainToDate =
+                        year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
                 });
         }
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        close.setOnClickListener(v -> dialog.dismiss());
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
-                toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-                if (fromDat.after(toDate)) {
-                    MSFDialog.alertDialog(requireContext(), 0,
-                        getResources().getString(R.string.motilal_oswal), INVALID_DATE_RANGE, "OK",
-                        true, null);
-                } else {
-                    if (mainFromDate != null) {
-                        fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
-                        fromPostingDate =
-                            CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
-                        tvStartDate.setText(fromPostingDate);
-                    }
-                    if (mainToDate != null) {
-                        toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-                        toPostingDate = CRMAppUtil.getDateStr(toDate, DATE_FORMAT_OF_DD_MMM_YYYY);
-                        tvEndDate.setText(toPostingDate);
-                    }
-                    RowData subEmployeeData = (RowData) spSelectEmployee.getSelectedItem();
-                    RowData subProfileData = (RowData) spProfileChange.getSelectedItem();
-                    webServiceCall(subEmployeeData.getKey(), subProfileData.getKey());
-                    dialog.dismiss();
+        btnSubmit.setOnClickListener(v -> {
+            fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
+            toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
+            if (fromDat.after(toDate)) {
+                MSFDialog.alertDialog(requireContext(), 0,
+                    getResources().getString(R.string.motilal_oswal), INVALID_DATE_RANGE, "OK",
+                    true, null);
+            } else {
+                if (mainFromDate != null) {
+                    fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
+                    fromPostingDate =
+                        CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
+                    tvStartDate.setText(fromPostingDate);
                 }
+                if (mainToDate != null) {
+                    toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
+                    toPostingDate = CRMAppUtil.getDateStr(toDate, DATE_FORMAT_OF_DD_MMM_YYYY);
+                    tvEndDate.setText(toPostingDate);
+                }
+                RowData subEmployeeData = (RowData) spSelectEmployee.getSelectedItem();
+                RowData subProfileData = (RowData) spProfileChange.getSelectedItem();
+                webServiceCall(subEmployeeData.getKey(), subProfileData.getKey());
+                dialog.dismiss();
             }
         });
 
@@ -387,21 +319,22 @@ public class PendingForApprovalFragment extends CommonFragment
 
         List<ApprovalFieldItem> dataList = uiModel.data;
         if (dataList != null) {
-            arrProfile = new ArrayList<>();
+            ArrayList<RowData> arrProfile = new ArrayList<>();
             for (int i = 0; i < dataList.size(); i++) {
                 ApprovalFieldItem item = dataList.get(i);
                 String lookUpId = stringOrEmpty(item.entityField);
                 String lookUpName = stringOrEmpty(item.referenceName);
                 arrProfile.add(new RowData(i, lookUpId, lookUpName));
             }
-            arrAdapProfile =
+            ArrayAdapter<RowData> arrAdapProfile =
                 new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfileChange.setAdapter(arrAdapProfile);
             spProfileChange.setOnItemSelectedListener(selectProfileListener);
             arrAdapProfile.notifyDataSetChanged();
 
-            String entityField = this.getArguments().getString(ENTITY_FIELD);
+            String entityField =
+                Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD);
 
             RowData entityFieldID = getSpinnerRowDataById(entityField, arrAdapProfile);
             if (entityFieldID != null) {
@@ -433,7 +366,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
         List<ApprovalUserItem> dataList = uiModel.data;
         if (dataList != null) {
-            arrEmployee = new ArrayList<>();
+            ArrayList<RowData> arrEmployee = new ArrayList<>();
 
             for (int i = 0; i < dataList.size(); i++) {
                 ApprovalUserItem item = dataList.get(i);
@@ -441,7 +374,7 @@ public class PendingForApprovalFragment extends CommonFragment
                 String lookUpName = stringOrEmpty(item.name);
                 arrEmployee.add(new RowData(i, lookUpId, lookUpName));
             }
-            arrAdapEmployee = new ArrayAdapter<>(requireContext(),
+            ArrayAdapter<RowData> arrAdapEmployee = new ArrayAdapter<>(requireContext(),
                 R.layout.simple_spinner_item, arrEmployee);
             arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
             spSelectEmployee.setAdapter(arrAdapEmployee);
@@ -468,7 +401,6 @@ public class PendingForApprovalFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
-            dataFoundFlag = false;
             table.setVisibility(View.GONE);
             tvNochart.setVisibility(View.VISIBLE);
             llButton.setVisibility(View.GONE);
@@ -488,7 +420,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
     private void renderTable(JSONArray arrayDetail) throws JSONException {
         pendingApprovalTableAdapter =
-            new PendingApprovalTableAdapter(getActivity(),
+            new PendingApprovalTableAdapter(requireActivity(),
                 new ArrayList<HashMap<String, String>>());
         table.setAdapter(pendingApprovalTableAdapter);
         selectedRowList.clear();
@@ -512,7 +444,6 @@ public class PendingForApprovalFragment extends CommonFragment
                 String leadId = (objDetail.isNull("LeadID")
                     || objDetail.getString("LeadID").equals(""))
                     ? "0" : objDetail.getString("LeadID");
-                //  String EntityField = (objDetail.isNull("EntityField") || objDetail.getString("EntityField").equals("")) ? "" : objDetail.getString("EntityField");
                 String FieldName =
                     (objDetail.isNull("ReferenceName") || objDetail.getString("ReferenceName")
                         .equals("")) ? ""
@@ -591,12 +522,10 @@ public class PendingForApprovalFragment extends CommonFragment
             }
 
             pendingApprovalTableAdapter.notifyDataSetChanged();
-            dataFoundFlag = true;
             table.setVisibility(View.VISIBLE);
             tvNochart.setVisibility(View.GONE);
             llButton.setVisibility(View.VISIBLE);
         } else {
-            dataFoundFlag = false;
             table.setVisibility(View.GONE);
             llButton.setVisibility(View.GONE);
             tvNochart.setVisibility(View.VISIBLE);
@@ -615,7 +544,7 @@ public class PendingForApprovalFragment extends CommonFragment
             Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
                 .map(responseS -> {
                     JSONObject response = new JSONObject(responseS);
-                    Boolean status = response.getBoolean(STATUS);
+                    boolean status = response.getBoolean(STATUS);
                     if (status) {
                         return response.getJSONObject(RESPONSE).getJSONArray(DATA);
                     } else {
@@ -659,17 +588,12 @@ public class PendingForApprovalFragment extends CommonFragment
         String data = uiModel.data;
 
         if (data != null) {
-            // String message= response.getString(MESSAGE);
-            alertDialog(getActivity(), 0,
+            alertDialog(requireContext(), 0,
                 getResources().getString(R.string.motilal_oswal),
-                data, "OK", true, new MSFDialog.DialogListener() {
-                    @Override
-                    public void alertDialogAction(
-                        MSFDialog.Action action, Object... data) {
-                        if (action == MSFDialog.Action.OK) {
-                            webServiceCall(employeeCodeStr,
-                                profileCodeStr);
-                        }
+                data, "OK", true, (action, data1) -> {
+                    if (action == MSFDialog.Action.OK) {
+                        webServiceCall(employeeCodeStr,
+                            profileCodeStr);
                     }
                 });
         }
@@ -677,17 +601,17 @@ public class PendingForApprovalFragment extends CommonFragment
 
     private void sendUpdateAppoovalWebService(String status) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            String approvalRequestId = "";
+            StringBuilder approvalRequestId = new StringBuilder();
             for (String approvalId : selectedRowList) {
-                if (approvalRequestId.equals("")) {
-                    approvalRequestId = approvalId;
+                if (approvalRequestId.toString().equals("")) {
+                    approvalRequestId = new StringBuilder(approvalId);
                 } else {
-                    approvalRequestId += "," + approvalId;
+                    approvalRequestId.append(",").append(approvalId);
                 }
             }
 
             MultiUpdateApprovalRequest request =
-                new MultiUpdateApprovalRequest(status, approvalRequestId);
+                new MultiUpdateApprovalRequest(status, approvalRequestId.toString());
             Disposable subscribe = getSaathiApi().postMultiUpdateApproval(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderMultiUpdate);
@@ -723,10 +647,14 @@ public class PendingForApprovalFragment extends CommonFragment
         }
     }
 
-    public class PendingApprovalTableAdapter extends BaseTableAdapter {
-        private final CommonHeader commonHeaders[];
+    private int getSelectedRowCount() {
+        return selectedRowList.size();
+    }
 
-        private final String headers[] = {
+    public class PendingApprovalTableAdapter extends BaseTableAdapter {
+        private final CommonHeader[] commonHeaders;
+
+        private final String[] headers = {
             EMPLOYEE_CODE_APP,
             EMP_NAME,
             LEAD_ID_APP,
@@ -742,54 +670,14 @@ public class PendingForApprovalFragment extends CommonFragment
             APPROVAL_REQUEST_ID
         };
 
-        private final int[] widths = { 150, 120, 120, 120, 90, 120, 120, 120, 120 };
-        private final float density;
-        HashMap hashMap;
         ArrayList<HashMap<String, String>> hashArray;
         private LayoutInflater inflater = null;
 
-        public PendingApprovalTableAdapter(Context context,
+        private PendingApprovalTableAdapter(Context context,
             ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
             this.hashArray = hashArray;
-            density = context.getResources().getDisplayMetrics().density;
 
-
-
-
-            /*commonHeaders[1].list.add(new Item(
-                    row.get("raj"),
-                    row.get("123.40"),
-                    row.get("123.56"),
-                    row.get("12.5"),
-                    row.get("123")
-            ));
-
-            commonHeaders[2].list.add(new Item(
-                    row.get("raj"),
-                    row.get("123.40"),
-                    row.get("123.56"),
-                    row.get("12.5"),
-                    row.get("123")
-            ));
-
-
-            commonHeaders[3].list.add(new Item(
-                    row.get("raj"),
-                    row.get("123.40"),
-                    row.get("123.56"),
-                    row.get("12.5"),
-                    row.get("123")
-            ));
-
-
-            commonHeaders[4].list.add(new Item(
-                    row.get("raj"),
-                    row.get("123.40"),
-                    row.get("123.56"),
-                    row.get("12.5"),
-                    row.get("123")
-            ));*/
 
         }
 
@@ -798,10 +686,6 @@ public class PendingForApprovalFragment extends CommonFragment
             return commonHeaders[0].list.size();
         }
 
-        public void clear() {
-            //    hashArray.clear();
-            //    commonHeaders[0].list.clear();
-        }
 
         public void add(HashMap<String, String> row) {
             hashArray.add(row);
@@ -846,18 +730,6 @@ public class PendingForApprovalFragment extends CommonFragment
                     break;
                 case 3:
                     view = getBody(row, column, convertView, parent);
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            lMap = (LinkedHashMap) hashArray.get(row);
-                            Bundle args = new Bundle();
-                            String clientCode = lMap.get(CLIENT_CODE).toString();
-                            String name = lMap.get(NEW_CLIENT_NAME).toString();
-                            String fieldName = lMap.get(FIELD_NAME).toString();
-                            String approvalRequestId = lMap.get(APPROVAL_REQUEST_ID).toString();
-                            String leadId = lMap.get(LEAD_ID_APP).toString();
-                        }
-                    });
                     break;
                 case 4:
                     view = getFamilyView(row, column, convertView, parent);
@@ -871,13 +743,13 @@ public class PendingForApprovalFragment extends CommonFragment
         //click on symbol header
 
         private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
-            inflater = LayoutInflater.from(getActivity());
+            inflater = LayoutInflater.from(requireContext());
             if (convertView == null) {
                 convertView =
                     inflater.inflate(R.layout.item_table_header_first_pending, parent, false);
             }
 
-            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+            TextView head = (convertView.findViewById(android.R.id.text1));
 
             if (clickedOn.equals(headers[column + 1]) && click > 1) {
                 head.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.up_button, 0);
@@ -886,74 +758,44 @@ public class PendingForApprovalFragment extends CommonFragment
             }
             head.setText(headers[0]);
 
-            cbClientName = (CheckBox) convertView.findViewById(R.id.cbClientName);
+            cbClientName = convertView.findViewById(R.id.cbClientName);
             if (isAllChecked) {
                 cbClientName.setChecked(true);
             } else {
                 cbClientName.setChecked(false);
             }
-            cbClientName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    isAllChecked = ((CheckBox) view).isChecked();
-                    for (int ctr = 0; ctr < getRowCount(); ctr++) {
-                        String approvalRequestId = getDevice(ctr - 1).data[12];
-                        selectedRowMap.put(ctr, ((CheckBox) view).isChecked());
+            cbClientName.setOnClickListener(view -> {
+                isAllChecked = ((CheckBox) view).isChecked();
+                for (int ctr = 0; ctr < getRowCount(); ctr++) {
+                    String approvalRequestId = getDevice(ctr - 1).data[12];
+                    selectedRowMap.put(ctr, ((CheckBox) view).isChecked());
 
-                        if (cbClientName.isChecked()) {
-                            //getDevice(ctr - 1).data[6] = "Y";
-                            selectedRowList.add(approvalRequestId);
-                            isSingleAllChecked = false;
-                        } else {
-                            //getDevice(ctr - 1).data[6] = "N";
-                            selectedRowList.remove(approvalRequestId);
-                        }
-                        Log.d("Loop", ctr + "");
+                    if (cbClientName.isChecked()) {
+                        selectedRowList.add(approvalRequestId);
+                        isSingleAllChecked = false;
+                    } else {
+                        selectedRowList.remove(approvalRequestId);
                     }
-                    notifyDataSetChanged();
                 }
+                notifyDataSetChanged();
             });
-           /* cbClientName.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    isAllChecked = isChecked;
 
-                    for (int ctr = 0; ctr < getRowCount(); ctr++) {
-                        String approvalRequestId = getDevice(ctr - 1).data[12];
-                        selectedRowMap.put(ctr, isChecked);
-
-                        if (isChecked) {
-                            //getDevice(ctr - 1).data[6] = "Y";
-                            selectedRowList.add(approvalRequestId);
-                        } else {
-                            //getDevice(ctr - 1).data[6] = "N";
-                            selectedRowList.remove(approvalRequestId);
-                        }
-                        Log.d("Loop", ctr + "");
-                    }
-                    notifyDataSetChanged();
-                }
-            });*/
-            if (selectedRowList.isEmpty() || selectedRowList.size() == 0 || isSingleAllChecked) {
+            if (selectedRowList.isEmpty() || isSingleAllChecked) {
                 cbClientName.setChecked(false);
             }
             if (getSelectedRowCount() > 0) {
 
             } else {
-                head.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                head.setOnClickListener(v -> {
 
-                        Log.d("HeadClick", ((TextView) v).getText().toString());
-                        TextView temp = (TextView) v;
-                        clickedOn = temp.getText().toString();
-                        if (click == 1) {
-                            sortByAMCName(click);
-                            click++;
-                        } else if (click > 1) {
-                            sortByAMCName(click);
-                            click = 1;
-                        }
+                    TextView temp = (TextView) v;
+                    clickedOn = temp.getText().toString();
+                    if (click == 1) {
+                        sortByAMCName(click);
+                        click++;
+                    } else if (click > 1) {
+                        sortByAMCName(click);
+                        click = 1;
                     }
                 });
             }
@@ -961,7 +803,7 @@ public class PendingForApprovalFragment extends CommonFragment
         }
 
         private void sortByAMCName(Integer sortVal) {
-            String sortCol = EMPLOYEE_CODE_APP; //((TextView) headerTextField).getText().toString();
+            String sortCol = EMPLOYEE_CODE_APP;
             ArrayList<String> out = new ArrayList<String>();
             for (int j = 0; j < hashArray.size(); j++) {
                 LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
@@ -1016,97 +858,93 @@ public class PendingForApprovalFragment extends CommonFragment
             if (getSelectedRowCount() > 0) {
 
             } else {
-                head.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("HeadClick", ((TextView) v).getText().toString());
-                        String sortCol = ((TextView) v).getText().toString();
+                head.setOnClickListener(v -> {
+                    String sortCol = ((TextView) v).getText().toString();
 
-                        boolean isNumber = sortCol.equals(REJECTED) ? true : false;
-                        //  boolean isDate = sortCol.equals(START_DATE) || sortCol.equals(LST_INSTALLMENT_DATE) ? true : false;
+                    boolean isNumber = sortCol.equals(REJECTED);
 
-                        ArrayList<String> outStr = new ArrayList<String>();
-                        ArrayList<Double> outDbl = new ArrayList<Double>();
+                    ArrayList<String> outStr = new ArrayList<String>();
+                    ArrayList<Double> outDbl = new ArrayList<Double>();
 
-                        for (int j = 0; j < hashArray.size(); j++) {
-                            LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
-                            String val = (String) linkedHashMap.get(sortCol);
-                            if (isNumber) {
-                                outDbl.add(Double.valueOf(val));
-                            } else {
-                                outStr.add(val);
-                            }
-                        }
-
+                    for (int j = 0; j < hashArray.size(); j++) {
+                        LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
+                        String val = (String) linkedHashMap.get(sortCol);
                         if (isNumber) {
-                            TextView temp = (TextView) v;
-                            clickedOn = temp.getText().toString();
-                            if (click == 1) {
-                                Collections.sort(outDbl, new Comparator<Double>() {
-                                    public int compare(Double c1, Double c2) {
-                                        return c1.compareTo(c2);
-                                    }
-                                });
-                                click++;
-                            } else if (click > 1) {
-                                Collections.reverse(outDbl);
-                                click = 1;
-                            }
-
-                            commonHeaders[0].list.clear();
-                            ArrayList<HashMap<String, String>> tempHashArray =
-                                (ArrayList<HashMap<String, String>>) hashArray.clone();
-                            hashArray.clear();
-
-                            for (int i = 0; i < outDbl.size(); i++) {
-                                Double sortedValue = outDbl.get(i);
-                                for (int j = 0; j < tempHashArray.size(); j++) {
-                                    LinkedHashMap sortLinkedMap =
-                                        (LinkedHashMap) tempHashArray.get(j);
-                                    String sortColVal = (String) sortLinkedMap.get(sortCol);
-                                    Double sortColValue = Double.valueOf(sortColVal);
-                                    int retval = Double.compare(sortedValue, sortColValue);
-                                    if (retval == 0) {
-                                        pendingApprovalTableAdapter.add(sortLinkedMap);
-                                        tempHashArray.remove(sortLinkedMap);
-                                    }
-                                }
-                            }
+                            outDbl.add(Double.valueOf(Objects.requireNonNull(val)));
                         } else {
-                            TextView temp = (TextView) v;
-                            clickedOn = temp.getText().toString();
-                            if (click == 1) {
-                                Collections.sort(outStr, new Comparator<String>() {
-                                    public int compare(String c1, String c2) {
-                                        return c1.compareTo(c2);
-                                    }
-                                });
-                                click++;
-                            } else if (click > 1) {
-                                Collections.reverse(outStr);
-                                click = 1;
-                            }
+                            outStr.add(val);
+                        }
+                    }
 
-                            commonHeaders[0].list.clear();
-                            ArrayList<HashMap<String, String>> tempHashArray =
-                                (ArrayList<HashMap<String, String>>) hashArray.clone();
-                            hashArray.clear();
+                    if (isNumber) {
+                        TextView temp = (TextView) v;
+                        clickedOn = temp.getText().toString();
+                        if (click == 1) {
+                            Collections.sort(outDbl, new Comparator<Double>() {
+                                public int compare(Double c1, Double c2) {
+                                    return c1.compareTo(c2);
+                                }
+                            });
+                            click++;
+                        } else if (click > 1) {
+                            Collections.reverse(outDbl);
+                            click = 1;
+                        }
 
-                            for (int i = 0; i < outStr.size(); i++) {
-                                String sortedValue = outStr.get(i);
-                                for (int j = 0; j < tempHashArray.size(); j++) {
-                                    LinkedHashMap sortLinkedMap =
-                                        (LinkedHashMap) tempHashArray.get(j);
-                                    String sortColVal = (String) sortLinkedMap.get(sortCol);
-                                    if (sortedValue.equals(sortColVal)) {
-                                        pendingApprovalTableAdapter.add(sortLinkedMap);
-                                        tempHashArray.remove(sortLinkedMap);
-                                    }
+                        commonHeaders[0].list.clear();
+                        ArrayList<HashMap<String, String>> tempHashArray =
+                            (ArrayList<HashMap<String, String>>) hashArray.clone();
+                        hashArray.clear();
+
+                        for (int i = 0; i < outDbl.size(); i++) {
+                            Double sortedValue = outDbl.get(i);
+                            for (int j = 0; j < tempHashArray.size(); j++) {
+                                LinkedHashMap sortLinkedMap =
+                                    (LinkedHashMap) tempHashArray.get(j);
+                                String sortColVal = (String) sortLinkedMap.get(sortCol);
+                                double sortColValue = Double.parseDouble(
+                                    Objects.requireNonNull(sortColVal));
+                                int retval = Double.compare(sortedValue, sortColValue);
+                                if (retval == 0) {
+                                    pendingApprovalTableAdapter.add(sortLinkedMap);
+                                    tempHashArray.remove(sortLinkedMap);
                                 }
                             }
                         }
-                        pendingApprovalTableAdapter.notifyDataSetChanged();
+                    } else {
+                        TextView temp = (TextView) v;
+                        clickedOn = temp.getText().toString();
+                        if (click == 1) {
+                            Collections.sort(outStr, new Comparator<String>() {
+                                public int compare(String c1, String c2) {
+                                    return c1.compareTo(c2);
+                                }
+                            });
+                            click++;
+                        } else if (click > 1) {
+                            Collections.reverse(outStr);
+                            click = 1;
+                        }
+
+                        commonHeaders[0].list.clear();
+                        ArrayList<HashMap<String, String>> tempHashArray =
+                            (ArrayList<HashMap<String, String>>) hashArray.clone();
+                        hashArray.clear();
+
+                        for (int i = 0; i < outStr.size(); i++) {
+                            String sortedValue = outStr.get(i);
+                            for (int j = 0; j < tempHashArray.size(); j++) {
+                                LinkedHashMap sortLinkedMap =
+                                    (LinkedHashMap) tempHashArray.get(j);
+                                String sortColVal = (String) sortLinkedMap.get(sortCol);
+                                if (sortedValue.equals(sortColVal)) {
+                                    pendingApprovalTableAdapter.add(sortLinkedMap);
+                                    tempHashArray.remove(sortLinkedMap);
+                                }
+                            }
+                        }
                     }
+                    pendingApprovalTableAdapter.notifyDataSetChanged();
                 });
             }
             return convertView;
@@ -1117,15 +955,14 @@ public class PendingForApprovalFragment extends CommonFragment
                 convertView = inflater.inflate(R.layout.item_table_first_pending, parent, false);
             }
             LinearLayout listLayout =
-                (LinearLayout) convertView.findViewById(R.id.item_table_first);
+                convertView.findViewById(R.id.item_table_first);
 
             listLayout.setBackgroundResource(
                 row % 2 == 0 ? R.color.alternateBackground : R.color.white);
 
             ((TextView) convertView.findViewById(R.id.tv_table_first)).setText(
                 getDevice(row).data[column + 1]);//row= 1 to ... & col=-1
-            cbClientNameBody = (CheckBox) convertView.findViewById(R.id.cbClientNameBody);
-            //String isChecked = getDevice(row).data[6];
+            CheckBox cbClientNameBody = convertView.findViewById(R.id.cbClientNameBody);
             Boolean isChecked = selectedRowMap.get(row);
             if (isChecked == null) {
                 isChecked = false;
@@ -1139,66 +976,35 @@ public class PendingForApprovalFragment extends CommonFragment
                 cbClientNameBody.setChecked(false);
             }
 
-            cbClientNameBody.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // isAllChecked = false; //if individual row is deselected, then deselect the selectAll crm_checkbox also
+            cbClientNameBody.setOnClickListener(v -> {
 
-                    boolean isChecked = ((CheckBox) v).isChecked();
-                    selectedRowMap.put(row, isChecked);
+                boolean isChecked1 = ((CheckBox) v).isChecked();
+                selectedRowMap.put(row, isChecked1);
 
-                    if (isChecked) {
-                        //getDevice(row).data[6] = "Y";
-                        selectedRowList.add(approvalRequestId);
-                    } else {
-                        //getDevice(row).data[6] = "N";
-
-                        selectedRowList.remove(approvalRequestId);
-                        isSingleAllChecked = true;
-                    }
-                    notifyDataSetChanged();
+                if (isChecked1) {
+                    selectedRowList.add(approvalRequestId);
+                } else {
+                    selectedRowList.remove(approvalRequestId);
+                    isSingleAllChecked = true;
                 }
+                notifyDataSetChanged();
             });
 
             return convertView;
         }
 
-        private String getItem(int row, int pos) {
-            if (pos == -1) {
-                return hashArray.get(row).get(MOSLConstants.EMPLOYEE_CODE_APP).toString();
-            } else if (pos == 0) {
-                return hashArray.get(row).get(MOSLConstants.EMP_NAME).toString();
-            } else if (pos == 1) {
-                return hashArray.get(row).get(MOSLConstants.LEAD_ID_APP).toString();
-            } else if (pos == 2) {
-                return hashArray.get(row).get(MOSLConstants.CLIENT_CODE).toString();
-            } else if (pos == 3) {
-                return hashArray.get(row).get(MOSLConstants.UCID).toString();
-            } else if (pos == 4) {
-                return hashArray.get(row).get(MOSLConstants.NEW_CLIENT_NAME).toString();
-            } else if (pos == 5) {
-                return hashArray.get(row).get(MOSLConstants.FIELD_NAME).toString();
-            } else if (pos == 6) {
-                return hashArray.get(row).get(MOSLConstants.MODULE_NAME).toString();
-            } else if (pos == 7) {
-                return hashArray.get(row).get(MOSLConstants.SUB_OPTION).toString();
-            } else if (pos == 8) {
-                return hashArray.get(row).get(MOSLConstants.APPROVAL_REQUEST_ID).toString();
-            }
-            return "N/A";
-        }
 
         private View getBody(final int row, int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table, parent, false);
             }
-            LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table);
+            LinearLayout listLayout = convertView.findViewById(R.id.item_table);
 
             listLayout.setBackgroundResource(
                 row % 2 == 0 ? R.color.alternateBackground : R.color.white);
             ((TextView) convertView.findViewById(android.R.id.text1)).setText(
                 getDevice(row).data[column]);
-            TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView text1 = convertView.findViewById(android.R.id.text1);
 
             text1.setBackgroundResource(0);
             return convertView;
@@ -1264,13 +1070,9 @@ public class PendingForApprovalFragment extends CommonFragment
 
             if (row == -1 || row == 0) {
                 int family = 0;
-                while (row > 0) {
-                    row -= commonHeaders[family].size();
-                    family++;
-                }
-                return row == 1;
+                return false;
             }
-            return row == 0;
+            return false;
         }
 
         private CommonHeader getFamily(int row) {
@@ -1293,10 +1095,6 @@ public class PendingForApprovalFragment extends CommonFragment
         public int getViewTypeCount() {
             return 5;
         }
-    }
-
-    public int getSelectedRowCount() {
-        return selectedRowList.size();
     }
 
     private void isDataPresent() {

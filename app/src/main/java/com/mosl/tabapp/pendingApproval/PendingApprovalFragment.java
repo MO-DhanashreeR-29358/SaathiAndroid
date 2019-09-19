@@ -12,7 +12,6 @@ import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest;
-import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AccountDetails;
@@ -21,26 +20,28 @@ import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.R.id;
+import static com.mosl.tabapp.R.layout;
+import static com.mosl.tabapp.R.string.motilal_oswal;
+import static com.mosl.tabapp.R.string.txt_label_approved;
+import static com.mosl.tabapp.R.string.txt_label_pending_approvals;
 import static com.mosl.tabapp.constants.MOSLConstants.ENTITY_FIELD;
 import static com.mosl.tabapp.constants.MOSLConstants.SOME_SERVER_ERROR_OCCURRED;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL;
 
-/**
- * Created by sun on 3/8/2017.
- */
-
-public class PendingApprovalFragment extends CommonFragment implements View.OnClickListener {
-    View pendingApprovalView;
-    TextView tvApproved, tvApprovedValue, tvPendingApproval, tvPendingApprovalValue;
+public class PendingApprovalFragment extends CommonFragment {
+	private View pendingApprovalView;
+	private TextView tvApprovedValue;
+	private TextView tvPendingApprovalValue;
     private RecyclerView RvPendApproval;
-    private ArrayList<PendingApprovalModel> pendingApprovalList;
-    private PendingApprovalAdapter pendingApprovalAdapter;
 
     Bundle args = new Bundle();
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+	public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingApprovalView = super.onCreateView(inflater, container, savedInstanceState);
         setAppTitle("Pending Approvals");
@@ -50,27 +51,21 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
     }
 
     @Override protected int getLayout() {
-        return R.layout.frag_pending_approvals;
+		return layout.frag_pending_approvals;
     }
 
     private void setUpView(View pendingApprovalView) {
-        tvApproved = (TextView) pendingApprovalView.findViewById(R.id.tvApproved);
-        tvApprovedValue = (TextView) pendingApprovalView.findViewById(R.id.tvApprovedValue);
-        tvPendingApproval = (TextView) pendingApprovalView.findViewById(R.id.tvPendingApproval);
+		TextView tvApproved = pendingApprovalView.findViewById(id.tvApproved);
+		tvApprovedValue = pendingApprovalView.findViewById(id.tvApprovedValue);
+		TextView tvPendingApproval =
+			pendingApprovalView.findViewById(id.tvPendingApproval);
         tvPendingApprovalValue =
-            (TextView) pendingApprovalView.findViewById(R.id.tvPendingApprovalValue);
-        RvPendApproval = (RecyclerView) pendingApprovalView.findViewById(R.id.RvPendApproval);
-        tvApproved.setText("Approved");
-        tvPendingApproval.setText("Pending Approvals");
+			pendingApprovalView.findViewById(id.tvPendingApprovalValue);
+		RvPendApproval = pendingApprovalView.findViewById(id.RvPendApproval);
+		tvApproved.setText(getString(txt_label_approved));
+		tvPendingApproval.setText(getString(txt_label_pending_approvals));
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-           /* case R.id.RvPendApproval:
-                navigateTo(NAV_TO_Pending_For_Approval, args, getFragmentManager(), true);
-                break;*/
-        }
-    }
 
     private void renderApprovalSummaryCount(UiModel<ApprovalSummaryCountItem> uiModel) {
 
@@ -91,7 +86,7 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
         }
     }
 
-    public void getAprovalCoutSummary() {
+	private void getAprovalCoutSummary() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
                 new PendingApprovalRequest(AccountDetails.getEmployeeCode());
@@ -115,7 +110,7 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
         List<ApprovalSummaryByEmployeeItem> data = uiModel.data;
 
         if (data != null) {
-            pendingApprovalList = new ArrayList<>();
+			ArrayList<PendingApprovalModel> pendingApprovalList = new ArrayList<>();
 
             for (int i = 0; i < data.size(); i++) {
                 ApprovalSummaryByEmployeeItem item = data.get(i);
@@ -126,14 +121,15 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
                 pendingApprovalList.add(
                     new PendingApprovalModel(referenceName, pendingCount, entityField));
             }
-            pendingApprovalAdapter = new PendingApprovalAdapter(pendingApprovalList);
+			PendingApprovalAdapter pendingApprovalAdapter =
+				new PendingApprovalAdapter(pendingApprovalList);
             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
             RvPendApproval.setLayoutManager(mLayoutManager);
             RvPendApproval.setAdapter(pendingApprovalAdapter);
         }
     }
 
-    public void getAprovalList() {
+	private void getAprovalList() {
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
@@ -156,7 +152,7 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
             }
         } catch (Exception e) {
             MSFDialog.alertDialog(requireContext(), 0,
-                getResources().getString(R.string.motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK",
+				getResources().getString(motilal_oswal), SOME_SERVER_ERROR_OCCURRED, "OK",
                 true, null);
         }
     }
@@ -166,28 +162,15 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
 
         private List<PendingApprovalModel> pendingApprovalList;
 
-        public class MyViewHolder1 extends RecyclerView.ViewHolder {
-            public TextView tvpendinglead;
-            public TextView tvpendingcount;
-            public LinearLayout llcounter;
-
-            public MyViewHolder1(View view) {
-                super(view);
-                tvpendinglead = (TextView) view.findViewById(R.id.tvpendinglead);
-                tvpendingcount = (TextView) view.findViewById(R.id.tvpendingcount);
-                llcounter = (LinearLayout) view.findViewById(R.id.llcounter);
-            }
-        }
-
-        public PendingApprovalAdapter(List<PendingApprovalModel> mpendingApprovalList) {
+		private PendingApprovalAdapter(List<PendingApprovalModel> mpendingApprovalList) {
             this.pendingApprovalList = mpendingApprovalList;
         }
 
-        @Override
+		@NotNull @Override
         public PendingApprovalAdapter.MyViewHolder1 onCreateViewHolder(ViewGroup parent,
             int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_pending_approvals, parent, false);
+				.inflate(layout.list_pending_approvals, parent, false);
 
             return new PendingApprovalAdapter.MyViewHolder1(itemView);
         }
@@ -197,14 +180,25 @@ public class PendingApprovalFragment extends CommonFragment implements View.OnCl
             final PendingApprovalModel pendingApprovalModel = pendingApprovalList.get(position);
             holder.tvpendinglead.setText(pendingApprovalModel.getmPendingLead());
             holder.tvpendingcount.setText(pendingApprovalModel.getmPendingLeadCount());
-            holder.llcounter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle args = new Bundle();
-                    args.putString(ENTITY_FIELD, pendingApprovalModel.getEntityField());
-                    //navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
-                }
-            });
+			holder.llcounter.setOnClickListener(v -> {
+				Bundle args = new Bundle();
+				args.putString(ENTITY_FIELD, pendingApprovalModel.getEntityField());
+				//navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
+				navigator.openPage(NAVIGATE_TO_PENDING_FOR_APPROVAL, args, true);
+			});
+		}
+
+		private class MyViewHolder1 extends RecyclerView.ViewHolder {
+			private TextView tvpendinglead;
+			private TextView tvpendingcount;
+			private LinearLayout llcounter;
+
+			private MyViewHolder1(View view) {
+				super(view);
+				tvpendinglead = view.findViewById(id.tvpendinglead);
+				tvpendingcount = view.findViewById(id.tvpendingcount);
+				llcounter = view.findViewById(id.llcounter);
+			}
         }
 
         @Override

@@ -185,4 +185,6 @@
     <string name="txt_label_active">Active</string>
     <string name="txt_label_inactive">InActive</string>
     <string name="txt_label_reschedule_appointment">Reschedule appointment</string>
+    <string name="txt_label_approved">Approved</string>
+    <string name="txt_label_pending_approvals">Pending Approvals</string>
 </resources>

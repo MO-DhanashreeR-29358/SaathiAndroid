@@ -50,7 +50,6 @@ import com.mosl.tabapp.model.AddedSplAttendeeModel;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
@@ -58,7 +57,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
-import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
@@ -110,7 +108,6 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class UpdateMeetingFragment extends CommonFragment
 	implements View.OnClickListener, TextView.OnEditorActionListener {
-	@Inject ScreenNavigatorImpl screenNavigator;
 	private View createMeetingView;
 	private TextView tvSplAttendeeCount, tvAttendeeCount, tvStartDate;
 	private View llSubcategory;
@@ -1495,7 +1492,7 @@ public class UpdateMeetingFragment extends CommonFragment
 							Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 						bundle.putString(UCID,
 							getArguments().getString(UCID));
-						screenNavigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
 					}
 				});
 		}

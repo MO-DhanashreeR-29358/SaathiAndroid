@@ -1,5 +1,7 @@
 package com.mosl.tabapp
 
+import com.mosl.tabapp.bankmeeting.BankMeetingFragment
+import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
@@ -149,4 +151,10 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideBankMeetingFactory(): BankMeetingFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
 }

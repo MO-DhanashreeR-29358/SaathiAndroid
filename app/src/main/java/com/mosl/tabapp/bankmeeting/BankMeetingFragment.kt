@@ -43,11 +43,11 @@ import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
 import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
-import com.mosl.tabapp.ui.MOSLCommonFragment
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
@@ -56,7 +56,7 @@ import java.util.ArrayList
 import java.util.Calendar
 import java.util.Locale
 
-class BankMeetingFragment : MOSLCommonFragment() {
+class BankMeetingFragment : CommonFragment() {
   private lateinit var binding: FragmentAuBankMeetingBinding
   private var arrMeetingType = ArrayList<RowData>()
   private var arrMeetingDuration = ArrayList<RowData>()
@@ -81,7 +81,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
   ): View? {
     super.onCreateView(inflater, container, savedInstanceState)
     binding = DataBindingUtil.inflate(
-      inflater, layout.fragment_au_bank_meeting, container, false
+        inflater, layout.fragment_au_bank_meeting, container, false
     )
     setUpView()
     return binding.root
@@ -93,7 +93,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
       binding.actvSubBroker.setText("")
       subBrokerId = -1
       if (((binding.spBranch.selectedItem as RowData).value) != "Other")
-        searchDialog("SubBroker")
+        searchDialog()
     }
 
     binding.ibBankEmployee.setOnClickListener {
@@ -133,13 +133,13 @@ class BankMeetingFragment : MOSLCommonFragment() {
         if (!enterText.isBlank()) {
           if (clientNameList.size < 5) {
             clientNameAdapter.addProduct(
-              MeetingClientName(clientName = enterText)
+                MeetingClientName(clientName = enterText)
             )
           } else {
             alertDialog(
-              requireContext(), 0,
-              resources.getString(R.string.motilal_oswal), "Maximum of 5 client can be added",
-              "OK", true, null
+                requireContext(), 0,
+                resources.getString(R.string.motilal_oswal), "Maximum of 5 client can be added",
+                "OK", true, null
             )
           }
           etClientName.setText("")
@@ -150,7 +150,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private val meetingTypeListener = object : AdapterView.OnItemSelectedListener {
-    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemSelected(
+      parent: AdapterView<*>,
+      view: View,
+      position: Int,
+      id: Long
+    ) {
       try {
 //        cityCodeStr = (spCity.getSelectedItem() as RowData).key
         binding.tvMeetingTypeError.visibility = View.GONE
@@ -167,7 +172,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private val bankListener = object : AdapterView.OnItemSelectedListener {
-    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemSelected(
+      parent: AdapterView<*>,
+      view: View,
+      position: Int,
+      id: Long
+    ) {
       try {
         binding.tvBankError.visibility = View.GONE
         callBranchList()
@@ -182,7 +192,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private val bankBranchListener = object : AdapterView.OnItemSelectedListener {
-    override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+    override fun onItemSelected(
+      parent: AdapterView<*>,
+      view: View,
+      position: Int,
+      id: Long
+    ) {
       try {
         binding.tvBranchError.visibility = View.GONE
         if (getSelectedBranch().value == "Other") {
@@ -217,16 +232,16 @@ class BankMeetingFragment : MOSLCommonFragment() {
     val d = cal.get(Calendar.DAY_OF_MONTH)
 
     val datePickerDialog = DatePickerDialog(
-      requireContext(), DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+        requireContext(), DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
 
-        val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year"
-        val pattern = "dd/MM/yyyy"
-        val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
-        val date = simpleDateFormat.parse(dateStr)
-        binding.tvDate.text = Factory.getInstance()
+      val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year"
+      val pattern = "dd/MM/yyyy"
+      val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
+      val date = simpleDateFormat.parse(dateStr)
+      binding.tvDate.text = Factory.getInstance()
           .newEditable(simpleDateFormat.format(date))
 
-      }, y, m, d
+    }, y, m, d
     )
 
     val minDate = Calendar.getInstance()
@@ -236,10 +251,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
     datePickerDialog.show()
   }
 
-  private fun searchDialog(type: String) {
+  private fun searchDialog() {
     activity!!.window
-      .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-    val searchList = CustomListPickerDialog(mainActivity)
+        .setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+        )
+    val searchList = CustomListPickerDialog(requireContext())
     searchList.threshold = MOSLConstants.SEARCH_LENTH
     searchList.show()
     searchList.setCustomTitle(resources.getString(R.string.str_search))
@@ -267,7 +284,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
     dialogAttendeeList.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialogAttendeeList.setContentView(layout.dialog_attendee_list)
     dialogAttendeeList.window!!
-      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     dialogAttendeeList.setCanceledOnTouchOutside(true)
     val etSearchAttendee =
       dialogAttendeeList.findViewById<DelayAutoCompleteTextView>(R.id.etSearchAttendee)
@@ -280,15 +297,15 @@ class BankMeetingFragment : MOSLCommonFragment() {
     bankEmployeeAdapter = BankEmployeeAdapter(requireContext(), this)
     etSearchAttendee.setAdapter<BankEmployeeAdapter>(bankEmployeeAdapter)
     etSearchAttendee.setLoadingIndicator(
-      dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
+        dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
     )
     etSearchAttendee.onItemClickListener =
       AdapterView.OnItemClickListener { parent, view, position, id ->
         val clientModel = bankEmployeeAdapter.getItem(position)
         val has = listHasEmployee(
-          addedBankEmployeeList,
+            addedBankEmployeeList,
 //          clientModel.employeeCode
-          clientModel.employeeName
+            clientModel.employeeName
         )
         if (!has) {
           if (clientModel.noData) {
@@ -296,17 +313,17 @@ class BankMeetingFragment : MOSLCommonFragment() {
           }
           addedEmployeeCount++
           addedBankEmployeeList.add(
-            AddedBankEmployeeModel(
-              clientModel.employeeCode,
-              clientModel.employeeName,
-              addedEmployeeCount
-            )
+              AddedBankEmployeeModel(
+                  clientModel.employeeCode,
+                  clientModel.employeeName,
+                  addedEmployeeCount
+              )
           )
           setCount(addedEmployeeCount)
           dialogAttendeeList.dismiss()
         } else {
-          Toast.makeText(mainActivity, MOSLConstants.EMPLOYEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
-            .show()
+          Toast.makeText(requireContext(), MOSLConstants.EMPLOYEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
+              .show()
           etSearchAttendee.setText("")
         }
       }
@@ -321,7 +338,7 @@ class BankMeetingFragment : MOSLCommonFragment() {
     dialogAddedAttendee.setContentView(layout.dialog_added_bank_employee_list)
     val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
     dialogAddedAttendee.window!!
-      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     dialogAddedAttendee.setCanceledOnTouchOutside(true)
     val lvAttendee = dialogAddedAttendee.findViewById<View>(R.id.lvAttendee) as ListView
     lvAttendee.emptyView = tvEmpty
@@ -342,12 +359,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun getProfile() {
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request =
         LookupRequest(AccountDetails.getBusinessUnitId(), MOSLConstants.BANKMEETINGTYPE, null, null)
       val subscribe = saathiApi.getAllLookupMaster(request)
-        .compose(applyUiModel())
-        .subscribe { this.renderMeetingType(it) }
+          .compose(applyUiModel())
+          .subscribe { this.renderMeetingType(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -372,7 +389,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
         val meetingName = stringOrEmpty(data[i].lookUpName)
         arrMeetingType.add(RowData(i + 1, meetingId, meetingName))
       }
-      meetingTypeAdapter = ArrayAdapter(mainActivity, layout.simple_spinner_item, arrMeetingType)
+      meetingTypeAdapter =
+        ArrayAdapter(requireContext(), layout.simple_spinner_item, arrMeetingType)
       meetingTypeAdapter.setDropDownViewResource(layout.mdropdown)
       binding.spMeetingType.apply {
         adapter = meetingTypeAdapter
@@ -383,12 +401,12 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun meetingDuration() {
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request =
         LookupRequest(AccountDetails.getBusinessUnitId(), MOSLConstants.MEETINGDURATION, null, null)
       val disposable = saathiApi.getAllLookup(request)
-        .compose(applyUiModel())
-        .subscribe { this.renderMeetingDuration(it) }
+          .compose(applyUiModel())
+          .subscribe { this.renderMeetingDuration(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -411,28 +429,27 @@ class BankMeetingFragment : MOSLCommonFragment() {
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
         arrMeetingDuration.add(
-          RowData(i + 1, lookUpId, lookUpName)
+            RowData(i + 1, lookUpId, lookUpName)
         )
       }
       meetingDurationAdapter = ArrayAdapter(
-        mainActivity,
-        layout.simple_spinner_item, arrMeetingDuration
+          requireContext(),
+          layout.simple_spinner_item, arrMeetingDuration
       )
       meetingDurationAdapter.setDropDownViewResource(layout.mdropdown)
       binding.apply {
         spMeetingDuration.adapter = meetingDurationAdapter
-//      spMeetingDuration.setOnItemSelectedListener(selectMeetingDurationListener)
       }
       meetingDurationAdapter.notifyDataSetChanged()
     }
   }
 
   private fun callBankList() {
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = BankRequest()
       val subscribe = saathiApi.getBankList(request)
-        .compose(applyUiModel())
-        .subscribe { this.renderBank(it) }
+          .compose(applyUiModel())
+          .subscribe { this.renderBank(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -457,8 +474,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
         arrBank.add(RowData(i + 1, id, name))
       }
       bankAdapter = ArrayAdapter(
-        mainActivity,
-        layout.simple_spinner_item, arrBank
+          requireContext(),
+          layout.simple_spinner_item, arrBank
       )
       bankAdapter.setDropDownViewResource(layout.mdropdown)
       binding.spBank.apply {
@@ -469,14 +486,14 @@ class BankMeetingFragment : MOSLCommonFragment() {
   }
 
   private fun callBranchList() {
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request =
         BankRequest(
-          bankId = 1
+            bankId = 1
         )
       val subscribe = saathiApi.getBankBranchList(request)
-        .compose(applyUiModel())
-        .subscribe { this.renderBranch(it) }
+          .compose(applyUiModel())
+          .subscribe { this.renderBranch(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -501,8 +518,8 @@ class BankMeetingFragment : MOSLCommonFragment() {
         arrBranch.add(RowData(i + 1, id, name))
       }
       branchAdapter = ArrayAdapter(
-        mainActivity,
-        layout.simple_spinner_item, arrBranch
+          requireContext(),
+          layout.simple_spinner_item, arrBranch
       )
       branchAdapter.setDropDownViewResource(layout.mdropdown)
       binding.spBranch.apply {
@@ -555,54 +572,54 @@ class BankMeetingFragment : MOSLCommonFragment() {
     val profileRequest: SubBrokerRequest
     try {
       profileRequest = SubBrokerRequest(
-        URLEncoder.encode("1", "utf-8"),
-        URLEncoder.encode("1"/*getSelectedBranch().value*/, "utf-8"),
-        URLEncoder.encode(constraint.toString(), "utf-8")
+          URLEncoder.encode("1", "utf-8"),
+          URLEncoder.encode("1"/*getSelectedBranch().value*/, "utf-8"),
+          URLEncoder.encode(constraint.toString(), "utf-8")
       )
     } catch (e: UnsupportedEncodingException) {
       return
     }
 
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val disposable = saathiApi.getSubBroker(profileRequest)
-        .compose(applyUiModel())
-        .subscribe { uiModel ->
-          if (uiModel.inProgress) {
-            hideKeyboard(binding.actvSubBroker)
-            searchList.showProgress(View.VISIBLE)
-          } else {
-            searchList.showProgress(View.GONE)
-          }
+          .compose(applyUiModel())
+          .subscribe { uiModel ->
+            if (uiModel.inProgress) {
+              hideKeyboard(binding.actvSubBroker)
+              searchList.showProgress(View.VISIBLE)
+            } else {
+              searchList.showProgress(View.GONE)
+            }
 
-          val error = uiModel.error
-          if (error != null) {
-            val modelList = ArrayList<SubBrokerData>()
-            modelList.add(getNoData(getErrorOnFailure(error)))
-            val myAssineeAdapter = SearchAdapter(mainActivity, modelList)
-            searchList.setAdapter(myAssineeAdapter)
-          }
+            val error = uiModel.error
+            if (error != null) {
+              val modelList = ArrayList<SubBrokerData>()
+              modelList.add(getNoData(getErrorOnFailureNew(error)))
+              val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
+              searchList.setAdapter(myAssineeAdapter)
+            }
 
-          val data = uiModel.data
-          if (data != null) {
-            val modelList = ArrayList<SubBrokerData>()
-            for (datum in data) {
-              modelList.add(
-                SubBrokerData(
-                  stringOrEmpty(datum.subBrokerName),
-                  datum.bankSubBrokerId,
-                  datum.bankBranchId,
-                  datum.bankId,
-                  false
+            val data = uiModel.data
+            if (data != null) {
+              val modelList = ArrayList<SubBrokerData>()
+              for (datum in data) {
+                modelList.add(
+                    SubBrokerData(
+                        stringOrEmpty(datum.subBrokerName),
+                        datum.bankSubBrokerId,
+                        datum.bankBranchId,
+                        datum.bankId,
+                        false
+                    )
                 )
-              )
+              }
+              if (modelList.isEmpty()) {
+                modelList.add(getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE))
+              }
+              val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
+              searchList.setAdapter(myAssineeAdapter)
             }
-            if (modelList.isEmpty()) {
-              modelList.add(getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE))
-            }
-            val myAssineeAdapter = SearchAdapter(mainActivity, modelList)
-            searchList.setAdapter(myAssineeAdapter)
           }
-        }
     } else {
       noInternetConnectionDialog()
     }
@@ -610,9 +627,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
   private fun getMeetingDate(): String {
     return getDateFromString(
-      binding.tvDate.text.toString(),
-      "dd/MM/yyyy",
-      "dd-MMM-yyyy"
+        binding.tvDate.text.toString(),
+        "dd/MM/yyyy",
+        "dd-MMM-yyyy"
     )
   }
 
@@ -657,11 +674,11 @@ class BankMeetingFragment : MOSLCommonFragment() {
 
   private fun submitCalled() {
     resetError()
-    if (CRMAppUtil.isNetworkEnabled(mainActivity)) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       if (getFormInput().validateForm(binding)) {
         val subscribe = saathiApi.inserBankMeeting(transformInput(getFormInput()))
-          .compose(applyUiModel())
-          .subscribe { this.render(it) }
+            .compose(applyUiModel())
+            .subscribe { this.render(it) }
       }
     } else {
       noInternetConnectionDialog()
@@ -679,9 +696,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
     val data = uiModel.data
     if (data != null) {
       alertDialog(
-        requireContext(), 0,
-        resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
-        "OK", true, null
+          requireContext(), 0,
+          resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
+          "OK", true, null
       )
       resetFields()
     }
@@ -731,19 +748,19 @@ class BankMeetingFragment : MOSLCommonFragment() {
     }
     binding.apply {
       return BankMeetingInput(
-        meetingDate = getMeetingDate(),
-        meetingTypeId = getMeetingType().key,
-        meetingDurationId = getMeetingDuration().key,
-        meetingDescription = getMeetingDescription(),
-        bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "-1",
-        bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
-        disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().value == "Other" else false,
-        subBrokerId = getSubBroker(),
-        bankEmployeeCode = getBankEmployee(),
-        subject = getSubject(),
-        isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training"),
-        isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Joint Meeting"),
-        clientName = clientNameValue
+          meetingDate = getMeetingDate(),
+          meetingTypeId = getMeetingType().key,
+          meetingDurationId = getMeetingDuration().key,
+          meetingDescription = getMeetingDescription(),
+          bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "-1",
+          bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
+          disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().value == "Other" else false,
+          subBrokerId = getSubBroker(),
+          bankEmployeeCode = getBankEmployee(),
+          subject = getSubject(),
+          isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training"),
+          isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Joint Meeting"),
+          clientName = clientNameValue
       )
     }
   }
@@ -765,9 +782,9 @@ class BankMeetingFragment : MOSLCommonFragment() {
       if (addedAttendeeModelList != null) {
         for (atten in addedAttendeeModelList) {
           if (atten.employeeCode.trim { it <= ' ' }.equals(
-              empID.trim { it <= ' ' },
-              ignoreCase = true
-            )
+                  empID.trim { it <= ' ' },
+                  ignoreCase = true
+              )
           ) {
             has = true
             break

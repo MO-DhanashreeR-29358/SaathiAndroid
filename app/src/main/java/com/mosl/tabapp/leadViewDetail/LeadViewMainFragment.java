@@ -35,7 +35,6 @@ import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
@@ -74,13 +73,12 @@ import static com.mosl.tabapp.model.ClientDetail.getName;
 import static com.mosl.tabapp.model.ClientDetail.getOaoUserId;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CREATE_MEETING;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT;
-import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SMT;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SUGGEST_ME;
 
 public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener {
 
 	private static final String SEARCH_TYPE_LEAD = "Lead";
 	private static final String SEARCH_TYPE_CLIENT = "Client";
-	@Inject ScreenNavigatorImpl screenNavigator;
 	@Inject EkycNavigator ekycNavigator;
 	private ArrayList<Fragment> pageListLeadView = new ArrayList<>();
 	private ImageView ivLead;
@@ -432,18 +430,18 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		});
 		ivCreateMeeting.setOnClickListener(view -> {
 			Bundle bundle = new Bundle();
-			bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
+			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
 			//navigateTo(NAV_TO_CREATE_MEETING, bundle, getFragmentManager(), true);
-			screenNavigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true);
+			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true);
 			dialog.dismiss();
 		});
 		ivSetAppointment.setOnClickListener(view -> {
 			Bundle bundle = new Bundle();
-			bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
+			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
 			//navigateTo(NAV_TO_SET_APPOINTMENT, bundle, getFragmentManager(), true);
-			screenNavigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
 			dialog.dismiss();
 		});
 		ivCall.setOnClickListener(view -> {
@@ -532,7 +530,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(URL_PATH, encryptedUrl);
 			//navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
 			//	true);
-			screenNavigator.openPage(NAVIGATE_TO_SMT, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true);
 		}
 	}
 }

@@ -38,7 +38,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.DATE;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING;
 import static com.mosl.tabapp.constants.MOSLConstants.NAME;
 import static com.mosl.tabapp.constants.MOSLConstants.TIME;
-
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CALENDER_LIST;
 
 public class CalendarFragment extends CommonFragment implements OnDateSelectedListener {
 	@SuppressLint("SimpleDateFormat") private static final DateFormat FORMATTER =
@@ -251,6 +251,9 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 				args.putString(DATE, selectionDate);
 				args.putString(NAME, calendarModel.getName());
 				args.putString(TIME, calendarModel.getTime());
+				//navigateTo(NAV_TO_CLIENT_MEETING, args, getFragmentManager(), true);
+				navigator.openPage(NAVIGATE_TO_CALENDER_LIST, args, true);
+
 			});
 		}
 
