@@ -29,4 +29,16 @@ data class User(
   fun isAuBankSalesSupport(): Boolean {
     return currentBusinessProfile.businessProfileId.equals("1142")
   }
+
+  fun isRetail(): Boolean {
+    return currentBusinessProfile.businessUnitId.equals("1")
+  }
+
+  fun isFranchise(): Boolean {
+    return currentBusinessProfile.businessUnitId.equals("3")
+  }
+
+  fun isIFA(): Boolean {
+    return currentBusinessProfile.businessUnitId.equals("4")
+  }
 }
