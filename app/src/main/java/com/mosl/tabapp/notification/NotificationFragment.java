@@ -32,7 +32,10 @@ import java.util.List;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.NOTIFICATION_DATA;
 import static com.mosl.tabapp.constants.MOSLConstants.OPERATIONAL;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 
 /**
@@ -164,7 +167,7 @@ public class NotificationFragment extends CommonFragment
         NotificationData data = new NotificationData(dataStr);
         if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
             //Goto leadView Detail
-            /*MOSLCommonFragment fragment = new LeadViewMainFragment();
+            //MOSLCommonFragment fragment = new LeadViewMainFragment();
             //BackStack
             Bundle bundle = new Bundle();
             String leadId = data.getParamMap().get(LEAD_ID);
@@ -174,9 +177,10 @@ public class NotificationFragment extends CommonFragment
             bundle.putString(UCID, ucid);
             bundle.putString(LEAD_ID, leadId);
             bundle.putParcelable(NOTIFICATION_DATA, data);
-            fragment.setArguments(bundle);*/
+            //fragment.setArguments(bundle);
             //todo open lead view main fragment
             //navigator.openPage();
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
         }
         //PENDINGAPPROVAL
         else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {

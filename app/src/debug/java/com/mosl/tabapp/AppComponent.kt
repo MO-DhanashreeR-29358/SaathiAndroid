@@ -5,6 +5,7 @@ import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.DataSyncWorker
+import com.mosl.tabapp.service.ServiceModule
 import com.mosl.tabapp.ws.HeaderInterceptor
 import dagger.BindsInstance
 import dagger.Component
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [AndroidInjectionModule::class, DebugModule::class, DebugActivityBuilder::class]
+    modules = [AndroidInjectionModule::class, DebugModule::class, DebugActivityBuilder::class, ServiceModule::class]
 )
 interface AppComponent : AndroidInjector<SaathiAppImpl> {
 

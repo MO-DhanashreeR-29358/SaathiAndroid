@@ -66,6 +66,7 @@ import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
 import com.mosl.saathi.api.model.documents.UploadDocumentItem
 import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
+import com.mosl.saathi.api.model.fcm_token.FcmTokenResponse
 import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
@@ -215,6 +216,7 @@ interface SaathiApi {
   fun getStageList(
     @Body request: StageRequest
   ): Observable<List<StageItem>>
+
 
   @POST("Stage/GetStageMobileSelectList")
   fun getStageMobileList(
@@ -482,7 +484,7 @@ interface SaathiApi {
   fun logout(@Body logoutRequest: LogoutRequest): Observable<String>
 
   @POST("Auth/UpdateFCMToken")
-  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<String>
+  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<FcmTokenResponse>
 
   @POST("Prospect/RegisterProspectOnline")
   fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>

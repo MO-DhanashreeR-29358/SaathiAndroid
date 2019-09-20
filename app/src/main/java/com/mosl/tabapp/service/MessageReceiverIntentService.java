@@ -10,29 +10,33 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Looper;
 import androidx.core.app.NotificationCompat;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.mosl.annotations.FcmToken;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.ui.MOSLCommonActivity;
+import dagger.android.AndroidInjection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
+import javax.inject.Inject;
 import timber.log.Timber;
 
-import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
 
 public class MessageReceiverIntentService extends FirebaseMessagingService {
 	private static final String CHANNEL_ID = "saathi";
 	String TAG = MessageReceiverIntentService.class.getCanonicalName();
+	@Inject
+	@FcmToken Preference<String> fcmtokenPref;
+
 
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -41,18 +45,21 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 		sendNotification(remoteMessage.getData());
 	}
 
-	@Override public void onNewToken(String refreshedToken) {
-		try {
-			SharedPreferences.Editor editor = getPrefs(this).edit();
-			editor.putString("TOKEN_ID", refreshedToken);
-			editor.apply();
+	@Override public void onCreate() {
+		AndroidInjection.inject(this);
+		super.onCreate();
+	}
 
-			Looper.prepare();
-			MOSLCommonActivity.sendRegistrationToServer(this, this.getContentResolver(), false);
-			Timber.tag(TAG).d("New firebase token: " + refreshedToken);
-		} catch (Exception ex) {
-			ex.printStackTrace();
+	@Override public void onNewToken(String refreshedToken) {
+
+		if (refreshedToken == null) {
+			fcmtokenPref.delete();
+		} else {
+			fcmtokenPref.set(refreshedToken);
 		}
+		Timber.tag(TAG).d("New firebase token: %s", refreshedToken);
+
+
 	}
 
 	private void sendNotification(Map data) {

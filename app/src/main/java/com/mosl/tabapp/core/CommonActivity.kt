@@ -8,7 +8,10 @@ import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.f2prateek.rx.preferences2.Preference
+import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
@@ -52,6 +55,9 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var screenNavigator: ScreenNavigatorImpl
   @Inject
   lateinit var navigationHelper: NavigationHelper
+  @Inject @field:FcmToken lateinit var tokenPref: Preference<String>
+  @Inject
+  lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -76,6 +82,22 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     } else {
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
     }
+
+    setupObservables()
+
+  }
+
+  private fun setupObservables() {
+    disposable.add(
+
+        tokenPref.asObservable().distinctUntilChanged()
+            .map { ignored -> tokenPref.get() }
+            .filter { token -> !token.equals("0") }
+            .switchMap { token ->
+              fcmTokenSyncHelper.saveToken(token)
+                  .compose(applyUiModel())
+            }
+            .subscribe())
   }
 
   private fun openMenuDrawer() {
