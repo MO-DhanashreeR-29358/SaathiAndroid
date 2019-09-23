@@ -23,7 +23,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.ekyc.EkycNavigator
-import com.mosl.tabapp.helper.shortcuts.ShortcutConstants
+import com.mosl.tabapp.model.NotificationDataNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
@@ -50,11 +50,20 @@ class ActivityNavigationHelper @Inject constructor(
     val uri = intent.data
 
     if (intent.isNotification()) {
-      val bundle = intent.extras ?: Bundle.EMPTY
-//      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, bundle, false)
+      val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
+      val target = NotificationDataNew(category)
+      if (target.page.equals(LEADVIEW)) {
+        screenNavigator.openPage(
+            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
+        )
+      } else {
+        screenNavigator.openPage(
+            notificationNavigation(category)
+        )
+      }
     } else if (userManager.user.isAuBankSalesSupport()) {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
-    }  else {
+    } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
         pageToOpen == -1 -> screenNavigator.openHome()
@@ -91,6 +100,16 @@ class ActivityNavigationHelper @Inject constructor(
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> getSuggestMe()
       NavigationConstants.NAVIGATE_TO_REPORTS -> navigateToReport(appMenu)
       else -> loadFragment(target)
+    }
+  }
+
+  fun notificationNavigation(category: String): Int {
+    val target = NotificationDataNew(category)
+    return when (target.page) {
+      PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
+      BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
+      DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD
+      else -> NavigationConstants.NAVIGATE_TO_DASHBOARD
     }
   }
 
@@ -173,11 +192,27 @@ class ActivityNavigationHelper @Inject constructor(
     ekycNavigator.openNewEkycApp(isExistingOrNewUser, "")
   }
 
+  private fun openLeadViewDetail(data: NotificationDataNew): Bundle {
+    val bundle = Bundle()
+    val leadId = data.paramMap
+        ?.get(MOSLConstants.LEAD_ID)
+    val ucid = data.paramMap
+        ?.get(MOSLConstants.UCID)
+    bundle.putString(MOSLConstants.UCID, ucid)
+    bundle.putString(MOSLConstants.LEAD_ID, leadId)
+    bundle.putParcelable(MOSLConstants.NOTIFICATION_DATA, data)
+
+    return bundle
+//    screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, false)
+  }
+
   companion object {
     //Notification
     const val ARG_NOTIFICATION_CATEGORY = "category"
 
-    //Gamooga Constants
-    const val NotificationId = "1"
+    const val LEADVIEW = "LEADVIEW"
+    const val PENDINGAPPROVAL = "PENDINGAPPROVAL"
+    const val BIRTHDAY = "BIRTHDAY"
+    const val DASHBOARD = "DASHBOARD"
   }
 }

@@ -143,7 +143,7 @@ class DrawerMenuView : FrameLayout {
         ?.let {
           val name = it.firstName.plus(it.lastName)
           menuSection.setHeader(
-              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl.toLowerCase())
+              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl)
           )
         }
   }

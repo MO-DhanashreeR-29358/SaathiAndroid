@@ -1,6 +1,8 @@
 package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -152,6 +154,10 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   private fun doLogout() {
+    val notificationManager = getSystemService(
+        Context.NOTIFICATION_SERVICE
+    ) as NotificationManager
+    notificationManager.cancelAll()
     val user = userManager.user
     val logoutInfo = LogoutInfo(
         userId = user.userId, token = user.token,

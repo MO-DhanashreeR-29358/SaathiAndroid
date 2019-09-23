@@ -2,13 +2,13 @@ package com.mosl.tabapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 
 /**
  * Created by Sanket Gurav on 7/31/2017.
@@ -20,16 +20,7 @@ public class NotificationData implements Parcelable {//, Serializable
     private String subSection;
     private Map<String, String> paramMap;
 
-    //region Constructor
-    public NotificationData() {
-    }
 
-    public NotificationData(String page, String section, String subSection, Map<String, String> paramMap) {
-        this.page = page;
-        this.section = section;
-        this.subSection = subSection;
-        this.paramMap = paramMap;
-    }
 
     public NotificationData(String jobj) {
         try {
@@ -44,7 +35,8 @@ public class NotificationData implements Parcelable {//, Serializable
                     JSONObject jsonTempChild = jsonArray.getJSONObject(i);
                     JSONArray jsonArrayNameList = jsonTempChild.names();
                     for (int j = 0; j < jsonArrayNameList.length(); j++) {
-                        String name = jsonArrayNameList.get(j).toString();
+                        String name = isBlank(jsonArrayNameList.get(j).toString()) ? "0"
+                            : jsonArrayNameList.get(j).toString();
                         this.paramMap.put(name, jsonTempChild.getString(name));
                     }
                 }

@@ -21,7 +21,7 @@ import com.mosl.saathi.domain.NewsDateKt;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.NotificationData;
+import com.mosl.tabapp.model.NotificationDataNew;
 import com.mosl.tabapp.model.NotificationModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS;
@@ -164,13 +165,13 @@ public class NotificationFragment extends CommonFragment
             //Noproper data goto dsh board
             navigator.openHome();
         }
-        NotificationData data = new NotificationData(dataStr);
-        if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
+        NotificationDataNew data = new NotificationDataNew(Objects.requireNonNull(dataStr));
+        if (Objects.requireNonNull(data.getPage()).equalsIgnoreCase("LEADVIEW")) {
             //Goto leadView Detail
             //MOSLCommonFragment fragment = new LeadViewMainFragment();
             //BackStack
             Bundle bundle = new Bundle();
-            String leadId = data.getParamMap().get(LEAD_ID);
+            String leadId = Objects.requireNonNull(data.getParamMap()).get(LEAD_ID);
             String ucid = data.getParamMap().get(UCID);
             ucid = (ucid == null || ucid.equalsIgnoreCase("")) ? "0" : ucid;
             leadId = (leadId == null || leadId.equalsIgnoreCase("")) ? "0" : leadId;

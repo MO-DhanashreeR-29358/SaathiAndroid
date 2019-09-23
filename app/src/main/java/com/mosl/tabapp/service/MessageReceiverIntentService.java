@@ -1,9 +1,5 @@
 package com.mosl.tabapp.service;
 
-/**
- * Created by pramod on 04/05/17.
- */
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -22,7 +18,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.mosl.annotations.FcmToken;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.ui.MOSLCommonActivity;
+import com.mosl.tabapp.core.CommonActivity;
 import dagger.android.AndroidInjection;
 import java.util.Map;
 import java.util.Objects;
@@ -30,13 +26,13 @@ import java.util.Random;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static com.mosl.tabapp.core.ActivityNavigationHelper.ARG_NOTIFICATION_CATEGORY;
 
 public class MessageReceiverIntentService extends FirebaseMessagingService {
 	private static final String CHANNEL_ID = "saathi";
 	String TAG = MessageReceiverIntentService.class.getCanonicalName();
 	@Inject
 	@FcmToken Preference<String> fcmtokenPref;
-
 
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -58,8 +54,6 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 			fcmtokenPref.set(refreshedToken);
 		}
 		Timber.tag(TAG).d("New firebase token: %s", refreshedToken);
-
-
 	}
 
 	private void sendNotification(Map data) {
@@ -67,20 +61,17 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 			String category = "";
 			Random random = new Random();
 			int m = random.nextInt(9999 - 1000) + 1000;
-			String color = data.get("color").toString();
-			if (data.get("category") == null) {
-			} else {
-				category = data.get("category").toString();
+			if (data.get("category") != null) {
+				category = Objects.requireNonNull(data.get("category")).toString();
 			}
-			String newsId = data.get("newsId").toString();
-			String title = data.get("title").toString();
-			String message = data.get("message").toString();
-			Intent notificationIntent = new Intent(this, MOSLCommonActivity.class);
+			String title = Objects.requireNonNull(data.get("title")).toString();
+			String message = Objects.requireNonNull(data.get("message")).toString();
+			Intent notificationIntent = new Intent(this, CommonActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			notificationIntent.setAction("Mosl_" + m);
 			notificationIntent.putExtra(MOSLConstants.SOURCE,
 				MOSLConstants.FCM_NOTIFICATION_SOURCE);
-			notificationIntent.putExtra(MOSLConstants.FCM_NOTIFICATION_CATEGORY, category);
+			notificationIntent.putExtra(ARG_NOTIFICATION_CATEGORY, category);
 			PendingIntent pendingIntent =
 				PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
 					PendingIntent.FLAG_ONE_SHOT);
