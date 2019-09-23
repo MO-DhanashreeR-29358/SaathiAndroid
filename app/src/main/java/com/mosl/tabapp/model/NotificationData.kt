@@ -7,7 +7,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
 
-class NotificationDataNew() : Parcelable {
+class NotificationData() : Parcelable {
 
   var page: String? = null
   var section: String? = null
@@ -85,12 +85,12 @@ class NotificationDataNew() : Parcelable {
     return 0
   }
 
-  companion object CREATOR : Creator<NotificationDataNew> {
-    override fun createFromParcel(parcel: Parcel): NotificationDataNew {
-      return NotificationDataNew(parcel)
+  companion object CREATOR : Creator<NotificationData> {
+    override fun createFromParcel(parcel: Parcel): NotificationData {
+      return NotificationData(parcel)
     }
 
-    override fun newArray(size: Int): Array<NotificationDataNew?> {
+    override fun newArray(size: Int): Array<NotificationData?> {
       return arrayOfNulls(size)
     }
   }

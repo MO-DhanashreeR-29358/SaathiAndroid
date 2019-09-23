@@ -33,7 +33,7 @@ import com.mosl.tabapp.common.LockedViewPager;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.ClientDetail;
-import com.mosl.tabapp.model.NotificationDataNew;
+import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
@@ -204,7 +204,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		indicatorLeadView.setupWithViewPager(vpLeadView);
 
 		//Go to section
-		NotificationDataNew section =
+		NotificationData section =
 			Objects.requireNonNull(this.getArguments()).getParcelable(NOTIFICATION_DATA);
 		//TODO  change meeting to ACTIVITIES
 		if (section == null) {

@@ -21,7 +21,7 @@ import com.mosl.saathi.domain.NewsDateKt;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.model.NotificationDataNew;
+import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.NotificationModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
@@ -165,7 +165,7 @@ public class NotificationFragment extends CommonFragment
             //Noproper data goto dsh board
             navigator.openHome();
         }
-        NotificationDataNew data = new NotificationDataNew(Objects.requireNonNull(dataStr));
+        NotificationData data = new NotificationData(Objects.requireNonNull(dataStr));
         if (Objects.requireNonNull(data.getPage()).equalsIgnoreCase("LEADVIEW")) {
             //Goto leadView Detail
             //MOSLCommonFragment fragment = new LeadViewMainFragment();

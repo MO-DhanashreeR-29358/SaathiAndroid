@@ -23,7 +23,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.ekyc.EkycNavigator
-import com.mosl.tabapp.model.NotificationDataNew
+import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
@@ -51,7 +51,7 @@ class ActivityNavigationHelper @Inject constructor(
 
     if (intent.isNotification()) {
       val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
-      val target = NotificationDataNew(category)
+      val target = NotificationData(category)
       if (target.page.equals(LEADVIEW)) {
         screenNavigator.openPage(
             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
@@ -104,7 +104,7 @@ class ActivityNavigationHelper @Inject constructor(
   }
 
   fun notificationNavigation(category: String): Int {
-    val target = NotificationDataNew(category)
+    val target = NotificationData(category)
     return when (target.page) {
       PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
       BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
@@ -192,7 +192,7 @@ class ActivityNavigationHelper @Inject constructor(
     ekycNavigator.openNewEkycApp(isExistingOrNewUser, "")
   }
 
-  private fun openLeadViewDetail(data: NotificationDataNew): Bundle {
+  private fun openLeadViewDetail(data: NotificationData): Bundle {
     val bundle = Bundle()
     val leadId = data.paramMap
         ?.get(MOSLConstants.LEAD_ID)
