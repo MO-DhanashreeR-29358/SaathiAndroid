@@ -25,6 +25,7 @@ import com.mosl.shared.util.Utility
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
+import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.LoginActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -38,7 +39,8 @@ class SplashActivityNew : LeanBaseActivity() {
   lateinit var loginRepository: LoginRepositoryImpl
   @Inject
   lateinit var userManager: UserManager
-
+  @Inject
+  lateinit var shortcutHelper: ShortcutHelper
   private val handler = Handler()
   private var count = 0
   override fun getLayout(): Int {
@@ -222,8 +224,10 @@ class SplashActivityNew : LeanBaseActivity() {
 
   fun handleStartup() {
     if (userManager.isLoggedIn()) {
+      shortcutHelper.setLoggedInUserShortcuts()
       setUserPreferenceData()
     } else {
+      shortcutHelper.setLogoutUserShortcuts()
       openLogin()
     }
   }

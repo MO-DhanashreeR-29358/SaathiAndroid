@@ -23,6 +23,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.ekyc.EkycNavigator
+import com.mosl.tabapp.helper.shortcuts.ShortcutConstants
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
@@ -48,11 +49,15 @@ class ActivityNavigationHelper @Inject constructor(
     Timber.d("extras %s", intent.extras?.toString())
     val uri = intent.data
 
-    if (isNotification(intent)) {
+    if (intent.isNotification()) {
       val bundle = intent.extras ?: Bundle.EMPTY
 //      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, bundle, false)
     } else if (userManager.user.isAuBankSalesSupport()) {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
+    } else if (intent.isAppShortcuts()) {
+
+      screenNavigator.openPage(intent.getIntExtra(ARG_PAGE_ID, 0), false)
+
     } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
@@ -62,9 +67,14 @@ class ActivityNavigationHelper @Inject constructor(
     }
   }
 
-  private fun isNotification(intent: Intent): Boolean {
-    val category: String? = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
+  private fun Intent.isNotification(): Boolean {
+    val category: String? = getStringExtra(ARG_NOTIFICATION_CATEGORY)
     if (category == null) return false else return true
+  }
+
+  private fun Intent.isAppShortcuts(): Boolean {
+
+    return getBooleanExtra(ShortcutConstants.IS_FROM_SHORTCUT, false)
   }
 
   fun loadFragment(@NavigationConstants pageId: Int) {

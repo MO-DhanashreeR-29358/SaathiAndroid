@@ -20,6 +20,8 @@ class UserManagerImpl @Inject constructor(
   init {
     val user = userCache.getUser()
     this.user = user
+    val reportMenuList = userCache.getReportMenuList()
+    this.reportMenulist = reportMenuList
   }
 
   fun saveUser(user: User) {
@@ -49,6 +51,8 @@ class UserManagerImpl @Inject constructor(
   }
 
   override fun setReportMenuList(reportMenuList: List<ChildMenu>) {
+    userCache.setReportMenuList(reportMenuList)
+
     this.reportMenulist = reportMenuList
   }
 

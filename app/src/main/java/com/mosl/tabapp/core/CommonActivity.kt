@@ -30,11 +30,11 @@ import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.splash.SplashActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
@@ -44,6 +44,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var binding: ActivityCommonbaseBinding
   @Inject
   lateinit var activityNavHelper: ActivityNavigationHelper
+
   @Inject
   lateinit var userManager: UserManager
   @Inject
@@ -58,7 +59,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   @Inject @field:FcmToken lateinit var tokenPref: Preference<String>
   @Inject
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
-
+  @Inject
+  lateinit var shortcutHelper: ShortcutHelper
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
   }
@@ -68,7 +70,6 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   ) {
     super.onCreate(savedInstanceState)
     binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
-
     binding.actionBar.setHomeAction({ openMenuDrawer() })
     binding.actionBar.showNotification({
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
@@ -78,6 +79,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     setupMenuDrawer()
     if (savedInstanceState == null) {
 //      screenNavigator.openHome()
+
       activityNavHelper.loadIntent(intent)
     } else {
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
@@ -142,6 +144,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
         getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, data ->
       if (action === Action.OK) {
+
         doLogout()
       }
     })
@@ -162,6 +165,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
           uiModel.data?.let {
             Timber.d("Logout Successfully")
+
             openLogin()
           }
 
@@ -173,6 +177,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
   fun openLogin() {
     //open image slider instead of splash
+    shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivityNew::class.java)
     startActivity(login)
     finish()

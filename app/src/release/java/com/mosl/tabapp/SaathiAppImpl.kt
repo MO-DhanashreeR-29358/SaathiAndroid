@@ -1,10 +1,13 @@
 package com.mosl.tabapp
 
 import android.content.Context
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.core.CrashlyticsCore
 import com.mosl.mobile.saathi.DaggerAppComponent
 import com.mosl.tabapp.SaathiAppNew
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 

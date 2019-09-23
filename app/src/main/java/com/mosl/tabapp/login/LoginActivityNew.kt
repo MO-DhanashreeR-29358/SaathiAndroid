@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.editorActions
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.base.BaseActivity
@@ -23,6 +21,7 @@ import com.mosl.navigator.Navigator
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
+import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -34,7 +33,8 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   lateinit var presenter: LoginPresenter
   @Inject
   lateinit var userManager: UserManager
-
+  @Inject
+  lateinit var shortcutHelper: ShortcutHelper
   override fun getLayout(): Int {
     return R.layout.activity_login_new
   }
@@ -97,6 +97,7 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   }
 
   private fun openCommonActivity() {
+    shortcutHelper.setLoggedInUserShortcuts()
     val intent = Intent(this, CommonActivity::class.java)
     startActivity(intent)
     finish()

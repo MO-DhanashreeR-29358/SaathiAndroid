@@ -51,9 +51,6 @@
                     android:scheme="app"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
         </activity>
         <activity
             android:name=".splash.SplashActivityNew"
@@ -63,9 +60,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
         </activity>
         <activity
             android:name=".login.LoginActivityNew"
@@ -91,11 +85,7 @@
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden"/>
 
-        <receiver android:name="com.mosl.tabapp.common.NetworkStateReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dda79f66330d41eeba7f4fcf83cfc3d519aaf942"/>
@@ -123,6 +113,6 @@
 
         <service
             android:name=".service.ForegroundService"
-            android:enabled="true"></service>
+            android:enabled="true" />
     </application>
 </manifest>
