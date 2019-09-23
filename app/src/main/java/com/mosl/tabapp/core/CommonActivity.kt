@@ -35,6 +35,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.splash.SplashActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject

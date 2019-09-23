@@ -32,8 +32,8 @@ import timber.log.Timber;
 		shortcutInfos.add(getShortCutInfo(context, "calender", "Calendar", "Calendar",
 			R.drawable.ic_new_calendar, NavigationConstants.NAVIGATE_TO_CALENDAR));
 		shortcutInfos.add(
-			getShortCutInfo(context, "birthdayAnniversary", "Birthdays &amp; Anniversary",
-				"Birthdays &amp; Anniversary",
+			getShortCutInfo(context, "birthdayAnniversary", "Birthdays & Anniversary",
+				"Birthdays & Anniversary",
 				R.drawable.ic_birthday_aniversary,
 				NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY));
 		shortcutInfos.add(getShortCutInfo(context, "createLead", "Create Lead", "Create Lead",

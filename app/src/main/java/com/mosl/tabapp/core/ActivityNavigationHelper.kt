@@ -54,11 +54,7 @@ class ActivityNavigationHelper @Inject constructor(
 //      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, bundle, false)
     } else if (userManager.user.isAuBankSalesSupport()) {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
-    } else if (intent.isAppShortcuts()) {
-
-      screenNavigator.openPage(intent.getIntExtra(ARG_PAGE_ID, 0), false)
-
-    } else {
+    }  else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
         pageToOpen == -1 -> screenNavigator.openHome()
@@ -70,11 +66,6 @@ class ActivityNavigationHelper @Inject constructor(
   private fun Intent.isNotification(): Boolean {
     val category: String? = getStringExtra(ARG_NOTIFICATION_CATEGORY)
     if (category == null) return false else return true
-  }
-
-  private fun Intent.isAppShortcuts(): Boolean {
-
-    return getBooleanExtra(ShortcutConstants.IS_FROM_SHORTCUT, false)
   }
 
   fun loadFragment(@NavigationConstants pageId: Int) {
