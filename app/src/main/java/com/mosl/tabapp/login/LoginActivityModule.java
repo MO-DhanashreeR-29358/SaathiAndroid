@@ -8,6 +8,7 @@ import com.mosl.navigator.FragmentTransitionHelper;
 import com.mosl.navigator.FragmentTransitionHelperImpl;
 import com.mosl.navigator.NavigationCallback;
 import com.mosl.navigator.Navigator;
+import com.mosl.tabapp.Permisssion.PermissionCheckHelper;
 import com.mosl.tabapp.core.LoginNavigatorImpl;
 import dagger.Binds;
 import dagger.Module;
@@ -40,4 +41,9 @@ import timber.log.Timber;
 	@Binds abstract LoginView provideCustomerLoginView(LoginActivityNew activity);
 
 	@Binds abstract LoginNavigator provideLoginNavigator(LoginNavigatorImpl loginNavigator);
+
+	@Provides
+	static PermissionCheckHelper providePermissionCheckHelper(LoginActivityNew loginActivityNew) {
+		return new PermissionCheckHelper(loginActivityNew);
+	}
 }
