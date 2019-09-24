@@ -14,7 +14,9 @@ import com.mosl.mobile.user.login.user
 import com.mosl.navigator.BaseNavigator
 import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
+import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.prospect.ProspectRequest
 import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.shared.util.Utility
@@ -30,6 +32,7 @@ import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
+import java.util.Objects
 import javax.inject.Inject
 
 @ActivityScoped
@@ -38,7 +41,9 @@ class ActivityNavigationHelper @Inject constructor(
   internal val ekycNavigator: EkycNavigator,
   internal val userManager: UserManagerImpl,
   val context: Context,
-  val navigator: Navigator
+  val navigator: Navigator,
+  val saathiApi: SaathiApi
+
 ) {
   private var pendingMenuAction: AppMenu? = null
   private val disposable: CompositeDisposable = CompositeDisposable()
@@ -147,6 +152,50 @@ class ActivityNavigationHelper @Inject constructor(
       bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
 
+    }
+  }
+
+  fun convertEkycApi(
+    ekycModule: EkycModule
+  ) {
+    if (context.isNetworkConnected()) {
+      val request = ProspectRequest(
+          ekycModule.mobile, ekycModule.email, ekycModule.branchEmpCode, ekycModule.source,
+          ekycModule.prospectSource, ekycModule.prospectSourceDetails, ekycModule.interestedIn
+      )
+
+      disposable.add(saathiApi
+          .registerProspectOnline(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderProspect(it) })
+
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderProspect(uiModel: UiModel<SaathiCommonResponse<List<ProspectResponse>>>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+
+    val data = uiModel.data
+    if (data != null) {
+      val prospectResponse =
+        Objects.requireNonNull<List<ProspectResponse>>(uiModel.data!!.response)[0]
+      if (prospectResponse.isRegistrationAllowed()) {
+        val oaoUserId = prospectResponse.ekycUserID
+        ekycNavigator.openNewEkycApp(true, oaoUserId)
+      } else {
+        MSFDialog.alertDialog(
+            context, 0,
+            context.getResources().getString(R.string.motilal_oswal),
+            data.message, "OK", true, null
+        )
+      }
     }
   }
 

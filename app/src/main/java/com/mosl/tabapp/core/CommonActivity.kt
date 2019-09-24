@@ -317,6 +317,12 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     exitPopup()
   }
 
+  fun gotoEkycPage(ekycModule: EkycModule) {
+
+    activityNavHelper.convertEkycApi(ekycModule)
+
+  }
+
   override fun onDestroy() {
     super.onDestroy()
     globalTitles.clear()

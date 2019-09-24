@@ -118,7 +118,11 @@ open class CommonFragment : BaseFragment() {
     }
   }
 
-
+  fun gotoEkycPage(
+    ekycModule: EkycModule
+  ) {
+    (requireActivity() as CommonActivity).gotoEkycPage(ekycModule)
+  }
 
   fun noInternetConnectionDialog() {
     MSFDialog.alertDialog(
