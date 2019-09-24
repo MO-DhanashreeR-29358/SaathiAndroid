@@ -55,7 +55,7 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		calendarView = super.onCreateView(inflater, container, savedInstanceState);
-		setAppTitle("Calendar");
+		container.post(() -> setAppTitle("Calendar"));
 		setUpView(calendarView);
 		setUserVisibleHint(true);
 		return calendarView;

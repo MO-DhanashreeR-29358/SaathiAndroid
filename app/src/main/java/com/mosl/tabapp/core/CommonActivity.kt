@@ -262,6 +262,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     val pageTitle: AppTitle = appTitle ?: globalTitles[page] ?: AppTitle.EMPTY
 
     globalTitles[page] = pageTitle
+    binding.actionBar.setTitle(pageTitle.titleStr)
+    binding.actionBar.setTitleVisibility(View.VISIBLE)
 //    binding.actionBar.setTitleAndOverflow(pageTitle)
   }
 
@@ -313,6 +315,12 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
       return
     }
     exitPopup()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    globalTitles.clear()
+    disposable.clear()
   }
 
   fun exitPopup() {

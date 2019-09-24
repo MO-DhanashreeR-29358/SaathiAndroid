@@ -1,5 +1,6 @@
 package com.mosl.tabapp.leadcreation;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -504,8 +504,7 @@ public class LeadCreationFragment extends CommonFragment
 	@Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		leadCreationView = super.onCreateView(inflater, container, savedInstanceState);
-
-		//setAppTitle(getClass().toString(), "Lead Creation");
+		container.post(() -> setAppTitle("Lead Creation"));
 		setUpView(leadCreationView);
 		setUserVisibleHint(true);
 		return leadCreationView;
@@ -523,16 +522,14 @@ public class LeadCreationFragment extends CommonFragment
 		}
 	}
 
-	private void setUpView(View leadCreationView) {
+	@SuppressLint("ClickableViewAccessibility") private void setUpView(View leadCreationView) {
 		scrollView = leadCreationView.findViewById(R.id.scrollView);
 		scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		scrollView.setFocusable(true);
 		scrollView.setFocusableInTouchMode(true);
-		scrollView.setOnTouchListener(new View.OnTouchListener() {
-			@Override public boolean onTouch(View v, MotionEvent event) {
-				v.requestFocusFromTouch();
-				return false;
-			}
+		scrollView.setOnTouchListener((v, event) -> {
+			v.requestFocusFromTouch();
+			return false;
 		});
 		llPersonalInformation =
 			leadCreationView.findViewById(R.id.llPersonalInformation);

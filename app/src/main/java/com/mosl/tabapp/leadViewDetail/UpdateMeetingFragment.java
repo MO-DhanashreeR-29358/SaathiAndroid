@@ -351,10 +351,9 @@ public class UpdateMeetingFragment extends CommonFragment
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_update_meeting);
 		meetingId = Objects.requireNonNull(this.getArguments()).getString(MEETING, "0");
 		getMeetingById(meetingId);
-		//setAppTitle(getClass().toString(), "Update Meeting");
+		container.post(() -> setAppTitle("Update Meeting"));
 		meetingObjective();
 		setUpView(createMeetingView);
 		return createMeetingView;

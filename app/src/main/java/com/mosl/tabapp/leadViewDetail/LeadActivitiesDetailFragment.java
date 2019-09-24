@@ -29,7 +29,8 @@ public class LeadActivitiesDetailFragment extends CommonFragment {
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View detailView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_lead_act_detail);
+		container.post(() -> setAppTitle(Objects.requireNonNull(
+			Objects.requireNonNull(this.getArguments()).getString("MeetingReason"))));
 		setUpView(Objects.requireNonNull(detailView));
 		return detailView;
 	}
@@ -60,7 +61,6 @@ public class LeadActivitiesDetailFragment extends CommonFragment {
 		TextView tvGeoMeetingLocation = detailView.findViewById(R.id.tvGeoMeetingLocation);
 
 		try {
-			//setAppTitle(getClass().toString(), this.getArguments().getString("MeetingReason"));
 			tvMonthDate.setText(
 				Objects.requireNonNull(this.getArguments()).getString(MOSLConstants.DATE));
 			tvTime.setText(this.getArguments().getString(TIME));

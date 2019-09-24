@@ -275,9 +275,7 @@ public class SetAppointmentFragment extends CommonFragment
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View setAppointmentView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_set_appiontment);
-		//setAppTitle(getClass().toString(), "Set Appointment");
-
+		container.post(() -> setAppTitle("Set Appointment"));
 		try {
 			mUCID = Objects.requireNonNull(this.getArguments())
 				.getString(UCID, "0")

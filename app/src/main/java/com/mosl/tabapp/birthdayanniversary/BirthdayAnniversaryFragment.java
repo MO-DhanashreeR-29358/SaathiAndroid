@@ -132,7 +132,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         Bundle savedInstanceState) {
         birthdayAnniversaryView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(birthdayAnniversaryView);
-        setAppTitle("Birthday & Anniversary");
+		container.post(() -> setAppTitle("Birthday & Anniversary"));
         setUserVisibleHint(true);
         return birthdayAnniversaryView;
     }

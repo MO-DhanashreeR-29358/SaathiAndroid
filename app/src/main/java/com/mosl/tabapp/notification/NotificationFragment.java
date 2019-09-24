@@ -58,7 +58,7 @@ public class NotificationFragment extends CommonFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         notificationView = super.onCreateView(inflater, container, savedInstanceState);
-        setAppTitle("Notification");
+		container.post(() -> setAppTitle("Notification"));
         setUpView(notificationView);
         setUserVisibleHint(true);
         return notificationView;

@@ -188,7 +188,6 @@ public class DashboardFragment extends CommonFragment
 		dashAdvisoryView = super.onCreateView(inflater, container, savedInstanceState);
 		setUpView(dashAdvisoryView);
 		hideAppTitle();
-
 		try {
 			//CHECK IF CALLED FROM SEARCH RESULT
 			Bundle bund = this.getArguments();

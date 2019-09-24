@@ -481,7 +481,7 @@ public class CreateMeetingFragment extends CommonFragment
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_create_meeting);
+		container.post(() -> setAppTitle("Create Meeting"));
 		setUpView(Objects.requireNonNull(createMeetingView));
 		startLocationUpdates();
 		try {
@@ -500,8 +500,6 @@ public class CreateMeetingFragment extends CommonFragment
 		selectProduct();
 		meetingObjective();
 		meetingLocation();
-		//setAppTitle(getClass().toString(), "Create Meeting");
-
 		return createMeetingView;
 	}
 
