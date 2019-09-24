@@ -64,6 +64,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
+
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
   }
@@ -138,6 +139,12 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
           activityNavHelper.onMenuClicked(menu)
 
           binding.drawerMenu.selectItem(menu)
+          binding.drawerLayout.closeDrawers()
+        }
+        .addTo(disposable)
+
+    binding.drawerMenu.onCloseClicked()
+        .subscribe() { view ->
           binding.drawerLayout.closeDrawers()
         }
         .addTo(disposable)

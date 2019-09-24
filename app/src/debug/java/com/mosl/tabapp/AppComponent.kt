@@ -26,7 +26,6 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 //  fun inject(target: ActionBar)
 
   fun inject(target: DataSyncWorker)
-
   fun inject(target: HeaderInterceptor)
 
   fun inject(target: BankEmployeeAdapter)
