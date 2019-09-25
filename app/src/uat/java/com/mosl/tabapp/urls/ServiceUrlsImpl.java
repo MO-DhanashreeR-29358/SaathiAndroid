@@ -3,11 +3,14 @@ package com.mosl.tabapp.urls;
 import androidx.annotation.NonNull;
 import org.jetbrains.annotations.Contract;
 public class ServiceUrlsImpl {
+
+    // Todo for testing used http://122.184.137.226:83/api/
+
     @NonNull
     @Contract(pure = true)
     public static String CRM_BASE_URL()  {
         return
-            "https://saathiuat.motilaloswal.com:1023/api/";
+            "http://122.184.137.226:83/api/";
     }
     @NonNull
     @Contract(pure = true)
