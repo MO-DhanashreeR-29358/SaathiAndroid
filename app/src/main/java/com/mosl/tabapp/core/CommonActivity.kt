@@ -10,6 +10,10 @@ import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.Preference
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
@@ -35,11 +39,15 @@ import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.service.location.DataSyncWorker
+import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivityNew
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
@@ -64,6 +72,10 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
+  private lateinit var locationWorkManager: WorkManager
+  private lateinit var dataSyncWorkManager: WorkManager
+  private lateinit var compressionLocationWorkId: UUID
+  private lateinit var compressionDataSyncWorkId: UUID
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -89,8 +101,40 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
     }
 
+    locationWorkManager = WorkManager.getInstance()
+    dataSyncWorkManager = WorkManager.getInstance()
+
+    startWorkManager()
     setupObservables()
 
+  }
+
+  private fun networkConstraints(): Constraints {
+    return Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+  }
+
+  private fun startWorkManager() {
+    val periodicDataSyncWork = PeriodicWorkRequest.Builder(
+        DataSyncWorker::class.java, 30,
+        TimeUnit.MINUTES
+    )
+        .setConstraints(networkConstraints())
+        .build()
+
+    val periodicLocationWork = PeriodicWorkRequest.Builder(
+        LocationWorker::class.java, 15,
+        TimeUnit.MINUTES
+    )
+        .setConstraints(networkConstraints())
+        .build()
+
+    dataSyncWorkManager.enqueue(periodicDataSyncWork)
+    locationWorkManager.enqueue(periodicLocationWork)
+
+    compressionDataSyncWorkId = periodicDataSyncWork.id
+    compressionLocationWorkId = periodicLocationWork.id
   }
 
   private fun setupObservables() {
@@ -191,6 +235,10 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
   fun openLogin() {
     //open image slider instead of splash
+
+    locationWorkManager.cancelWorkById(compressionLocationWorkId)
+    dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
+
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivityNew::class.java)
     startActivity(login)

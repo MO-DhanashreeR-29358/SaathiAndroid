@@ -46,7 +46,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -89,7 +88,6 @@ import com.mosl.tabapp.model.AccountDetails;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.SearchResultModel;
 import com.mosl.tabapp.notification.NotificationFragment;
-import com.mosl.tabapp.service.DataSyncWorker;
 import com.mosl.tabapp.service.ForegroundService;
 import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ui.quickdialog.ActionItem;
@@ -106,7 +104,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -296,7 +293,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 
 		setContentView(R.layout.crm_activity_main);
 		mWorkManager = WorkManager.getInstance();
-		startWorkManager();
+		//startWorkManager();
 		startService(new Intent(this, ForegroundService.class));
 		//region Get intent
 		Intent intent = getIntent();
@@ -1278,13 +1275,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 		return new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
 	}
 
-	private void startWorkManager() {
-		PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 30,
-			TimeUnit.MINUTES).setConstraints(networkConstraints()).build();
-		mWorkManager.enqueue(periodicWork);
-
-		compressionWorkId = periodicWork.getId();
-	}
+	//private void startWorkManager() {
+	//	PeriodicWorkRequest periodicWork = new PeriodicWorkRequest.Builder(DataSyncWorker.class, 30,
+	//		TimeUnit.MINUTES).setConstraints(networkConstraints()).build();
+	//	mWorkManager.enqueue(periodicWork);
+	//
+	//	compressionWorkId = periodicWork.getId();
+	//}
 
 	private void getSuggestMe() {
 		if (CRMAppUtil.isNetworkEnabled(MOSLCommonActivity.this)) {

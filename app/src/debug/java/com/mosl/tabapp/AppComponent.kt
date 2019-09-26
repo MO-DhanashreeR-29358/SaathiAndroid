@@ -4,8 +4,9 @@ import com.mosl.tabapp.SaathiAppImpl
 import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
-import com.mosl.tabapp.service.DataSyncWorker
 import com.mosl.tabapp.service.ServiceModule
+import com.mosl.tabapp.service.location.DataSyncWorker
+import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.ws.HeaderInterceptor
 import dagger.BindsInstance
 import dagger.Component
@@ -23,9 +24,10 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   fun inject(target: DrawerMenuView)
 
-//  fun inject(target: ActionBar)
+  fun inject(target: LocationWorker)
 
   fun inject(target: DataSyncWorker)
+
   fun inject(target: HeaderInterceptor)
 
   fun inject(target: BankEmployeeAdapter)

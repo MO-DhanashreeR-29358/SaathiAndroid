@@ -10,8 +10,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Binder;
@@ -30,18 +28,10 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.mosl.mobile.user.login.UserManager;
 import com.mosl.tabapp.R;
-import com.mosl.tabapp.SaathiAppNew;
-import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.database.LocationData;
 import dagger.android.AndroidInjection;
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
-import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static java.util.Objects.requireNonNull;
 
@@ -65,7 +55,7 @@ public class ForegroundService extends Service {
 					if (requireNonNull(manager)
 						.isProviderEnabled(LocationManager.GPS_PROVIDER) && hasGPSDevice(
 						getApplicationContext())) {
-						LocationUpdate();
+						//LocationUpdate();
 					}
 				}
 				refreshHandler.postDelayed(runnableCode, 15 * 60 * 1000);
@@ -128,41 +118,41 @@ public class ForegroundService extends Service {
 		return notification.build();
 	}
 
-	private void LocationUpdate() {
-		new Thread(new Runnable() {
-			@Override public void run() {
-				LocationData locationData = new LocationData();
-				if (mCurrentLocation != null) {
-					Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-					try {
-						List<Address> addressList =
-							geocoder.getFromLocation(mCurrentLocation.getLatitude(),
-								mCurrentLocation.getLongitude(), 1);
-						locationData.setGeoArea(addressList.get(0).getAddressLine(0));
-						locationData.setGeoPincode(addressList.get(0).getPostalCode());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					locationData.setLatitude(mCurrentLocation.getLatitude() + "");
-					locationData.setLongitude(mCurrentLocation.getLongitude() + "");
-					locationData.setAccuracy(mCurrentLocation.getAccuracy() + "");
-					locationData.setEmpCode(
-						requireNonNull(userManager.getUser()).employeeCode);
-					locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
-					locationData.setDeviceId(
-						getDeviceID(getApplicationContext().getContentResolver()));
-					if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
-						requireNonNull(SaathiAppNew.get().getDB()).daoAccess()
-							.insertLocationList(locationData);
-						Timber.tag("Location Data entered").d(locationData.toString());
-					}
-				} else {
-					getCurrentLocation();
-					refreshHandler.postDelayed(runnableCode, 10000);
-				}
-			}
-		}).start();
-	}
+	//private void LocationUpdate() {
+	//	new Thread(new Runnable() {
+	//		@Override public void run() {
+	//			LocationData locationData = new LocationData();
+	//			if (mCurrentLocation != null) {
+	//				Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+	//				try {
+	//					List<Address> addressList =
+	//						geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+	//							mCurrentLocation.getLongitude(), 1);
+	//					locationData.setGeoArea(addressList.get(0).getAddressLine(0));
+	//					locationData.setGeoPincode(addressList.get(0).getPostalCode());
+	//				} catch (IOException e) {
+	//					e.printStackTrace();
+	//				}
+	//				locationData.setLatitude(mCurrentLocation.getLatitude() + "");
+	//				locationData.setLongitude(mCurrentLocation.getLongitude() + "");
+	//				locationData.setAccuracy(mCurrentLocation.getAccuracy() + "");
+	//				locationData.setEmpCode(
+	//					requireNonNull(userManager.getUser()).employeeCode);
+	//				locationData.setTime(CRMAppUtil.getCurrentDisplayDate());
+	//				locationData.setDeviceId(
+	//					getDeviceID(getApplicationContext().getContentResolver()));
+	//				if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+	//					requireNonNull(SaathiAppNew.get().getDB()).daoAccess()
+	//						.insertLocationList(locationData);
+	//					Timber.tag("Location Data entered").d(locationData.toString());
+	//				}
+	//			} else {
+	//				getCurrentLocation();
+	//				refreshHandler.postDelayed(runnableCode, 10000);
+	//			}
+	//		}
+	//	}).start();
+	//}
 
 	@Override public void onDestroy() {
 		super.onDestroy();

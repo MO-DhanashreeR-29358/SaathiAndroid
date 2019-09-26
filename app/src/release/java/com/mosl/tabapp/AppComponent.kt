@@ -14,6 +14,8 @@ import javax.inject.Singleton
 import com.mosl.tabapp.service.DataSyncWorker
 import com.mosl.tabapp.service.ServiceModule
 import com.mosl.tabapp.ws.HeaderInterceptor
+import com.mosl.tabapp.service.location.LocationWorker
+import com.mosl.tabapp.service.location.DataSyncWorker
 
 @Singleton
 @Component(
@@ -21,11 +23,13 @@ import com.mosl.tabapp.ws.HeaderInterceptor
 )
 interface AppComponent : AndroidInjector<SaathiAppImpl> {
   override fun inject(instance: SaathiAppImpl)
-  fun inject(target: DataSyncWorker)
 
   fun inject(target: DrawerMenuView)
 
+  fun inject(target: LocationWorker)
+
 //  fun inject(target: ActionBar)
+fun inject(target: DataSyncWorker)
 
   fun inject(target: HeaderInterceptor)
 

@@ -32,7 +32,6 @@ abstract class SaathiAppNew : DaggerApplication() {
   override fun onCreate() {
     super.onCreate()
     init()
-
     CRMWebServiceHandler.initSaathiApi(this)
     AppProvider.initSaathiApi(this)
 

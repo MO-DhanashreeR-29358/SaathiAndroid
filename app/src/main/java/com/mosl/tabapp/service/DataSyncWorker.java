@@ -1,3 +1,4 @@
+/*
 package com.mosl.tabapp.service;
 
 import android.content.Context;
@@ -5,13 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.mosl.app.core.utils.Injector;
+import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.domain.location.LocationRepository;
 import com.mosl.mobile.saathi.AppComponent;
+import com.mosl.mobile.user.helper.AppUserHelperKt;
 import com.mosl.mobile.user.login.UserManager;
+import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
+import com.mosl.tabapp.service.location.LocationDataMapperKt;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -25,7 +33,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import timber.log.Timber;
 
+import static com.mosl.app.core.rx.DispatchersKt.RxDispatchers;
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
+import static com.mosl.mobile.user.helper.AppUserHelperKt.applyUiModel;
 import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static java.util.Objects.requireNonNull;
@@ -33,11 +43,14 @@ import static java.util.Objects.requireNonNull;
 public class DataSyncWorker extends Worker {
 	private static final String TAG = "MyWorker";
 	@Inject UserManager userManager;
+	@Inject SaathiApi saathiApi;
+	@Inject LocationRepository repository;
+	private CompositeDisposable disposable = new CompositeDisposable();
 
 	public DataSyncWorker(@NonNull Context context,
 		@NonNull WorkerParameters workerParams) {
 		super(context, workerParams);
-		Injector.obtain(getApplicationContext(), AppComponent.class).inject(this);
+		//Injector.obtain(getApplicationContext(), AppComponent.class).inject(this);
 	}
 
 	@NonNull
@@ -45,6 +58,7 @@ public class DataSyncWorker extends Worker {
 	public Result doWork() {
 		try {
 			if (userManager.isLoggedIn()) {
+
 				if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
 					if (requireNonNull(SaathiAppNew.get().getDB()).daoAccess()
 						.getLocationList()
@@ -60,6 +74,8 @@ public class DataSyncWorker extends Worker {
 			return Result.retry();
 		}
 	}
+
+
 
 	private void SaveGeoLocation() {
 		OkHttpClient client = new OkHttpClient();
@@ -132,6 +148,20 @@ public class DataSyncWorker extends Worker {
 		}
 	}
 
+	//private void saveGeoLocation() {
+	//	Disposable disposable =
+	//		repository.getGeoLocation(
+	//			LocationDataMapperKt.transformLocationData(requireNonNull(SaathiAppNew.get().getDB()).daoAccess().getLocationList()))
+	//		.compose(applyUiModel())
+	//		.subscribe (this::renderLocation);
+	//
+	//
+	//}
+
+	private void renderLocation(UiModel<String> stringUiModel) {
+
+	}
+
 	private String getLocationMapping(List<LocationData> locationDataList) {
 		String json = "{\"GeoList\":[";
 		for (LocationData model : locationDataList) {
@@ -154,3 +184,4 @@ public class DataSyncWorker extends Worker {
 		return json;
 	}
 }
+*/

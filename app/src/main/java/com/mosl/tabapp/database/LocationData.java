@@ -1,13 +1,12 @@
 package com.mosl.tabapp.database;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class LocationData {
-    @NonNull
-    @PrimaryKey(autoGenerate = true)
+
+	@PrimaryKey(autoGenerate = true)
     public int id;
     private String latitude;
     private String longitude;
@@ -82,18 +81,16 @@ public class LocationData {
         this.geoPincode = geoPincode;
     }
 
-    @Override
-    public String toString() {
-        return "LocationData{" +
-            "id=" + id +
-            ", lat='" + latitude + '\'' +
-            ", Long='" + longitude + '\'' +
-            ", deviceId='" + deviceId + '\'' +
-            ", empCode='" + empCode + '\'' +
-            ", time='" + time + '\'' +
-            ", accuracy='" + accuracy + '\'' +
-            ", geoArea='" + geoArea + '\'' +
-            ", geoPincode='" + geoPincode + '\'' +
-            '}';
-    }
+	public LocationData(String latitude, String longitude, String deviceId,
+		String empCode, String time, String accuracy, String geoArea, String geoPincode) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.deviceId = deviceId;
+		this.empCode = empCode;
+		this.time = time;
+		this.accuracy = accuracy;
+		this.geoArea = geoArea;
+		this.geoPincode = geoPincode;
+	}
+
 }
