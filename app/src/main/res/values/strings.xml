@@ -55,6 +55,9 @@
     <string name="TXT_AUFSB_TELEPHONE2">022&#8211;40548488</string>
     <string name="TXT_FRESH_REGISTRATION">New client account opening process</string>
     <string name="TXT_EXISTING_APPLICATION">Resume previously saved application to complete the account opening process</string>
+    <string name="mgs_update_address">Kindly update address and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
 
 
     <string-array name="meetingDuration">

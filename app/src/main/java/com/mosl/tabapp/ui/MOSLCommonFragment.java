@@ -251,6 +251,12 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
             null);
     }
 
+    public void erroMsgDialog(String message) {
+        MSFDialog.alertDialog(getMainActivity(), 0,
+            getResources().getString(R.string.motilal_oswal), message, OK, true,
+            null);
+    }
+
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
                 getMainActivity().getIntent());

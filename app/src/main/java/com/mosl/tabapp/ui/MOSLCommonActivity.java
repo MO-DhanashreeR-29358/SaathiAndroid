@@ -437,8 +437,9 @@ public class MOSLCommonActivity extends AppCompatActivity
 				if (fragment != null && fragment.isVisible()) {
 					if (fragment instanceof DashboardFragment) {
 						return true;
-					} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT) &&
-							fragment instanceof BankMeetingFragment) {
+					} else if (AccountDetails.getBusinessProfileId().equals(AU_BANK_SALES_SUPPORT)
+						&&
+						fragment instanceof BankMeetingFragment) {
 						return true;
 					}
 				}
@@ -540,13 +541,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 			if (strAction.trim().equalsIgnoreCase("com.mosl.tabapp.ADD_QUERY")) {
 				setupFragment(new QueryFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
+				.equalsIgnoreCase("com.mosl.tabapp.VIEW_CALE")) {//goto callendar
 				setupFragment(new CalendarFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
+				.equalsIgnoreCase("com.mosl.tabapp.VIEW_BA")) {//goto birthday
 				setupFragment(new BirthdayAnniversaryFragment());
 			} else if (strAction.trim()
-					.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
+				.equalsIgnoreCase("com.mosl.tabapp.CREATE_LEAD")) {//create lead
 				setupFragment(new LeadCreationFragment());
 			} else {
 				setupFragment(new DashboardFragment());
@@ -999,6 +1000,12 @@ public class MOSLCommonActivity extends AppCompatActivity
 	private void noInternetConnectionDialog() {
 		MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
 			getResources().getString(R.string.motilal_oswal), INTERNET_CONNECTION, OK, true,
+			null);
+	}
+
+	private void erroMsgDialog(String message) {
+		MSFDialog.alertDialog(MOSLCommonActivity.this, 0,
+			getResources().getString(R.string.motilal_oswal), message, OK, true,
 			null);
 	}
 
@@ -1535,10 +1542,19 @@ public class MOSLCommonActivity extends AppCompatActivity
 						bundle.putString(LEAD_ID, searchResultModel.getLeadId());
 						bundle.putString(UCID, searchResultModel.getUCID());
 						createMeetingFragment.setArguments(bundle);
-						addFragment(R.id.activityFrameLayout, createMeetingFragment, true, false);
 						hideKeyboard(actionBar.getSearchBoxView());
 						autoCompleteAdapter.clearAll();
 						actionBar.clearSearchText();
+						if (searchResultModel.getCreateMeetingId() == 0) {
+							addFragment(R.id.activityFrameLayout, createMeetingFragment, true,
+								false);
+						} else if (searchResultModel.getCreateMeetingId() == 1) {
+							erroMsgDialog(getString(R.string.mgs_update_address));
+						} else if (searchResultModel.getCreateMeetingId() == 2) {
+							erroMsgDialog(getString(R.string.mgs_update_profile));
+						} else if (searchResultModel.getCreateMeetingId() == 3) {
+							erroMsgDialog(getString(R.string.mgs_update_profile_address));
+						}
 					}
 				});
 				holderView.rlViewDetail.setOnClickListener(new View.OnClickListener() {
@@ -1778,6 +1794,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 												String email =
 													jsonObjMetatata.getString(EMAIL) == null ? ""
 														: jsonObjMetatata.getString(EMAIL);
+												int createMeetinId =
+													jsonObjMetatata.getInt(CREATE_MEETING_ID);
 												// String clientCode = jsonObjMetatata.getString(CLIENTCODE) == null ? "" : jsonObjMetatata.getString(CLIENTCODE);
 
 												if (jsonObjMetatata.has(CLIENTCODE)) {
@@ -1831,11 +1849,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 															oaoUserId, sourceName,
 															prospectSourceName,
 															prospectSourceDetails, interestedIn,
-															clientCode));
+															clientCode, createMeetinId));
 													modelList.add(
 														new SearchResultModel(searchType, "", "",
 															"", "", "", "", null, "", "", "", "",
-															""));
+															"", 0));
 												} else {
 													modelList.add(
 														new SearchResultModel(searchType, leadID,
@@ -1843,13 +1861,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 															oaoUserId, sourceName,
 															prospectSourceName,
 															prospectSourceDetails, interestedIn,
-															clientCode));
+															clientCode, createMeetinId));
 													if (jsonArray.length() > 7
 														&& i == (jsonArray.length() - 1)) {
 														modelList.add(
 															new SearchResultModel(searchType, "",
 																"", "", "", "", "", null, "", "",
-																"", "", ""));
+																"", "", "", 0));
 													}
 												}
 

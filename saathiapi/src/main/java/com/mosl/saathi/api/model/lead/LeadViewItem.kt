@@ -71,6 +71,7 @@ data class LeadViewItem(
     @JvmField @SerializedName("IsReCycleTransfer") val isReCycleTransfer: String?,
     @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: String?,
     @JvmField @SerializedName("LeadID") val leadID: Int,
+    @JvmField @SerializedName("CreateMeeting") val createMeetingId: Int,
     @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: String?,
     @JvmField @SerializedName("leadProfileParameters") val leadProfileParameters: String?,
     @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: Int,

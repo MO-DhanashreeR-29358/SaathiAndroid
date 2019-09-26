@@ -13,7 +13,7 @@ public class SearchResultModel implements Serializable {
     private String email;
     private String leadOwner;
     private String UCID = "0";
-    private Integer oaoUserId = 0;
+    private int oaoUserId = 0;
     private boolean expanded;
     private String sourceName;
     private String prospectSourceName;
@@ -28,6 +28,7 @@ public class SearchResultModel implements Serializable {
     private String productId;
     private String searchType;
     private String clientCode="0";
+    private int createMeetingId = 0;
 
     public SearchResultModel(String searchType, String empCode, String name, String businessProfileId, String businessProfileName, String productId) {
         this.searchType = searchType;
@@ -39,7 +40,9 @@ public class SearchResultModel implements Serializable {
     }
 
     public SearchResultModel(String searchType, String leadId, String name, String mobileNo, String email,
-                             String UCID, String leadOwner, Integer oaoUserId, String sourceName, String prospectSourceName, String prospectSourceDetails, String interestedIn, String clientCode) {
+        String UCID, String leadOwner, Integer oaoUserId, String sourceName,
+        String prospectSourceName, String prospectSourceDetails, String interestedIn,
+        String clientCode, int createMeetingId) {
         this.searchType = searchType;
         this.leadId = leadId;
         this.name = name;
@@ -53,6 +56,7 @@ public class SearchResultModel implements Serializable {
         this.prospectSourceDetails = prospectSourceDetails;
         this.interestedIn = interestedIn;
         this.clientCode = clientCode;
+        this.createMeetingId = createMeetingId;
     }
 
     public String getLeadId() {
@@ -213,5 +217,13 @@ public class SearchResultModel implements Serializable {
 
     public void setClientCode(String clientCode) {
         this.clientCode = clientCode;
+    }
+
+    public int getCreateMeetingId() {
+        return createMeetingId;
+    }
+
+    public void setCreateMeetingId(int createMeetingId) {
+        this.createMeetingId = createMeetingId;
     }
 }
