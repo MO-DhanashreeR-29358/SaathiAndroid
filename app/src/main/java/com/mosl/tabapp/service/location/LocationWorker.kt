@@ -68,10 +68,10 @@ class LocationWorker(
     mLocationRequest = LocationRequest()
     mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     /* 10 secs */
-    val UPDATE_INTERVAL = (10 * 1000).toLong()
+    val UPDATE_INTERVAL = (15 * 1000 * 60).toLong()
     mLocationRequest?.interval = UPDATE_INTERVAL
     /* 2 sec */
-    val FASTEST_INTERVAL: Long = 2 * 1000
+    val FASTEST_INTERVAL: Long = 60 * 1000
     mLocationRequest?.fastestInterval = FASTEST_INTERVAL
 
     val builder = LocationSettingsRequest.Builder()

@@ -2,6 +2,7 @@ package com.mosl.tabapp.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import org.jetbrains.annotations.NotNull;
 
 @Entity
 public class LocationData {
@@ -91,6 +92,20 @@ public class LocationData {
 		this.accuracy = accuracy;
 		this.geoArea = geoArea;
 		this.geoPincode = geoPincode;
-	}
+    }
 
+    @NotNull @Override
+    public String toString() {
+        return "LocationData{" +
+            "id=" + id +
+            ", lat='" + latitude + '\'' +
+            ", Long='" + longitude + '\'' +
+            ", deviceId='" + deviceId + '\'' +
+            ", empCode='" + empCode + '\'' +
+            ", time='" + time + '\'' +
+            ", accuracy='" + accuracy + '\'' +
+            ", geoArea='" + geoArea + '\'' +
+            ", geoPincode='" + geoPincode + '\'' +
+            '}';
+    }
 }
