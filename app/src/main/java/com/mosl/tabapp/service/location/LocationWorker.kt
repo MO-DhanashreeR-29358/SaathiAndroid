@@ -67,10 +67,10 @@ class LocationWorker(
   protected fun startLocationUpdates() {
     mLocationRequest = LocationRequest()
     mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    /* 10 secs */
-    val UPDATE_INTERVAL = (15 * 1000 * 60).toLong()
+    /* 60 secs */
+    val UPDATE_INTERVAL = (1000 * 60).toLong()
     mLocationRequest?.interval = UPDATE_INTERVAL
-    /* 2 sec */
+    /* 60 sec */
     val FASTEST_INTERVAL: Long = 60 * 1000
     mLocationRequest?.fastestInterval = FASTEST_INTERVAL
 
@@ -95,7 +95,7 @@ class LocationWorker(
       }, Looper.myLooper()
       )
     }
-    mainHandler.postDelayed(myRunnable, 15 * 60 * 1000)
+    mainHandler.postDelayed(myRunnable, 60 * 1000)
   }
 
   fun onLocationChanged(location: Location) {

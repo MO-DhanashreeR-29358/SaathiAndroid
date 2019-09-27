@@ -117,7 +117,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
   private fun startWorkManager() {
     val periodicDataSyncWork = PeriodicWorkRequest.Builder(
-        DataSyncWorker::class.java, 30,
+        DataSyncWorker::class.java, 32,
         TimeUnit.MINUTES
     )
         .setConstraints(networkConstraints())
@@ -130,8 +130,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
         .setConstraints(networkConstraints())
         .build()
 
-    dataSyncWorkManager.enqueue(periodicDataSyncWork)
     locationWorkManager.enqueue(periodicLocationWork)
+    dataSyncWorkManager.enqueue(periodicDataSyncWork)
 
     compressionDataSyncWorkId = periodicDataSyncWork.id
     compressionLocationWorkId = periodicLocationWork.id
