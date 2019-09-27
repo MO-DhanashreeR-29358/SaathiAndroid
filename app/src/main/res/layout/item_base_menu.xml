@@ -8,13 +8,14 @@
       android:background="@color/light_white"
       android:orientation="horizontal"
       >
-    <ImageView
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgGroupImage"
         android:layout_width="@dimen/menuIcons"
         android:layout_height="@dimen/menuIcons"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/margin_normal"
-        android:layout_marginRight="@dimen/margin_normal"
+        android:layout_marginLeft="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
         android:clickable="false"
         android:padding="@dimen/padding_extra_small"
         />
@@ -24,11 +25,9 @@
         android:layout_height="wrap_content"
         android:drawablePadding="@dimen/padding_large"
         android:gravity="center_vertical"
-        android:minHeight="48dp"
-        android:paddingEnd="@dimen/padding_medium"
-        android:paddingLeft="@dimen/padding_large"
-        android:paddingRight="@dimen/padding_medium"
-        android:paddingStart="@dimen/padding_large"
+        android:minHeight="68dp"
+        android:paddingLeft="@dimen/padding_medium"
+        android:textSize="@dimen/text_size_normal"
         android:textColor="@color/black"
         tools:text="About Us"
         />

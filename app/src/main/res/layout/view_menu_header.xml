@@ -7,7 +7,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/menu_header_background_color"
-      android:paddingTop="48dp"
+      android:paddingTop="@dimen/padding_large"
       >
     <ImageView
         android:id="@+id/imgClose"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_medium"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_medium"
+        android:textSize="@dimen/text_size_small"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/txtBusinessProfileName"
         app:layout_constraintStart_toEndOf="@id/imgPartner"

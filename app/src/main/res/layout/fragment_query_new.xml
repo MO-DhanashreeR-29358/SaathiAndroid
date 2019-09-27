@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:text="@string/btn_reset"
+                    android:layout_marginLeft="@dimen/_10sdp"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/btn_submit"
