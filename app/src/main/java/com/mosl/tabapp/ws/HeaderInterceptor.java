@@ -2,8 +2,8 @@ package com.mosl.tabapp.ws;
 
 import android.content.Context;
 import com.mosl.app.core.utils.Injector;
-import com.mosl.mobile.saathi.AppComponent;
 import com.mosl.mobile.user.login.UserManager;
+import com.mosl.tabapp.AppComponent;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMMOSLCommon;
 import com.mosl.tabapp.common.CRMSecurityUtil;

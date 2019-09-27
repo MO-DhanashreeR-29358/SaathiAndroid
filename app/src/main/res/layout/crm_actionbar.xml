@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 >
 
-                <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+              <AutoCompleteTextView
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -81,6 +81,8 @@
                     android:maxLength="90"
                     android:paddingLeft="5dp"
                     android:textSize="@dimen/_12sdp"
+                  android:textColor="@color/black"
+                  android:textColorHint="@color/black"
                     />
 
                 <LinearLayout

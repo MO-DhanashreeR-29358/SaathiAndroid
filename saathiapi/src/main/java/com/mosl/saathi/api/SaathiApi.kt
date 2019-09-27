@@ -2,6 +2,7 @@ package com.mosl.saathi.api
 
 import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
+import com.mosl.saathi.api.model.SearchResponse
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
@@ -92,6 +93,7 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
+import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
@@ -191,6 +193,12 @@ interface SaathiApi {
   fun updateLead(
     @Body request: UpdateLeadRequest
   ): Observable<UpdateLeadResponse>
+
+  @POST("Lead/SearchCommonMetaData")
+  @ExtraDataWrapper
+  fun getSearchData(
+    @Body request: SearchRequest
+  ): Observable<List<SearchResponse>>
 
   @POST("UserApi/AutoCompleteProductSpecialist")
   fun getProductSpecialist(

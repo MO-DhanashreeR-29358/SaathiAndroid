@@ -155,6 +155,10 @@ public class SearchResultModel implements Serializable {
         return searchType;
     }
 
+    public boolean isEmpType() {
+        return searchType.equals("Employee");
+    }
+
     public void setSearchType(String searchType) {
         this.searchType = searchType;
     }
@@ -165,6 +169,10 @@ public class SearchResultModel implements Serializable {
 
     public void setOaoUserId(Integer oaoUserId) {
         this.oaoUserId = oaoUserId;
+    }
+
+    public boolean isOaoUserIdValid() {
+        return oaoUserId != null && oaoUserId > 0;
     }
 
     public boolean isExpanded() {
@@ -209,6 +217,10 @@ public class SearchResultModel implements Serializable {
 
     public String getClientCode() {
         return clientCode;
+    }
+
+    public boolean hasClientCode() {
+        return !clientCode.isEmpty() && !clientCode.equals("0");
     }
 
     public void setClientCode(String clientCode) {

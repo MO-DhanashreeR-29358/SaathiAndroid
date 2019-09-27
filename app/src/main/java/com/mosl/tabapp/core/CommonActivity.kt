@@ -31,16 +31,22 @@ import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
+import com.mosl.tabapp.model.AccountDetails.isAufsb
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.splash.SplashActivityNew
+import com.mosl.tabapp.ui.quickdialog.ActionItem
+import com.mosl.tabapp.ui.quickdialog.QuickAction
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
-class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
+class CommonActivity : BaseActivity(),
+    Navigator,
+    ActivityDelegate,
+    QuickAction.OnActionItemClickListener {
 
   lateinit var binding: ActivityCommonbaseBinding
   @Inject
@@ -62,6 +68,8 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
+  private var searchType = SEARCH_TYPE_LEAD
+
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
   }
@@ -71,11 +79,13 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   ) {
     super.onCreate(savedInstanceState)
     binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
-    binding.actionBar.setHomeAction({ openMenuDrawer() })
-    binding.actionBar.showNotification({
+    binding.actionBar.setHomeAction(View.OnClickListener { openMenuDrawer() })
+    binding.actionBar.setNotification(View.OnClickListener {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
-      binding.actionBar.updateCnt(0)
+//      binding.actionBar.updateCnt(0)
     })
+    binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
+    binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
     hideAppTitle()
     setupMenuDrawer()
     if (savedInstanceState == null) {
@@ -88,6 +98,54 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
     setupObservables()
 
+  }
+
+  //quick dialog
+  fun openSearchOptions(v: View) {
+    val acLead = ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this)
+    val acCleint = ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this)
+    val acDadhBoard = ActionItem(ID_EMP, "Dashbord for", getChecedStateIcon(SEARCH_TYPE_EMP), this)
+
+    val quickAction = QuickAction(this, QuickAction.VERTICAL)
+    quickAction.addActionItem(acLead)
+    quickAction.addActionItem(acCleint)
+    if (!isAufsb()) {
+      quickAction.addActionItem(acDadhBoard)
+    }
+
+    quickAction.setOnActionItemClickListener(this)
+    quickAction.show(v)
+  }
+
+  private fun getChecedStateIcon(data: String): Int {
+    return if (searchType.equals(data, ignoreCase = true)) {
+      R.drawable.ic_check_black
+    } else {
+      R.drawable.ic_check_blank
+    }
+  }
+
+  //search option listen
+  override fun onItemClick(
+    source: QuickAction,
+    pos: Int,
+    actionId: Int
+  ) {
+
+    when (actionId) {
+      ID_LEAD -> {
+        searchType = SEARCH_TYPE_LEAD
+        binding.actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT)
+      }
+      ID_CLEINT -> {
+        searchType = SEARCH_TYPE_CLIENT
+        binding.actionBar.setSearchHint(SEARCH_TYPE_CLIENT_HINT)
+      }
+      ID_EMP -> {
+        searchType = SEARCH_TYPE_EMP
+        binding.actionBar.setSearchHint(SEARCH_TYPE_DASHBOARD_HINT)
+      }
+    }
   }
 
   private fun setupObservables() {
@@ -234,7 +292,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
   }
 
   override fun hideAppTitle() {
-    binding.actionBar.setTitleVisibility(View.GONE)
+    binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
   }
 
   override fun hideProgress() {
@@ -249,7 +307,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     val pageTitle: AppTitle = appTitle ?: globalTitles[page] ?: AppTitle.EMPTY
 
     globalTitles[page] = pageTitle
-//    binding.actionBar.setTitleAndOverflow(pageTitle)
+    binding.actionBar.setTitleAndOverflow(pageTitle)
   }
 
   override fun showProgress() {
@@ -318,5 +376,14 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     const val IS_LOGGED_IN_SUCESS = "isLoggedIn"
     const val PAGE_TITLES = "pageTitles"
     const val ARG_PAGE_ID = "pageId"
+    const val SEARCH_TYPE_LEAD = "Lead"
+    const val SEARCH_TYPE_CLIENT = "Client"
+    const val SEARCH_TYPE_EMP = "Employee"
+    const val SEARCH_TYPE_LEAD_HINT = "Search Lead"
+    const val SEARCH_TYPE_CLIENT_HINT = "Search Client"
+    const val SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for"
+    const val ID_LEAD = 1
+    const val ID_CLEINT = 2
+    const val ID_EMP = 3
   }
 }

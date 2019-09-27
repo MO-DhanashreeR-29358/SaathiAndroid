@@ -14,8 +14,8 @@ import com.mosl.app.core.utils.obtain
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.saathi.AppComponent
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.drawermenu.data.BaseMenu

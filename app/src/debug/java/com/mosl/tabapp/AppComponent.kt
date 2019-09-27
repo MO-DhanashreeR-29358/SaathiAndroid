@@ -1,7 +1,8 @@
-package com.mosl.mobile.saathi
+package com.mosl.tabapp
 
-import com.mosl.tabapp.SaathiAppImpl
-import com.mosl.tabapp.SaathiAppNew
+import com.mosl.mobile.saathi.DebugActivityBuilder
+import com.mosl.mobile.saathi.DebugModule
+import com.mosl.tabapp.actionbar.Actionbar
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.DataSyncWorker
@@ -23,7 +24,7 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   fun inject(target: DrawerMenuView)
 
-//  fun inject(target: ActionBar)
+  fun inject(target: Actionbar)
 
   fun inject(target: DataSyncWorker)
 
