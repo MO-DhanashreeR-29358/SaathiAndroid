@@ -2336,7 +2336,7 @@ public class DashboardFragment extends CommonFragment
 					if (!advisoryActionableInsightModel.getActionableCount()
 						.equalsIgnoreCase("0")) {
 						//navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-						navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true);
+						navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
 						dialog.dismiss();
 					}
 				}

@@ -512,7 +512,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							bundle.putString(STRING_TITLE, nextTitle);
 							navigator.openPage(
 								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
-								true);
+								true, false);
 						} else {
 
 							if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
@@ -533,7 +533,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							Bundle bundle = new Bundle();
 							bundle.putString(LEAD_ID, leadId);
 							bundle.putString(UCID, ucid);
-							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 						}
 					});
 
@@ -551,7 +551,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							bundle.putString(STRING_TITLE, nextTitle);
 							navigator.openPage(
 								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
-								true);
+								true, false);
 						} else {
 
 							if (!isBlank(getValue(row, "LEAD ID", "LeadId", "Lead_Id",
@@ -574,7 +574,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							bundle.putString(UCID, ucid);
 							//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
 							//	true);
-							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 						}
 					});
 					break;

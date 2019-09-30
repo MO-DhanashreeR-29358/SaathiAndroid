@@ -2072,7 +2072,7 @@ public class CreateMeetingFragment extends CommonFragment
 							Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 						bundle.putString(UCID,
 							getArguments().getString(UCID));
-						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 					}
 				});
 		}

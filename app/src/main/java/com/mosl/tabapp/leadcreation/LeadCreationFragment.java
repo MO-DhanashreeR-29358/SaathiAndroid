@@ -2536,7 +2536,8 @@ public class LeadCreationFragment extends CommonFragment
 								//navigateTo(NAV_TO_LEAD_VIEW_MAIN,
 								//    bundle, getFragmentManager(),
 								//    false);
-								navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+								navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+									false);
 							}
 						});
 				alertDialog.setCancelable(false);

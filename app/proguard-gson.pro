@@ -7,7 +7,7 @@
 -keepattributes *Annotation*
 
 # Gson specific classes
--dontwarn sun.misc.**
+-keep class sun.misc.Unsafe { *; }
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson

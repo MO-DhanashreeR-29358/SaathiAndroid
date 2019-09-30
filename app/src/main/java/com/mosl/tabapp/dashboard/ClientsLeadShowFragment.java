@@ -366,7 +366,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                                     navigator.openPage(
                                         NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
                                         args,
-                                        true);
+                                        true, false);
                                 }
                             }
                         }

@@ -181,7 +181,8 @@ public class NotificationFragment extends CommonFragment
             //fragment.setArguments(bundle);
             //todo open lead view main fragment
             //navigator.openPage();
-            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                false);
         }
         //PENDINGAPPROVAL
         else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {

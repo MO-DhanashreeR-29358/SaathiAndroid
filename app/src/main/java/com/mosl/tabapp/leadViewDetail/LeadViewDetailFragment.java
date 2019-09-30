@@ -2581,7 +2581,7 @@ public class LeadViewDetailFragment extends CommonFragment
 							//	bundle,
 							//	getFragmentManager(),
 							//	true);
-							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 						}
 					});
 			} else {
@@ -2844,7 +2844,7 @@ public class LeadViewDetailFragment extends CommonFragment
 					Objects.requireNonNull(this.getArguments()).getString(LEAD_ID));
 				args.putString(UCID, this.getArguments().getString(UCID));
 				//navigateTo(NAV_TO_LEAD_DOCUMENT, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_DOCUMENT, args, true);
+				navigator.openPage(NAVIGATE_TO_DOCUMENT, args, true, false);
 				break;
 			case R.id.cbPrimaryAddress:
 				if (cbPrimaryAddress.isChecked()) {

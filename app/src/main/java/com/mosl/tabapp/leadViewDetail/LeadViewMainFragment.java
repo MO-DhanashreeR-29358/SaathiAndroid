@@ -423,14 +423,14 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			Bundle bundle = new Bundle();
 			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
-			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true);
+			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
 			dialog.dismiss();
 		});
 		ivSetAppointment.setOnClickListener(view -> {
 			Bundle bundle = new Bundle();
 			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
-			navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
 			dialog.dismiss();
 		});
 		ivCall.setOnClickListener(view -> {
@@ -519,7 +519,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(URL_PATH, encryptedUrl);
 			//navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
 			//	true);
-			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
 		}
 	}
 }

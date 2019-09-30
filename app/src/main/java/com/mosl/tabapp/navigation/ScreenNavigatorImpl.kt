@@ -32,6 +32,15 @@ class ScreenNavigatorImpl @Inject constructor(
   val userManager: UserManager,
   val navigator: Navigator
 ) : BaseNavigator, EkycNavigator {
+  override fun openPage(
+    pageId: Int,
+    args: Bundle,
+    addToStack: Boolean,
+    forceReload: Boolean
+  ) {
+    openPage(FragmentNavigationEntry(pageId, args, addToStack, forceReload))
+  }
+
   override fun openNewEkycApp(
     isExistingUser: Boolean,
     userId: String
@@ -131,13 +140,6 @@ class ScreenNavigatorImpl @Inject constructor(
     }
   }
 
-  override fun openPage(
-    pageId: Int,
-    args: Bundle,
-    addToStack: Boolean
-  ) {
-    openPage(FragmentNavigationEntry(pageId, args, addToStack))
-  }
 
   override fun openPage(
     pageId: Int,
