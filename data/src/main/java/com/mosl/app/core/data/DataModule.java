@@ -17,7 +17,7 @@ import timber.log.Timber;
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }*/
 
-    static OkHttpClient.Builder createOkHttpClient() {
+	static OkHttpClient.Builder createOkHttpClient() {
         return new OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS)
             .connectTimeout(20, TimeUnit.SECONDS);
     }

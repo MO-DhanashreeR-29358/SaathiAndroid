@@ -90,6 +90,7 @@ android {
       minifyEnabled true
       shrinkResources true
       multiDexEnabled true
+      debuggable true
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
       proguardFile 'proguard-slidingpanel.pro'
