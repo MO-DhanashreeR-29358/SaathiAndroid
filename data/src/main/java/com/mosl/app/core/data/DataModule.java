@@ -6,6 +6,7 @@ import com.mosl.app.core.data.meta.InternalAPIClient;
 import dagger.Module;
 import dagger.Provides;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -17,17 +18,24 @@ import timber.log.Timber;
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }*/
 
-	static OkHttpClient.Builder createOkHttpClient() {
+    static OkHttpClient.Builder createOkHttpClient() {
         return new OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS)
             .connectTimeout(20, TimeUnit.SECONDS);
     }
 
-    @Provides @Singleton static OkHttpClient provideOkHttpClient(Cache okHttpCache) {
+    @Provides @Singleton
+    static OkHttpClient provideOkHttpClient(@Named("BaseOkClient") OkHttpClient okHttpClient) {
+        return okHttpClient.newBuilder().build();
+    }
+
+    @Provides @Singleton @Named("BaseOkClient")
+    static OkHttpClient provideBaseOkHttpClient(Cache okHttpCache) {
         return createOkHttpClient().cache(okHttpCache).build();
     }
 
     @Provides @Singleton @InternalAPIClient
-    static OkHttpClient provideInternalAPIOkHttpClient(OkHttpClient okHttpClient,
+    static OkHttpClient provideInternalAPIOkHttpClient(
+        @Named("BaseOkClient") OkHttpClient okHttpClient,
         HttpLoggingInterceptor loggingInterceptor,
         HeaderInterceptor headerInterceptor,
         EncryptionInterceptor encryptionInterceptor) {
