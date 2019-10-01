@@ -41,6 +41,8 @@ dependencies {
 
   implementation deps.dagger.core
   kapt deps.dagger.compiler
+  implementation deps.dagger.android
+  kapt deps.dagger.androidCompiler
   implementation deps.kotlin
   implementation deps.retrofit.gson
   implementation deps.timber

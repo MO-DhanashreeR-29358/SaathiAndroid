@@ -1,11 +1,9 @@
-package com.mosl.mobile.saathi
+package com.mosl.tabapp
 
 import android.app.Application
 import android.content.Context
 import com.mosl.app.core.data.BaseApiModule
-import com.mosl.tabapp.CommonUiModel
-import com.mosl.tabapp.DebugUiModule
-import com.mosl.tabapp.SaathiAppNew
+import com.mosl.mobile.saathi.DebugDataModule
 import com.mosl.tabapp.data.CommonDataModule
 import dagger.Binds
 import dagger.Module

@@ -1,7 +1,5 @@
-package com.mosl.mobile.saathi
+package com.mosl.tabapp
 
-import com.mosl.tabapp.SaathiAppImpl
-import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.ServiceModule

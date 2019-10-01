@@ -1,7 +1,6 @@
 package com.mosl.tabapp
 
 import com.crashlytics.android.Crashlytics
-import com.mosl.mobile.saathi.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.fabric.sdk.android.Fabric

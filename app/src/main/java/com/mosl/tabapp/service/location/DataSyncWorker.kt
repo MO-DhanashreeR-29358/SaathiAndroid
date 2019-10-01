@@ -7,9 +7,9 @@ import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.utils.obtain
 import com.mosl.mobile.domain.location.LocationRepository
 import com.mosl.mobile.domain.location.LocationResponse
-import com.mosl.mobile.saathi.AppComponent
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.SaathiAppNew
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber

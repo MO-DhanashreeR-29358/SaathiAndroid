@@ -5,7 +5,6 @@ import android.content.Context
 import com.mosl.app.core.data.BaseApiModule
 import com.mosl.app.core.data.DataModule
 import com.mosl.tabapp.data.CommonDataModule
-import com.mosl.tabapp.navigation.UiModule
 import dagger.Binds
 import dagger.Module
 

@@ -1,11 +1,7 @@
-package com.mosl.mobile.saathi
+package com.mosl.tabapp
 
-import com.mosl.tabapp.ApplicationModule
-import com.mosl.tabapp.SaathiAppImpl
-import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
-import com.mosl.tabapp.navigation.ActivityBuilder
 import com.mosl.tabapp.service.ServiceModule
 import com.mosl.tabapp.service.location.DataSyncWorker
 import com.mosl.tabapp.service.location.LocationWorker
