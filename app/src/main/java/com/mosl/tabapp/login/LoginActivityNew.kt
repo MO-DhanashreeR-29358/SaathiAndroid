@@ -80,8 +80,7 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
     toggleProgressBar(uiModel.inProgress)
 //    Timber.d("User cache %s", userManager.user)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       error.showOnFailurePopup()
     }
   }

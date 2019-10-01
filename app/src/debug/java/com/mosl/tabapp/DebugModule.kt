@@ -3,7 +3,7 @@ package com.mosl.tabapp
 import android.app.Application
 import android.content.Context
 import com.mosl.app.core.data.BaseApiModule
-import com.mosl.mobile.saathi.DebugDataModule
+import com.mosl.app.core.data.DebugDataModule
 import com.mosl.tabapp.data.CommonDataModule
 import dagger.Binds
 import dagger.Module
