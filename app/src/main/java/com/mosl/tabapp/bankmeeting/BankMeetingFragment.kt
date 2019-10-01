@@ -127,7 +127,7 @@ class BankMeetingFragment : CommonFragment() {
       }
 
       etClientName.imeOptions = EditorInfo.IME_ACTION_DONE
-      etClientName.setOnEditorActionListener { v, actionId, event ->
+      etClientName.setOnEditorActionListener { _, _, _ ->
         val enterText = etClientName.text.toString()
         if (!enterText.isBlank()) {
           if (clientNameList.size < 5) {
@@ -288,8 +288,8 @@ class BankMeetingFragment : CommonFragment() {
     val etSearchAttendee =
       dialogAttendeeList.findViewById<DelayAutoCompleteTextView>(R.id.etSearchAttendee)
     etSearchAttendee.imeOptions = EditorInfo.IME_ACTION_DONE
-    etSearchAttendee.setOnEditorActionListener { v, actionId, event ->
-      hideKeyboard(v)
+    etSearchAttendee.setOnEditorActionListener { view, _, _ ->
+      hideKeyboard(view)
       false
     }
     etSearchAttendee.threshold = 3
@@ -299,7 +299,7 @@ class BankMeetingFragment : CommonFragment() {
         dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
     )
     etSearchAttendee.onItemClickListener =
-      AdapterView.OnItemClickListener { parent, view, position, id ->
+      AdapterView.OnItemClickListener { _, _, position, _ ->
         val clientModel = bankEmployeeAdapter.getItem(position)
         val has = listHasEmployee(
             addedBankEmployeeList,
@@ -364,9 +364,9 @@ class BankMeetingFragment : CommonFragment() {
             userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
             MOSLConstants.BANKMEETINGTYPE, null, null
         )
-      val subscribe = saathiApi.getAllLookupMaster(request)
+      disposable.add(saathiApi.getAllLookupMaster(request)
           .compose(applyUiModel())
-          .subscribe { this.renderMeetingType(it) }
+          .subscribe { this.renderMeetingType(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -409,9 +409,9 @@ class BankMeetingFragment : CommonFragment() {
             userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
             MOSLConstants.MEETINGDURATION, null, null
         )
-      val disposable = saathiApi.getAllLookup(request)
+      disposable.add(saathiApi.getAllLookup(request)
           .compose(applyUiModel())
-          .subscribe { this.renderMeetingDuration(it) }
+          .subscribe { this.renderMeetingDuration(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -452,9 +452,9 @@ class BankMeetingFragment : CommonFragment() {
   private fun callBankList() {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = BankRequest()
-      val subscribe = saathiApi.getBankList(request)
+      disposable.add(saathiApi.getBankList(request)
           .compose(applyUiModel())
-          .subscribe { this.renderBank(it) }
+          .subscribe { this.renderBank(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -496,9 +496,9 @@ class BankMeetingFragment : CommonFragment() {
         BankRequest(
             bankId = 1
         )
-      val subscribe = saathiApi.getBankBranchList(request)
+      disposable.add(saathiApi.getBankBranchList(request)
           .compose(applyUiModel())
-          .subscribe { this.renderBranch(it) }
+          .subscribe { this.renderBranch(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -586,7 +586,7 @@ class BankMeetingFragment : CommonFragment() {
     }
 
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val disposable = saathiApi.getSubBroker(profileRequest)
+      disposable.add(saathiApi.getSubBroker(profileRequest)
           .compose(applyUiModel())
           .subscribe { uiModel ->
             if (uiModel.inProgress) {
@@ -624,7 +624,7 @@ class BankMeetingFragment : CommonFragment() {
               val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
               searchList.setAdapter(myAssineeAdapter)
             }
-          }
+          })
     } else {
       noInternetConnectionDialog()
     }
@@ -681,9 +681,9 @@ class BankMeetingFragment : CommonFragment() {
     resetError()
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       if (getFormInput().validateForm(binding)) {
-        val subscribe = saathiApi.inserBankMeeting(transformInput(getFormInput()))
+        disposable.add(saathiApi.inserBankMeeting(transformInput(getFormInput()))
             .compose(applyUiModel())
-            .subscribe { this.render(it) }
+            .subscribe { this.render(it) })
       }
     } else {
       noInternetConnectionDialog()

@@ -1,5 +1,6 @@
 package com.mosl.tabapp.drawermenu.item
 
+import androidx.core.content.ContextCompat
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ItemChildMenuBinding
 import com.mosl.tabapp.drawermenu.data.AppMenu
@@ -51,10 +52,10 @@ class ChildMenuItem(
     }
 
     if (childMenu.enabled) {
-      txtRoot.setTextColor(context.resources.getColor(R.color.black))
+      txtRoot.setTextColor(ContextCompat.getColor(context, R.color.black))
       txtRoot.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
     } else {
-      txtRoot.setTextColor(context.resources.getColor(R.color.text_color_disabled))
+      txtRoot.setTextColor(ContextCompat.getColor(context, R.color.text_color_disabled))
       txtRoot.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ico_lock, 0)
     }
   }

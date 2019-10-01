@@ -9,6 +9,8 @@ import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.navigator.BaseNavigator
@@ -52,7 +54,6 @@ class ActivityNavigationHelper @Inject constructor(
     if (intent == null) return
     Timber.d("Intent Received %s ", intent.toString())
     Timber.d("extras %s", intent.extras?.toString())
-    val uri = intent.data
 
     if (intent.isNotification()) {
       val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
@@ -140,19 +141,21 @@ class ActivityNavigationHelper @Inject constructor(
   ) {
     toggleProgressBar(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       showOnFailurePopup(error)
     }
 
-    val data = uiModel.data
-    if (data != null && data.response != null) {
-      val encryptedUrl = Utility.stringOrEmpty(data.response!!.encryptedUrl)
-      val bundle = Bundle()
-      bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
-      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
 
+    uiModel.onSuccess { data ->
+      if (data.response != null) {
+        val encryptedUrl = Utility.stringOrEmpty(data.response!!.encryptedUrl)
+        val bundle = Bundle()
+        bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
+        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
+
+      }
     }
+
   }
 
   fun convertEkycApi(
@@ -177,15 +180,13 @@ class ActivityNavigationHelper @Inject constructor(
   private fun renderProspect(uiModel: UiModel<SaathiCommonResponse<List<ProspectResponse>>>) {
     toggleProgressBar(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       showOnFailurePopup(error)
     }
 
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       val prospectResponse =
-        Objects.requireNonNull<List<ProspectResponse>>(uiModel.data!!.response)[0]
+        Objects.requireNonNull<List<ProspectResponse>>(data.response)[0]
       if (prospectResponse.isRegistrationAllowed()) {
         val oaoUserId = prospectResponse.ekycUserID
         ekycNavigator.openNewEkycApp(true, oaoUserId)

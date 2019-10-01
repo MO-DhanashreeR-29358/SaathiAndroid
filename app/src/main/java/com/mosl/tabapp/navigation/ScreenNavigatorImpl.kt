@@ -32,6 +32,7 @@ class ScreenNavigatorImpl @Inject constructor(
   val userManager: UserManager,
   val navigator: Navigator
 ) : BaseNavigator, EkycNavigator {
+
   override fun openPage(
     pageId: Int,
     args: Bundle,

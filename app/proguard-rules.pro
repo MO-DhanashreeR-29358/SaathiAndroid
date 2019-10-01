@@ -31,9 +31,6 @@
 # OkHttp (Updated-04/11/2016)
 -dontwarn okhttp3.**
 
--keep class org.json.**{ *; }
--dontwarn org.json.**
-
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
 -dontwarn com.squareup.okhttp.**
@@ -45,10 +42,10 @@
 # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
 -dontwarn org.codehaus.mojo.animal_sniffer.*
 
--dontwarn okio.**
 -keep class * implements android.os.Parcelable {
   public static final android.os.Parcelable$Creator *;
 }
 
 -keep class com.google.android.gms.** { *; }
 -dontwarn com.google.android.gms.**
+

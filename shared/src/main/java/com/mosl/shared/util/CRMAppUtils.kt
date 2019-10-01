@@ -34,7 +34,7 @@ fun getDeviceID(contentResolver: ContentResolver): String {
 
 fun hasGPSDevice(context: Context): Boolean {
   val mgr = context
-      .getSystemService(Context.LOCATION_SERVICE) as LocationManager ?: return false
+      .getSystemService(Context.LOCATION_SERVICE) as LocationManager
   val providers = mgr.allProviders ?: return false
   return providers.contains(LocationManager.GPS_PROVIDER)
 }
@@ -52,13 +52,8 @@ fun isLocationFromMockProvider(
   return isMock
 }
 
-fun isMockSettingsON(context: Context): Boolean {
-  return if (Settings.Secure.getString(
-          context.contentResolver, Settings.Secure.ALLOW_MOCK_LOCATION
-      ) == "0"
-  ) {
-    false
-  } else {
-    true
-  }
+@Suppress("DEPRECATION") fun isMockSettingsON(context: Context): Boolean {
+  return Settings.Secure.getString(
+      context.contentResolver, Settings.Secure.ALLOW_MOCK_LOCATION
+  ) != "0"
 }
