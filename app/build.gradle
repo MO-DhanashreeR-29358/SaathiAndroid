@@ -93,7 +93,6 @@ android {
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
       proguardFile 'proguard-slidingpanel.pro'
-//      proguardFile 'proguard-saxparser.pro'
       proguardFile 'proguard-dagger.pro'
       proguardFile 'proguard-retrofit.pro'
       proguardFile 'proguard-okhttp.pro'
