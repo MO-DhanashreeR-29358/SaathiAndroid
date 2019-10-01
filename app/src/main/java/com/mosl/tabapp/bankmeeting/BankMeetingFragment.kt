@@ -22,6 +22,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
@@ -375,14 +377,12 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderMeetingType(uiModel: UiModel<List<MeetingTypeResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrMeetingType.clear()
       showOnFailurePopup(error)
     }
 
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrMeetingType.clear()
       arrMeetingType.add(RowData(0, "-1", "Select"))
 
@@ -420,13 +420,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderMeetingDuration(uiModel: UiModel<List<LookupItem>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrMeetingDuration.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrMeetingDuration.clear()
       arrMeetingDuration.add(RowData(0, "-1", MOSLConstants.SELECT_MEETING_DURATION))
       for (i in data.indices) {
@@ -463,13 +461,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderBank(uiModel: UiModel<List<BankListResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBank.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrBank.clear()
       arrBank.add(RowData(0, "-1", MOSLConstants.SELECT_BANK))
       for (i in data.indices) {
@@ -507,13 +503,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderBranch(uiModel: UiModel<List<BranchListResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBranch.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrBranch.clear()
       arrBranch.add(RowData(0, "-1", MOSLConstants.SELECT_BRANCH))
       for (i in data.indices) {
@@ -596,16 +590,14 @@ class BankMeetingFragment : CommonFragment() {
               searchList.showProgress(View.GONE)
             }
 
-            val error = uiModel.error
-            if (error != null) {
+            uiModel.onFailure { error ->
               val modelList = ArrayList<SubBrokerData>()
               modelList.add(getNoData(getErrorOnFailureNew(error)))
               val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
               searchList.setAdapter(myAssineeAdapter)
             }
 
-            val data = uiModel.data
-            if (data != null) {
+            uiModel.onSuccess { data ->
               val modelList = ArrayList<SubBrokerData>()
               for (datum in data) {
                 modelList.add(
@@ -693,13 +685,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun render(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBranch.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { _ ->
       alertDialog(
           requireContext(), 0,
           resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
