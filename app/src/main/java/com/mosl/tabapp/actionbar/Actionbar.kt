@@ -35,6 +35,7 @@ import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
 import com.mosl.tabapp.model.SearchResultModel
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -105,31 +106,40 @@ class Actionbar @JvmOverloads constructor(
         .switchMap {
           saathiApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
               .map { t: List<SearchResponse> ->
-                t.map { searchResponse: SearchResponse ->
-                  val jsonObject = JSONObject(searchResponse.metaData)
-                  if (getSearchHint().equals(SEARCH_TYPE_EMP)) {
-                    val empCode = jsonObject.getString(EMPLOYEE_CODE)
-                    val name = jsonObject.getString(MOSLConstants.NAME)
-                    val businessProfile = jsonObject.getString(MOSLConstants.BUSINESS_PROFILE)
-                    val businessProfileId = jsonObject.getString(MOSLConstants.PROFILE_ID)
-                    val productId = jsonObject.getString(MOSLConstants.PRODUCT_ID)
-                    SearchResultModel(
-                        getSearchHint(), empCode, name, businessProfileId, businessProfile,
-                        productId
-                    )
-                  } else {
-                    val ucid = jsonObject.getString(MOSLConstants.UCID)
-                    val leadid = jsonObject.getString(MOSLConstants.LEADID)
-                    val name = jsonObject.getString(MOSLConstants.NAME)
-                    val mobile = jsonObject.getString(MOSLConstants.MOBILE)
-                    val email = jsonObject.getString(MOSLConstants.EMAIL)
+                if (t.isNotEmpty()) {
+                  t.map { searchResponse: SearchResponse ->
+                    val jsonObject = JSONObject(searchResponse.metaData)
+                    if (getSearchHint().equals(SEARCH_TYPE_EMP)) {
+                      val empCode = jsonObject.getString(EMPLOYEE_CODE)
+                      val name = jsonObject.getString(MOSLConstants.NAME)
+                      val businessProfile = jsonObject.getString(MOSLConstants.BUSINESS_PROFILE)
+                      val businessProfileId = jsonObject.getString(MOSLConstants.PROFILE_ID)
+                      val productId = jsonObject.getString(MOSLConstants.PRODUCT_ID)
+                      SearchResultModel(
+                          getSearchHint(), empCode, name, businessProfileId, businessProfile,
+                          productId
+                      )
+                    } else {
+                      val ucid = jsonObject.getString(MOSLConstants.UCID)
+                      val leadid = jsonObject.getString(MOSLConstants.LEADID)
+                      val name = jsonObject.getString(MOSLConstants.NAME)
+                      val mobile = jsonObject.getString(MOSLConstants.MOBILE)
+                      val email = jsonObject.getString(MOSLConstants.EMAIL)
 //                    val leadOwner = jsonObject.getString(MOSLConstants.LEAD_OWNER)?:""
-                    val oaoUserId = jsonObject.getInt(MOSLConstants.OAOUSERID)
-                    SearchResultModel(
-                        getSearchHint(), leadid, name, mobile, email, ucid, "", oaoUserId, "", "",
-                        "", "", ""
-                    )
+                      val oaoUserId = jsonObject.getInt(MOSLConstants.OAOUSERID)
+                      SearchResultModel(
+                          getSearchHint(), leadid, name, mobile, email, ucid, "", oaoUserId, "", "",
+                          "", "", ""
+                      )
+                    }
                   }
+                } else {
+                  listOf(
+                      SearchResultModel(
+                          "", "", NO_RECORDS_FOUND, "", "",
+                          ""
+                      )
+                  )
                 }
               }
               .compose(applyUiModel())

@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.mosl.app.core.utils.hideKeyBoard
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
@@ -56,14 +57,11 @@ class AutoCompleteAdapter(
     if (resultModel.isEmpType) {
       if (name.equals(NO_RECORDS_FOUND)) {
         holderView.ivDropDownArrow.visibility = View.GONE
-        holderView.clientID.setText("")
-        holderView.clientUcid.setText("")
-        holderView.clientName.setText("")
+        holderView.clientID.visibility = View.GONE
+        holderView.clientUcid.visibility = View.GONE
+//        holderView.clientName.setText("")
         holderView.error.visibility = View.GONE
       } else {
-        holderView.llExpand.setOnClickListener(View.OnClickListener {
-
-        })
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientName.setText("Name : $name")
         holderView.clientUcid.setText(resultModel.businessProfileName)
@@ -95,21 +93,28 @@ class AutoCompleteAdapter(
           holderView.rlOAOForm.visibility = View.GONE
         }
       }
-      //AUFSB USer Cond
+      //todo AUFSB USer Cond
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
       holderView.rlSetAppointment.setOnClickListener({
+        hideKeyBoard(holderView.rlSetAppointment)
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       })
       holderView.rlCreateMeeting.setOnClickListener({
+        hideKeyBoard(holderView.rlCreateMeeting)
         openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
       })
       holderView.rlViewDetail.setOnClickListener({
+        hideKeyBoard(holderView.rlViewDetail)
         bundle.putString(MOBILE, resultModel.mobileNo)
         openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
       })
+      holderView.rlOpenAccount.setOnClickListener({
+        //todo need to implement click listener
+      })
       holderView.rlOAOForm.setOnClickListener({
+        hideKeyBoard(holderView.rlOAOForm)
         navigator.openNewEkycApp(true, resultModel.oaoUserId.toString())
       })
       holderView.llExpand.setOnClickListener({
@@ -121,11 +126,11 @@ class AutoCompleteAdapter(
           resultModel.isExpanded = false
         }
       })
-      if (resultModel.leadId.isEmpty()) {
+      if (resultModel.leadId.isNullOrEmpty()) {
         holderView.ivDropDownArrow.visibility = View.GONE
-        holderView.clientID.setText("")
-        holderView.clientUcid.setText("")
-        holderView.clientName.setText("")
+        holderView.clientID.visibility = View.GONE
+        holderView.clientUcid.visibility = View.GONE
+//        holderView.clientName.setText("")
       } else {
         holderView.ivDropDownArrow.visibility = View.VISIBLE
         holderView.error.visibility = View.GONE
@@ -138,6 +143,7 @@ class AutoCompleteAdapter(
     navigationConstants: Int,
     bundle: Bundle
   ) {
+    clearAll()
     navigator.openPage(navigationConstants, bundle)
   }
 

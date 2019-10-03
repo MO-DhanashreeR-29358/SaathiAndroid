@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
-import com.mosl.mobile.saathi.AppComponent
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.ws.AppProvider
 import com.mosl.tabapp.ws.CRMWebServiceHandler

@@ -1,7 +1,6 @@
 package com.mosl.tabapp
 
 import com.facebook.stetho.Stetho
-import com.mosl.mobile.saathi.DaggerAppComponent
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
