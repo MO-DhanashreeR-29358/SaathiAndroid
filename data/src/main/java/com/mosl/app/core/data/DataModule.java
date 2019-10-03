@@ -43,7 +43,7 @@ import timber.log.Timber;
             .addInterceptor(headerInterceptor)
             .addInterceptor(loggingInterceptor)
             .addInterceptor(encryptionInterceptor)
-            .addInterceptor(loggingInterceptor)
+			//.addInterceptor(loggingInterceptor)
             .build();
     }
 
