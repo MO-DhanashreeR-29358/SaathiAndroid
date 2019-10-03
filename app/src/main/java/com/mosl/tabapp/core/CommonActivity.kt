@@ -41,7 +41,6 @@ import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import com.mosl.tabapp.service.DataSyncWorker
 import com.mosl.tabapp.service.location.DataSyncWorker
 import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivityNew
@@ -130,7 +129,7 @@ class CommonActivity : BaseActivity(),
     val quickAction = QuickAction(this, QuickAction.VERTICAL)
     quickAction.addActionItem(acLead)
     quickAction.addActionItem(acCleint)
-    if (!isAufsb()) {
+    if (!userManager.user.isAufsb()) {
       quickAction.addActionItem(acDadhBoard)
     }
 

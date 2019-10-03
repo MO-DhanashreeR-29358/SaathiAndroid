@@ -1,7 +1,5 @@
 package com.mosl.tabapp
 
-import com.mosl.mobile.saathi.DebugActivityBuilder
-import com.mosl.mobile.saathi.DebugModule
 import com.mosl.tabapp.actionbar.Actionbar
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
