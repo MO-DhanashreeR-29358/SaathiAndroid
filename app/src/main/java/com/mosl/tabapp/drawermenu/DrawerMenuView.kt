@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,8 +14,8 @@ import com.mosl.app.core.utils.obtain
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.saathi.AppComponent
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.drawermenu.data.BaseMenu
@@ -190,19 +189,6 @@ class DrawerMenuView : FrameLayout {
 
   fun List<ChildMenu>.getChildMenuItems(): List<ChildMenuItem> {
     return map { ChildMenuItem(it) }
-  }
-
-  fun setMenuSelection(@StringRes groupPos: Int) {
-    val selectedPage = 0
-
-    for (selectableMenu in selectableItemList) {
-      if (selectedPage != 0) {
-        if (selectableMenu.getAppMenu().pageId == selectedPage) {
-          selectItem(selectableMenu.getAppMenu())
-          expandableItems[0].expand()
-        }
-      }
-    }
   }
 
   companion object {

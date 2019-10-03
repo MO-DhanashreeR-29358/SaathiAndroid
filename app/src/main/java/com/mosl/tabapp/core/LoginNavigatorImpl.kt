@@ -2,7 +2,6 @@ package com.mosl.tabapp.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.mosl.mobile.saathi.core.LoginNavigator
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.NavigationEntry
 import com.mosl.navigator.NavigationRequest
@@ -15,6 +14,15 @@ class LoginNavigatorImpl @Inject constructor(
   val activity: AppCompatActivity,
   val navigator: Navigator
 ) : LoginNavigator {
+  override fun openPage(
+    pageId: Int,
+    args: Bundle,
+    addToStack: Boolean,
+    forceReload: Boolean
+  ) {
+    openPage(NavigationRequest(pageId, args, addToStack))
+  }
+
   override fun finish() {
     activity.finish()
   }
@@ -59,13 +67,6 @@ class LoginNavigatorImpl @Inject constructor(
     }
   }
 
-  override fun openPage(
-    pageId: Int,
-    args: Bundle,
-    addToStack: Boolean
-  ) {
-    openPage(NavigationRequest(pageId, args, addToStack))
-  }
 
   override fun openPage(
     pageId: Int,

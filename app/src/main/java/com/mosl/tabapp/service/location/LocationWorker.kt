@@ -14,13 +14,13 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationServices.getFusedLocationProviderClient
 import com.google.android.gms.location.LocationSettingsRequest
 import com.mosl.app.core.utils.obtain
-import com.mosl.mobile.saathi.AppComponent
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.Utility
 import com.mosl.shared.util.getDeviceID
 import com.mosl.shared.util.hasGPSDevice
 import com.mosl.shared.util.isLocationFromMockProvider
+import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.database.LocationData
 import io.reactivex.Observable

@@ -6,6 +6,7 @@ import com.mosl.app.core.data.meta.InternalAPIClient;
 import dagger.Module;
 import dagger.Provides;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -22,12 +23,19 @@ import timber.log.Timber;
             .connectTimeout(20, TimeUnit.SECONDS);
     }
 
-    @Provides @Singleton static OkHttpClient provideOkHttpClient(Cache okHttpCache) {
+    @Provides @Singleton
+    static OkHttpClient provideOkHttpClient(@Named("BaseOkClient") OkHttpClient okHttpClient) {
+        return okHttpClient.newBuilder().build();
+    }
+
+    @Provides @Singleton @Named("BaseOkClient")
+    static OkHttpClient provideBaseOkHttpClient(Cache okHttpCache) {
         return createOkHttpClient().cache(okHttpCache).build();
     }
 
     @Provides @Singleton @InternalAPIClient
-    static OkHttpClient provideInternalAPIOkHttpClient(OkHttpClient okHttpClient,
+    static OkHttpClient provideInternalAPIOkHttpClient(
+        @Named("BaseOkClient") OkHttpClient okHttpClient,
         HttpLoggingInterceptor loggingInterceptor,
         HeaderInterceptor headerInterceptor,
         EncryptionInterceptor encryptionInterceptor) {

@@ -622,7 +622,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
         args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
         navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-            true);
+			true, false);
     }
 
     private Map<String, String> getAddtionalParameterMap() {

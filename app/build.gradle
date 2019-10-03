@@ -87,21 +87,22 @@ android {
 
   buildTypes {
     release {
-      debuggable false
-      multiDexEnabled true
-      multiDexKeepFile file('multidex-config.txt')
       minifyEnabled true
       shrinkResources true
-      proguardFile 'proguard-library.pro'
+      multiDexEnabled true
+      debuggable true
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
       proguardFile 'proguard-slidingpanel.pro'
-      proguardFile 'proguard-saxparser.pro'
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      proguardFile 'proguard-dagger.pro'
+      proguardFile 'proguard-retrofit.pro'
+      proguardFile 'proguard-okhttp.pro'
+      proguardFile 'proguard-simple-xml.pro'
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
     debug {
+      applicationIdSuffix '.debug'
       multiDexEnabled true
-      multiDexKeepFile file('multidex-config.txt')
       debuggable true
       ext.enableCrashlytics = false
       ext.alwaysUpdateBuildId = false
@@ -120,8 +121,6 @@ android {
 }
 
 dependencies {
-//  implementation project(':TabLibrary')
-  //  implementation project(':eKYC')
   implementation project (':appuser')
   implementation project (':data')
   implementation project (':saathiapi')
@@ -130,14 +129,6 @@ dependencies {
   implementation(deps.crashlytics) {
     transitive = true
   }
-  /*implementation deps.support.design
-  implementation deps.support.cardview
-  implementation deps.support.customtabs
-  implementation deps.support.support
-  implementation deps.support.appcompat
-  implementation deps.support.recyclerview
-  implementation deps.support.drawable
-  implementation deps.multidex*/
 
   implementation deps.androidx.material
   implementation deps.androidx.appcompat
@@ -177,7 +168,6 @@ dependencies {
   implementation deps.location
   //workmanager
   implementation deps.work
-  //  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
   debugImplementation deps.leakCanary.debug
   kapt deps.dataBinding
   implementation deps.retrofit.core

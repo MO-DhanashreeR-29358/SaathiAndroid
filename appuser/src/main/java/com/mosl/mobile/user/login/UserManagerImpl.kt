@@ -15,7 +15,7 @@ class UserManagerImpl @Inject constructor(
 ) : UserManager {
 
   private var user: User?
-  private lateinit var reportMenulist: List<ChildMenu>
+  private var reportMenulist: List<ChildMenu>
 
   init {
     val user = userCache.getUser()

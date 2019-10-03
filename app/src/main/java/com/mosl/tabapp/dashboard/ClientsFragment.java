@@ -237,7 +237,7 @@ public class ClientsFragment extends CommonFragment {
                     args.putString(LABEL, "Clients");
                     args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                     navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                        true);
+                        true, false);
                 }
             });
 
@@ -272,7 +272,7 @@ public class ClientsFragment extends CommonFragment {
                             if (!tvMetMTD.getText().toString().trim().equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
                         }
                     });
@@ -290,7 +290,7 @@ public class ClientsFragment extends CommonFragment {
                             if (!tvMetYTD.getText().toString().trim().equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
 
                         }

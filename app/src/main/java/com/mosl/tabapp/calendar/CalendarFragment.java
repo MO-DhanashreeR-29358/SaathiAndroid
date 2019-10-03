@@ -252,7 +252,7 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 				args.putString(NAME, calendarModel.getName());
 				args.putString(TIME, calendarModel.getTime());
 				//navigateTo(NAV_TO_CLIENT_MEETING, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_CALENDER_LIST, args, true);
+				navigator.openPage(NAVIGATE_TO_CALENDER_LIST, args, true, false);
 
 			});
 		}

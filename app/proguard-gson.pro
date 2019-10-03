@@ -7,7 +7,7 @@
 -keepattributes *Annotation*
 
 # Gson specific classes
--dontwarn sun.misc.**
+-keep class sun.misc.Unsafe { *; }
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson
@@ -20,3 +20,8 @@
 -keep class * implements com.google.gson.JsonDeserializer
 
 ##---------------End: proguard configuration for Gson  ----------
+
+# Prevent R8 from leaving Data object members always null
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}

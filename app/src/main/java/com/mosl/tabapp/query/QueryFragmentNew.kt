@@ -6,6 +6,8 @@ import androidx.appcompat.app.AlertDialog
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
@@ -60,19 +62,16 @@ class QueryFragmentNew : CommonFragment(), QueryView {
   }
 
   override fun onSubmitDialogOpen(uiModel: UiModel<String>) {
-    uiModel.error?.let {
-      if (uiModel.error is ValidationException) {
-        val message = (uiModel.error as ValidationException).error
+    uiModel.onFailure { error ->
+      if (error is ValidationException) {
+        val message = (error).error
             .error
         message?.let { msg -> alert(getString(msg)) }
 
-      } else {
-//        Handle error condition
-//        binding.viewState.showError(it)
       }
     }
 
-    uiModel.data?.let {
+    uiModel.onSuccess {
       AlertDialog.Builder(requireContext())
           .setTitle(getString(R.string.app_name))
           .setMessage(getString(R.string.btn_submit))
@@ -125,10 +124,10 @@ class QueryFragmentNew : CommonFragment(), QueryView {
 
   override fun renderSubmit(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
-    uiModel.error?.let {
+    uiModel.onSuccess {
       //      binding.viewState.showError(it)
     }
-    uiModel.data?.let {
+    uiModel.onSuccess {
       AlertDialog.Builder(requireContext())
           .setMessage(it)
           .setCancelable(true)

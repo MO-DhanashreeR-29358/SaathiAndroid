@@ -1,4 +1,4 @@
-package com.mosl.mobile.saathi.core
+package com.mosl.tabapp.core
 
 import com.mosl.navigator.BaseNavigator
 

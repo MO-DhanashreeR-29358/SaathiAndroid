@@ -186,7 +186,7 @@ public class PendingApprovalFragment extends CommonFragment {
 				Bundle args = new Bundle();
 				args.putString(ENTITY_FIELD, pendingApprovalModel.getEntityField());
 				//navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_PENDING_FOR_APPROVAL, args, true);
+				navigator.openPage(NAVIGATE_TO_PENDING_FOR_APPROVAL, args, true, false);
 			});
 		}
 

@@ -72,22 +72,6 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
     fragment.requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSION_WRITE_STORAGE_CODE)
   }
 
-  fun onRequestPermissionsResult(
-    requestCode: Int,
-    permissions: Array<out String>,
-    grantResults: IntArray
-  ) {
-    when (requestCode) {
-      PERMISSION_ALL_CODE -> if (grantResults.isNotEmpty()) {
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-          listener.OnPermissionGranted()
-        } else {
-          //requestAllPermissions()
-        }
-      }
-    }
-  }
-
   interface OnPermissionChangeListener {
     fun OnPermissionGranted()
   }

@@ -561,11 +561,11 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
                     if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
                         .equalsIgnoreCase("0.0")) {
                         navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
-                            args, true);
+                            args, true, false);
                     }
                 } else {
                     navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                        true);
+                        true, false);
                 }
             }
 

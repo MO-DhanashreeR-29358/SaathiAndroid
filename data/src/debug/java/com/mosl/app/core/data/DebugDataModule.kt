@@ -1,4 +1,4 @@
-package com.mosl.mobile.saathi
+package com.mosl.app.core.data
 
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor
 import com.mosl.app.core.data.interceptor.HeaderInterceptor

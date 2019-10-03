@@ -192,7 +192,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
                             if (!tvMetMTD.getText().toString().trim().equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
                         }
                     });
@@ -211,7 +211,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
                             if (!tvMetYTD.getText().toString().trim().equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
 
                         }

@@ -22,6 +22,8 @@ import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
@@ -141,7 +143,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
     disposable.add(
 
         tokenPref.asObservable().distinctUntilChanged()
-            .map { ignored -> tokenPref.get() }
+            .map { _ -> tokenPref.get() }
             .filter { token -> !token.equals("0") }
             .switchMap { token ->
               fcmTokenSyncHelper.saveToken(token)
@@ -188,7 +190,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
         .addTo(disposable)
 
     binding.drawerMenu.onCloseClicked()
-        .subscribe() { view ->
+        .subscribe() { _ ->
           binding.drawerLayout.closeDrawers()
         }
         .addTo(disposable)
@@ -196,7 +198,7 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
 
   internal fun logoutCustomer() {
     MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
-        getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, data ->
+        getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, _ ->
       if (action === Action.OK) {
 
         doLogout()
@@ -221,13 +223,13 @@ class CommonActivity : BaseActivity(), Navigator, ActivityDelegate {
         .subscribe { uiModel ->
           toggleProgressBar(uiModel.inProgress)
 
-          uiModel.data?.let {
+          uiModel.onSuccess {
             Timber.d("Logout Successfully")
 
             openLogin()
           }
 
-          uiModel.error?.let {
+          uiModel.onFailure {
             showOnFailurePopup(it)
           }
         })

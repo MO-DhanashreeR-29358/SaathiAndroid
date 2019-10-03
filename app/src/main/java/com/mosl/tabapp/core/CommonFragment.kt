@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.base.BaseFragment
 import com.mosl.mobile.user.login.UserManager
@@ -111,10 +111,10 @@ open class CommonFragment : BaseFragment() {
   }
 
   fun getErrorOnFailureNew(throwable: Throwable): String {
-    if (throwable is ServiceFailureException) {
-      return (throwable as ServiceFailureException).errorMessage;
+    return if (throwable is ServiceFailureException) {
+      (throwable).errorMessage
     } else {
-      return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+      SERVER_ERROR_OCCURRED;
     }
   }
 
