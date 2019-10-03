@@ -1,6 +1,8 @@
 package com.mosl.tabapp.data;
 
+import com.mosl.app.core.data.location.LocationRepositoryImpl;
 import com.mosl.app.core.data.util.BaseDataModule;
+import com.mosl.mobile.domain.location.LocationRepository;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSource;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSourceImpl;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
@@ -16,4 +18,6 @@ public abstract class CommonDataModule {
 	}
 
 	@Binds abstract MenuDataSource provideMenuDataSource(MenuDataSourceImpl dataSource);
+
+	@Binds abstract LocationRepository provideLocationRepository(LocationRepositoryImpl dataSource);
 }

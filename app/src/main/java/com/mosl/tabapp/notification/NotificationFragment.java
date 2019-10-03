@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS;
@@ -57,7 +58,7 @@ public class NotificationFragment extends CommonFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         notificationView = super.onCreateView(inflater, container, savedInstanceState);
-        setAppTitle("Notification");
+		container.post(() -> setAppTitle("Notification"));
         setUpView(notificationView);
         setUserVisibleHint(true);
         return notificationView;
@@ -164,13 +165,13 @@ public class NotificationFragment extends CommonFragment
             //Noproper data goto dsh board
             navigator.openHome();
         }
-        NotificationData data = new NotificationData(dataStr);
-        if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
+        NotificationData data = new NotificationData(Objects.requireNonNull(dataStr));
+        if (Objects.requireNonNull(data.getPage()).equalsIgnoreCase("LEADVIEW")) {
             //Goto leadView Detail
             //MOSLCommonFragment fragment = new LeadViewMainFragment();
             //BackStack
             Bundle bundle = new Bundle();
-            String leadId = data.getParamMap().get(LEAD_ID);
+            String leadId = Objects.requireNonNull(data.getParamMap()).get(LEAD_ID);
             String ucid = data.getParamMap().get(UCID);
             ucid = (ucid == null || ucid.equalsIgnoreCase("")) ? "0" : ucid;
             leadId = (leadId == null || leadId.equalsIgnoreCase("")) ? "0" : leadId;
@@ -180,7 +181,8 @@ public class NotificationFragment extends CommonFragment
             //fragment.setArguments(bundle);
             //todo open lead view main fragment
             //navigator.openPage();
-            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                false);
         }
         //PENDINGAPPROVAL
         else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {

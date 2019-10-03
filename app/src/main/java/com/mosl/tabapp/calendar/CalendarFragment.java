@@ -55,7 +55,7 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		calendarView = super.onCreateView(inflater, container, savedInstanceState);
-		setAppTitle("Calendar");
+		container.post(() -> setAppTitle("Calendar"));
 		setUpView(calendarView);
 		setUserVisibleHint(true);
 		return calendarView;
@@ -252,7 +252,7 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 				args.putString(NAME, calendarModel.getName());
 				args.putString(TIME, calendarModel.getTime());
 				//navigateTo(NAV_TO_CLIENT_MEETING, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_CALENDER_LIST, args, true);
+				navigator.openPage(NAVIGATE_TO_CALENDER_LIST, args, true, false);
 
 			});
 		}

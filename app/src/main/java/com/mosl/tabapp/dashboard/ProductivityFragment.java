@@ -256,7 +256,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
         navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-            true);
+			true, false);
 
     }
 

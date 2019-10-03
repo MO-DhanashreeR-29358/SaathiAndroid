@@ -10,7 +10,6 @@
     <dimen name="txt_size_lms_top_section">@dimen/_10sdp</dimen>
     <dimen name="txt_size_head">@dimen/_15sdp</dimen>
     <dimen name="menu_txt_size">@dimen/_13sdp</dimen>
-
     <dimen name="actionbar_height">48dp</dimen>
     <dimen name="ten_sp">10sp</dimen>
     <dimen name="twenty_sp">20sp</dimen>
@@ -49,6 +48,25 @@
     <dimen name="header1">@dimen/_14sdp</dimen>
     <dimen name="txt_size_profile">@dimen/_5sdp</dimen>
 
-  <dimen name="menuIcons">24dp</dimen>
-  <dimen name="menu_icons_size">48dp</dimen>
+    <dimen name="text_size_medium">@dimen/_16sdp</dimen>
+    <dimen name="text_size_normal">@dimen/_14sdp</dimen>
+    <dimen name="text_size_small">@dimen/_12sdp</dimen>
+
+    <dimen name="margin_extra_large">@dimen/_24sdp</dimen>
+    <dimen name="margin_extra_small">@dimen/_2sdp</dimen>
+    <dimen name="margin_large">@dimen/_16sdp</dimen>
+    <dimen name="margin_medium">@dimen/_8sdp</dimen>
+    <dimen name="margin_normal">@dimen/_12sdp</dimen>
+    <dimen name="margin_small">@dimen/_4sdp</dimen>
+    <dimen name="padding_extra_large">@dimen/_24sdp</dimen>
+    <dimen name="padding_extra_small">@dimen/_2sdp</dimen>
+    <dimen name="padding_large">@dimen/_16sdp</dimen>
+    <dimen name="padding_medium">@dimen/_8sdp</dimen>
+    <dimen name="padding_normal">@dimen/_12sdp</dimen>
+    <dimen name="padding_small">@dimen/_4sdp</dimen>
+    <dimen name="text_size_extra_small">@dimen/_10sdp</dimen>
+    <dimen name="text_size_large">@dimen/_20sdp</dimen>
+
+    <dimen name="menuIcons">@dimen/_24sdp</dimen>
+    <dimen name="menu_icons_size">@dimen/_48sdp</dimen>
 </resources>

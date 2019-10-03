@@ -5,6 +5,7 @@ import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
 import com.mosl.tabapp.dashboard.ClientsFragment
@@ -50,6 +51,7 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideLeadViewMainFactory(): LeadViewMainFragment
+
   @ContributesAndroidInjector
   abstract fun provideLeadViewDetailFactory(): LeadViewDetailFragment
 
@@ -143,7 +145,7 @@ abstract class FragmentProvider {
   @ContributesAndroidInjector
   abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
 
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
   abstract fun provideCreateMeetingFactory(): CreateMeetingFragment
 
   @ContributesAndroidInjector

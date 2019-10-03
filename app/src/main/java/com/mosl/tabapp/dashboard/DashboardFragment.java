@@ -188,7 +188,6 @@ public class DashboardFragment extends CommonFragment
 		dashAdvisoryView = super.onCreateView(inflater, container, savedInstanceState);
 		setUpView(dashAdvisoryView);
 		hideAppTitle();
-
 		try {
 			//CHECK IF CALLED FROM SEARCH RESULT
 			Bundle bund = this.getArguments();
@@ -2337,7 +2336,7 @@ public class DashboardFragment extends CommonFragment
 					if (!advisoryActionableInsightModel.getActionableCount()
 						.equalsIgnoreCase("0")) {
 						//navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-						navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true);
+						navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
 						dialog.dismiss();
 					}
 				}

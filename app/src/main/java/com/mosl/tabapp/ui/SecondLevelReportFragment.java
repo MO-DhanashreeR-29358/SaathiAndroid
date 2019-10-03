@@ -308,7 +308,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 							bundle.putString(UCID, ucid);
 							//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
 							//    true);
-							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 						}
 					});
 
@@ -337,7 +337,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 							bundle.putString(UCID, ucid);
 							//navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
 							//    true);
-							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+							navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 						}
 					});
 					break;

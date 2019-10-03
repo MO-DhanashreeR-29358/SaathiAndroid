@@ -1,6 +1,7 @@
 package com.mosl.tabapp.drawermenu.item
 
 import android.graphics.Typeface
+import androidx.core.content.ContextCompat
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ItemBaseMenuBinding
 import com.mosl.tabapp.drawermenu.data.AppMenu
@@ -32,14 +33,23 @@ class BaseMenuItem(
     position: Int
   ) {
     val txtRoot = viewBinding.txtBaseMenu
+    val context = viewBinding.root.context
     txtRoot.setTypeface(null, Typeface.NORMAL)
     txtRoot.setText(baseMenu.label)
 
+    if (this.isSelected) {
+      viewBinding.llListItem.setBackgroundColor(
+          ContextCompat.getColor(context, R.color.flush_orange)
+      )
+    } else {
+      viewBinding.llListItem.setBackgroundColor(
+          ContextCompat.getColor(context, R.color.light_white)
+      )
+
+    }
     viewBinding.imgGroupImage.setImageResource(baseMenu.icon)
     if (baseMenu.enabled) {
       txtRoot.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-    } else {
-//      txtRoot.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0)
     }
   }
 

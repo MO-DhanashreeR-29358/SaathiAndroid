@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
-import com.mosl.app.core.rx.Dispatchers;
-import com.mosl.app.core.rx.DispatchersKt;
+import com.mosl.app.core.rx.RxDispatchers;
+import com.mosl.commons.rx.Dispatchers;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;
@@ -23,7 +23,7 @@ import timber.log.Timber;
 public abstract class BaseDataModule {
     @Provides
     static Dispatchers provideDispatchers() {
-        return DispatchersKt.RxDispatchers;
+        return RxDispatchers.DefaultDispatchers;
     }
 
     @Provides @Singleton static RxJava2CallAdapterFactory getRxJava2CallAdapter() {

@@ -5,7 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.rx.applyUiModel
@@ -101,7 +101,6 @@ class SplashActivityNew : LeanBaseActivity() {
     disposables.add(
         loginRepository.versionCheck(versionRequest)
             .compose(applyUiModel())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::renderVersionData)
     )
   }
@@ -120,10 +119,8 @@ class SplashActivityNew : LeanBaseActivity() {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onSuccess {
-      if (it != null) {
+
         val msg = it.msg;
-        val newEkycUrl = it.newEkycUrl
-//        setEkycUrl(newEkycUrl.replace(" ".toRegex(), "%20"))
         when (it.statusCode) {
           0 -> MSFDialog.alertDialog(this@SplashActivityNew, 0,
               resources.getString(R.string.MOSL), msg,
@@ -173,15 +170,12 @@ class SplashActivityNew : LeanBaseActivity() {
           }
           1 -> handleStartup()
         }
-      }
+
     }
 
     uiModel.onFailure {
-      Timber.d("message %s", it.message!!)
-      val error = uiModel.error
-      if (error != null) {
-        infoDialog(error)
-      }
+      Timber.e(it,"message %s", it.message)
+      infoDialog(it)
     }
     /*uiModel.error?.let {
       Timber.d("message %s", it.message!!)
@@ -246,9 +240,9 @@ class SplashActivityNew : LeanBaseActivity() {
   fun infoDialog(t: Throwable) {
     val errorMessage: String
     if (t is ServiceFailureException) {
-      errorMessage = (t as ServiceFailureException).errorMessage
+      errorMessage = (t).errorMessage
     } else {
-      errorMessage = MOSLResponseWrapper.SERVER_ERROR_OCCURRED
+      errorMessage = SERVER_ERROR_OCCURRED
     }
     actionableAlert(errorMessage, false) {
       finish()

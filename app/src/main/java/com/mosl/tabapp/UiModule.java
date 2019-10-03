@@ -1,4 +1,4 @@
-package com.mosl.tabapp.navigation;
+package com.mosl.tabapp;
 
 import com.mosl.app.core.base.ViewContainer;
 import dagger.Module;

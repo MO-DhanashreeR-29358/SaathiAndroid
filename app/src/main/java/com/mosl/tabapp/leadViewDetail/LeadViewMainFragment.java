@@ -31,15 +31,14 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.LockedViewPager;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.core.EkycModule;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
@@ -47,19 +46,11 @@ import org.jetbrains.annotations.NotNull;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITIES;
 import static com.mosl.tabapp.constants.MOSLConstants.DETAILS;
-import static com.mosl.tabapp.constants.MOSLConstants.EMAIL;
-import static com.mosl.tabapp.constants.MOSLConstants.INTRESTEDIN;
-import static com.mosl.tabapp.constants.MOSLConstants.ISAUFSB;
 import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
-import static com.mosl.tabapp.constants.MOSLConstants.LEAD_OWNER;
 import static com.mosl.tabapp.constants.MOSLConstants.MAPPING_HISTORY;
 import static com.mosl.tabapp.constants.MOSLConstants.MAPPING_INTERACTION;
-import static com.mosl.tabapp.constants.MOSLConstants.MOBILE;
 import static com.mosl.tabapp.constants.MOSLConstants.NOTIFICATION_DATA;
 import static com.mosl.tabapp.constants.MOSLConstants.PROFILING;
-import static com.mosl.tabapp.constants.MOSLConstants.PROSPECT_SOURCEDETAIL;
-import static com.mosl.tabapp.constants.MOSLConstants.PROSPECT_SOURCENAME;
-import static com.mosl.tabapp.constants.MOSLConstants.SOURCENAME;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.URL_PATH;
 import static com.mosl.tabapp.model.ClientDetail.getBranchCode;
@@ -210,7 +201,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		if (section == null) {
 			vpLeadView.setCurrentItem(0);
 		} else {
-			if (section.getSection().equalsIgnoreCase("ACTIVITIES")) {
+			if (Objects.requireNonNull(section.getSection()).equalsIgnoreCase("ACTIVITIES")) {
 				vpLeadView.setCurrentItem(1);
 			} else {
 				vpLeadView.setCurrentItem(0);
@@ -416,31 +407,30 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		});
 		ivOpenAccount.setOnClickListener(view -> {
 			dialog.dismiss();
-			Map inpuMap = new HashMap();
-			inpuMap.put(MOBILE, mobileNo);
-			inpuMap.put(EMAIL, email);
-			inpuMap.put(LEAD_OWNER, LeadOwner);
-			inpuMap.put(SOURCENAME, sourceName);
-			inpuMap.put(PROSPECT_SOURCENAME, prospectSourceName);
-			inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
-			inpuMap.put(INTRESTEDIN, intrestedIn);
-			inpuMap.put(ISAUFSB, userManager.getUser().isAufsb());
-			//gotoEkycPage(CALL_CONVERT_EKYC, inpuMap);
+			//Map inpuMap = new HashMap();
+			//inpuMap.put(MOBILE, mobileNo);
+			//inpuMap.put(EMAIL, email);
+			//inpuMap.put(LEAD_OWNER, LeadOwner);
+			//inpuMap.put(SOURCENAME, sourceName);
+			//inpuMap.put(PROSPECT_SOURCENAME, prospectSourceName);
+			//inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
+			//inpuMap.put(INTRESTEDIN, intrestedIn);
+			//inpuMap.put(ISAUFSB, userManager.getUser().isAufsb());
+			gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
+				prospectSourceDetail, intrestedIn));
 		});
 		ivCreateMeeting.setOnClickListener(view -> {
 			Bundle bundle = new Bundle();
 			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
-			//navigateTo(NAV_TO_CREATE_MEETING, bundle, getFragmentManager(), true);
-			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true);
+			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
 			dialog.dismiss();
 		});
 		ivSetAppointment.setOnClickListener(view -> {
 			Bundle bundle = new Bundle();
 			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
-			//navigateTo(NAV_TO_SET_APPOINTMENT, bundle, getFragmentManager(), true);
-			navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
 			dialog.dismiss();
 		});
 		ivCall.setOnClickListener(view -> {
@@ -529,7 +519,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(URL_PATH, encryptedUrl);
 			//navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
 			//	true);
-			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true);
+			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
 		}
 	}
 }

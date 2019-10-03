@@ -56,8 +56,7 @@ public class CalendarAppointsListFragment extends CommonFragment
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View calendarView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_client_meeting);
-		//setAppTitle(getClass().toString(), "Calendar");
+		container.post(() -> setAppTitle("Calendar"));
 		setUpView(Objects.requireNonNull(calendarView));
 		return calendarView;
 	}

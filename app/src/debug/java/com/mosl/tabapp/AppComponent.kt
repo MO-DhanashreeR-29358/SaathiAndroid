@@ -5,8 +5,9 @@ import com.mosl.mobile.saathi.DebugModule
 import com.mosl.tabapp.actionbar.Actionbar
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
-import com.mosl.tabapp.service.DataSyncWorker
 import com.mosl.tabapp.service.ServiceModule
+import com.mosl.tabapp.service.location.DataSyncWorker
+import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.ws.HeaderInterceptor
 import dagger.BindsInstance
 import dagger.Component
@@ -25,6 +26,8 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
   fun inject(target: DrawerMenuView)
 
   fun inject(target: Actionbar)
+
+  fun inject(target: LocationWorker)
 
   fun inject(target: DataSyncWorker)
 

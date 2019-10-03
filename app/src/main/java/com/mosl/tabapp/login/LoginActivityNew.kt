@@ -1,6 +1,8 @@
 package com.mosl.tabapp.login
 
 import android.content.Intent
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -20,6 +22,7 @@ import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
+import com.mosl.tabapp.Permisssion.PermissionCheckHelper
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
@@ -37,13 +40,21 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
   lateinit var userManager: UserManager
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
+
+  @Inject
+  lateinit var permissionCheckHelper: PermissionCheckHelper
+
   override fun getLayout(): Int {
     return R.layout.activity_login_new
   }
 
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
+    if (VERSION.SDK_INT >= VERSION_CODES.M) {
+      permissionCheckHelper.requestAllPermissions()
+    }
     binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
     presenter.start()
   }
@@ -69,8 +80,7 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
     toggleProgressBar(uiModel.inProgress)
 //    Timber.d("User cache %s", userManager.user)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       error.showOnFailurePopup()
     }
   }

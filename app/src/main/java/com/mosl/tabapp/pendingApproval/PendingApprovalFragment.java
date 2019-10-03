@@ -44,7 +44,7 @@ public class PendingApprovalFragment extends CommonFragment {
 	public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-        setAppTitle("Pending Approvals");
+		container.post(() -> setAppTitle("Pending Approvals"));
         setUpView(pendingApprovalView);
         setUserVisibleHint(true);
         return pendingApprovalView;
@@ -186,7 +186,7 @@ public class PendingApprovalFragment extends CommonFragment {
 				Bundle args = new Bundle();
 				args.putString(ENTITY_FIELD, pendingApprovalModel.getEntityField());
 				//navigateTo(NAV_TO_PENDING_FOR_APPROVAL, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_PENDING_FOR_APPROVAL, args, true);
+				navigator.openPage(NAVIGATE_TO_PENDING_FOR_APPROVAL, args, true, false);
 			});
 		}
 

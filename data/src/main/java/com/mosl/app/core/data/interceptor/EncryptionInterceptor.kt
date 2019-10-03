@@ -3,9 +3,9 @@ package com.mosl.app.core.data.interceptor
 import com.mosl.shared.Encryptor.AESEncryptor
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.Buffer
 import java.io.IOException
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class EncryptionInterceptor @Inject constructor(
 
       val mediaType = "text/plain; charset=utf-8".toMediaTypeOrNull()
       val strNewBody = encryptor.encrypt(strOldBody)
-      val body = RequestBody.create(mediaType, strNewBody)
+      val body = strNewBody.toRequestBody(mediaType)
       request = request.newBuilder()
           .method(request.method, body)
           .build()
@@ -40,10 +40,7 @@ class EncryptionInterceptor @Inject constructor(
         val strResponse = response.body
         val decrypted = encryptor.decrypt(strResponse!!.string())
         if (decrypted != null) {
-          val decryptedBody = ResponseBody.create(
-              "application/json".toMediaTypeOrNull(),
-              decrypted
-          )
+          val decryptedBody = decrypted.toResponseBody("application/json".toMediaTypeOrNull())
           return response.newBuilder()
               .body(decryptedBody)
               .build()

@@ -111,8 +111,5 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".service.ForegroundService"
-            android:enabled="true" />
     </application>
 </manifest>

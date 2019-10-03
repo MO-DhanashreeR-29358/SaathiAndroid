@@ -212,7 +212,7 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                             if (!tvNoOfClients.getText().toString().trim().equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
                         }
                     });
@@ -232,7 +232,7 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                                 .equalsIgnoreCase("0")) {
                                 navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                                    true);
+                                    true, false);
                             }
                         }
                     });

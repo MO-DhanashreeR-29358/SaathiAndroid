@@ -60,4 +60,14 @@ public class Utility {
 			return "";
 		}
 	}
+
+	public static Date getCurrentDisplayDate() {
+		Calendar calendar = Calendar.getInstance();
+		calendar.get(Calendar.YEAR);
+		calendar.get(Calendar.MONTH);
+		calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.get(Calendar.HOUR_OF_DAY);
+		calendar.get(Calendar.MINUTE);
+		return calendar.getTime();
+	}
 }

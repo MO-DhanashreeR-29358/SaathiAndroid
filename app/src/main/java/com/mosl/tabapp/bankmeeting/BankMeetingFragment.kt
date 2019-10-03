@@ -22,6 +22,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
 import com.mosl.saathi.api.model.aubankmeeting.BankRequest
 import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
@@ -127,7 +129,7 @@ class BankMeetingFragment : CommonFragment() {
       }
 
       etClientName.imeOptions = EditorInfo.IME_ACTION_DONE
-      etClientName.setOnEditorActionListener { v, actionId, event ->
+      etClientName.setOnEditorActionListener { _, _, _ ->
         val enterText = etClientName.text.toString()
         if (!enterText.isBlank()) {
           if (clientNameList.size < 5) {
@@ -288,8 +290,8 @@ class BankMeetingFragment : CommonFragment() {
     val etSearchAttendee =
       dialogAttendeeList.findViewById<DelayAutoCompleteTextView>(R.id.etSearchAttendee)
     etSearchAttendee.imeOptions = EditorInfo.IME_ACTION_DONE
-    etSearchAttendee.setOnEditorActionListener { v, actionId, event ->
-      hideKeyboard(v)
+    etSearchAttendee.setOnEditorActionListener { view, _, _ ->
+      hideKeyboard(view)
       false
     }
     etSearchAttendee.threshold = 3
@@ -299,7 +301,7 @@ class BankMeetingFragment : CommonFragment() {
         dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
     )
     etSearchAttendee.onItemClickListener =
-      AdapterView.OnItemClickListener { parent, view, position, id ->
+      AdapterView.OnItemClickListener { _, _, position, _ ->
         val clientModel = bankEmployeeAdapter.getItem(position)
         val has = listHasEmployee(
             addedBankEmployeeList,
@@ -364,9 +366,9 @@ class BankMeetingFragment : CommonFragment() {
             userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
             MOSLConstants.BANKMEETINGTYPE, null, null
         )
-      val subscribe = saathiApi.getAllLookupMaster(request)
+      disposable.add(saathiApi.getAllLookupMaster(request)
           .compose(applyUiModel())
-          .subscribe { this.renderMeetingType(it) }
+          .subscribe { this.renderMeetingType(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -375,14 +377,12 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderMeetingType(uiModel: UiModel<List<MeetingTypeResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrMeetingType.clear()
       showOnFailurePopup(error)
     }
 
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrMeetingType.clear()
       arrMeetingType.add(RowData(0, "-1", "Select"))
 
@@ -409,9 +409,9 @@ class BankMeetingFragment : CommonFragment() {
             userManager.getUser()?.currentBusinessProfile?.businessUnitId!!,
             MOSLConstants.MEETINGDURATION, null, null
         )
-      val disposable = saathiApi.getAllLookup(request)
+      disposable.add(saathiApi.getAllLookup(request)
           .compose(applyUiModel())
-          .subscribe { this.renderMeetingDuration(it) }
+          .subscribe { this.renderMeetingDuration(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -420,13 +420,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderMeetingDuration(uiModel: UiModel<List<LookupItem>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrMeetingDuration.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrMeetingDuration.clear()
       arrMeetingDuration.add(RowData(0, "-1", MOSLConstants.SELECT_MEETING_DURATION))
       for (i in data.indices) {
@@ -452,9 +450,9 @@ class BankMeetingFragment : CommonFragment() {
   private fun callBankList() {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = BankRequest()
-      val subscribe = saathiApi.getBankList(request)
+      disposable.add(saathiApi.getBankList(request)
           .compose(applyUiModel())
-          .subscribe { this.renderBank(it) }
+          .subscribe { this.renderBank(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -463,13 +461,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderBank(uiModel: UiModel<List<BankListResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBank.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrBank.clear()
       arrBank.add(RowData(0, "-1", MOSLConstants.SELECT_BANK))
       for (i in data.indices) {
@@ -496,9 +492,9 @@ class BankMeetingFragment : CommonFragment() {
         BankRequest(
             bankId = 1
         )
-      val subscribe = saathiApi.getBankBranchList(request)
+      disposable.add(saathiApi.getBankBranchList(request)
           .compose(applyUiModel())
-          .subscribe { this.renderBranch(it) }
+          .subscribe { this.renderBranch(it) })
     } else {
       noInternetConnectionDialog()
     }
@@ -507,13 +503,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun renderBranch(uiModel: UiModel<List<BranchListResponse>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBranch.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrBranch.clear()
       arrBranch.add(RowData(0, "-1", MOSLConstants.SELECT_BRANCH))
       for (i in data.indices) {
@@ -586,7 +580,7 @@ class BankMeetingFragment : CommonFragment() {
     }
 
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val disposable = saathiApi.getSubBroker(profileRequest)
+      disposable.add(saathiApi.getSubBroker(profileRequest)
           .compose(applyUiModel())
           .subscribe { uiModel ->
             if (uiModel.inProgress) {
@@ -596,16 +590,14 @@ class BankMeetingFragment : CommonFragment() {
               searchList.showProgress(View.GONE)
             }
 
-            val error = uiModel.error
-            if (error != null) {
+            uiModel.onFailure { error ->
               val modelList = ArrayList<SubBrokerData>()
               modelList.add(getNoData(getErrorOnFailureNew(error)))
               val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
               searchList.setAdapter(myAssineeAdapter)
             }
 
-            val data = uiModel.data
-            if (data != null) {
+            uiModel.onSuccess { data ->
               val modelList = ArrayList<SubBrokerData>()
               for (datum in data) {
                 modelList.add(
@@ -624,7 +616,7 @@ class BankMeetingFragment : CommonFragment() {
               val myAssineeAdapter = SearchAdapter(requireContext(), modelList)
               searchList.setAdapter(myAssineeAdapter)
             }
-          }
+          })
     } else {
       noInternetConnectionDialog()
     }
@@ -681,9 +673,9 @@ class BankMeetingFragment : CommonFragment() {
     resetError()
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       if (getFormInput().validateForm(binding)) {
-        val subscribe = saathiApi.inserBankMeeting(transformInput(getFormInput()))
+        disposable.add(saathiApi.inserBankMeeting(transformInput(getFormInput()))
             .compose(applyUiModel())
-            .subscribe { this.render(it) }
+            .subscribe { this.render(it) })
       }
     } else {
       noInternetConnectionDialog()
@@ -693,13 +685,11 @@ class BankMeetingFragment : CommonFragment() {
   private fun render(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       arrBranch.clear()
       showOnFailurePopup(error)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { _ ->
       alertDialog(
           requireContext(), 0,
           resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",

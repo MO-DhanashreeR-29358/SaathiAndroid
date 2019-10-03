@@ -143,8 +143,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 	@Override public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		documentView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_document);
-		//setAppTitle(getClass().toString(), "Documents");
+		container.post(() -> setAppTitle("Documents"));
 		setUpView(Objects.requireNonNull(documentView));
 		try {
 			leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID);

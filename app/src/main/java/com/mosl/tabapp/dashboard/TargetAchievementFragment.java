@@ -145,7 +145,8 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         args.putString(SYSTEM_NAME, widgetSystemName);
         args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true);
+		navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true,
+			false);
         //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
     }
 
@@ -368,7 +369,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                 args.putString(LABEL, TEAM_TARGET_TITLE + "-" + widgetName);
                 args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                 navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                    true);
+					true, false);
                 //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
             }
 

@@ -1,4 +1,4 @@
-package com.mosl.tabapp.navigation
+package com.mosl.tabapp
 
 import com.mosl.annotations.ActivityScoped
 import com.mosl.tabapp.core.CommonActivity

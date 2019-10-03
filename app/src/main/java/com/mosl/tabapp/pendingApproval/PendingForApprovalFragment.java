@@ -152,7 +152,7 @@ public class PendingForApprovalFragment extends CommonFragment
     public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-        setAppTitle("Pending For Approvals");
+		container.post(() -> setAppTitle("Pending For Approvals"));
         setUpView(pendingForApprovalView);
         setUserVisibleHint(true);
         return pendingForApprovalView;

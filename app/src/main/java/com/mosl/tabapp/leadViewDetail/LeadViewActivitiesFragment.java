@@ -337,7 +337,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 				bundle.putString(MEETING_ID, appointmentModel.getMeetingid());
 				bundle.putString(UCID, mUcid);
 				//navigateTo(NAV_TO_SET_APPOINTMENT, bundle, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true);
+				navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
 				dialog.dismiss();
 			}
 		});
@@ -397,7 +397,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 			args.putString("ActivityType", appointmentModel.getActivityType());
 			args.putString(UCID, mUcid);
 			//navigateTo(NAV_TO_UPDATE_MEETING, args, getFragmentManager(), true);
-			navigator.openPage(NAVIGATE_TO_UPDATE_MEETING, args, true);
+			navigator.openPage(NAVIGATE_TO_UPDATE_MEETING, args, true, false);
 			dialog.dismiss();
 		});
 
@@ -573,7 +573,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 				args.putString("Amount", meetingModel.getAmount());
 				args.putString("GeoMeetingLocation", meetingModel.getGeoMeetingLocation());
 				//navigateTo(NAV_TO_LEAD_ACTIVITIES_DETAIL, args, getFragmentManager(), true);
-				navigator.openPage(NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true);
+				navigator.openPage(NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true, false);
 			});
 		}
 

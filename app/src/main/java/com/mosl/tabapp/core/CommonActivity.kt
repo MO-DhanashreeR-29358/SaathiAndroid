@@ -1,6 +1,8 @@
 package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,6 +10,10 @@ import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.Preference
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
@@ -16,6 +22,8 @@ import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
@@ -31,9 +39,11 @@ import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
-import com.mosl.tabapp.model.AccountDetails.isAufsb
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.service.DataSyncWorker
+import com.mosl.tabapp.service.location.DataSyncWorker
+import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivityNew
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
@@ -41,6 +51,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.HashMap
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class CommonActivity : BaseActivity(),
@@ -70,6 +82,11 @@ class CommonActivity : BaseActivity(),
   lateinit var shortcutHelper: ShortcutHelper
   private var searchType = SEARCH_TYPE_LEAD
 
+  private lateinit var locationWorkManager: WorkManager
+  private lateinit var dataSyncWorkManager: WorkManager
+  private lateinit var compressionLocationWorkId: UUID
+  private lateinit var compressionDataSyncWorkId: UUID
+
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
   }
@@ -96,6 +113,10 @@ class CommonActivity : BaseActivity(),
       globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
     }
 
+    locationWorkManager = WorkManager.getInstance()
+    dataSyncWorkManager = WorkManager.getInstance()
+
+    startWorkManager()
     setupObservables()
 
   }
@@ -148,11 +169,39 @@ class CommonActivity : BaseActivity(),
     }
   }
 
+  private fun networkConstraints(): Constraints {
+    return Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
+  }
+
+  private fun startWorkManager() {
+    val periodicDataSyncWork = PeriodicWorkRequest.Builder(
+        DataSyncWorker::class.java, 32,
+        TimeUnit.MINUTES
+    )
+        .setConstraints(networkConstraints())
+        .build()
+
+    val periodicLocationWork = PeriodicWorkRequest.Builder(
+        LocationWorker::class.java, 15,
+        TimeUnit.MINUTES
+    )
+        .setConstraints(networkConstraints())
+        .build()
+
+    locationWorkManager.enqueue(periodicLocationWork)
+    dataSyncWorkManager.enqueue(periodicDataSyncWork)
+
+    compressionDataSyncWorkId = periodicDataSyncWork.id
+    compressionLocationWorkId = periodicLocationWork.id
+  }
+
   private fun setupObservables() {
     disposable.add(
 
         tokenPref.asObservable().distinctUntilChanged()
-            .map { ignored -> tokenPref.get() }
+            .map { _ -> tokenPref.get() }
             .filter { token -> !token.equals("0") }
             .switchMap { token ->
               fcmTokenSyncHelper.saveToken(token)
@@ -197,11 +246,17 @@ class CommonActivity : BaseActivity(),
           binding.drawerLayout.closeDrawers()
         }
         .addTo(disposable)
+
+    binding.drawerMenu.onCloseClicked()
+        .subscribe() { _ ->
+          binding.drawerLayout.closeDrawers()
+        }
+        .addTo(disposable)
   }
 
   internal fun logoutCustomer() {
     MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
-        getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, data ->
+        getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, _ ->
       if (action === Action.OK) {
 
         doLogout()
@@ -210,6 +265,10 @@ class CommonActivity : BaseActivity(),
   }
 
   private fun doLogout() {
+    val notificationManager = getSystemService(
+        Context.NOTIFICATION_SERVICE
+    ) as NotificationManager
+    notificationManager.cancelAll()
     val user = userManager.user
     val logoutInfo = LogoutInfo(
         userId = user.userId, token = user.token,
@@ -222,13 +281,13 @@ class CommonActivity : BaseActivity(),
         .subscribe { uiModel ->
           toggleProgressBar(uiModel.inProgress)
 
-          uiModel.data?.let {
+          uiModel.onSuccess {
             Timber.d("Logout Successfully")
 
             openLogin()
           }
 
-          uiModel.error?.let {
+          uiModel.onFailure {
             showOnFailurePopup(it)
           }
         })
@@ -236,6 +295,10 @@ class CommonActivity : BaseActivity(),
 
   fun openLogin() {
     //open image slider instead of splash
+
+    locationWorkManager.cancelWorkById(compressionLocationWorkId)
+    dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
+
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivityNew::class.java)
     startActivity(login)
@@ -358,6 +421,18 @@ class CommonActivity : BaseActivity(),
       return
     }
     exitPopup()
+  }
+
+  fun gotoEkycPage(ekycModule: EkycModule) {
+
+    activityNavHelper.convertEkycApi(ekycModule)
+
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    globalTitles.clear()
+    disposable.clear()
   }
 
   fun exitPopup() {

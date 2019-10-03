@@ -1,10 +1,8 @@
 package com.mosl.tabapp.leadViewDetail;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -43,7 +41,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.LocationCallback;
@@ -65,6 +62,7 @@ import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
+import com.mosl.tabapp.Permisssion.PermissionCheckHelperFragment;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -86,6 +84,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import javax.inject.Inject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
@@ -99,7 +98,6 @@ import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
-import static com.mosl.tabapp.common.CRMMOSLCommon.setPermisson;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE;
 import static com.mosl.tabapp.constants.MOSLConstants.ATLEAST_FIFTY_CHARACTERS;
@@ -213,6 +211,7 @@ public class CreateMeetingFragment extends CommonFragment
 	private ArrayList<CreateMeetingTravellingModel> travellingList;
 	private ArrayAdapter<RowData> arrAdapMeetingReason;
 	private boolean enableLocationGroup;
+	@Inject PermissionCheckHelperFragment permissionCheckHelper;
 	private AdapterView.OnItemSelectedListener selectMeetingLocation =
 		new AdapterView.OnItemSelectedListener() {
 			@Override
@@ -481,7 +480,7 @@ public class CreateMeetingFragment extends CommonFragment
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_create_meeting);
+		container.post(() -> setAppTitle("Create Meeting"));
 		setUpView(Objects.requireNonNull(createMeetingView));
 		startLocationUpdates();
 		try {
@@ -500,8 +499,6 @@ public class CreateMeetingFragment extends CommonFragment
 		selectProduct();
 		meetingObjective();
 		meetingLocation();
-		//setAppTitle(getClass().toString(), "Create Meeting");
-
 		return createMeetingView;
 	}
 
@@ -908,12 +905,6 @@ public class CreateMeetingFragment extends CommonFragment
 	private void getLatLong(MeetingApptModel meetingApptModel) {
 		Handler mainHandler = new Handler(requireContext().getMainLooper());
 		Runnable myRunnable = () -> {
-			if (ActivityCompat.checkSelfPermission(requireContext(),
-				Manifest.permission.ACCESS_FINE_LOCATION)
-				!= PackageManager.PERMISSION_GRANTED) {
-				ActivityCompat.checkSelfPermission(requireContext(),
-					Manifest.permission.ACCESS_COARSE_LOCATION);
-			}
 			getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
 				getmLocationRequest(), new LocationCallback() {
 					@Override
@@ -1131,12 +1122,9 @@ public class CreateMeetingFragment extends CommonFragment
 			tvSubCategoryCommentsError.requestFocus();
 			return false;
 		} else if (enableLocationGroup
-			&& ActivityCompat.checkSelfPermission(requireContext(),
-			Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-			&& ActivityCompat.checkSelfPermission(requireContext(),
-			Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			&& !permissionCheckHelper.locationPermission()) {
+			permissionCheckHelper.requestLocation();
 
-			setPermisson(requireActivity(), requireContext());
 			return false;
 		} else if (enableLocationGroup
 			&& !((LocationManager) Objects.requireNonNull(requireContext()).getSystemService(
@@ -2084,7 +2072,7 @@ public class CreateMeetingFragment extends CommonFragment
 							Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 						bundle.putString(UCID,
 							getArguments().getString(UCID));
-						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true);
+						navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
 					}
 				});
 		}
@@ -2114,13 +2102,7 @@ public class CreateMeetingFragment extends CommonFragment
 		Runnable myRunnable = new Runnable() {
 			@Override
 			public void run() {
-				if (ActivityCompat.checkSelfPermission(requireContext(),
-					Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-					&& ActivityCompat.checkSelfPermission(requireContext(),
-					Manifest.permission.ACCESS_COARSE_LOCATION)
-					!= PackageManager.PERMISSION_GRANTED) {
-
-				} else {
+				if (permissionCheckHelper.locationPermission()) {
 					getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
 						getmLocationRequest(), new LocationCallback() {
 							@Override

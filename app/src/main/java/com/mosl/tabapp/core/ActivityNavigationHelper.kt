@@ -9,12 +9,16 @@ import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.navigator.BaseNavigator
 import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
+import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.prospect.ProspectRequest
 import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.shared.util.Utility
@@ -23,13 +27,14 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonActivity.Companion.ARG_PAGE_ID
 import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.ekyc.EkycNavigator
-import com.mosl.tabapp.helper.shortcuts.ShortcutConstants
+import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
+import java.util.Objects
 import javax.inject.Inject
 
 @ActivityScoped
@@ -38,7 +43,9 @@ class ActivityNavigationHelper @Inject constructor(
   internal val ekycNavigator: EkycNavigator,
   internal val userManager: UserManagerImpl,
   val context: Context,
-  val navigator: Navigator
+  val navigator: Navigator,
+  val saathiApi: SaathiApi
+
 ) {
   private var pendingMenuAction: AppMenu? = null
   private val disposable: CompositeDisposable = CompositeDisposable()
@@ -47,14 +54,22 @@ class ActivityNavigationHelper @Inject constructor(
     if (intent == null) return
     Timber.d("Intent Received %s ", intent.toString())
     Timber.d("extras %s", intent.extras?.toString())
-    val uri = intent.data
 
     if (intent.isNotification()) {
-      val bundle = intent.extras ?: Bundle.EMPTY
-//      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, bundle, false)
+      val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
+      val target = NotificationData(category)
+      if (target.page.equals(LEADVIEW)) {
+        screenNavigator.openPage(
+            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
+        )
+      } else {
+        screenNavigator.openPage(
+            notificationNavigation(category)
+        )
+      }
     } else if (userManager.user.isAuBankSalesSupport()) {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
-    }  else {
+    } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
         pageToOpen == -1 -> screenNavigator.openHome()
@@ -94,6 +109,16 @@ class ActivityNavigationHelper @Inject constructor(
     }
   }
 
+  fun notificationNavigation(category: String): Int {
+    val target = NotificationData(category)
+    return when (target.page) {
+      PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
+      BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
+      DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD
+      else -> NavigationConstants.NAVIGATE_TO_DASHBOARD
+    }
+  }
+
   private fun getSuggestMe() {
     if (context.isNetworkConnected()) {
       val request = SuggestMeRequest(0, 0)
@@ -116,18 +141,62 @@ class ActivityNavigationHelper @Inject constructor(
   ) {
     toggleProgressBar(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.onFailure { error ->
       showOnFailurePopup(error)
     }
 
-    val data = uiModel.data
-    if (data != null && data.response != null) {
-      val encryptedUrl = Utility.stringOrEmpty(data.response!!.encryptedUrl)
-      val bundle = Bundle()
-      bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
-      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
 
+    uiModel.onSuccess { data ->
+      if (data.response != null) {
+        val encryptedUrl = Utility.stringOrEmpty(data.response!!.encryptedUrl)
+        val bundle = Bundle()
+        bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
+        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
+
+      }
+    }
+
+  }
+
+  fun convertEkycApi(
+    ekycModule: EkycModule
+  ) {
+    if (context.isNetworkConnected()) {
+      val request = ProspectRequest(
+          ekycModule.mobile, ekycModule.email, ekycModule.branchEmpCode, ekycModule.source,
+          ekycModule.prospectSource, ekycModule.prospectSourceDetails, ekycModule.interestedIn
+      )
+
+      disposable.add(saathiApi
+          .registerProspectOnline(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderProspect(it) })
+
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderProspect(uiModel: UiModel<SaathiCommonResponse<List<ProspectResponse>>>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      showOnFailurePopup(error)
+    }
+
+    uiModel.onSuccess { data ->
+      val prospectResponse =
+        Objects.requireNonNull<List<ProspectResponse>>(data.response)[0]
+      if (prospectResponse.isRegistrationAllowed()) {
+        val oaoUserId = prospectResponse.ekycUserID
+        ekycNavigator.openNewEkycApp(true, oaoUserId)
+      } else {
+        MSFDialog.alertDialog(
+            context, 0,
+            context.getResources().getString(R.string.motilal_oswal),
+            data.message, "OK", true, null
+        )
+      }
     }
   }
 
@@ -173,11 +242,27 @@ class ActivityNavigationHelper @Inject constructor(
     ekycNavigator.openNewEkycApp(isExistingOrNewUser, "")
   }
 
+  private fun openLeadViewDetail(data: NotificationData): Bundle {
+    val bundle = Bundle()
+    val leadId = data.paramMap
+        ?.get(MOSLConstants.LEAD_ID)
+    val ucid = data.paramMap
+        ?.get(MOSLConstants.UCID)
+    bundle.putString(MOSLConstants.UCID, ucid)
+    bundle.putString(MOSLConstants.LEAD_ID, leadId)
+    bundle.putParcelable(MOSLConstants.NOTIFICATION_DATA, data)
+
+    return bundle
+//    screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, false)
+  }
+
   companion object {
     //Notification
     const val ARG_NOTIFICATION_CATEGORY = "category"
 
-    //Gamooga Constants
-    const val NotificationId = "1"
+    const val LEADVIEW = "LEADVIEW"
+    const val PENDINGAPPROVAL = "PENDINGAPPROVAL"
+    const val BIRTHDAY = "BIRTHDAY"
+    const val DASHBOARD = "DASHBOARD"
   }
 }

@@ -3,8 +3,8 @@ package com.mosl.tabapp.drawermenu
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
-import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +47,7 @@ import javax.inject.Inject
 class DrawerMenuView : FrameLayout {
 
   private val menuSelectSubject = PublishSubject.create<AppMenu>()
+  private val closeSelectSubject = PublishSubject.create<View>()
   private val selectableItemList = ArrayList<SelectableMenu>()
   private val expandableItems = ArrayList<BaseMenuExpandableItem>()
 
@@ -122,6 +123,11 @@ class DrawerMenuView : FrameLayout {
     return menuSelectSubject
   }
 
+  fun onCloseClicked(): Observable<View> {
+
+    return closeSelectSubject
+  }
+
   fun selectItem(appMenu: AppMenu) {
     for (item in selectableItemList) {
       if (item.getAppMenu() == appMenu) {
@@ -143,7 +149,7 @@ class DrawerMenuView : FrameLayout {
         ?.let {
           val name = it.firstName.plus(it.lastName)
           menuSection.setHeader(
-              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl.toLowerCase())
+              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl, closeSelectSubject)
           )
         }
   }
@@ -183,19 +189,6 @@ class DrawerMenuView : FrameLayout {
 
   fun List<ChildMenu>.getChildMenuItems(): List<ChildMenuItem> {
     return map { ChildMenuItem(it) }
-  }
-
-  fun setMenuSelection(@StringRes groupPos: Int) {
-    val selectedPage = 0
-
-    for (selectableMenu in selectableItemList) {
-      if (selectedPage != 0) {
-        if (selectableMenu.getAppMenu().pageId == selectedPage) {
-          selectItem(selectableMenu.getAppMenu())
-          expandableItems[0].expand()
-        }
-      }
-    }
   }
 
   companion object {

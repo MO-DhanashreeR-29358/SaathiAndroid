@@ -35,13 +35,13 @@ class ClientNameAdapter(
   ) {
     val (clientName) = productList[position]
     holder.tvProductName.text = clientName
-    holder.ivDeleteProduct.setOnClickListener { view ->
+    holder.ivDeleteProduct.setOnClickListener { _ ->
       alertDialog(
         mContext, 0, mContext.resources.getString(R.string.motilal_oswal),
         "Are you sure you want to delete client name: "
             + clientName
             + " ?", "Yes", "No", true
-      ) { action, data ->
+      ) { action, _ ->
         if (action == MSFDialog.Action.OK) {
           deleteDocument(clientName)
         }
@@ -81,7 +81,7 @@ class ClientNameAdapter(
   }
 
   fun addProduct(meetingClientName: MeetingClientName) {
-    if (this.productList == null) {
+    if (this.productList.size == 0) {
       this.productList = ArrayList()
     }
     val hs =
