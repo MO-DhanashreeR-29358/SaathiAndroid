@@ -22,6 +22,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.CharSequenceToString
 import com.mosl.commons.rx.MapStringIsBlank
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.AppTitle
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.SearchResponse
@@ -54,6 +55,8 @@ class Actionbar @JvmOverloads constructor(
 
   @Inject
   lateinit var saathiApi: SaathiApi
+  @Inject
+  lateinit var userManager: UserManager
   internal lateinit var mTitleView: TextView
   internal lateinit var tvMsgCount: TextView
   internal lateinit var mHomeBtn: ImageView
@@ -89,7 +92,7 @@ class Actionbar @JvmOverloads constructor(
     ivIcon = findViewById(R.id.ivIcon) as ImageView
     llSearch = findViewById(R.id.llSearch)
 
-    autoCompleteAdapter = AutoCompleteAdapter(context)
+    autoCompleteAdapter = AutoCompleteAdapter(context, userManager)
     searchBoxView.setAdapter(autoCompleteAdapter)
 
     val searchObs = searchBoxView.textChanges()
@@ -226,7 +229,7 @@ class Actionbar @JvmOverloads constructor(
   }
 
   fun setNotification(onClickAction: OnClickListener) {
-    btnNotification.setOnClickListener { onClickAction }
+    btnNotification.setOnClickListener(onClickAction)
   }
 
   fun setSearchHint(hint: CharSequence) {

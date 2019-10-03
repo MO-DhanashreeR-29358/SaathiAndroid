@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.mosl.app.core.utils.hideKeyBoard
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
@@ -25,7 +27,8 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 
 class AutoCompleteAdapter(
-  context: Context
+  context: Context,
+  val userManager: UserManager
 ) : BaseAdapter(), Filterable {
   private val inflater: LayoutInflater = LayoutInflater.from(context)
   private val resultsList = ArrayList<SearchResultModel>()
@@ -103,7 +106,11 @@ class AutoCompleteAdapter(
           holderView.rlOAOForm.visibility = View.GONE
         }
       }
-      //todo AUFSB USer Cond
+
+      if (userManager.user.isAufsb()) {
+        holderView.rlSetAppointment.visibility = View.GONE
+        holderView.rlCreateMeeting.visibility = View.GONE
+      }
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
