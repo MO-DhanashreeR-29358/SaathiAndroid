@@ -12,11 +12,6 @@ class SaathiAppImpl : SaathiAppNew() {
 
     Fabric.with(this, Crashlytics())
 
-    Timber.plant(object : Timber.DebugTree() {
-      override fun createStackElementTag(element: StackTraceElement): String? {
-        return element.lineNumber.toString() + ":" + super.createStackElementTag(element)
-      }
-    })
     RxJavaPlugins.setErrorHandler { throwable ->
       Timber.tag("RxError")
           .e(throwable)
