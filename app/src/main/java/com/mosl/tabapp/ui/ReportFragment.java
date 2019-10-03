@@ -70,6 +70,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 	private TableFixHeaders table;
 	private TextView tvNochart;
 	private String widgetSystemName;
+	private String titleName;
 	private TextView tvStartDate, tvEndDate;
 	private String mainFromDate, mainToDate, toPostingDate, fromPostingDate;
 	private Dialog dialog;
@@ -192,6 +193,8 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		if (error != null) {
 			Timber.d("throwable %s", error.getMessage());
 			showOnFailurePopup(error);
+			table.setVisibility(View.GONE);
+			tvNochart.setVisibility(View.VISIBLE);
 		}
 
 		HashMap<String, Object> data = uiModel.data;
@@ -442,7 +445,8 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 		super.onFragmentReopened(args);
 		widgetSystemName =
 			Objects.requireNonNull(args).getString(MOSLConstants.SYSTEM_NAME);
-		txtLables.setText(args.getString(MOSLConstants.NAME));
+		titleName = args.getString(MOSLConstants.NAME);
+		txtLables.setText(titleName);
 		selectBranch();
 	}
 
@@ -506,10 +510,8 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							Bundle bundle = new Bundle();
 							bundle.putSerializable(STRING_MAP,
 								getRespBody(getValue(row, "EMPLOYEE CODE")));
-							String nextTitle = Objects.requireNonNull(
-								ReportFragment.this.getArguments())
-								.getString(MOSLConstants.NAME);
-							bundle.putString(STRING_TITLE, nextTitle);
+
+							bundle.putString(STRING_TITLE, titleName);
 							navigator.openPage(
 								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
 								true, false);
@@ -545,10 +547,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 							Bundle bundle = new Bundle();
 							bundle.putSerializable(STRING_MAP,
 								getRespBody(getValue(row, "EMPLOYEE CODE")));
-							String nextTitle = Objects.requireNonNull(
-								ReportFragment.this.getArguments())
-								.getString(MOSLConstants.NAME);
-							bundle.putString(STRING_TITLE, nextTitle);
+							bundle.putString(STRING_TITLE, titleName);
 							navigator.openPage(
 								NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT, bundle,
 								true, false);
