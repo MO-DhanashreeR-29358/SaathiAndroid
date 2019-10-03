@@ -71,21 +71,23 @@ class AutoCompleteAdapter(
           openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, bundle)
         })
         holderView.ivDropDownArrow.visibility = View.GONE
-        holderView.clientName.setText("Name :".plus(name))
-        holderView.clientUcid.setText("Business Profile: ".plus(resultModel.businessProfileName))
-        holderView.clientID.setText("Emp Id: ".plus(resultModel.empCode))
+        holderView.clientName.setText(String.format("Name :%s", name))
+        holderView.clientUcid.setText(
+            String.format("Business Profile: %s", resultModel.businessProfileName)
+        )
+        holderView.clientID.setText(String.format("Emp Id: %s,", resultModel.empCode))
         holderView.error.visibility = View.GONE
       }
     } else {
       holderView.clientName.setText(name)
       val clientCode = resultModel.clientCode
       if (resultModel.hasClientCode()) {
-        holderView.clientID.setText("Lead Id/Client Code: $clientCode")
+        holderView.clientID.setText(String.format("Lead Id/Client Code: %s", clientCode))
       } else {
-        holderView.clientID.setText("Lead Id/Client Code: ${resultModel.leadId}")
+        holderView.clientID.setText(String.format("Lead Id/Client Code: %s", resultModel.leadId))
       }
       val ucid = resultModel.ucid
-      holderView.clientUcid.setText("UCID: $ucid")
+      holderView.clientUcid.setText(String.format("UCID: %s", ucid))
       var ekyMenuType = SEARCH_TYPE_LEAD
       if (!ucid.equals("0")) {
         ekyMenuType = SEARCH_TYPE_CLIENT
