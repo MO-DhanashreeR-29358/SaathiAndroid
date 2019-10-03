@@ -50,9 +50,6 @@ class AppUserRepositoryImpl @Inject constructor(
           response.get(0)
               .transform()
         }
-        .doOnError { t ->
-          Log.d("on Error ", t.message)
-        }
   }
 
   override fun fetchReportTypes(): Observable<List<ReportType>> {

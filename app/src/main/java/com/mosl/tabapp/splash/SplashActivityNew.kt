@@ -101,7 +101,6 @@ class SplashActivityNew : LeanBaseActivity() {
     disposables.add(
         loginRepository.versionCheck(versionRequest)
             .compose(applyUiModel())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(this::renderVersionData)
     )
   }
@@ -175,9 +174,8 @@ class SplashActivityNew : LeanBaseActivity() {
     }
 
     uiModel.onFailure {
-      Timber.d("message %s", it.message!!)
+      Timber.e(it,"message %s", it.message)
       infoDialog(it)
-
     }
     /*uiModel.error?.let {
       Timber.d("message %s", it.message!!)
