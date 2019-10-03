@@ -16,6 +16,7 @@ import com.mosl.app.core.utils.hideKeyBoard
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.LEADID
 import com.mosl.tabapp.constants.MOSLConstants.MOBILE
 import com.mosl.tabapp.constants.MOSLConstants.UCID
@@ -62,6 +63,13 @@ class AutoCompleteAdapter(
 //        holderView.clientName.setText("")
         holderView.error.visibility = View.GONE
       } else {
+        holderView.llExpand.setOnClickListener({
+          val bundle = Bundle()
+          bundle.putString(MOSLConstants.PROFILE_ID, resultModel.businessProfileId)
+          bundle.putString(MOSLConstants.PRODUCT_ID, resultModel.productId)
+          bundle.putString(MOSLConstants.EMPLOYEE_CODE, resultModel.empCode)
+          openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, bundle)
+        })
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientName.setText("Name : $name")
         holderView.clientUcid.setText(resultModel.businessProfileName)
