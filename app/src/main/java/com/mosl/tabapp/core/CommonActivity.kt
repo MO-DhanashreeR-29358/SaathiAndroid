@@ -95,10 +95,9 @@ class CommonActivity : BaseActivity(),
   ) {
     super.onCreate(savedInstanceState)
     binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
-    binding.actionBar.setHomeAction(View.OnClickListener { openMenuDrawer() })
-    binding.actionBar.setNotification(View.OnClickListener {
+    binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
+    binding.actionBar.setNotification(OnClickListener {
       screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
-//      binding.actionBar.updateCnt(0)
     })
     binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
     binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
