@@ -55,13 +55,13 @@ class AutoCompleteAdapter(
     } else {
       holderView.llExpand.visibility = View.VISIBLE
     }
-    if (resultModel.isEmpType) {
+    if (resultModel.isEmpType(resultModel.searchType)) {
       if (name.equals(NO_RECORDS_FOUND)) {
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientID.visibility = View.GONE
         holderView.clientUcid.visibility = View.GONE
 //        holderView.clientName.setText("")
-        holderView.error.visibility = View.GONE
+        holderView.error.visibility = View.VISIBLE
       } else {
         holderView.llExpand.setOnClickListener({
           val bundle = Bundle()
@@ -71,9 +71,9 @@ class AutoCompleteAdapter(
           openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, bundle)
         })
         holderView.ivDropDownArrow.visibility = View.GONE
-        holderView.clientName.setText("Name : $name")
-        holderView.clientUcid.setText(resultModel.businessProfileName)
-        holderView.clientID.setText("Emp Id: $resultModel.empCode")
+        holderView.clientName.setText("Name :".plus(name))
+        holderView.clientUcid.setText("Business Profile: ".plus(resultModel.businessProfileName))
+        holderView.clientID.setText("Emp Id: ".plus(resultModel.empCode))
         holderView.error.visibility = View.GONE
       }
     } else {

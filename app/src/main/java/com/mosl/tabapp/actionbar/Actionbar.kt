@@ -31,6 +31,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.EMPLOYEE_CODE
 import com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH
+import com.mosl.tabapp.constants.MOSLConstants.SEARCH_TYPE_DASHBOARD_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
 import com.mosl.tabapp.model.SearchResultModel
@@ -109,7 +110,7 @@ class Actionbar @JvmOverloads constructor(
                 if (t.isNotEmpty()) {
                   t.map { searchResponse: SearchResponse ->
                     val jsonObject = JSONObject(searchResponse.metaData)
-                    if (getSearchHint().equals(SEARCH_TYPE_EMP)) {
+                    if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
                       val empCode = jsonObject.getString(EMPLOYEE_CODE)
                       val name = jsonObject.getString(MOSLConstants.NAME)
                       val businessProfile = jsonObject.getString(MOSLConstants.BUSINESS_PROFILE)
