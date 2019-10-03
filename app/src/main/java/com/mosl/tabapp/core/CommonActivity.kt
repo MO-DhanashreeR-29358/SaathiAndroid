@@ -46,6 +46,7 @@ import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivityNew
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
@@ -57,7 +58,8 @@ import javax.inject.Inject
 class CommonActivity : BaseActivity(),
     Navigator,
     ActivityDelegate,
-    QuickAction.OnActionItemClickListener {
+    QuickAction.OnActionItemClickListener,
+    ConvertToEkyc {
 
   lateinit var binding: ActivityCommonbaseBinding
   @Inject
@@ -101,6 +103,7 @@ class CommonActivity : BaseActivity(),
     })
     binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
     binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
+    binding.actionBar.autoCompleteAdapter.setConvertToEkycListener(this)
     hideAppTitle()
     setupMenuDrawer()
     if (savedInstanceState == null) {
@@ -123,7 +126,7 @@ class CommonActivity : BaseActivity(),
   fun openSearchOptions(v: View) {
     val acLead = ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this)
     val acCleint = ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this)
-    val acDadhBoard = ActionItem(ID_EMP, "Dashbord for", getChecedStateIcon(SEARCH_TYPE_EMP), this)
+    val acDadhBoard = ActionItem(ID_EMP, "Dashboard for", getChecedStateIcon(SEARCH_TYPE_EMP), this)
 
     val quickAction = QuickAction(this, QuickAction.VERTICAL)
     quickAction.addActionItem(acLead)
@@ -421,10 +424,8 @@ class CommonActivity : BaseActivity(),
     exitPopup()
   }
 
-  fun gotoEkycPage(ekycModule: EkycModule) {
-
-    activityNavHelper.convertEkycApi(ekycModule)
-
+  override fun gotoEkycPage(ekycModule: EkycModule) {
+    activityNavHelper.convertEkycApi(this, ekycModule)
   }
 
   override fun onDestroy() {

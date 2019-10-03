@@ -159,6 +159,7 @@ class ActivityNavigationHelper @Inject constructor(
   }
 
   fun convertEkycApi(
+    context: Context,
     ekycModule: EkycModule
   ) {
     if (context.isNetworkConnected()) {
@@ -170,14 +171,17 @@ class ActivityNavigationHelper @Inject constructor(
       disposable.add(saathiApi
           .registerProspectOnline(request)
           .compose(applyUiModel())
-          .subscribe { this.renderProspect(it) })
+          .subscribe { this.renderProspect(it, context) })
 
     } else {
       noInternetConnectionDialog()
     }
   }
 
-  private fun renderProspect(uiModel: UiModel<SaathiCommonResponse<List<ProspectResponse>>>) {
+  private fun renderProspect(
+    uiModel: UiModel<SaathiCommonResponse<List<ProspectResponse>>>,
+    context: Context
+  ) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure { error ->
@@ -193,7 +197,7 @@ class ActivityNavigationHelper @Inject constructor(
       } else {
         MSFDialog.alertDialog(
             context, 0,
-            context.getResources().getString(R.string.motilal_oswal),
+            this.context.getResources().getString(R.string.motilal_oswal),
             data.message, "OK", true, null
         )
       }

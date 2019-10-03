@@ -22,6 +22,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.LEADID
 import com.mosl.tabapp.constants.MOSLConstants.MOBILE
 import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchResultModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -33,9 +34,14 @@ class AutoCompleteAdapter(
   private val inflater: LayoutInflater = LayoutInflater.from(context)
   private val resultsList = ArrayList<SearchResultModel>()
   lateinit var navigator: ScreenNavigatorImpl
+  lateinit var convertToEkyc: ConvertToEkyc
 
   fun setScreenNavigator(screenNavigator: ScreenNavigatorImpl) {
     this.navigator = screenNavigator
+  }
+
+  fun setConvertToEkycListener(convertToEkyc: ConvertToEkyc) {
+    this.convertToEkyc = convertToEkyc
   }
 
   override fun getView(
@@ -128,7 +134,16 @@ class AutoCompleteAdapter(
         openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
       })
       holderView.rlOpenAccount.setOnClickListener({
-        //todo need to implement click listener
+        hideKeyBoard(holderView.rlOpenAccount)
+        clearAll()
+        val data = EkycModule(
+            mobile = resultModel.mobileNo, email = resultModel.email,
+            branchEmpCode = resultModel.leadOwner, interestedIn = resultModel.interestedIn,
+            prospectSourceDetails = resultModel.prospectSourceDetails,
+            prospectSource = resultModel.prospectSourceName,
+            source = resultModel.sourceName
+        )
+        convertToEkyc.gotoEkycPage(data)
       })
       holderView.rlOAOForm.setOnClickListener({
         hideKeyBoard(holderView.rlOAOForm)
@@ -222,5 +237,9 @@ class AutoCompleteAdapter(
 
   companion object {
     const val NO_RECORDS_FOUND = "No records found"
+  }
+
+  interface ConvertToEkyc {
+    fun gotoEkycPage(ekycModule: EkycModule)
   }
 }
