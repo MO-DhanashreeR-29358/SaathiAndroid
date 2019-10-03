@@ -2,6 +2,8 @@ package com.mosl.tabapp.model;
 
 import java.io.Serializable;
 
+import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_TYPE_DASHBOARD_HINT;
+
 /**
  * Created by srv_admin on 2/3/2016.
  */
@@ -155,8 +157,8 @@ public class SearchResultModel implements Serializable {
         return searchType;
     }
 
-    public boolean isEmpType() {
-        return searchType.equals("Employee");
+    public boolean isEmpType(String searchType) {
+        return searchType.equals(SEARCH_TYPE_DASHBOARD_HINT);
     }
 
     public void setSearchType(String searchType) {
