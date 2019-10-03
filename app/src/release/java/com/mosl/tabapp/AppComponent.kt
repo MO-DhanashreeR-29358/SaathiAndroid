@@ -1,5 +1,6 @@
 package com.mosl.tabapp
 
+import com.mosl.tabapp.actionbar.Actionbar
 import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.ServiceModule
@@ -18,6 +19,8 @@ import javax.inject.Singleton
 )
 interface AppComponent : AndroidInjector<SaathiAppImpl> {
   override fun inject(instance: SaathiAppImpl)
+
+  fun inject(target: Actionbar)
 
   fun inject(target: DrawerMenuView)
 
