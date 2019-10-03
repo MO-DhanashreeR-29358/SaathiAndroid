@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.mosl.app.core.utils.hideKeyBoard
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
@@ -25,7 +27,8 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 
 class AutoCompleteAdapter(
-  context: Context
+  context: Context,
+  val userManager: UserManager
 ) : BaseAdapter(), Filterable {
   private val inflater: LayoutInflater = LayoutInflater.from(context)
   private val resultsList = ArrayList<SearchResultModel>()
@@ -71,21 +74,23 @@ class AutoCompleteAdapter(
           openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, bundle)
         })
         holderView.ivDropDownArrow.visibility = View.GONE
-        holderView.clientName.setText("Name :".plus(name))
-        holderView.clientUcid.setText("Business Profile: ".plus(resultModel.businessProfileName))
-        holderView.clientID.setText("Emp Id: ".plus(resultModel.empCode))
+        holderView.clientName.setText(String.format("Name :%s", name))
+        holderView.clientUcid.setText(
+            String.format("Business Profile: %s", resultModel.businessProfileName)
+        )
+        holderView.clientID.setText(String.format("Emp Id: %s,", resultModel.empCode))
         holderView.error.visibility = View.GONE
       }
     } else {
       holderView.clientName.setText(name)
       val clientCode = resultModel.clientCode
       if (resultModel.hasClientCode()) {
-        holderView.clientID.setText("Lead Id/Client Code: $clientCode")
+        holderView.clientID.setText(String.format("Lead Id/Client Code: %s", clientCode))
       } else {
-        holderView.clientID.setText("Lead Id/Client Code: ${resultModel.leadId}")
+        holderView.clientID.setText(String.format("Lead Id/Client Code: %s", resultModel.leadId))
       }
       val ucid = resultModel.ucid
-      holderView.clientUcid.setText("UCID: $ucid")
+      holderView.clientUcid.setText(String.format("UCID: %s", ucid))
       var ekyMenuType = SEARCH_TYPE_LEAD
       if (!ucid.equals("0")) {
         ekyMenuType = SEARCH_TYPE_CLIENT
@@ -101,7 +106,11 @@ class AutoCompleteAdapter(
           holderView.rlOAOForm.visibility = View.GONE
         }
       }
-      //todo AUFSB USer Cond
+
+      if (userManager.user.isAufsb()) {
+        holderView.rlSetAppointment.visibility = View.GONE
+        holderView.rlCreateMeeting.visibility = View.GONE
+      }
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
