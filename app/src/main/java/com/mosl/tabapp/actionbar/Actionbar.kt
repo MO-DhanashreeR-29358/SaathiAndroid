@@ -140,11 +140,11 @@ class Actionbar @JvmOverloads constructor(
                       val name = jsonObject.getString(NAME)
                       val mobile = jsonObject.getString(MOBILE)
                       val email = jsonObject.getString(EMAIL)
-                      val sourceName = jsonObject.getString(SOURCENAME) ?: ""
-                      val prospectSourceName = jsonObject.getString(PROSPECTSOURCENAME) ?: ""
-                      val prospectSourceDetails = jsonObject.getString(PROSPECTSOURCEDETAILS) ?: ""
-                      val interestedIn = jsonObject.getString(INTERESTEDIN) ?: ""
-                      val leadOwner = jsonObject.getString(LEAD_OWNER) ?: ""
+                      val sourceName = jsonObject.optString(SOURCENAME) ?: ""
+                      val prospectSourceName = jsonObject.optString(PROSPECTSOURCENAME) ?: ""
+                      val prospectSourceDetails = jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
+                      val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
+                      val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
                       val oaoUserId = jsonObject.getInt(OAOUSERID)
                       val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
                       SearchResultModel(
