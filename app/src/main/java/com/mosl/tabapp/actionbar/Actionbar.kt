@@ -29,13 +29,26 @@ import com.mosl.saathi.api.model.SearchResponse
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
-import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.EMPLOYEE_CODE
-import com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH
-import com.mosl.tabapp.constants.MOSLConstants.SEARCH_TYPE_DASHBOARD_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
 import com.mosl.tabapp.model.SearchResultModel
+import com.mosl.tabapp.util.BUSINESS_PROFILE
+import com.mosl.tabapp.util.CLIENTCODE
+import com.mosl.tabapp.util.EMAIL
+import com.mosl.tabapp.util.EMPLOYEE_CODE
+import com.mosl.tabapp.util.INTERESTEDIN
+import com.mosl.tabapp.util.LEADID
+import com.mosl.tabapp.util.LEAD_OWNER
+import com.mosl.tabapp.util.MOBILE
+import com.mosl.tabapp.util.NAME
+import com.mosl.tabapp.util.OAOUSERID
+import com.mosl.tabapp.util.PRODUCT_ID
+import com.mosl.tabapp.util.PROFILE_ID
+import com.mosl.tabapp.util.PROSPECTSOURCEDETAILS
+import com.mosl.tabapp.util.PROSPECTSOURCENAME
+import com.mosl.tabapp.util.SEARCH_TYPE_DASHBOARD_HINT
+import com.mosl.tabapp.util.SOURCENAME
+import com.mosl.tabapp.util.UCID
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
 import io.reactivex.Observable
@@ -87,7 +100,6 @@ class Actionbar @JvmOverloads constructor(
     mTitleView = findViewById(R.id.appTitle)
     tvMsgCount = findViewById(R.id.tvMsgCount)
     pbLoadingIndicator = findViewById(R.id.pbLoadingIndicator)
-    searchBoxView.setThreshold(SEARCH_LENTH)
     searchBoxView.setDropDownBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     ivIcon = findViewById(R.id.ivIcon) as ImageView
     llSearch = findViewById(R.id.llSearch)
@@ -115,25 +127,31 @@ class Actionbar @JvmOverloads constructor(
                     val jsonObject = JSONObject(searchResponse.metaData)
                     if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
                       val empCode = jsonObject.getString(EMPLOYEE_CODE)
-                      val name = jsonObject.getString(MOSLConstants.NAME)
-                      val businessProfile = jsonObject.getString(MOSLConstants.BUSINESS_PROFILE)
-                      val businessProfileId = jsonObject.getString(MOSLConstants.PROFILE_ID)
-                      val productId = jsonObject.getString(MOSLConstants.PRODUCT_ID)
+                      val name = jsonObject.getString(NAME)
+                      val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
+                      val businessProfileId = jsonObject.getString(PROFILE_ID)
+                      val productId = jsonObject.getString(PRODUCT_ID)
                       SearchResultModel(
                           getSearchHint(), empCode, name, businessProfileId, businessProfile,
                           productId
                       )
                     } else {
-                      val ucid = jsonObject.getString(MOSLConstants.UCID)
-                      val leadid = jsonObject.getString(MOSLConstants.LEADID)
-                      val name = jsonObject.getString(MOSLConstants.NAME)
-                      val mobile = jsonObject.getString(MOSLConstants.MOBILE)
-                      val email = jsonObject.getString(MOSLConstants.EMAIL)
-//                    val leadOwner = jsonObject.getString(MOSLConstants.LEAD_OWNER)?:""
-                      val oaoUserId = jsonObject.getInt(MOSLConstants.OAOUSERID)
+                      val ucid = jsonObject.getString(UCID)
+                      val leadid = jsonObject.getString(LEADID)
+                      val name = jsonObject.getString(NAME)
+                      val mobile = jsonObject.getString(MOBILE)
+                      val email = jsonObject.getString(EMAIL)
+                      val sourceName = jsonObject.getString(SOURCENAME) ?: ""
+                      val prospectSourceName = jsonObject.getString(PROSPECTSOURCENAME) ?: ""
+                      val prospectSourceDetails = jsonObject.getString(PROSPECTSOURCEDETAILS) ?: ""
+                      val interestedIn = jsonObject.getString(INTERESTEDIN) ?: ""
+                      val leadOwner = jsonObject.getString(LEAD_OWNER) ?: ""
+                      val oaoUserId = jsonObject.getInt(OAOUSERID)
+                      val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
                       SearchResultModel(
-                          getSearchHint(), leadid, name, mobile, email, ucid, "", oaoUserId, "", "",
-                          "", "", ""
+                          getSearchHint(), leadid, name, mobile, email, ucid, leadOwner, oaoUserId,
+                          sourceName, prospectSourceName,
+                          prospectSourceDetails, interestedIn, clientCode
                       )
                     }
                   }

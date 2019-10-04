@@ -425,6 +425,7 @@ class CommonActivity : BaseActivity(),
   }
 
   override fun gotoEkycPage(ekycModule: EkycModule) {
+    Timber.d("ekyc module %s", ekycModule.toString())
     activityNavHelper.convertEkycApi(this, ekycModule)
   }
 
