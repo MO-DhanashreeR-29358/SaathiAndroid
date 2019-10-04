@@ -90,13 +90,17 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View leadViewMainView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_leadview_main);
+		getUserID(this.getArguments());
+		setUpView(Objects.requireNonNull(leadViewMainView));
+		return leadViewMainView;
+	}
 
+	private void getUserID(Bundle args) {
 		try {
-			leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID);
-			if (this.getArguments().containsKey(UCID)) {
-				mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0"
-					: this.getArguments().getString(UCID, "0");
+			leadId = Objects.requireNonNull(args).getString(LEAD_ID);
+			if (args.containsKey(UCID)) {
+				mUCID = args.getString(UCID, "0").equals("") ? "0"
+					: args.getString(UCID, "0");
 			}
 			if (!mUCID.equalsIgnoreCase("0")) {
 				getClientDetail(mUCID);
@@ -104,13 +108,9 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			} else {
 				getLeadByIdFromServer(leadId);
 			}
-			setUpView(Objects.requireNonNull(leadViewMainView));
-			setUserVisibleHint(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return leadViewMainView;
 	}
 
 	private void setUpView(View leadViewDetailView) {
@@ -521,5 +521,10 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			//	true);
 			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
 		}
+	}
+
+	@Override public void onFragmentReopened(@NotNull Bundle args) {
+		super.onFragmentReopened(args);
+		getUserID(args);
 	}
 }
