@@ -74,6 +74,7 @@ import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
@@ -102,6 +103,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -174,8 +176,7 @@ public class DashboardFragment extends CommonFragment
 
 	private XAxis xAxis;
 	private String[] mMonths;
-	////////////////////
-	// Progress Dialog
+	@Inject EkycNavigator ekycNavigator;
 	private ProgressDialog pDialog;
 
 	@Override protected int getLayout() {
@@ -679,6 +680,7 @@ public class DashboardFragment extends CommonFragment
 				map.put(TOKENKEY, userManager.getUser().token);
 				map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
 				//gotoNewEkyc(getInputBody(map));
+				ekycNavigator.openNewEkycApp(false, "");
 			} else if (id == R.id.rlExisting) {
 				HashMap<String, String> map = new HashMap();
 				map.put(NEW_USERID, "");
@@ -690,6 +692,7 @@ public class DashboardFragment extends CommonFragment
 				map.put(TOKENKEY, userManager.getUser().token);
 				map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
 				//gotoNewEkyc(getInputBody(map));
+				ekycNavigator.openNewEkycApp(true, "");
 			} else if (id == R.id.txtTelephoneNo1) {
 				MSFDialog.alertDialog(getActivity(), 0,
 					getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",

@@ -30,9 +30,12 @@ class MenuHeaderItem(
       closeSelectSubject.onNext(it);
     })
 
-    Picasso.with(context)
-        .load(imageUrl)
-        .placeholder(R.drawable.menu_profile_pic)
-        .into(viewBinding.imgPartner)
+    if (!imageUrl.isEmpty()) {
+      Picasso.with(context)
+          .load(imageUrl)
+          .placeholder(R.drawable.menu_profile_pic)
+          .into(viewBinding.imgPartner)
+    }
+
   }
 }

@@ -65,7 +65,8 @@ class MenuDataSourceImpl @Inject constructor(
   protected fun getAufsbUserMenu(): List<BaseMenu> {
     return listOf(
         getDashboard(),
-        getOpenAccount()
+        getOpenAccount(),
+        getLogout()
     )
   }
 
