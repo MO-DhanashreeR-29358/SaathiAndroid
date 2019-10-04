@@ -171,7 +171,7 @@ class AutoCompleteAdapter(
     bundle: Bundle
   ) {
     clearAll()
-    navigator.openPage(navigationConstants, bundle)
+    navigator.openPage(navigationConstants, bundle, true)
     clickListener.onSearchResultClick()
   }
 

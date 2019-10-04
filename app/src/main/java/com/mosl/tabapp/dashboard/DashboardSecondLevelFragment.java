@@ -746,7 +746,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
 									bundle.putString(LABEL, txtLables.getText().toString());
 									navigator.openPage(
 										NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-										bundle, true, false);
+										bundle, true, true);
 								}
 							}
 							Bundle bundle = new Bundle();
@@ -802,7 +802,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
 									bundle.putString(LABEL, txtLables.getText().toString());
 									navigator.openPage(
 										NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-										bundle, true, false);
+										bundle, true, true);
 								}
 							}
 							Bundle bundle = new Bundle();

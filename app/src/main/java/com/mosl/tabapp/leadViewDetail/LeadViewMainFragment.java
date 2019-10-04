@@ -70,7 +70,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 	private static final String SEARCH_TYPE_LEAD = "Lead";
 	private static final String SEARCH_TYPE_CLIENT = "Client";
 	@Inject EkycNavigator ekycNavigator;
-	private ArrayList<Fragment> pageListLeadView = new ArrayList<>();
+	private ArrayList<Fragment> pageListLeadView;
 	private ImageView ivLead;
 	private TextView tvClientCode, tvLeadId, tvBranchCode, tvCurrentStage, tvCurrentStageSince,
 		tvName;
@@ -81,7 +81,8 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 	private Integer oaoUserId = 0;
 	private String LeadOwner = "";
 	private String searchType = SEARCH_TYPE_LEAD;
-
+	private LockedViewPager vpLeadView;
+	private TabLayout indicatorLeadView;
 	@Override protected int getLayout() {
 		return R.layout.frag_leadview_main;
 	}
@@ -115,14 +116,12 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
 	private void setUpView(View leadViewDetailView) {
 
-		LockedViewPager vpLeadView = leadViewDetailView.findViewById(R.id.vpLeadView);
+		vpLeadView = leadViewDetailView.findViewById(R.id.vpLeadView);
 		vpLeadView.setPagingEnabled(false);
-		TabLayout indicatorLeadView = leadViewDetailView.findViewById(R.id.indicatorLeadView);
+		indicatorLeadView = leadViewDetailView.findViewById(R.id.indicatorLeadView);
 
 		ivLead = leadViewDetailView.findViewById(R.id.ivLead);
-		if (!leadId.equalsIgnoreCase("0")) {
-			CRMAppUtil.setImage(new byte[0], ivLead, requireContext());
-		}
+
 		ImageView ivLeadViewArrow = leadViewDetailView.findViewById(R.id.ivLeadViewArrow);
 		ivLeadViewArrow.setVisibility(View.VISIBLE);
 		tvClientCode = leadViewDetailView.findViewById(R.id.tvClientCode);
@@ -133,11 +132,19 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 		tvCurrentStageSince = leadViewDetailView.findViewById(R.id.tvCurrentStageSince);
 
 		ivLeadViewArrow.setOnClickListener(this);
+		pagerAction();
+	}
+
+	private void pagerAction() {
+		if (!leadId.equalsIgnoreCase("0")) {
+			CRMAppUtil.setImage(new byte[0], ivLead, requireContext());
+		}
 		String[] headingClient = new String[5];
 		LeadViewDetailFragment leadViewDetailFragment;
 		LeadViewActivitiesFragment leadViewActivitieFragment;
 		LeadViewHistoryFragment leadViewHistoryFragment;
 		LeadViewInteractionFragment leadViewInteractionFragment;
+		pageListLeadView = new ArrayList<>();
 		if (leadId.equalsIgnoreCase("0")) {
 			headingClient[0] = DETAILS;
 			headingClient[1] = ACTIVITIES;
@@ -519,12 +526,14 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(URL_PATH, encryptedUrl);
 			//navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
 			//	true);
-			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
+			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, true);
 		}
 	}
 
 	@Override public void onFragmentReopened(@NotNull Bundle args) {
 		super.onFragmentReopened(args);
 		getUserID(args);
+		pagerAction();
+
 	}
 }

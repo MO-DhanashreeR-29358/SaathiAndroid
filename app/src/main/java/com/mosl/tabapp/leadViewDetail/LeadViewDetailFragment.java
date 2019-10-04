@@ -160,9 +160,7 @@ public class LeadViewDetailFragment extends CommonFragment
 	private final ArrayList<RowData> arrSelectProfile = new ArrayList<>();
 	private final ArrayList<RowData> arrInterested = new ArrayList<>();
 	private final ArrayList<RowData> arrCrossSellingProductId = new ArrayList<>();
-	private final ArrayList<RowData> arrState = new ArrayList<>();
 	private final ArrayList<RowData> arrCity = new ArrayList<>();
-	private final ArrayList<RowData> arrOffState = new ArrayList<>();
 	private final ArrayList<RowData> arrOffCity = new ArrayList<>();
 	private LinearLayout NewDataLinearLayout;
 	private View leadViewDetailView;
@@ -1372,8 +1370,9 @@ public class LeadViewDetailFragment extends CommonFragment
 
 		List<StateProvinceItem> data = uiModel.data;
 		if (data != null) {
-			arrState.clear();
-			arrOffState.clear();
+			ArrayList<RowData> arrState = new ArrayList<>();
+			ArrayList<RowData> arrOffState = new ArrayList<>();
+
 			arrState.add(new RowData(0, "-1", "Select"));
 			arrOffState.add(new RowData(0, "-1", "Select"));
 
