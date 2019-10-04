@@ -227,7 +227,7 @@ class CommonActivity : BaseActivity(),
 
       @SuppressLint("SwitchIntDef")
       override fun onDrawerClosed(drawerView: View) {
-        activityNavHelper.handlePendingMenuAction()
+        activityNavHelper.handlePendingMenuAction(this@CommonActivity)
       }
 
       override fun onDrawerStateChanged(newState: Int) {

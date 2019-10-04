@@ -42,7 +42,6 @@ class ActivityNavigationHelper @Inject constructor(
   internal val screenNavigator: BaseNavigator,
   internal val ekycNavigator: EkycNavigator,
   internal val userManager: UserManagerImpl,
-  val context: Context,
   val navigator: Navigator,
   val saathiApi: SaathiApi
 
@@ -91,19 +90,22 @@ class ActivityNavigationHelper @Inject constructor(
     pendingMenuAction = appMenu
   }
 
-  fun handlePendingMenuAction() {
+  fun handlePendingMenuAction(context: Context) {
     pendingMenuAction?.let {
-      handleNavigation(it)
+      handleNavigation(it, context)
     }
     pendingMenuAction = null
   }
 
-  fun handleNavigation(appMenu: AppMenu) {
+  fun handleNavigation(
+    appMenu: AppMenu,
+    context: Context
+  ) {
     val target = appMenu.pageId
     when (target) {
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> openEkycApp(false)
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> openEkycApp(true)
-      NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> getSuggestMe()
+      NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> getSuggestMe(context)
       NavigationConstants.NAVIGATE_TO_REPORTS -> navigateToReport(appMenu)
       else -> loadFragment(target)
     }
@@ -119,7 +121,7 @@ class ActivityNavigationHelper @Inject constructor(
     }
   }
 
-  private fun getSuggestMe() {
+  private fun getSuggestMe(context: Context) {
     if (context.isNetworkConnected()) {
       val request = SuggestMeRequest(0, 0)
       disposable.add(
@@ -129,20 +131,21 @@ class ActivityNavigationHelper @Inject constructor(
                   applyUiModel()
               )
               .subscribe(
-                  Consumer { this.renderSuggestMe(it) })
+                  Consumer { this.renderSuggestMe(it, context) })
       )
     } else {
-      noInternetConnectionDialog()
+      noInternetConnectionDialog(context)
     }
   }
 
   private fun renderSuggestMe(
-    uiModel: UiModel<SaathiCommonResponse<ProspectResponse>>
+    uiModel: UiModel<SaathiCommonResponse<ProspectResponse>>,
+    context: Context
   ) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      showOnFailurePopup(error, context)
     }
 
 
@@ -174,7 +177,7 @@ class ActivityNavigationHelper @Inject constructor(
           .subscribe { this.renderProspect(it, context) })
 
     } else {
-      noInternetConnectionDialog()
+      noInternetConnectionDialog(context)
     }
   }
 
@@ -185,7 +188,7 @@ class ActivityNavigationHelper @Inject constructor(
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      showOnFailurePopup(error, context)
     }
 
     uiModel.onSuccess { data ->
@@ -197,7 +200,7 @@ class ActivityNavigationHelper @Inject constructor(
       } else {
         MSFDialog.alertDialog(
             context, 0,
-            this.context.getResources().getString(R.string.motilal_oswal),
+            context.getResources().getString(R.string.motilal_oswal),
             data.message, "OK", true, null
         )
       }
@@ -211,7 +214,7 @@ class ActivityNavigationHelper @Inject constructor(
     screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_REPORTS, bundle, false)
   }
 
-  private fun noInternetConnectionDialog() {
+  private fun noInternetConnectionDialog(context: Context) {
     MSFDialog.alertDialog(
         context, 0,
         context.getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION,
@@ -220,7 +223,10 @@ class ActivityNavigationHelper @Inject constructor(
     )
   }
 
-  fun showOnFailurePopup(t: Throwable) {
+  fun showOnFailurePopup(
+    t: Throwable,
+    context: Context
+  ) {
     val message: String
     if (t is ServiceFailureException) {
       message = t.errorMessage
