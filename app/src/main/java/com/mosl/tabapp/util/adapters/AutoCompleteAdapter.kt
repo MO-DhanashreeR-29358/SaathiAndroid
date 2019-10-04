@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.mosl.app.core.utils.hideKeyBoard
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
@@ -29,7 +28,8 @@ import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 
 class AutoCompleteAdapter(
   context: Context,
-  val userManager: UserManager
+  val userManager: UserManager,
+  val clickListener: SearchResultClickListener
 ) : BaseAdapter(), Filterable {
   private val inflater: LayoutInflater = LayoutInflater.from(context)
   private val resultsList = ArrayList<SearchResultModel>()
@@ -69,7 +69,6 @@ class AutoCompleteAdapter(
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientID.visibility = View.GONE
         holderView.clientUcid.visibility = View.GONE
-//        holderView.clientName.setText("")
         holderView.error.visibility = View.VISIBLE
       } else {
         holderView.llExpand.setOnClickListener({
@@ -121,20 +120,16 @@ class AutoCompleteAdapter(
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
       holderView.rlSetAppointment.setOnClickListener({
-        hideKeyBoard(holderView.rlSetAppointment)
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       })
       holderView.rlCreateMeeting.setOnClickListener({
-        hideKeyBoard(holderView.rlCreateMeeting)
         openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
       })
       holderView.rlViewDetail.setOnClickListener({
-        hideKeyBoard(holderView.rlViewDetail)
         bundle.putString(MOBILE, resultModel.mobileNo)
         openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
       })
       holderView.rlOpenAccount.setOnClickListener({
-        hideKeyBoard(holderView.rlOpenAccount)
         clearAll()
         val data = EkycModule(
             mobile = resultModel.mobileNo, email = resultModel.email,
@@ -144,10 +139,11 @@ class AutoCompleteAdapter(
             source = resultModel.sourceName
         )
         convertToEkyc.gotoEkycPage(data)
+        clickListener.onSearchResultClick()
       })
       holderView.rlOAOForm.setOnClickListener({
-        hideKeyBoard(holderView.rlOAOForm)
         navigator.openNewEkycApp(true, resultModel.oaoUserId.toString())
+        clickListener.onSearchResultClick()
       })
       holderView.llExpand.setOnClickListener({
         if (!resultModel.isExpanded) {
@@ -162,7 +158,6 @@ class AutoCompleteAdapter(
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientID.visibility = View.GONE
         holderView.clientUcid.visibility = View.GONE
-//        holderView.clientName.setText("")
       } else {
         holderView.ivDropDownArrow.visibility = View.VISIBLE
         holderView.error.visibility = View.GONE
@@ -177,6 +172,7 @@ class AutoCompleteAdapter(
   ) {
     clearAll()
     navigator.openPage(navigationConstants, bundle)
+    clickListener.onSearchResultClick()
   }
 
   override fun getItem(position: Int): SearchResultModel {
@@ -241,5 +237,9 @@ class AutoCompleteAdapter(
 
   interface ConvertToEkyc {
     fun gotoEkycPage(ekycModule: EkycModule)
+  }
+
+  interface SearchResultClickListener {
+    fun onSearchResultClick()
   }
 }

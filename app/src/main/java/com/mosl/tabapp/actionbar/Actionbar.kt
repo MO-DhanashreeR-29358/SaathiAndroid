@@ -12,7 +12,6 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.jakewharton.rxbinding3.widget.itemClickEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.hideKeyBoard
@@ -51,7 +50,7 @@ import com.mosl.tabapp.util.SOURCENAME
 import com.mosl.tabapp.util.UCID
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
-import io.reactivex.Observable
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.SearchResultClickListener
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -64,7 +63,7 @@ class Actionbar @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null,
   defStyleAttr: Int = 0
-) : RelativeLayout(context, attrs, defStyleAttr) {
+) : RelativeLayout(context, attrs, defStyleAttr), SearchResultClickListener {
 
   @Inject
   lateinit var saathiApi: SaathiApi
@@ -104,7 +103,7 @@ class Actionbar @JvmOverloads constructor(
     ivIcon = findViewById(R.id.ivIcon) as ImageView
     llSearch = findViewById(R.id.llSearch)
 
-    autoCompleteAdapter = AutoCompleteAdapter(context, userManager)
+    autoCompleteAdapter = AutoCompleteAdapter(context, userManager, this)
     searchBoxView.setAdapter(autoCompleteAdapter)
 
     val searchObs = searchBoxView.textChanges()
@@ -168,9 +167,6 @@ class Actionbar @JvmOverloads constructor(
         }
         .subscribe(this::renderSearchResult)
         .addTo(disposable)
-
-    onSearchResultClicked().subscribe { handleSearchResultClick(it) }
-        .addTo(disposable)
   }
 
   fun getSearchType(): String {
@@ -181,23 +177,9 @@ class Actionbar @JvmOverloads constructor(
     }
   }
 
-  fun onSearchResultClicked(): Observable<SearchResultModel> {
-    return searchBoxView.itemClickEvents()
-        .map { event ->
-          val item = autoCompleteAdapter.getItem(event.position)
-          searchBoxView.tag = item
-          item
-        }
-  }
-
-  private fun handleSearchResultClick(searchResult: SearchResultModel) {
-    /*if (searchResult.clientName.equals("No Match Found", ignoreCase = true)) {
-      setSearchText("")
-      hideKeyBoard(searchBoxView)
-      return
-    }*/
-    setSearchText("")
+  override fun onSearchResultClick() {
     hideKeyBoard(searchBoxView)
+    setSearchText("")
   }
 
   fun setSearchText(text: String) {
