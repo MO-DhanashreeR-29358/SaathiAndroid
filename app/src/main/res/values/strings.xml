@@ -53,6 +53,11 @@
     <string name="hint_text_employee_code">Employee Code</string>
     <string name="hint_text_password">Password</string>
 
+    <string name="mgs_update_address">Kindly update address and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
+
+
     <!--franchise-lead & lead creation-->
 
 

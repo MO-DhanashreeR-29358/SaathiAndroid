@@ -37,6 +37,7 @@ import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -47,6 +48,7 @@ import com.mosl.tabapp.splash.SplashActivityNew
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.MsgDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
@@ -59,7 +61,7 @@ class CommonActivity : BaseActivity(),
     Navigator,
     ActivityDelegate,
     QuickAction.OnActionItemClickListener,
-    ConvertToEkyc {
+    ConvertToEkyc, MsgDialog {
 
   lateinit var binding: ActivityCommonbaseBinding
   @Inject
@@ -104,6 +106,7 @@ class CommonActivity : BaseActivity(),
     binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
     binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
     binding.actionBar.autoCompleteAdapter.setConvertToEkycListener(this)
+    binding.actionBar.autoCompleteAdapter.setErrorMsgDialogListener(this)
     hideAppTitle()
     setupMenuDrawer()
     if (savedInstanceState == null) {
@@ -445,6 +448,14 @@ class CommonActivity : BaseActivity(),
         finish()
       }
     }
+  }
+
+  override fun erroMsgDialog(message: String) {
+    com.mosl.tabapp.ui.MSFDialog.alertDialog(
+        this, 0,
+        resources.getString(R.string.motilal_oswal), message, MOSLConstants.OK, true,
+        null
+    )
   }
 
   companion object {

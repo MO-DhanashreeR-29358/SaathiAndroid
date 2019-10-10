@@ -1714,6 +1714,8 @@ public class MOSLCommonActivity extends AppCompatActivity
 												String email =
 													jsonObjMetatata.getString(EMAIL) == null ? ""
 														: jsonObjMetatata.getString(EMAIL);
+												int createMeetinId =
+													jsonObjMetatata.getInt(CREATE_MEETING_ID);
 												// String clientCode = jsonObjMetatata.getString(CLIENTCODE) == null ? "" : jsonObjMetatata.getString(CLIENTCODE);
 
 												if (jsonObjMetatata.has(CLIENTCODE)) {
@@ -1767,11 +1769,11 @@ public class MOSLCommonActivity extends AppCompatActivity
 															oaoUserId, sourceName,
 															prospectSourceName,
 															prospectSourceDetails, interestedIn,
-															clientCode));
+															clientCode, createMeetinId));
 													modelList.add(
 														new SearchResultModel(searchType, "", "",
 															"", "", "", "", null, "", "", "", "",
-															""));
+															"", 0));
 												} else {
 													modelList.add(
 														new SearchResultModel(searchType, leadID,
@@ -1779,13 +1781,13 @@ public class MOSLCommonActivity extends AppCompatActivity
 															oaoUserId, sourceName,
 															prospectSourceName,
 															prospectSourceDetails, interestedIn,
-															clientCode));
+															clientCode, createMeetinId));
 													if (jsonArray.length() > 7
 														&& i == (jsonArray.length() - 1)) {
 														modelList.add(
 															new SearchResultModel(searchType, "",
 																"", "", "", "", "", null, "", "",
-																"", "", ""));
+																"", "", "", 0));
 													}
 												}
 
