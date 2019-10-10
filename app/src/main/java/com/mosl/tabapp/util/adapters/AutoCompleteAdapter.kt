@@ -27,7 +27,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 
 class AutoCompleteAdapter(
-  context: Context,
+  val context: Context,
   val userManager: UserManager,
   val clickListener: SearchResultClickListener
 ) : BaseAdapter(), Filterable {
@@ -35,6 +35,7 @@ class AutoCompleteAdapter(
   private val resultsList = ArrayList<SearchResultModel>()
   lateinit var navigator: ScreenNavigatorImpl
   lateinit var convertToEkyc: ConvertToEkyc
+  lateinit var msgDialog: MsgDialog
 
   fun setScreenNavigator(screenNavigator: ScreenNavigatorImpl) {
     this.navigator = screenNavigator
@@ -42,6 +43,10 @@ class AutoCompleteAdapter(
 
   fun setConvertToEkycListener(convertToEkyc: ConvertToEkyc) {
     this.convertToEkyc = convertToEkyc
+  }
+
+  fun setErrorMsgDialogListener(msgDialog: MsgDialog) {
+    this.msgDialog = msgDialog
   }
 
   override fun getView(
@@ -89,6 +94,7 @@ class AutoCompleteAdapter(
     } else {
       holderView.clientName.setText(name)
       val clientCode = resultModel.clientCode
+      val creacteMeetingId = resultModel.createMeetingId
       if (resultModel.hasClientCode()) {
         holderView.clientID.setText(String.format("Lead Id/Client Code: %s", clientCode))
       } else {
@@ -123,7 +129,16 @@ class AutoCompleteAdapter(
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       })
       holderView.rlCreateMeeting.setOnClickListener({
-        openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
+        if (creacteMeetingId == 0) {
+          openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
+        } else if (creacteMeetingId == 1) {
+          msgDialog.erroMsgDialog(context.resources.getString(R.string.mgs_update_address))
+        } else if (creacteMeetingId == 2) {
+          msgDialog.erroMsgDialog(context.resources.getString(R.string.mgs_update_profile))
+        } else if (creacteMeetingId == 3) {
+          msgDialog.erroMsgDialog(context.resources.getString(R.string.mgs_update_profile_address))
+        }
+
       })
       holderView.rlViewDetail.setOnClickListener({
         bundle.putString(MOBILE, resultModel.mobileNo)
@@ -237,6 +252,10 @@ class AutoCompleteAdapter(
 
   interface ConvertToEkyc {
     fun gotoEkycPage(ekycModule: EkycModule)
+  }
+
+  interface MsgDialog {
+    fun erroMsgDialog(msg: String)
   }
 
   interface SearchResultClickListener {

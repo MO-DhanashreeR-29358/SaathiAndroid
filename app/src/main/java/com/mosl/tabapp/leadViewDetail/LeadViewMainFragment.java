@@ -83,6 +83,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 	private String searchType = SEARCH_TYPE_LEAD;
 	private LockedViewPager vpLeadView;
 	private TabLayout indicatorLeadView;
+	private int createMeetingId = 0;
 	@Override protected int getLayout() {
 		return R.layout.frag_leadview_main;
 	}
@@ -311,6 +312,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			String leadId = stringOrEmpty(String.valueOf(data.leadID));
 			String branchCode = stringOrEmpty(data.branchcode);
 			Contact contact = data.contact;
+			createMeetingId = data.createMeetingId;
 			LeadOwner = stringOrEmpty(data.leadOwner);
 			sourceName = stringOrEmpty(data.sourceName);
 			prospectSourceName = stringOrEmpty(data.prospectSource);
@@ -430,7 +432,15 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			Bundle bundle = new Bundle();
 			bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
 			bundle.putString(UCID, mUCID);
-			navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
+			if (createMeetingId == 0) {
+				navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
+			} else if (createMeetingId == 1) {
+				erroMsgDialog(getString(R.string.mgs_update_address));
+			} else if (createMeetingId == 2) {
+				erroMsgDialog(getString(R.string.mgs_update_profile));
+			} else if (createMeetingId == 3) {
+				erroMsgDialog(getString(R.string.mgs_update_profile_address));
+			}
 			dialog.dismiss();
 		});
 		ivSetAppointment.setOnClickListener(view -> {

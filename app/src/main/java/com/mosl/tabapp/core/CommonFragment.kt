@@ -131,4 +131,12 @@ open class CommonFragment : BaseFragment() {
         null
     )
   }
+
+  fun erroMsgDialog(message: String) {
+    MSFDialog.alertDialog(
+        requireContext(), 0,
+        resources.getString(R.string.motilal_oswal), message, MOSLConstants.OK, true,
+        null
+    )
+  }
 }

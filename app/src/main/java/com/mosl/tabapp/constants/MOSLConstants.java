@@ -618,5 +618,7 @@ public interface MOSLConstants extends LabelConfig {
 	String STRING_MAP = "map";
 	String STRING_TITLE = "title";
   String AU_BANK_SALES_SUPPORT_BUSSINESS_PROFILEID = "1142";
+  String CREATE_MEETING_ID = "CreateMeeting";
+
 }
 

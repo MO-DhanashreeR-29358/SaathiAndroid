@@ -28,6 +28,7 @@ import com.mosl.saathi.api.model.SearchResponse
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
+import com.mosl.tabapp.constants.MOSLConstants.CREATE_MEETING_ID
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
 import com.mosl.tabapp.model.SearchResultModel
@@ -147,10 +148,11 @@ class Actionbar @JvmOverloads constructor(
                       val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
                       val oaoUserId = jsonObject.getInt(OAOUSERID)
                       val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
+                      val createMeetingId = jsonObject.getInt(CREATE_MEETING_ID) ?: 0
                       SearchResultModel(
                           getSearchHint(), leadid, name, mobile, email, ucid, leadOwner, oaoUserId,
                           sourceName, prospectSourceName,
-                          prospectSourceDetails, interestedIn, clientCode
+                          prospectSourceDetails, interestedIn, clientCode, createMeetingId
                       )
                     }
                   }

@@ -18,7 +18,7 @@ public class ClientDetail implements MOSLConstants {
     private static String currentStageSince = "";
     private static String leadId = "";
     private static String mobile = "";
-
+    private static Integer createMeetingId;
     public static Integer getOaoUserId() {
         return oaoUserId;
     }
@@ -33,6 +33,7 @@ public class ClientDetail implements MOSLConstants {
     //region constructor
     public ClientDetail() {
     }
+
 
     public ClientDetail(ClientDetailItem response) {
 
@@ -49,6 +50,7 @@ public class ClientDetail implements MOSLConstants {
 
             name = response.clientName;
             mobile = response.mobile;
+            createMeetingId = response.createMeetingId;
             if (String.valueOf(response.leadID) != null) {
                 leadId = String.valueOf(response.leadID);
             }
@@ -65,6 +67,14 @@ public class ClientDetail implements MOSLConstants {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Integer getCreateMeetingId() {
+        return createMeetingId;
+    }
+
+    public static void setCreateMeetingId(Integer createMeetingId) {
+        ClientDetail.createMeetingId = createMeetingId;
     }
 
     //endregion
