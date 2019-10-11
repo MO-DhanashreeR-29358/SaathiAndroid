@@ -526,7 +526,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 			bundle.putString(URL_PATH, encryptedUrl);
 			//navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
 			//	true);
-			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, true);
+			navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
 		}
 	}
 
