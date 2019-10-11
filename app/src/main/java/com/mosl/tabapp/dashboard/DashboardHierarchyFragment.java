@@ -404,7 +404,7 @@ public class DashboardHierarchyFragment extends CommonFragment {
 									navigator.openPage(
 										NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
 										bundle,
-										true, true);
+										true, false);
 								}
 							}
 							Bundle bundle = new Bundle();
@@ -460,7 +460,7 @@ public class DashboardHierarchyFragment extends CommonFragment {
 									navigator.openPage(
 										NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
 										bundle,
-										true, true);
+										true, false);
 								}
 							}
 							Bundle bundle = new Bundle();
