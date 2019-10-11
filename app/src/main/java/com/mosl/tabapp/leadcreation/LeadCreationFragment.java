@@ -113,7 +113,6 @@ import static com.mosl.tabapp.constants.MOSLConstants.INVALID_MOBILE_NO;
 import static com.mosl.tabapp.constants.MOSLConstants.LEADCATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
 import static com.mosl.tabapp.constants.MOSLConstants.LOGOUT_CODE;
-import static com.mosl.tabapp.constants.MOSLConstants.NAV_TO_LEAD_CREATION;
 import static com.mosl.tabapp.constants.MOSLConstants.OFFICE;
 import static com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS;
 import static com.mosl.tabapp.constants.MOSLConstants.PRODUCTTYPE;
@@ -127,6 +126,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.WEBSITE_CLIENT_REFERRAL;
 import static com.mosl.tabapp.constants.MOSLConstants.WEBSITE_PROSPECT_REFERRAL;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_CREATION;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -2472,7 +2472,7 @@ public class LeadCreationFragment extends CommonFragment
 		});
 		btnClose.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View view) {
-				navigator.openPage(NAV_TO_LEAD_CREATION, true);
+				navigator.openPage(NAVIGATE_TO_LEAD_CREATION, new Bundle(), true, false);
 				dialog.dismiss();
 			}
 		});
