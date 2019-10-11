@@ -24,6 +24,7 @@ import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
 import com.mosl.tabapp.Permisssion.PermissionCheckHelper
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMMOSLCommon.enableLocationSetting
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
@@ -55,6 +56,8 @@ class LoginActivityNew : BaseActivity(), Navigator, LoginView {
     if (VERSION.SDK_INT >= VERSION_CODES.M) {
       permissionCheckHelper.requestAllPermissions()
     }
+    enableLocationSetting(this)
+
     binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
     presenter.start()
   }
