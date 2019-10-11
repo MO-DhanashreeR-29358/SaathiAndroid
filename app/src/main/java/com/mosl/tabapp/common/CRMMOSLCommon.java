@@ -8,24 +8,21 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import androidx.core.app.ActivityCompat;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.Task;
 import com.mosl.tabapp.constants.MOSLConstants;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,6 +40,7 @@ import org.json.JSONObject;
 public class CRMMOSLCommon {
 
     final static int REQUEST_LOCATION = 199;
+	private static final int REQUEST_CHECK_SETTINGS = 100;
 
     public static void setPermisson(Activity activity, Context context) {
 
@@ -94,66 +92,52 @@ public class CRMMOSLCommon {
                 activity.requestPermissions(permissionString, 100);
             }
         }
-        enableLoc(activity);
-    }
+		enableLocationSetting(activity);
+	}
 
-    public static void enableLoc(final Activity activity) {
-        GoogleApiClient googleApiClient = null;
-        if (googleApiClient == null) {
-            final GoogleApiClient finalGoogleApiClient = googleApiClient;
-            googleApiClient = new GoogleApiClient.Builder(activity)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(Bundle bundle) {
+	public static void enableLocationSetting(Activity activity) {
+		LocationRequest mLocationRequest = LocationRequest.create();
+		mLocationRequest.setInterval(10000);
+		mLocationRequest.setFastestInterval(5000);
+		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                        }
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+			.addLocationRequest(mLocationRequest);
 
-                        @Override
-                        public void onConnectionSuspended(int i) {
-                            finalGoogleApiClient.connect();
-                        }
-                    })
-                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(ConnectionResult connectionResult) {
+		SettingsClient client = LocationServices.getSettingsClient(activity);
+		Task<LocationSettingsResponse> result = client.checkLocationSettings(builder.build());
 
-                            Log.d("Location error", "Location error " + connectionResult.getErrorCode());
-                        }
-                    }).build();
-            googleApiClient.connect();
-
-            LocationRequest locationRequest = LocationRequest.create();
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval(30 * 1000);
-            locationRequest.setFastestInterval(5 * 1000);
-            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                    .addLocationRequest(locationRequest);
-
-            builder.setAlwaysShow(true);
-
-            PendingResult<LocationSettingsResult> result =
-                    LocationServices.SettingsApi.checkLocationSettings(googleApiClient, builder.build());
-            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-                @Override
-                public void onResult(LocationSettingsResult result) {
-                    final Status status = result.getStatus();
-                    switch (status.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                            try {
-                                // Show the dialog by calling startResolutionForResult(),
-                                // and check the result in onActivityResult().
-                                status.startResolutionForResult(activity, REQUEST_LOCATION);
-
-//                                activity.finish();
-                            } catch (IntentSender.SendIntentException e) {
-                                // Ignore the error.
-                            }
-                            break;
-                    }
-                }
-            });
-        }
+		result.addOnCompleteListener(task -> {
+			try {
+				LocationSettingsResponse response = task.getResult(ApiException.class);
+				// All location settings are satisfied. The client can initialize location
+				// requests here.
+			} catch (ApiException exception) {
+				switch (exception.getStatusCode()) {
+					case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+						// Location settings are not satisfied. But could be fixed by showing the
+						// user a dialog.
+						try {
+							// Cast to a resolvable exception.
+							ResolvableApiException resolvable = (ResolvableApiException) exception;
+							// Show the dialog by calling startResolutionForResult(),
+							// and check the result in onActivityResult().
+							resolvable.startResolutionForResult(
+								activity,
+								REQUEST_CHECK_SETTINGS);
+						} catch (IntentSender.SendIntentException e) {
+							// Ignore the error.
+						} catch (ClassCastException e) {
+							// Ignore, should be an impossible error.
+						}
+						break;
+					case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+						// Location settings are not satisfied. However, we have no way to fix the
+						// settings so we won't show the dialog.
+						break;
+				}
+			}
+		});
     }
 
     public static boolean hasGPSDevice(Context context) {

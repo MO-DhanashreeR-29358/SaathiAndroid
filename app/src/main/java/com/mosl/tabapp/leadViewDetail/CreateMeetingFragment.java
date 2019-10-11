@@ -96,7 +96,7 @@ import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
-import static com.mosl.tabapp.common.CRMMOSLCommon.enableLoc;
+import static com.mosl.tabapp.common.CRMMOSLCommon.enableLocationSetting;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE;
@@ -1131,7 +1131,7 @@ public class CreateMeetingFragment extends CommonFragment
 			Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
 			&& hasGPSDevice(requireContext())) {
 
-			enableLoc(requireActivity());
+			enableLocationSetting(requireActivity());
 
 			return false;
 		}
