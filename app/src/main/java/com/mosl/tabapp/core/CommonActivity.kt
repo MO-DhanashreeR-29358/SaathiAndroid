@@ -28,12 +28,7 @@ import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
-import com.mosl.navigator.AppTitle
-import com.mosl.navigator.AuthorizationState
-import com.mosl.navigator.FragmentNavigationEntry
-import com.mosl.navigator.FragmentResolver
-import com.mosl.navigator.NavigationHelper
-import com.mosl.navigator.Navigator
+import com.mosl.navigator.*
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
@@ -52,8 +47,7 @@ import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.MsgDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
-import java.util.HashMap
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -450,10 +444,10 @@ class CommonActivity : BaseActivity(),
     }
   }
 
-  override fun erroMsgDialog(message: String) {
+  override fun erroMsgDialog(msg: String) {
     com.mosl.tabapp.ui.MSFDialog.alertDialog(
         this, 0,
-        resources.getString(R.string.motilal_oswal), message, MOSLConstants.OK, true,
+      resources.getString(R.string.motilal_oswal), msg, MOSLConstants.OK, true,
         null
     )
   }
