@@ -1,16 +1,9 @@
 package com.mosl.mobile.user.login
 
 import android.content.Context
-import android.util.Log
 import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.LogoutInfo
-import com.mosl.mobile.user.model.LoginInfo
-import com.mosl.mobile.user.model.LoginResponse
-import com.mosl.mobile.user.model.ReportType
-import com.mosl.mobile.user.model.VersionInfo
-import com.mosl.mobile.user.model.VersionResponse
-import com.mosl.mobile.user.model.transform
-import com.mosl.mobile.user.model.transformReportData
+import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.logout.LogoutRequest
@@ -34,7 +27,7 @@ class AppUserRepositoryImpl @Inject constructor(
             macAddress = getDeviceID(context.contentResolver)
         )
     )
-        .map { response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform() }
+        .map { response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform(request.password) }
   }
 
   override fun versionCheck(versionInfo: VersionInfo): Observable<VersionResponse> {

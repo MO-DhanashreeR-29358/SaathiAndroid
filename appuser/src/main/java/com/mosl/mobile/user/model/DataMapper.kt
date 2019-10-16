@@ -7,10 +7,12 @@ import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionResponse
 
 fun LoginResponse.transform(
+    password: String
 ): com.mosl.mobile.user.model.LoginResponse {
+
   val userProfile = user
   return LoginResponse(
-      user = userProfile.transformUser(smtEnabled),
+      user = userProfile.transformUser(smtEnabled, password),
       smtEnabled = smtEnabled
   )
 }
@@ -28,7 +30,8 @@ fun VersionResponse.transform(
 }
 
 fun com.mosl.saathi.api.model.login.User.transformUser(
-  smtEnabled: String
+    smtEnabled: String,
+    password: String
 
 ): User {
   val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
@@ -46,8 +49,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
       token = token ?: "0",
       userTypeSequence = userTypeSequence ?: "",
       defaultBusinessProfile = defaultBusinessProfile.transformDefaultBusinessProfile(),
-      currentBusinessProfile = currentBusinessProfile.transformCurrentBusinessProfile()
-
+      currentBusinessProfile = currentBusinessProfile.transformCurrentBusinessProfile(),
+      password = password
   )
 }
 

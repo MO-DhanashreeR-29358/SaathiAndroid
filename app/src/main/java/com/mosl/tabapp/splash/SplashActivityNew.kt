@@ -27,7 +27,6 @@ import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.LoginActivityNew
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
@@ -51,6 +50,7 @@ class SplashActivityNew : LeanBaseActivity() {
     super.onCreate(savedInstanceState)
     binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
     disposables = CompositeDisposable()
+      Timber.d("password %s", userManager.getUser()?.password)
     handler.postDelayed({
       checkNetwork()
     }, 2000)

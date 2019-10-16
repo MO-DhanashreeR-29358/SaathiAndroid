@@ -5,22 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.LEADID
-import com.mosl.tabapp.constants.MOSLConstants.MOBILE
-import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchResultModel
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -186,7 +178,7 @@ class AutoCompleteAdapter(
     bundle: Bundle
   ) {
     clearAll()
-    navigator.openPage(navigationConstants, bundle, true)
+    navigator.openPage(navigationConstants, bundle, true, false)
     clickListener.onSearchResultClick()
   }
 
