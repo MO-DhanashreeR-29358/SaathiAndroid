@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
@@ -33,7 +34,12 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ui.MSFDialog;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -44,17 +50,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class PendingForApprovalFragment extends CommonFragment
-    implements View.OnClickListener, MOSLConstants {
+        implements View.OnClickListener, MOSLConstants {
 
     private View pendingForApprovalView;
     private Spinner spProfileChange, spSelectEmployee;
@@ -77,22 +81,22 @@ public class PendingForApprovalFragment extends CommonFragment
     private Calendar today;
     private LinearLayout llButton;
     private AdapterView.OnItemSelectedListener selectEmployeeListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    employeeCodeStr = ((RowData) spSelectEmployee.getSelectedItem()).getKey();
-                    isDataPresent();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        employeeCodeStr = ((RowData) spSelectEmployee.getSelectedItem()).getKey();
+                        isDataPresent();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
 
     public static PendingForApprovalFragment newInstance(Context context) {
         PendingForApprovalFragment fragment = new PendingForApprovalFragment();
@@ -100,6 +104,24 @@ public class PendingForApprovalFragment extends CommonFragment
         fragment.setArguments(args);
         return fragment;
     }
+
+    private AdapterView.OnItemSelectedListener selectProfileListener =
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        profileCodeStr = ((RowData) spProfileChange.getSelectedItem()).getKey();
+                        isDataPresent();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            };
 
     private void setUpView(View pendingForApprovalView) {
 
@@ -112,7 +134,7 @@ public class PendingForApprovalFragment extends CommonFragment
         tvStartDate = pendingForApprovalView.findViewById(R.id.tvStartDate);
         tvEndDate = pendingForApprovalView.findViewById(R.id.tvEndDate);
         LinearLayout llStartDate =
-            pendingForApprovalView.findViewById(R.id.llStartDate);
+                pendingForApprovalView.findViewById(R.id.llStartDate);
         LinearLayout llEndDate = pendingForApprovalView.findViewById(R.id.llEndDate);
         mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd");
         fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
@@ -130,35 +152,18 @@ public class PendingForApprovalFragment extends CommonFragment
         llButton = pendingForApprovalView.findViewById(R.id.llButton);
     }
 
-    private AdapterView.OnItemSelectedListener selectProfileListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    profileCodeStr = ((RowData) spProfileChange.getSelectedItem()).getKey();
-                    isDataPresent();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-
     @Override
     public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-		container.post(() -> setAppTitle("Pending For Approvals"));
+        container.post(() -> setAppTitle("Pending For Approvals"));
         setUpView(pendingForApprovalView);
         setUserVisibleHint(true);
         return pendingForApprovalView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_pending_for_approval;
     }
 
@@ -169,34 +174,34 @@ public class PendingForApprovalFragment extends CommonFragment
 
                 if (getSelectedRowCount() > 0 || cbClientName.isChecked()) {
                     MSFDialog.alertDialog(requireContext(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        "Are you sure, you want to approve selected request?", "Yes", "No", true,
-                        (action, data) -> {
-                            if (action == MSFDialog.Action.OK) {
-                                sendUpdateAppoovalWebService("2");
-                            }
-                        });
+                            getResources().getString(R.string.motilal_oswal),
+                            "Are you sure, you want to approve selected request?", "Yes", "No", true,
+                            (action, data) -> {
+                                if (action == MSFDialog.Action.OK) {
+                                    sendUpdateAppoovalWebService("2");
+                                }
+                            });
                 } else {
                     MSFDialog.alertDialog(requireContext(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        "Please select at least one record", "OK", true, null);
+                            getResources().getString(R.string.motilal_oswal),
+                            "Please select at least one record", "OK", true, null);
                 }
                 break;
             case R.id.btnReject:
 
                 if (getSelectedRowCount() > 0 || cbClientName.isChecked()) {
                     MSFDialog.alertDialog(requireContext(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        "Are you sure, you want to reject selected request?", "Yes", "No", true,
-                        (action, data) -> {
-                            if (action == MSFDialog.Action.OK) {
-                                sendUpdateAppoovalWebService("3");
-                            }
-                        });
+                            getResources().getString(R.string.motilal_oswal),
+                            "Are you sure, you want to reject selected request?", "Yes", "No", true,
+                            (action, data) -> {
+                                if (action == MSFDialog.Action.OK) {
+                                    sendUpdateAppoovalWebService("3");
+                                }
+                            });
                 } else {
                     MSFDialog.alertDialog(requireContext(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        "Please select at least one record", "OK", true, null);
+                            getResources().getString(R.string.motilal_oswal),
+                            "Please select at least one record", "OK", true, null);
                 }
                 break;
             case R.id.llStartDate:
@@ -215,7 +220,7 @@ public class PendingForApprovalFragment extends CommonFragment
             if (isVisibleToUser && pendingForApprovalView != null) {
                 getApprovelReqestUserList();
                 getApprovelReqestFieldList(
-                    Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD));
+                        Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,10 +232,10 @@ public class PendingForApprovalFragment extends CommonFragment
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dialog.getWindow())
-            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
         dialog.getWindow()
-            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         DatePicker dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
         DatePicker dpToDate = dialog.findViewById(R.id.datePickerToDate);
@@ -243,30 +248,30 @@ public class PendingForApprovalFragment extends CommonFragment
         if (mainFromDate != null) {
             String[] dateSplit = mainFromDate.split("-");
             dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                Integer.parseInt(dateSplit[2]),
-                (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+                    Integer.parseInt(dateSplit[2]),
+                    (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.getFirstDayOfWeek(), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+                    today.getFirstDayOfWeek(), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         }
 
         if (mainFromDate != null) {
             String[] dateSplit = mainToDate.split("-");
             dpToDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                Integer.parseInt(dateSplit[2]),
-                (view, year, monthOfYear, dayOfMonth) -> mainToDate =
-                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+                    Integer.parseInt(dateSplit[2]),
+                    (view, year, monthOfYear, dayOfMonth) -> mainToDate =
+                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         } else {
             dpToDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
+                    today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
 
-                    today.set(year, monthOfYear, dayOfMonth);
-                    long dayy = today.getActualMaximum(Calendar.DATE);
-                    mainToDate =
-                        year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                });
+                        today.set(year, monthOfYear, dayOfMonth);
+                        long dayy = today.getActualMaximum(Calendar.DATE);
+                        mainToDate =
+                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                    });
         }
 
         close.setOnClickListener(v -> dialog.dismiss());
@@ -276,13 +281,13 @@ public class PendingForApprovalFragment extends CommonFragment
             toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
             if (fromDat.after(toDate)) {
                 MSFDialog.alertDialog(requireContext(), 0,
-                    getResources().getString(R.string.motilal_oswal), INVALID_DATE_RANGE, "OK",
-                    true, null);
+                        getResources().getString(R.string.motilal_oswal), INVALID_DATE_RANGE, "OK",
+                        true, null);
             } else {
                 if (mainFromDate != null) {
                     fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");
                     fromPostingDate =
-                        CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
+                            CRMAppUtil.getDateStr(fromDat, DATE_FORMAT_OF_DD_MMM_YYYY);
                     tvStartDate.setText(fromPostingDate);
                 }
                 if (mainToDate != null) {
@@ -326,14 +331,14 @@ public class PendingForApprovalFragment extends CommonFragment
                 arrProfile.add(new RowData(i, lookUpId, lookUpName));
             }
             ArrayAdapter<RowData> arrAdapProfile =
-                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfileChange.setAdapter(arrAdapProfile);
             spProfileChange.setOnItemSelectedListener(selectProfileListener);
             arrAdapProfile.notifyDataSetChanged();
 
             String entityField =
-                Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD);
+                    Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD);
 
             RowData entityFieldID = getSpinnerRowDataById(entityField, arrAdapProfile);
             if (entityFieldID != null) {
@@ -345,10 +350,10 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestFieldList(final String entityField) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-				new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
+                    new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalFieldList(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderApprovalField);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderApprovalField);
         } else {
             noInternetConnectionDialog();
         }
@@ -374,11 +379,11 @@ public class PendingForApprovalFragment extends CommonFragment
                 arrEmployee.add(new RowData(i, lookUpId, lookUpName));
             }
             ArrayAdapter<RowData> arrAdapEmployee = new ArrayAdapter<>(requireContext(),
-                R.layout.simple_spinner_item, arrEmployee);
+                    R.layout.simple_spinner_item, arrEmployee);
             arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
             spSelectEmployee.setAdapter(arrAdapEmployee);
             spSelectEmployee.setOnItemSelectedListener(
-                selectEmployeeListener);
+                    selectEmployeeListener);
             arrAdapEmployee.notifyDataSetChanged();
         }
     }
@@ -386,10 +391,10 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestUserList() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-				new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
+                    new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalUserList(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderApprovalUser);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderApprovalUser);
         } else {
             noInternetConnectionDialog();
         }
@@ -412,15 +417,15 @@ public class PendingForApprovalFragment extends CommonFragment
                 renderTable(data);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void renderTable(JSONArray arrayDetail) throws JSONException {
         pendingApprovalTableAdapter =
-            new PendingApprovalTableAdapter(requireActivity(),
-                new ArrayList<HashMap<String, String>>());
+                new PendingApprovalTableAdapter(requireActivity(),
+                        new ArrayList<HashMap<String, String>>());
         table.setAdapter(pendingApprovalTableAdapter);
         selectedRowList.clear();
         selectedRowMap.clear();
@@ -431,59 +436,59 @@ public class PendingForApprovalFragment extends CommonFragment
         if (arrayDetail.length() != 0) {
             for (int y = 0; y < arrayDetail.length(); y++) {
                 JSONObject objDetail =
-                    (JSONObject) arrayDetail.get(y);
+                        (JSONObject) arrayDetail.get(y);
                 String approvalRequestId =
-                    (objDetail.isNull("ApprovalRequestId")
-                        || objDetail.getString("ApprovalRequestId")
-                        .equals("")) ? "0"
-                        : objDetail.getString("ApprovalRequestId");
+                        (objDetail.isNull("ApprovalRequestId")
+                                || objDetail.getString("ApprovalRequestId")
+                                .equals("")) ? "0"
+                                : objDetail.getString("ApprovalRequestId");
                 String employeeCode = (objDetail.isNull("UpdatedBy")
-                    || objDetail.getString("UpdatedBy").equals(""))
-                    ? "0" : objDetail.getString("UpdatedBy");
+                        || objDetail.getString("UpdatedBy").equals(""))
+                        ? "0" : objDetail.getString("UpdatedBy");
                 String leadId = (objDetail.isNull("LeadID")
-                    || objDetail.getString("LeadID").equals(""))
-                    ? "0" : objDetail.getString("LeadID");
+                        || objDetail.getString("LeadID").equals(""))
+                        ? "0" : objDetail.getString("LeadID");
                 String FieldName =
-                    (objDetail.isNull("ReferenceName") || objDetail.getString("ReferenceName")
-                        .equals("")) ? ""
-                        : objDetail.getString("ReferenceName");
+                        (objDetail.isNull("ReferenceName") || objDetail.getString("ReferenceName")
+                                .equals("")) ? ""
+                                : objDetail.getString("ReferenceName");
                 String empName =
-                    (objDetail.isNull("EmployeeName") || objDetail.getString("EmployeeName")
-                        .equals("")) ? ""
-                        : objDetail.getString("EmployeeName");
+                        (objDetail.isNull("EmployeeName") || objDetail.getString("EmployeeName")
+                                .equals("")) ? ""
+                                : objDetail.getString("EmployeeName");
                 String subOption =
-                    (objDetail.isNull("ApprovalFieldValue")
-                        || objDetail.getString("ApprovalFieldValue")
-                        .equals("")) ? ""
-                        : objDetail.getString("ApprovalFieldValue");
+                        (objDetail.isNull("ApprovalFieldValue")
+                                || objDetail.getString("ApprovalFieldValue")
+                                .equals("")) ? ""
+                                : objDetail.getString("ApprovalFieldValue");
                 String ucid = (objDetail.isNull("UCID")
-                    || objDetail.getString("UCID").equals("")) ? "0"
-                    : objDetail.getString("UCID");
+                        || objDetail.getString("UCID").equals("")) ? "0"
+                        : objDetail.getString("UCID");
                 String clientName = (objDetail.isNull("ClientName")
-                    || objDetail.getString("ClientName").equals(""))
-                    ? "" : objDetail.getString("ClientName");
+                        || objDetail.getString("ClientName").equals(""))
+                        ? "" : objDetail.getString("ClientName");
                 String clientCode = (objDetail.isNull("ClientCode")
-                    || objDetail.getString("ClientCode").equals(""))
-                    ? "0" : objDetail.getString("ClientCode");
+                        || objDetail.getString("ClientCode").equals(""))
+                        ? "0" : objDetail.getString("ClientCode");
                 String moduleName = (objDetail.isNull("Entity")
-                    || objDetail.getString("Entity").equals(""))
-                    ? "0" : objDetail.getString("Entity");
+                        || objDetail.getString("Entity").equals(""))
+                        ? "0" : objDetail.getString("Entity");
                 String FinalStatus =
-                    (objDetail.isNull("FinalStatus")
-                        || objDetail.getString("FinalStatus")
-                        .equals("")) ? "0"
-                        : objDetail.getString("FinalStatus");
+                        (objDetail.isNull("FinalStatus")
+                                || objDetail.getString("FinalStatus")
+                                .equals("")) ? "0"
+                                : objDetail.getString("FinalStatus");
                 String requestDate =
-                    (objDetail.isNull("UpdationDate")
-                        || objDetail.getString("UpdationDate")
-                        .equals("")) ? ""
-                        : objDetail.getString("UpdationDate");
+                        (objDetail.isNull("UpdationDate")
+                                || objDetail.getString("UpdationDate")
+                                .equals("")) ? ""
+                                : objDetail.getString("UpdationDate");
                 String approvedDate =
-                    (objDetail.isNull("Approver2StatusUpdateDate")
-                        || objDetail.getString(
-                        "Approver2StatusUpdateDate").equals(""))
-                        ? "" : objDetail.getString(
-                        "Approver2StatusUpdateDate");
+                        (objDetail.isNull("Approver2StatusUpdateDate")
+                                || objDetail.getString(
+                                "Approver2StatusUpdateDate").equals(""))
+                                ? "" : objDetail.getString(
+                                "Approver2StatusUpdateDate");
                 if (FinalStatus.equalsIgnoreCase("1")) {
                     Status = "Pending";
                 } else if (FinalStatus.equalsIgnoreCase("2")) {
@@ -493,16 +498,16 @@ public class PendingForApprovalFragment extends CommonFragment
                 }
 
                 requestDate =
-                    CRMAppUtil.getDateFromString(requestDate,
-                        DATE_FORMAT_TO_SERVER_MEETING,
-                        CAL_DATE_FORMAT);
+                        CRMAppUtil.getDateFromString(requestDate,
+                                DATE_FORMAT_TO_SERVER_MEETING,
+                                CAL_DATE_FORMAT);
                 approvedDate =
-                    CRMAppUtil.getDateFromString(approvedDate,
-                        DATE_FORMAT_TO_SERVER_MEETING,
-                        CAL_DATE_FORMAT);
+                        CRMAppUtil.getDateFromString(approvedDate,
+                                DATE_FORMAT_TO_SERVER_MEETING,
+                                CAL_DATE_FORMAT);
 
                 LinkedHashMap<String, String> hm =
-                    new LinkedHashMap<>();
+                        new LinkedHashMap<>();
                 hm.put(EMPLOYEE_CODE_APP, employeeCode);
                 hm.put(EMP_NAME, empName);
                 hm.put(LEAD_ID_APP, leadId);
@@ -537,23 +542,23 @@ public class PendingForApprovalFragment extends CommonFragment
             String updatedEndDate = tvEndDate.getText().toString() + " 00:00:00";
 
             ApprovalListRequest request =
-                new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
-					Objects.requireNonNull(userManager.getUser()).employeeCode, "0",
-					updatedStartDate, updatedEndDate,
-                    profileStr);
+                    new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
+                            Objects.requireNonNull(userManager.getUser()).employeeCode, "0",
+                            updatedStartDate, updatedEndDate,
+                            profileStr);
             Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
-                .map(responseS -> {
-                    JSONObject response = new JSONObject(responseS);
-                    boolean status = response.getBoolean(STATUS);
-                    if (status) {
-                        return response.getJSONObject(RESPONSE).getJSONArray(DATA);
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderApprovalRequest);
+                    .map(responseS -> {
+                        JSONObject response = new JSONObject(responseS);
+                        boolean status = response.getBoolean(STATUS);
+                        if (status) {
+                            return response.getJSONObject(RESPONSE).getJSONArray(DATA);
+                        } else {
+                            String message = response.get(MESSAGE).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::renderApprovalRequest);
         } else {
             noInternetConnectionDialog();
         }
@@ -587,15 +592,23 @@ public class PendingForApprovalFragment extends CommonFragment
 
         String data = uiModel.data;
 
+
         if (data != null) {
+            String message = "";
+            try {
+                JSONObject response = new JSONObject(data);
+                message = response.get(MESSAGE).toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             alertDialog(requireContext(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                data, "OK", true, (action, data1) -> {
-                    if (action == MSFDialog.Action.OK) {
-                        webServiceCall(employeeCodeStr,
-                            profileCodeStr);
-                    }
-                });
+                    getResources().getString(R.string.motilal_oswal),
+                    message, "OK", true, (action, data1) -> {
+                        if (action == MSFDialog.Action.OK) {
+                            webServiceCall(employeeCodeStr,
+                                    profileCodeStr);
+                        }
+                    });
         }
     }
 
@@ -611,38 +624,37 @@ public class PendingForApprovalFragment extends CommonFragment
             }
 
             MultiUpdateApprovalRequest request =
-                new MultiUpdateApprovalRequest(status, approvalRequestId.toString());
+                    new MultiUpdateApprovalRequest(status, approvalRequestId.toString());
             Disposable subscribe = getSaathiApi().postMultiUpdateApproval(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderMultiUpdate);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderMultiUpdate);
         } else {
             noInternetConnectionDialog();
         }
     }
 
 
-
     private class Item {
         private final String[] data;
 
         private Item(String employeeCode, String empName, String leadID, String clientCode,
-            String ucid, String clientName,
-            String moduleName, String fieldName, String subOption, String status,
-            String requestDate, String approvedDate, String appovalRequestId) {
-            data = new String[] {
-                employeeCode,
-                empName,
-                leadID,
-                clientCode,
-                ucid,
-                clientName,
-                moduleName,
-                fieldName,
-                subOption,
-                status,
-                requestDate,
-                approvedDate,
-                appovalRequestId
+                     String ucid, String clientName,
+                     String moduleName, String fieldName, String subOption, String status,
+                     String requestDate, String approvedDate, String appovalRequestId) {
+            data = new String[]{
+                    employeeCode,
+                    empName,
+                    leadID,
+                    clientCode,
+                    ucid,
+                    clientName,
+                    moduleName,
+                    fieldName,
+                    subOption,
+                    status,
+                    requestDate,
+                    approvedDate,
+                    appovalRequestId
             };
         }
     }
@@ -655,27 +667,27 @@ public class PendingForApprovalFragment extends CommonFragment
         private final CommonHeader[] commonHeaders;
 
         private final String[] headers = {
-            EMPLOYEE_CODE_APP,
-            EMP_NAME,
-            LEAD_ID_APP,
-            CLIENT_CODE,
-            UCID,
-            NEW_CLIENT_NAME,
-            MODULE_NAME,
-            FIELD_NAME,
-            SUB_OPTION,
-            STATUS,
-            REQUEST_DATE,
-            APPROVED_DATE,
-            APPROVAL_REQUEST_ID
+                EMPLOYEE_CODE_APP,
+                EMP_NAME,
+                LEAD_ID_APP,
+                CLIENT_CODE,
+                UCID,
+                NEW_CLIENT_NAME,
+                MODULE_NAME,
+                FIELD_NAME,
+                SUB_OPTION,
+                STATUS,
+                REQUEST_DATE,
+                APPROVED_DATE,
+                APPROVAL_REQUEST_ID
         };
 
         ArrayList<HashMap<String, String>> hashArray;
         private LayoutInflater inflater = null;
 
         private PendingApprovalTableAdapter(Context context,
-            ArrayList<HashMap<String, String>> hashArray) {
-            commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
+                                            ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
 
 
@@ -691,19 +703,19 @@ public class PendingForApprovalFragment extends CommonFragment
             hashArray.add(row);
 
             commonHeaders[0].list.add(new Item(
-                row.get(EMPLOYEE_CODE_APP),
-                row.get(EMP_NAME),
-                row.get(LEAD_ID_APP),
-                row.get(CLIENT_CODE),
-                row.get(UCID),
-                row.get(NEW_CLIENT_NAME),
-                row.get(MODULE_NAME),
-                row.get(FIELD_NAME),
-                row.get(SUB_OPTION),
-                row.get(STATUS),
-                row.get(REQUEST_DATE),
-                row.get(APPROVED_DATE),
-                row.get(APPROVAL_REQUEST_ID)
+                    row.get(EMPLOYEE_CODE_APP),
+                    row.get(EMP_NAME),
+                    row.get(LEAD_ID_APP),
+                    row.get(CLIENT_CODE),
+                    row.get(UCID),
+                    row.get(NEW_CLIENT_NAME),
+                    row.get(MODULE_NAME),
+                    row.get(FIELD_NAME),
+                    row.get(SUB_OPTION),
+                    row.get(STATUS),
+                    row.get(REQUEST_DATE),
+                    row.get(APPROVED_DATE),
+                    row.get(APPROVAL_REQUEST_ID)
 
             ));
         }
@@ -746,7 +758,7 @@ public class PendingForApprovalFragment extends CommonFragment
             inflater = LayoutInflater.from(requireContext());
             if (convertView == null) {
                 convertView =
-                    inflater.inflate(R.layout.item_table_header_first_pending, parent, false);
+                        inflater.inflate(R.layout.item_table_header_first_pending, parent, false);
             }
 
             TextView head = (convertView.findViewById(android.R.id.text1));
@@ -823,7 +835,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
             commonHeaders[0].list.clear();
             ArrayList<HashMap<String, String>> tempHashArray =
-                (ArrayList<HashMap<String, String>>) hashArray.clone();
+                    (ArrayList<HashMap<String, String>>) hashArray.clone();
             hashArray.clear();
 
             for (int i = 0; i < out.size(); i++) {
@@ -893,17 +905,17 @@ public class PendingForApprovalFragment extends CommonFragment
 
                         commonHeaders[0].list.clear();
                         ArrayList<HashMap<String, String>> tempHashArray =
-                            (ArrayList<HashMap<String, String>>) hashArray.clone();
+                                (ArrayList<HashMap<String, String>>) hashArray.clone();
                         hashArray.clear();
 
                         for (int i = 0; i < outDbl.size(); i++) {
                             Double sortedValue = outDbl.get(i);
                             for (int j = 0; j < tempHashArray.size(); j++) {
                                 LinkedHashMap sortLinkedMap =
-                                    (LinkedHashMap) tempHashArray.get(j);
+                                        (LinkedHashMap) tempHashArray.get(j);
                                 String sortColVal = (String) sortLinkedMap.get(sortCol);
                                 double sortColValue = Double.parseDouble(
-                                    Objects.requireNonNull(sortColVal));
+                                        Objects.requireNonNull(sortColVal));
                                 int retval = Double.compare(sortedValue, sortColValue);
                                 if (retval == 0) {
                                     pendingApprovalTableAdapter.add(sortLinkedMap);
@@ -928,14 +940,14 @@ public class PendingForApprovalFragment extends CommonFragment
 
                         commonHeaders[0].list.clear();
                         ArrayList<HashMap<String, String>> tempHashArray =
-                            (ArrayList<HashMap<String, String>>) hashArray.clone();
+                                (ArrayList<HashMap<String, String>>) hashArray.clone();
                         hashArray.clear();
 
                         for (int i = 0; i < outStr.size(); i++) {
                             String sortedValue = outStr.get(i);
                             for (int j = 0; j < tempHashArray.size(); j++) {
                                 LinkedHashMap sortLinkedMap =
-                                    (LinkedHashMap) tempHashArray.get(j);
+                                        (LinkedHashMap) tempHashArray.get(j);
                                 String sortColVal = (String) sortLinkedMap.get(sortCol);
                                 if (sortedValue.equals(sortColVal)) {
                                     pendingApprovalTableAdapter.add(sortLinkedMap);
@@ -955,13 +967,13 @@ public class PendingForApprovalFragment extends CommonFragment
                 convertView = inflater.inflate(R.layout.item_table_first_pending, parent, false);
             }
             LinearLayout listLayout =
-                convertView.findViewById(R.id.item_table_first);
+                    convertView.findViewById(R.id.item_table_first);
 
             listLayout.setBackgroundResource(
-                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
 
             ((TextView) convertView.findViewById(R.id.tv_table_first)).setText(
-                getDevice(row).data[column + 1]);//row= 1 to ... & col=-1
+                    getDevice(row).data[column + 1]);//row= 1 to ... & col=-1
             CheckBox cbClientNameBody = convertView.findViewById(R.id.cbClientNameBody);
             Boolean isChecked = selectedRowMap.get(row);
             if (isChecked == null) {
@@ -1001,9 +1013,9 @@ public class PendingForApprovalFragment extends CommonFragment
             LinearLayout listLayout = convertView.findViewById(R.id.item_table);
 
             listLayout.setBackgroundResource(
-                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
             ((TextView) convertView.findViewById(android.R.id.text1)).setText(
-                getDevice(row).data[column]);
+                    getDevice(row).data[column]);
             TextView text1 = convertView.findViewById(android.R.id.text1);
 
             text1.setBackgroundResource(0);
