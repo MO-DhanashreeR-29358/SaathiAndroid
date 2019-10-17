@@ -1634,6 +1634,18 @@ public class DashboardFragment extends CommonFragment
     }
 
     private void renderCurrentQuarterStatus(JSONObject responseJsonObj) throws JSONException {
+
+        tableCurrentQuaterStatusFirst.removeAllViews();
+        tableCurrentQuaterStatusSecond.removeAllViews();
+        tableCurrentQuaterStatusThree.removeAllViews();
+        tableCurrentQuaterStatusFour.removeAllViews();
+
+        llCurrentQuaterStatusFirst.setVisibility(View.GONE);
+        llCurrentQuaterStatusSecond.setVisibility(View.GONE);
+        llCurrentQuaterStatusThree.setVisibility(View.GONE);
+        llCurrentQuaterStatusFour.setVisibility(View.GONE);
+
+
         if (responseJsonObj.has("Table")) {
             JSONArray jsonArray =
                     responseJsonObj.getJSONArray("Table");
@@ -1761,7 +1773,6 @@ public class DashboardFragment extends CommonFragment
     }
 
     private void currentQuarterStatusTableFirst(String headingName, JSONArray jsonArray) {
-        tableCurrentQuaterStatusFirst.removeAllViews();
         try {
             if (jsonArray == null) return;
 
@@ -1860,7 +1871,6 @@ public class DashboardFragment extends CommonFragment
     }
 
     private void currentQuarterStatusTableSecond(String headingName, JSONArray jsonArray) {
-        tableCurrentQuaterStatusSecond.removeAllViews();
         try {
             if (jsonArray == null) return;
 
@@ -1960,7 +1970,6 @@ public class DashboardFragment extends CommonFragment
 
     private void currentQuarterStatusTableThird(String headingName,
                                                 ArrayList<HashMap<String, String>> arrayList) {
-        tableCurrentQuaterStatusThree.removeAllViews();
         LayoutInflater inFla = getActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
             for (int i = 0; i < arrayList.size(); i++) {
@@ -1987,7 +1996,6 @@ public class DashboardFragment extends CommonFragment
 
     private void currentQuarterStatusTableFourth(String headingName,
                                                  ArrayList<HashMap<String, String>> arrayList) {
-        tableCurrentQuaterStatusFour.removeAllViews();
         LayoutInflater inFla = getActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
             for (int i = 0; i < arrayList.size(); i++) {
