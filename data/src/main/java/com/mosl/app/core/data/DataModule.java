@@ -3,11 +3,14 @@ package com.mosl.app.core.data;
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor;
 import com.mosl.app.core.data.interceptor.HeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
-import dagger.Module;
-import dagger.Provides;
+
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,8 +22,8 @@ import timber.log.Timber;
     }*/
 
     static OkHttpClient.Builder createOkHttpClient() {
-        return new OkHttpClient.Builder().readTimeout(20, TimeUnit.SECONDS)
-            .connectTimeout(20, TimeUnit.SECONDS);
+        return new OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS);
     }
 
     @Provides @Singleton
