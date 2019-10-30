@@ -527,6 +527,7 @@ public class DashboardFragment extends CommonFragment
         float barSpace = 0.05f;
         float barWidth = 0.35f;
         List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
+        yDataGraphArrAdv.clear();
         for (int i = 0; i < table1Items.size(); i++) {
             ChartDataModel model = new ChartDataModel();
             com.mosl.saathi.api.model.dashboard.incentive.Table1Item item = table1Items.get(i);
