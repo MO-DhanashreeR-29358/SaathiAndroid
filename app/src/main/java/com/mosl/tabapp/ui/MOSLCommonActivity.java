@@ -45,10 +45,12 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -100,7 +102,10 @@ import com.mosl.tabapp.ui.quickdialog.ActionItem;
 import com.mosl.tabapp.ui.quickdialog.QuickAction;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import com.mosl.tabapp.ws.WebServiceDirectCall;
-import io.reactivex.disposables.Disposable;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,8 +115,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
@@ -1834,7 +1839,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 												}
 												oaoUserId = jsonObjMetatata.has(OAOUSERID)
 													&& !jsonObjMetatata.isNull(OAOUSERID)
-													? jsonObjMetatata.getInt(OAOUSERID) : null;
+														? jsonObjMetatata.getInt(OAOUSERID) : 0;
 												if (searchType.equalsIgnoreCase(SEARCH_TYPE_LEAD)) {
 													leadOwner =
 														jsonObjMetatata.getString(LEAD_OWNER)
@@ -1852,7 +1857,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 															clientCode, createMeetinId));
 													modelList.add(
 														new SearchResultModel(searchType, "", "",
-															"", "", "", "", null, "", "", "", "",
+																"", "", "", "", 0, "", "", "", "",
 															"", 0));
 												} else {
 													modelList.add(
@@ -1866,7 +1871,7 @@ public class MOSLCommonActivity extends AppCompatActivity
 														&& i == (jsonArray.length() - 1)) {
 														modelList.add(
 															new SearchResultModel(searchType, "",
-																"", "", "", "", "", null, "", "",
+																	"", "", "", "", "", 0, "", "",
 																"", "", "", 0));
 													}
 												}
