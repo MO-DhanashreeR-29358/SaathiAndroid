@@ -5,6 +5,7 @@ import android.content.Context;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
 import com.mosl.saathi.data.MOSLResponseWrapper;
+import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
@@ -106,6 +107,7 @@ public class CRMWebServiceHandler {
                         .addInterceptor(new AuthorizationInterceptor(context))
                         .addInterceptor(loggingInterceptor)
                         .addInterceptor(new EncryptionInterceptor())
+                        .eventListenerFactory(CrmApp.eventListenerFactory)
                         .build();
 
         return new Retrofit.Builder().baseUrl(CALL_BASE_URL)

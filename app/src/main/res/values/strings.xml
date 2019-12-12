@@ -185,7 +185,8 @@
     <string name="show_footer">Show footer</string>
     <string name="show_login">Login</string>
 
-
+    <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
+    <string name="button_label_ok">OK</string>
     <string-array name="BirthdayAniversary">
         <item>Birthday</item>
         <item>Anniversary</item>

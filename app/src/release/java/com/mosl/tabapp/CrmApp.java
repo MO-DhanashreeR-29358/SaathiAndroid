@@ -5,13 +5,16 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.mosl.tabapp.database.AppDatabase;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.HttpListenerFactory;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -25,6 +28,7 @@ public class CrmApp extends MultiDexApplication {
         return INSTANCE;
     }
 
+    public static HttpListenerFactory eventListenerFactory = new HttpListenerFactory();
     public static void initImageLoader(Context context) {
         // This configuration tuning is custom. You can tune every option, you may tune some of them,
         // or you can create default configuration by
