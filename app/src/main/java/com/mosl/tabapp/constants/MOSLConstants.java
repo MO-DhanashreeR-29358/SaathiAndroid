@@ -251,6 +251,7 @@ public interface MOSLConstants extends LabelConfig {
     String MOBILE = "Mobile";
     String LEAD_OWNER = "LeadOwner";
     String EMAIL = "Email";
+  String CREATE_MEETING_ID = "CreateMeeting";
     String OAOUSERID = "OAOUserID";
     String TOKEN = "Token";
     String CURRENT_BUSINESS_PROFILE = "CurrentBusinessProfile";

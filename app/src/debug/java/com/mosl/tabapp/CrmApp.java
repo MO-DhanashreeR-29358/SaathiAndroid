@@ -5,16 +5,19 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.stetho.Stetho;
 import com.mosl.tabapp.database.AppDatabase;
 import com.mosl.tabapp.ws.AppProvider;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
+import com.mosl.tabapp.ws.HttpListenerFactory;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -23,6 +26,7 @@ public class CrmApp extends MultiDexApplication {
     private static final String DATABASE_NAME = "location_db";
     private AppDatabase appDatabase;
     public static CrmApp INSTANCE;
+    public static HttpListenerFactory eventListenerFactory = new HttpListenerFactory();
 
     public static CrmApp get() {
         return INSTANCE;

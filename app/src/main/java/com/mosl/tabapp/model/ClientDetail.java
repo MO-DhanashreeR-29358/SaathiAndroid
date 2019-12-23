@@ -29,10 +29,7 @@ public class ClientDetail implements MOSLConstants {
 
     private static Integer oaoUserId;
 
-    //endregion
-    //region constructor
-    public ClientDetail() {
-    }
+    private static Integer createMeetingId;
 
     public ClientDetail(ClientDetailItem response) {
 
@@ -62,9 +59,23 @@ public class ClientDetail implements MOSLConstants {
             }
 
             oaoUserId = response.oAOUserid;
+            createMeetingId = response.createMeetingId;
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static Integer getCreateMeetingId() {
+        return createMeetingId;
+    }
+
+    //endregion
+    //region constructor
+    public ClientDetail() {
+    }
+
+    public static void setCreateMeetingId(Integer createMeetingId) {
+        ClientDetail.createMeetingId = createMeetingId;
     }
 
     //endregion

@@ -67,6 +67,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
     private String email;
     private String mUCID = "0";
     private Integer oaoUserId = 0;
+    private int createMeetingId = 0;
     private String LeadOwner = "";
     private static final String SEARCH_TYPE_LEAD = "Lead";
     private static final String SEARCH_TYPE_CLIENT = "Client";
@@ -268,6 +269,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
             tvBranchCode.setText(ClientDetail.getBranchCode());
             mobileNo = ClientDetail.getMobile();
             oaoUserId = ClientDetail.getOaoUserId();
+            createMeetingId = ClientDetail.getCreateMeetingId();
             searchType = SEARCH_TYPE_CLIENT;
         }
     }
@@ -295,6 +297,7 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
         if (data != null) {
             String leadId = stringOrEmpty(String.valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
+            createMeetingId = data.createMeetingId;
             Contact contact = data.contact;
             LeadOwner = stringOrEmpty(data.leadOwner);
             sourceName = stringOrEmpty(data.sourceName);
@@ -426,7 +429,16 @@ public class LeadViewMainFragment extends MOSLCommonFragment implements View.OnC
                 Bundle bundle = new Bundle();
                 bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
                 bundle.putString(UCID, mUCID);
-                navigateTo(NAV_TO_CREATE_MEETING, bundle, getFragmentManager(), true);
+                if (createMeetingId == 0) {
+                    navigateTo(NAV_TO_CREATE_MEETING, bundle, getFragmentManager(), true);
+                } else if (createMeetingId == 1) {
+                    erroMsgDialog(getString(R.string.mgs_update_address));
+                } else if (createMeetingId == 2) {
+                    erroMsgDialog(getString(R.string.mgs_update_profile));
+                } else if (createMeetingId == 3) {
+                    erroMsgDialog(getString(R.string.mgs_update_profile_address));
+                }
+
                 dialog.dismiss();
             }
         });
