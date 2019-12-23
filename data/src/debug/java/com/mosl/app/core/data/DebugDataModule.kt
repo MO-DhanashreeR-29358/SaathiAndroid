@@ -3,6 +3,7 @@ package com.mosl.app.core.data
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor
 import com.mosl.app.core.data.interceptor.HeaderInterceptor
 import com.mosl.app.core.data.meta.InternalAPIClient
+import com.mosl.app.core.data.util.HttpListenerFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -52,18 +53,19 @@ class DebugDataModule {
 
   internal fun createOkHttpClient(): OkHttpClient.Builder {
     return OkHttpClient.Builder()
-        .readTimeout(20, TimeUnit.SECONDS)
-        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(60, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS)
   }
 
   @Provides
   @Singleton
   @InternalAPIClient
   fun provideInternalAPIOkHttpClient(
-    @Named("BaseOkClient") okHttpClient: OkHttpClient,
-    loggingInterceptor: HttpLoggingInterceptor,
-    headerInterceptor: HeaderInterceptor,
-    encryptionInterceptor: EncryptionInterceptor
+      @Named("BaseOkClient") okHttpClient: OkHttpClient,
+      loggingInterceptor: HttpLoggingInterceptor,
+      headerInterceptor: HeaderInterceptor,
+      encryptionInterceptor: EncryptionInterceptor,
+      listenerFactory: HttpListenerFactory
 //    authorizationInterceptor: AuthorizationInterceptor
   ): OkHttpClient {
     return okHttpClient.newBuilder()
@@ -71,6 +73,7 @@ class DebugDataModule {
         .addInterceptor(loggingInterceptor)
         .addInterceptor(encryptionInterceptor)
         .addInterceptor(loggingInterceptor)
+        .eventListenerFactory(listenerFactory)
 //        .addInterceptor(authorizationInterceptor)
         .build()
   }

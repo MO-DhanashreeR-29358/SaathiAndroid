@@ -42,6 +42,7 @@ dependencies {
   implementation deps.rx.java
   implementation deps.rx.android
   implementation deps.rx.kotlin
+  implementation deps.rx.relay
   implementation deps.gson
   implementation deps.retrofit.core
   implementation deps.retrofit.gson

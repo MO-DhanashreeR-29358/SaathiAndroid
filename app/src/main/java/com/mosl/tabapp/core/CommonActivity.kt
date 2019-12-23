@@ -15,9 +15,11 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.Preference
+import com.google.android.material.snackbar.Snackbar
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
+import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
@@ -78,11 +80,13 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
   private var searchType = SEARCH_TYPE_LEAD
-
+  @Inject
+  lateinit var eventListenerFactory: HttpListenerFactory
   private lateinit var locationWorkManager: WorkManager
   private lateinit var dataSyncWorkManager: WorkManager
   private lateinit var compressionLocationWorkId: UUID
   private lateinit var compressionDataSyncWorkId: UUID
+  internal var snackbar: Snackbar? = null
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -196,6 +200,7 @@ class CommonActivity : BaseActivity(),
   }
 
   private fun setupObservables() {
+    val mainThread = dispatchers.main
     disposable.add(
 
         tokenPref.asObservable().distinctUntilChanged()
@@ -206,6 +211,17 @@ class CommonActivity : BaseActivity(),
                   .compose(applyUiModel())
             }
             .subscribe())
+
+    val Threshold = TimeUnit.SECONDS.toNanos(5)
+    eventListenerFactory.getApiStatsObservable()
+      .filter { callTime -> callTime > Threshold }
+      .observeOn(mainThread)
+      .subscribe { ignored ->
+        val snackbar1 = snackbar
+        if (snackbar1 == null || snackbar1.isShown) {
+          snackbar = showConnectivityIssueSnackbar()
+        }
+      }.addTo(disposable)
   }
 
   private fun openMenuDrawer() {
@@ -419,6 +435,13 @@ class CommonActivity : BaseActivity(),
       return
     }
     exitPopup()
+  }
+
+  internal fun showConnectivityIssueSnackbar(): Snackbar {
+    val snackbar = Snackbar.make(binding.rootCoordinator, R.string.network_connection_slow, 10000)
+    snackbar.setAction(R.string.button_label_ok) { v -> snackbar.dismiss() }
+    snackbar.show()
+    return snackbar
   }
 
   override fun gotoEkycPage(ekycModule: EkycModule) {

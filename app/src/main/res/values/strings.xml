@@ -192,4 +192,5 @@
     <string name="txt_label_reschedule_appointment">Reschedule appointment</string>
     <string name="txt_label_approved">Approved</string>
     <string name="txt_label_pending_approvals">Pending Approvals</string>
+    <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
 </resources>
