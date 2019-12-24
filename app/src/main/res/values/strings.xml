@@ -193,4 +193,8 @@
     <string name="txt_label_approved">Approved</string>
     <string name="txt_label_pending_approvals">Pending Approvals</string>
     <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
+    <string name="txt_label_incentive">Incentive</string>
+    <string name="txt_label_parameters">Parameters</string>
+    <string name="txt_label_performance">Performance</string>
+    <string name="txt_label_team_snapshot">Team Snapshot</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -16,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -126,13 +126,12 @@ import static java.util.Objects.requireNonNull;
 
 public class DashboardFragment extends CommonFragment
         implements View.OnClickListener, MOSLConstants {
-    private final int itemcount = 4;
     Bundle args = new Bundle();
     @Inject
     EkycNavigator ekycNavigator;
     private String businessProfileIdForDashboard, productId, employeeCode, dashboardId = "";
     private View dashAdvisoryView;
-    private TextView txtClients, txtTarget, tvMain, txtTelephoneNo1, txtTelephoneNo2;
+    private TextView txtClients, txtTarget, tvMain;
     private LinearLayout llClient, llTarget, llPerformanceAndIncentives, llBusinessSnapshotHead,
             llClientsLeads, llTargetAchievementADV, llTeamTargetAchievement,
             llPerformanceAndIncentivesHeader, lldashboardAufsb;
@@ -145,10 +144,7 @@ public class DashboardFragment extends CommonFragment
             btnBusinessSnapshotAdvisor;
     private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
     private FloatingActionsMenu floatingActionsMenu;
-    private FloatingActionButton leadcreation;
-    private RelativeLayout llMain, rlClientLeads, rlTargetAchievementADV, rlTeamTargetAchievement,
-            rlMonthOnMonth, rlBusinessSnapshotHead, rlPerformanceAndIncentivesHeader,
-            rlFreshRegistration, rlExisting;
+    private RelativeLayout llMain;
     private Dialog dialog;
     //Team
     private LinearLayout llTeamTarget;
@@ -158,7 +154,6 @@ public class DashboardFragment extends CommonFragment
             tableAdvPerformance, tableCurrentQuaterStatusFirst,
             tableCurrentQuaterStatusSecond;
     private LinearLayout llSnapshot;
-    private TextView tvSnapshot, txtMonthTrends;
     private LinearLayout llMonthTrend, llMonthvsTrends;
     private List<DashboardModel> dashboardList = new ArrayList<>();
     //incentive
@@ -171,14 +166,17 @@ public class DashboardFragment extends CommonFragment
     //Adviosory Performance
     private BarChart mChartAdv;
     private ArrayList<String> yDataGraphArrAdv = new ArrayList<>();
-    private TextView tvDetailIncentive;
     private ArrayList<HashMap<String, String>> arrayListIncentive =
-            new ArrayList<HashMap<String, String>>();
-    private LinearLayout llIncentive, llCurrentQuaterStatusThree, llCurrentQuaterStatusFour,
-            llCurrentQuaterStatusFirst, llCurrentQuaterStatusSecond, llCurrentQuarterStatusAdviosory,
-            llAdvPerformance, llTeamPerformance, llCurrentQuarterStatusOneUp, llEmail;
-    private ScrollView scrollView;
-    private XAxis xAxis;
+            new ArrayList<>();
+    private LinearLayout llIncentive;
+    private LinearLayout llCurrentQuaterStatusThree;
+    private LinearLayout llCurrentQuaterStatusFour;
+    private LinearLayout llCurrentQuaterStatusFirst;
+    private LinearLayout llCurrentQuaterStatusSecond;
+    private LinearLayout llCurrentQuarterStatusAdviosory;
+    private LinearLayout llAdvPerformance;
+    private LinearLayout llTeamPerformance;
+    private LinearLayout llCurrentQuarterStatusOneUp;
     private String[] mMonths;
     private ProgressDialog pDialog;
 
@@ -188,15 +186,14 @@ public class DashboardFragment extends CommonFragment
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dashAdvisoryView = super.onCreateView(inflater, container, savedInstanceState);
-        setUpView(dashAdvisoryView);
+        setUpView(requireNonNull(dashAdvisoryView));
         hideAppTitle();
         try {
-            //CHECK IF CALLED FROM SEARCH RESULT
             Bundle bund = this.getArguments();
-            if (bund == null) {//No argument passedise my own profile id
+            if (bund == null) {
                 businessProfileIdForDashboard = requireNonNull(
                         userManager.getUser()).currentBusinessProfile.businessProfileId;
             } else {
@@ -214,23 +211,20 @@ public class DashboardFragment extends CommonFragment
     }
 
     private void setUpView(View dashAdvisoryView) {
-        scrollView = dashAdvisoryView.findViewById(R.id.scrollView);
+        ScrollView scrollView = dashAdvisoryView.findViewById(R.id.scrollView);
         scrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         scrollView.setFocusable(true);
         scrollView.setFocusableInTouchMode(true);
-        scrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.requestFocusFromTouch();
-                return false;
-            }
+        scrollView.setOnTouchListener((v, event) -> {
+            v.requestFocusFromTouch();
+            return false;
         });
 
-        tvDetailIncentive = dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
+        TextView tvDetailIncentive = dashAdvisoryView.findViewById(R.id.tvDetailIncentive);
         tvDetailIncentive.setOnClickListener(this);
         llMain = dashAdvisoryView.findViewById(R.id.llMain);
         floatingActionsMenu = dashAdvisoryView.findViewById(R.id.floatingActionsMenu);
-        leadcreation = dashAdvisoryView.findViewById(R.id.leadcreation);
+        FloatingActionButton leadcreation = dashAdvisoryView.findViewById(R.id.leadcreation);
 
         ivActionableInsights = dashAdvisoryView.findViewById(R.id.ivActionableInsights);
         ivClientLeads = dashAdvisoryView.findViewById(R.id.ivClientLeads);
@@ -243,8 +237,8 @@ public class DashboardFragment extends CommonFragment
         txtClients = dashAdvisoryView.findViewById(R.id.txtClients);
         txtTarget = dashAdvisoryView.findViewById(R.id.txtTarget);
         txtTeamTarget = dashAdvisoryView.findViewById(R.id.txtTeamTarget);
-        txtTelephoneNo1 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo1);
-        txtTelephoneNo2 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo2);
+        TextView txtTelephoneNo1 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo1);
+        TextView txtTelephoneNo2 = dashAdvisoryView.findViewById(R.id.txtTelephoneNo2);
         tvPerformanceAndIncentivesHeader =
                 dashAdvisoryView.findViewById(R.id.tvPerformanceAndIncentivesHeader);
         tvMain = dashAdvisoryView.findViewById(R.id.tvMain);
@@ -263,18 +257,14 @@ public class DashboardFragment extends CommonFragment
                 dashAdvisoryView.findViewById(R.id.llTeamTargetAchievement);
         llPerformanceAndIncentivesHeader =
                 dashAdvisoryView.findViewById(R.id.llPerformanceAndIncentivesHeader);
-        rlClientLeads = dashAdvisoryView.findViewById(R.id.rlClientLeads);
-        rlExisting = dashAdvisoryView.findViewById(R.id.rlExisting);
-        rlFreshRegistration = dashAdvisoryView.findViewById(R.id.rlFreshRegistration);
-        rlTargetAchievementADV =
-                dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
-        rlTeamTargetAchievement =
-                dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
-        rlMonthOnMonth = dashAdvisoryView.findViewById(R.id.rlMonthOnMonth);
-        rlBusinessSnapshotHead =
-                dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
-        rlPerformanceAndIncentivesHeader =
-                dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
+        RelativeLayout rlClientLeads = dashAdvisoryView.findViewById(R.id.rlClientLeads);
+        RelativeLayout rlExisting = dashAdvisoryView.findViewById(R.id.rlExisting);
+        RelativeLayout rlFreshRegistration = dashAdvisoryView.findViewById(R.id.rlFreshRegistration);
+        RelativeLayout rlTargetAchievementADV = dashAdvisoryView.findViewById(R.id.rlTargetAchievementADV);
+        RelativeLayout rlTeamTargetAchievement = dashAdvisoryView.findViewById(R.id.rlTeamTargetAchievement);
+        RelativeLayout rlMonthOnMonth = dashAdvisoryView.findViewById(R.id.rlMonthOnMonth);
+        RelativeLayout rlBusinessSnapshotHead = dashAdvisoryView.findViewById(R.id.rlBusinessSnapshotHead);
+        RelativeLayout rlPerformanceAndIncentivesHeader = dashAdvisoryView.findViewById(R.id.rlPerformanceAndIncentivesHeader);
 
         btnClientTraded = dashAdvisoryView.findViewById(R.id.btnClientTraded);
         btnBusinessSnapshot = dashAdvisoryView.findViewById(R.id.btnBusinessSnapshot);
@@ -303,7 +293,7 @@ public class DashboardFragment extends CommonFragment
                 dashAdvisoryView.findViewById(R.id.llCurrentQuarterStatusOneUp);
         llAdvPerformance = dashAdvisoryView.findViewById(R.id.llAdvPerformance);
         llTeamPerformance = dashAdvisoryView.findViewById(R.id.llTeamPerformance);
-        llEmail = dashAdvisoryView.findViewById(R.id.llEmail);
+        LinearLayout llEmail = dashAdvisoryView.findViewById(R.id.llEmail);
 
         rlClientLeads.setOnClickListener(this);
         rlTargetAchievementADV.setOnClickListener(this);
@@ -314,8 +304,8 @@ public class DashboardFragment extends CommonFragment
         //Hierarchy
 
         llSnapshot = dashAdvisoryView.findViewById(R.id.llSnapshot);
-        tvSnapshot = dashAdvisoryView.findViewById(R.id.tvSnapshot);
-        txtMonthTrends = dashAdvisoryView.findViewById(R.id.txtMonthTrends);
+        TextView tvSnapshot = dashAdvisoryView.findViewById(R.id.tvSnapshot);
+        TextView txtMonthTrends = dashAdvisoryView.findViewById(R.id.txtMonthTrends);
         tvSnapshot.setText(BUSINESS_SNAPSHOT_TITLE);
         txtMonthTrends.setText(TRENDS_TITLE);
 
@@ -330,7 +320,8 @@ public class DashboardFragment extends CommonFragment
 
         btnClientTraded.setOnClickListener(this);
 
-        if (userManager.getUser().isAufsb()) floatingActionsMenu.setVisibility(View.GONE);
+        if (requireNonNull(userManager.getUser()).isAufsb())
+            floatingActionsMenu.setVisibility(View.GONE);
 
         floatingActionsMenu.setOnFloatingActionsMenuUpdateListener(
                 new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
@@ -385,8 +376,8 @@ public class DashboardFragment extends CommonFragment
                 // your code here
             }
         });
-        String[] quarterArray = getActivity().getResources().getStringArray(R.array.SelectQuarter);
-        ArrayList<String> arrEventType = new ArrayList<String>(Arrays.asList(quarterArray));
+        String[] quarterArray = requireActivity().getResources().getStringArray(R.array.SelectQuarter);
+        ArrayList<String> arrEventType = new ArrayList<>(Arrays.asList(quarterArray));
         ArrayAdapter<String> arrAdapEventType =
                 new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
@@ -402,7 +393,7 @@ public class DashboardFragment extends CommonFragment
         tvCurrentQuaterStatusFourHeading =
                 dashAdvisoryView.findViewById(R.id.tvCurrentQuaterStatusFourHeading);
 
-        mChartAdv = (BarChart) dashAdvisoryView.findViewById(R.id.chart);
+        mChartAdv = dashAdvisoryView.findViewById(R.id.chart);
         mChartAdv.getDescription().setEnabled(false);
         mChartAdv.setPinchZoom(false);
         mChartAdv.setDrawBarShadow(false);
@@ -419,7 +410,7 @@ public class DashboardFragment extends CommonFragment
         legendAdv.setTextSize(8f);
         legendAdv.setEnabled(false);
 
-        xAxis = mChartAdv.getXAxis();
+        XAxis xAxis = mChartAdv.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setCenterAxisLabels(true);
@@ -481,7 +472,7 @@ public class DashboardFragment extends CommonFragment
         List<ArrayList<BarEntry>> entryList = new ArrayList<>();
 
         for (int x = 0; x < barDataList.size(); x++) {
-            ArrayList<BarEntry> entry = new ArrayList<BarEntry>();
+            ArrayList<BarEntry> entry = new ArrayList<>();
             entryList.add(entry);
         }
         BarDataSet set1 = null;
@@ -513,20 +504,18 @@ public class DashboardFragment extends CommonFragment
         d.setBarWidth(barWidth);
         if (barDataList.size() > 1) {
             d.groupBars(0, groupSpace, barSpace); // start at x = 0
-        } else {
-
         }
 
         return d;
     }
 
-    public void advLoadChart(
+    private void advLoadChart(
             List<com.mosl.saathi.api.model.dashboard.incentive.Table1Item> table1Items) {
         String ytd = "";
         float groupSpace = 0.25f;
         float barSpace = 0.05f;
         float barWidth = 0.35f;
-        List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
+        List<ChartDataModel> dataList = new ArrayList<>();
         yDataGraphArrAdv.clear();
         for (int i = 0; i < table1Items.size(); i++) {
             ChartDataModel model = new ChartDataModel();
@@ -564,14 +553,13 @@ public class DashboardFragment extends CommonFragment
 
         int groupCount = mMonths.length;
         int startYear = 2010;
-        int endYear = 2015;
         tableAdvPerformance.removeAllViews();
         //Adding head
-        LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View tableRowHeader = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
-        TextView tvTeamAvgHeader = (TextView) tableRowHeader.findViewById(R.id.tvTeamAvg);
-        TextView tvNationalAvgHeader = (TextView) tableRowHeader.findViewById(R.id.tvNationalAvg);
-        TextView tvIncentivesHeader = (TextView) tableRowHeader.findViewById(R.id.tvIncentives);
+        LayoutInflater layoutInflater = requireActivity().getLayoutInflater();
+        @SuppressLint("InflateParams") View tableRowHeader = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
+        TextView tvTeamAvgHeader = tableRowHeader.findViewById(R.id.tvTeamAvg);
+        TextView tvNationalAvgHeader = tableRowHeader.findViewById(R.id.tvNationalAvg);
+        TextView tvIncentivesHeader = tableRowHeader.findViewById(R.id.tvIncentives);
         tvIncentivesHeader.setText(yDataGraphArrAdv.get(0));
         tvIncentivesHeader.setTypeface(null, Typeface.BOLD);
         tvIncentivesHeader.setTextColor(Color.rgb(60, 220, 78));
@@ -587,10 +575,10 @@ public class DashboardFragment extends CommonFragment
 
         tableAdvPerformance.addView(tableRowHeader);
         for (int i = 1; i < mMonths.length + 1; i++) {
-            View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
-            TextView tvTeamAvg = (TextView) tableRow.findViewById(R.id.tvTeamAvg);
-            TextView tvNationalAvg = (TextView) tableRow.findViewById(R.id.tvNationalAvg);
-            TextView tvIncentives = (TextView) tableRow.findViewById(R.id.tvIncentives);
+            @SuppressLint("InflateParams") View tableRow = layoutInflater.inflate(R.layout.frag_performance_team_tab_row, null);
+            TextView tvTeamAvg = tableRow.findViewById(R.id.tvTeamAvg);
+            TextView tvNationalAvg = tableRow.findViewById(R.id.tvNationalAvg);
+            TextView tvIncentives = tableRow.findViewById(R.id.tvIncentives);
 
             tvIncentives.setText(yDataGraphArrAdv.get(i));
             tvTeamAvg.setText(yDataGraphArrAdv.get(6 + i));
@@ -619,13 +607,12 @@ public class DashboardFragment extends CommonFragment
         mChartAdv.invalidate();
 
         llAdvPerformance.setVisibility(View.VISIBLE);
-        tvPerformance.setText("Performance");
+        tvPerformance.setText(getResources().getString(R.string.txt_label_performance));
     }
 
     @Override
     public void onClick(View view) {
         int id = view.getId();
-        Bundle args = new Bundle();
         try {
             if (id == R.id.tvDetailIncentive) {
                 if (!dashboardId.isEmpty()) {
@@ -656,7 +643,6 @@ public class DashboardFragment extends CommonFragment
             } else if (id == R.id.leadcreation) {
                 hideKeyboard(view);
                 floatingActionsMenu.collapse();
-                //navigateTo(NAV_TO_LEAD_CREATION, args, getFragmentManager(), true);
                 navigator.openPage(NAVIGATE_TO_LEAD_CREATION, true);
             } else if (id == R.id.llMain) {
                 floatingActionsMenu.collapse();
@@ -689,7 +675,7 @@ public class DashboardFragment extends CommonFragment
             } else if (id == R.id.rlExisting) {
                 HashMap<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
+                map.put(BRANCHEMPCODE, requireNonNull(userManager.getUser()).employeeCode);
                 map.put(COMMANDTYPE, "RESUME");
                 map.put(APPLICATIONTYPE, "CRM");
                 map.put(OSTYPE, "ANDROID");
@@ -699,29 +685,23 @@ public class DashboardFragment extends CommonFragment
                 //gotoNewEkyc(getInputBody(map));
                 ekycNavigator.openNewEkycApp(true, "");
             } else if (id == R.id.txtTelephoneNo1) {
-                MSFDialog.alertDialog(getActivity(), 0,
+                MSFDialog.alertDialog(requireActivity(), 0,
                         getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",
-                        "No", true, new MSFDialog.DialogListener() {
-                            @Override
-                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                if (action == MSFDialog.Action.OK) {
-                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                    callIntent.setData(Uri.parse("tel:" + "02239982515"));
-                                    startActivity(callIntent);
-                                }
+                        "No", true, (action, data) -> {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + "02239982515"));
+                                startActivity(callIntent);
                             }
                         });
             } else if (id == R.id.txtTelephoneNo2) {
-                MSFDialog.alertDialog(getActivity(), 0,
+                MSFDialog.alertDialog(requireActivity(), 0,
                         getResources().getString(R.string.motilal_oswal), "Do you want to call?", "Yes",
-                        "No", true, new MSFDialog.DialogListener() {
-                            @Override
-                            public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                                if (action == MSFDialog.Action.OK) {
-                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                    callIntent.setData(Uri.parse("tel:" + "02239982515"));
-                                    startActivity(callIntent);
-                                }
+                        "No", true, (action, data) -> {
+                            if (action == MSFDialog.Action.OK) {
+                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                callIntent.setData(Uri.parse("tel:" + "02239982515"));
+                                startActivity(callIntent);
                             }
                         });
             } else if (id == R.id.llEmail) {
@@ -745,7 +725,7 @@ public class DashboardFragment extends CommonFragment
         ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, leadsFragment)
                 .commit();
@@ -757,7 +737,7 @@ public class DashboardFragment extends CommonFragment
         ProductivityFragment productivityFragment = ProductivityFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         productivityFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, productivityFragment)
                 .commit();
@@ -769,7 +749,7 @@ public class DashboardFragment extends CommonFragment
         BusSnapshotAdvFragment leadsFragment = BusSnapshotAdvFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, leadsFragment)
                 .commit();
@@ -783,7 +763,7 @@ public class DashboardFragment extends CommonFragment
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
 
         clientsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, clientsFragment)
                 .commit();
@@ -795,7 +775,7 @@ public class DashboardFragment extends CommonFragment
         BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, leadsFragment)
                 .commit();
@@ -806,28 +786,28 @@ public class DashboardFragment extends CommonFragment
         ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llReplaceClientFragment, clientsFragment)
                 .commit();
     }
 
     private void setTabActivre(Button button) {
-        btnBusinessSnapshot.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshot.setBackground(getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshot.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnBusinessSnapshotAdvisor.setBackgroundDrawable(
-                getResources().getDrawable(R.drawable.white));
+        btnBusinessSnapshotAdvisor.
+                setBackground(getResources().getDrawable(R.drawable.white));
         btnBusinessSnapshotAdvisor.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClient.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClient.setBackground(getResources().getDrawable(R.drawable.white));
         btnClient.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnProductivity.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnProductivity.setBackground(getResources().getDrawable(R.drawable.white));
         btnProductivity.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnLeads.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnLeads.setBackground(getResources().getDrawable(R.drawable.white));
         btnLeads.setTextColor(getResources().getColor(R.color.Button_text_color));
-        btnClientTraded.setBackgroundDrawable(getResources().getDrawable(R.drawable.white));
+        btnClientTraded.setBackground(getResources().getDrawable(R.drawable.white));
         btnClientTraded.setTextColor(getResources().getColor(R.color.Button_text_color));
 
-        button.setBackgroundDrawable(getResources().getDrawable(R.drawable.orange));
+        button.setBackground(getResources().getDrawable(R.drawable.orange));
         button.setTextColor(getResources().getColor(R.color.white));
     }
 
@@ -837,7 +817,7 @@ public class DashboardFragment extends CommonFragment
                 TargetAchievementFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llTargetAchievementADV, leadsFragment)
                 .commit();
@@ -849,7 +829,7 @@ public class DashboardFragment extends CommonFragment
                 TargetAchievementTeamFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llTeamTargetAchievement, leadsFragment)
                 .commit();
@@ -860,7 +840,7 @@ public class DashboardFragment extends CommonFragment
         TrendsTabFragment leadsFragment = TrendsTabFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llMonthvsTrends, leadsFragment)
                 .commit();
@@ -871,7 +851,7 @@ public class DashboardFragment extends CommonFragment
         BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.llBusinessSnapshotHead, leadsFragment)
                 .commit();
@@ -882,20 +862,18 @@ public class DashboardFragment extends CommonFragment
 
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_actionable_insights);
         dialog.getWindow()
                 .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
 
-        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
-        ListView lvActionableInsights = (ListView) dialog.findViewById(R.id.lvActionableInsights);
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
+        ImageView ivClose = dialog.findViewById(R.id.ivClose);
+        ListView lvActionableInsights = dialog.findViewById(R.id.lvActionableInsights);
+        ivClose.setOnClickListener(view -> {
+            dialog.dismiss();
+
         });
 
         lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
@@ -996,10 +974,6 @@ public class DashboardFragment extends CommonFragment
     private void renderActionableCount(UiModel<ActionableCountItem> uiModel, String systemName) {
         toggleProgress(uiModel.inProgress);
 
-        Throwable error = uiModel.error;
-        if (error != null) {
-            // showOnFailurePopup(error);
-        }
 
         ActionableCountItem data = uiModel.data;
         if (data != null) {
@@ -1029,11 +1003,11 @@ public class DashboardFragment extends CommonFragment
                 currentDashboard.setActionableCount(systemName, count,
                         typeList);
 
-                advisoryActionableInsightAdapter.showCount(true,
+                advisoryActionableInsightAdapter.showCount(
                         systemName);
             } catch (Exception e) {
                 currentDashboard.setActionableCount(systemName, "",
-                        new ArrayList<TypeActionableFilterModel>());
+                        new ArrayList<>());
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                         SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
@@ -1077,8 +1051,7 @@ public class DashboardFragment extends CommonFragment
         }
     }
 
-    private List<DashboardGroupModel> getGroupModelFromJsonArray(List<GroupsItem> groupsItems)
-            throws Exception {
+    private List<DashboardGroupModel> getGroupModelFromJsonArray(List<GroupsItem> groupsItems) {
         List<DashboardGroupModel> groupList = new ArrayList();
 
         for (int liX = 0; liX < groupsItems.size(); liX++) {
@@ -1099,7 +1072,7 @@ public class DashboardFragment extends CommonFragment
                 groupModel.setSystemName(groupSystemName);
                 groupModel.setIconUrl1(imageUrl1);
                 groupModel.setIconUrl2(imageUrl2);
-                boolean selected = (liX == 0) ? true : false;
+                boolean selected = liX == 0;
                 groupModel.setSelected(selected);
 
                 List<GroupsItem> childrenGroupItems = item.children;
@@ -1111,7 +1084,7 @@ public class DashboardFragment extends CommonFragment
 
                 List<AvailableWidgetsItem> availableWidgets = item.availableWidgets;
                 List<WidgetModel> widgetModelList =
-                        getWidgetModelFromAvailableWidgets(availableWidgets);
+                        getWidgetModelFromAvailableWidgets(requireNonNull(availableWidgets));
 
                 groupModel.getWidgetList().addAll(widgetModelList);
 
@@ -1125,8 +1098,7 @@ public class DashboardFragment extends CommonFragment
     /**
      * this method will collect the filter data (dropdown)
      */
-    public List<WidgetFilterModel> getFilterList(List<AvailableFilterItem> availableFilterItems) {
-        //Timber.v("All " + jsonObject.toString());
+    private List<WidgetFilterModel> getFilterList(List<AvailableFilterItem> availableFilterItems) {
         List<WidgetFilterModel> filterList = new ArrayList<>();
         try {
 
@@ -1175,12 +1147,11 @@ public class DashboardFragment extends CommonFragment
      * @throws Exception
      */
     private List<WidgetModel> getWidgetModelFromAvailableWidgets(
-            List<AvailableWidgetsItem> widgetsItems)
-            throws Exception {
+            List<AvailableWidgetsItem> widgetsItems) {
         List<WidgetModel> widgetModelList = new ArrayList<>();
 
         for (int ctr = 0; ctr < widgetsItems.size(); ctr++) {
-            AvailableWidgetsItem item = (AvailableWidgetsItem) widgetsItems.get(ctr);
+            AvailableWidgetsItem item = widgetsItems.get(ctr);
 
             if (item != null) {
                 WidgetModel widgetModel = new WidgetModel();
@@ -1199,7 +1170,7 @@ public class DashboardFragment extends CommonFragment
                     widgetModel.setWidgetTypeList(childrenGroup);
                 }
 
-                boolean selected = (ctr == 0) ? true : false;
+                boolean selected = ctr == 0;
                 widgetModel.setSelected(selected);
                 widgetModel.setId(id);
                 widgetModel.setName(displayName);
@@ -1213,12 +1184,11 @@ public class DashboardFragment extends CommonFragment
         return widgetModelList;
     }
 
-    private List<WidgetType> getWidgetTypeFromAvailableWidgets(List<WidgetTypeItem> widgetTypeItems)
-            throws Exception {
+    private List<WidgetType> getWidgetTypeFromAvailableWidgets(List<WidgetTypeItem> widgetTypeItems) {
         List<WidgetType> widgetModelList = new ArrayList<>();
 
         for (int ctr = 0; ctr < widgetTypeItems.size(); ctr++) {
-            WidgetTypeItem item = (WidgetTypeItem) widgetTypeItems.get(ctr);
+            WidgetTypeItem item = widgetTypeItems.get(ctr);
 
             if (item != null) {
                 String widgetTypes = stringOrEmpty(item.widgetTypes);
@@ -1309,7 +1279,7 @@ public class DashboardFragment extends CommonFragment
             List<WidgetModel> widgetModelList =
                     currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
             advisoryActionableInsightAdapter =
-                    new AdvisoryActionableInsightAdapter(getActivity(), widgetModelList);
+                    new AdvisoryActionableInsightAdapter(requireActivity(), widgetModelList);
         }
         if (currentDashboard.isGroupExists(MyClient_MyLead)) {
             llClient.setVisibility(View.VISIBLE);
@@ -1383,7 +1353,7 @@ public class DashboardFragment extends CommonFragment
             }
             setClientLayoutVisibility(SYS_TEAM_SNAPSHOT);
             loadLeadBusinessSnapShot();
-            btnBusinessSnapshot.setText("Team Snapshot");
+            btnBusinessSnapshot.setText(getResources().getString(R.string.txt_label_team_snapshot));
             //  loadLead();
             DashboardSystemModel.setBusinessSnapshotSystemName(SYS_TEAM_SNAPSHOT);
         }
@@ -1656,7 +1626,7 @@ public class DashboardFragment extends CommonFragment
                             "Table").equals(""))
                             ? "" : jsonObject.getString("Table");
             if (Table.equalsIgnoreCase("3")) {
-                ArrayList<String> keyList = new ArrayList<String>();
+                ArrayList<String> keyList = new ArrayList<>();
                 String headingName =
                         (jsonObject.isNull("Heading")
                                 || jsonObject.getString("Heading")
@@ -1669,23 +1639,21 @@ public class DashboardFragment extends CommonFragment
                 }
 
                 final ArrayList<HashMap<String, String>> yAxisList =
-                        new ArrayList<HashMap<String, String>>();
+                        new ArrayList<>();
 
                 for (String keySetE : keyList) {
                     HashMap<String, String> keyValue =
                             new HashMap<>();
-                    if (keySetE.toString()
+                    if (keySetE
                             .equalsIgnoreCase("Heading")
-                            || keySetE.toString()
+                            || keySetE
                             .equalsIgnoreCase("Table")) {
                     } else {
                         String columnData =
                                 jsonObject.getString(keySetE)
-                                        .toString()
                                         .equals("") ? ""
-                                        : jsonObject.getString(keySetE)
-                                        .toString();
-                        keyValue.put(keySetE.toString(),
+                                        : jsonObject.getString(keySetE);
+                        keyValue.put(keySetE,
                                 columnData);
                         yAxisList.add(keyValue);
                     }
@@ -1712,7 +1680,7 @@ public class DashboardFragment extends CommonFragment
                             "Table").equals(""))
                             ? "" : jsonObject.getString("Table");
             if (Table.equalsIgnoreCase("4")) {
-                ArrayList<String> keyList = new ArrayList<String>();
+                ArrayList<String> keyList = new ArrayList<>();
                 String headingName =
                         (jsonObject.isNull("Heading")
                                 || jsonObject.getString("Heading")
@@ -1725,23 +1693,20 @@ public class DashboardFragment extends CommonFragment
                 }
 
                 final ArrayList<HashMap<String, String>> yAxisList =
-                        new ArrayList<HashMap<String, String>>();
+                        new ArrayList<>();
 
                 for (String keySetE : keyList) {
                     HashMap<String, String> keyValue =
                             new HashMap<>();
-                    if (keySetE.toString()
+                    if (keySetE
                             .equalsIgnoreCase("Heading")
-                            || keySetE.toString()
+                            || keySetE
                             .equalsIgnoreCase("Table")) {
                     } else {
                         String columnData =
-                                jsonObject.getString(keySetE)
-                                        .toString()
-                                        .equals("") ? ""
-                                        : jsonObject.getString(keySetE)
-                                        .toString();
-                        keyValue.put(keySetE.toString(),
+                                jsonObject.getString(keySetE).equals("") ? ""
+                                        : jsonObject.getString(keySetE);
+                        keyValue.put(keySetE,
                                 columnData);
                         yAxisList.add(keyValue);
                     }
@@ -1764,10 +1729,8 @@ public class DashboardFragment extends CommonFragment
     private String keyName(Set<String> keySet) {
         String key = "";
         if (keySet != null) {
-            Iterator<String> iterator = keySet.iterator();
-            while (iterator.hasNext()) {
-                key = iterator.next();
-                break;
+            for (String s : keySet) {
+                key = s;
             }
         }
         return key;
@@ -1810,7 +1773,7 @@ public class DashboardFragment extends CommonFragment
             Set<String> rowHeadingSet = tableMap.keySet();
 
             //header
-            TableRow headingRow = new TableRow(getActivity());
+            TableRow headingRow = new TableRow(requireActivity());
             tableCurrentQuaterStatusFirst.addView(headingRow);
             headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
@@ -1822,11 +1785,11 @@ public class DashboardFragment extends CommonFragment
                 String rowHead = headingIterator.next().toString();
                 List<Map> mm = tableMap.get(rowHead);
 
-                for (Map cellmap : mm) {
+                for (Map cellmap : requireNonNull(mm)) {
                     String headingText = cellmap.keySet().iterator().next().toString();
                     headingText = headingText.replaceAll("_", " ");
 
-                    TextView headingCell = new TextView(getActivity());
+                    TextView headingCell = new TextView(requireActivity());
                     headingRow.addView(headingCell);
                     headingCell.setLayoutParams(
                             new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -1841,18 +1804,17 @@ public class DashboardFragment extends CommonFragment
 
             //row data
             for (String column1Heading : rowHeadingSet) {
-                TableRow tableRow = new TableRow(getActivity());
+                TableRow tableRow = new TableRow(requireActivity());
                 tableCurrentQuaterStatusFirst.addView(tableRow);
                 tableRow.setLayoutParams(
                         new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                                 TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
-                for (Map map : rowList) {
-                    String header = map.keySet().iterator().next().toString();
+                for (Map map : requireNonNull(rowList)) {
                     String value = map.values().iterator().next().toString();
 
-                    TextView textView = new TextView(getActivity());
+                    TextView textView = new TextView(requireActivity());
                     tableRow.addView(textView);
                     textView.setLayoutParams(
                             new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -1860,7 +1822,6 @@ public class DashboardFragment extends CommonFragment
                     textView.setBackgroundResource(R.drawable.cell_shape);
                     final int padding = (int) getResources().getDimension(R.dimen._5sdp);
                     textView.setPadding(padding, padding, padding, padding);
-                    //column.setTextAppearance(context, android.R.attr.textAppearanceMedium);
                     textView.setText(value);
                 }
             }
@@ -1908,7 +1869,7 @@ public class DashboardFragment extends CommonFragment
             Set<String> rowHeadingSet = tableMap.keySet();
 
             //header
-            TableRow headingRow = new TableRow(getActivity());
+            TableRow headingRow = new TableRow(requireActivity());
             tableCurrentQuaterStatusSecond.addView(headingRow);
             headingRow.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
@@ -1920,11 +1881,11 @@ public class DashboardFragment extends CommonFragment
                 String rowHead = headingIterator.next().toString();
                 List<Map> mm = tableMap.get(rowHead);
 
-                for (Map cellmap : mm) {
+                for (Map cellmap : requireNonNull(mm)) {
                     String headingText = cellmap.keySet().iterator().next().toString();
                     headingText = headingText.replaceAll("_", " ");
 
-                    TextView headingCell = new TextView(getActivity());
+                    TextView headingCell = new TextView(requireActivity());
                     headingRow.addView(headingCell);
                     headingCell.setLayoutParams(
                             new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -1939,18 +1900,17 @@ public class DashboardFragment extends CommonFragment
 
             //row data
             for (String column1Heading : rowHeadingSet) {
-                TableRow tableRow = new TableRow(getActivity());
+                TableRow tableRow = new TableRow(requireActivity());
                 tableCurrentQuaterStatusSecond.addView(tableRow);
                 tableRow.setLayoutParams(
                         new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                                 TableRow.LayoutParams.WRAP_CONTENT));
 
                 List<Map> rowList = tableMap.get(column1Heading);
-                for (Map map : rowList) {
-                    String header = map.keySet().iterator().next().toString();
+                for (Map map : requireNonNull(rowList)) {
                     String value = map.values().iterator().next().toString();
 
-                    TextView textView = new TextView(getActivity());
+                    TextView textView = new TextView(requireActivity());
                     tableRow.addView(textView);
                     textView.setLayoutParams(
                             new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
@@ -1971,7 +1931,7 @@ public class DashboardFragment extends CommonFragment
 
     private void currentQuarterStatusTableThird(String headingName,
                                                 ArrayList<HashMap<String, String>> arrayList) {
-        LayoutInflater inFla = getActivity().getLayoutInflater();
+        LayoutInflater inFla = requireActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
             for (int i = 0; i < arrayList.size(); i++) {
 
@@ -1980,10 +1940,10 @@ public class DashboardFragment extends CommonFragment
 
                 String value = arrayList.get(i).get(keyName(keySet));
 
-                View tableRow = inFla.inflate(R.layout.table_current_quarter_status_three, null);
+                @SuppressLint("InflateParams") View tableRow = inFla.inflate(R.layout.table_current_quarter_status_three, null);
 
-                TextView tvKey = (TextView) tableRow.findViewById(R.id.tvKey);
-                TextView tvValue = (TextView) tableRow.findViewById(R.id.tvValue);
+                TextView tvKey = tableRow.findViewById(R.id.tvKey);
+                TextView tvValue = tableRow.findViewById(R.id.tvValue);
 
                 tvKey.setText(keyName(keySet).replace("_", " "));
                 tvValue.setText(value);
@@ -1997,7 +1957,7 @@ public class DashboardFragment extends CommonFragment
 
     private void currentQuarterStatusTableFourth(String headingName,
                                                  ArrayList<HashMap<String, String>> arrayList) {
-        LayoutInflater inFla = getActivity().getLayoutInflater();
+        LayoutInflater inFla = requireActivity().getLayoutInflater();
         if (arrayList.size() > 0) {
             for (int i = 0; i < arrayList.size(); i++) {
 
@@ -2006,10 +1966,10 @@ public class DashboardFragment extends CommonFragment
 
                 String value = arrayList.get(i).get(keyName(keySet));
 
-                View tableRow = inFla.inflate(R.layout.table_current_quarter_status_three, null);
+                @SuppressLint("InflateParams") View tableRow = inFla.inflate(R.layout.table_current_quarter_status_three, null);
 
-                TextView tvKey = (TextView) tableRow.findViewById(R.id.tvKey);
-                TextView tvValue = (TextView) tableRow.findViewById(R.id.tvValue);
+                TextView tvKey = tableRow.findViewById(R.id.tvKey);
+                TextView tvValue = tableRow.findViewById(R.id.tvValue);
 
                 tvKey.setText(keyName(keySet).replace("_", " "));
                 tvValue.setText(value);
@@ -2025,7 +1985,7 @@ public class DashboardFragment extends CommonFragment
             List<com.mosl.saathi.api.model.dashboard.incentive.TableItem> tableItems) {
         arrayListIncentive.clear();
         for (int i = 0; i < tableItems.size(); i++) {
-            HashMap<String, String> fieldData = new HashMap<String, String>();
+            HashMap<String, String> fieldData = new HashMap<>();
             com.mosl.saathi.api.model.dashboard.incentive.TableItem item = tableItems.get(i);
             String Parameters = stringOrEmpty(item.parameters);
             String q1 = stringOrZero(String.valueOf(item.q1));
@@ -2048,13 +2008,12 @@ public class DashboardFragment extends CommonFragment
         //clear data from table
         tableMData.removeAllViews();
         //Adding head
-        LayoutInflater inFla = getActivity().getLayoutInflater();
-        View tableRowH = inFla.inflate(R.layout.item_table_row, null);
-        TextView tvMTDCOUNT = (TextView) tableRowH.findViewById(R.id.tvMTDCOUNT);
-        TextView tvYTDCOUNT = (TextView) tableRowH.findViewById(R.id.tvYTDCOUNT);
-        TextView tvParameters = (TextView) tableRowH.findViewById(R.id.tvParameters);
-        // LinearLayout llFamiMappedCount = (LinearLayout) tableRowH.findViewById(R.id.llFamiMappedCount);
-        tvParameters.setText("Parameters");
+        LayoutInflater inFla = requireNonNull(requireActivity()).getLayoutInflater();
+        @SuppressLint("InflateParams") View tableRowH = inFla.inflate(R.layout.item_table_row, null);
+        TextView tvMTDCOUNT = tableRowH.findViewById(R.id.tvMTDCOUNT);
+        TextView tvYTDCOUNT = tableRowH.findViewById(R.id.tvYTDCOUNT);
+        TextView tvParameters = tableRowH.findViewById(R.id.tvParameters);
+        tvParameters.setText(getResources().getString(R.string.txt_label_parameters));
         tvMTDCOUNT.setText(value);
         tvYTDCOUNT.setText(YTD);
         tableMData.addView(tableRowH);
@@ -2066,11 +2025,11 @@ public class DashboardFragment extends CommonFragment
                 String filterData = arrayListIncentive.get(i).get(value);
                 String parameter = arrayListIncentive.get(i).get(PARAMETERS);
                 String ytd = arrayListIncentive.get(i).get(YTD);
-                View tableRow = inFla.inflate(R.layout.item_table_row, null);
-                LinearLayout linearLayout = (LinearLayout) tableRow.findViewById(R.id.linearLayout);
-                TextView tvMTDCOUNTData = (TextView) tableRow.findViewById(R.id.tvMTDCOUNT);
-                TextView tvYTDCOUNTData = (TextView) tableRow.findViewById(R.id.tvYTDCOUNT);
-                TextView tvParametersData = (TextView) tableRow.findViewById(R.id.tvParameters);
+                @SuppressLint("InflateParams") View tableRow = inFla.inflate(R.layout.item_table_row, null);
+                LinearLayout linearLayout = tableRow.findViewById(R.id.linearLayout);
+                TextView tvMTDCOUNTData = tableRow.findViewById(R.id.tvMTDCOUNT);
+                TextView tvYTDCOUNTData = tableRow.findViewById(R.id.tvYTDCOUNT);
+                TextView tvParametersData = tableRow.findViewById(R.id.tvParameters);
 
                 tvParametersData.setText(parameter);
                 tvMTDCOUNTData.setText(filterData);
@@ -2080,7 +2039,7 @@ public class DashboardFragment extends CommonFragment
             }
         }
         llIncentive.setVisibility(View.VISIBLE);
-        tvIncentives.setText("Incentive");
+        tvIncentives.setText(getResources().getString(R.string.txt_label_incentive));
     }
 
     private void createFloatingButtons() {
@@ -2094,27 +2053,24 @@ public class DashboardFragment extends CommonFragment
                 button.setIconDrawable(getResources().getDrawable(R.drawable.ic_create_lead));
                 floatingActionsMenu.addButton(button);
                 dashboardBtnList.add(button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        hideKeyboard(v);
-                        tvMain.requestFocus();
-                        floatingActionsMenu.collapse();
-                        currentDashboard = dashboardModel;
+                button.setOnClickListener(v -> {
+                    hideKeyboard(v);
+                    tvMain.requestFocus();
+                    floatingActionsMenu.collapse();
+                    currentDashboard = dashboardModel;
 
-                        List<WidgetModel> widgetModelList =
-                                currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
-                        if (advisoryActionableInsightAdapter == null) {
-                            advisoryActionableInsightAdapter =
-                                    new AdvisoryActionableInsightAdapter(getActivity(),
-                                            widgetModelList);
-                        } else {
-                            advisoryActionableInsightAdapter.addItems(widgetModelList);
-                        }
-                        advisoryActionableInsightAdapter.notifyDataSetChanged();
-
-                        renderDashboard();
+                    List<WidgetModel> widgetModelList =
+                            currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+                    if (advisoryActionableInsightAdapter == null) {
+                        advisoryActionableInsightAdapter =
+                                new AdvisoryActionableInsightAdapter(requireActivity(),
+                                        widgetModelList);
+                    } else {
+                        advisoryActionableInsightAdapter.addItems(widgetModelList);
                     }
+                    advisoryActionableInsightAdapter.notifyDataSetChanged();
+
+                    renderDashboard();
                 });
             }
         }
@@ -2170,11 +2126,11 @@ public class DashboardFragment extends CommonFragment
         }
     }
 
-    public void webServiceInceniveSlab(String dashboardId) {
+    private void webServiceInceniveSlab(String dashboardId) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             IncentivePolicyRequest request = new IncentivePolicyRequest(
                     businessProfileIdForDashboard,
-                    userManager.getUser().employeeCode,
+                    requireNonNull(userManager.getUser()).employeeCode,
                     dashboardId
             );
             Disposable subscribe = getSaathiApi().getIncentivePolicy(request)
@@ -2185,10 +2141,10 @@ public class DashboardFragment extends CommonFragment
         }
     }
 
-    public void showDownloadFile(File localFilePath) {
+    private void showDownloadFile(File localFilePath) {
         try {
             Uri uri = FileProvider.getUriForFile(
-                    getActivity(),
+                    requireActivity(),
                     "com.mosl.tabapp.provider",
                     localFilePath);
             Intent intent = new Intent();
@@ -2198,7 +2154,7 @@ public class DashboardFragment extends CommonFragment
 
             intent.setDataAndType(
                     uri,
-                    getActivity().getContentResolver().getType(uri));
+                    requireNonNull(requireActivity()).getContentResolver().getType(uri));
 
             startActivity(intent);
         } catch (ActivityNotFoundException ex) {
@@ -2215,8 +2171,8 @@ public class DashboardFragment extends CommonFragment
     /**
      * Showing Dialog
      */
-    public void showDialog() {
-        pDialog = new ProgressDialog(getActivity());
+    private void showDialog() {
+        pDialog = new ProgressDialog(requireActivity());
         pDialog.setMessage("Downloading file. Please wait...");
         pDialog.setIndeterminate(false);
         pDialog.setMax(100);
@@ -2243,13 +2199,10 @@ public class DashboardFragment extends CommonFragment
 
         private LinkedHashMap<String, Float> monthData = new LinkedHashMap<>();
 
-        public LinkedHashMap<String, Float> getMonthData() {
+        private LinkedHashMap<String, Float> getMonthData() {
             return monthData;
         }
 
-        public void setMonthData(LinkedHashMap<String, Float> monthData) {
-            this.monthData = monthData;
-        }
     }
 
     public class AdvisoryActionableInsightAdapter extends BaseAdapter {
@@ -2257,22 +2210,19 @@ public class DashboardFragment extends CommonFragment
         private final LayoutInflater inflater;
         Context mContext;
         List<WidgetModel> advisoryActionableInsightModelList;
-        //private ArrayList<AdvisoryActionableInsightModel> arraylist;
 
-        public AdvisoryActionableInsightAdapter(Context c,
-                                                List<WidgetModel> advisoryActionableInsightModelList) {
+        private AdvisoryActionableInsightAdapter(Context c,
+                                                 List<WidgetModel> advisoryActionableInsightModelList) {
             inflater = LayoutInflater.from(c);
             this.mContext = c;
             this.advisoryActionableInsightModelList = advisoryActionableInsightModelList;
         }
 
-        public void showCount(boolean show, String systemName) {
+        private void showCount(String systemName) {
             for (WidgetModel model : advisoryActionableInsightModelList) {
                 if (model.getSystemName().equals(systemName)) {
-                    if (show) {
-                        model.setShowActionableCount(show);
-                        break;
-                    }
+                    model.setShowActionableCount(true);
+                    break;
                 }
             }
             notifyDataSetChanged();
@@ -2298,6 +2248,7 @@ public class DashboardFragment extends CommonFragment
             return 0;
         }
 
+        @SuppressLint("ViewHolder")
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             final Holder holder = new Holder();
@@ -2305,11 +2256,11 @@ public class DashboardFragment extends CommonFragment
 
             final WidgetModel advisoryActionableInsightModel =
                     advisoryActionableInsightModelList.get(i);
-            holder.ivActionableInsights = (ImageView) view.findViewById(R.id.ivActionableInsights);
-            holder.pbLoadingIndicator = (ProgressBar) view.findViewById(R.id.pbLoadingIndicator);
-            holder.tvActionableInsights = (TextView) view.findViewById(R.id.tvActionableInsights);
-            holder.tvActionableCount = (TextView) view.findViewById(R.id.tvActionableCount);
-            holder.rlActionable = (RelativeLayout) view.findViewById(R.id.rlActionable);
+            holder.ivActionableInsights = view.findViewById(R.id.ivActionableInsights);
+            holder.pbLoadingIndicator = view.findViewById(R.id.pbLoadingIndicator);
+            holder.tvActionableInsights = view.findViewById(R.id.tvActionableInsights);
+            holder.tvActionableCount = view.findViewById(R.id.tvActionableCount);
+            holder.rlActionable = view.findViewById(R.id.rlActionable);
 
             final Map<String, String> addtionalParameterMap = new HashMap<>();
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
@@ -2334,38 +2285,35 @@ public class DashboardFragment extends CommonFragment
             holder.tvActionableCount.setText(advisoryActionableInsightModel.getActionableCount());
             final DashboardGroupModel groupModel = currentDashboard.getGroupModel(ACTIONABLE);
 
-            holder.rlActionable.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Bundle args = new Bundle();
-                    args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
-                    args.putString(LABEL, ACTIONABLE);
-                    args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
-                    args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                    List<WidgetModel> widgetList = groupModel.getWidgetList();
-                    if (widgetList != null && widgetList.size() > 0) {
-                        for (WidgetModel model1 : widgetList) {
-                            if (advisoryActionableInsightModel.getSystemName()
-                                    .equalsIgnoreCase(model1.getSystemName())) {
-                                ArrayList<WidgetFilterModel> filterList =
-                                        (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
-                                ArrayList<TypeActionableFilterModel> spinnerFilter =
-                                        (ArrayList<TypeActionableFilterModel>) model1.getSpinnerFilterList();
-                                if (!filterList.isEmpty()) {
-                                    args.putParcelableArrayList(FILTER_LIST, filterList);
-                                }
-                                if (!spinnerFilter.isEmpty()) {
-                                    args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
-                                }
+            holder.rlActionable.setOnClickListener(view1 -> {
+                Bundle args = new Bundle();
+                args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
+                args.putString(LABEL, ACTIONABLE);
+                args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
+                args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                List<WidgetModel> widgetList = groupModel.getWidgetList();
+                if (widgetList != null && widgetList.size() > 0) {
+                    for (WidgetModel model1 : widgetList) {
+                        if (advisoryActionableInsightModel.getSystemName()
+                                .equalsIgnoreCase(model1.getSystemName())) {
+                            ArrayList<WidgetFilterModel> filterList =
+                                    (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
+                            ArrayList<TypeActionableFilterModel> spinnerFilter =
+                                    model1.getSpinnerFilterList();
+                            if (!filterList.isEmpty()) {
+                                args.putParcelableArrayList(FILTER_LIST, filterList);
+                            }
+                            if (!spinnerFilter.isEmpty()) {
+                                args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
                             }
                         }
                     }
-                    if (!advisoryActionableInsightModel.getActionableCount()
-                            .equalsIgnoreCase("0")) {
-                        //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                        navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
-                        dialog.dismiss();
-                    }
+                }
+                if (!advisoryActionableInsightModel.getActionableCount()
+                        .equalsIgnoreCase("0")) {
+                    //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                    navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
+                    dialog.dismiss();
                 }
             });
 
@@ -2381,7 +2329,7 @@ public class DashboardFragment extends CommonFragment
             return view;
         }
 
-        public void addItems(List<WidgetModel> widgetModelList) {
+        private void addItems(List<WidgetModel> widgetModelList) {
             advisoryActionableInsightModelList = widgetModelList;
             notifyDataSetChanged();
         }
@@ -2397,6 +2345,7 @@ public class DashboardFragment extends CommonFragment
     /**
      * Background Async Task to download file
      */
+    @SuppressLint("StaticFieldLeak")
     class DownloadFileFromURL extends AsyncTask<String, String, Boolean> {
 
         String fileName, remoteFilePath;
@@ -2434,16 +2383,12 @@ public class DashboardFragment extends CommonFragment
                 // Output stream to write file
                 File baseFolder = new File(requireContext().getFilesDir(), "crmdocs");
 
-                if (!baseFolder.exists()) {
-                    baseFolder.mkdir();
-                }
-
                 File localFile = new File(baseFolder, fileName);
 
                 OutputStream output = new FileOutputStream(
                         localFile.getAbsolutePath()); //Environment.getExternalStorageDirectory().toString()+"/"+fileName);
 
-                byte data[] = new byte[1024];
+                byte[] data = new byte[1024];
 
                 long total = 0;
 
