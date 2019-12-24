@@ -1031,7 +1031,7 @@ public class DashboardFragment extends CommonFragment
         }
     }
 
-    private void fillAvailableWidgetModel(DashboardMetaDataItem data) throws Exception {
+    private void fillAvailableWidgetModel(DashboardMetaDataItem data) {
         if (data != null) {
             String dashboardId = String.valueOf(data.id);
             String dashboardName = data.name;
@@ -1045,7 +1045,7 @@ public class DashboardFragment extends CommonFragment
 
             List<GroupsItem> groupsItems = data.groups;
 
-            List<DashboardGroupModel> mainGroupList = getGroupModelFromJsonArray(groupsItems);
+            List<DashboardGroupModel> mainGroupList = getGroupModelFromJsonArray(requireNonNull(groupsItems));
             dashboardModel.getGroupList().clear();
             dashboardModel.getGroupList().addAll(mainGroupList);
         }
