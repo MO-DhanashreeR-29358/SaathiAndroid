@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class BankCodeResponse(
     @SerializedName("BankId") val bankId: Int,
-    @SerializedName("bankname") val bankName: String
+    @SerializedName("BankName") val bankName: String
 )

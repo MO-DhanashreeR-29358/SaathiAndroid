@@ -10,6 +10,8 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.saathi.api.model.ausfbLead.BankCodeModel
+import com.mosl.saathi.api.model.ausfbLead.BranchCodeModel
+import com.mosl.saathi.api.model.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -35,8 +37,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
     private lateinit var monthAdapter: ArrayAdapter<FilterRowData>
     private lateinit var productAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
-    private lateinit var branchAdapter: ArrayAdapter<FilterRowData>
-    private lateinit var subBranchAdapter: ArrayAdapter<FilterRowData>
+    private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
+    private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
 
     @Inject
     lateinit var presenter: AuLeadsPresenter
@@ -123,6 +125,18 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         return binding.spFilterBank.itemSelections()
     }
 
+    override fun getBank(): BankCodeModel? {
+        return binding.spFilterBank.selectedItem as? BankCodeModel
+    }
+
+    override fun getBranch(): BranchCodeModel? {
+        return binding.spFilterBranch.selectedItem as? BranchCodeModel
+    }
+
+    override fun getSubBranch(): SubBranchCodeModel? {
+        return binding.spFilterSubBranch.selectedItem as? SubBranchCodeModel
+    }
+
     override fun onBranchChange(): Observable<Int> {
         return binding.spFilterBranch.itemSelections()
     }
@@ -142,4 +156,29 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
             bankAdapter.setSpinnerData(binding.spFilterBank, it)
         }
     }
+
+    override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+        }
+
+        uiModel.onSuccess {
+            branchAdapter.setSpinnerData(binding.spFilterBranch, it)
+        }
+    }
+
+    override fun renderSubBranchFilter(uiModel: UiModel<List<SubBranchCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+        }
+
+        uiModel.onSuccess {
+            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, it)
+        }
+    }
+
+
 }

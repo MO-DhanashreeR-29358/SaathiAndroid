@@ -8,7 +8,7 @@ import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.aubankmeeting.*
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
-import com.mosl.saathi.api.model.ausfbLead.BankCodeResponse
+import com.mosl.saathi.api.model.ausfbLead.*
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -357,6 +357,12 @@ interface SaathiApi {
 
   @POST("UserApi/GetBankCode")
   fun getBankFilter(): Observable<List<BankCodeResponse>>
+
+  @POST("UserApi/GetBranchCodeByBank")
+  fun getBranchFilter(@Body request: BranchCodeRequest): Observable<List<BranchCodeResponse>>
+
+  @POST("UserApi/GetSubBranchCodeByBank")
+  fun getSubBranchFilter(@Body request: SubBranchCodeRequest): Observable<List<SubBranchCodeResponse>>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClients(
