@@ -34,7 +34,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         HashMap<Any, Any>()
     private var filterFirst: String = ""
     private var filterSecond: String = ""
-    private lateinit var monthAdapter: ArrayAdapter<FilterRowData>
+    private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     private lateinit var productAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
@@ -75,11 +75,11 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         widgetSystemName = model.systemName
         val filterList = model.widgetFilterList
         if (filterList.size == 2) {
-            monthAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-            binding.spFilterFirst.adapter = monthAdapter
-            monthAdapter.setSpinnerData(binding.spFilterFirst, filterList[0].filterData)
+            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spFilterFirst.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spFilterFirst, filterList[0].filterData)
             val productDataFirst =
-                FilterRowData.getSpinnerFilterDataByValue(filterFirst, monthAdapter)
+                FilterRowData.getSpinnerFilterDataByValue(filterFirst, periodAdapter)
             if (productDataFirst != null) {
                 binding.spFilterFirst.setSelection(productDataFirst.position)
             }
@@ -93,11 +93,11 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
                 binding.spFilterSecond.setSelection(productDataSecond.position)
             }
         } else if (filterList.size == 1) {
-            monthAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-            binding.spFilterFirst.adapter = monthAdapter
-            monthAdapter.setSpinnerData(binding.spFilterFirst, filterList[0].filterData)
+            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spFilterFirst.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spFilterFirst, filterList[0].filterData)
             val productDataFirst =
-                FilterRowData.getSpinnerFilterDataByValue(filterFirst, monthAdapter)
+                FilterRowData.getSpinnerFilterDataByValue(filterFirst, periodAdapter)
             if (productDataFirst != null) {
                 binding.spFilterFirst.setSelection(productDataFirst.position)
             }
@@ -113,7 +113,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     }
 
-    override fun onMonthChange(): Observable<Int> {
+    override fun onPeriodChange(): Observable<Int> {
         return binding.spFilterFirst.itemSelections()
     }
 
@@ -135,6 +135,14 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     override fun getSubBranch(): SubBranchCodeModel? {
         return binding.spFilterSubBranch.selectedItem as? SubBranchCodeModel
+    }
+
+    override fun getPeriod(): FilterRowData? {
+        return binding.spFilterFirst.selectedItem as? FilterRowData
+    }
+
+    override fun getProduct(): FilterRowData? {
+        return binding.spFilterSecond.selectedItem as? FilterRowData
     }
 
     override fun onBranchChange(): Observable<Int> {

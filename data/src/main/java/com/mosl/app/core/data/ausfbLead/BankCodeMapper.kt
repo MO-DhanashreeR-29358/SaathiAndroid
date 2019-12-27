@@ -1,5 +1,8 @@
 package com.mosl.app.core.data.ausfbLead
 
+import com.mosl.mobile.domain.ausfbLead.SelectBank
+import com.mosl.mobile.domain.ausfbLead.SelectBranch
+import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
 import com.mosl.saathi.api.model.ausfbLead.*
 
 fun List<BankCodeResponse>.banckCodeTransform(): List<BankCodeModel> {
@@ -12,6 +15,8 @@ fun List<BankCodeResponse>.banckCodeTransform(): List<BankCodeModel> {
 
         )
     }
+        .orEmpty()
+        .defaultSelection(SelectBank)
 }
 
 fun List<BranchCodeResponse>.branchCodeTransform(): List<BranchCodeModel> {
@@ -24,7 +29,8 @@ fun List<BranchCodeResponse>.branchCodeTransform(): List<BranchCodeModel> {
 
 
         )
-    }
+    }.orEmpty()
+        .defaultSelection(SelectBranch)
 }
 
 
@@ -37,5 +43,6 @@ fun List<SubBranchCodeResponse>.subBranchCodeTransform(): List<SubBranchCodeMode
 
 
         )
-    }
+    }.orEmpty()
+        .defaultSelection(SelectSubBranch)
 }

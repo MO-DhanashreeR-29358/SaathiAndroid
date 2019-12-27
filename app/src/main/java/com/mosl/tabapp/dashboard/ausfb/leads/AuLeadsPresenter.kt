@@ -27,6 +27,10 @@ class AuLeadsPresenter @Inject constructor(view: AuLeadsView, val repository: Ba
                 repository.getSubBranchFilter(view.getBranch()!!.branchId)
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
+
+//        Observable.merge(view.onPeriodChange(),view.onProductChange(),view.onSubBranchChange()).filter {
+//
+//        }
     }
 
 }
