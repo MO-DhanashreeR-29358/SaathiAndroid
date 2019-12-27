@@ -1,5 +1,6 @@
 package com.mosl.tabapp.drawermenu.data.source
 
+import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
@@ -72,6 +73,7 @@ class MenuDataSourceImpl @Inject constructor(
 
   protected fun getAuSalesBank(): List<BaseMenu> {
     return listOf(
+        getDashboard(),
         getAUBankMeeting(),
         getAUBankMeetingReport(),
         getSalesBrochure(),

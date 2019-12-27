@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android-extensions'
 
 def gitSha() {
   def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
@@ -150,7 +151,6 @@ dependencies {
   implementation deps.constraintLayout
   testImplementation deps.testing.junit
   androidTestImplementation(deps.testing.espresso.core)
-
   implementation deps.timber
   implementation deps.imageLoader
   implementation deps.commonsLang

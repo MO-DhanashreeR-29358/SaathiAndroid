@@ -34,7 +34,7 @@ import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
-import java.util.Objects
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -67,7 +67,7 @@ class ActivityNavigationHelper @Inject constructor(
         )
       }
     } else if (userManager.user.isAuBankSalesSupport()) {
-      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING, true)
+        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, true)
     } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {

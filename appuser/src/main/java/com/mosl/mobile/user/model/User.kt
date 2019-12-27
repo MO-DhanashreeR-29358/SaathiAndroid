@@ -19,28 +19,28 @@ data class User(
     @JvmField var password: String
 
 ) {
-  fun isAufsb(): Boolean {
-    return userTypeSequence.equals("9")
-  }
+    fun isAufsb(): Boolean {
+        return userTypeSequence.equals("9")
+    }
 
-  fun isSMTEnabled(): Boolean {
-    return smtEnabled.equals("1")
-  }
+    fun isSMTEnabled(): Boolean {
+        return smtEnabled.equals("1")
+    }
 
-  fun isAuBankSalesSupport(): Boolean {
-    return currentBusinessProfile.businessProfileId.equals("1142")
-  }
+    fun isAuBankSalesSupport(): Boolean {
+        return currentBusinessProfile.businessProfileId?.equals("1142") ?: false
+    }
 
-  fun isRetail(): Boolean {
-    return currentBusinessProfile.businessUnitId.equals("1")
-  }
+    fun isRetail(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("1") ?: false
+    }
 
-  fun isFranchise(): Boolean {
-    return currentBusinessProfile.businessUnitId.equals("3")
-  }
+    fun isFranchise(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("3") ?: false
+    }
 
-  fun isIFA(): Boolean {
-    return currentBusinessProfile.businessUnitId.equals("4")
-  }
+    fun isIFA(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("4") ?: false
+    }
 
 }

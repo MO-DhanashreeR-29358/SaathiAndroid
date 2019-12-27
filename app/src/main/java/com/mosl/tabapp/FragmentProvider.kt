@@ -6,30 +6,10 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
-import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
-import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
-import com.mosl.tabapp.dashboard.ClientsFragment
-import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
-import com.mosl.tabapp.dashboard.ClientsLeadsFragment
-import com.mosl.tabapp.dashboard.ClientsTradedYesterdayFragment
-import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
-import com.mosl.tabapp.dashboard.ProductivityFragment
-import com.mosl.tabapp.dashboard.TargetAchievementFragment
-import com.mosl.tabapp.dashboard.TargetAchievementTeamFragment
-import com.mosl.tabapp.dashboard.TrendsTabFragment
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.DocumentFragment
-import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
-import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
-import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
+import com.mosl.tabapp.dashboard.*
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsModule
+import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -78,6 +58,9 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
+
+    @ContributesAndroidInjector(modules = [AuLeadsModule::class])
+    abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
 
   @ContributesAndroidInjector
   abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment

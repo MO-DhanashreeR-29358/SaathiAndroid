@@ -197,4 +197,5 @@
     <string name="txt_label_parameters">Parameters</string>
     <string name="txt_label_performance">Performance</string>
     <string name="txt_label_team_snapshot">Team Snapshot</string>
+    <string name="txt_label_total">Total</string>
 </resources>

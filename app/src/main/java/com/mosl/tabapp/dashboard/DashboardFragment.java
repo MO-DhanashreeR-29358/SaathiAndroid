@@ -76,6 +76,7 @@ import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -630,7 +631,11 @@ public class DashboardFragment extends CommonFragment
                 loadLeadBusinessSnapShot();
             } else if (id == R.id.btnLeads) {
                 hideKeyboard(view);
-                loadLead();
+                if (userManager.getUser().isAuBankSalesSupport()) {
+                    loadAusfbLead();
+                } else {
+                    loadLead();
+                }
             } else if (id == R.id.btnProductivity) {
                 hideKeyboard(view);
                 loadProductivity();
@@ -723,6 +728,19 @@ public class DashboardFragment extends CommonFragment
         Bundle args = new Bundle();
         setTabActivre(btnLeads);
         ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
+        leadsFragment.setArguments(args);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llReplaceClientFragment, leadsFragment)
+                .commit();
+    }
+
+
+    private void loadAusfbLead() {
+        Bundle args = new Bundle();
+        setTabActivre(btnLeads);
+        AuLeadsFragment leadsFragment = new AuLeadsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -1215,6 +1233,14 @@ public class DashboardFragment extends CommonFragment
                 btnClientTraded.setVisibility(View.GONE);
                 btnProductivity.setVisibility(View.GONE);
                 break;
+            case MY_LEAD_AU_SUPPORT:
+                btnClient.setVisibility(View.GONE);
+                btnBusinessSnapshot.setVisibility(View.GONE);
+                btnBusinessSnapshotAdvisor.setVisibility(View.GONE);
+                btnClientTraded.setVisibility(View.GONE);
+                btnProductivity.setVisibility(View.GONE);
+                break;
+
             case MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY:
                 btnBusinessSnapshot.setVisibility(View.GONE);
                 btnLeads.setVisibility(View.GONE);
@@ -1300,6 +1326,15 @@ public class DashboardFragment extends CommonFragment
             setClientLayoutVisibility(MY_LEAD);
             loadLead();
             DashboardSystemModel.setLeadSystemName(MY_LEAD);
+        } else if (currentDashboard.isGroupExists(MY_LEAD_AU_SUPPORT)) {
+            llClient.setVisibility(View.VISIBLE);
+            setIcon(llClientsLeads, ivClientLeads);
+            if (llClientsLeads.getVisibility() != View.VISIBLE) {
+                toggleSectionExpansion(llClientsLeads, ivClientLeads);
+            }
+            setClientLayoutVisibility(MY_LEAD_AU_SUPPORT);
+            loadAusfbLead();
+            DashboardSystemModel.setLeadSystemName(MY_LEAD_AU_SUPPORT);
         } else if (currentDashboard.isGroupExists(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
             llClient.setVisibility(View.VISIBLE);
             setIcon(llClientsLeads, ivClientLeads);
