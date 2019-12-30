@@ -23,5 +23,6 @@ interface AuLeadsView : BaseView {
     fun getSubBranch(): SubBranchCodeModel?
     fun getPeriod(): FilterRowData?
     fun getProduct(): FilterRowData?
+    fun getWidgetSystemsName(): String?
 
 }

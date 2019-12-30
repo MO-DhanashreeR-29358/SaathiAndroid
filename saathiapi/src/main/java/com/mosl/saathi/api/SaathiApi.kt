@@ -375,6 +375,12 @@ interface SaathiApi {
     @Body request: ClientRequest
   ): Observable<String>
 
+
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getAusfbLeadWidgetData(
+        @Body request: AusfbLeadRequest
+    ): Observable<String>
+
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
     @Body request: ClientRequest

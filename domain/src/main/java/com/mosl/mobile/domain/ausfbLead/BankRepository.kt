@@ -11,4 +11,6 @@ interface BankRepository {
     fun getBranchFilter(bankId: Int): Observable<List<BranchCodeModel>>
 
     fun getSubBranchFilter(branchId: Int): Observable<List<SubBranchCodeModel>>
+
+
 }

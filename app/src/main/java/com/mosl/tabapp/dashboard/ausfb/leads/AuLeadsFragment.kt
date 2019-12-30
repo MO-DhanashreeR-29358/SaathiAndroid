@@ -9,12 +9,13 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.ausfbLead.SelectBranch
+import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
 import com.mosl.saathi.api.model.ausfbLead.BankCodeModel
 import com.mosl.saathi.api.model.ausfbLead.BranchCodeModel
 import com.mosl.saathi.api.model.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
@@ -22,16 +23,12 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
-import java.util.*
 import javax.inject.Inject
 
 class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     lateinit var binding: FragmentAuLeadsBinding
-    lateinit var dashboardModel: DashboardModel
     private var widgetSystemName: String? = null
-    private val addtionalParameterMap: Map<*, *> =
-        HashMap<Any, Any>()
     private var filterFirst: String = ""
     private var filterSecond: String = ""
     private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
@@ -42,6 +39,9 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     @Inject
     lateinit var presenter: AuLeadsPresenter
+
+    @Inject
+    lateinit var dashboardModel: DashboardModel
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_leads
@@ -60,7 +60,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     private fun setUpView() {
         val context = requireContext()
-        dashboardModel = arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
+//        dashboardModel = arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
 
         val groupModel = dashboardModel.getGroupModel(
             DashboardSystemModel.getLeadSystemName()
@@ -145,6 +145,10 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         return binding.spFilterSecond.selectedItem as? FilterRowData
     }
 
+    override fun getWidgetSystemsName(): String? {
+        return widgetSystemName
+    }
+
     override fun onBranchChange(): Observable<Int> {
         return binding.spFilterBranch.itemSelections()
     }
@@ -167,12 +171,20 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
         toggleProgress(uiModel.inProgress)
+        val selectBranch = mutableListOf<BranchCodeModel>()
+        selectBranch.add(0, SelectBranch)
+        val selectSubBranch = mutableListOf<SubBranchCodeModel>()
+        selectSubBranch.add(0, SelectSubBranch)
         uiModel.onFailure { error ->
             showOnFailurePopup(error)
+            branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
+            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
         }
 
         uiModel.onSuccess {
             branchAdapter.setSpinnerData(binding.spFilterBranch, it)
+            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+
         }
     }
 

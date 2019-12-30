@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.ausfbLead
 
+import com.mosl.app.core.data.util.defaultSelection
 import com.mosl.mobile.domain.ausfbLead.SelectBank
 import com.mosl.mobile.domain.ausfbLead.SelectBranch
 import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
