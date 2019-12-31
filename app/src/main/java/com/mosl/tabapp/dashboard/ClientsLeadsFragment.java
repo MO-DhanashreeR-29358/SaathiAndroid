@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -22,7 +21,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -449,22 +448,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 		xAxis.setCenterAxisLabels(true);
 		xAxis.setDrawAxisLine(false);
 
-		xAxis.setValueFormatter(new IAxisValueFormatter() {
-			@Override
-			public String getFormattedValue(float value, AxisBase axis) {
-
-				try {
-					if (value < 0) {
-						return "";
-					} else {
-						return xAxisValue.get((int) value % xAxisValue.size());
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-		});
+		xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisValue));
 
 		ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 

@@ -19,6 +19,7 @@ import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
@@ -52,6 +53,10 @@ import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
 import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKBRANCHCODE;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKNAME;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKSUBBROKERCODE;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -222,7 +227,16 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         int id = view.getId();
         if (id == R.id.tvShowLess) {
             Bundle args = new Bundle();
-            ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+            CommonFragment leadsFragment;
+            if (Objects.requireNonNull(Objects.requireNonNull(this.getArguments()).
+                    getString(TYPESOFLEAD)).equalsIgnoreCase(LEAD)) {
+                leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+            } else {
+                leadsFragment = new AuLeadsFragment();
+                args.putInt(FLT_BANKNAME, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKNAME));
+                args.putInt(FLT_BANKBRANCHCODE, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKBRANCHCODE));
+                args.putInt(FLT_BANKSUBBROKERCODE, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKSUBBROKERCODE));
+            }
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
             args.putInt(FILTERFIRST, Objects.requireNonNull(this.getArguments()).getInt(FILTERFIRST));
             args.putInt(FILTERSECOND, Objects.requireNonNull(this.getArguments()).getInt(FILTERSECOND));

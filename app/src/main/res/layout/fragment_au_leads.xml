@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/sp_filter_first"
+                android:id="@+id/sp_filter_period"
                 style="@style/DashbordSpinnerSelector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -25,17 +25,7 @@
 
 
             <Spinner
-                android:id="@+id/sp_filter_second"
-                style="@style/DashbordSpinnerSelector"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_weight="1"
-                android:visibility="gone" />
-
-            <Spinner
-                android:id="@+id/sp_filter_third"
+                android:id="@+id/sp_filter_product"
                 style="@style/DashbordSpinnerSelector"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -98,6 +88,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/_5sdp">
@@ -111,34 +102,27 @@
                     android:text="@string/txt_label_total"
                     android:textColor="@color/light_black"
                     android:textSize="@dimen/_14sdp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_toRightOf="@+id/textView"
+                    android:layout_toEndOf="@+id/textView"
                     android:textColor="@color/green_textcolor"
                     android:textSize="@dimen/_14sdp" />
 
-                <LinearLayout
-                    android:id="@+id/llShowMore"
+
+                <TextView
+                    android:id="@+id/tvShowMore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_8sdp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/tvShowMore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/SHOW_MORE"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/txt_size" />
-                </LinearLayout>
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:text="@string/SHOW_MORE"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/txt_size" />
 
 
             </RelativeLayout>
