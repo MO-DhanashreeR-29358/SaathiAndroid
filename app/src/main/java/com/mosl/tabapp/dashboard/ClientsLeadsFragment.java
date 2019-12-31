@@ -54,7 +54,6 @@ import java.util.Map;
 import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
 import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
@@ -86,7 +85,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 	private DashboardModel dashboardModel;
 	private String widgetSystemName;
 	private Map addtionalParameterMap = new HashMap<>();
-	private String filterFirst = "", filterSecond = "", filterThird = "";
 
 	public static ClientsLeadsFragment newInstance(Context context) {
 		ClientsLeadsFragment fragment = new ClientsLeadsFragment();
@@ -116,7 +114,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 				int position,
 				long id) {
-				filterFirst = ((FilterRowData) spFilter1.getSelectedItem()).getValue();
 				webServiceCall();
 			}
 
@@ -131,7 +128,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 				int position,
 				long id) {
-				filterSecond = ((FilterRowData) spFilter2.getSelectedItem()).getValue();
 				webServiceCall();
 			}
 
@@ -146,7 +142,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
 				int position,
 				long id) {
-				filterThird = ((FilterRowData) spFilter3.getSelectedItem()).getValue();
 				webServiceCall();
 			}
 
@@ -155,13 +150,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			}
 		});
 
-		try {
-			filterFirst = this.getArguments().getString(FILTERFIRST);
-			filterSecond = this.getArguments().getString(FILTERSECOND);
-			filterThird = this.getArguments().getString(FILTERTHIRD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		mChart = leadsView.findViewById(R.id.chart1);
 		mChart.getDescription().setEnabled(false);
@@ -225,12 +213,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 							filterList.get(0).getFilterData());
 					adapter1.setDropDownViewResource(R.layout.mdropdown);
 					spFilter1.setAdapter(adapter1);
-
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
 
 					ArrayAdapter<FilterRowData> adapter2 =
 						new ArrayAdapter<FilterRowData>(requireContext(),
@@ -239,12 +222,8 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 					adapter2.setDropDownViewResource(R.layout.mdropdown);
 					spFilter2.setAdapter(adapter2);
 					spFilter2.setVisibility(View.VISIBLE);
+					spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
 
-					FilterRowData productDataSecond =
-						getSpinnerFilterDataByValue(filterSecond, adapter2);
-					if (productDataSecond != null) {
-						spFilter2.setSelection(productDataSecond.getPosition());
-					}
 				}
 				if (filterList != null && filterList.size() == 3) {
 					ArrayAdapter<FilterRowData> adapter1 =
@@ -254,12 +233,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 					adapter1.setDropDownViewResource(R.layout.mdropdown);
 					spFilter1.setAdapter(adapter1);
 
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
-
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
 					ArrayAdapter<FilterRowData> adapter2 =
 						new ArrayAdapter<FilterRowData>(requireContext(),
 							android.R.layout.simple_spinner_item,
@@ -267,24 +241,14 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 					adapter2.setDropDownViewResource(R.layout.mdropdown);
 					spFilter2.setAdapter(adapter2);
 
-					FilterRowData productDataSecond =
-						getSpinnerFilterDataByValue(filterSecond, adapter2);
-					if (productDataSecond != null) {
-						spFilter2.setSelection(productDataSecond.getPosition());
-					}
-
+					spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
 					ArrayAdapter<FilterRowData> adapter3 =
 						new ArrayAdapter<FilterRowData>(requireContext(),
 							android.R.layout.simple_spinner_item,
 							filterList.get(2).getFilterData());
 					adapter3.setDropDownViewResource(R.layout.mdropdown);
 					spFilter3.setAdapter(adapter3);
-
-					FilterRowData productDataThird =
-						getSpinnerFilterDataByValue(filterThird, adapter3);
-					if (productDataThird != null) {
-						spFilter3.setSelection(productDataThird.getPosition());
-					}
+					spFilter3.setSelection(this.getArguments().getInt(FILTERTHIRD));
 					spFilter2.setVisibility(View.VISIBLE);
 					spFilter3.setVisibility(View.VISIBLE);
 				} else if (filterList != null && filterList.size() == 1) {
@@ -295,11 +259,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 					adapter1.setDropDownViewResource(R.layout.mdropdown);
 					spFilter1.setAdapter(adapter1);
 
-					FilterRowData productDataFirst =
-						getSpinnerFilterDataByValue(filterFirst, adapter1);
-					if (productDataFirst != null) {
-						spFilter1.setSelection(productDataFirst.getPosition());
-					}
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
 				}
 			}
 		}
@@ -318,11 +278,9 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			}
 			if (filter2 != null) {
 				addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
-				filterSecond = filter2.getValue();
 			}
 			if (filter3 != null) {
 				addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
-				filterThird = filter3.getValue();
 			}
 			addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
 		} catch (Exception ex) {
@@ -593,9 +551,9 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 			args.putSerializable(DASHBOARD_MODEL, dashboardModel);
 			args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
 			args.putString(SYSTEM_NAME, widgetSystemName);
-			args.putString(FILTERFIRST, filterFirst);
-			args.putString(FILTERSECOND, filterSecond);
-			args.putString(FILTERTHIRD, filterThird);
+			args.putInt(FILTERFIRST, spFilter1.getSelectedItemPosition());
+			args.putInt(FILTERSECOND, spFilter2.getSelectedItemPosition());
+			args.putInt(FILTERTHIRD, spFilter3.getSelectedItemPosition());
 			args.putString(TYPESOFLEAD, LEAD);
 			clientsFragment.setArguments(args);
 			requireActivity().getSupportFragmentManager()

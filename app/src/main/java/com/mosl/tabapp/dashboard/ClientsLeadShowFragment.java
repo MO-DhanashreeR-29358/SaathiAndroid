@@ -68,7 +68,6 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
     private Map<String, String> addtionalParameterMap = new HashMap<>();
     private LinkedHashMap lMap;
     private SparseArray tabaleHeaderMap = new SparseArray<>();
-    private String filterFirst = "", filterSecond = "", filterThird = "";
 
     public static ClientsLeadShowFragment newInstance() {
         ClientsLeadShowFragment fragment = new ClientsLeadShowFragment();
@@ -100,9 +99,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         try {
             map = (HashMap<String, String>) this.getArguments().getSerializable(MAP);
             widgetSystemName = this.getArguments().getString(SYSTEM_NAME);
-            filterFirst = this.getArguments().getString(FILTERFIRST);
-            filterSecond = this.getArguments().getString(FILTERSECOND);
-            filterThird = this.getArguments().getString(FILTERTHIRD);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -227,9 +224,9 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             Bundle args = new Bundle();
             ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            args.putString(FILTERFIRST, filterFirst);
-            args.putString(FILTERSECOND, filterSecond);
-            args.putString(FILTERTHIRD, filterThird);
+            args.putInt(FILTERFIRST, Objects.requireNonNull(this.getArguments()).getInt(FILTERFIRST));
+            args.putInt(FILTERSECOND, Objects.requireNonNull(this.getArguments()).getInt(FILTERSECOND));
+            args.putInt(FILTERTHIRD, Objects.requireNonNull(this.getArguments()).getInt(FILTERTHIRD));
             leadsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
