@@ -1,9 +1,9 @@
-package com.mosl.saathi.api.model.ausfbLead
+package com.mosl.saathi.api.model.dashboard.ausfbLead
 
 
 data class BankCodeModel(
-    val bankId: Int,
-    val bankName: String
+    @JvmField val bankId: Int,
+    @JvmField val bankName: String
 
 
 ) {

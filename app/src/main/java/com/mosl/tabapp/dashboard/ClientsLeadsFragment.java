@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -41,7 +42,7 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import io.reactivex.disposables.Disposable;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
@@ -66,6 +69,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
 import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -585,13 +589,14 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
 		if (id == R.id.llShowMore) {
 			Bundle args = new Bundle();
 			ClientsLeadShowFragment clientsFragment =
-				ClientsLeadShowFragment.newInstance(getContext());
+					ClientsLeadShowFragment.newInstance();
 			args.putSerializable(DASHBOARD_MODEL, dashboardModel);
 			args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
 			args.putString(SYSTEM_NAME, widgetSystemName);
 			args.putString(FILTERFIRST, filterFirst);
 			args.putString(FILTERSECOND, filterSecond);
 			args.putString(FILTERTHIRD, filterThird);
+			args.putString(TYPESOFLEAD, LEAD);
 			clientsFragment.setArguments(args);
 			requireActivity().getSupportFragmentManager()
 				.beginTransaction()

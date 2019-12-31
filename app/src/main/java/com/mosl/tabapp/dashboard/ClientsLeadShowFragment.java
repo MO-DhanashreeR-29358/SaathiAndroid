@@ -1,17 +1,16 @@
 package com.mosl.tabapp.dashboard;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -24,7 +23,9 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,7 +33,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
@@ -55,48 +59,44 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  */
 
 public class ClientsLeadShowFragment extends CommonFragment implements View.OnClickListener {
-    private String TAG = ClientsLeadShowFragment.class.getCanonicalName();
 
-    private View leadShowView;
     private TableFixHeaders table;
-    private LeadTableAdapter leadTableAdapter;
-    private TextView tvNochart, tvShowLess;
-    static Context mContext;
+    private TextView tvNochart;
     private DashboardModel dashboardModel;
     private HashMap<String, String> map;
     private String widgetSystemName;
-    private Map addtionalParameterMap = new HashMap<>();
+    private Map<String, String> addtionalParameterMap = new HashMap<>();
     private LinkedHashMap lMap;
     private SparseArray tabaleHeaderMap = new SparseArray<>();
     private String filterFirst = "", filterSecond = "", filterThird = "";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-        leadShowView = super.onCreateView(inflater, container, savedInstanceState);
-        setUpView(leadShowView);
-        hideAppTitle();
-        return leadShowView;
-    }
-
-    @Override protected int getLayout() {
-        return R.layout.frag_table_lead_show;
-    }
-
-    public static ClientsLeadShowFragment newInstance(Context context) {
+    public static ClientsLeadShowFragment newInstance() {
         ClientsLeadShowFragment fragment = new ClientsLeadShowFragment();
         Bundle args = new Bundle();
-        mContext = context;
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View leadShowView = super.onCreateView(inflater, container, savedInstanceState);
+        setUpView(Objects.requireNonNull(leadShowView));
+        hideAppTitle();
+        return leadShowView;
+    }
+
+    @Override
+    protected int getLayout() {
+        return R.layout.frag_table_lead_show;
+    }
+
     private void setUpView(View leadShowView) {
-        table = (TableFixHeaders) leadShowView.findViewById(R.id.table);
-        tvNochart = (TextView) leadShowView.findViewById(R.id.tvNochart);
-        tvShowLess = (TextView) leadShowView.findViewById(R.id.tvShowLess);
+        table = leadShowView.findViewById(R.id.table);
+        tvNochart = leadShowView.findViewById(R.id.tvNochart);
+        TextView tvShowLess = leadShowView.findViewById(R.id.tvShowLess);
         tvShowLess.setPaintFlags(tvShowLess.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
+        dashboardModel = (DashboardModel) Objects.requireNonNull(this.getArguments()).getSerializable(DASHBOARD_MODEL);
         try {
             map = (HashMap<String, String>) this.getArguments().getSerializable(MAP);
             widgetSystemName = this.getArguments().getString(SYSTEM_NAME);
@@ -113,30 +113,28 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
 
     private void renderLeadTable(Map<String, Object> responseJsonObj) {
         //hideProgress();
-        leadTableAdapter =
-            new LeadTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+        LeadTableAdapter leadTableAdapter = new LeadTableAdapter(new ArrayList<HashMap<String, String>>());
         table.setAdapter(leadTableAdapter);
 
         newPrepareGroupMap(responseJsonObj); //prepare group map
 
         List<Map<String, Object>> arrayDetail =
-            (List<Map<String, Object>>) responseJsonObj.get("Table");
+                (List<Map<String, Object>>) responseJsonObj.get("Table");
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> header = new ArrayList<String>();
-        ArrayList<String> headerSecond = new ArrayList<String>();
 
-        if (arrayDetail.size() != 0) {
+        if (Objects.requireNonNull(arrayDetail).size() != 0) {
 
             for (int y = 2; y < arrayDetail.size(); y++) {
                 Map<String, Object> objDetailSecond =
-                    (Map<String, Object>) arrayDetail.get(0);
+                        arrayDetail.get(0);
                 if (columns.size() == 0) {
                     for (Object keySetE : objDetailSecond.keySet()) {
                         columns.add(keySetE.toString());
                     }
                     for (String column : columns) {
-                        String columnData = objDetailSecond.get(column).toString().equals("") ? ""
-                            : objDetailSecond.get(column).toString();
+                        String columnData = Objects.requireNonNull(objDetailSecond.get(column)).toString().equals("") ? ""
+                                : Objects.requireNonNull(objDetailSecond.get(column)).toString();
                         header.add(columnData);
                     }
                     String[] stockArr = new String[header.size()];
@@ -144,7 +142,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                     leadTableAdapter.setHeadersSecond(stockArr);
                 }
                 Map<String, Object> objDetail =
-                    (Map<String, Object>) arrayDetail.get(y);
+                        arrayDetail.get(y);
                 String[] stockArr = new String[columns.size()];
                 stockArr = columns.toArray(stockArr);
                 leadTableAdapter.setHeaders(stockArr);
@@ -152,9 +150,9 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 LinkedHashMap<String, String> hm = new LinkedHashMap<>();
                 for (String column : columns) {
                     String columnData =
-                        (objDetail.get(column).toString() == null || objDetail.get(column)
-                            .toString()
-                            .equals("")) ? "0" : objDetail.get(column).toString();
+                            Objects.requireNonNull(objDetail.get(column))
+                                    .toString()
+                                    .equals("") ? "0" : Objects.requireNonNull(objDetail.get(column)).toString();
                     hm.put(column, columnData);
                 }
                 leadTableAdapter.add(hm);
@@ -182,41 +180,41 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 renderLeadTable(data);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void newWebServiceCall(String systemName,
-        Map<String, String> getAddtionalParameterMap) {
+                                   Map<String, String> getAddtionalParameterMap) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                getAddtionalParameterMap,
-                systemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    getAddtionalParameterMap,
+                    systemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
 
             Disposable subscribe = getSaathiApi().getDashboardData(request)
-                .map(responseS -> {
-                    Gson mGson = new Gson();
-                    Type type = new TypeToken<HashMap<String, Object>>() {
-                    }.getType();
-                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                    Map<String, Object> responseJsonObj =
-                        (Map<String, Object>) response.get("Response");
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return responseJsonObj;
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderClientLeadShow);
+                    .map(responseS -> {
+                        Gson mGson = new Gson();
+                        Type type = new TypeToken<HashMap<String, Object>>() {
+                        }.getType();
+                        HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                        Map<String, Object> responseJsonObj =
+                                (Map<String, Object>) response.get("Response");
+                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        if (status.equalsIgnoreCase("true")) {
+                            return responseJsonObj;
+                        } else {
+                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::renderClientLeadShow);
         } else {
             noInternetConnectionDialog();
         }
@@ -227,16 +225,16 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         int id = view.getId();
         if (id == R.id.tvShowLess) {
             Bundle args = new Bundle();
-            ClientsLeadsFragment clientsFragment = ClientsLeadsFragment.newInstance(getContext());
+            ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
             args.putString(FILTERFIRST, filterFirst);
             args.putString(FILTERSECOND, filterSecond);
             args.putString(FILTERTHIRD, filterThird);
-            clientsFragment.setArguments(args);
-            getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.llReplaceClientFragment, clientsFragment)
-                .commit();
+            leadsFragment.setArguments(args);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.llReplaceClientFragment, leadsFragment)
+                    .commit();
         }
     }
 
@@ -266,22 +264,69 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         }
     }
 
+    private String getRowKeyName(Double childId) {
+        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
+            int groupId = tabaleHeaderMap.keyAt(ctr);
+            List<Map> childList = (List) tabaleHeaderMap.get(groupId);
+            for (Map childMap : childList) {
+                Set<Integer> childListSet = childMap.keySet();
+                for (Integer childIdFromMap : childListSet) {
+                    if (childId == childIdFromMap.intValue()) {
+                        return Objects.requireNonNull(childMap.get(childIdFromMap)).toString();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean isGroup(double id) {
+        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
+            int groupId = tabaleHeaderMap.keyAt(ctr);
+            if (groupId == id) return true;
+        }
+        return false;
+    }
+
+    private void newPrepareGroupMap(Map<String, Object> responseJsonObj) {
+        try {
+            if (responseJsonObj.get("Table2") == null) return;
+            List<Map<String, Object>> jsonArray =
+                    (List<Map<String, Object>>) responseJsonObj.get("Table2");
+            if (jsonArray == null) return;
+            for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
+                Map<String, Object> jsonRowObject = jsonArray.get(ctr);
+                int groupId = Integer.parseInt(Objects.requireNonNull(jsonRowObject.get("GroupId")).toString());
+                int childid = Integer.parseInt(Objects.requireNonNull(jsonRowObject.get("childid")).toString());
+                String rowFilter = Objects.requireNonNull(jsonRowObject.get("RowFilter")).toString();
+
+                List<Map> childList = (List) tabaleHeaderMap.get(groupId);
+                if (childList == null) {
+                    childList = new ArrayList<>();
+                }
+                Map childMap = new HashMap();
+                childMap.put(childid, rowFilter);
+                childList.add(childMap);
+                tabaleHeaderMap.put(groupId, childList);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public class LeadTableAdapter extends BaseTableAdapter {
-        private final CommonHeader commonHeaders[];
+        private final CommonHeader[] commonHeaders;
 
-        private String headers[] = {};
+        private String[] headers = {};
 
-        private String headers2[] = {};
+        private String[] headers2 = {};
 
-        private final float density;
-        HashMap hashMap;
         ArrayList<HashMap<String, String>> hashArray;
         private LayoutInflater inflater = null;
 
-        public LeadTableAdapter(Context context, ArrayList<HashMap<String, String>> hashArray) {
-            commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
+        LeadTableAdapter(ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
-            density = context.getResources().getDisplayMetrics().density;
         }
 
         public String[] getHeaders() {
@@ -292,11 +337,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             this.headers = headers;
         }
 
-        public String[] getHeadersSecond() {
-            return headers2;
-        }
-
-        public void setHeadersSecond(String[] headers) {
+        void setHeadersSecond(String[] headers) {
             this.headers2 = headers;
         }
 
@@ -311,10 +352,10 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         public void add(HashMap<String, String> row) {
             hashArray.add(row);
 
-            String rowData[] = new String[headers.length];
+            String[] rowData = new String[headers.length];
             int ctr = 0;
             for (String columnName : headers) {
-                String value = row.get(columnName).toString();
+                String value = row.get(columnName);
                 rowData[ctr] = value;
                 ctr++;
             }
@@ -333,10 +374,10 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
 
             switch (getItemViewType(row, column)) {
                 case 0:
-                    view = getFirstHeader(row, column, convertView, parent);
+                    view = getFirstHeader(convertView, parent);
                     break;
                 case 1:
-                    view = getHeader(row, column, convertView, parent);
+                    view = getHeader(column, convertView, parent);
                     break;
                 case 2:
                     view = getFirstBody(row, column, convertView, parent);
@@ -344,32 +385,28 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                     break;
                 case 3:
                     view = getBody(row, column, convertView, parent);
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            int newColumn = column + 1;
-                            Set<String> stringSet = hashArray.get(row).keySet();
-                            String columnName = stringSet.toArray()[newColumn].toString();
-                            addtionalParameterMap.clear();
-                            addtionalParameterMap.put(COL_FILTER, columnName);
-                            addtionalParameterMap.put(ROW_FILTER, getRowKeyName(
-                                Double.parseDouble(hashArray.get(row).get("id").toString())));
-                            addtionalParameterMap.putAll(map);
-                            Bundle args = new Bundle();
-                            args.putString(SYSTEM_NAME, widgetSystemName);
-                            args.putString(LABEL, LEAD);
-                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            lMap = (LinkedHashMap) hashArray.get(row);
-                            String columnData = lMap.get(columnName).toString();
-                            if (columnData != null) {
-                                if (!columnData.trim().equalsIgnoreCase("0")) {
-                                    navigator.openPage(
-                                        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
-                                        args,
-                                        true, false);
-                                }
-                            }
+                    view.setOnClickListener(view1 -> {
+                        int newColumn = column + 1;
+                        Set<String> stringSet = hashArray.get(row).keySet();
+                        String columnName = Objects.requireNonNull(stringSet.toArray())[newColumn].toString();
+                        addtionalParameterMap.clear();
+                        addtionalParameterMap.put(COL_FILTER, columnName);
+                        addtionalParameterMap.put(ROW_FILTER, Objects.requireNonNull(getRowKeyName(
+                                Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))));
+                        addtionalParameterMap.putAll(map);
+                        Bundle args = new Bundle();
+                        args.putString(SYSTEM_NAME, widgetSystemName);
+                        args.putString(LABEL, LEAD);
+                        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                        lMap = (LinkedHashMap) hashArray.get(row);
+                        String columnData = Objects.requireNonNull(lMap.get(columnName)).toString();
+                        if (!columnData.trim().equalsIgnoreCase("0")) {
+                            navigator.openPage(
+                                    NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+                                    args,
+                                    true, false);
                         }
+
                     });
                     break;
                 case 4:
@@ -382,13 +419,13 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         }
 
         //click on symbol header
-        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+        private View getFirstHeader(View convertView, ViewGroup parent) {
             inflater = LayoutInflater.from(getActivity());
             if (convertView == null) {
                 convertView =
-                    inflater.inflate(R.layout.item_table_header_first_lead, parent, false);
+                        inflater.inflate(R.layout.item_table_header_first_lead, parent, false);
             }
-            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+            TextView head = convertView.findViewById(android.R.id.text1);
             try {
                 head.setText(headers[1]);
             } catch (Exception e) {
@@ -400,13 +437,13 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         }
 
         //click on header other than symbol
-        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+        private View getHeader(int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header_lead, parent, false);
             }
-            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+            TextView head = convertView.findViewById(android.R.id.text1);
 
-            TextView head1 = ((TextView) convertView.findViewById(android.R.id.text2));
+            TextView head1 = convertView.findViewById(android.R.id.text2);
 
             try {
                 head1.setText(headers[column + 1]);
@@ -423,18 +460,17 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 convertView = inflater.inflate(R.layout.item_table_first_lead, parent, false);
             }
             LinearLayout listLayout =
-                (LinearLayout) convertView.findViewById(R.id.item_table_first_lead);
-            TextView tv_table_first = (TextView) convertView.findViewById(R.id.tv_table_first);
+                    convertView.findViewById(R.id.item_table_first_lead);
+            TextView tv_table_first = convertView.findViewById(R.id.tv_table_first);
 
             try {
                 if (hashArray.get(row).get("id") != null && isGroup(
-                    Double.parseDouble(hashArray.get(row).get("id").toString()))) {
+                        Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))) {
                     tv_table_first.setTypeface(null, Typeface.BOLD);
                     tv_table_first.setTextColor(getResources().getColor(R.color.flush_orange));
                     listLayout.setBackgroundResource(R.color.lead_self_back);
                 } else if (hashArray.get(row).get("stage") != null && (hashArray.get(row)
-                    .get("stage")
-                    .toString()).equalsIgnoreCase("total")) {
+                        .get("stage")).equalsIgnoreCase("total")) {
                     tv_table_first.setTypeface(null, Typeface.BOLD);
                     tv_table_first.setTextColor(getResources().getColor(R.color.black));
                     listLayout.setBackgroundResource(R.color.secondaryBackground);
@@ -456,22 +492,21 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table, parent, false);
             }
-            LinearLayout listLayout = (LinearLayout) convertView.findViewById(R.id.item_table);
+            LinearLayout listLayout = convertView.findViewById(R.id.item_table);
             try {
                 ((TextView) convertView.findViewById(android.R.id.text1)).setText(
-                    getDevice(row).data[column + 1]);
+                        getDevice(row).data[column + 1]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView text1 = convertView.findViewById(android.R.id.text1);
             if (hashArray.get(row).get("id") != null && isGroup(
-                Double.parseDouble(hashArray.get(row).get("id").toString()))) {
+                    Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))) {
                 text1.setTextColor(getResources().getColor(R.color.flush_orange));
                 listLayout.setBackgroundResource(R.color.lead_self_back);
             } else if (hashArray.get(row).get("stage") != null && hashArray.get(row)
-                .get("stage")
-                .toString()
-                .equalsIgnoreCase("total")) {
+                    .get("stage")
+                    .equalsIgnoreCase("total")) {
                 text1.setTypeface(null, Typeface.BOLD);
                 text1.setTextColor(getResources().getColor(R.color.black));
                 listLayout.setBackgroundResource(R.color.lead_total_back);
@@ -516,8 +551,6 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             final int height;
             if (row == -1) {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
-            } else if (isFamily(row)) {
-                height = 0;
             } else {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
             }
@@ -531,8 +564,6 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 itemViewType = 0;
             } else if (row == -1) {
                 itemViewType = 1;
-            } else if (isFamily(row)) {
-                itemViewType = 4;
             } else if (column == -1) {
                 itemViewType = 2;
             } else {
@@ -541,18 +572,6 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             return itemViewType;
         }
 
-        private boolean isFamily(int row) {
-
-            if (row == -1 || row == 0) {
-                int family = 0;
-                while (row > 0) {
-                    row -= commonHeaders[family].size();
-                    family++;
-                }
-                return row == 1;
-            }
-            return row == 0;
-        }
 
         private CommonHeader getFamily(int row) {
             int family = 0;
@@ -574,57 +593,6 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         public int getViewTypeCount() {
             return 5;
         }
-    }
-
-    private String getRowKeyName(Double childId) {
-        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
-            Integer groupId = tabaleHeaderMap.keyAt(ctr);
-            List<Map> childList = (List) tabaleHeaderMap.get(groupId);
-            for (Map childMap : childList) {
-                Set<Integer> childListSet = childMap.keySet();
-                for (Integer childIdFromMap : childListSet) {
-                    if (childId == childIdFromMap.intValue()) {
-                        return childMap.get(childIdFromMap).toString();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private boolean isGroup(double id) {
-        for (int ctr = 0; ctr < tabaleHeaderMap.size(); ctr++) {
-            Integer groupId = tabaleHeaderMap.keyAt(ctr);
-            if (groupId.intValue() == id) return true;
-        }
-        return false;
-    }
-
-    private void newPrepareGroupMap(Map<String, Object> responseJsonObj) {
-        try {
-            if (responseJsonObj.get("Table2") == null) return;
-            List<Map<String, Object>> jsonArray =
-                (List<Map<String, Object>>) responseJsonObj.get("Table2");
-            if (jsonArray == null) return;
-            for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
-                Map<String, Object> jsonRowObject = (Map<String, Object>) jsonArray.get(ctr);
-                int groupId = Integer.parseInt(jsonRowObject.get("GroupId").toString());
-                int childid = Integer.parseInt(jsonRowObject.get("childid").toString());
-                String rowFilter = jsonRowObject.get("RowFilter").toString();
-
-                List<Map> childList = (List) tabaleHeaderMap.get(groupId);
-                if (childList == null) {
-                    childList = new ArrayList<>();
-                }
-                Map childMap = new HashMap();
-                childMap.put(childid, rowFilter);
-                childList.add(childMap);
-                tabaleHeaderMap.put(groupId, childList);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        Log.d(TAG, "Done");
     }
 }
 

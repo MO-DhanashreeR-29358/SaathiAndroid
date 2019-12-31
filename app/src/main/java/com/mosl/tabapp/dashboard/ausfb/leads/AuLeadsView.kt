@@ -2,9 +2,10 @@ package com.mosl.tabapp.dashboard.ausfb.leads
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.saathi.api.model.ausfbLead.BankCodeModel
-import com.mosl.saathi.api.model.ausfbLead.BranchCodeModel
-import com.mosl.saathi.api.model.ausfbLead.SubBranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.common.FilterRowData
 import io.reactivex.Observable
 
@@ -24,5 +25,7 @@ interface AuLeadsView : BaseView {
     fun getPeriod(): FilterRowData?
     fun getProduct(): FilterRowData?
     fun getWidgetSystemsName(): String?
+    fun renderData(uiModel: UiModel<AusfbLeadModel>)
+
 
 }

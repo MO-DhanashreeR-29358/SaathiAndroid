@@ -39,13 +39,13 @@ class AuLeadsPresenter @Inject constructor(
 
         Observable.merge(
             view.onPeriodChange(), view.onProductChange(),
-            view.onSubBranchChange(), view.onBranchChange()
-        )
+            view.onSubBranchChange()
+        ).filter(InvalidSelectionPredicate)
             .map { getWidgetRequest() }
             .switchMap {
                 ausfbLeadRepository.getAusfbLeadWidget(it)
                     .compose(applyUiModel())
-            }.subscribe().addTo(disposable)
+            }.subscribe(view::renderData).addTo(disposable)
     }
 
 
@@ -56,9 +56,9 @@ class AuLeadsPresenter @Inject constructor(
             productId = dashboardModel.productId,
             employeeCode = dashboardModel.employeeCode,
             addtionalParameters = AdditionalParametersInput(
-                fltBankName = view.getBank()?.bankId.toString(),
-                fltBankBranchCode = view.getBranch()?.branchId.toString(),
-                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
+//                fltBankName = view.getBank()?.bankId.toString(),
+//                fltBankBranchCode = view.getBranch()?.branchId.toString(),
+//                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
                 fltPeriod = view.getPeriod()?.value.toString(),
                 fltProduct = view.getProduct()?.value.toString(),
                 fltHierarchy = dashboardModel.dashboardFor

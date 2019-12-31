@@ -1,8 +1,21 @@
 package com.mosl.tabapp.dashboard.ausfb.leads
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
+import com.github.mikephil.charting.charts.HorizontalBarChart
+import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -11,18 +24,26 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.ausfbLead.SelectBranch
 import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
-import com.mosl.saathi.api.model.ausfbLead.BankCodeModel
-import com.mosl.saathi.api.model.ausfbLead.BranchCodeModel
-import com.mosl.saathi.api.model.ausfbLead.SubBranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
+import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
 import com.mosl.tabapp.databinding.FragmentAuLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
+import java.io.Serializable
+import java.util.*
 import javax.inject.Inject
 
 class AuLeadsFragment : CommonFragment(), AuLeadsView {
@@ -60,7 +81,6 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
     private fun setUpView() {
         val context = requireContext()
-//        dashboardModel = arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
 
         val groupModel = dashboardModel.getGroupModel(
             DashboardSystemModel.getLeadSystemName()
@@ -149,6 +169,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         return widgetSystemName
     }
 
+
     override fun onBranchChange(): Observable<Int> {
         return binding.spFilterBranch.itemSelections()
     }
@@ -166,6 +187,18 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
 
         uiModel.onSuccess {
             bankAdapter.setSpinnerData(binding.spFilterBank, it)
+        }
+    }
+
+    override fun renderSubBranchFilter(uiModel: UiModel<List<SubBranchCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+        }
+
+        uiModel.onSuccess {
+            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, it)
         }
     }
 
@@ -188,17 +221,232 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView {
         }
     }
 
-    override fun renderSubBranchFilter(uiModel: UiModel<List<SubBranchCodeModel>>) {
+    override fun renderData(uiModel: UiModel<AusfbLeadModel>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure { error ->
             showOnFailurePopup(error)
+            binding.chart.clear()
         }
 
         uiModel.onSuccess {
-            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, it)
+            stackedBarData(binding.chart, it.getXAxisList(), it.getYAxisList(), it.getLabelString())
         }
     }
 
+    private fun getAddtionalParameterMap(): Map<String, String> {
+        val addtionalParameterMap: MutableMap<String, String> = HashMap()
+
+        addtionalParameterMap.apply {
+
+            getPeriod()?.let {
+                this[it.keyValue] = it.value
+            }
+            getProduct()?.let {
+                this[it.keyValue] = it.value
+            }
+
+//            getBank()?.let {
+//                this[FLT_BANKNAME] = it.bankId.toString()
+//            }
+//
+//            getBranch()?.let {
+//                this[FLT_BANKBRANCHCODE] = it.branchId.toString()
+//            }
+//
+//            getSubBranch()?.let {
+//                this[FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+//            }
+
+            this[MOSLConstants.SELF_KEY] = dashboardModel.dashboardFor
+        }
+
+        return addtionalParameterMap
+    }
+
+    private fun stackedBarData(
+        mChart: HorizontalBarChart,
+        xAxisValue: MutableList<String>,
+        yAxisValue: MutableList<MutableList<String>>,
+        lableString: Array<String>
+    ) {
+
+        Collections.reverse(xAxisValue)
+        Collections.reverse(yAxisValue.get(0))
+        Collections.reverse(yAxisValue.get(1))
+
+
+        makeChart(mChart)
+        val leftAxis = mChart.axisLeft
+        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
+
+        val xAxis: XAxis = mChart.getXAxis()
+        xAxis.setDrawGridLines(false)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setCenterAxisLabels(true)
+        xAxis.setDrawAxisLine(false)
+        xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.black)
+
+//      xAxis.valueFormatter =
+//            IAxisValueFormatter { value, axis ->
+//                try {
+//                    return@IAxisValueFormatter if (value < 0) {
+//                        ""
+//                    } else {
+//                        xAxisValue[value.toInt() % xAxisValue.size]
+//                    }
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                }
+//                null
+//            }
+
+        xAxis.setValueFormatter(IndexAxisValueFormatter(xAxisValue))
+        makeLegend(mChart)
+
+        val data = getBarData(yAxisValue, lableString)
+        data.setValueFormatter(CRMValueFormatter())
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTextSize(13f)
+        data.barWidth = 0.6f
+
+        mChart.setData(data)
+        mChart.invalidate()
+        mChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(
+                e: Entry,
+                h: Highlight
+            ) {
+                if (e.y == 0.0f) return
+                val addtionalParameterMap: MutableMap<String, String> = HashMap()
+                addtionalParameterMap.put(
+                    MOSLConstants.COL_FILTER,
+                    xAxisValue[e.x.toInt()]
+                )
+                addtionalParameterMap.put(
+                    MOSLConstants.ROW_FILTER,
+                    lableString[h.stackIndex]
+                )
+                addtionalParameterMap.putAll(getAddtionalParameterMap())
+                val args = Bundle()
+                args.putString(MOSLConstants.SYSTEM_NAME, widgetSystemName)
+                args.putString(MOSLConstants.LABEL, MOSLConstants.LEAD)
+                args.putSerializable(
+                    MOSLConstants.MAP,
+                    addtionalParameterMap as Serializable?
+                )
+                if (lableString[h.stackIndex].equals(ASSIGNED, ignoreCase = true)) {
+                    if (!yAxisValue.get(1).get(e.x.toInt()).equals("0")) {
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+                            args, true, false
+                        )
+                    }
+                } else {
+                    navigator.openPage(
+                        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                        true, false
+                    )
+                }
+
+            }
+
+            override fun onNothingSelected() {
+            }
+
+
+        })
+    }
+
+    private fun getBarData(
+        yAxisValue: MutableList<MutableList<String>>,
+        lableString: Array<String>
+    ): BarData {
+        val entries = ArrayList<BarEntry>()
+        for (i in yAxisValue[0].indices) {
+            try {
+                val val1 = yAxisValue[0][i].toFloat()
+                val val2 = yAxisValue[1][i].toFloat()
+                entries.add(BarEntry(i + 0.5f, floatArrayOf(val1, val2)))
+            } catch (e: NumberFormatException) {
+                e.printStackTrace()
+            }
+        }
+
+        val barDataSet: BarDataSet
+        val colors = ArrayList<Int>()
+        val VORDIPLOM_COLORS = intArrayOf(
+            Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
+        )
+        for (c in VORDIPLOM_COLORS) colors.add(c)
+        barDataSet = BarDataSet(entries, "")
+        barDataSet.colors = colors
+        barDataSet.stackLabels = lableString
+
+        val dataSets = ArrayList<IBarDataSet>()
+        dataSets.add(barDataSet)
+        return BarData(dataSets)
+    }
+
+    private fun makeChart(mChart: HorizontalBarChart) {
+        mChart.description.isEnabled = false
+        mChart.setBackgroundColor(Color.WHITE)
+        mChart.setDrawGridBackground(false)
+        mChart.setDrawBarShadow(false)
+        mChart.isHighlightFullBarEnabled = false
+        mChart.setPinchZoom(false)
+        mChart.isScaleXEnabled = true
+        mChart.isScaleYEnabled = false
+        mChart.setDrawValueAboveBar(false)
+        mChart.axisRight.isEnabled = false
+        mChart.axisLeft.isEnabled = false
+    }
+
+    private fun makeLegend(
+        chart: HorizontalBarChart
+    ) {
+        val legend = chart.legend
+        legend.form = Legend.LegendForm.CIRCLE
+        legend.textSize = resources.getDimension(R.dimen.chart_text_size)
+        legend.isWordWrapEnabled = true
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.setDrawInside(false)
+        legend.textColor = ContextCompat.getColor(requireContext(), R.color.black)
+
+    }
+
+
+    fun onClick(view: View) {
+        when (view.id) {
+            R.id.llShowMore -> {
+                val args = Bundle()
+                val clientsFragment =
+                    ClientsLeadShowFragment.newInstance()
+                args.putSerializable(DASHBOARD_MODEL, dashboardModel)
+                args.putSerializable(
+                    MAP,
+                    getAddtionalParameterMap() as Serializable
+                )
+                args.putString(SYSTEM_NAME, widgetSystemName)
+                args.putString(FILTERFIRST, getPeriod()?.value)
+                args.putString(FILTERSECOND, getProduct()?.value)
+                args.putString(TYPESOFLEAD, AUSFB_LEAD)
+                clientsFragment.arguments = args
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.llReplaceClientFragment, clientsFragment)
+                    .commit()
+            }
+        }
+    }
+
+    companion object {
+        const val FLT_BANKNAME = "flt_BankName"
+        const val FLT_BANKBRANCHCODE = "flt_BankBranchCode"
+        const val FLT_BANKSUBBROKERCODE = "flt_banksubbrokercode"
+        const val ASSIGNED = "Assigned"
+    }
 
 }

@@ -8,7 +8,6 @@ import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.aubankmeeting.*
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
-import com.mosl.saathi.api.model.ausfbLead.*
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
@@ -29,6 +28,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
+import com.mosl.saathi.api.model.dashboard.ausfbLead.*
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
@@ -379,7 +379,7 @@ interface SaathiApi {
     @POST("Dashboard/LoadWidgetAsync")
     fun getAusfbLeadWidgetData(
         @Body request: AusfbLeadRequest
-    ): Observable<String>
+    ): Observable<AusfbLeadResponse>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(

@@ -1,9 +1,9 @@
-package com.mosl.saathi.api.model.ausfbLead
+package com.mosl.saathi.api.model.dashboard.ausfbLead
 
 
 data class SubBranchCodeModel(
-    val bankBranchId: Int,
-    val subBrokerName: String
+    @JvmField val bankBranchId: Int,
+    @JvmField val subBrokerName: String
 
 
 ) {

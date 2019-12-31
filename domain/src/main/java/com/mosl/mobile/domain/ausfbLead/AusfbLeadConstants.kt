@@ -1,8 +1,8 @@
 package com.mosl.mobile.domain.ausfbLead
 
-import com.mosl.saathi.api.model.ausfbLead.BankCodeModel
-import com.mosl.saathi.api.model.ausfbLead.BranchCodeModel
-import com.mosl.saathi.api.model.ausfbLead.SubBranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
+import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 
 
 @JvmField

@@ -1,4 +1,4 @@
-package com.mosl.saathi.api.model.ausfbLead
+package com.mosl.saathi.api.model.dashboard.ausfbLead
 
 import com.google.gson.annotations.SerializedName
 

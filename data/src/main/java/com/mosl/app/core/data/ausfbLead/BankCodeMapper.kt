@@ -4,7 +4,7 @@ import com.mosl.app.core.data.util.defaultSelection
 import com.mosl.mobile.domain.ausfbLead.SelectBank
 import com.mosl.mobile.domain.ausfbLead.SelectBranch
 import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
-import com.mosl.saathi.api.model.ausfbLead.*
+import com.mosl.saathi.api.model.dashboard.ausfbLead.*
 
 fun List<BankCodeResponse>.banckCodeTransform(): List<BankCodeModel> {
     return map {

@@ -2,7 +2,7 @@ package com.mosl.app.core.data.ausfbLead
 
 import com.mosl.mobile.domain.ausfbLead.BankRepository
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.ausfbLead.*
+import com.mosl.saathi.api.model.dashboard.ausfbLead.*
 import io.reactivex.Observable
 import javax.inject.Inject
 

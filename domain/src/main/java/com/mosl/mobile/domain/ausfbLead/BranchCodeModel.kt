@@ -1,10 +1,10 @@
-package com.mosl.saathi.api.model.ausfbLead
+package com.mosl.saathi.api.model.dashboard.ausfbLead
 
 
 data class BranchCodeModel(
-    val bankId: Int,
-    val branchName: String,
-    val branchId: Int
+    @JvmField val bankId: Int,
+    @JvmField val branchName: String,
+    @JvmField val branchId: Int
 
 
 ) {
