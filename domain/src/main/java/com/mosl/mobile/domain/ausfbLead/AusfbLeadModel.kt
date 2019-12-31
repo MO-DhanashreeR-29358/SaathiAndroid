@@ -45,6 +45,18 @@ data class AusfbLeadModel(
 
     }
 
+    fun getTotal(): String {
+
+        table1?.let {
+            val total = it.get(2).total ?: "0"
+
+            return total
+        }
+
+        return "0"
+
+    }
+
 
     fun getList(itemModel: AusfbLeadItemModel): MutableList<String> {
         val mutableList: MutableList<String> = mutableListOf()

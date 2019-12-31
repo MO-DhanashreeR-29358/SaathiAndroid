@@ -51,8 +51,6 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     lateinit var binding: FragmentAuLeadsBinding
     private var widgetSystemName: String? = null
-    private var filterFirst: String = ""
-    private var filterSecond: String = ""
     private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     private lateinit var productAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
@@ -259,7 +257,9 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
         uiModel.onSuccess {
             binding.relativeLayout.visibility = View.VISIBLE
+            binding.tvTotal.text = it.getTotal()
             stackedBarData(binding.chart, it.getXAxisList(), it.getYAxisList(), it.getLabelString())
+
         }
     }
 
