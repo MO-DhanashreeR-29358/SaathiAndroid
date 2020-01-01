@@ -9,6 +9,8 @@ import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.*
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsModule
+import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementFragment
+import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementModule
 import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
@@ -59,8 +61,11 @@ abstract class FragmentProvider {
   @ContributesAndroidInjector
   abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
 
-    @ContributesAndroidInjector(modules = [AuLeadsModule::class])
+  @ContributesAndroidInjector(modules = [AuLeadsModule::class])
     abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
+
+  @ContributesAndroidInjector(modules = [AuTargetVsAchievementModule::class])
+  abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetVsAchievementFragment
 
   @ContributesAndroidInjector
   abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment

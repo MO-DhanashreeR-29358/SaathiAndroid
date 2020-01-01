@@ -50,7 +50,6 @@ import javax.inject.Inject
 class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     lateinit var binding: FragmentAuLeadsBinding
-    private var widgetSystemName: String? = null
     private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     private lateinit var productAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
@@ -62,6 +61,9 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     @Inject
     lateinit var dashboardModel: DashboardModel
+
+    private lateinit var model: WidgetModel
+
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_leads
@@ -85,14 +87,12 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         val groupModel = dashboardModel.getGroupModel(
             DashboardSystemModel.getLeadSystemName()
         )
-        val model: WidgetModel
         val widgetList = groupModel.widgetList
         model = if (widgetList.size == 1) {
             widgetList[0]
         } else {
             widgetList[1]
         }
-        widgetSystemName = model.systemName
         val filterList = model.widgetFilterList
         if (filterList.size == 2) {
             periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
@@ -156,8 +156,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         return binding.spFilterProduct.selectedItem as? FilterRowData
     }
 
-    override fun getWidgetSystemsName(): String? {
-        return widgetSystemName
+    override fun getWidgetSystemsName(): String {
+        return model.systemName
     }
 
 
@@ -338,7 +338,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                 addtionalParameterMap.put(ROW_FILTER, lableString[h.stackIndex])
                 addtionalParameterMap.putAll(getAddtionalParameterMap())
                 val args = Bundle()
-                args.putString(SYSTEM_NAME, widgetSystemName)
+                args.putString(SYSTEM_NAME, getWidgetSystemsName())
                 args.putString(LABEL, LEAD)
                 args.putSerializable(MAP, addtionalParameterMap as Serializable)
                 if (lableString[h.stackIndex].equals(ASSIGNED, ignoreCase = true)) {
@@ -435,7 +435,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                     MAP,
                     getAddtionalParameterMap() as Serializable
                 )
-                args.putString(SYSTEM_NAME, widgetSystemName)
+                args.putString(SYSTEM_NAME, getWidgetSystemsName())
                 args.putInt(FILTERFIRST, binding.spFilterPeriod.selectedItemPosition)
                 args.putInt(FILTERSECOND, binding.spFilterProduct.selectedItemPosition)
                 args.putInt(FLT_BANKNAME, binding.spFilterBank.selectedItemPosition)
