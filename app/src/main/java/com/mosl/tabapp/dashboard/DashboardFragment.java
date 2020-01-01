@@ -833,7 +833,7 @@ public class DashboardFragment extends CommonFragment
     private void loadTargetAchievement() {
         Bundle args = new Bundle();
         TargetAchievementFragment leadsFragment =
-                TargetAchievementFragment.newInstance(getContext());
+                new TargetAchievementFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
