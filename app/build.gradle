@@ -186,6 +186,7 @@ dependencies {
   api deps.mofslArtifacts.appcore
   api deps.mofslArtifacts.appcoreui
   api deps.mofslArtifacts.validator
+  api deps.mofslArtifacts.groupie
 
   // Dagger
 

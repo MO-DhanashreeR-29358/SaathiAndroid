@@ -7,6 +7,7 @@ import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
 import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
 import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.common.FilterRowData
+import com.mosl.tabapp.model.dashboard.WidgetModel
 import io.reactivex.Observable
 
 interface AuTargetVsAchievementView : BaseView {
@@ -25,6 +26,7 @@ interface AuTargetVsAchievementView : BaseView {
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<AusfbLeadModel>)
 
-
+    fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick>
+    fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
 }
 

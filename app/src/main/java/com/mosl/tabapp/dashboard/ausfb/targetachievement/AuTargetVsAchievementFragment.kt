@@ -3,12 +3,14 @@ package com.mosl.tabapp.dashboard.ausfb.targetachievement
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.ausfbLead.SelectBank
 import com.mosl.mobile.domain.ausfbLead.SelectBranch
 import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
@@ -23,8 +25,13 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuTargetVsAchievementBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
+import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import java.util.*
 import javax.inject.Inject
 
 class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementView {
@@ -40,8 +47,12 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
     @Inject
     lateinit var dashboardModel: DashboardModel
+    private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
+    private val widgetUiEvent = PublishSubject.create<AuWidgetUiEvent>()
 
+    private var previousPosition: Int = 0
+    private var itemList = mutableListOf<ItemTargetVsAchievementWidget>()
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_target_vs_achievement
@@ -59,26 +70,47 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
     }
 
     private fun setUpView() {
-        val context = requireContext()
+        val groupAdapter = GroupAdapter<ViewHolder>()
+        binding.horizontalRecyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            setHasFixedSize(true)
+            adapter = groupAdapter
+        }
 
         val groupModel = dashboardModel.getGroupModel(
             DashboardSystemModel.getTargetAchivementSystemName()
         )
         val filterList = groupModel.groupFilterList
         if (filterList.size == 1) {
-            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
             binding.spFilterPeriod.adapter = periodAdapter
             periodAdapter.setSpinnerData(binding.spFilterPeriod, filterList[0].filterData)
             arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(MOSLConstants.FILTERFIRST)) }
 
         }
-        bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+
+        widgetModelList = Objects.requireNonNull(dashboardModel)
+            .getGroupModel(DashboardSystemModel.getTargetAchivementSystemName())
+            .widgetList
+        if (widgetModelList.size < 3) {
+            widgetModelList.add(WidgetModel())
+            widgetModelList.add(WidgetModel())
+        } else if (widgetModelList.size < 4) {
+            widgetModelList.add(WidgetModel())
+        }
+        for (model in widgetModelList) {
+            itemList.add(ItemTargetVsAchievementWidget(model, widgetUiEvent, requireContext()))
+        }
+        groupAdapter.addAll(itemList)
+
+        bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterBank.adapter = bankAdapter
 
-        branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+        branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterBranch.adapter = branchAdapter
 
-        subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+        subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterSubBranch.adapter = subBranchAdapter
 
     }
@@ -202,6 +234,18 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
     override fun renderData(uiModel: UiModel<AusfbLeadModel>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
+        return widgetUiEvent.ofType()
+    }
+
+    override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
+        if (widgetModel.name.isNotEmpty()) {
+            itemList.get(currentPosition).updateItem(true)
+            itemList.get(previousPosition).updateItem(false)
+            previousPosition = currentPosition
+        }
     }
 
 

@@ -34,6 +34,11 @@ class AuTargetVsAchievementPresenter @Inject constructor(
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
 
+        view.onWidgetItemClicked()
+            .subscribe {
+                view.renderWidgetData(it.widgetItemInfo, it.currentPosition)
+            }.addTo(disposable)
+
 //        Observable.merge(
 //            view.onPeriodChange(),
 //            view.onSubBranchChange()
