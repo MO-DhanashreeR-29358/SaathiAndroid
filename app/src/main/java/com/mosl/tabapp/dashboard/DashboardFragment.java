@@ -77,6 +77,7 @@ import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
+import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -841,6 +842,18 @@ public class DashboardFragment extends CommonFragment
                 .commit();
     }
 
+    private void loadAusfbTargetAchievement() {
+        Bundle args = new Bundle();
+        AuTargetVsAchievementFragment leadsFragment =
+                new AuTargetVsAchievementFragment();
+        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
+        leadsFragment.setArguments(args);
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.llTargetAchievementADV, leadsFragment)
+                .commit();
+    }
+
     private void loadTeamTargetAchievement() {
         Bundle args = new Bundle();
         TargetAchievementTeamFragment leadsFragment =
@@ -1432,6 +1445,17 @@ public class DashboardFragment extends CommonFragment
             llTarget.setVisibility(View.VISIBLE);
             loadTargetAchievement();
             DashboardSystemModel.setTargetAchivementSystemName(SELF_TARGET_ACHIEVEMNET);
+        }
+        if (currentDashboard.isGroupExists(AUSFB_TARGET_ACHIEVEMNET)) {
+            txtTarget.setText(
+                    currentDashboard.getGroupModel(AUSFB_TARGET_ACHIEVEMNET).getDisplayName());
+            setIcon(llTargetAchievementADV, ivTargetAchievementADV);
+            if (llTargetAchievementADV.getVisibility() != View.VISIBLE) {
+                toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
+            }
+            llTarget.setVisibility(View.VISIBLE);
+            loadAusfbTargetAchievement();
+            DashboardSystemModel.setTargetAchivementSystemName(AUSFB_TARGET_ACHIEVEMNET);
         }
 
         if (currentDashboard.isGroupExists(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT)) {

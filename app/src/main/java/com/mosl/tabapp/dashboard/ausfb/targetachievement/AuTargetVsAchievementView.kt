@@ -12,7 +12,6 @@ import io.reactivex.Observable
 interface AuTargetVsAchievementView : BaseView {
 
     fun onPeriodChange(): Observable<Int>
-    fun onProductChange(): Observable<Int>
     fun onBankChange(): Observable<Int>
     fun onBranchChange(): Observable<Int>
     fun onSubBranchChange(): Observable<Int>
@@ -23,7 +22,6 @@ interface AuTargetVsAchievementView : BaseView {
     fun getBranch(): BranchCodeModel?
     fun getSubBranch(): SubBranchCodeModel?
     fun getPeriod(): FilterRowData?
-    fun getProduct(): FilterRowData?
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<AusfbLeadModel>)
 

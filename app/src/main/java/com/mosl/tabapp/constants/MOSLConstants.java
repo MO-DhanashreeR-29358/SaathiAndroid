@@ -123,6 +123,7 @@ public interface MOSLConstants extends LabelConfig {
     String TEAM_LEAD = "Team_Lead";
     String TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT = "Team_target_achievemnet";
     String SELF_TARGET_ACHIEVEMNET = "target_achievemnet";
+    String AUSFB_TARGET_ACHIEVEMNET = "Target_Achievemnet_AU_Support";
     String DASHBOARD_MODEL = "dashboardModel";
     String MONTH_ON_MONTH = "MonthOnMonth";
     String MONTH_ON_MONTH_ACCOUNT_REVENUE = "MonthOnMonthAccountRevenue";

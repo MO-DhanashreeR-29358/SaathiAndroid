@@ -32,7 +32,6 @@ import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
@@ -287,7 +286,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 //                this[FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
 //            }
 
-            this[MOSLConstants.SELF_KEY] = dashboardModel.dashboardFor
+            this[SELF_KEY] = dashboardModel.dashboardFor
         }
 
         return addtionalParameterMap

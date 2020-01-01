@@ -2,19 +2,28 @@ package com.mosl.tabapp.dashboard.ausfb.targetachievement
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.ausfbLead.SelectBank
+import com.mosl.mobile.domain.ausfbLead.SelectBranch
+import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
 import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
 import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
 import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
 import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsPresenter
 import com.mosl.tabapp.databinding.FragmentAuTargetVsAchievementBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
-import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.model.dashboard.DashboardSystemModel
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -22,85 +31,174 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
     lateinit var binding: FragmentAuTargetVsAchievementBinding
 
+    private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
+    private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
+    private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
+    private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
     @Inject
-    lateinit var presenter: AuLeadsPresenter
+    lateinit var presenter: AuTargetVsAchievementPresenter
 
     @Inject
     lateinit var dashboardModel: DashboardModel
 
-    private lateinit var model: WidgetModel
 
 
     override fun getLayout(): Int {
-        return R.layout.fragment_au_leads
+        return R.layout.fragment_au_target_vs_achievement
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentAuTargetVsAchievementBinding.bind(view)
+        setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
 
 
     }
 
+    private fun setUpView() {
+        val context = requireContext()
 
-    override fun onPeriodChange(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val groupModel = dashboardModel.getGroupModel(
+            DashboardSystemModel.getTargetAchivementSystemName()
+        )
+        val filterList = groupModel.groupFilterList
+        if (filterList.size == 1) {
+            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spFilterPeriod.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spFilterPeriod, filterList[0].filterData)
+            arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(MOSLConstants.FILTERFIRST)) }
+
+        }
+        bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+        binding.spFilterBank.adapter = bankAdapter
+
+        branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+        binding.spFilterBranch.adapter = branchAdapter
+
+        subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+        binding.spFilterSubBranch.adapter = subBranchAdapter
+
     }
 
-    override fun onProductChange(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun onPeriodChange(): Observable<Int> {
+        return binding.spFilterPeriod.itemSelections()
     }
 
     override fun onBankChange(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onBranchChange(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onSubBranchChange(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun renderBankFilter(uiModel: UiModel<List<BankCodeModel>>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun renderSubBranchFilter(uiModel: UiModel<List<SubBranchCodeModel>>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return binding.spFilterBank.itemSelections()
     }
 
     override fun getBank(): BankCodeModel? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return binding.spFilterBank.selectedItem as? BankCodeModel
     }
 
     override fun getBranch(): BranchCodeModel? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return binding.spFilterBranch.selectedItem as? BranchCodeModel
     }
 
     override fun getSubBranch(): SubBranchCodeModel? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return binding.spFilterSubBranch.selectedItem as? SubBranchCodeModel
     }
 
     override fun getPeriod(): FilterRowData? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return binding.spFilterPeriod.selectedItem as? FilterRowData
     }
 
-    override fun getProduct(): FilterRowData? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun getWidgetSystemsName(): String {
+        return ""
     }
 
-    override fun getWidgetSystemsName(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    override fun onBranchChange(): Observable<Int> {
+        return binding.spFilterBranch.itemSelections()
     }
+
+    override fun onSubBranchChange(): Observable<Int> {
+        return binding.spFilterSubBranch.itemSelections()
+    }
+
+    override fun renderBankFilter(uiModel: UiModel<List<BankCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+            chartClear()
+            setDefaultValues(1)
+        }
+
+        uiModel.onSuccess {
+            bankAdapter.setSpinnerData(binding.spFilterBank, it)
+
+        }
+    }
+
+    override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+            chartClear()
+            setDefaultValues(2)
+        }
+
+        uiModel.onSuccess {
+            branchAdapter.setSpinnerData(binding.spFilterBranch, it)
+        }
+    }
+
+    override fun renderSubBranchFilter(uiModel: UiModel<List<SubBranchCodeModel>>) {
+        toggleProgress(uiModel.inProgress)
+
+        val selectSubBranch = mutableListOf<SubBranchCodeModel>()
+        selectSubBranch.add(0, SelectSubBranch)
+
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+            chartClear()
+            setDefaultValues(3)
+        }
+
+        uiModel.onSuccess {
+            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, it)
+        }
+    }
+
+    fun setDefaultValues(dropdownTypes: Int) {
+        val selectBank = mutableListOf<BankCodeModel>()
+        selectBank.add(0, SelectBank)
+        val selectBranch = mutableListOf<BranchCodeModel>()
+        selectBranch.add(0, SelectBranch)
+        val selectSubBranch = mutableListOf<SubBranchCodeModel>()
+        selectSubBranch.add(0, SelectSubBranch)
+        when (dropdownTypes) {
+            1 -> {
+                bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
+                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+            }
+            2 -> {
+                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+            }
+            3 -> {
+                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+            }
+            else -> {
+                bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
+                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+            }
+        }
+    }
+
+    fun chartClear() {
+
+    }
+
 
     override fun renderData(uiModel: UiModel<AusfbLeadModel>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
