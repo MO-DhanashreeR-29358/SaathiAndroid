@@ -62,7 +62,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        if (itemList.get(0).widgetModel.name.isNullOrEmpty()) {
+        if (itemList.get(0).widgetModel.name.isNotEmpty()) {
             widgetUiEvent.onNext(
                 AuWidgetUiEvent.ItemClick(
                     itemList.get(0).widgetModel,
