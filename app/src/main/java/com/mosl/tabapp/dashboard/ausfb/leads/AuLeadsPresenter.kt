@@ -2,10 +2,10 @@ package com.mosl.tabapp.dashboard.ausfb.leads
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.mobile.domain.ausfbLead.AdditionalParametersInput
-import com.mosl.mobile.domain.ausfbLead.AusfbLeadInput
-import com.mosl.mobile.domain.ausfbLead.AusfbLeadRepository
-import com.mosl.mobile.domain.ausfbLead.BankRepository
+import com.mosl.mobile.domain.aulead.AdditionalParametersInput
+import com.mosl.mobile.domain.aulead.AusfbLeadInput
+import com.mosl.mobile.domain.aulead.AusfbLeadRepository
+import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
@@ -23,23 +23,30 @@ class AuLeadsPresenter @Inject constructor(
                 .compose(applyUiModel())
         }
             .subscribe(view::renderBankFilter).addTo(disposable)
+        val bankChangeObsc = view.onBankChange().share()
+        val branchChangeObsc = view.onBranchChange().share()
 
-        view.onBankChange()
+        bankChangeObsc
             .filter(InvalidSelectionPredicate)
             .switchMap {
                 bankRepository.getBranchFilter(view.getBank()!!.bankId)
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 
-        view.onBranchChange()
-            .filter(InvalidSelectionPredicate).switchMap {
+        branchChangeObsc
+            .filter(InvalidSelectionPredicate)
+            .switchMap {
                 bankRepository.getSubBranchFilter(view.getBranch()!!.branchId)
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
 
+        val bankChange = Observable.merge(
+            bankChangeObsc,
+            branchChangeObsc, view.onSubBranchChange()
+        ).share()
         Observable.merge(
             view.onPeriodChange(), view.onProductChange(),
-            view.onSubBranchChange()
+            bankChange
         ).filter(InvalidSelectionPredicate)
             .map { getWidgetRequest() }
             .switchMap {
@@ -56,9 +63,9 @@ class AuLeadsPresenter @Inject constructor(
             productId = dashboardModel.productId,
             employeeCode = dashboardModel.employeeCode,
             addtionalParameters = AdditionalParametersInput(
-//                fltBankName = view.getBank()?.bankId.toString(),
-//                fltBankBranchCode = view.getBranch()?.branchId.toString(),
-//                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
+                fltBankName = view.getBank()?.bankId.toString(),
+                fltBankBranchCode = view.getBranch()?.branchId.toString(),
+                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
                 fltPeriod = view.getPeriod()?.value.toString(),
                 fltProduct = view.getProduct()?.value.toString(),
                 fltHierarchy = dashboardModel.dashboardFor

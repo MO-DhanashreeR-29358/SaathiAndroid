@@ -77,7 +77,7 @@ import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
-import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementFragment;
+import com.mosl.tabapp.dashboard.ausfb.target.AuTargetVsAchievementFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;

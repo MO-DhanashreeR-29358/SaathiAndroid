@@ -9,8 +9,8 @@ import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.*
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsModule
-import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementFragment
-import com.mosl.tabapp.dashboard.ausfb.targetachievement.AuTargetVsAchievementModule
+import com.mosl.tabapp.dashboard.ausfb.target.AuTargetVsAchievementFragment
+import com.mosl.tabapp.dashboard.ausfb.target.AuTargetVsAchievementModule
 import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment

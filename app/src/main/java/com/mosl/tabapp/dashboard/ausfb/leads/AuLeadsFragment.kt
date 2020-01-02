@@ -22,13 +22,8 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.ausfbLead.SelectBank
-import com.mosl.mobile.domain.ausfbLead.SelectBranch
-import com.mosl.mobile.domain.ausfbLead.SelectSubBranch
+import com.mosl.mobile.domain.bank.*
 import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
-import com.mosl.saathi.api.model.dashboard.ausfbLead.BankCodeModel
-import com.mosl.saathi.api.model.dashboard.ausfbLead.BranchCodeModel
-import com.mosl.saathi.api.model.dashboard.ausfbLead.SubBranchCodeModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
@@ -274,17 +269,17 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                 this[it.keyValue] = it.value
             }
 
-//            getBank()?.let {
-//                this[FLT_BANKNAME] = it.bankId.toString()
-//            }
-//
-//            getBranch()?.let {
-//                this[FLT_BANKBRANCHCODE] = it.branchId.toString()
-//            }
-//
-//            getSubBranch()?.let {
-//                this[FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
-//            }
+            getBank()?.let {
+                this[FLT_BANKNAME] = it.bankId.toString()
+            }
+
+            getBranch()?.let {
+                this[FLT_BANKBRANCHCODE] = it.branchId.toString()
+            }
+
+            getSubBranch()?.let {
+                this[FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+            }
 
             this[SELF_KEY] = dashboardModel.dashboardFor
         }
@@ -451,8 +446,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
     }
 
     companion object {
-        const val FLT_BANKNAME = "flt_BankName"
-        const val FLT_BANKBRANCHCODE = "flt_BankBranchCode"
+        const val FLT_BANKNAME = "flt_bankname"
+        const val FLT_BANKBRANCHCODE = "flt_bankbranchcode"
         const val FLT_BANKSUBBROKERCODE = "flt_banksubbrokercode"
         const val ASSIGNED = "Assigned"
     }

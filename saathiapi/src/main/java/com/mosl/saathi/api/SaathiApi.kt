@@ -28,7 +28,10 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
-import com.mosl.saathi.api.model.dashboard.ausfbLead.*
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadRequest
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadResponse
+import com.mosl.saathi.api.model.dashboard.autarget.AuTargetRequest
+import com.mosl.saathi.api.model.dashboard.bank.*
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
@@ -380,6 +383,11 @@ interface SaathiApi {
     fun getAusfbLeadWidgetData(
         @Body request: AusfbLeadRequest
     ): Observable<AusfbLeadResponse>
+
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getAuTargetWidgetData(
+        @Body request: AuTargetRequest
+    ): Observable<TargetAchievementItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
