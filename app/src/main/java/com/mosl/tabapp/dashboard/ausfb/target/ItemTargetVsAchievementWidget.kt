@@ -46,19 +46,14 @@ class ItemTargetVsAchievementWidget(
                 cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
             }
 
-            // Todo first time load
-            if (position == 0) publishSubject.onNext(
-                AuWidgetUiEvent.ItemClick(
-                    widgetModel,
-                    position
-                )
-            )
             cardView.setOnClickListener {
-                publishSubject.onNext(
-                    AuWidgetUiEvent.ItemClick(
-                        widgetModel, position
+                if (widgetModel.name.isNotEmpty()) {
+                    publishSubject.onNext(
+                        AuWidgetUiEvent.ItemClick(
+                            widgetModel, position
+                        )
                     )
-                )
+                }
 
             }
         }
@@ -87,15 +82,5 @@ class ItemTargetVsAchievementWidget(
             })
     }
 
-//    override fun onClick(v: View?) {
-//        when {
-//            v?.id == R.id.card_view -> {publishSubject.onNext(
-//                AuWidgetUiEvent.ItemClick(
-//                    widgetModel,currentPosition
-//                )
-//            )
-//
-//            }
-//        }
-//    }
+
 }

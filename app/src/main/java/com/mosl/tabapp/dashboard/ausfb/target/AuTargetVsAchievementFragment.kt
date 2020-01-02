@@ -44,7 +44,8 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
     lateinit var dashboardModel: DashboardModel
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
-    private val widgetUiEvent = PublishSubject.create<AuWidgetUiEvent>()
+    private val widgetUiEvent: PublishSubject<AuWidgetUiEvent> =
+        PublishSubject.create<AuWidgetUiEvent>()
 
     private var previousPosition: Int = 0
     private var itemList = mutableListOf<ItemTargetVsAchievementWidget>()
@@ -61,8 +62,14 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-
-
+        if (itemList.get(0).widgetModel.name.isNullOrEmpty()) {
+            widgetUiEvent.onNext(
+                AuWidgetUiEvent.ItemClick(
+                    itemList.get(0).widgetModel,
+                    0
+                )
+            )
+        }
     }
 
     private fun setUpView() {
@@ -95,9 +102,12 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
         } else if (widgetModelList.size < 4) {
             widgetModelList.add(WidgetModel())
         }
-        for (model in widgetModelList) {
+
+        widgetModelList.mapIndexed { position: Int, model: WidgetModel ->
+
             itemList.add(ItemTargetVsAchievementWidget(model, widgetUiEvent, requireContext()))
         }
+
         groupAdapter.addAll(itemList)
 
         bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
@@ -108,6 +118,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
         subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterSubBranch.adapter = subBranchAdapter
+
 
     }
 
@@ -244,11 +255,12 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
     }
 
     override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
-        if (widgetModel.name.isNotEmpty() && currentPosition != previousPosition) {
+        if (currentPosition != previousPosition) {
             itemList.get(currentPosition).updateItem(true)
             itemList.get(previousPosition).updateItem(false)
             previousPosition = currentPosition
         }
+        binding.tvUniqueLeads.setText(widgetModel.widgetTypeList.get(0).getTitle())
         this.widgetModel = widgetModel
     }
 
