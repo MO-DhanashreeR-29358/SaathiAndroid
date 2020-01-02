@@ -48,7 +48,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
     private var previousPosition: Int = 0
     private var itemList = mutableListOf<ItemTargetVsAchievementWidget>()
-    private lateinit var widgetModel: WidgetModel
+    private var widgetModel: WidgetModel? = null
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_target_vs_achievement
@@ -138,7 +138,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
 
     override fun getWidgetSystemsName(): String {
-        return widgetModel.systemName
+        return widgetModel?.systemName ?: ""
     }
 
 
@@ -229,7 +229,14 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
 
     override fun renderData(uiModel: UiModel<TargetItemModel>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+        }
+
+        uiModel.onSuccess {
+
+        }
     }
 
     override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
@@ -237,7 +244,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
     }
 
     override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
-        if (widgetModel.name.isNotEmpty()) {
+        if (widgetModel.name.isNotEmpty() && currentPosition != previousPosition) {
             itemList.get(currentPosition).updateItem(true)
             itemList.get(previousPosition).updateItem(false)
             previousPosition = currentPosition
@@ -245,8 +252,8 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
         this.widgetModel = widgetModel
     }
 
-    override fun onWidgetItemApiClicked(): Observable<AuWidgetUiEvent.ItemClickApi> {
-        return widgetUiEvent.ofType()
+    override fun getWidgetModel(): WidgetModel? {
+        return widgetModel
     }
 
 

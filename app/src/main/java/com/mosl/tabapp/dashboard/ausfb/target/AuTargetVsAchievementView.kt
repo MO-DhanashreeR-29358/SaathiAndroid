@@ -25,9 +25,8 @@ interface AuTargetVsAchievementView : BaseView {
     fun getPeriod(): FilterRowData?
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<TargetItemModel>)
-
     fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
-    fun onWidgetItemApiClicked(): Observable<AuWidgetUiEvent.ItemClickApi>
+    fun getWidgetModel(): WidgetModel?
 }
 

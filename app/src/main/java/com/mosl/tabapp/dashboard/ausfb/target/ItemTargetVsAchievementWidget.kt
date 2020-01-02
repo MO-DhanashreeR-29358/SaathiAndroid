@@ -45,15 +45,20 @@ class ItemTargetVsAchievementWidget(
                 tvWidgetName.setText(widgetModel.getName())
                 cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
             }
+
+            // Todo first time load
+            if (position == 0) publishSubject.onNext(
+                AuWidgetUiEvent.ItemClick(
+                    widgetModel,
+                    position
+                )
+            )
             cardView.setOnClickListener {
                 publishSubject.onNext(
                     AuWidgetUiEvent.ItemClick(
                         widgetModel, position
                     )
                 )
-//                publishSubject.onNext(
-//                    AuWidgetUiEvent.ItemClickApi
-//                )
 
             }
         }

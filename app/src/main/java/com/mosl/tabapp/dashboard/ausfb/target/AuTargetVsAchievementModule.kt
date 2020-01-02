@@ -14,8 +14,6 @@ class AuTargetVsAchievementModule {
     internal fun provideAuLeadView(fragment: AuTargetVsAchievementFragment): AuTargetVsAchievementView {
         return fragment
     }
-
-
     @Provides
     internal fun provideDashBoardModel(fragment: AuTargetVsAchievementFragment): DashboardModel {
         val args: Bundle? = fragment.getArguments()

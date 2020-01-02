@@ -56,11 +56,13 @@ class AuTargetVsAchievementPresenter @Inject constructor(
             bankChange,
             view.onPeriodChange(),
             widgetItemClickedObsc
-        ).map { getWidgetRequest() }
+        ).filter { view.getWidgetModel() != null }
+            .map { getWidgetRequest() }
             .switchMap {
                 repository.getAuTargetWidget(it)
                     .compose(applyUiModel())
-            }.subscribe(view::renderData).addTo(disposable)
+            }.subscribe(view::renderData)
+            .addTo(disposable)
     }
 
 
