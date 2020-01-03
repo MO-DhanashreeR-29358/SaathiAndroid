@@ -12,6 +12,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.autarget.TableItemModel
 import com.mosl.mobile.domain.autarget.TargetItemModel
 import com.mosl.mobile.domain.bank.*
 import com.mosl.tabapp.R
@@ -91,7 +92,12 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
         binding.rvTabel.apply {
             layoutManager =
-                GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+                GridLayoutManager(
+                    requireContext(),
+                    1,
+                    GridLayoutManager.VERTICAL,
+                    false
+                )
             adapter = tabelGroupAdapter
         }
 
@@ -262,21 +268,40 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         }
 
         uiModel.onSuccess {
-            val sortedList = it.table?.sortedWith(compareBy { it.ord })
-            sortedList?.mapIndexed { index, tableItemModel ->
-                tableItemList.add(
-                    TargetTabelItem(
-                        tableItemModel,
-                        tabelUiEvent,
-                        requireContext(),
-                        this@AuTargetFragment
-                    )
-                )
+            it.table?.apply {
+                TabelView(this)
+
             }
-            tabelGroupAdapter.addAll(tableItemList)
         }
 
 
+    }
+
+    fun TabelView(table: List<TableItemModel>) {
+
+        (binding.rvTabel.getLayoutManager() as GridLayoutManager).spanCount = gridSpanCount(table)
+
+        val sortedList = table.sortedWith(compareBy { it.ord })
+        sortedList.mapIndexed { index, tableItemModel ->
+            tableItemList.add(
+                TargetTabelItem(
+                    tableItemModel, tabelUiEvent, requireContext(),
+                    this@AuTargetFragment
+                )
+            )
+        }
+        tabelGroupAdapter.addAll(tableItemList)
+
+    }
+
+    fun gridSpanCount(table: List<TableItemModel>): Int {
+        if (table.size >= 3) {
+            return 3
+        } else if (table.size == 2) {
+            return 2
+        } else {
+            return 1
+        }
 
     }
 
