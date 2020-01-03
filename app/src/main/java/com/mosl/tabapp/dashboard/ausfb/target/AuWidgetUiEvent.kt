@@ -7,7 +7,7 @@ sealed class AuWidgetUiEvent {
     data class ItemClick(@JvmField val widgetItemInfo: WidgetModel, @JvmField val currentPosition: Int) :
         AuWidgetUiEvent()
 
-    data class TabelItemClick(@JvmField val tabelItemInfo: TableItemModel) :
+    data class SummaryCountItemClick(@JvmField val tabelItemInfo: TableItemModel) :
         AuWidgetUiEvent()
 
 

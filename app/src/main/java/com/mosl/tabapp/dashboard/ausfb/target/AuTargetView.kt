@@ -23,10 +23,12 @@ interface AuTargetView : BaseView {
     fun getBranch(): BranchCodeModel?
     fun getSubBranch(): SubBranchCodeModel?
     fun getPeriod(): FilterRowData?
-    fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<TargetItemModel>)
     fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun getWidgetModel(): WidgetModel?
+    fun getAddtionalParameterMap(): Map<String, String>
+    fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick>
+
 }
 

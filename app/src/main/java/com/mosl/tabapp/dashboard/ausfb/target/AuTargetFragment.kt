@@ -12,6 +12,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.autarget.Table1ItemModel
 import com.mosl.mobile.domain.autarget.TableItemModel
 import com.mosl.mobile.domain.autarget.TargetItemModel
 import com.mosl.mobile.domain.bank.*
@@ -19,6 +20,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
 import com.mosl.tabapp.databinding.FragmentAuTargetVsAchievementBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -49,16 +51,18 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
     private val widgetUiEvent =
         PublishSubject.create<AuWidgetUiEvent>()
 
-    private val tabelUiEvent =
+    private val summaryCountUiEvent =
         PublishSubject.create<AuWidgetUiEvent>()
 
     private var previousPosition: Int = 0
     private var itemList = mutableListOf<TargetWidgetItem>()
-    private var tableItemList = mutableListOf<TargetTabelItem>()
+    private var summaryCountItemList = mutableListOf<TargetSummaryCountItem>()
+    private var lableItemList = mutableListOf<TargetLableItem>()
 
     private var widgetModel: WidgetModel? = null
 
-    private val tabelGroupAdapter = GroupAdapter<ViewHolder>()
+    private val summaryCountGroupAdapter = GroupAdapter<ViewHolder>()
+    private val labelGroupAdapter = GroupAdapter<ViewHolder>()
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_target_vs_achievement
@@ -90,7 +94,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
             adapter = groupAdapter
         }
 
-        binding.rvTabel.apply {
+        binding.rvSummaryCount.apply {
             layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -98,7 +102,16 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
                     GridLayoutManager.VERTICAL,
                     false
                 )
-            adapter = tabelGroupAdapter
+            adapter = summaryCountGroupAdapter
+        }
+
+        binding.rvLable.apply {
+            layoutManager = GridLayoutManager(
+                requireContext(), 3,
+                GridLayoutManager.VERTICAL,
+                false
+            )
+            adapter = labelGroupAdapter
         }
 
         val groupModel = dashboardModel.getGroupModel(
@@ -167,18 +180,24 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         return binding.spFilterPeriod.selectedItem as? FilterRowData
     }
 
-
-    override fun getWidgetSystemsName(): String {
-        return widgetModel?.systemName ?: ""
-    }
-
-
     override fun onBranchChange(): Observable<Int> {
         return binding.spFilterBranch.itemSelections()
     }
 
     override fun onSubBranchChange(): Observable<Int> {
         return binding.spFilterSubBranch.itemSelections()
+    }
+
+    override fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick> {
+        return summaryCountUiEvent.ofType()
+    }
+
+    override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
+        return widgetUiEvent.ofType()
+    }
+
+    override fun getWidgetModel(): WidgetModel? {
+        return widgetModel
     }
 
     override fun renderBankFilter(uiModel: UiModel<List<BankCodeModel>>) {
@@ -254,6 +273,28 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         }
     }
 
+    override fun getAddtionalParameterMap(): Map<String, String> {
+        val addtionalParameterMap: MutableMap<String, String> = HashMap()
+
+        addtionalParameterMap.apply {
+
+            getPeriod()?.let { this[it.keyValue] = it.value }
+
+            getBank()?.let { this[AuLeadsFragment.FLT_BANKNAME] = it.bankId.toString() }
+
+            getBranch()?.let { this[AuLeadsFragment.FLT_BANKBRANCHCODE] = it.branchId.toString() }
+
+            getSubBranch()?.let {
+                this[AuLeadsFragment.FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+            }
+
+            this[MOSLConstants.SELF_KEY] = dashboardModel.dashboardFor
+        }
+
+        return addtionalParameterMap
+    }
+
+
     fun chartClear() {
 
     }
@@ -261,52 +302,55 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
     override fun renderData(uiModel: UiModel<TargetItemModel>) {
         toggleProgressBar(uiModel.inProgress)
-        tableItemList.clear()
-        tabelGroupAdapter.clear()
+        summaryCountItemList.clear()
+        summaryCountGroupAdapter.clear()
+        labelGroupAdapter.clear()
+        lableItemList.clear()
         uiModel.onFailure { error ->
             showOnFailurePopup(error)
         }
 
         uiModel.onSuccess {
             it.table?.apply {
-                TabelView(this)
-
+                SummaryCountView(this)
+            }
+            it.table1?.apply {
+                LableView(this)
             }
         }
 
 
     }
 
-    fun TabelView(table: List<TableItemModel>) {
+    fun SummaryCountView(tableList: List<TableItemModel>) {
 
-        (binding.rvTabel.getLayoutManager() as GridLayoutManager).spanCount = gridSpanCount(table)
+        (binding.rvSummaryCount.getLayoutManager() as GridLayoutManager).spanCount =
+            gridSpanCount(tableList.size)
 
-        val sortedList = table.sortedWith(compareBy { it.ord })
+        val sortedList = tableList.sortedWith(compareBy { it.ord })
         sortedList.mapIndexed { index, tableItemModel ->
-            tableItemList.add(
-                TargetTabelItem(
-                    tableItemModel, tabelUiEvent, requireContext(),
+            summaryCountItemList.add(
+                TargetSummaryCountItem(
+                    tableItemModel, summaryCountUiEvent, requireContext(),
                     this@AuTargetFragment
                 )
             )
         }
-        tabelGroupAdapter.addAll(tableItemList)
+        summaryCountGroupAdapter.addAll(summaryCountItemList)
 
     }
 
-    fun gridSpanCount(table: List<TableItemModel>): Int {
-        if (table.size >= 3) {
-            return 3
-        } else if (table.size == 2) {
-            return 2
-        } else {
-            return 1
+    fun LableView(tableList: List<Table1ItemModel>) {
+        (binding.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
+            gridSpanCount(tableList.size)
+
+        tableList.mapIndexed { index, tableItemModel ->
+            lableItemList.add(
+                TargetLableItem(tableItemModel, requireContext())
+            )
         }
+        labelGroupAdapter.addAll(lableItemList)
 
-    }
-
-    override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
-        return widgetUiEvent.ofType()
     }
 
     override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
@@ -319,9 +363,14 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         this.widgetModel = widgetModel
     }
 
-    override fun getWidgetModel(): WidgetModel? {
-        return widgetModel
-    }
+    fun gridSpanCount(listCount: Int): Int {
+        return when {
+            listCount >= 3 -> 3
+            listCount == 2 -> 2
 
+            else -> 1
+        }
+
+    }
 
 }
