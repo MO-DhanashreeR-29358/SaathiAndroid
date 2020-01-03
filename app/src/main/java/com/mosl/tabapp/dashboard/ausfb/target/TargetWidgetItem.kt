@@ -9,19 +9,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.mosl.tabapp.R
-import com.mosl.tabapp.databinding.ItemTargetAchievementWidgetBinding
+import com.mosl.tabapp.databinding.TargetAchievementWidgetItemBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.xwray.groupie.databinding.BindableItem
 import io.reactivex.subjects.PublishSubject
 
-class ItemTargetVsAchievementWidget(
+class TargetWidgetItem(
     val widgetModel: WidgetModel,
     private val publishSubject: PublishSubject<AuWidgetUiEvent>,
     val context: Context
-) : BindableItem<ItemTargetAchievementWidgetBinding>() {
+) : BindableItem<TargetAchievementWidgetItemBinding>() {
 
     override fun getLayout(): Int {
-        return R.layout.item_target_achievement_widget
+        return R.layout.target_achievement_widget_item
     }
 
     fun updateItem(status: Boolean) {
@@ -29,7 +29,7 @@ class ItemTargetVsAchievementWidget(
         notifyChanged()
     }
 
-    override fun bind(viewBinding: ItemTargetAchievementWidgetBinding, position: Int) {
+    override fun bind(viewBinding: TargetAchievementWidgetItemBinding, position: Int) {
         viewBinding.apply {
             if (widgetModel.isSelected()) {
                 tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.white))

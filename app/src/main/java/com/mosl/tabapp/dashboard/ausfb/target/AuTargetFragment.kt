@@ -3,6 +3,7 @@ package com.mosl.tabapp.dashboard.ausfb.target
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -29,7 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
-class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementView {
+class AuTargetFragment : CommonFragment(), AuTargetView {
 
     lateinit var binding: FragmentAuTargetVsAchievementBinding
 
@@ -38,18 +39,25 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
     @Inject
-    lateinit var presenter: AuTargetVsAchievementPresenter
+    lateinit var presenter: AuTargetPresenter
 
     @Inject
     lateinit var dashboardModel: DashboardModel
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
-    private val widgetUiEvent: PublishSubject<AuWidgetUiEvent> =
+    private val widgetUiEvent =
+        PublishSubject.create<AuWidgetUiEvent>()
+
+    private val tabelUiEvent =
         PublishSubject.create<AuWidgetUiEvent>()
 
     private var previousPosition: Int = 0
-    private var itemList = mutableListOf<ItemTargetVsAchievementWidget>()
+    private var itemList = mutableListOf<TargetWidgetItem>()
+    private var tableItemList = mutableListOf<TargetTabelItem>()
+
     private var widgetModel: WidgetModel? = null
+
+    private val tabelGroupAdapter = GroupAdapter<ViewHolder>()
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_target_vs_achievement
@@ -62,7 +70,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        if (itemList.get(0).widgetModel.name.isNotEmpty()) {
+        if (itemList.size > 0) {
             widgetUiEvent.onNext(
                 AuWidgetUiEvent.ItemClick(
                     itemList.get(0).widgetModel,
@@ -79,6 +87,12 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             setHasFixedSize(true)
             adapter = groupAdapter
+        }
+
+        binding.rvTabel.apply {
+            layoutManager =
+                GridLayoutManager(requireContext(), 3, GridLayoutManager.VERTICAL, false)
+            adapter = tabelGroupAdapter
         }
 
         val groupModel = dashboardModel.getGroupModel(
@@ -105,7 +119,7 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
         widgetModelList.mapIndexed { position: Int, model: WidgetModel ->
 
-            itemList.add(ItemTargetVsAchievementWidget(model, widgetUiEvent, requireContext()))
+            itemList.add(TargetWidgetItem(model, widgetUiEvent, requireContext()))
         }
 
         groupAdapter.addAll(itemList)
@@ -241,13 +255,29 @@ class AuTargetVsAchievementFragment : CommonFragment(), AuTargetVsAchievementVie
 
     override fun renderData(uiModel: UiModel<TargetItemModel>) {
         toggleProgressBar(uiModel.inProgress)
+        tableItemList.clear()
+        tabelGroupAdapter.clear()
         uiModel.onFailure { error ->
             showOnFailurePopup(error)
         }
 
         uiModel.onSuccess {
-
+            val sortedList = it.table?.sortedWith(compareBy { it.ord })
+            sortedList?.mapIndexed { index, tableItemModel ->
+                tableItemList.add(
+                    TargetTabelItem(
+                        tableItemModel,
+                        tabelUiEvent,
+                        requireContext(),
+                        this@AuTargetFragment
+                    )
+                )
+            }
+            tabelGroupAdapter.addAll(tableItemList)
         }
+
+
+
     }
 
     override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {

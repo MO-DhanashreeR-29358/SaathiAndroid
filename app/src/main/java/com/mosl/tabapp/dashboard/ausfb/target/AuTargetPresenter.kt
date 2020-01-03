@@ -11,12 +11,12 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
-class AuTargetVsAchievementPresenter @Inject constructor(
-    view: AuTargetVsAchievementView, val bankRepository: BankRepository,
+class AuTargetPresenter @Inject constructor(
+    view: AuTargetView, val bankRepository: BankRepository,
     val repository: AuTargetRepository,
     val dashboardModel: DashboardModel
 ) :
-    BasePresenter<AuTargetVsAchievementView>(view) {
+    BasePresenter<AuTargetView>(view) {
     override fun start() {
         onFetchCalled().switchMap {
             bankRepository.getBankFilter()

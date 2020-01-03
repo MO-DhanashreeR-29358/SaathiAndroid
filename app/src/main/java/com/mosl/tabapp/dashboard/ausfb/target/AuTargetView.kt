@@ -10,7 +10,7 @@ import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import io.reactivex.Observable
 
-interface AuTargetVsAchievementView : BaseView {
+interface AuTargetView : BaseView {
 
     fun onPeriodChange(): Observable<Int>
     fun onBankChange(): Observable<Int>

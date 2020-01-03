@@ -8,14 +8,14 @@ import dagger.Provides
 
 
 @Module
-class AuTargetVsAchievementModule {
+class AuTargetModule {
 
     @Provides
-    internal fun provideAuLeadView(fragment: AuTargetVsAchievementFragment): AuTargetVsAchievementView {
+    internal fun provideAuLeadView(fragment: AuTargetFragment): AuTargetView {
         return fragment
     }
     @Provides
-    internal fun provideDashBoardModel(fragment: AuTargetVsAchievementFragment): DashboardModel {
+    internal fun provideDashBoardModel(fragment: AuTargetFragment): DashboardModel {
         val args: Bundle? = fragment.getArguments()
         val dashboardModel: DashboardModel =
             args?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel

@@ -42,6 +42,7 @@ import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
+import com.mosl.saathi.api.model.dashboard.target.AuTargetItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.documents.*
@@ -387,7 +388,7 @@ interface SaathiApi {
     @POST("Dashboard/LoadWidgetAsync")
     fun getAuTargetWidgetData(
         @Body request: AuTargetRequest
-    ): Observable<TargetAchievementItem>
+    ): Observable<AuTargetItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
