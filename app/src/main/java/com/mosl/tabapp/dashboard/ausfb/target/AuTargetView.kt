@@ -29,6 +29,8 @@ interface AuTargetView : BaseView {
     fun getWidgetModel(): WidgetModel?
     fun getAddtionalParameterMap(): Map<String, String>
     fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick>
+    fun onPieChartClicked(): Observable<AuWidgetUiEvent.PieChartClick>
+    fun getColorsArray(): IntArray
 
 }
 

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -71,6 +70,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
         binding.tvShowMore.setOnClickListener(this)
+        makeChart()
+        makeLegend()
 
 
     }
@@ -252,7 +253,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         uiModel.onSuccess {
             binding.relativeLayout.visibility = View.VISIBLE
             binding.tvTotal.text = it.getTotal()
-            stackedBarData(binding.chart, it.getXAxisList(), it.getYAxisList(), it.getLabelString())
+            stackedBarData(it.getXAxisList(), it.getYAxisList(), it.getLabelString())
 
         }
     }
@@ -288,18 +289,15 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
     }
 
     private fun stackedBarData(
-        mChart: HorizontalBarChart,
         xAxisValue: MutableList<String>,
         yAxisValue: MutableList<MutableList<String>>,
         lableString: Array<String>
     ) {
-
+        val mChart = binding.chart
         Collections.reverse(xAxisValue)
         Collections.reverse(yAxisValue.get(0))
         Collections.reverse(yAxisValue.get(1))
 
-
-        makeChart(mChart)
         val leftAxis = mChart.axisLeft
         leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
@@ -309,9 +307,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         xAxis.setCenterAxisLabels(true)
         xAxis.setDrawAxisLine(false)
         xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.black)
-
         xAxis.setValueFormatter(IndexAxisValueFormatter(xAxisValue))
-        makeLegend(mChart)
 
         val data = getBarData(yAxisValue, lableString)
         data.setValueFormatter(CRMValueFormatter())
@@ -388,24 +384,25 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         return BarData(dataSets)
     }
 
-    private fun makeChart(mChart: HorizontalBarChart) {
-        mChart.description.isEnabled = false
-        mChart.setBackgroundColor(Color.WHITE)
-        mChart.setDrawGridBackground(false)
-        mChart.setDrawBarShadow(false)
-        mChart.isHighlightFullBarEnabled = false
-        mChart.setPinchZoom(false)
-        mChart.isScaleXEnabled = true
-        mChart.isScaleYEnabled = false
-        mChart.setDrawValueAboveBar(false)
-        mChart.axisRight.isEnabled = false
-        mChart.axisLeft.isEnabled = false
+    private fun makeChart() {
+        binding.chart.apply {
+            description.isEnabled = false
+            setBackgroundColor(Color.WHITE)
+            setDrawGridBackground(false)
+            setDrawBarShadow(false)
+            isHighlightFullBarEnabled = false
+            setPinchZoom(false)
+            isScaleXEnabled = true
+            isScaleYEnabled = false
+            setDrawValueAboveBar(false)
+            axisRight.isEnabled = false
+            axisLeft.isEnabled = false
+        }
     }
 
     private fun makeLegend(
-        chart: HorizontalBarChart
     ) {
-        val legend = chart.legend
+        val legend = binding.chart.legend
         legend.form = Legend.LegendForm.CIRCLE
         legend.textSize = resources.getDimension(R.dimen.chart_text_size)
         legend.isWordWrapEnabled = true

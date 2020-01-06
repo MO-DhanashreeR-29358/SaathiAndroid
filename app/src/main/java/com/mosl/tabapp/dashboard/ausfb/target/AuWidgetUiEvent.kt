@@ -10,5 +10,8 @@ sealed class AuWidgetUiEvent {
     data class SummaryCountItemClick(@JvmField val tabelItemInfo: TableItemModel) :
         AuWidgetUiEvent()
 
+    data class PieChartClick(@JvmField val label: String?) :
+        AuWidgetUiEvent()
+
 
 }

@@ -161,8 +161,6 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         RecyclerView horizontalRecyclerView = targetView.findViewById(R.id.horizontalRecyclerView);
         verticalRecyclerView = targetView.findViewById(R.id.verticalRecyclerView);
         chartTarget = targetView.findViewById(R.id.chartTarget);
-        chartTarget.setRotationEnabled(false);
-        chartTarget.setEntryLabelTextSize(getResources().getDimension(R.dimen.chart_text_size));
         llTop = targetView.findViewById(R.id.llTop);
 
         linearLayoutLeft = targetView.findViewById(R.id.linearLayoutLeft);
@@ -224,6 +222,8 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
             ArrayList<TargetAchievementModel> targetAchievementModels) {
         Description des = chartTarget.getDescription();
         des.setEnabled(false);
+        chartTarget.setRotationEnabled(false);
+        chartTarget.setEntryLabelTextSize(getResources().getDimension(R.dimen.chart_text_size));
         chartTarget.setUsePercentValues(true);
         chartTarget.setExtraOffsets(5, 10, 5, 5);
         chartTarget.setDragDecelerationFrictionCoef(0.85f);

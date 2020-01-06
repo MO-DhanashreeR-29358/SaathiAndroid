@@ -1,10 +1,20 @@
 package com.mosl.tabapp.dashboard.ausfb.target
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -51,6 +61,9 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
     private val widgetUiEvent =
         PublishSubject.create<AuWidgetUiEvent>()
 
+    private val pieChartEvent =
+        PublishSubject.create<AuWidgetUiEvent>()
+
     private val summaryCountUiEvent =
         PublishSubject.create<AuWidgetUiEvent>()
 
@@ -63,6 +76,26 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
     private val summaryCountGroupAdapter = GroupAdapter<ViewHolder>()
     private val labelGroupAdapter = GroupAdapter<ViewHolder>()
+
+    private val VORDIPLOM_COLORS = intArrayOf(
+        Color.rgb(255, 21, 0),
+        Color.rgb(38, 127, 183),
+        Color.rgb(0, 177, 207),
+        Color.rgb(22, 225, 143),
+        Color.rgb(64, 0, 255),
+        Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46),
+        Color.rgb(255, 21, 0),
+        Color.rgb(38, 127, 183),
+        Color.rgb(0, 177, 207),
+        Color.rgb(22, 225, 143),
+        Color.rgb(64, 0, 255),
+        Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46),
+        Color.rgb(64, 0, 255),
+        Color.rgb(255, 255, 0),
+        Color.rgb(254, 46, 46)
+    )
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_target_vs_achievement
@@ -83,6 +116,8 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
                 )
             )
         }
+        makeChart()
+
     }
 
     private fun setUpView() {
@@ -155,6 +190,31 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
     }
 
+    private fun makeChart() {
+
+        binding.chart.apply {
+            description.isEnabled = false
+            setRotationEnabled(false)
+            setEntryLabelTextSize(resources.getDimension(R.dimen.chart_text_size))
+            setUsePercentValues(true)
+            setExtraOffsets(5f, 10f, 5f, 5f)
+            setDragDecelerationFrictionCoef(0.85f)
+            getLegend().setEnabled(false)
+            setDrawHoleEnabled(true)
+            setTransparentCircleColor(Color.WHITE)
+            setTransparentCircleAlpha(100)
+            setHoleRadius(70f)
+            setTransparentCircleRadius(30f)
+            setDrawCenterText(true)
+            setDrawEntryLabels(false)
+            setBackgroundColor(Color.WHITE)
+            animateY(1400, Easing.EasingOption.EaseInOutQuad)
+            highlightValues(null)
+        }
+
+
+    }
+
 
     override fun onPeriodChange(): Observable<Int> {
         return binding.spFilterPeriod.itemSelections()
@@ -190,6 +250,14 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
     override fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick> {
         return summaryCountUiEvent.ofType()
+    }
+
+    override fun onPieChartClicked(): Observable<AuWidgetUiEvent.PieChartClick> {
+        return pieChartEvent.ofType()
+    }
+
+    override fun getColorsArray(): IntArray {
+        return VORDIPLOM_COLORS
     }
 
     override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
@@ -296,7 +364,8 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
 
     fun chartClear() {
-
+        binding.chart.clear()
+        binding.tvWidgetName.visibility = View.GONE
     }
 
 
@@ -316,10 +385,60 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
             }
             it.table1?.apply {
                 LableView(this)
+                setDataBroking(this)
             }
+
         }
 
+    }
 
+    private fun setDataBroking(
+        tableItemList: List<Table1ItemModel>
+    ) {
+
+        val data = getPieData(tableItemList)
+        data.setDrawValues(false) // for text hidden
+        data.setValueTextSize(11f)
+        data.setValueTextColor(Color.WHITE)
+        data.setValueTypeface(Typeface.DEFAULT)
+        binding.chart.setData(data)
+        binding.chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(
+                e: Entry,
+                h: Highlight
+            ) {
+
+                pieChartEvent.onNext(AuWidgetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
+
+            }
+
+            override fun onNothingSelected() {}
+        })
+        binding.chart.invalidate()
+    }
+
+
+    private fun getPieData(
+        tableItemList: List<Table1ItemModel>
+
+    ): PieData {
+        val entries = ArrayList<PieEntry>()
+        for (i in tableItemList.indices) {
+            entries.add(
+                PieEntry(
+                    tableItemList[i].value!!.toFloat(),
+                    tableItemList[i].label, i
+                )
+            )
+        }
+        val dataSet = PieDataSet(entries, "Total Client")
+        dataSet.sliceSpace = 5f
+        dataSet.selectionShift = 5f
+        val colors = ArrayList<Int>()
+        for (c in VORDIPLOM_COLORS) colors.add(c)
+        colors.add(ColorTemplate.getHoloBlue())
+        dataSet.colors = colors
+        return PieData(dataSet)
     }
 
     fun SummaryCountView(tableList: List<TableItemModel>) {
@@ -346,7 +465,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
         tableList.mapIndexed { index, tableItemModel ->
             lableItemList.add(
-                TargetLableItem(tableItemModel, requireContext())
+                TargetLableItem(tableItemModel, requireContext(), this)
             )
         }
         labelGroupAdapter.addAll(lableItemList)
@@ -359,7 +478,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
             itemList.get(previousPosition).updateItem(false)
             previousPosition = currentPosition
         }
-        binding.tvUniqueLeads.setText(widgetModel.widgetTypeList.get(0).getTitle())
+        binding.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
         this.widgetModel = widgetModel
     }
 

@@ -57,7 +57,12 @@ class AuTargetPresenter @Inject constructor(
 
         view.onSummaryCountClicked()
             .subscribe {
-                SummaryCountNavigate(it.tabelItemInfo)
+                SummaryCountClicked(it.tabelItemInfo)
+            }.addTo(disposable)
+
+        view.onPieChartClicked()
+            .subscribe {
+                PieChartClicked(it.label)
             }.addTo(disposable)
 
         val bankChange = Observable.merge(
@@ -78,12 +83,21 @@ class AuTargetPresenter @Inject constructor(
             .addTo(disposable)
     }
 
-    private fun SummaryCountNavigate(tableItemModel: TableItemModel) {
-
+    private fun SummaryCountClicked(tableItemModel: TableItemModel) {
         val addtionalParameterMap: MutableMap<String, String> = HashMap()
         tableItemModel.displayText?.let { addtionalParameterMap.put(WIDGETTYPE, it) }
         addtionalParameterMap.putAll(view.getAddtionalParameterMap())
+        toNavigate(addtionalParameterMap)
+    }
 
+    private fun PieChartClicked(label: String?) {
+        val addtionalParameterMap: MutableMap<String, String> = HashMap()
+        label?.let { addtionalParameterMap.put(KEY, it) }
+        addtionalParameterMap.putAll(view.getAddtionalParameterMap())
+        toNavigate(addtionalParameterMap)
+    }
+
+    fun toNavigate(addtionalParameterMap: MutableMap<String, String> = HashMap()) {
         val args = Bundle()
         args.putString(SYSTEM_NAME, view.getWidgetModel()?.systemName)
         args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.systemName)

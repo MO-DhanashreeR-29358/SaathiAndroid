@@ -97,7 +97,7 @@
                     android:src="@drawable/horizontal_line" />
 
                 <TextView
-                    android:id="@+id/tvUniqueLeads"
+                    android:id="@+id/tv_widget_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -110,19 +110,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <view
-                        android:id="@+id/chartTarget"
-                        class="com.mosl.tabapp.common.LockedPieChart"
+                    <com.mosl.tabapp.common.LockedPieChart
+                        android:id="@+id/chart"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_150sdp"
-                        android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_minus10sdp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_lable"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/chartTarget"
+                        android:layout_below="@+id/chart"
                         android:layout_margin="@dimen/_3sdp"
                         tools:listitem="@layout/item_target_achievement_dynamic_list" />
 
