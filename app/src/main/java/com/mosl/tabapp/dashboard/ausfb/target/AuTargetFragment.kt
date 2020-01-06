@@ -377,6 +377,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         lableItemList.clear()
         uiModel.onFailure { error ->
             showOnFailurePopup(error)
+            chartClear()
         }
 
         uiModel.onSuccess {
@@ -384,8 +385,13 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
                 SummaryCountView(this)
             }
             it.table1?.apply {
-                LableView(this)
-                setDataBroking(this)
+                if (this.isEmpty()) {
+                    binding.chart.clear()
+                } else {
+                    setDataBroking(this)
+                    LableView(this)
+                }
+
             }
 
         }
