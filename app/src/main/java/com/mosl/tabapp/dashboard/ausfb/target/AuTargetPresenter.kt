@@ -48,21 +48,21 @@ class AuTargetPresenter @Inject constructor(
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
 
-        val widgetItemClickedObsc = view.onWidgetItemClicked().share()
+        val widgetItemClickObsc = view.onWidgetItemClick().share()
 
-        widgetItemClickedObsc
+        widgetItemClickObsc
             .subscribe {
                 view.renderWidgetData(it.widgetItemInfo, it.currentPosition)
             }.addTo(disposable)
 
-        view.onSummaryCountClicked()
+        view.onSummaryCountClick()
             .subscribe {
-                SummaryCountClicked(it.tabelItemInfo)
+                SummaryCountClick(it.tabelItemInfo)
             }.addTo(disposable)
 
-        view.onPieChartClicked()
+        view.onPieChartClick()
             .subscribe {
-                PieChartClicked(it.label)
+                PieChartClick(it.label)
             }.addTo(disposable)
 
         val bankChange = Observable.merge(
@@ -73,7 +73,7 @@ class AuTargetPresenter @Inject constructor(
         Observable.merge(
             bankChange,
             view.onPeriodChange(),
-            widgetItemClickedObsc
+            widgetItemClickObsc
         ).filter { view.getWidgetModel() != null }
             .map { getWidgetRequest() }
             .switchMap {
@@ -83,14 +83,14 @@ class AuTargetPresenter @Inject constructor(
             .addTo(disposable)
     }
 
-    private fun SummaryCountClicked(tableItemModel: TableItemModel) {
+    private fun SummaryCountClick(tableItemModel: TableItemModel) {
         val addtionalParameterMap: MutableMap<String, String> = HashMap()
         tableItemModel.displayText?.let { addtionalParameterMap.put(WIDGETTYPE, it) }
         addtionalParameterMap.putAll(view.getAddtionalParameterMap())
         toNavigate(addtionalParameterMap)
     }
 
-    private fun PieChartClicked(label: String?) {
+    private fun PieChartClick(label: String?) {
         val addtionalParameterMap: MutableMap<String, String> = HashMap()
         label?.let { addtionalParameterMap.put(KEY, it) }
         addtionalParameterMap.putAll(view.getAddtionalParameterMap())

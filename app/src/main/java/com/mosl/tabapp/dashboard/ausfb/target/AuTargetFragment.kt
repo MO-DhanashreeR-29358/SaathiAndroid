@@ -248,11 +248,11 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         return binding.spFilterSubBranch.itemSelections()
     }
 
-    override fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick> {
+    override fun onSummaryCountClick(): Observable<AuWidgetUiEvent.SummaryCountItemClick> {
         return summaryCountUiEvent.ofType()
     }
 
-    override fun onPieChartClicked(): Observable<AuWidgetUiEvent.PieChartClick> {
+    override fun onPieChartClick(): Observable<AuWidgetUiEvent.PieChartClick> {
         return pieChartEvent.ofType()
     }
 
@@ -260,7 +260,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         return VORDIPLOM_COLORS
     }
 
-    override fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick> {
+    override fun onWidgetItemClick(): Observable<AuWidgetUiEvent.ItemClick> {
         return widgetUiEvent.ofType()
     }
 

@@ -27,7 +27,7 @@ interface AuLeadsView : BaseView {
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<AusfbLeadModel>)
     fun getAddtionalParameterMap(): Map<String, String>
-
+    fun onBarChartClick(): Observable<AuLeadUiEvent.BarChartClick>
 
 }
 

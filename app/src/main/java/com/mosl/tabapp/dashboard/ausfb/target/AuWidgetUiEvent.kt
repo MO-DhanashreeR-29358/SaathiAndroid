@@ -13,5 +13,4 @@ sealed class AuWidgetUiEvent {
     data class PieChartClick(@JvmField val label: String?) :
         AuWidgetUiEvent()
 
-
 }

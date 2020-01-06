@@ -33,9 +33,10 @@ import com.mosl.tabapp.databinding.FragmentAuLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
-import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
@@ -57,6 +58,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     private lateinit var model: WidgetModel
 
+    private val barChartEvent =
+        PublishSubject.create<AuLeadUiEvent>()
 
     override fun getLayout(): Int {
         return R.layout.fragment_au_leads
@@ -162,6 +165,11 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     override fun onSubBranchChange(): Observable<Int> {
         return binding.spFilterSubBranch.itemSelections()
+    }
+
+    override fun onBarChartClick(): Observable<AuLeadUiEvent.BarChartClick> {
+
+        return barChartEvent.ofType()
     }
 
     override fun renderBankFilter(uiModel: UiModel<List<BankCodeModel>>) {
@@ -323,25 +331,21 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                 h: Highlight
             ) {
                 if (e.y == 0.0f) return
-                val addtionalParameterMap: MutableMap<String, String> = HashMap()
-                addtionalParameterMap.put(COL_FILTER, xAxisValue[e.x.toInt()])
-                addtionalParameterMap.put(ROW_FILTER, lableString[h.stackIndex])
-                addtionalParameterMap.putAll(getAddtionalParameterMap())
-                val args = Bundle()
-                args.putString(SYSTEM_NAME, getWidgetSystemsName())
-                args.putString(LABEL, LEAD)
-                args.putSerializable(MAP, addtionalParameterMap as Serializable)
                 if (lableString[h.stackIndex].equals(ASSIGNED, ignoreCase = true)) {
                     if (!yAxisValue.get(1).get(e.x.toInt()).equals("0")) {
-                        navigator.openPage(
-                            NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
-                            args, true, false
+                        barChartEvent.onNext(
+                            AuLeadUiEvent.BarChartClick(
+                                lableString[h.stackIndex],
+                                xAxisValue.get(e.x.toInt())
+                            )
                         )
                     }
                 } else {
-                    navigator.openPage(
-                        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-                        true, false
+                    barChartEvent.onNext(
+                        AuLeadUiEvent.BarChartClick(
+                            lableString[h.stackIndex],
+                            xAxisValue.get(e.x.toInt())
+                        )
                     )
                 }
 

@@ -24,12 +24,12 @@ interface AuTargetView : BaseView {
     fun getSubBranch(): SubBranchCodeModel?
     fun getPeriod(): FilterRowData?
     fun renderData(uiModel: UiModel<TargetItemModel>)
-    fun onWidgetItemClicked(): Observable<AuWidgetUiEvent.ItemClick>
+    fun onWidgetItemClick(): Observable<AuWidgetUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun getWidgetModel(): WidgetModel?
     fun getAddtionalParameterMap(): Map<String, String>
-    fun onSummaryCountClicked(): Observable<AuWidgetUiEvent.SummaryCountItemClick>
-    fun onPieChartClicked(): Observable<AuWidgetUiEvent.PieChartClick>
+    fun onSummaryCountClick(): Observable<AuWidgetUiEvent.SummaryCountItemClick>
+    fun onPieChartClick(): Observable<AuWidgetUiEvent.PieChartClick>
     fun getColorsArray(): IntArray
 
 }
