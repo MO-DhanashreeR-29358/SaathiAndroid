@@ -258,7 +258,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         }
     }
 
-    private fun getAddtionalParameterMap(): Map<String, String> {
+    override fun getAddtionalParameterMap(): Map<String, String> {
         val addtionalParameterMap: MutableMap<String, String> = HashMap()
 
         addtionalParameterMap.apply {

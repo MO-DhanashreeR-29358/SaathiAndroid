@@ -26,6 +26,7 @@ interface AuLeadsView : BaseView {
     fun getProduct(): FilterRowData?
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<AusfbLeadModel>)
+    fun getAddtionalParameterMap(): Map<String, String>
 
 
 }

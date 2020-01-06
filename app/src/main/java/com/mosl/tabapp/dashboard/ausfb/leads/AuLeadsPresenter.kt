@@ -44,6 +44,7 @@ class AuLeadsPresenter @Inject constructor(
             bankChangeObsc,
             branchChangeObsc, view.onSubBranchChange()
         ).share()
+
         Observable.merge(
             view.onPeriodChange(), view.onProductChange(),
             bankChange
@@ -54,7 +55,6 @@ class AuLeadsPresenter @Inject constructor(
                     .compose(applyUiModel())
             }.subscribe(view::renderData).addTo(disposable)
     }
-
 
     private fun getWidgetRequest(): AusfbLeadInput {
         return AusfbLeadInput(

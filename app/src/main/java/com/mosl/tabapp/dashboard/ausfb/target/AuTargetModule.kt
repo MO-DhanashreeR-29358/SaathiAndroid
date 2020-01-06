@@ -14,6 +14,7 @@ class AuTargetModule {
     internal fun provideAuLeadView(fragment: AuTargetFragment): AuTargetView {
         return fragment
     }
+
     @Provides
     internal fun provideDashBoardModel(fragment: AuTargetFragment): DashboardModel {
         val args: Bundle? = fragment.getArguments()

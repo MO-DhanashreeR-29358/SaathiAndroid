@@ -11,14 +11,14 @@ import dagger.Binds
 import dagger.Module
 
 @Module
-abstract class RepositoryAliasProviders {
+interface RepositoryAliasProviders {
 
     @Binds
-    abstract fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
+    fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
 
     @Binds
-    abstract fun provideAusfbLeadRepository(repository: AusfbLeadRepositoryImpl): AusfbLeadRepository
+    fun provideAusfbLeadRepository(repository: AusfbLeadRepositoryImpl): AusfbLeadRepository
 
     @Binds
-    abstract fun provideAuTargetVsAchRepository(repository: AuTargetRepositoryImpl): AuTargetRepository
+    fun provideAuTargetVsAchRepository(repository: AuTargetRepositoryImpl): AuTargetRepository
 }
