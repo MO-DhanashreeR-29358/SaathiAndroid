@@ -144,6 +144,7 @@
     <string name="text_hint_label_enter_client">Enter Client Name*</string>
     <string name="text_label_add">Add</string>
     <string name="text_label_no_lead">There are no Lead</string>
+    <string name="text_label_show_less">Show Less</string>
 
     <!--AU Bank Meeting Validation Message-->
     <string name="validate_meeting_type">Enter Meeting Type</string>
