@@ -331,16 +331,8 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                 h: Highlight
             ) {
                 if (e.y == 0.0f) return
-                if (lableString[h.stackIndex].equals(ASSIGNED, ignoreCase = true)) {
-                    if (!yAxisValue.get(1).get(e.x.toInt()).equals("0")) {
-                        barChartEvent.onNext(
-                            AuLeadUiEvent.BarChartClick(
-                                lableString[h.stackIndex],
-                                xAxisValue.get(e.x.toInt())
-                            )
-                        )
-                    }
-                } else {
+
+                if (!yAxisValue.get(h.stackIndex).get(e.x.toInt()).equals("0")) {
                     barChartEvent.onNext(
                         AuLeadUiEvent.BarChartClick(
                             lableString[h.stackIndex],
@@ -348,6 +340,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                         )
                     )
                 }
+
 
             }
 
