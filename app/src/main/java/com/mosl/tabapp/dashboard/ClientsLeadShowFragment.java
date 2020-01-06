@@ -174,6 +174,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         Throwable error = uiModel.error;
         if (error != null) {
             showOnFailurePopup(error);
+            tvNochart.setVisibility(View.VISIBLE);
         }
 
         Map<String, Object> data = uiModel.data;

@@ -143,6 +143,7 @@
     <string name="text_hint_label_enter_subject">Enter Subject*</string>
     <string name="text_hint_label_enter_client">Enter Client Name*</string>
     <string name="text_label_add">Add</string>
+    <string name="text_label_no_lead">There are no Lead</string>
 
     <!--AU Bank Meeting Validation Message-->
     <string name="validate_meeting_type">Enter Meeting Type</string>
