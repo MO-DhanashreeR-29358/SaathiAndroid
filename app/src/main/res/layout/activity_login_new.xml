@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,16 +35,16 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_text_employee_code">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edEmpCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_medium"
                     android:background="@drawable/rounded_edittext_border"
-                    android:drawableStart="@drawable/ic_person_outline_black_24dp"
                     android:drawablePadding="@dimen/padding_small"
                     android:padding="@dimen/padding_medium"
                     android:singleLine="true"
+                    app:drawableStartCompat="@drawable/ic_person_outline_black_24dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/imgIcon" />
@@ -56,20 +56,20 @@
                 android:hint="@string/hint_text_password"
                 app:passwordToggleEnabled="true">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/edPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:layout_marginBottom="@dimen/margin_medium"
                     android:background="@drawable/rounded_edittext_border"
-                    android:drawableStart="@drawable/ic_lock_black_24dp"
                     android:drawablePadding="@dimen/padding_small"
                     android:imeActionLabel="@string/button_label_login"
                     android:imeOptions="actionDone"
                     android:inputType="textPassword"
                     android:padding="@dimen/padding_medium"
                     android:singleLine="true"
+                    app:drawableStartCompat="@drawable/ic_lock_black_24dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/edEmpCode" />

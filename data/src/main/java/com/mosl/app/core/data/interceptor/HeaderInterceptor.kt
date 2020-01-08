@@ -29,7 +29,7 @@ class HeaderInterceptor @Inject constructor(
 
     val builder = original.newBuilder()
 
-    if (chain.request().url.pathSegments.last() != LoginEndPoint && chain.request().url.pathSegments.last() != AppVersionEndPoint) {
+    if (chain.request().url().pathSegments().last() != LoginEndPoint && chain.request().url().pathSegments().last() != AppVersionEndPoint) {
       val user = userManager.user
       builder.header(API_HEADER_CONTENT_TYPE, encryptor.encrypt(API_HEADER_CONTENT_TYPE_VALUE))
       builder.header(API_HEADER_CLIENT_INFO, encryptor.encrypt(API_HEADER_CLIENT_INFO_VALUE))

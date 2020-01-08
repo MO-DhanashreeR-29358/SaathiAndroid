@@ -230,7 +230,7 @@
           app:hintTextAppearance="@style/InputLayout"
           >
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etMeetingDescription"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_80sdp"
@@ -329,7 +329,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etClientCode"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -361,7 +361,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etClientName"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -501,7 +501,7 @@
           app:hintTextAppearance="@style/InputLayout"
           >
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etCustomerComment"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_80sdp"
@@ -596,7 +596,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etAmount"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -630,7 +630,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etLocation"
               android:layout_width="match_parent"
               android:layout_height="@dimen/_80sdp"
@@ -663,7 +663,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etPinCode"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -784,7 +784,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-          <EditText
+          <androidx.appcompat.widget.AppCompatEditText
               android:id="@+id/etCategory"
               android:layout_width="match_parent"
               android:layout_height="@dimen/_80sdp"
@@ -856,7 +856,7 @@
               app:hintTextAppearance="@style/InputLayout"
               >
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etSubCategory"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"

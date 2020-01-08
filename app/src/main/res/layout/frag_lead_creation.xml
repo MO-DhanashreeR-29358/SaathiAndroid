@@ -99,7 +99,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etContactPerson"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -280,7 +280,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -314,7 +314,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -348,7 +348,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateMobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -382,7 +382,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLandLine"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -416,7 +416,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEkycMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -450,7 +450,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etPanNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -484,7 +484,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAadharNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -578,7 +578,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSourceDetails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -678,7 +678,7 @@
                                 android:src="@drawable/search"
                                 />
 
-                            <org.droidparts.widget.ClearableEditText
+                            <org.droidparts.widget.Clearableandroidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/actAssignTo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -760,7 +760,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -812,7 +812,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -848,7 +848,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -884,7 +884,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -919,7 +919,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -953,7 +953,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -987,7 +987,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1060,7 +1060,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1093,7 +1093,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1127,7 +1127,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1240,7 +1240,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1327,7 +1327,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1348,7 +1348,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1368,7 +1368,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1482,7 +1482,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1517,7 +1517,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
