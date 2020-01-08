@@ -3,7 +3,6 @@ package com.mosl.tabapp.core
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.base.BaseFragment
@@ -23,10 +22,6 @@ open class CommonFragment : BaseFragment() {
   internal lateinit var navigator: ScreenNavigatorImpl
   val saathiApi = CRMWebServiceHandler.getSaathiApi()
   val compositeDisposable = CompositeDisposable();
-  protected fun showToast(message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT)
-        .show()
-  }
 
   fun stringOrEmpty(input: String?): String {
     return stringOrDefault(input, "")

@@ -1,4 +1,4 @@
-package com.mosl.mobile.core.data.util
+package com.mosl.app.core.data.util
 
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
