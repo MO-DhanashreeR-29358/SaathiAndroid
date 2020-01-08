@@ -177,7 +177,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
                 >
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_meeting_description"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"

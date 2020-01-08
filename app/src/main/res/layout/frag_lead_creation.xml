@@ -678,7 +678,7 @@
                                 android:src="@drawable/search"
                                 />
 
-                            <org.droidparts.widget.Clearableandroidx.appcompat.widget.AppCompatEditText
+                            <org.droidparts.widget.ClearableEditText
                                 android:id="@+id/actAssignTo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"

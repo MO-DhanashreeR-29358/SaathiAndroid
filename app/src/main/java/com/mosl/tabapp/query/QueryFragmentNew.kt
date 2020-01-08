@@ -53,7 +53,7 @@ class QueryFragmentNew : CommonFragment(), QueryView {
   }
 
   override fun getQueryMessgae(): String {
-    return binding.etQueryDescription.text.trim()
+    return binding.etQueryDescription.text?.trim()
         .toString()
   }
 
