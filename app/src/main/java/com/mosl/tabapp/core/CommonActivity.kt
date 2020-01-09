@@ -212,7 +212,7 @@ class CommonActivity : BaseActivity(),
             }
             .subscribe())
 
-    val Threshold = TimeUnit.SECONDS.toNanos(5)
+      val Threshold = TimeUnit.SECONDS.toNanos(10)
     eventListenerFactory.getApiStatsObservable()
       .filter { callTime -> callTime > Threshold }
       .observeOn(mainThread)
