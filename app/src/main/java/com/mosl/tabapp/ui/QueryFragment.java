@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.query.QueryItem;
 import com.mosl.saathi.api.model.query.QueryRequest;
 import com.mosl.tabapp.R;
@@ -19,7 +19,7 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.model.AccountDetails;
 import io.reactivex.disposables.Disposable;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -28,7 +28,8 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 /**
  * Created by Raju on 3/10/2017.
  */
-public class QueryFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class
+QueryFragment extends MOSLCommonFragment implements View.OnClickListener {
     View queryView;
     Button btnSubmit, btnReset;
     EditText edttxtYourName, edttxtEmailAddress, edttxtMobileNo, edttxtBranchCode, edQueryText;

@@ -2,8 +2,6 @@ package com.mosl.tabapp.notification;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.notification.NotificationRequest;
 import com.mosl.saathi.api.model.notification.NotificationResponse;
 import com.mosl.saathi.domain.DateFormatUtils;
@@ -20,22 +20,30 @@ import com.mosl.saathi.domain.NewsDate;
 import com.mosl.saathi.domain.NewsDateKt;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.NotificationModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD_ID;
+import static com.mosl.tabapp.constants.MOSLConstants.NOTIFICATION_DATA;
+import static com.mosl.tabapp.constants.MOSLConstants.OPERATIONAL;
+import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.model.AccountDetails.isAufsb;
 
 /**
  * Created by raju on 4/20/2017.
  */
 
-public class NotificationFragment extends MOSLCommonFragment
+public class NotificationFragment extends CommonFragment
     implements AdapterView.OnItemSelectedListener {
     private View notificationView;
     private RecyclerView recyclerView;
@@ -50,11 +58,14 @@ public class NotificationFragment extends MOSLCommonFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         notificationView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_notification);
-        setAppTitle(getClass().toString(), "Notification");
+		container.post(() -> setAppTitle("Notification"));
         setUpView(notificationView);
         setUserVisibleHint(true);
         return notificationView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_notification;
     }
 
     private void setUpView(View calendarView) {
@@ -66,7 +77,7 @@ public class NotificationFragment extends MOSLCommonFragment
             getActivity().getResources().getStringArray(R.array.NotificationCategory);
         arrCategory = new ArrayList<String>(Arrays.asList(eventTypeArray));
         arrAdapCategory =
-            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrCategory);
+            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrCategory);
         arrAdapCategory.setDropDownViewResource(R.layout.mdropdown);
         spCategory.setAdapter(arrAdapCategory);
 
@@ -118,8 +129,9 @@ public class NotificationFragment extends MOSLCommonFragment
     }
 
     private void notification(String category) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            Disposable disposable = saathiApi.getNotifications(new NotificationRequest(category))
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            Disposable disposable =
+                getSaathiApi().getNotifications(new NotificationRequest(category))
                 .compose(applyUiModel())
                 .subscribe(this::renderNotifications);
         } else {
@@ -146,6 +158,46 @@ public class NotificationFragment extends MOSLCommonFragment
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void navigateTo(String dataStr) {
+        if (dataStr == null || dataStr.length() < 1) {
+            //Noproper data goto dsh board
+            navigator.openHome();
+        }
+        NotificationData data = new NotificationData(Objects.requireNonNull(dataStr));
+        if (Objects.requireNonNull(data.getPage()).equalsIgnoreCase("LEADVIEW")) {
+            //Goto leadView Detail
+            //MOSLCommonFragment fragment = new LeadViewMainFragment();
+            //BackStack
+            Bundle bundle = new Bundle();
+            String leadId = Objects.requireNonNull(data.getParamMap()).get(LEAD_ID);
+            String ucid = data.getParamMap().get(UCID);
+            ucid = (ucid == null || ucid.equalsIgnoreCase("")) ? "0" : ucid;
+            leadId = (leadId == null || leadId.equalsIgnoreCase("")) ? "0" : leadId;
+            bundle.putString(UCID, ucid);
+            bundle.putString(LEAD_ID, leadId);
+            bundle.putParcelable(NOTIFICATION_DATA, data);
+            //fragment.setArguments(bundle);
+            //todo open lead view main fragment
+            //navigator.openPage();
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                false);
+        }
+        //PENDINGAPPROVAL
+        else if (data.getPage().equalsIgnoreCase("PENDINGAPPROVAL")) {
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL, false);
+        }
+        //BIRTHDAY
+        else if (data.getPage().equalsIgnoreCase("BIRTHDAY")) {
+            navigator.openPage(NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY, false);
+        }
+        //DASHBOARD
+        else if (data.getPage().equalsIgnoreCase("DASHBOARD")) {
+            navigator.openHome();
+        } else {
+            navigator.openHome();
+        }
     }
 
     public class NotificationAdapter
@@ -180,7 +232,7 @@ public class NotificationFragment extends MOSLCommonFragment
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    notificationFragment(model.getAdditionalData());
+                    navigateTo(model.getAdditionalData());
                 }
             });
         }

@@ -30,20 +30,14 @@
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
-    <string name="TITANIUM">Titanium</string>
-    <string name="GOLD">Gold</string>
     <string name="NEXT">Next</string>
     <string name="DONE">Done</string>
-    <string name="SILVER">Silver</string>
-    <string name="BLUE">Blue</string>
     <string name="NO_DATA_FOUND">No data found</string>
     <string name="CLIENTS">Clients</string>
     <string name="PRODUCTIVITY">Productivity</string>
     <string name="CLIENTS_TRADED">Clients Traded Y"'"day</string>
     <string name="LEADS">Leads</string>
     <string name="SNAPSHOT">Snapshot</string>
-    <string name="BA_SNAPSHOT">BA Snapshot</string>
-    <string name="BA_CATEGORY">BA Category</string>
     <string name="LEAD_HAVING_THE_POTENTIAL_OF_PMS_PRODUCT">Lead having the potential of PMS product</string>
     <string name="PROSPECT_REFEREE_NAME_HINT_TXT">Prospect Referee Name</string>
     <string name="PROSPECT_REFEREE_MOBILE_HINT_TXT">Prospect Referee Mobile</string>
@@ -59,68 +53,15 @@
     <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
     <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
 
+    <string name="hint_text_employee_code">Employee Code</string>
+    <string name="hint_text_password">Password</string>
 
-    <string-array name="meetingDuration">
-        <item>Meeting Duration</item>
-    </string-array>
+    <string name="mgs_update_address">Kindly update address and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
 
-    <string-array name="activityType">
-        <item>Activity Type</item>
-    </string-array>
-    <string-array name="meetingReason">
-        <item>Meeting Reason</item>
-    </string-array>
-
-    <string-array name="actionables">
-        <item>Actionables</item>
-    </string-array>
 
     <!--franchise-lead & lead creation-->
-    <string-array name="businessname">
-        <item>Business Name</item>
-    </string-array>
-    <string-array name="existingbroker">
-        <item>Existing Broker</item>
-    </string-array>
-    <string-array name="source">
-        <item>Source</item>
-    </string-array>
-    <string-array name="prospectsource">
-        <item>Prospect Source</item>
-    </string-array>
-    <string-array name="stage">
-        <item>Stage</item>
-    </string-array>
-    <string-array name="city">
-        <item>City</item>
-    </string-array>
-    <string-array name="background">
-        <item>Background</item>
-    </string-array>
-    <string-array name="workexp">
-        <item>Work Exp. in broking industry</item>
-    </string-array>
-    <string-array name="status">
-        <item>Status</item>
-    </string-array>
-    <string-array name="state">
-        <item>State</item>
-    </string-array>
-    <string-array name="intrestin">
-        <item>Intrested In</item>
-    </string-array>
-    <string-array name="producttype">
-        <item>Product Type</item>
-    </string-array>
-    <string-array name="date">
-        <item>Day</item>
-        <item>WTD</item>
-        <item>MTD</item>
-        <item>YTD</item>
-    </string-array>
-    <string-array name="stir">
-        <item>STIR Information</item>
-    </string-array>
 
 
     <string-array name="LeadInteraction">
@@ -128,12 +69,8 @@
         <item>Birthday/Anniversary Wishes/Gifts</item>
         <item>Events &amp; Seminar Attended</item>
 
-
     </string-array>
 
-    <string-array name="ProfileChange">
-        <item>Profile Change</item>
-    </string-array>
 
 
     <string-array name="SelectQuarter">
@@ -157,32 +94,7 @@
         <item>Select Meeting Reason</item>
     </string-array>
 
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="dialog_title">Dialog setup:</string>
-    <string name="footer">Footer</string>
-    <string name="header">Header</string>
-    <string name="header_title">Motilal Oswal</string>
     <string name="motilal_oswal">Saathi</string>
-    <string name="header_sample">SAMPLE HEADER</string>
-    <string name="dialog_footer_button">OK</string>
-    <string name="footer_button_confirm">CONFIRM</string>
-    <string name="footer_sample">SAMPLE FOOTER</string>
-    <string name="button_bottom">Bottom</string>
-    <string name="button_center">Center</string>
-    <string name="button_top">Top</string>
-    <string name="google_plus_title">Google Plus</string>
-    <string name="google_maps_title">Maps</string>
-    <string name="google_messenger_title">Messenger</string>
-    <string name="question">Please enter query description</string>
-    <string name="button_like">I like it</string>
-    <string name="button_love">I love it</string>
-    <string name="view_holder">View Holder</string>
-    <string name="list_holder">List Holder</string>
-    <string name="grid_holder">Grid Holder</string>
-    <string name="show_header">Show header</string>
-    <string name="show_footer">Show footer</string>
     <string name="show_login">Login</string>
 
     <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
@@ -235,6 +147,8 @@
     <string name="text_hint_label_enter_subject">Enter Subject*</string>
     <string name="text_hint_label_enter_client">Enter Client Name*</string>
     <string name="text_label_add">Add</string>
+    <string name="text_label_no_lead">There are no Lead</string>
+    <string name="text_label_show_less">Show Less</string>
 
     <!--AU Bank Meeting Validation Message-->
     <string name="validate_meeting_type">Enter Meeting Type</string>
@@ -249,4 +163,45 @@
     <string name="validate_client_name">Enter Client Name</string>
     <string name="text_label_from_date">From Date</string>
     <string name="text_label_to_date">To Date</string>
+
+    <string name="button_label_retrieve">Retrieve</string>
+    <string name="button_label_exit">Exit</string>
+
+    <!--QUERY-->
+    <string name="text_label_query_description">Query Description</string>
+    <string name="text_label_partner_name">Partner Name</string>
+    <string name="text_label_email_address">Email Address</string>
+    <string name="text_label_mobile_number">Mobile Number</string>
+    <string name="text_label_branch_code">Branch Code</string>
+    <string name="btn_reset">Reset</string>
+    <string name="btn_submit">Submit</string>
+    <string name="text_label_contact_us">Contact Us</string>
+    <string name="text_label_support_queries">Support Related Queries</string>
+    <string name="text_label_tele_phone_1">91&#8211;22&#8211;39982515 /</string>
+    <string name="text_label_tele_phone_2">91&#8211;22&#8211;67490600</string>
+    <string name="error_message_empty_query">Please enter query description</string>
+    <string name="page_title_query">Insert Your Query</string>
+    <string name="text_label_no">No</string>
+    <string name="text_label_yes">Yes</string>
+    <string name="call_alert_message">"Do you want to call?"</string>
+    <string name="button_label_login">Login</string>
+
+    <string name="msg_username_empty">Username cannot be empty</string>
+    <string name="msg_password_empty">Password cannot be empty</string>
+    <string name="text_label_cancel">Cancel</string>
+    <string name="text_label_take_photo">Take photo</string>
+    <string name="text_label_add_from_device">Add From Device</string>
+    <string name="validation_msg_enter_clien_name">Enter client name</string>
+    <string name="validation_msg_enter_client_code">Enter client code</string>
+    <string name="txt_label_active">Active</string>
+    <string name="txt_label_inactive">InActive</string>
+    <string name="txt_label_reschedule_appointment">Reschedule appointment</string>
+    <string name="txt_label_approved">Approved</string>
+    <string name="txt_label_pending_approvals">Pending Approvals</string>
+    <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
+    <string name="txt_label_incentive">Incentive</string>
+    <string name="txt_label_parameters">Parameters</string>
+    <string name="txt_label_performance">Performance</string>
+    <string name="txt_label_team_snapshot">Team Snapshot</string>
+    <string name="txt_label_total">Total</string>
 </resources>

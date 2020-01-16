@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         >
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_6sdp"
@@ -68,7 +68,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_date"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sp_meeting_type"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sp_meeting_duration"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_duration"
                 />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_meeting_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,7 +177,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
                 >
 
-                <EditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_meeting_description"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"
@@ -187,7 +187,7 @@
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
                     style="@style/Widget.AppCompat.EditText"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_bank_label"
@@ -221,7 +221,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sp_bank"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/sp_branch"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -269,7 +269,7 @@
                 app:constraint_referenced_ids="sp_branch,tv_branch_error"
                 />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_sub_broker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -290,7 +290,7 @@
                     android:inputType="none"
                     style="@style/Widget.AppCompat.EditText"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:id="@+id/ll_bank_employee"
@@ -352,7 +352,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ll_bank_employee"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_bank_employee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -382,7 +382,7 @@
                     />
             </android.support.design.widget.TextInputLayout>-->
 
-            <android.support.constraint.Group
+            <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_bank_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -392,7 +392,7 @@
                 tools:visibility="visible"
                 />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_subject"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -404,7 +404,7 @@
                 tools:visibility="visible"
                 >
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_subject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -413,14 +413,14 @@
                     android:maxLength="100"
                     style="@style/Widget.AppCompat.EditText"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!--<include
                 layout="@layout/include_layout_bank_meeting_client_name"
                 android:id="@+id/include_client1"
                 app:layout_constraintTop_toBottomOf="@+id/il_subject"
                 />-->
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_client_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -429,7 +429,7 @@
                  il_sub_broker,il_subject"
                 />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_client_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -441,7 +441,7 @@
                 tools:visibility="visible"
                 >
 
-                <android.support.v7.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_client_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -451,9 +451,9 @@
                     android:imeOptions="actionDone"
                     style="@style/Widget.AppCompat.EditText"
                     />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_client_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -462,7 +462,7 @@
                 tools:visibility="visible"
                 />
 
-            <android.support.constraint.Barrier
+            <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -496,6 +496,6 @@
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toEndOf="@+id/btn_save"
                 />
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

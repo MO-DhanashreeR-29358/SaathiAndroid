@@ -1,16 +1,22 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
-  compileSdkVersion 28
+  compileSdkVersion rootProject.ext.versions.compileSdkVersion
+  buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 28
+    targetSdkVersion rootProject.ext.versions.targetSdkVersion
     versionCode 1
     versionName "1.0"
 
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    /*javaCompileOptions {
+      annotationProcessorOptions {
+        includeCompileClasspath = true
+      }
+    }*/
   }
 
   buildTypes {
@@ -26,17 +32,34 @@ android {
 }
 
 dependencies {
-
+  implementation deps.androidx.appcompat
   implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-  implementation 'com.android.support:appcompat-v7:28.0.0'
   testImplementation 'junit:junit:4.12'
   androidTestImplementation 'com.android.support.test:runner:1.0.2'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
   implementation project(':saathiapi')
   implementation deps.rx.java
   implementation deps.rx.android
+  implementation deps.rx.kotlin
+  implementation deps.rx.relay
   implementation deps.gson
   implementation deps.retrofit.core
+  implementation deps.retrofit.gson
+  implementation deps.retrofit.rxJava
   implementation deps.kotlin
+  implementation deps.timber
+  api deps.mofslArtifacts.appcore
+
+  implementation deps.dagger.core
+  kapt deps.dagger.compiler
+  implementation deps.dagger.android
+  kapt deps.dagger.androidCompiler
+
+  implementation deps.okHttp.core
+  implementation deps.okHttp.logger
+
+  implementation project(':saathiapi')
+  implementation project(':appuser')
+  implementation project(':shared')
+  implementation project(':domain')
 }

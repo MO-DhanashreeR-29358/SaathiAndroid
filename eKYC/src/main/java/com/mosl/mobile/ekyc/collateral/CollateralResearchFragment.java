@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -24,7 +24,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.common.MOSLCommon;
@@ -59,8 +58,6 @@ import static com.mosl.mobile.ekyc.constants.MOSLConstants.NO;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.SOME_SERVER_ERROR_OCCURRED;
 import static com.mosl.mobile.ekyc.constants.MOSLConstants.YES;
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
 
 /**
  * Created by Owner on 7/18/2016.

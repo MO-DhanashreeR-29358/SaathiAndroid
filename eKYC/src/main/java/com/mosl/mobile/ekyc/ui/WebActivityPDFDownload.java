@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -13,7 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
+import androidx.fragment.app.FragmentActivity;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 
@@ -51,14 +50,16 @@ public class WebActivityPDFDownload extends FragmentActivity implements MOSLCons
 
                 @Override
                 public void onDownloadStart(String url, String userAgent,
-                                            String contentDisposition, String mimetype,
-                                            long contentLength) {
+                    String contentDisposition, String mimetype,
+                    long contentLength) {
                     DownloadManager.Request request = new DownloadManager.Request(
-                            Uri.parse(url));
+                        Uri.parse(url));
 
                     request.allowScanningByMediaScanner();
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                    request.setNotificationVisibility(
+                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                        fileName);
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
                     finish();
@@ -73,8 +74,8 @@ public class WebActivityPDFDownload extends FragmentActivity implements MOSLCons
             });
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID()+"-"+getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID()+"-"+getAppLoginID());
+            //            Crashlytics.logException(e);
         }
     }
 
@@ -102,9 +103,7 @@ public class WebActivityPDFDownload extends FragmentActivity implements MOSLCons
 
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
-
         }
-
     }
 
     @Override
@@ -119,7 +118,6 @@ public class WebActivityPDFDownload extends FragmentActivity implements MOSLCons
                     }
                     return true;
             }
-
         }
         return super.onKeyDown(keyCode, event);
     }

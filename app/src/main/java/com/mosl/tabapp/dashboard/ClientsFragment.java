@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import com.mosl.app.core.data.UiModel;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientItem;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.client.Table1Item;
@@ -19,12 +19,13 @@ import com.mosl.saathi.api.model.dashboard.client.TableItem;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,13 +33,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.DAY;
+import static com.mosl.tabapp.constants.MOSLConstants.FAMILYSTATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MTD;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.YTD_CNT;
 
 /**
  * Created by raju on 2/14/2017.
  */
 
-public class ClientsFragment extends MOSLCommonFragment {
+public class ClientsFragment extends CommonFragment {
     private View clientsView;
     static Context mContext;
     private Spinner spClients;
@@ -56,11 +68,14 @@ public class ClientsFragment extends MOSLCommonFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         clientsView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_clients);
         setUpView(clientsView);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUserVisibleHint(true);
         return clientsView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_clients;
     }
 
     public static ClientsFragment newInstance(Context context) {
@@ -171,7 +186,7 @@ public class ClientsFragment extends MOSLCommonFragment {
     }
 
     private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             Map<String, String> additionalMap = getAddtionalParameterMap();
@@ -183,7 +198,7 @@ public class ClientsFragment extends MOSLCommonFragment {
                 dashboardModel.getProductId(),
                 dashboardModel.getEmployeeCode()
             );
-            Disposable subscribe = saathiApi.getClients(request)
+            Disposable subscribe = getSaathiApi().getClients(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderClients);
         } else {
@@ -221,7 +236,8 @@ public class ClientsFragment extends MOSLCommonFragment {
                     args.putString(SYSTEM_NAME, widgetSystemName);
                     args.putString(LABEL, "Clients");
                     args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                    navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                        true, false);
                 }
             });
 
@@ -254,7 +270,9 @@ public class ClientsFragment extends MOSLCommonFragment {
                             args.putString(LABEL, "Clients");
                             args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                             if (!tvMetMTD.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                navigator.openPage(
+                                    NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                                    true, false);
                             }
                         }
                     });
@@ -270,7 +288,9 @@ public class ClientsFragment extends MOSLCommonFragment {
                             args.putString(LABEL, "Clients");
                             args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                             if (!tvMetYTD.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+                                navigator.openPage(
+                                    NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+                                    true, false);
                             }
 
                         }

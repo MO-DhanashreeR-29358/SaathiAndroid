@@ -13,20 +13,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -39,15 +40,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
+import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS_SNAPSHOT_TITLE;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 6/30/2017.
  */
 
-public class BusinessSnapshotFragment extends MOSLCommonFragment {
+public class BusinessSnapshotFragment extends CommonFragment {
     private View businessSnapshotView;
     private DashboardModel dashboardModel;
     private String widgetSystemName;
@@ -63,11 +75,14 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         businessSnapshotView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_business_snapshot);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUpView(businessSnapshotView);
         setUserVisibleHint(true);
         return businessSnapshotView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_business_snapshot;
     }
 
     public static BusinessSnapshotFragment newInstance(Context context) {
@@ -214,7 +229,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
 
     private void webServiceCall() {
         ////////////////////////////////////////////
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -224,7 +239,7 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -266,8 +281,8 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0,
-                    context.getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0,
+                    requireContext().getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -467,8 +482,10 @@ public class BusinessSnapshotFragment extends MOSLCommonFragment {
                             String columnData = lMap.get(columnName).toString();
                             if (columnData != null) {
                                 if (!columnData.trim().equalsIgnoreCase("0")) {
-                                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(),
-                                        true);
+                                    navigator.openPage(
+                                        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+                                        args,
+                                        true, false);
                                 }
                             }
                         }

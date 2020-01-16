@@ -1,23 +1,17 @@
 package com.mosl.tabapp.leadViewDetail;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,8 +31,16 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.jakewharton.rxbinding2.widget.RxTextView;
-import com.mosl.app.core.data.UiModel;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.jakewharton.rxbinding3.widget.RxTextView;
+import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest;
 import com.mosl.saathi.api.model.clientdetail.AdvisorsItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -103,7 +105,7 @@ import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.common.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.model.AccountDetails;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AddressDetailModel;
 import com.mosl.tabapp.model.ContactDetailModel;
 import com.mosl.tabapp.model.EmployeeModel;
@@ -112,11 +114,14 @@ import com.mosl.tabapp.model.LeadFieldValueModel;
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+
+import org.droidparts.widget.ClearableEditText;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,12 +131,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import org.droidparts.widget.ClearableEditText;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
@@ -143,65 +150,75 @@ import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
 import static com.mosl.tabapp.common.CRMValidationRule.validateTel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_DOCUMENT;
+import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class LeadViewDetailFragment extends MOSLCommonFragment
-    implements View.OnClickListener, MOSLConstants {
+public class LeadViewDetailFragment extends CommonFragment
+        implements View.OnClickListener, MOSLConstants {
 
     final public static String TAG = LeadViewDetailFragment.class.getSimpleName();
-    public static final String SectionTagPrefix = "Section";
-    public static final String TextBox = "TextBox";
-    public static final String DropDown = "DropDown";
+    private static final String SectionTagPrefix = "Section";
+    private static final String TextBox = "TextBox";
+    private static final String DropDown = "DropDown";
     private static String ucid, mLeadId;
     private final ArrayList<RowData> arrProfession = new ArrayList<>();
     private final ArrayList<RowData> arrSelectProfile = new ArrayList<>();
     private final ArrayList<RowData> arrInterested = new ArrayList<>();
     private final ArrayList<RowData> arrCrossSellingProductId = new ArrayList<>();
-    private final ArrayList<RowData> arrState = new ArrayList<>();
     private final ArrayList<RowData> arrCity = new ArrayList<>();
-    private final ArrayList<RowData> arrOffState = new ArrayList<>();
     private final ArrayList<RowData> arrOffCity = new ArrayList<>();
+    @Inject
+    UserManager userManager;
     private LinearLayout NewDataLinearLayout;
     private View leadViewDetailView;
     private ViewPager viewPager;
-    private TextView tvClientDetail, tvClientPortfolioDetails, tvLeadDetail, tvDocuments;
+    private TextView tvClientDetail;
+    private TextView tvClientPortfolioDetails;
+    private TextView tvLeadDetail;
     private LinearLayout llClient, llClientPortfolioDetails, llClientDetail, llClientPortfolio,
-        llLeadDetail, llEditLeadDetail;
-    private LinearLayout customProgress;
+            llLeadDetail, llEditLeadDetail;
     private TextView tvClientCode, tvClientName, tvClientAddress, tvChannel, tvDefaultBank,
-        tvPanCard, tvAccountType, tvUCID, tvFamilyUCID, tvBranchCode, tvAdvisoryType,
-        tvAccountNumber, tvAadharCard, tvProfile;
+            tvPanCard, tvAccountType, tvUCID, tvFamilyUCID, tvBranchCode, tvAdvisoryType,
+            tvAccountNumber, tvAadharCard, tvProfile;
     private EditText etLeadID, etLeadCategory, etLastModifiedBy, etEkycMobileNumber,
-        etPanNumber, etAadharNumber, etLeadName, etCreationDate, etCreatedBy, etSource,
-        etProspectSource,
-        etProspectSourceDetail, etCreatedThrough, etMobileNumber, etLastModifiedDate,
-        etLandlineNumber, etEmail, etRefereeCode, etRefereeName, etRefereeEmail, etRefereeMobile,
-        etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments,
-        etProspectRefereeName, etProspectRefereerMobile, etProspectRefereerEmail;
+            etPanNumber, etAadharNumber, etLeadName, etCreationDate, etCreatedBy, etSource,
+            etProspectSource,
+            etProspectSourceDetail, etCreatedThrough, etMobileNumber, etLastModifiedDate,
+            etLandlineNumber, etEmail, etRefereeCode, etRefereeName, etRefereeEmail, etRefereeMobile,
+            etAlternateMobileNumber, etAlternateEmail, etContactPerson, etComments,
+            etProspectRefereeName, etProspectRefereerMobile, etProspectRefereerEmail;
     private Spinner spProfile, spCountry, spOffCountry, spProfession, spPmsProduct;
-    private org.droidparts.widget.ClearableEditText etDob, etAnniversary;
+    private ClearableEditText etDob, etAnniversary;
     private TextView tvAnniversaryError;
     private TextView tvspIntrestError, tvspStatusError, tvCrossSellingProductIdError,
-        tvCrossSellingStatusError, tvspStageError;
-    private RelativeLayout rlAddProduct;
+            tvCrossSellingStatusError, tvspStageError;
     private Button btnSubmit;
     private TextInputLayout ilLeadName;
     private String
-        interestInCodeStr, stageCodeStr, newStageCodeStr, newStageNameStr, countryCodeStr,
-        stateCodeStr, cityCodeStr,
-        offCountryCodeStr, offStateCodeStr,
-        professionCodeStr = "", profileCodeStr;
-    private ArrayList<RowData> arrProductType;
+            interestInCodeStr;
+    private String stageCodeStr;
+    private String newStageCodeStr;
+    private String newStageNameStr;
+    private String countryCodeStr;
+    private String stateCodeStr;
+    private String cityCodeStr;
+    private String offCountryCodeStr;
+    private String professionCodeStr = "";
+    private String profileCodeStr;
     private ArrayList<RowData> arrStage;
     private ArrayList<RowData> arrStatus;
-    private ArrayList<RowData> arrCrossSellingStatus;
-    private ArrayList<RowData> arrCountry;
-    private ArrayAdapter<RowData> arrAdapProfession, arrAdapProfile, arrAdapInterested,
-        arrAdapProductType, arrAdapStage, arrAdapStatus,
-        arrAdapCrossSellingStatus, arrAdapCrossSellingProductId, arrAdapCountry, arrAdapState,
-        arrAdapCity, arrAdapOffState, arrAdapOffCity;
-    private String interestedIn, sourceID, leadProspetSourceID,
-        primaryRm, stageId, statusId, creationDate, profile, contactPerson, profession;
+    private ArrayAdapter<RowData> arrAdapProfession;
+    private ArrayAdapter<RowData> arrAdapProfile;
+    private ArrayAdapter<RowData> arrAdapInterested;
+    private ArrayAdapter<RowData> arrAdapStage;
+    private ArrayAdapter<RowData> arrAdapStatus;
+    private ArrayAdapter<RowData> arrAdapCountry;
+    private ArrayAdapter<RowData> arrAdapState;
+    private ArrayAdapter<RowData> arrAdapCity;
+    private ArrayAdapter<RowData> arrAdapOffCity;
+    private String sourceID, leadProspetSourceID,
+            stageId, statusId, creationDate, profile, contactPerson, profession;
     private ArrayList<ContactDetailModel> contactDetailList = new ArrayList<>();
     private ArrayList<AddressDetailModel> addressDetailList = new ArrayList<>();
     private ListView lvAddProduct;
@@ -212,41 +229,39 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private String primaryRMAdd = "";
     private String primaryRMEdit = "", advisorCode = "";
     private TextView tvLandLineError, tvAlternateMobileNumberError, tvEmailIdError,
-        tvAlternateEmailIdError, tvPincodeError, tvOffPincodeError, tvNameError,
-        tvContactPersonError, tvPanNumError, tvAadharNumError,
-        tvProspectRefereeNameError, tvProspectRefereerMobileError, tvProspectRefereerEmailError;
-    private NestedScrollView nestedScrollView;
+            tvAlternateEmailIdError, tvPincodeError, tvOffPincodeError, tvNameError,
+            tvContactPersonError, tvPanNumError, tvAadharNumError,
+            tvProspectRefereeNameError, tvProspectRefereerMobileError, tvProspectRefereerEmailError;
     private List<LeadFieldSectionModel> mLeadFieldSectionModelList;
     private Map<String, View> newSectionMap;
     private CheckBox cbPrimaryAddress, cbSameAs, cbOffPrimaryAddress;
     private SearchableSpinner spState, spCity, spOffState, spOffCity;
     private EditText etAdd1, etAdd2, etAdd3, etPincode, etOffAdd1, etOffAdd2, etOffAdd3,
-        etOffPincode;
-    private String stateStr, cityStr, offStateStr, offCityStr, offAdd1, offAdd2, offAdd3,
-        offPincode, offCountryId;
+            etOffPincode;
+    private String cityStr;
+    private String offStateStr;
+    private String offCityStr;
+    private String offAdd1;
+    private String offAdd2;
+    private String offAdd3;
+    private String offPincode;
+    private String offCountryId;
     private LinearLayout llResAdd, llOffAdd;
     private LinearLayout llPortfolio, llProfitLoss, llAvailableLimits, llBrokingPortfolio,
-        llAssestPortfolio, llCash;
-    private LinearLayout llBrokingProducts, llAssestProducts, llProfile;
-    private String outerSectionExpansion = "OuterSectionExpansion", innerSectionExpansion =
-        "InnerSectionExpansion";
+            llAssestPortfolio, llCash;
+    private LinearLayout llBrokingProducts;
+    private LinearLayout llAssestProducts;
     private TextView txtNetworth, txtDaychgamt, txtDaychgperst, txtOverallchgamt,
-        txt_overallchgperst, tvSTGainLoss, tvTotalGainLoss, tvSTGainLossPer, tvLTGainLoss,
-        tvLTGainLossPer;
-    private Button btnBrokPortfolio, btnAssetPortfolio;
-    private HashMap<String, String> brokingMap, assestMap, cashMap, brokPLHashMap, assetPLHashMap,
-        limitsPLHashMap;
-    private ArrayList<HashMap<String, String>> arrayList_broking, arrayList_cash, arrayList_asset,
-        arrLstPLBrok, arrLstPLAsset, arrLstPLLimits;
+            txt_overallchgperst, tvSTGainLoss, tvTotalGainLoss, tvSTGainLossPer, tvLTGainLoss,
+            tvLTGainLossPer;
     private ListView lvBrok, lvAsset, lvCash, lvPLBrok, lvPLAsset, lvPLLimits;
     private TextView txtPortfolioSnapshot, txtPorfitLoss, txtAvailableLimits, txtBrokingPortfolio,
-        txtAssestPortfolio, txtCash;
+            txtAssestPortfolio, txtCash;
     private TextView txtBrokingProducts, txtAssestProducts;
     private boolean isIndividualsFlag;
     private boolean editableFlag = true;
     private String refereeCode, refereeName;
     private boolean isRefreeCode;
-
     private boolean isLowMargin;
     private List<LowMargin> lowMarginList = new ArrayList<>();
     private ProgressBar pbLoadingIndicatorRefreeCode, pbLoadingIndicatorRefreeName;
@@ -255,184 +270,184 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private ArrayList<String> arrPmsProduct;
     private boolean leadEditable = true, isPotentialPMSProduct = false, isPMSProductStageStatus;
     private AdapterView.OnItemSelectedListener profileListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    profileCodeStr = ((RowData) spProfile.getSelectedItem()).getKey();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        profileCodeStr = ((RowData) spProfile.getSelectedItem()).getKey();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener professionListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    professionCodeStr = ((RowData) spProfession.getSelectedItem()).getKey();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        professionCodeStr = ((RowData) spProfession.getSelectedItem()).getKey();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener cityListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
-                    cityStr = cityCodeStr;
-                    if (cbSameAs.isChecked()) {
-                        RowData dataCity = RowData.getSpinnerRowDataById(cityCodeStr, arrAdapCity);
-                        if (dataCity != null) {
-                            spOffCity.setSelection(dataCity.getPosition());
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
+                        cityStr = cityCodeStr;
+                        if (cbSameAs.isChecked()) {
+                            RowData dataCity = RowData.getSpinnerRowDataById(cityCodeStr, arrAdapCity);
+                            if (dataCity != null) {
+                                spOffCity.setSelection(dataCity.getPosition());
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener offStateListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    offStateCodeStr = ((RowData) spOffState.getSelectedItem()).getKey();
-                    if (!offStateCodeStr.equalsIgnoreCase("-1") && !cbSameAs.isChecked()) {
-                        getCity(offStateCodeStr, OFFICE, offCityStr);
-                    } else {
-                        arrOffCity.clear();
-                        arrOffCity.add(new RowData(0, "-1", "Select"));
-                        arrAdapOffCity =
-                            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                                arrOffCity);
-                        arrAdapOffCity.setDropDownViewResource(R.layout.mdropdown);
-                        spOffCity.setAdapter(arrAdapOffCity);
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        String offStateCodeStr = ((RowData) spOffState.getSelectedItem()).getKey();
+                        if (!offStateCodeStr.equalsIgnoreCase("-1") && !cbSameAs.isChecked()) {
+                            getCity(offStateCodeStr, OFFICE, offCityStr);
+                        } else {
+                            arrOffCity.clear();
+                            arrOffCity.add(new RowData(0, "-1", "Select"));
+                            arrAdapOffCity =
+                                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                            arrOffCity);
+                            arrAdapOffCity.setDropDownViewResource(R.layout.mdropdown);
+                            spOffCity.setAdapter(arrAdapOffCity);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener stateListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
-                    arrCity.clear();
-                    arrCity.add(new RowData(0, "-1", "Select"));
-                    arrAdapCity =
-                        new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                            arrCity);
-                    arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
-                    spCity.setAdapter(arrAdapCity);
-                    if (!stateCodeStr.equalsIgnoreCase("-1")) {
-                        getCity(stateCodeStr, RESIDENCE, cityStr);
-                    } else {
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
                         arrCity.clear();
                         arrCity.add(new RowData(0, "-1", "Select"));
                         arrAdapCity =
-                            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                                arrCity);
+                                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                        arrCity);
                         arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
                         spCity.setAdapter(arrAdapCity);
-                    }
-                    if (cbSameAs.isChecked()) {
-                        RowData dataState =
-                            RowData.getSpinnerRowDataById(stateCodeStr, arrAdapState);
-                        if (dataState != null) {
-                            spOffState.setSelection(dataState.getPosition());
-                            spOffState.setOnItemSelectedListener(offStateListener);
+                        if (!stateCodeStr.equalsIgnoreCase("-1")) {
+                            getCity(stateCodeStr, RESIDENCE, cityStr);
+                        } else {
+                            arrCity.clear();
+                            arrCity.add(new RowData(0, "-1", "Select"));
+                            arrAdapCity =
+                                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                            arrCity);
+                            arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
+                            spCity.setAdapter(arrAdapCity);
                         }
+                        if (cbSameAs.isChecked()) {
+                            RowData dataState =
+                                    RowData.getSpinnerRowDataById(stateCodeStr, arrAdapState);
+                            if (dataState != null) {
+                                spOffState.setSelection(dataState.getPosition());
+                                spOffState.setOnItemSelectedListener(offStateListener);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener offCountryListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    offCountryCodeStr = ((RowData) spOffCountry.getSelectedItem()).getKey();
-                    if (officeStateFlag) {
-                        getState(offCountryCodeStr, OFFICE, null);
-                    } else {
-                        officeStateFlag = true;
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        offCountryCodeStr = ((RowData) spOffCountry.getSelectedItem()).getKey();
+                        if (officeStateFlag) {
+                            getState(offCountryCodeStr, OFFICE, null);
+                        } else {
+                            officeStateFlag = true;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
     private AdapterView.OnItemSelectedListener countryListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    countryCodeStr = ((RowData) spCountry.getSelectedItem()).getKey();
-                    if (stateFlag) {
-                        if (!countryCodeStr.equalsIgnoreCase("-1")) {
-                            getState(countryCodeStr, RESIDENCE, null);
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        countryCodeStr = ((RowData) spCountry.getSelectedItem()).getKey();
+                        if (stateFlag) {
+                            if (!countryCodeStr.equalsIgnoreCase("-1")) {
+                                getState(countryCodeStr, RESIDENCE, null);
+                            }
+                        } else {
+                            stateFlag = true;
                         }
-                    } else {
-                        stateFlag = true;
-                    }
-                    if (cbSameAs.isChecked()) {
-                        RowData dataCountry =
-                            RowData.getSpinnerRowDataById(countryCodeStr, arrAdapCountry);
-                        if (dataCountry != null) {
-                            spOffCountry.setSelection(dataCountry.getPosition());
-                            spOffCountry.setOnItemSelectedListener(offCountryListener);
+                        if (cbSameAs.isChecked()) {
+                            RowData dataCountry =
+                                    RowData.getSpinnerRowDataById(countryCodeStr, arrAdapCountry);
+                            if (dataCountry != null) {
+                                spOffCountry.setSelection(dataCountry.getPosition());
+                                spOffCountry.setOnItemSelectedListener(offCountryListener);
+                            }
                         }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
 
     public static LeadViewDetailFragment newInstance(int position, String type, String leadID,
-        String Ucid) {
+                                                     String Ucid) {
         LeadViewDetailFragment fragment = new LeadViewDetailFragment();
         Bundle args = new Bundle();
         args.putInt("Position", position);
@@ -445,20 +460,24 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         return fragment;
     }
 
-    public boolean isLeadEditable() {
+    private boolean isLeadEditable() {
         return leadEditable;
     }
 
-    public void setLeadEditable(boolean leadEditable) {
+    private void setLeadEditable(boolean leadEditable) {
         this.leadEditable = leadEditable;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+    protected int getLayout() {
+        return R.layout.frag_leadview_detail;
+    }
+
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         leadViewDetailView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_leadview_detail);
-        setUpView(leadViewDetailView);
+        setUpView(Objects.requireNonNull(leadViewDetailView));
         setUserVisibleHint(true);
         return leadViewDetailView;
     }
@@ -472,7 +491,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && leadViewDetailView != null && viewPager.getCurrentItem() == 0) {
-                if (!this.getArguments().getString(LEAD_ID).equalsIgnoreCase("0")) {
+                if (!Objects.requireNonNull(this.getArguments())
+                        .getString(LEAD_ID)
+                        .equalsIgnoreCase("0")) {
                     setEnableDisable(false);
                     leadSection();
                 } else {
@@ -558,23 +579,22 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         getInterestIn();
         llClient.setVisibility(View.VISIBLE);
         llClientPortfolioDetails.setVisibility(View.VISIBLE);
-        webServiceportfolioSnapshot(this.getArguments().getString(UCID));
+        webServiceportfolioSnapshot(Objects.requireNonNull(this.getArguments()).getString(UCID));
         webServicePL(this.getArguments().getString(UCID));
-        getClientDetail(Integer.parseInt(this.getArguments().getString(UCID)));
+        getClientDetail(Integer.parseInt(
+                Objects.requireNonNull(this.getArguments().getString(UCID))));
         toggleSectionExpansion(llClientDetail, tvClientDetail);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View leadViewDetailView) {
-        nestedScrollView = leadViewDetailView.findViewById(R.id.nestedScrollView);
+        NestedScrollView nestedScrollView = leadViewDetailView.findViewById(R.id.nestedScrollView);
         nestedScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
         nestedScrollView.setFocusable(true);
         nestedScrollView.setFocusableInTouchMode(true);
-        nestedScrollView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.requestFocusFromTouch();
-                return false;
-            }
+        nestedScrollView.setOnTouchListener((v, event) -> {
+            v.requestFocusFromTouch();
+            return false;
         });
 
         lvAddProduct = leadViewDetailView.findViewById(R.id.lvAddProduct);
@@ -584,17 +604,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         llClientPortfolio = leadViewDetailView.findViewById(R.id.llClientPortfolio);
         llClient = leadViewDetailView.findViewById(R.id.llClient);
         llClientPortfolioDetails =
-            leadViewDetailView.findViewById(R.id.llClientPortfolioDetails);
+                leadViewDetailView.findViewById(R.id.llClientPortfolioDetails);
         llLeadDetail = leadViewDetailView.findViewById(R.id.llLeadDetail);
         llResAdd = leadViewDetailView.findViewById(R.id.llResAdd);
         llOffAdd = leadViewDetailView.findViewById(R.id.llOffAdd);
-        rlAddProduct = leadViewDetailView.findViewById(R.id.rlAddProduct);
+        RelativeLayout rlAddProduct = leadViewDetailView.findViewById(R.id.rlAddProduct);
 
         tvClientDetail = leadViewDetailView.findViewById(R.id.tvClientDetail);
         tvClientPortfolioDetails =
-            leadViewDetailView.findViewById(R.id.tvClientPortfolioDetails);
+                leadViewDetailView.findViewById(R.id.tvClientPortfolioDetails);
         tvLeadDetail = leadViewDetailView.findViewById(R.id.tvLeadDetail);
-        tvDocuments = leadViewDetailView.findViewById(R.id.tvDocuments);
+        TextView tvDocuments = leadViewDetailView.findViewById(R.id.tvDocuments);
 
         tvClientCode = leadViewDetailView.findViewById(R.id.tvClientCode);
         tvClientName = leadViewDetailView.findViewById(R.id.tvClientName);
@@ -610,7 +630,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         tvAccountNumber = leadViewDetailView.findViewById(R.id.tvAccountNumber);
         tvAadharCard = leadViewDetailView.findViewById(R.id.tvAadharCard);
         tvProfile = leadViewDetailView.findViewById(R.id.tvProfile);
-        llProfile = leadViewDetailView.findViewById(R.id.llProfile);
+        LinearLayout llProfile = leadViewDetailView.findViewById(R.id.llProfile);
         tvAnniversaryError = leadViewDetailView.findViewById(R.id.tvAnniversaryError);
         etLeadID = leadViewDetailView.findViewById(R.id.etLeadID);
         etLeadCategory = leadViewDetailView.findViewById(R.id.etLeadCategory);
@@ -624,25 +644,25 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etSource = leadViewDetailView.findViewById(R.id.etSource);
         etProspectSource = leadViewDetailView.findViewById(R.id.etProspectSource);
         etProspectSourceDetail =
-            leadViewDetailView.findViewById(R.id.etProspectSourceDetail);
+                leadViewDetailView.findViewById(R.id.etProspectSourceDetail);
         etCreatedThrough = leadViewDetailView.findViewById(R.id.etCreatedThrough);
         spProfile = leadViewDetailView.findViewById(R.id.spProfile);
         spPmsProduct = leadViewDetailView.findViewById(R.id.spPmsProduct);
         String[] arrayPmsProduct =
-            getActivity().getResources().getStringArray(R.array.selectPmsProduct);
+                requireActivity().getResources().getStringArray(R.array.selectPmsProduct);
         arrPmsProduct = new ArrayList<>(Arrays.asList(arrayPmsProduct));
         spProfession = leadViewDetailView.findViewById(R.id.spProfession);
         etMobileNumber = leadViewDetailView.findViewById(R.id.etMobileNumber);
         etLandlineNumber = leadViewDetailView.findViewById(R.id.etLandlineNumber);
         etEmail = leadViewDetailView.findViewById(R.id.etEmail);
         etRefereeCode = leadViewDetailView.findViewById(R.id.etRefereeCode);
-        etRefereeCode.setFilters(new InputFilter[] {
-            CRMAppUtil.filterOnlyAlphabetAndNumbers, new InputFilter.AllCaps()
+        etRefereeCode.setFilters(new InputFilter[]{
+                CRMAppUtil.filterOnlyAlphabetAndNumbers, new InputFilter.AllCaps()
         });
         pbLoadingIndicatorRefreeCode =
-            leadViewDetailView.findViewById(R.id.pbLoadingIndicatorRefreeCode);
+                leadViewDetailView.findViewById(R.id.pbLoadingIndicatorRefreeCode);
         pbLoadingIndicatorRefreeName =
-            leadViewDetailView.findViewById(R.id.pbLoadingIndicatorRefreeName);
+                leadViewDetailView.findViewById(R.id.pbLoadingIndicatorRefreeName);
         etRefereeName = leadViewDetailView.findViewById(R.id.etRefereeName);
         etRefereeEmail = leadViewDetailView.findViewById(R.id.etRefereeEmail);
         etRefereeMobile = leadViewDetailView.findViewById(R.id.etRefereeNumber);
@@ -653,39 +673,39 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etAnniversary = leadViewDetailView.findViewById(R.id.etAnniversary);
         etLastModifiedDate = leadViewDetailView.findViewById(R.id.etLastModifiedDate);
         etAlternateMobileNumber =
-            leadViewDetailView.findViewById(R.id.etAlternateMobileNumber);
+                leadViewDetailView.findViewById(R.id.etAlternateMobileNumber);
         etAlternateEmail = leadViewDetailView.findViewById(R.id.etAlternateEmail);
         etContactPerson = leadViewDetailView.findViewById(R.id.etContactPerson);
         etProspectRefereeName = leadViewDetailView.findViewById(R.id.etProspectRefereeName);
         etProspectRefereerMobile = leadViewDetailView.findViewById(R.id.etProspectRefereerMobile);
         etProspectRefereerEmail = leadViewDetailView.findViewById(R.id.etProspectRefereerEmail);
-        etContactPerson.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-        etRefereeName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
+        etContactPerson.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
+        etRefereeName.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
         etProspectRefereeName.setFilters(
-            new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-        etLeadName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
+                new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
+        etLeadName.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
 
         ilLeadName = leadViewDetailView.findViewById(R.id.ilLeadName);
         NewDataLinearLayout =
-            leadViewDetailView.findViewById(R.id.newDataLinearLayout);
+                leadViewDetailView.findViewById(R.id.newDataLinearLayout);
 
         etAdd1 = leadViewDetailView.findViewById(R.id.etAdd1);
-        etAdd1.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etAdd1.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etAdd2 = leadViewDetailView.findViewById(R.id.etAdd2);
-        etAdd2.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etAdd2.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etAdd3 = leadViewDetailView.findViewById(R.id.etAdd3);
-        etAdd3.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etAdd3.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etPincode = leadViewDetailView.findViewById(R.id.etPincode);
 
         etOffAdd1 = leadViewDetailView.findViewById(R.id.etOffAdd1);
-        etOffAdd1.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etOffAdd1.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffAdd2 = leadViewDetailView.findViewById(R.id.etOffAdd2);
-        etOffAdd2.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etOffAdd2.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffAdd3 = leadViewDetailView.findViewById(R.id.etOffAdd3);
-        etOffAdd3.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etOffAdd3.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffPincode = leadViewDetailView.findViewById(R.id.etOffPincode);
         etComments = leadViewDetailView.findViewById(R.id.etComments);
-        etComments.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
+        etComments.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
 
         spCity = leadViewDetailView.findViewById(R.id.spCity);
         spState = leadViewDetailView.findViewById(R.id.spState);
@@ -720,50 +740,44 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         tvLandLineError = leadViewDetailView.findViewById(R.id.tvLandLineError);
         tvNameError = leadViewDetailView.findViewById(R.id.tvNameError);
         tvContactPersonError =
-            leadViewDetailView.findViewById(R.id.tvContactPersonError);
+                leadViewDetailView.findViewById(R.id.tvContactPersonError);
         tvPanNumError = leadViewDetailView.findViewById(R.id.tvPanNumError);
         tvAadharNumError = leadViewDetailView.findViewById(R.id.tvAadharNumError);
         tvProspectRefereeNameError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
+                leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
         tvProspectRefereerMobileError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
+                leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
         tvProspectRefereerEmailError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
+                leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
         tvAlternateMobileNumberError =
-            leadViewDetailView.findViewById(R.id.tvAlternateMobileNumberError);
+                leadViewDetailView.findViewById(R.id.tvAlternateMobileNumberError);
         tvAlternateEmailIdError =
-            leadViewDetailView.findViewById(R.id.tvAlternateEmailIdError);
+                leadViewDetailView.findViewById(R.id.tvAlternateEmailIdError);
         tvEmailIdError = leadViewDetailView.findViewById(R.id.tvEmailIdError);
         tvPincodeError = leadViewDetailView.findViewById(R.id.tvPincodeError);
         tvOffPincodeError = leadViewDetailView.findViewById(R.id.tvOffPincodeError);
         tvProspectRefereeNameError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
+                leadViewDetailView.findViewById(R.id.tvProspectRefereeNameError);
         tvProspectRefereerMobileError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
+                leadViewDetailView.findViewById(R.id.tvProspectRefereerMobileError);
         tvProspectRefereerEmailError =
-            leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
-        etRefereeCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (etRefereeCode.getText().toString().length() < 4) {
-                    refereeCode = "";
-                    refereeName = "";
-                    etRefereeName.setText("");
-                    etRefereeEmail.setText("");
-                    etRefereeMobile.setText("");
-                }
+                leadViewDetailView.findViewById(R.id.tvProspectRefereerEmailError);
+        etRefereeCode.setOnFocusChangeListener((view, b) -> {
+            if (etRefereeCode.getText().toString().length() < 4) {
+                refereeCode = "";
+                refereeName = "";
+                etRefereeName.setText("");
+                etRefereeEmail.setText("");
+                etRefereeMobile.setText("");
             }
         });
-        etRefereeName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (etRefereeName.getText().toString().length() < 3) {
-                    refereeCode = "";
-                    refereeName = "";
-                    etRefereeCode.setText("");
-                    etRefereeEmail.setText("");
-                    etRefereeMobile.setText("");
-                }
+        etRefereeName.setOnFocusChangeListener((view, b) -> {
+            if (etRefereeName.getText().toString().length() < 3) {
+                refereeCode = "";
+                refereeName = "";
+                etRefereeCode.setText("");
+                etRefereeEmail.setText("");
+                etRefereeMobile.setText("");
             }
         });
 
@@ -781,7 +795,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 if (!isBlank(etLeadName.getText().toString().trim())) {
                     tvNameError.setVisibility(View.GONE);
                     if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        etLeadName.getText().toString().trim())) {
+                            etLeadName.getText().toString().trim())) {
                         tvNameError.setText(ErrorMsgName);
                         tvNameError.setVisibility(View.VISIBLE);
                     } else {
@@ -798,16 +812,18 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
                 if (!isBlank(etProspectRefereeName.getText().toString().trim())) {
                     tvProspectRefereeNameError.setVisibility(View.GONE);
 
                     //format check
                     if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        etProspectRefereeName.getText().toString().trim())) {
+                            etProspectRefereeName.getText().toString().trim())) {
                         tvProspectRefereeNameError.setText(ErrorMsgName);
                         tvProspectRefereeNameError.setVisibility(View.VISIBLE);
                     } else {
@@ -825,10 +841,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etProspectRefereerMobile.getText().toString())) {
                     if (!CRMValidationRule.validateMobile(
-                        etProspectRefereerMobile.getText().toString())) {
+                            etProspectRefereerMobile.getText().toString())) {
                         tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
                         tvProspectRefereerMobileError.setText(INVALID_MOBILE_NO);
                         etProspectRefereerMobile.requestFocus();
@@ -840,7 +857,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -851,7 +869,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             }
 
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!isBlank(etProspectRefereerEmail.getText().toString().trim())) {
                     if (!isValidEmail(etProspectRefereerEmail.getText())) {
                         tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
@@ -865,7 +884,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
             }
 
-            @Override public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -884,7 +904,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 if (!isBlank(etContactPerson.getText().toString().trim())) {
                     tvContactPersonError.setVisibility(View.GONE);
                     if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        etContactPerson.getText().toString().trim())) {
+                            etContactPerson.getText().toString().trim())) {
                         tvContactPersonError.setText(ErrorMsgName);
                         tvContactPersonError.setVisibility(View.VISIBLE);
                     } else {
@@ -935,7 +955,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 if (etAlternateMobileNumber.isEnabled() == true) {
                     if (!isBlank(etAlternateMobileNumber.getText().toString())) {
                         if (!CRMValidationRule.validateMobile(
-                            etAlternateMobileNumber.getText().toString())) {
+                                etAlternateMobileNumber.getText().toString())) {
                             tvAlternateMobileNumberError.setVisibility(View.VISIBLE);
                             tvAlternateMobileNumberError.setText(INVALID_MOBILE_NO);
                             etAlternateMobileNumber.requestFocus();
@@ -1012,7 +1032,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         });
 
         etPanNumber.setFilters(
-            new InputFilter[] { new InputFilter.LengthFilter(10), new InputFilter.AllCaps() });
+                new InputFilter[]{new InputFilter.LengthFilter(10), new InputFilter.AllCaps()});
         etPanNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1170,68 +1190,68 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         });
 
         Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefereeName)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
-            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .share();
+                .filter(event -> event.getView().isFocused())
+                .map(query -> Objects.requireNonNull(query.getEditable()).toString().trim())
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .share();
 
-        compositeDisposable.add(
-            refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
-                etRefereeEmail.setText("");
-                etRefereeMobile.setText("");
-                etRefereeCode.setText("");
-            }));
+        getCompositeDisposable().add(
+                refreeNameObs.filter(query -> query.length() == 2).subscribe(ignored -> {
+                    etRefereeEmail.setText("");
+                    etRefereeMobile.setText("");
+                    etRefereeCode.setText("");
+                }));
 
-        compositeDisposable.add(
-            refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
-                pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
-                etRefereeEmail.setText("");
-                etRefereeMobile.setText("");
-                etRefereeCode.setText("");
-                final Map inputMap = new HashMap<>();
-                inputMap.put("SearchType", "ByName");
-                inputMap.put("SearchHint", query);
-                return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName)
-                    .compose(applyUiModel());
-            }).subscribe(uiModel -> {
-                JSONObject data1 = uiModel.data;
-                if (data1 != null) {
-                    RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
-                }
-            }));
+        getCompositeDisposable().add(
+                refreeNameObs.filter(query -> query.length() > 2).switchMap(query -> {
+                    pbLoadingIndicatorRefreeName.setVisibility(View.VISIBLE);
+                    etRefereeEmail.setText("");
+                    etRefereeMobile.setText("");
+                    etRefereeCode.setText("");
+                    final Map inputMap = new HashMap<>();
+                    inputMap.put("SearchType", "ByName");
+                    inputMap.put("SearchHint", query);
+                    return RefreeSyncWebServiceCall.getObservableData(requireContext(),
+                            "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeName, userManager)
+                            .compose(applyUiModel());
+                }).subscribe(uiModel -> {
+                    JSONObject data1 = uiModel.data;
+                    if (data1 != null) {
+                        RefreeData(data1, "ByName", pbLoadingIndicatorRefreeName);
+                    }
+                }));
 
         Observable<String> refreeCodeObs = RxTextView.afterTextChangeEvents(etRefereeCode)
-            .filter(event -> event.view().isFocused())
-            .map(query -> query.editable().toString().trim())
-            .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-            .share();
+                .filter(event -> event.getView().isFocused())
+                .map(query -> query.getEditable().toString().trim())
+                .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .share();
 
-        compositeDisposable.add(
-            refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
-                etRefereeName.setText("");
-                etRefereeMobile.setText("");
-                etRefereeEmail.setText("");
-            }));
+        getCompositeDisposable().add(
+                refreeCodeObs.filter(query -> query.length() == 3).subscribe(ignored -> {
+                    etRefereeName.setText("");
+                    etRefereeMobile.setText("");
+                    etRefereeEmail.setText("");
+                }));
 
-        compositeDisposable.add(
-            refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
-                pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
-                etRefereeName.setText("");
-                etRefereeMobile.setText("");
-                etRefereeEmail.setText("");
-                final Map inputMap = new HashMap<>();
-                inputMap.put("SearchType", "ByCode");
-                inputMap.put("SearchHint", query);
-                return RefreeSyncWebServiceCall.getObservableData(getMainActivity(),
-                    "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode)
-                    .compose(applyUiModel());
-            }).subscribe(uiModel -> {
-                JSONObject data1 = uiModel.data;
-                if (data1 != null) {
-                    RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
-                }
-            }));
+        getCompositeDisposable().add(
+                refreeCodeObs.filter(query -> query.length() > 3).switchMap(query -> {
+                    pbLoadingIndicatorRefreeCode.setVisibility(View.VISIBLE);
+                    etRefereeName.setText("");
+                    etRefereeMobile.setText("");
+                    etRefereeEmail.setText("");
+                    final Map inputMap = new HashMap<>();
+                    inputMap.put("SearchType", "ByCode");
+                    inputMap.put("SearchHint", query);
+                    return RefreeSyncWebServiceCall.getObservableData(requireContext(),
+                            "Common/GetRefereeCode", inputMap, pbLoadingIndicatorRefreeCode, userManager)
+                            .compose(applyUiModel());
+                }).subscribe(uiModel -> {
+                    JSONObject data1 = uiModel.data;
+                    if (data1 != null) {
+                        RefreeData(data1, "ByCode", pbLoadingIndicatorRefreeCode);
+                    }
+                }));
 
         lvBrok = leadViewDetailView.findViewById(R.id.listBrokingPortfolio);
         lvAsset = leadViewDetailView.findViewById(R.id.listAssestPortfolio);
@@ -1241,7 +1261,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         lvPLLimits = leadViewDetailView.findViewById(R.id.lvPLLimits);
 
         txtPortfolioSnapshot =
-            leadViewDetailView.findViewById(R.id.txtPortfolioSnapshot);
+                leadViewDetailView.findViewById(R.id.txtPortfolioSnapshot);
         txtPorfitLoss = leadViewDetailView.findViewById(R.id.txtPorfitLoss);
         txtAvailableLimits = leadViewDetailView.findViewById(R.id.txtAvailableLimits);
         txtBrokingPortfolio = leadViewDetailView.findViewById(R.id.txtBrokingPortfolio);
@@ -1265,14 +1285,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         llProfitLoss = leadViewDetailView.findViewById(R.id.llProfitLoss);
         llAvailableLimits = leadViewDetailView.findViewById(R.id.llAvailableLimits);
         llBrokingPortfolio =
-            leadViewDetailView.findViewById(R.id.llBorkingPortfolio);
+                leadViewDetailView.findViewById(R.id.llBorkingPortfolio);
         llAssestPortfolio = leadViewDetailView.findViewById(R.id.llAssestPortfolio);
         llCash = leadViewDetailView.findViewById(R.id.llCash);
         llBrokingProducts = leadViewDetailView.findViewById(R.id.llBorkingProducts);
         llAssestProducts = leadViewDetailView.findViewById(R.id.llAssestProducts);
 
-        btnBrokPortfolio = leadViewDetailView.findViewById(R.id.btnBrokPortfolio);
-        btnAssetPortfolio = leadViewDetailView.findViewById(R.id.btnAssetPortfolio);
+        Button btnBrokPortfolio = leadViewDetailView.findViewById(R.id.btnBrokPortfolio);
+        Button btnAssetPortfolio = leadViewDetailView.findViewById(R.id.btnAssetPortfolio);
         btnBrokPortfolio.setVisibility(View.GONE);
         btnAssetPortfolio.setVisibility(View.GONE);
         txtPortfolioSnapshot.setOnClickListener(this);
@@ -1303,16 +1323,16 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getCountry() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getCountries()
-                .compose(applyUiModel())
-                .subscribe(this::renderCountries));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getCountries()
+                    .compose(applyUiModel())
+                    .subscribe(this::renderCountries));
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    protected void renderCountries(UiModel<List<CountryItem>> uiModel) {
+    private void renderCountries(UiModel<List<CountryItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1324,17 +1344,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         if (data != null) {
             stateFlag = false;
             officeStateFlag = false;
-            arrCountry = new ArrayList<>();
+            ArrayList<RowData> arrCountry = new ArrayList<>();
             for (int i = 0; i < data.size(); i++) {
                 CountryItem item = data.get(i);
                 arrCountry.add(new RowData(
-                    i,
-                    stringOrEmpty(item.countryId),
-                    stringOrEmpty(item.countryName))
+                        i,
+                        stringOrEmpty(item.countryId),
+                        stringOrEmpty(item.countryName))
                 );
             }
-            arrAdapCountry = new ArrayAdapter<>(getMainActivity(),
-                R.layout.simple_spinner_item, arrCountry);
+            arrAdapCountry = new ArrayAdapter<>(requireContext(),
+                    R.layout.simple_spinner_item, arrCountry);
             arrAdapCountry.setDropDownViewResource(R.layout.mdropdown);
             spCountry.setAdapter(arrAdapCountry);
             spCountry.setOnItemSelectedListener(countryListener);
@@ -1344,17 +1364,18 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getState(String id, final String type, final String value) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getStateProvinces(new StateProvinceRequest(id))
-                .compose(applyUiModel())
-                .subscribe(uiModel -> renderStates(uiModel, type, value)));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(
+                    getSaathiApi().getStateProvinces(new StateProvinceRequest(id))
+                            .compose(applyUiModel())
+                            .subscribe(uiModel -> renderStates(uiModel, type, value)));
         } else {
             noInternetConnectionDialog();
         }
     }
 
     private void renderStates(UiModel<List<StateProvinceItem>> uiModel, final String type,
-        final String value) {
+                              final String value) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1364,8 +1385,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
         List<StateProvinceItem> data = uiModel.data;
         if (data != null) {
-            arrState.clear();
-            arrOffState.clear();
+            ArrayList<RowData> arrState = new ArrayList<>();
+            ArrayList<RowData> arrOffState = new ArrayList<>();
+
             arrState.add(new RowData(0, "-1", "Select"));
             arrOffState.add(new RowData(0, "-1", "Select"));
 
@@ -1385,9 +1407,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
             }
 
+            ArrayAdapter<RowData> arrAdapOffState;
             if (cbSameAs.isChecked()) {
                 arrAdapState =
-                    new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrState);
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrState);
                 arrAdapState.setDropDownViewResource(R.layout.mdropdown);
                 spState.setAdapter(arrAdapState);
                 RowData dataPrimary = RowData.getSpinnerRowDataById(value, arrAdapState);
@@ -1397,8 +1420,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 spState.setOnItemSelectedListener(stateListener);
 
                 arrAdapOffState =
-                    new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                        arrOffState);
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                arrOffState);
                 arrAdapOffState.setDropDownViewResource(R.layout.mdropdown);
                 spOffState.setAdapter(arrAdapOffState);
                 RowData dataOffice = RowData.getSpinnerRowDataById(value, arrAdapOffState);
@@ -1409,8 +1432,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             } else {
                 if (type.equals(RESIDENCE)) {
                     arrAdapState =
-                        new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                            arrState);
+                            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                    arrState);
                     arrAdapState.setDropDownViewResource(R.layout.mdropdown);
                     spState.setAdapter(arrAdapState);
                     RowData rowData = RowData.getSpinnerRowDataById(value, arrAdapState);
@@ -1420,8 +1443,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     spState.setOnItemSelectedListener(stateListener);
                 } else if (type.equals(OFFICE)) {
                     arrAdapOffState =
-                        new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                            arrOffState);
+                            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                    arrOffState);
                     arrAdapOffState.setDropDownViewResource(R.layout.mdropdown);
                     spOffState.setAdapter(arrAdapOffState);
                     RowData rowData = RowData.getSpinnerRowDataById(value, arrAdapOffState);
@@ -1435,17 +1458,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getCity(String id, final String type, final String value) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getCityList(new CityListRequest(id))
-                .compose(applyUiModel())
-                .subscribe(uiModel -> renderCities(uiModel, type, value)));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getCityList(new CityListRequest(id))
+                    .compose(applyUiModel())
+                    .subscribe(uiModel -> renderCities(uiModel, type, value)));
         } else {
             noInternetConnectionDialog();
         }
     }
 
     private void renderCities(UiModel<List<CityItem>> uiModel, final String type,
-        final String value) {
+                              final String value) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -1482,7 +1505,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             if (cbSameAs.isChecked()) {
                 arrAdapCity =
-                    new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrCity);
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrCity);
                 arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
                 spCity.setAdapter(arrAdapCity);
                 if (!isBlank(value)) {
@@ -1494,7 +1517,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
 
                 arrAdapOffCity =
-                    new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrOffCity);
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrOffCity);
                 arrAdapOffCity.setDropDownViewResource(R.layout.mdropdown);
                 spOffCity.setAdapter(arrAdapOffCity);
                 int pos = ((RowData) spCity.getSelectedItem()).getPosition();
@@ -1502,8 +1525,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             } else {
                 if (type.equals(RESIDENCE)) {
                     arrAdapCity =
-                        new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                            arrCity);
+                            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                    arrCity);
                     arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
                     spCity.setAdapter(arrAdapCity);
                     if (!isBlank(value)) {
@@ -1516,8 +1539,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
                 if (type.equals(OFFICE)) {
                     arrAdapOffCity =
-                        new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                            arrOffCity);
+                            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                    arrOffCity);
                     arrAdapOffCity.setDropDownViewResource(R.layout.mdropdown);
                     spOffCity.setAdapter(arrAdapOffCity);
                     if (!isBlank(value)) {
@@ -1532,12 +1555,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getProfession() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), PROFESSIONID, null, null);
-            compositeDisposable.add(saathiApi.getAllLookup(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderProfession));
+                    new LookupRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), PROFESSIONID,
+                            null, null);
+            getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderProfession));
         } else {
             noInternetConnectionDialog();
         }
@@ -1559,13 +1585,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 arrProfession.add(
-                    new RowData(i + 1,
-                        String.valueOf(item.lookUpid),
-                        stringOrEmpty(item.lookUpName))
+                        new RowData(i + 1,
+                                String.valueOf(item.lookUpid),
+                                stringOrEmpty(item.lookUpName))
                 );
             }
             arrAdapProfession =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrProfession);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfession);
             arrAdapProfession.setDropDownViewResource(R.layout.mdropdown);
             spProfession.setAdapter(arrAdapProfession);
             spProfession.setOnItemSelectedListener(professionListener);
@@ -1573,12 +1599,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getInterestIn() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), INTERESTEDIN, null, null);
-            compositeDisposable.add(saathiApi.getAllLookup(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderInterests));
+                    new LookupRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                            null, null);
+            getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderInterests));
         } else {
             noInternetConnectionDialog();
         }
@@ -1601,24 +1630,27 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 arrInterested.add(
-                    new RowData(i + 1,
-                        String.valueOf(item.lookUpid),
-                        stringOrEmpty(item.lookUpName)
-                    ));
+                        new RowData(i + 1,
+                                String.valueOf(item.lookUpid),
+                                stringOrEmpty(item.lookUpName)
+                        ));
             }
             arrAdapInterested =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrInterested);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrInterested);
             arrAdapInterested.setDropDownViewResource(R.layout.mdropdown);
         }
     }
 
     private void getProductType(String productId) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest lookupRequest =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), PRODUCTTYPE, productId, null);
-            compositeDisposable.add(saathiApi.getAllLookup(lookupRequest)
-                .compose(applyUiModel())
-                .subscribe(this::renderProductTypes));
+                    new LookupRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), PRODUCTTYPE,
+                            productId, null);
+            getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderProductTypes));
         } else {
             noInternetConnectionDialog();
         }
@@ -1628,6 +1660,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
+        ArrayList<RowData> arrProductType;
         if (error != null) {
             arrProductType = new ArrayList<>();
             showOnFailurePopup(error);
@@ -1640,22 +1673,23 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 arrProductType.add(
-                    new RowData(i + 1,
-                        String.valueOf(item.lookUpid),
-                        stringOrEmpty(item.lookUpName)
-                    ));
+                        new RowData(i + 1,
+                                String.valueOf(item.lookUpid),
+                                stringOrEmpty(item.lookUpName)
+                        ));
             }
-            arrAdapProductType =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrProductType);
+            ArrayAdapter<RowData> arrAdapProductType =
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProductType);
             arrAdapProductType.setDropDownViewResource(R.layout.mdropdown);
         }
     }
 
     private void getStatus(final Spinner spStatus, String productId) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getStatusList(new StatusRequest(productId, "1"))
-                .compose(applyUiModel())
-                .subscribe(uiModel -> renderStatus(uiModel, spStatus)));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(
+                    getSaathiApi().getStatusList(new StatusRequest(productId, "1"))
+                            .compose(applyUiModel())
+                            .subscribe(uiModel -> renderStatus(uiModel, spStatus)));
         } else {
             noInternetConnectionDialog();
         }
@@ -1663,15 +1697,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void renderStatus(UiModel<List<StatusItem>> uiModel, final Spinner spStatus) {
         toggleProgress(uiModel.inProgress);
-        if (uiModel.inProgress) {
-            if (customProgress != null) {
-                customProgress.setVisibility(View.VISIBLE);
-            }
-        } else {
-            if (customProgress != null) {
-                customProgress.setVisibility(View.GONE);
-            }
-        }
 
         Throwable error = uiModel.error;
         if (error != null) {
@@ -1687,22 +1712,22 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 StatusItem item = data.get(i);
                 arrStatus.add(new RowData(i + 1,
-                    String.valueOf(item.statusID),
-                    stringOrEmpty(item.statusName)
+                        String.valueOf(item.statusID),
+                        stringOrEmpty(item.statusName)
                 ));
             }
             arrAdapStatus =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrStatus);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStatus);
             arrAdapStatus.setDropDownViewResource(R.layout.mdropdown);
             spStatus.setAdapter(arrAdapStatus);
         }
     }
 
     private void getLeadDetail() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getLeadView(new LeadViewRequest(mLeadId))
-                .compose(applyUiModel())
-                .subscribe(this::renderLeads));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getLeadView(new LeadViewRequest(mLeadId))
+                    .compose(applyUiModel())
+                    .subscribe(this::renderLeads));
         } else {
             noInternetConnectionDialog();
         }
@@ -1747,7 +1772,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             String canEditLead = stringOrDefault(String.valueOf(data.canEditLead), "1");
             String isProductSpecialist = stringOrDefault(data.isProductSpecialist, "N");
             if (canEditLead.equalsIgnoreCase("0")
-                || isProductSpecialist.equalsIgnoreCase("Y")) {
+                    || isProductSpecialist.equalsIgnoreCase("Y")) {
                 setLeadEditable(false);
             } else {
                 setLeadEditable(true);
@@ -1767,8 +1792,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             etLastModifiedBy.setText(lastModifiedBy);
             try {
                 etLastModifiedDate.setText(
-                    getDateFromString(lastModificationDate,
-                        "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY));
+                        getDateFromString(lastModificationDate,
+                                "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY));
             } catch (Exception e) {
                 etLastModifiedDate.setText(lastModificationDate.replace("T", " "));
             }
@@ -1801,7 +1826,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 mLeadFieldSectionModelList = new ArrayList<>();
                 for (LeadFieldSection sectionModel : sectionModels) {
                     LeadFieldSectionModel tmpObj =
-                        new LeadFieldSectionModel();
+                            new LeadFieldSectionModel();
                     tmpObj.setFieldSectionId(sectionModel.fieldSectionId);
                     tmpObj.setSectionName(stringOrEmpty(sectionModel.sectionName));
                     tmpObj.setSectionCode(stringOrEmpty(sectionModel.sectionCode));
@@ -1814,8 +1839,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             if (valueDataList != null && valueDataList.size() > 0) {
                 for (LeadFieldValueData valueData : valueDataList) {
                     LeadFieldSectionModel tempSection =
-                        LeadFieldSectionModel.getSectionFromListWithId(
-                            mLeadFieldSectionModelList, valueData.fieldSectionId);
+                            LeadFieldSectionModel.getSectionFromListWithId(
+                                    mLeadFieldSectionModelList, valueData.fieldSectionId);
                     if (tempSection != null) {
                         boolean isMandatory = stringOrEmpty(valueData.mandatory).length() > 0;
                         LeadFieldValueModel.setLeadid(mLeadId);
@@ -1827,10 +1852,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         valueModel.setMandatory(isMandatory);
                         valueModel.setLeadFieldId(valueData.leadFieldId);
                         valueModel.setDropdownValueArr(stringOrEmpty(valueData.dropdownValue),
-                            "\\|");
+                                "\\|");
                         tempSection.addSelectionList(valueModel);
                     } else {
-                        Log.w("Section list", " Dangling Failed");
+                        Timber.tag("Section list").w(" Dangling Failed");
                     }
                 }
                 addNewSections();
@@ -1845,69 +1870,67 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    public void renderLeadProductMapping(
-        @NonNull List<LeadProductMappingItem> mappingItems
+    private void renderLeadProductMapping(
+            @NonNull List<LeadProductMappingItem> mappingItems
     ) {
         for (LeadProductMappingItem item : mappingItems) {
-            interestedIn = String.valueOf(item.interestedIn);
-            primaryRm = stringOrEmpty(item.primaryRMName);
             stageId = String.valueOf(item.stageID);
             statusId = String.valueOf(item.statusID);
             leadDetailAddProductList.add(getLeadDetailAddProductModel(item));
             tvClientCode.setText(item.clientCode);
         }
         leadDetailAddProductAdapter =
-            new LeadDetailAddProductAdapter(getMainActivity(), leadDetailAddProductList);
+                new LeadDetailAddProductAdapter(requireContext(), leadDetailAddProductList);
         lvAddProduct.setAdapter(leadDetailAddProductAdapter);
         setListViewHeightBasedOnChildrenDetail(lvAddProduct);
     }
 
-    public LeadDetailAddProductModel getLeadDetailAddProductModel(
-        @NonNull LeadProductMappingItem item
+    private LeadDetailAddProductModel getLeadDetailAddProductModel(
+            @NonNull LeadProductMappingItem item
     ) {
         List<CrossSellingProductsModel> crossSellingProducts =
-            getCrossSellingProductsModel(item.crossSellingProducts);
+                getCrossSellingProductsModel(item.crossSellingProducts);
         return new LeadDetailAddProductModel(
-            String.valueOf(item.stageID),
-            stringOrEmpty(item.stageName),
-            String.valueOf(item.statusID),
-            stringOrEmpty(item.statusName),
-            String.valueOf(item.interestedIn),
-            stringOrEmpty(item.productName),
-            stringOrEmpty(item.primaryRMName),
-            stringOrEmpty(item.productSpecialistName),
-            stringOrEmpty(item.assignedBy),
-            stringOrEmpty(item.assignedByDate),
-            stringOrEmpty(item.clientCode),
-            String.valueOf(item.leadProductMappingID),
-            item.isDefault,
-            crossSellingProducts,
-            item.isCrossSellingProduct,
-            stringOrEmpty(item.isProductSpecialistEditDisabled),
-            stringOrEmpty(item.isProductDisabled),
-            stringOrEmpty(item.productSpecialist)
+                String.valueOf(item.stageID),
+                stringOrEmpty(item.stageName),
+                String.valueOf(item.statusID),
+                stringOrEmpty(item.statusName),
+                String.valueOf(item.interestedIn),
+                stringOrEmpty(item.productName),
+                stringOrEmpty(item.primaryRMName),
+                stringOrEmpty(item.productSpecialistName),
+                stringOrEmpty(item.assignedBy),
+                stringOrEmpty(item.assignedByDate),
+                stringOrEmpty(item.clientCode),
+                String.valueOf(item.leadProductMappingID),
+                item.isDefault,
+                crossSellingProducts,
+                item.isCrossSellingProduct,
+                stringOrEmpty(item.isProductSpecialistEditDisabled),
+                stringOrEmpty(item.isProductDisabled),
+                stringOrEmpty(item.productSpecialist)
         );
     }
 
-    public List<CrossSellingProductsModel> getCrossSellingProductsModel(
-        List<CrossSellingProduct> products) {
+    private List<CrossSellingProductsModel> getCrossSellingProductsModel(
+            List<CrossSellingProduct> products) {
         List<CrossSellingProductsModel> crossSellingProducts = new ArrayList<>();
         if (products != null && products.size() > 0) {
             for (CrossSellingProduct sellingProduct : products) {
                 crossSellingProducts.add(
-                    new CrossSellingProductsModel(
-                        sellingProduct.leadProductId,
-                        sellingProduct.productId,
-                        sellingProduct.statusId,
-                        sellingProduct.productName,
-                        sellingProduct.statusName)
+                        new CrossSellingProductsModel(
+                                sellingProduct.leadProductId,
+                                sellingProduct.productId,
+                                sellingProduct.statusId,
+                                sellingProduct.productName,
+                                sellingProduct.statusName)
                 );
             }
         }
         return crossSellingProducts;
     }
 
-    public void renderContact(Contact contact, String leadCategoryText) {
+    private void renderContact(Contact contact, String leadCategoryText) {
         cbSameAs.setChecked(contact.isSameAsAbove);
         int ucid = Integer.valueOf(stringOrZero(contact.uCID));
         if (ucid > 0) {
@@ -1927,8 +1950,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etLandlineNumber.setText(contact.landlineNo);
         etAlternateMobileNumber.setText(contact.alternateMobileNo);
 
-        String newDob[] = stringOrEmpty(contact.dOB).split("T");
-        String newDoa[] = stringOrEmpty(contact.dOA).split("T");
+        String[] newDob = stringOrEmpty(contact.dOB).split("T");
+        String[] newDoa = stringOrEmpty(contact.dOA).split("T");
 
         try {
             if (!newDob[0].isEmpty()) {
@@ -1943,7 +1966,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             e.printStackTrace();
         }
         List<ContactAddressItem> contactAddress = contact.contactAddress;
-        if (contactAddress != null && contactAddress.size() > 0) {
+        if (contactAddress.size() > 0) {
             renderContactAddress(contactAddress);
         }
         tvPanCard.setText(contact.panNumber);
@@ -1952,8 +1975,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         ilLeadName.setHint(leadCategoryText + " Name*");
         try {
             etCreationDate.setText(
-                getDateFromString(creationDate,
-                    "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY));
+                    getDateFromString(creationDate,
+                            "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY));
         } catch (Exception e) {
             creationDate = creationDate.replace("T", " ");
             etCreationDate.setText(creationDate);
@@ -1979,7 +2002,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         etContactPerson.setText(contactPerson);
     }
 
-    public void renderContactAddress(List<ContactAddressItem> contactAddress) {
+    private void renderContactAddress(List<ContactAddressItem> contactAddress) {
         for (ContactAddressItem address : contactAddress) {
             int addressTypeId = address.addressTypeID;
             String address1 = stringOrEmpty(address.address1);
@@ -1996,7 +2019,6 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 etAdd2.setText(address2);
                 etAdd3.setText(address3);
                 etPincode.setText(pinCode);
-                stateStr = stateId;
                 cityStr = cityId;
                 if (arrAdapCountry == null) {
                     getCountry();
@@ -2006,7 +2028,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         spCountry.setSelection(dataCountry.getPosition());
                     }
                     String key = ((RowData) spCountry.getSelectedItem()).getKey();
-                    getState(key, RESIDENCE, stateStr);
+                    getState(key, RESIDENCE, stateId);
                 }
                 if (cbPrimaryAddress.isChecked()) {
                     cbOffPrimaryAddress.setVisibility(View.GONE);
@@ -2044,7 +2066,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    public int getSpinnerPosition(String value, ArrayList<String> arrayList) {
+    private int getSpinnerPosition(String value, ArrayList<String> arrayList) {
 
         for (int i = 0; i < arrayList.size(); i++) {
             if (arrayList.get(i).equalsIgnoreCase(value)) {
@@ -2055,54 +2077,54 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void updateLead(LeadDetailModel model) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             List<ContactAddressRequest> contactAddresses = new ArrayList<>();
             List<AddressDetailModel> detailModels = model.getAddressDetailModels();
             for (AddressDetailModel detailModel : detailModels) {
                 contactAddresses.add(new ContactAddressRequest(
-                    String.valueOf(detailModel.getAddressTypeID()),
-                    detailModel.getAddress1(),
-                    detailModel.getAddress2(),
-                    detailModel.getAddress3(),
-                    detailModel.getStateID(),
-                    detailModel.getCountryID(),
-                    detailModel.getCityID(),
-                    detailModel.getPincode(),
-                    detailModel.isPrimary(),
-                    detailModel.getBusinessUnitID()
+                        String.valueOf(detailModel.getAddressTypeID()),
+                        detailModel.getAddress1(),
+                        detailModel.getAddress2(),
+                        detailModel.getAddress3(),
+                        detailModel.getStateID(),
+                        detailModel.getCountryID(),
+                        detailModel.getCityID(),
+                        detailModel.getPincode(),
+                        detailModel.isPrimary(),
+                        detailModel.getBusinessUnitID()
                 ));
             }
             ContactRequest contactRequest = new ContactRequest(
-                model.getName(),
-                model.geteMail(),
-                model.getAlternateEmail(),
-                model.getMobileNo(),
-                model.getEkycMobileNo(),
-                model.getLandLineNo(),
-                model.getAlternateMobileNo(),
-                model.getAadharNum(),
-                model.getPanNum(),
-                model.getDob(),
-                model.getAnniversary(),
-                model.isSameAsAbove(),
-                contactAddresses
+                    model.getName(),
+                    model.geteMail(),
+                    model.getAlternateEmail(),
+                    model.getMobileNo(),
+                    model.getEkycMobileNo(),
+                    model.getLandLineNo(),
+                    model.getAlternateMobileNo(),
+                    model.getAadharNum(),
+                    model.getPanNum(),
+                    model.getDob(),
+                    model.getAnniversary(),
+                    model.isSameAsAbove(),
+                    contactAddresses
             );
             UpdateLeadRequest updateLeadRequest = new UpdateLeadRequest(
-                model.getLeadID(), model.getBusinessUnitID(), model.getIsPotentialPMSProduct(),
-                model.getLeadCategoryID(), model.getContactPerson(), model.getSourceID(),
-                model.getLeadSourceID(), model.getLeadSourceDetailsID(),
-                model.getLeadSourceDetails(), model.getRefereeCode(), model.getRefereeName(),
-                model.getRefereeEmail(), model.getRefereeMobile(), model.getComments(),
-                model.getProfileID(),
-                model.getProfessionID(), model.getCreatedBy(), model.getProspectRefereName(),
-                model.getProspectRefereMobile(), model.getProspectRefereEmail(),
-                model.getCreatedThrough(), model.getCreationDate(),
-                contactRequest,
-                model.getLeadFieldValueModels()
+                    model.getLeadID(), model.getBusinessUnitID(), model.getIsPotentialPMSProduct(),
+                    model.getLeadCategoryID(), model.getContactPerson(), model.getSourceID(),
+                    model.getLeadSourceID(), model.getLeadSourceDetailsID(),
+                    model.getLeadSourceDetails(), model.getRefereeCode(), model.getRefereeName(),
+                    model.getRefereeEmail(), model.getRefereeMobile(), model.getComments(),
+                    model.getProfileID(),
+                    model.getProfessionID(), model.getCreatedBy(), model.getProspectRefereName(),
+                    model.getProspectRefereMobile(), model.getProspectRefereEmail(),
+                    model.getCreatedThrough(), model.getCreationDate(),
+                    contactRequest,
+                    model.getLeadFieldValueModels()
             );
-            compositeDisposable.add(saathiApi.updateLead(updateLeadRequest)
-                .compose(applyUiModel())
-                .subscribe(this::renderUpdateLead));
+            getCompositeDisposable().add(getSaathiApi().updateLead(updateLeadRequest)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderUpdateLead));
         } else {
             noInternetConnectionDialog();
         }
@@ -2119,27 +2141,30 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         UpdateLeadResponse data = uiModel.data;
         if (data != null) {
             String approvalMessage = stringOrEmpty(data.approvalMessage);
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal),
-                (approvalMessage.isEmpty() ? "Lead Updated Successfully"
-                    : approvalMessage), "Ok", true,
-                (action, a2) -> {
-                    if (action == MSFDialog.Action.OK) {
-                        setEnableDisable(false);
-                        editableFlag = true;
-                        leadSection();
-                    }
-                });
+            alertDialog(requireContext(), 0,
+                    getResources().getString(R.string.motilal_oswal),
+                    (approvalMessage.isEmpty() ? "Lead Updated Successfully"
+                            : approvalMessage), "Ok", true,
+                    (action, a2) -> {
+                        if (action == MSFDialog.Action.OK) {
+                            setEnableDisable(false);
+                            editableFlag = true;
+                            leadSection();
+                        }
+                    });
         }
     }
 
     private void selectProfile() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
-            compositeDisposable.add(saathiApi.getAllLookup(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderLeadProfile));
+                    new LookupRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+                            null, null);
+            getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderLeadProfile));
         } else {
             noInternetConnectionDialog();
         }
@@ -2159,13 +2184,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 arrSelectProfile.add(
-                    new RowData(i + 1,
-                        String.valueOf(item.lookUpid),
-                        stringOrEmpty(item.lookUpName)
-                    ));
+                        new RowData(i + 1,
+                                String.valueOf(item.lookUpid),
+                                stringOrEmpty(item.lookUpName)
+                        ));
             }
             arrAdapProfile = new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                arrSelectProfile);
+                    arrSelectProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfile.setAdapter(arrAdapProfile);
             spProfile.setOnItemSelectedListener(profileListener);
@@ -2174,13 +2199,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void addProductDialog() {
-        final Dialog dialog = new Dialog(getMainActivity());
+        final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow())
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_leadview_add_product);
         dialog.getWindow()
-            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         final Spinner spInterestedIn = dialog.findViewById(R.id.spInterestedIn);
         final Spinner spStage = dialog.findViewById(R.id.spStage);
@@ -2192,33 +2218,26 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         Button btnClose = dialog.findViewById(R.id.btnClose);
         final LinearLayout progressLayout = dialog.findViewById(R.id.customProgress);
         final ClearableEditText productSpecialistAdd =
-            dialog.findViewById(R.id.dacProductSpecialist);
+                dialog.findViewById(R.id.dacProductSpecialist);
         final ClearableEditText actAssignTo =
-            dialog.findViewById(R.id.actAssignTo);
+                dialog.findViewById(R.id.actAssignTo);
         productSpecialistAdd.setHint(getResources().getString(R.string.str_prod_spl));
         actAssignTo.setHint(getResources().getString(R.string.str_assing));
-        productSpecialistAdd.setListener(new ClearableEditText.Listener() {
-            @Override
-            public void didClearText() {
-                specialistAdd = "";
-            }
-        });
-        productSpecialistAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getWindow()
+        productSpecialistAdd.setListener(() -> specialistAdd = "");
+        productSpecialistAdd.setOnClickListener(v -> {
+            requireActivity().getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-                final CustomListPickerDialog searchListProductSpecialist =
-                    new CustomListPickerDialog(getMainActivity());
+            final CustomListPickerDialog searchListProductSpecialist =
+                    new CustomListPickerDialog(requireContext());
 
-                searchListProductSpecialist.setThreshold(SEARCH_LENTH);
+            searchListProductSpecialist.setThreshold(SEARCH_LENTH);
 
-                searchListProductSpecialist.show();
-                searchListProductSpecialist.setCustomTitle(
+            searchListProductSpecialist.show();
+            searchListProductSpecialist.setCustomTitle(
                     getResources().getString(R.string.str_prod_spl));
-                CustomListPickerDialog.ListPickerListneable productSpecialistViewListner =
+            CustomListPickerDialog.ListPickerListneable productSpecialistViewListner =
                     new CustomListPickerDialog.ListPickerListneable() {
                         @Override
                         public void onListItemSelect(Parcelable data) {
@@ -2237,8 +2256,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             searchProductSpecialist(constraint, searchListProductSpecialist);
                         }
                     };
-                searchListProductSpecialist.setmListner(productSpecialistViewListner);
-            }
+            searchListProductSpecialist.setmListner(productSpecialistViewListner);
         });
         actAssignTo.setListener(new ClearableEditText.Listener() {
             @Override
@@ -2246,18 +2264,16 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 primaryRMAdd = "";
             }
         });
-        actAssignTo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getWindow()
+        actAssignTo.setOnClickListener(v -> {
+            requireActivity().getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                        | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                final CustomListPickerDialog searchList =
-                    new CustomListPickerDialog(getMainActivity());
-                searchList.show();
-                searchList.setThreshold(SEARCH_LENTH);
-                searchList.setCustomTitle(getResources().getString(R.string.str_assing));
-                CustomListPickerDialog.ListPickerListneable assingViewListner =
+                            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+            final CustomListPickerDialog searchList =
+                    new CustomListPickerDialog(requireContext());
+            searchList.show();
+            searchList.setThreshold(SEARCH_LENTH);
+            searchList.setCustomTitle(getResources().getString(R.string.str_assing));
+            CustomListPickerDialog.ListPickerListneable assingViewListner =
                     new CustomListPickerDialog.ListPickerListneable() {
                         @Override
                         public void onListItemSelect(Parcelable data) {
@@ -2276,8 +2292,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             searchUserBusinessProfile(constraint, searchList);
                         }
                     };
-                searchList.setmListner(assingViewListner);
-            }
+            searchList.setmListner(assingViewListner);
         });
         //endregion
 
@@ -2329,138 +2344,192 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             }
         });
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Mandatory check
-                if (spInterestedIn.getSelectedItemPosition() < 1) {
-                    tvspIntrestError.setVisibility(View.VISIBLE);
-                    tvspIntrestError.setText("Select Interested Product");
-                    return;
-                }
-                if (spStage.getSelectedItemPosition() < 1) {
-                    tvspStageError.setVisibility(View.VISIBLE);
-                    tvspStageError.setText("Select Stage");
-                    return;
-                }
-                if (spStatus.getSelectedItemPosition() < 1) {
-                    tvspStatusError.setVisibility(View.VISIBLE);
-                    tvspStatusError.setText("Select Status");
-                    return;
-                }
-                //Mandatory chec end
+        btnSave.setOnClickListener(view -> {
+            //Mandatory check
+            if (spInterestedIn.getSelectedItemPosition() < 1) {
+                tvspIntrestError.setVisibility(View.VISIBLE);
+                tvspIntrestError.setText("Select Interested Product");
+                return;
+            }
+            if (spStage.getSelectedItemPosition() < 1) {
+                tvspStageError.setVisibility(View.VISIBLE);
+                tvspStageError.setText("Select Stage");
+                return;
+            }
+            if (spStatus.getSelectedItemPosition() < 1) {
+                tvspStatusError.setVisibility(View.VISIBLE);
+                tvspStatusError.setText("Select Status");
+                return;
+            }
+            //Mandatory chec end
 
-                String interestedInKey = ((RowData) spInterestedIn.getSelectedItem()).getKey();
-                String interestedInDisplayText =
+            String interestedInKey = ((RowData) spInterestedIn.getSelectedItem()).getKey();
+            String interestedInDisplayText =
                     ((RowData) spInterestedIn.getSelectedItem()).getValue();
-                if (leadDetailAddProductList.size() == 0) {
-                    leadDetailAddProductAdapter = new LeadDetailAddProductAdapter(getMainActivity(),
+            if (leadDetailAddProductList.size() == 0) {
+                leadDetailAddProductAdapter = new LeadDetailAddProductAdapter(requireContext(),
                         leadDetailAddProductList);
-                }
-                if (leadDetailAddProductAdapter.checkProduct(interestedInKey)) {
-                    alertDialog(getMainActivity(), 0,
+            }
+            if (leadDetailAddProductAdapter.checkProduct(interestedInKey)) {
+                alertDialog(requireContext(), 0,
                         getResources().getString(R.string.motilal_oswal),
                         interestedInDisplayText + " is already selected", "OK", true, null);
-                } else {
-                    if (isPotentialPMSProduct) {
-                        MSFDialog.alertDialog(getActivity(), 0,
+            } else {
+                if (isPotentialPMSProduct) {
+                    MSFDialog.alertDialog(requireActivity(), 0,
                             getResources().getString(R.string.motilal_oswal),
                             POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
                             new MSFDialog.DialogListener() {
                                 @Override
                                 public void alertDialogAction(MSFDialog.Action action,
-                                    Object... data) {
+                                                              Object... data) {
                                     if (action == MSFDialog.Action.OK) {
                                         addProduct(
-                                            ((RowData) spInterestedIn.getSelectedItem()).getKey(),
-                                            ((RowData) spStage.getSelectedItem()).getKey(),
-                                            ((RowData) spStatus.getSelectedItem()).getKey(), YES);
+                                                ((RowData) spInterestedIn.getSelectedItem()).getKey(),
+                                                ((RowData) spStage.getSelectedItem()).getKey(),
+                                                ((RowData) spStatus.getSelectedItem()).getKey(), YES);
                                     } else {
                                         addProduct(
-                                            ((RowData) spInterestedIn.getSelectedItem()).getKey(),
-                                            ((RowData) spStage.getSelectedItem()).getKey(),
-                                            ((RowData) spStatus.getSelectedItem()).getKey(), NO);
+                                                ((RowData) spInterestedIn.getSelectedItem()).getKey(),
+                                                ((RowData) spStage.getSelectedItem()).getKey(),
+                                                ((RowData) spStatus.getSelectedItem()).getKey(), NO);
                                     }
                                 }
                             });
-                    } else {
-                        addProduct(((RowData) spInterestedIn.getSelectedItem()).getKey(),
+                } else {
+                    addProduct(((RowData) spInterestedIn.getSelectedItem()).getKey(),
                             ((RowData) spStage.getSelectedItem()).getKey(),
                             ((RowData) spStatus.getSelectedItem()).getKey(), "");
-                    }
                 }
-                dialog.dismiss();
             }
+            dialog.dismiss();
         });
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideKeyboard(leadViewDetailView);
-                dialog.dismiss();
-            }
+        btnClose.setOnClickListener(view -> {
+            hideKeyboard(leadViewDetailView);
+            dialog.dismiss();
         });
         dialog.show();
     }
 
-    void searchProductSpecialist(@Nullable CharSequence constraint,
-        CustomListPickerDialog productSpecialistDialog) {
+    private void searchProductSpecialist(@Nullable CharSequence constraint,
+                                         CustomListPickerDialog productSpecialistDialog) {
         if (constraint == null) return;
         ProductSpecialistRequest specialistRequest;
         try {
             primaryRMAdd =
-                CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode
-                    : leadOwner.trim();
+                    CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode
+                            : leadOwner.trim();
             specialistRequest =
-                new ProductSpecialistRequest(
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    primaryRMAdd
-                );
+                    new ProductSpecialistRequest(
+                            URLEncoder.encode(constraint.toString(), "utf-8"),
+                            URLEncoder.encode(constraint.toString(), "utf-8"),
+                            primaryRMAdd
+                    );
         } catch (Exception ex) {
             return;
         }
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(
-                saathiApi.getProductSpecialist(specialistRequest)
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(
+                    getSaathiApi().getProductSpecialist(specialistRequest)
+                            .compose(applyUiModel())
+                            .subscribe(uiModel -> {
+                                if (uiModel.inProgress) {
+                                    productSpecialistDialog.showProgress(View.VISIBLE);
+                                } else {
+                                    productSpecialistDialog.showProgress(View.GONE);
+                                }
+
+                                Throwable error = uiModel.error;
+                                if (error != null) {
+                                    final ArrayList<EmployeeModel> modelList = new ArrayList<>();
+                                    modelList.add(EmployeeModel.getNoData(getErrorOnFailureNew(error)));
+                                    final AttendeeAdapter mYAdapter =
+                                            new AttendeeAdapter(requireContext(), modelList);
+                                    productSpecialistDialog.setAdapter(
+                                            mYAdapter);
+                                }
+
+                                List<ProductSpecialistItem> data = uiModel.data;
+                                if (data != null) {
+                                    final ArrayList<EmployeeModel> modelList = new ArrayList<>();
+                                    for (ProductSpecialistItem datum : data) {
+                                        if (Objects.requireNonNull(userManager.getUser()).employeeCode
+                                                .equalsIgnoreCase(datum.employeeCode)) {
+                                            continue;
+                                        }
+                                        modelList.add(new EmployeeModel(
+                                                stringOrEmpty(datum.employeeName),
+                                                stringOrEmpty(datum.employeeCode),
+                                                stringOrEmpty(datum.branchCode),
+                                                false));
+                                    }
+                                    if (modelList.isEmpty()) {
+                                        modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
+                                    }
+                                    final AttendeeAdapter mYAdapter =
+                                            new AttendeeAdapter(requireContext(), modelList);
+                                    productSpecialistDialog.setAdapter(mYAdapter);
+                                }
+                            }));
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void searchUserBusinessProfile(@Nullable CharSequence constraint,
+                                           CustomListPickerDialog searchList) {
+        if (constraint == null) return;
+        UserBusinessProfileRequest request;
+        try {
+            request = new UserBusinessProfileRequest(
+                    URLEncoder.encode(constraint.toString(), "utf-8"),
+                    URLEncoder.encode(constraint.toString(), "utf-8")
+            );
+        } catch (Exception ex) {
+            return;
+        }
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getUserBusinessProfile(request)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> {
                         if (uiModel.inProgress) {
-                            productSpecialistDialog.showProgress(View.VISIBLE);
+                            hideKeyboard(leadViewDetailView);
+                            searchList.showProgress(View.VISIBLE);
                         } else {
-                            productSpecialistDialog.showProgress(View.GONE);
+                            searchList.showProgress(View.GONE);
                         }
 
                         Throwable error = uiModel.error;
                         if (error != null) {
                             final ArrayList<EmployeeModel> modelList = new ArrayList<>();
-                            modelList.add(EmployeeModel.getNoData(getErrorOnFailure(error)));
+                            modelList.add(EmployeeModel.getNoData(getErrorOnFailureNew(error)));
                             final AttendeeAdapter mYAdapter =
-                                new AttendeeAdapter(getMainActivity(), modelList);
-                            productSpecialistDialog.setAdapter(
-                                mYAdapter);
+                                    new AttendeeAdapter(requireContext(), modelList);
+                            searchList.setAdapter(mYAdapter);
                         }
 
-                        List<ProductSpecialistItem> data = uiModel.data;
+                        List<BusinessProfile> data = uiModel.data;
                         if (data != null) {
                             final ArrayList<EmployeeModel> modelList = new ArrayList<>();
-                            for (ProductSpecialistItem datum : data) {
-                                if (AccountDetails.getEmployeeCode()
-                                    .equalsIgnoreCase(datum.employeeCode)) {
+                            for (BusinessProfile datum : data) {
+                                if (userManager.getUser().employeeCode
+                                        .equalsIgnoreCase(datum.employeeCode)) {
                                     continue;
                                 }
-                                modelList.add(new EmployeeModel(
-                                    stringOrEmpty(datum.employeeName),
-                                    stringOrEmpty(datum.employeeCode),
-                                    stringOrEmpty(datum.branchCode),
-                                    false));
+                                modelList.add(
+                                        new EmployeeModel(
+                                                stringOrEmpty(datum.employeeName),
+                                                stringOrEmpty(datum.employeeCode),
+                                                stringOrEmpty(datum.branchCode),
+                                                false));
                             }
                             if (modelList.isEmpty()) {
                                 modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
                             }
                             final AttendeeAdapter mYAdapter =
-                                new AttendeeAdapter(getMainActivity(), modelList);
-                            productSpecialistDialog.setAdapter(mYAdapter);
+                                    new AttendeeAdapter(requireContext(), modelList);
+                            searchList.setAdapter(mYAdapter);
                         }
                     }));
         } else {
@@ -2468,87 +2537,27 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    void searchUserBusinessProfile(@Nullable CharSequence constraint,
-        CustomListPickerDialog searchList) {
-        if (constraint == null) return;
-        UserBusinessProfileRequest request;
-        try {
-            request = new UserBusinessProfileRequest(
-                URLEncoder.encode(constraint.toString(), "utf-8"),
-                URLEncoder.encode(constraint.toString(), "utf-8")
-            );
-        } catch (Exception ex) {
-            return;
-        }
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getUserBusinessProfile(request)
-                .compose(applyUiModel())
-                .subscribe(uiModel -> {
-                    if (uiModel.inProgress) {
-                        hideKeyboard(leadViewDetailView);
-                        searchList.showProgress(View.VISIBLE);
-                    } else {
-                        searchList.showProgress(View.GONE);
-                    }
-
-                    Throwable error = uiModel.error;
-                    if (error != null) {
-                        final ArrayList<EmployeeModel> modelList = new ArrayList<>();
-                        modelList.add(EmployeeModel.getNoData(getErrorOnFailure(error)));
-                        final AttendeeAdapter mYAdapter =
-                            new AttendeeAdapter(getMainActivity(), modelList);
-                        searchList.setAdapter(mYAdapter);
-                    }
-
-                    List<BusinessProfile> data = uiModel.data;
-                    if (data != null) {
-                        final ArrayList<EmployeeModel> modelList = new ArrayList<>();
-                        for (BusinessProfile datum : data) {
-                            if (AccountDetails.getEmployeeCode()
-                                .equalsIgnoreCase(datum.employeeCode)) {
-                                continue;
-                            }
-                            modelList.add(
-                                new EmployeeModel(
-                                    stringOrEmpty(datum.employeeName),
-                                    stringOrEmpty(datum.employeeCode),
-                                    stringOrEmpty(datum.branchCode),
-                                    false));
-                        }
-                        if (modelList.isEmpty()) {
-                            modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
-                        }
-                        final AttendeeAdapter mYAdapter =
-                            new AttendeeAdapter(getMainActivity(), modelList);
-                        searchList.setAdapter(mYAdapter);
-                    }
-                }));
-        } else {
-            noInternetConnectionDialog();
-        }
-    }
-
     private void addProduct(String interestedIn, String stageId, String statusId,
-        String productMapping) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                            String productMapping) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             primaryRMAdd =
-                CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
+                    CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
             InsertLeadProductRequest leadProductRequest = new InsertLeadProductRequest(
-                mLeadId,
-                ucid,
-                interestedIn,
-                interestedIn,
-                primaryRMAdd,
-                specialistAdd,
-                AccountDetails.getEmployeeCode(),
-                CRMAppUtil.getDBDate(),
-                stageId,
-                statusId,
-                productMapping
+                    mLeadId,
+                    ucid,
+                    interestedIn,
+                    interestedIn,
+                    primaryRMAdd,
+                    specialistAdd,
+                    userManager.getUser().employeeCode,
+                    CRMAppUtil.getDBDate(),
+                    stageId,
+                    statusId,
+                    productMapping
             );
-            compositeDisposable.add(saathiApi.insertLeadProductMapping(leadProductRequest)
-                .compose(applyUiModel())
-                .subscribe(this::renderInsertLeadMapping));
+            getCompositeDisposable().add(getSaathiApi().insertLeadProductMapping(leadProductRequest)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderInsertLeadMapping));
         } else {
             noInternetConnectionDialog();
         }
@@ -2571,43 +2580,41 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 LeadProductMappingItem productItem = data.get(0);
                 String leadID = String.valueOf(productItem.leadID);
                 String uCID = String.valueOf(productItem.uCID);
-                alertDialog(getActivity(), 0,
-                    getResources().getString(
-                        R.string.motilal_oswal),
-                    "Product Added Successfully with leadId "
-                        + leadID, "OK", true,
-                    (action, data1) -> {
-                        if (action == MSFDialog.Action.OK) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(LEAD_ID, leadID);
-                            bundle.putString(UCID, uCID);
-                            navigateTo(
-                                NAV_TO_LEAD_VIEW_MAIN,
-                                bundle,
-                                getFragmentManager(),
-                                true);
-                        }
-                    });
+                alertDialog(requireActivity(), 0,
+                        getResources().getString(
+                                R.string.motilal_oswal),
+                        "Product Added Successfully with leadId "
+                                + leadID, "OK", true,
+                        (action, data1) -> {
+                            if (action == MSFDialog.Action.OK) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(LEAD_ID, leadID);
+                                bundle.putString(UCID, uCID);
+                                navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
+                            }
+                        });
             } else {
                 if (data.size() > 0) {
                     for (LeadProductMappingItem datum : data) {
                         String potentialPMSProduct = stringOrEmpty(datum.isPotentialPMSProduct);
                         isPotentialPMSProduct = potentialPMSProduct.isEmpty();
                         spPmsProduct.setSelection(
-                            getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
+                                getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
 
                         leadDetailAddProductList.add(getLeadDetailAddProductModel(datum));
                     }
                     leadDetailAddProductAdapter =
-                        new LeadDetailAddProductAdapter(requireContext(), leadDetailAddProductList);
+                            new LeadDetailAddProductAdapter(requireContext(), leadDetailAddProductList);
                     lvAddProduct.setAdapter(leadDetailAddProductAdapter);
                     setListViewHeightBasedOnChildrenDetail(lvAddProduct);
                 }
-                alertDialog(getActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
-                    "Product Added Successfully", "OK",
-                    true, (action, data12) -> {
-                    });
+                alertDialog(requireActivity(), 0,
+                        getResources().getString(R.string.motilal_oswal),
+                        "Product Added Successfully", "OK",
+                        true, (action, data12) -> {
+                            leadSection();
+                        });
+
             }
         }
     }
@@ -2620,12 +2627,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return false;
         } else
             //
-            if (!isBlank(etDob.getText().toString()) & !isBlank(
-                etAnniversary.getText().toString())) {
+            if (!isBlank(Objects.requireNonNull(etDob.getText()).toString()) & !isBlank(
+                    Objects.requireNonNull(etAnniversary.getText()).toString())) {
                 try {
                     Date dobDate = getDBDateFrom(etDob.getText().toString().trim(), "dd-MM-yyyy");
                     Date anniDate =
-                        getDBDateFrom(etAnniversary.getText().toString().trim(), "dd-MM-yyyy");
+                            getDBDateFrom(etAnniversary.getText().toString().trim(), "dd-MM-yyyy");
 
                     if (dobDate.after(anniDate)) {
                         tvAnniversaryError.setText(MESSAGE_DOB_ANNI_COMPARE);
@@ -2646,7 +2653,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     return false;
                 }
             } else if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                etLeadName.getText().toString().trim())) {
+                    etLeadName.getText().toString().trim())) {
 
                 tvNameError.setText(ErrorMsgName);
                 tvNameError.setVisibility(View.VISIBLE);
@@ -2656,114 +2663,114 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 tvContactPersonError.requestFocus();
                 return false;
             } else if (!isIndividualsFlag
-                && !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                etContactPerson.getText().toString().trim())) {
+                    && !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
+                    etContactPerson.getText().toString().trim())) {
                 tvContactPersonError.setText(ErrorMsgName);
                 tvContactPersonError.setVisibility(View.VISIBLE);
                 tvContactPersonError.requestFocus();
                 return false;
             } else if (!isBlank(etAlternateMobileNumber.getText().toString())
-                && !CRMValidationRule.validateMobile(
-                etAlternateMobileNumber.getText().toString())) {
+                    && !CRMValidationRule.validateMobile(
+                    etAlternateMobileNumber.getText().toString())) {
                 tvAlternateMobileNumberError.setText("Invalid mobile number");
                 etAlternateMobileNumber.requestFocus();
                 tvAlternateMobileNumberError.setVisibility(View.VISIBLE);
                 return false;
             } else if (!isBlank(etAlternateMobileNumber.getText().toString())
-                && etMobileNumber.getText()
-                .toString()
-                .equalsIgnoreCase(etAlternateMobileNumber.getText().toString())) {
+                    && etMobileNumber.getText()
+                    .toString()
+                    .equalsIgnoreCase(etAlternateMobileNumber.getText().toString())) {
                 tvAlternateMobileNumberError.setText(
-                    "Mobile and Alternate mobile number are not Same");
+                        "Mobile and Alternate mobile number are not Same");
                 etAlternateMobileNumber.requestFocus();
                 tvAlternateMobileNumberError.setVisibility(View.VISIBLE);
                 return false;
             } else if (!isBlank(etLandlineNumber.getText().toString()) && !validateTel(
-                etLandlineNumber.getText().toString().trim())) {
+                    etLandlineNumber.getText().toString().trim())) {
                 tvLandLineError.setText("Invalid Tel number");
                 etLandlineNumber.requestFocus();
                 tvLandLineError.setVisibility(View.VISIBLE);
                 return false;
             } else if (!isBlank(etEmail.getText().toString()) && !isValidEmail(
-                etEmail.getText().toString().trim())) {
+                    etEmail.getText().toString().trim())) {
                 tvEmailIdError.setText(INVALID_EMAIL_ID);
                 tvEmailIdError.setVisibility(View.VISIBLE);
                 etEmail.requestFocus();
                 return false;
             } else if (!isBlank(etAlternateEmail.getText().toString()) && !isValidEmail(
-                etAlternateEmail.getText().toString().trim())) {
+                    etAlternateEmail.getText().toString().trim())) {
                 tvAlternateEmailIdError.setText(INVALID_EMAIL_ID);
                 tvAlternateEmailIdError.setVisibility(View.VISIBLE);
                 etAlternateEmail.requestFocus();
                 return false;
             } else if (!isBlank(etAlternateEmail.getText().toString()) && etEmail.getText()
-                .toString()
-                .equalsIgnoreCase(etAlternateEmail.getText().toString())) {
+                    .toString()
+                    .equalsIgnoreCase(etAlternateEmail.getText().toString())) {
                 tvAlternateEmailIdError.setText("Email and Alternate email id are not same");
                 tvAlternateEmailIdError.setVisibility(View.VISIBLE);
                 etAlternateEmail.requestFocus();
                 return false;
             } else if (!isBlank(etPanNumber.getText().toString())
-                && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
+                    && !CRMValidationRule.isValidPannumber(etPanNumber.getText().toString())) {
                 tvPanNumError.setText("Invalid PAN number");
                 etPanNumber.requestFocus();
                 tvPanNumError.setVisibility(View.VISIBLE);
                 return false;
             } else if (!isBlank(etAadharNumber.getText().toString()) && !validateAadhar(
-                etAadharNumber.getText().toString().trim())) {
+                    etAadharNumber.getText().toString().trim())) {
                 tvAadharNumError.setText("Invalid Aadhar number");
                 etAadharNumber.requestFocus();
                 tvAadharNumError.setVisibility(View.VISIBLE);
                 return false;
             } else if (!isBlank(etProspectRefereeName.getText().toString().trim()) &&
-                !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                    etProspectRefereeName.getText().toString().trim())) {
+                    !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
+                            etProspectRefereeName.getText().toString().trim())) {
                 tvProspectRefereeNameError.setText(ErrorMsgName);
                 tvProspectRefereeNameError.setVisibility(View.VISIBLE);
                 return false;
             } else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
-                && isBlank(etProspectRefereeName.getText().toString().trim())) {
+                    && isBlank(etProspectRefereeName.getText().toString().trim())) {
                 tvProspectRefereeNameError.setText(ENTER_PROSPECT_REFEREE_NAME);
                 tvProspectRefereeNameError.setVisibility(View.VISIBLE);
                 etProspectRefereeName.requestFocus();
                 return false;
             } else if (!isBlank(etProspectRefereerMobile.getText().toString())
-                && !CRMValidationRule.validateMobile(
-                etProspectRefereerMobile.getText().toString().trim())) {
+                    && !CRMValidationRule.validateMobile(
+                    etProspectRefereerMobile.getText().toString().trim())) {
                 tvProspectRefereerMobileError.setText(INVALID_MOBILE_NO);
                 tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
                 etProspectRefereerMobile.requestFocus();
                 return false;
             } else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
-                && isBlank(etProspectRefereerMobile.getText().toString())) {
+                    && isBlank(etProspectRefereerMobile.getText().toString())) {
                 tvProspectRefereerMobileError.setText(ENTER_MOBILE_NUMBER);
                 tvProspectRefereerMobileError.setVisibility(View.VISIBLE);
                 etProspectRefereerMobile.requestFocus();
                 return false;
             } else if (!isBlank(etProspectRefereerEmail.getText().toString()) && !isValidEmail(
-                etProspectRefereerEmail.getText().toString().trim())) {
+                    etProspectRefereerEmail.getText().toString().trim())) {
                 tvProspectRefereerEmailError.setText(INVALID_EMAIL_ID);
                 tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
                 etProspectRefereerEmail.requestFocus();
                 return false;
             } else if (etProspectSource.getText().toString().equals(WEBSITE_PROSPECT_REFERRAL)
-                && isBlank(etProspectRefereerEmail.getText().toString())) {
+                    && isBlank(etProspectRefereerEmail.getText().toString())) {
                 tvProspectRefereerEmailError.setText(ENTER_EMAIL_ID);
                 tvProspectRefereerEmailError.setVisibility(View.VISIBLE);
                 etProspectRefereerEmail.requestFocus();
                 return false;
             } else if (cbPrimaryAddress.isChecked()
-                && !isBlank(etPincode.getText().toString())
-                && etPincode.length() < 6
-                && etPincode.length() != 0) {
+                    && !isBlank(etPincode.getText().toString())
+                    && etPincode.length() < 6
+                    && etPincode.length() != 0) {
                 tvPincodeError.setVisibility(View.VISIBLE);
                 tvPincodeError.setText("Invalid pincode");
                 tvPincodeError.requestFocus();
                 return false;
             } else if ((cbOffPrimaryAddress.isChecked() || cbSameAs.isChecked())
-                && !isBlank(etOffPincode.getText().toString())
-                && etOffPincode.length() < 6
-                && etOffPincode.length() != 0) {
+                    && !isBlank(etOffPincode.getText().toString())
+                    && etOffPincode.length() < 6
+                    && etOffPincode.length() != 0) {
                 tvOffPincodeError.setVisibility(View.VISIBLE);
                 tvOffPincodeError.setText("Invalid pincode");
                 etOffPincode.requestFocus();
@@ -2776,9 +2783,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     @Override
     public void onClick(View view) {
         Bundle args = new Bundle();
+        String outerSectionExpansion = "OuterSectionExpansion";
+        String innerSectionExpansion = "InnerSectionExpansion";
         switch (view.getId()) {
             case R.id.llEditLeadDetail:
-                if (!this.getArguments().getString(LEAD_ID).equalsIgnoreCase("0")) {
+                if (!Objects.requireNonNull(this.getArguments().getString(LEAD_ID))
+                        .equalsIgnoreCase("0")) {
                     if (isLeadEditable()) {
                         if (editableFlag) {
                             setEnableDisable(true);
@@ -2793,15 +2803,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             case R.id.etDob:
                 try {
                     CustomDatePickerDialog dobDatePicker =
-                        new CustomDatePickerDialog(getContext(), false, etDob.getText().toString(),
-                            true, new DatePickerListener() {
-                            @Override
-                            public void submitDatePicker(String date) {
+                            new CustomDatePickerDialog(getContext(), false, Objects.requireNonNull(
+                                    etDob.getText()).toString(),
+                                    true, date -> {
                                 tvAnniversaryError.setVisibility(View.GONE);
                                 etDob.setText(date);
                                 etDob.setClearIconVisible(true);
-                            }
-                        });
+                            });
                     dobDatePicker.show();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2810,16 +2818,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             case R.id.etAnniversary:
                 try {
                     CustomDatePickerDialog anniversaryDatePicker =
-                        new CustomDatePickerDialog(getContext(), false,
-                            etAnniversary.getText().toString(), true, new DatePickerListener() {
-                            @Override
-                            public void submitDatePicker(String date) {
-                                tvAnniversaryError.setVisibility(View.GONE);
-                                etAnniversary.setText(date);
+                            new CustomDatePickerDialog(getContext(), false,
+                                    Objects.requireNonNull(etAnniversary.getText()).toString(), true,
+                                    new DatePickerListener() {
+                                        @Override
+                                        public void submitDatePicker(String date) {
+                                            tvAnniversaryError.setVisibility(View.GONE);
+                                            etAnniversary.setText(date);
 
-                                etAnniversary.setClearIconVisible(true);
-                            }
-                        });
+                                            etAnniversary.setClearIconVisible(true);
+                                        }
+                                    });
                     anniversaryDatePicker.show();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -2842,9 +2851,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
             break;
             case R.id.tvDocuments:
-                args.putString(LEAD_ID, this.getArguments().getString(LEAD_ID));
+                args.putString(LEAD_ID,
+                        Objects.requireNonNull(this.getArguments()).getString(LEAD_ID));
                 args.putString(UCID, this.getArguments().getString(UCID));
-                navigateTo(NAV_TO_LEAD_DOCUMENT, args, getFragmentManager(), true);
+                //navigateTo(NAV_TO_LEAD_DOCUMENT, args, getFragmentManager(), true);
+                navigator.openPage(NAVIGATE_TO_DOCUMENT, args, true, false);
                 break;
             case R.id.cbPrimaryAddress:
                 if (cbPrimaryAddress.isChecked()) {
@@ -2878,23 +2889,23 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     etOffAdd3.setText(etAdd3.getText().toString());
                     etOffPincode.setText(etPincode.getText().toString());
                     RowData dataCountry =
-                        RowData.getSpinnerRowDataById(countryCodeStr, arrAdapCountry);
+                            RowData.getSpinnerRowDataById(countryCodeStr, arrAdapCountry);
                     if (dataCountry != null) {
                         spOffCountry.setSelection(dataCountry.getPosition());
                         getState(((RowData) spOffCountry.getSelectedItem()).getKey(), OFFICE,
-                            stateCodeStr);
+                                stateCodeStr);
                     }
 
                     disableField(llOffAdd);
                 } else {
                     if (!isBlank(offStateStr)
-                        || !isBlank(offCityStr)
-                        || !isBlank(offAdd1)
-                        || !isBlank(offAdd2)
-                        || !isBlank(offAdd3)
-                        || !isBlank(offPincode)) {
+                            || !isBlank(offCityStr)
+                            || !isBlank(offAdd1)
+                            || !isBlank(offAdd2)
+                            || !isBlank(offAdd3)
+                            || !isBlank(offPincode)) {
                         if (offStateStr.equalsIgnoreCase("-1") || offCityStr.equalsIgnoreCase(
-                            "-1")) {
+                                "-1")) {
                             enableField(llOffAdd);
                             unCheckedSameasAbove();
                         } else {
@@ -2906,7 +2917,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 getCountry();
                             } else {
                                 RowData dataCountry =
-                                    RowData.getSpinnerRowDataById(offCountryId, arrAdapCountry);
+                                        RowData.getSpinnerRowDataById(offCountryId, arrAdapCountry);
                                 if (dataCountry != null) {
                                     spOffCountry.setSelection(dataCountry.getPosition());
                                 }
@@ -2924,21 +2935,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 tvAnniversaryError.setVisibility(View.GONE);
                 if (isLeadEditable()) {
                     if (validateLead()) {
-                        MSFDialog.alertDialog(getMainActivity(), 0,
-                            getResources().getString(R.string.motilal_oswal), CONFIRM_LEAD_UPDATE,
-                            "YES", "NO", true, new MSFDialog.DialogListener() {
-                                @Override
-                                public void alertDialogAction(MSFDialog.Action action,
-                                    Object... data) {
-                                    if (action == MSFDialog.Action.OK) {
-                                        updateLead();
-                                        return;
-                                    } else if (action == MSFDialog.Action.CANCEL) {
-                                        return;
+                        MSFDialog.alertDialog(requireContext(), 0,
+                                getResources().getString(R.string.motilal_oswal), CONFIRM_LEAD_UPDATE,
+                                "YES", "NO", true, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action,
+                                                                  Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            updateLead();
+                                        }
                                     }
-                                }
-                            });
-                        // updateLead();
+                                });
                     }
                 }
                 break;
@@ -2953,32 +2960,32 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 break;
             case R.id.txtAvailableLimits:
                 toggleSectionExpansion(llAvailableLimits, txtAvailableLimits,
-                    outerSectionExpansion);
+                        outerSectionExpansion);
                 break;
             case R.id.txtBrokingPortfolio:
                 toggleSectionExpansion(llBrokingPortfolio, txtBrokingPortfolio,
-                    innerSectionExpansion);
+                        innerSectionExpansion);
                 break;
             case R.id.txtAssestPortfolio:
                 toggleSectionExpansion(llAssestPortfolio, txtAssestPortfolio,
-                    innerSectionExpansion);
+                        innerSectionExpansion);
                 break;
             case R.id.txtCash:
                 toggleSectionExpansion(llCash, txtCash, innerSectionExpansion);
                 break;
             case R.id.txtBrokingProducts:
                 toggleSectionExpansion(llBrokingProducts, txtBrokingProducts,
-                    innerSectionExpansion);
+                        innerSectionExpansion);
                 break;
             case R.id.txtAssestProducts:
                 toggleSectionExpansion(llAssestProducts, txtAssestProducts, innerSectionExpansion);
                 break;
             case R.id.btnBrokPortfolio:
-                Toast.makeText(getMainActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.btnAssetPortfolio:
-                Toast.makeText(getMainActivity(), "Coming Soon", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
                 break;
             default: {
                 if (view instanceof TextView) {
@@ -2991,11 +2998,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             if (newSectionMap.get(mTag) != null) {
                                 toggleSectionExpansion(newSectionMap.get(mTag), (TextView) view);
                             } else {
-                                Log.w(TAG, "NoLinear lauout");
+                                Timber.tag(TAG).w("NoLinear lauout");
                             }
                         }
                     } else {
-                        Log.v(TAG, mTag + " Not found");
+                        Timber.tag(TAG).v(String.format("%s Not found", mTag));
                     }
                 }
             }
@@ -3006,20 +3013,23 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     private void updateLead() {
         addressDetailList.clear();
         addressDetailList.add(new AddressDetailModel(RESIDENCEADDRESS,
-            getJsonSafeString(etAdd1.getText().toString().trim()),
-            getJsonSafeString(etAdd2.getText().toString().trim()),
-            getJsonSafeString(etAdd3.getText().toString().trim()), countryCodeStr,
-            stateCodeStr,
-            cityCodeStr, etPincode.getText().toString().trim(),
-            cbPrimaryAddress.isChecked(), AccountDetails.getBusinessUnitId()));
+                getJsonSafeString(etAdd1.getText().toString().trim()),
+                getJsonSafeString(etAdd2.getText().toString().trim()),
+                getJsonSafeString(etAdd3.getText().toString().trim()), countryCodeStr,
+                stateCodeStr,
+                cityCodeStr, etPincode.getText().toString().trim(),
+                cbPrimaryAddress.isChecked(), Objects.requireNonNull(
+                Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId)));
         addressDetailList.add(new AddressDetailModel(OFFICEADDRESS,
-            getJsonSafeString(etOffAdd1.getText().toString().trim()),
-            getJsonSafeString(etOffAdd2.getText().toString().trim()),
-            getJsonSafeString(etOffAdd3.getText().toString().trim()), offCountryCodeStr,
-            stateCodeStr,
-            cityCodeStr,
-            etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
-            AccountDetails.getBusinessUnitId()));
+                getJsonSafeString(etOffAdd1.getText().toString().trim()),
+                getJsonSafeString(etOffAdd2.getText().toString().trim()),
+                getJsonSafeString(etOffAdd3.getText().toString().trim()), offCountryCodeStr,
+                stateCodeStr,
+                cityCodeStr,
+                etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
+                Objects.requireNonNull(
+                        Objects.requireNonNull(
+                                userManager.getUser()).currentBusinessProfile.businessUnitId)));
 
         LeadDetailModel leadDetailModel = new LeadDetailModel();
         leadDetailModel.setSameAsAbove(cbSameAs.isChecked());
@@ -3034,20 +3044,20 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         leadDetailModel.setIsPotentialPMSProduct(spPmsProduct.getSelectedItem().toString());
         leadDetailModel.setProspectRefereName(etProspectRefereeName.getText().toString().trim());
         leadDetailModel.setProspectRefereMobile(
-            etProspectRefereerMobile.getText().toString().trim());
+                etProspectRefereerMobile.getText().toString().trim());
         leadDetailModel.setProspectRefereEmail(etProspectRefereerEmail.getText().toString().trim());
         try {
-            if (!isBlank(etDob.getText().toString())) {
+            if (!isBlank(Objects.requireNonNull(etDob.getText()).toString())) {
                 String strDob = etDob.getText().toString().trim();
                 leadDetailModel.setDob(CRMAppUtil.getDateFromString(strDob, CAL_DATE_FORMAT,
-                    DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
+                        DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
             } else {
                 leadDetailModel.setDob("");
             }
-            if (!isBlank(etAnniversary.getText().toString())) {
+            if (!isBlank(Objects.requireNonNull(etAnniversary.getText()).toString())) {
                 String strANN = etAnniversary.getText().toString().trim();
                 leadDetailModel.setAnniversary(CRMAppUtil.getDateFromString(strANN, CAL_DATE_FORMAT,
-                    DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
+                        DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
             } else {
                 leadDetailModel.setAnniversary("");
             }
@@ -3055,7 +3065,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             e.printStackTrace();
         }
         leadDetailModel.setLeadID(etLeadID.getText().toString().trim());
-        leadDetailModel.setBusinessUnitID(AccountDetails.getBusinessUnitId());
+        leadDetailModel.setBusinessUnitID(Objects.requireNonNull(
+                Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId));
         leadDetailModel.setContactPerson(etContactPerson.getText().toString().trim());
         leadDetailModel.setSourceID(sourceID);
         leadDetailModel.setLeadSourceID(leadProspetSourceID);
@@ -3076,8 +3087,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         leadDetailModel.setCreatedBy(etCreatedBy.getText().toString().trim());
         leadDetailModel.setCreatedThrough("0");
         leadDetailModel.setCreationDate(etCreationDate.getText().toString().trim()
-            .replace("p.m.", "PM")
-            .replace("a.m", "AM"));
+                .replace("p.m.", "PM")
+                .replace("a.m", "AM"));
         leadDetailModel.setContactDetailModels(contactDetailList);
         leadDetailModel.setAddressDetailModels(addressDetailList);
         leadDetailModel.setSecondaryRM(null);
@@ -3087,20 +3098,22 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void getStage(final Spinner spStageDialog, final String stageId,
-        final LinearLayout progressLayout) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                          final LinearLayout progressLayout) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String stageID = isBlank(stageId) ? null : stageId;
-            compositeDisposable.add(saathiApi.getStageList(
-                new StageRequest(AccountDetails.getBusinessUnitId(), stageID))
-                .compose(applyUiModel())
-                .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout)));
+            getCompositeDisposable().add(getSaathiApi().getStageList(
+                    new StageRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), stageID))
+                    .compose(applyUiModel())
+                    .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout)));
         } else {
             noInternetConnectionDialog();
         }
     }
 
     private void renderStage(UiModel<List<StageItem>> uiModel, final Spinner spStageDialog,
-        final LinearLayout progressLayout) {
+                             final LinearLayout progressLayout) {
         if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
@@ -3120,14 +3133,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 StageItem item = data.get(i);
                 arrStage.add(
-                    new RowData(i + 1,
-                        String.valueOf(item.stageID),
-                        stringOrEmpty(item.stageName)
-                    ));
+                        new RowData(i + 1,
+                                String.valueOf(item.stageID),
+                                stringOrEmpty(item.stageName)
+                        ));
             }
 
             arrAdapStage =
-                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStage);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStage);
             arrAdapStage.setDropDownViewResource(R.layout.mdropdown);
             spStageDialog.setAdapter(arrAdapStage);
             RowData stageData = getSpinnerRowDataById(stageId, arrAdapStage);
@@ -3138,21 +3151,23 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void GetStageSelectList(final Spinner spStageDialog, final String stageId,
-        final LinearLayout progressLayout) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                    final LinearLayout progressLayout) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String stageID = isBlank(stageId) ? null : stageId;
             StageMobileRequest mobileRequest =
-                new StageMobileRequest(AccountDetails.getBusinessUnitId(), stageID);
-            compositeDisposable.add(saathiApi.getStageMobileList(mobileRequest)
-                .compose(applyUiModel())
-                .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
+                    new StageMobileRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), stageID);
+            getCompositeDisposable().add(getSaathiApi().getStageMobileList(mobileRequest)
+                    .compose(applyUiModel())
+                    .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
         } else {
             noInternetConnectionDialog();
         }
     }
 
     private void renderStageMobile(UiModel<List<StageMobileItem>> uiModel,
-        final Spinner spStageDialog, final LinearLayout progressLayout) {
+                                   final Spinner spStageDialog, final LinearLayout progressLayout) {
         if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
@@ -3172,13 +3187,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             for (int i = 0; i < data.size(); i++) {
                 StageMobileItem item = data.get(i);
                 arrStage.add(new RowData(i + 1,
-                    String.valueOf(item.stageID),
-                    stringOrEmpty(item.stageName),
-                    stringOrEmpty(item.showPotentialPopup)
+                        String.valueOf(item.stageID),
+                        stringOrEmpty(item.stageName),
+                        stringOrEmpty(item.showPotentialPopup)
                 ));
             }
             arrAdapStage =
-                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStage);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStage);
             arrAdapStage.setDropDownViewResource(R.layout.mdropdown);
             spStageDialog.setAdapter(arrAdapStage);
             RowData stageData = getSpinnerRowDataById(stageId, arrAdapStage);
@@ -3190,7 +3205,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void addNewSections() {
         if (mLeadFieldSectionModelList == null || mLeadFieldSectionModelList.size() <= 0) {
-            Log.w(TAG, "mLeadFieldSectionModelList Was null or empty");
+            Timber.tag(TAG).w("mLeadFieldSectionModelList Was null or empty");
             return;
         }
         NewDataLinearLayout.removeAllViews();
@@ -3198,11 +3213,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         newSectionMap.clear();
         for (LeadFieldSectionModel mSection : mLeadFieldSectionModelList) {
 
-            ViewGroup childSection = (ViewGroup) getActivity().getLayoutInflater()
-                .inflate(R.layout.include_section, null);
+            @SuppressLint("InflateParams") ViewGroup childSection =
+                    (ViewGroup) requireActivity().getLayoutInflater()
+                            .inflate(R.layout.include_section, null);
             TextView tvSectionHead = childSection.findViewById(R.id.tvSectionName);
             LinearLayout llSectionContent =
-                childSection.findViewById(R.id.llSectionContent);
+                    childSection.findViewById(R.id.llSectionContent);
             tvSectionHead.setTag(SectionTagPrefix + mSection.getSectionCode());
             tvSectionHead.setText(mSection.getSectionHeader());
             toggleSectionExpansion(llSectionContent, tvSectionHead);
@@ -3212,8 +3228,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 for (LeadFieldValueModel modal : mSection.getSelectionList()) {
                     switch (modal.getControlType()) {
                         case TextBox: {
-                            View childValue = getActivity().getLayoutInflater()
-                                .inflate(R.layout.include_edittext_section, null);
+                            View childValue = requireActivity().getLayoutInflater()
+                                    .inflate(R.layout.include_edittext_section, null);
                             TextView tvHead = childValue.findViewById(R.id.tvHead);
                             tvHead.setText(modal.getFieldName());
 
@@ -3225,15 +3241,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         }
                         break;
                         case DropDown: {
-                            View childValue = getActivity().getLayoutInflater()
-                                .inflate(R.layout.include_spiner, null);
+                            View childValue = requireActivity().getLayoutInflater()
+                                    .inflate(R.layout.include_spiner, null);
                             TextView tvHead = childValue.findViewById(R.id.tvHead);
                             Spinner spSection = childValue.findViewById(R.id.spSection);
                             tvHead.setText(modal.getFieldName());
 
                             ArrayAdapter<String> arrAdap =
-                                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item,
-                                    modal.getDropdownValueArr());
+                                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                            modal.getDropdownValueArr());
                             arrAdap.setDropDownViewResource(R.layout.mdropdown);
                             spSection.setAdapter(arrAdap);
                             modal.setControlObject(spSection);
@@ -3245,7 +3261,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         }
                         break;
                         default:
-                            Log.w(TAG, "Diffrent Control type :" + modal.getControlType());
+                            Timber.tag(TAG).w("Diffrent Control type :%s", modal.getControlType());
                             break;
                     }
                 }
@@ -3256,7 +3272,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private List<LeadFieldValueRequest> getLeadFieldValues(
-        @Nullable List<LeadFieldSectionModel> fieldSectionModels) {
+            @Nullable List<LeadFieldSectionModel> fieldSectionModels) {
         List<LeadFieldValueRequest> requests = new ArrayList<>();
         if (fieldSectionModels == null) {
             return requests;
@@ -3268,10 +3284,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
             for (LeadFieldValueModel modal : selectionList) {
                 requests.add(new LeadFieldValueRequest(
-                    modal.getLF_SysName(),
-                    modal.getUiValue(),
-                    modal.getLeadFieldId(),
-                    LeadFieldValueModel.getLeadid()
+                        modal.getLF_SysName(),
+                        modal.getUiValue(),
+                        modal.getLeadFieldId(),
+                        LeadFieldValueModel.getLeadid()
                 ));
             }
         }
@@ -3280,17 +3296,17 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
     private void getClientDetail(int uCid) {
         if (uCid <= 0) return;
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(
-                saathiApi.getClientDetail(new ClientDetailRequest(uCid))
-                    .compose(applyUiModel())
-                    .subscribe(this::renderClientDetail));
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(
+                    getSaathiApi().getClientDetail(new ClientDetailRequest(uCid))
+                            .compose(applyUiModel())
+                            .subscribe(this::renderClientDetail));
         } else {
             noInternetConnectionDialog();
         }
     }
 
-    public void renderClientDetail(UiModel<ClientDetailItem> uiModel) {
+    private void renderClientDetail(UiModel<ClientDetailItem> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -3326,7 +3342,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    public void setListViewHeightBasedOnChildren(ListView listView) {
+    private void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
             return;
@@ -3368,7 +3384,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             if (parent.getVisibility() == View.VISIBLE) {
                 parent.setVisibility(View.GONE);
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.
-                    ic_upload_plus, 0);
+                        ic_upload_plus, 0);
             } else {
                 parent.setVisibility(View.VISIBLE);
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_upload_minus, 0);
@@ -3385,13 +3401,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
     }
 
-    public void webServiceportfolioSnapshot(String ucid) {
-        if (MSFStatistics.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getClientSummary(
-                "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
-                AccountDetails.getUserId(), ucid)
-                .compose(applyUiModel())
-                .subscribe(this::renderClientSummary));
+    private void webServiceportfolioSnapshot(String ucid) {
+        if (MSFStatistics.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getClientSummary(
+                    "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
+                    Objects.requireNonNull(userManager.getUser()).userId, ucid)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderClientSummary));
         } else {
             noInternetConnectionDialog();
         }
@@ -3418,7 +3434,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             txtNetworth.setText(StringStuff.commaDecorator(netWorth));
             txtDaychgamt.setText(StringStuff.commaDecorator(dayChangeAmount));
             txtDaychgperst.setText(
-                "(" + StringStuff.commaDecorator(dayChangePer) + " %)");
+                    String.format("(%s %%)", StringStuff.commaDecorator(dayChangePer)));
 
             if (dayChangeAmount.startsWith("-")) {
 
@@ -3439,9 +3455,9 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             txtDaychgperst.setTextColor(getResources().getColor(bgcolor));
 
             txtOverallchgamt.setText(
-                StringStuff.commaDecorator(overallChangeAmt));
+                    StringStuff.commaDecorator(overallChangeAmt));
             txt_overallchgperst.setText(
-                "(" + StringStuff.commaDecorator(overallChangePer) + " %)");
+                    String.format("(%s %%)", StringStuff.commaDecorator(overallChangePer)));
             if (overallChangeAmt.startsWith("-")) {
 
                 bgcolor = R.color.action_bar_negative;
@@ -3450,7 +3466,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 bgcolor = R.color.action_bar_positive;
             }
             txtOverallchgamt.setBackgroundColor(
-                getResources().getColor(bgcolor));
+                    getResources().getColor(bgcolor));
 
             if (overallChangePer.startsWith("-")) {
 
@@ -3461,7 +3477,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
             txt_overallchgperst.setTextColor(getResources().getColor(bgcolor));
 
-            arrayList_broking = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrayList_broking = new ArrayList<>();
             List<BrokingProductItem> brokingProduct = data.brokingProduct;
             for (int i = 0; i < brokingProduct.size(); i++) {
                 BrokingProductItem brokingItem = brokingProduct.get(i);
@@ -3472,27 +3488,27 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String percentageGainLoss = brokingItem.percentageGainLoss;
                 String productID = brokingItem.productId;
 
-                brokingMap = new HashMap<>();
+                HashMap<String, String> brokingMap = new HashMap<>();
                 brokingMap.put(PRODUCT, product);
                 brokingMap.put(INVEST_AMT,
-                    StringStuff.commaDecorator(investmentValue));
+                        StringStuff.commaDecorator(investmentValue));
                 brokingMap.put(PURCHASE_VALUE,
-                    StringStuff.commaDecorator(marketVal));
+                        StringStuff.commaDecorator(marketVal));
                 brokingMap.put(OVERALL_GAIN_LOSS,
-                    StringStuff.commaDecorator(overallGainLoss));
+                        StringStuff.commaDecorator(overallGainLoss));
                 brokingMap.put(PERCENTAGE_GAIN_LOSS,
-                    StringStuff.commaDecorator(percentageGainLoss) + " %");
+                        StringStuff.commaDecorator(percentageGainLoss) + " %");
                 brokingMap.put(PRODUCT_ID, productID);
                 arrayList_broking.add(brokingMap);
             }
             final PortfolioSnapshotBrokAdapter navListAdapter =
-                new PortfolioSnapshotBrokAdapter(
-                    getActivity().getApplicationContext(), arrayList_broking);
+                    new PortfolioSnapshotBrokAdapter(
+                            requireContext(), arrayList_broking);
             lvBrok.setAdapter(navListAdapter);
 
             navListAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvBrok);
-            arrayList_asset = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrayList_asset = new ArrayList<>();
 
             List<AssetProductItem> assetProduct = data.assetProduct;
             for (int x = 0; x < assetProduct.size(); x++) {
@@ -3505,29 +3521,29 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String percentGainLoss_asset = assetItem.percentageGainLoss;
                 String productType = assetItem.producttype;
 
-                assestMap = new HashMap<>();
+                HashMap<String, String> assestMap = new HashMap<>();
                 assestMap.put(MOSLConstants.PRODUCT_ID, ProductID);
                 assestMap.put(MOSLConstants.PRODUCT, product_aaset);
                 assestMap.put(MOSLConstants.INVEST_AMT,
-                    StringStuff.commaDecorator(marketValue_asset));
+                        StringStuff.commaDecorator(marketValue_asset));
                 assestMap.put(MOSLConstants.PURCHASE_VALUE,
-                    StringStuff.commaDecorator(purchaseValue_asset));
+                        StringStuff.commaDecorator(purchaseValue_asset));
                 assestMap.put(MOSLConstants.OVERALL_GAIN_LOSS,
-                    StringStuff.commaDecorator(overallGainLoss_asset));
+                        StringStuff.commaDecorator(overallGainLoss_asset));
                 assestMap.put(MOSLConstants.PERCENTAGE_GAIN_LOSS,
-                    StringStuff.commaDecorator(percentGainLoss_asset)
-                        + " %");
+                        StringStuff.commaDecorator(percentGainLoss_asset)
+                                + " %");
                 assestMap.put(MOSLConstants.PRODUCT_TYPE, productType);
                 arrayList_asset.add(assestMap);
             }
 
             PortfolioSnapshotAssetAdapter navListAssetAdapter =
-                new PortfolioSnapshotAssetAdapter(
-                    getActivity().getApplicationContext(), arrayList_asset);
+                    new PortfolioSnapshotAssetAdapter(
+                            requireActivity().getApplicationContext(), arrayList_asset);
             navListAssetAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvAsset);
 
-            arrayList_cash = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrayList_cash = new ArrayList<>();
 
             List<CashPortfolioItem> cashPortfolio = data.cashPortfolio;
             for (int i = 0; i < cashPortfolio.size(); i++) {
@@ -3536,30 +3552,30 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String productCash = cashItem.product;
                 String totalLedger = cashItem.totalLedgerBalance;
 
-                cashMap = new HashMap<>();
+                HashMap<String, String> cashMap = new HashMap<>();
                 cashMap.put(MOSLConstants.PRODUCT, productCash);
                 cashMap.put(MOSLConstants.TOTAL,
-                    StringStuff.commaDecorator(totalLedger));
+                        StringStuff.commaDecorator(totalLedger));
 
                 arrayList_cash.add(cashMap);
             }
 
             PortfolioSnapshotCashAdapter navListCashAdapter =
-                new PortfolioSnapshotCashAdapter(
-                    getActivity().getApplicationContext(), arrayList_cash);
+                    new PortfolioSnapshotCashAdapter(
+                            requireActivity().getApplicationContext(), arrayList_cash);
             lvCash.setAdapter(navListCashAdapter);
             navListAssetAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvCash);
         }
     }
 
-    public void webServicePL(String ucid) {
-        if (MSFStatistics.isNetworkEnabled(getMainActivity())) {
-            compositeDisposable.add(saathiApi.getClientGainLossSummary(
-                "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
-                AccountDetails.getUserId(), ucid)
-                .compose(applyUiModel())
-                .subscribe(this::renderGainLossSummary));
+    private void webServicePL(String ucid) {
+        if (MSFStatistics.isNetworkEnabled(requireContext())) {
+            getCompositeDisposable().add(getSaathiApi().getClientGainLossSummary(
+                    "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
+                    Objects.requireNonNull(userManager.getUser()).userId, ucid)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderGainLossSummary));
         } else {
             noInternetConnectionDialog();
         }
@@ -3588,10 +3604,10 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
             tvSTGainLoss.setText(StringStuff.commaDecorator(totalSTGain));
             tvSTGainLossPer.setText(
-                "(" + StringStuff.commaDecorator(stGainPer) + " %)");
+                    String.format("(%s %%)", StringStuff.commaDecorator(stGainPer)));
             tvLTGainLoss.setText(StringStuff.commaDecorator(totalLTGain));
             tvLTGainLossPer.setText(
-                "(" + StringStuff.commaDecorator(ltGainPer) + " %)");
+                    String.format("(%s %%)", StringStuff.commaDecorator(ltGainPer)));
 
             if (totalSTGain.startsWith("-")) {
 
@@ -3629,7 +3645,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
             tvLTGainLossPer.setTextColor(getResources().getColor(bgcolor));
 
-            arrLstPLBrok = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrLstPLBrok = new ArrayList<>();
             List<BrokingGainLossItem> brokingGainloss = data.brokingProductwiseGainloss;
             for (int i = 0; i < brokingGainloss.size(); i++) {
                 BrokingGainLossItem brokingItem = brokingGainloss.get(i);
@@ -3641,25 +3657,25 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String totalGainLoss = brokingItem.assetSubTypeId;
                 String assetSubTypeID = brokingItem.assetSubTypeId;
 
-                brokPLHashMap = new HashMap<>();
+                HashMap<String, String> brokPLHashMap = new HashMap<>();
                 brokPLHashMap.put(PRODUCT_ID, productId);
                 brokPLHashMap.put(PRODUCT, product);
                 brokPLHashMap.put(STGL, StringStuff.commaDecorator(stGainLoss));
                 brokPLHashMap.put(LTGL, StringStuff.commaDecorator(ltGainLoss));
                 brokPLHashMap.put(TOTAL_GAIN_LOSS,
-                    StringStuff.commaDecorator(totalGainLoss));
+                        StringStuff.commaDecorator(totalGainLoss));
                 brokPLHashMap.put(ASSET_SUB_TYPE_ID, assetSubTypeID);
 
                 arrLstPLBrok.add(brokPLHashMap);
             }
             PortfolioPLBrokingAdapter plBrokingAdapter =
-                new PortfolioPLBrokingAdapter(getActivity().getApplicationContext(),
-                    arrLstPLBrok);
+                    new PortfolioPLBrokingAdapter(requireContext(),
+                            arrLstPLBrok);
             lvPLBrok.setAdapter(plBrokingAdapter);
             plBrokingAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvPLBrok);
 
-            arrLstPLAsset = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrLstPLAsset = new ArrayList<>();
             List<AssetGainLossItem> assetGainloss = data.assetProductwiseGainloss;
             for (int i = 0; i < assetGainloss.size(); i++) {
                 AssetGainLossItem assetItem = assetGainloss.get(i);
@@ -3669,24 +3685,24 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String ltGainLoss = assetItem.assetSubTypeId;
                 String totalGainLoss = assetItem.assetSubTypeId;
 
-                assetPLHashMap = new HashMap<>();
+                HashMap<String, String> assetPLHashMap = new HashMap<>();
                 assetPLHashMap.put(PRODUCT_ID, productId);
                 assetPLHashMap.put(PRODUCT, product);
                 assetPLHashMap.put(STGL, StringStuff.commaDecorator(stGainLoss));
                 assetPLHashMap.put(LTGL, StringStuff.commaDecorator(ltGainLoss));
                 assetPLHashMap.put(TOTAL_GAIN_LOSS,
-                    StringStuff.commaDecorator(totalGainLoss));
+                        StringStuff.commaDecorator(totalGainLoss));
 
                 arrLstPLAsset.add(assetPLHashMap);
             }
             PortfolioPLAssetAdapter plAssetAdapter =
-                new PortfolioPLAssetAdapter(getActivity().getApplicationContext(),
-                    arrLstPLAsset);
+                    new PortfolioPLAssetAdapter(requireActivity().getApplicationContext(),
+                            arrLstPLAsset);
             lvPLAsset.setAdapter(plAssetAdapter);
             plAssetAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvPLAsset);
 
-            arrLstPLLimits = new ArrayList<>();
+            ArrayList<HashMap<String, String>> arrLstPLLimits = new ArrayList<>();
             List<AvailableLimitsItem> availableLimits = data.availableLimits;
             for (int i = 0; i < availableLimits.size(); i++) {
                 AvailableLimitsItem limitsItem = availableLimits.get(i);
@@ -3694,15 +3710,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 String cash = limitsItem.cASH;
                 String amount = limitsItem.aMOUNT;
 
-                limitsPLHashMap = new HashMap<>();
+                HashMap<String, String> limitsPLHashMap = new HashMap<>();
                 limitsPLHashMap.put(CASH, cash);
                 limitsPLHashMap.put(AMOUNT, StringStuff.commaDecorator(amount));
 
                 arrLstPLLimits.add(limitsPLHashMap);
             }
             PortfolioPLLimitsAdapter plLimitsAdapter =
-                new PortfolioPLLimitsAdapter(getActivity().getApplicationContext(),
-                    arrLstPLLimits);
+                    new PortfolioPLLimitsAdapter(requireActivity().getApplicationContext(),
+                            arrLstPLLimits);
             lvPLLimits.setAdapter(plLimitsAdapter);
             plAssetAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvPLLimits);
@@ -3710,7 +3726,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void RefreeData(JSONObject response, String type,
-        final ProgressBar pbLoadingIndicatorRefreeCode) {
+                            final ProgressBar pbLoadingIndicatorRefreeCode) {
         try {
             String status = response.getString(STATUS);
             if (status.equalsIgnoreCase("true")) {
@@ -3718,13 +3734,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 pbLoadingIndicatorRefreeCode.setVisibility(View.GONE);
                 JSONObject jsonObject = response.getJSONObject("Response");
                 refereeCode =
-                    jsonObject.isNull("RefereeCode") ? "" : jsonObject.getString("RefereeCode");
+                        jsonObject.isNull("RefereeCode") ? "" : jsonObject.getString("RefereeCode");
                 refereeName =
-                    jsonObject.isNull("RefereeName") ? "" : jsonObject.getString("RefereeName");
+                        jsonObject.isNull("RefereeName") ? "" : jsonObject.getString("RefereeName");
                 String RefereeEmail =
-                    jsonObject.isNull("RefereeEmail") ? "" : jsonObject.getString("RefereeEmail");
+                        jsonObject.isNull("RefereeEmail") ? "" : jsonObject.getString("RefereeEmail");
                 String RefereeMobile =
-                    jsonObject.isNull("RefereeMobile") ? "" : jsonObject.getString("RefereeMobile");
+                        jsonObject.isNull("RefereeMobile") ? "" : jsonObject.getString("RefereeMobile");
                 if (type.equalsIgnoreCase("BYCODE")) {
                     etRefereeName.setText(refereeName);
                 } else {
@@ -3761,24 +3777,25 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
     }
 
     private void dialogUpdateProfile() {
-        final Dialog dialog = new Dialog(getMainActivity());
+        final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow())
+                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_update_profile);
         dialog.getWindow()
-            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         final Spinner spProfileUpdate = dialog.findViewById(R.id.spProfile);
         Button btnUpdate = dialog.findViewById(R.id.btnUpdate);
         arrAdapProfile =
-            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrSelectProfile);
+                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrSelectProfile);
         arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
         spProfileUpdate.setAdapter(arrAdapProfile);
         spProfileUpdate.setOnItemSelectedListener(profileListener);
         arrAdapProfile.notifyDataSetChanged();
         RowData productData =
-            RowData.getSpinnerRowDataByValue(tvProfile.getText().toString().trim(), arrAdapProfile);
+                RowData.getSpinnerRowDataByValue(tvProfile.getText().toString().trim(), arrAdapProfile);
         if (productData != null) {
             spProfileUpdate.setSelection(productData.getPosition());
         }
@@ -3786,15 +3803,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                     ClientProfileRequest profileRequest = new ClientProfileRequest(
-                        ((RowData) spProfileUpdate.getSelectedItem()).getValue(),
-                        false,
-                        tvUCID.getText().toString().trim()
+                            ((RowData) spProfileUpdate.getSelectedItem()).getValue(),
+                            false,
+                            tvUCID.getText().toString().trim()
                     );
-                    compositeDisposable.add(saathiApi.saveClientProfile(profileRequest)
-                        .compose(applyUiModel())
-                        .subscribe(this::renderUpdateProfile));
+                    getCompositeDisposable().add(getSaathiApi().saveClientProfile(profileRequest)
+                            .compose(applyUiModel())
+                            .subscribe(this::renderUpdateProfile));
                 } else {
                     noInternetConnectionDialog();
                 }
@@ -3815,21 +3832,15 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     if (approvalMessage.isEmpty()) {
                         tvProfile.setText(data.clientPotential);
                     } else {
-                        alertDialog(getMainActivity(), 0,
-                            getResources().getString(R.string.motilal_oswal),
-                            approvalMessage, "OK", true, null);
+                        alertDialog(requireContext(), 0,
+                                getResources().getString(R.string.motilal_oswal),
+                                approvalMessage, "OK", true, null);
                     }
                 }
             }
         });
-        ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
+        ImageView ivClose = dialog.findViewById(R.id.ivClose);
+        ivClose.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
 
@@ -3855,8 +3866,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         Context mContext;
         private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
 
-        public LeadDetailAddProductAdapter(Context c,
-            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
+        private LeadDetailAddProductAdapter(Context c,
+                                            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
             inflater = LayoutInflater.from(c);
             mContext = c;
             this.leadDetailAddProductModelList = leadDetailAddProductModelList;
@@ -3877,7 +3888,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return i;
         }
 
-        public void addProduct(LeadDetailAddProductModel addProduct) {
+        private void addProduct(LeadDetailAddProductModel addProduct) {
             if (this.leadDetailAddProductModelList == null) {
                 this.leadDetailAddProductModelList = new ArrayList<>();
             }
@@ -3885,13 +3896,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             this.leadDetailAddProductModelList.add(addProduct);
             notifyDataSetChanged();
             setListViewHeightBasedOnChildrenDetail(
-                lvAddProduct);
+                    lvAddProduct);
         }
 
+        @SuppressLint("ViewHolder")
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             final LeadDetailAddProductModel leadDetailAddProductModel =
-                leadDetailAddProductModelList.get(i);
+                    leadDetailAddProductModelList.get(i);
 
             view = inflater.inflate(R.layout.item_list_add_product, viewGroup, false);
 
@@ -3905,11 +3917,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.llDeleteLeadDetail = view.findViewById(R.id.llDeleteLeadDetail);
             holder.llAddProduct = view.findViewById(R.id.llAddProduct);
             holder.llCrossSellingProducts =
-                view.findViewById(R.id.llCrossSellingProducts);
+                    view.findViewById(R.id.llCrossSellingProducts);
             holder.llChildCrossSellingProduct =
-                view.findViewById(R.id.llChildCrossSellingProduct);
+                    view.findViewById(R.id.llChildCrossSellingProduct);
             holder.tvAddInvestmentProduct =
-                view.findViewById(R.id.tvAddInvestmentProduct);
+                    view.findViewById(R.id.tvAddInvestmentProduct);
             holder.tvProduct.setText(leadDetailAddProductModel.getInterestedInValue());
             holder.tvProductSpecialist.setText(leadDetailAddProductModel.getProductSpecialist());
             holder.tvPrimaryRM.setText(leadDetailAddProductModel.getPrimaryRM());
@@ -3917,178 +3929,171 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             holder.tvProductID.setText(leadDetailAddProductModel.getInterestedInValue());
             holder.tvStatus.setText(leadDetailAddProductModel.getStatusValue());
             if (leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("Equity")
-                || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("MF")) {
+                    || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("MF")) {
                 holder.llCrossSellingProducts.setVisibility(View.VISIBLE);
             } else {
                 holder.llCrossSellingProducts.setVisibility(View.GONE);
             }
 
             for (final CrossSellingProductsModel mSection : leadDetailAddProductModel.getCrossSellingProductsModelList()) {
-                ViewGroup childSection = (ViewGroup) getActivity().getLayoutInflater()
-                    .inflate(R.layout.child_cross_selling_product, null);
+                @SuppressLint("ViewHolder") ViewGroup childSection =
+                        (ViewGroup) requireActivity().getLayoutInflater()
+                                .inflate(R.layout.child_cross_selling_product, null);
                 TextView tvCrossSellingProduct =
-                    childSection.findViewById(R.id.tvCrossSellingProduct);
+                        childSection.findViewById(R.id.tvCrossSellingProduct);
                 TextView tvCrosellingStatus =
-                    childSection.findViewById(R.id.tvCrosellingStatus);
+                        childSection.findViewById(R.id.tvCrosellingStatus);
                 LinearLayout llCrossSellingUpdateProduct =
-                    childSection.findViewById(R.id.llCrossSellingUpdateProduct);
+                        childSection.findViewById(R.id.llCrossSellingUpdateProduct);
                 tvCrosellingStatus.setText(mSection.getCrossSellingStatusName());
                 tvCrossSellingProduct.setText(mSection.getCrossSellingProductName());
                 llCrossSellingUpdateProduct.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final Dialog dialog = new Dialog(getMainActivity());
+                        final Dialog dialog = new Dialog(requireContext());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.getWindow()
-                            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        Objects.requireNonNull(dialog.getWindow())
+                                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.setContentView(
-                            R.layout.dialog_leadview_update_cross_selling_product);
+                                R.layout.dialog_leadview_update_cross_selling_product);
                         dialog.getWindow()
-                            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
                         dialog.getWindow()
-                            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                         final Spinner spProductIdDialog =
-                            dialog.findViewById(R.id.spProductId);
+                                dialog.findViewById(R.id.spProductId);
                         final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
                         final LinearLayout progressLayout =
-                            dialog.findViewById(R.id.customProgress);
+                                dialog.findViewById(R.id.customProgress);
                         spProductIdDialog.setEnabled(false);
                         //Text errors
                         tvCrossSellingProductIdError =
-                            dialog.findViewById(R.id.tvspProductIdError);
+                                dialog.findViewById(R.id.tvspProductIdError);
                         tvCrossSellingStatusError =
-                            dialog.findViewById(R.id.tvspStatusError);
+                                dialog.findViewById(R.id.tvspStatusError);
 
                         Button btnSave = dialog.findViewById(R.id.btnSave);
                         Button btnClose = dialog.findViewById(R.id.btnClose);
 
                         newGetCrossSellingStatus(spStatusDialog, mSection.getCrossSellingStatusId(),
-                            progressLayout);
+                                progressLayout);
                         newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
-                            spProductIdDialog, mSection.getCrossSellingProductId(), progressLayout);
+                                spProductIdDialog, mSection.getCrossSellingProductId(), progressLayout);
 
                         spStatusDialog.setOnItemSelectedListener(
-                            new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                                    if (position > 0) {
-                                        tvCrossSellingStatusError.setVisibility(View.GONE);
+                                new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> parent, View view,
+                                                               int position, long id) {
+                                        if (position > 0) {
+                                            tvCrossSellingStatusError.setVisibility(View.GONE);
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> parent) {
 
-                                }
-                            });
-                        btnSave.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (spStatusDialog.getSelectedItemPosition() < 1) {
-                                    //TODO Show Error
-                                    tvCrossSellingStatusError.setVisibility(View.VISIBLE);
-                                    tvCrossSellingStatusError.setText("Select Status");
-                                    return;
-                                }
+                                    }
+                                });
+                        btnSave.setOnClickListener(view14 -> {
+                            if (spStatusDialog.getSelectedItemPosition() < 1) {
+                                //TODO Show Error
+                                tvCrossSellingStatusError.setVisibility(View.VISIBLE);
+                                tvCrossSellingStatusError.setText("Select Status");
+                                return;
+                            }
 
-                                if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                                    SaveLeadCrossSellingProductRequest productRequest =
+                            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                                SaveLeadCrossSellingProductRequest productRequest =
                                         new SaveLeadCrossSellingProductRequest(
-                                            etLeadID.getText().toString().trim(),
-                                            leadDetailAddProductModel.getInterestedIn(),
-                                            ((RowData) spStatusDialog.getSelectedItem()).getKey(),
-                                            ((RowData) spProductIdDialog.getSelectedItem()).getKey(),
-                                            mSection.getLeadCrossSellingProductId()
+                                                etLeadID.getText().toString().trim(),
+                                                leadDetailAddProductModel.getInterestedIn(),
+                                                ((RowData) spStatusDialog.getSelectedItem()).getKey(),
+                                                ((RowData) spProductIdDialog.getSelectedItem()).getKey(),
+                                                mSection.getLeadCrossSellingProductId()
                                         );
 
-                                    compositeDisposable.add(
-                                        saathiApi.saveLeadCrossSellingProduct(productRequest)
-                                            .compose(applyUiModel())
-                                            .subscribe(uiModel -> {
-                                                toggleProgress(uiModel.inProgress);
+                                getCompositeDisposable().add(
+                                        getSaathiApi().saveLeadCrossSellingProduct(productRequest)
+                                                .compose(applyUiModel())
+                                                .subscribe(uiModel -> {
+                                                    toggleProgress(uiModel.inProgress);
 
-                                                Throwable error = uiModel.error;
-                                                if (error != null) {
-                                                    showOnFailurePopup(error);
-                                                }
+                                                    Throwable error = uiModel.error;
+                                                    if (error != null) {
+                                                        showOnFailurePopup(error);
+                                                    }
 
-                                                Object data = uiModel.data;
-                                                if (data != null) {
-                                                    alertDialog(requireContext(), 0,
-                                                        getResources().getString(
-                                                            R.string.motilal_oswal),
-                                                        "Cross Selling Product Saved successfully",
-                                                        "Ok",
-                                                        true,
-                                                        (action, data1) -> {
-                                                            if (action == MSFDialog.Action.OK) {
-                                                                leadSection();
-                                                            }
-                                                        });
-                                                }
-                                            }));
-                                } else {
-                                    noInternetConnectionDialog();
-                                }
-
-                                dialog.dismiss();
+                                                    Object data = uiModel.data;
+                                                    if (data != null) {
+                                                        alertDialog(requireContext(), 0,
+                                                                getResources().getString(
+                                                                        R.string.motilal_oswal),
+                                                                "Cross Selling Product Saved successfully",
+                                                                "Ok",
+                                                                true,
+                                                                (action, data1) -> {
+                                                                    if (action == MSFDialog.Action.OK) {
+                                                                        leadSection();
+                                                                    }
+                                                                });
+                                                    }
+                                                }));
+                            } else {
+                                noInternetConnectionDialog();
                             }
+
+                            dialog.dismiss();
                         });
 
-                        btnClose.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                hideKeyboard(leadViewDetailView);
-                                dialog.dismiss();
-                            }
+                        btnClose.setOnClickListener(view13 -> {
+                            hideKeyboard(leadViewDetailView);
+                            dialog.dismiss();
                         });
                         dialog.show();
                     }
                 });
                 holder.llChildCrossSellingProduct.addView(childSection);
             }
-            holder.tvAddInvestmentProduct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
+            holder.tvAddInvestmentProduct.setOnClickListener(v -> {
+                if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
                         .equals("1")) {
-                        final Dialog dialog = new Dialog(getMainActivity());
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.getWindow()
+                    final Dialog dialog = new Dialog(requireContext());
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    Objects.requireNonNull(dialog.getWindow())
                             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        dialog.setCanceledOnTouchOutside(false);
-                        dialog.setContentView(R.layout.dialog_leadview_add_cross_selling_product);
-                        dialog.getWindow()
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setContentView(R.layout.dialog_leadview_add_cross_selling_product);
+                    dialog.getWindow()
                             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
-                        dialog.getWindow()
+                                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow()
                             .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                        final Spinner spProductIdDialog =
+                    final Spinner spProductIdDialog =
                             dialog.findViewById(R.id.spProductId);
-                        final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-                        final LinearLayout progressLayout =
+                    final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
+                    final LinearLayout progressLayout =
                             dialog.findViewById(R.id.customProgress);
-                        //Text errors
-                        tvCrossSellingProductIdError =
+                    //Text errors
+                    tvCrossSellingProductIdError =
                             dialog.findViewById(R.id.tvspProductIdError);
-                        tvCrossSellingStatusError =
+                    tvCrossSellingStatusError =
                             dialog.findViewById(R.id.tvspStatusError);
 
-                        Button btnSave = dialog.findViewById(R.id.btnSave);
-                        Button btnClose = dialog.findViewById(R.id.btnClose);
+                    Button btnSave = dialog.findViewById(R.id.btnSave);
+                    Button btnClose = dialog.findViewById(R.id.btnClose);
 
-                        newGetCrossSellingStatus(spStatusDialog, "", progressLayout);
-                        newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
+                    newGetCrossSellingStatus(spStatusDialog, "", progressLayout);
+                    newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
                             spProductIdDialog, "", progressLayout);
 
-                        spProductIdDialog.setOnItemSelectedListener(
+                    spProductIdDialog.setOnItemSelectedListener(
                             new AdapterView.OnItemSelectedListener() {
                                 @Override
-                                public void onItemSelected(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                                public void onItemSelected(AdapterView<?> parent, View view15,
+                                                           int position, long id) {
                                     if (position > 0) {
                                         tvCrossSellingProductIdError.setVisibility(View.GONE);
                                     }
@@ -4099,11 +4104,11 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                                 }
                             });
-                        spStatusDialog.setOnItemSelectedListener(
+                    spStatusDialog.setOnItemSelectedListener(
                             new AdapterView.OnItemSelectedListener() {
                                 @Override
-                                public void onItemSelected(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                                public void onItemSelected(AdapterView<?> parent, View view15,
+                                                           int position, long id) {
                                     if (position > 0) {
                                         tvCrossSellingStatusError.setVisibility(View.GONE);
                                     }
@@ -4115,78 +4120,74 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 }
                             });
 
-                        btnSave.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if (spProductIdDialog.getSelectedItemPosition() < 1) {
-                                    //TODO Show Error
-                                    tvCrossSellingProductIdError.setVisibility(View.VISIBLE);
-                                    tvCrossSellingProductIdError.setText("Select Product Id");
-                                    return;
-                                } else if (spStatusDialog.getSelectedItemPosition() < 1) {
-                                    //TODO Show Error
-                                    tvCrossSellingStatusError.setVisibility(View.VISIBLE);
-                                    tvCrossSellingStatusError.setText("Select Status");
-                                    return;
-                                }
+                    btnSave.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view15) {
+                            if (spProductIdDialog.getSelectedItemPosition() < 1) {
+                                //TODO Show Error
+                                tvCrossSellingProductIdError.setVisibility(View.VISIBLE);
+                                tvCrossSellingProductIdError.setText("Select Product Id");
+                                return;
+                            } else if (spStatusDialog.getSelectedItemPosition() < 1) {
+                                //TODO Show Error
+                                tvCrossSellingStatusError.setVisibility(View.VISIBLE);
+                                tvCrossSellingStatusError.setText("Select Status");
+                                return;
+                            }
 
-                                if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                                    SaveLeadCrossSellingProductRequest productRequest =
+                            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                                SaveLeadCrossSellingProductRequest productRequest =
                                         new SaveLeadCrossSellingProductRequest(
-                                            etLeadID.getText().toString().trim(),
-                                            leadDetailAddProductModel.getInterestedIn(),
-                                            ((RowData) spStatusDialog.getSelectedItem()).getKey(),
-                                            ((RowData) spProductIdDialog.getSelectedItem()).getKey()
+                                                etLeadID.getText().toString().trim(),
+                                                leadDetailAddProductModel.getInterestedIn(),
+                                                ((RowData) spStatusDialog.getSelectedItem()).getKey(),
+                                                ((RowData) spProductIdDialog.getSelectedItem()).getKey()
                                         );
-                                    compositeDisposable.add(
-                                        saathiApi.saveLeadCrossSellingProduct(productRequest)
-                                            .compose(applyUiModel())
-                                            .subscribe(uiModel -> {
-                                                toggleProgress(uiModel.inProgress);
-                                                if (uiModel.inProgress) {
-                                                    hideKeyboard(leadViewDetailView);
-                                                }
+                                getCompositeDisposable().add(
+                                        getSaathiApi().saveLeadCrossSellingProduct(productRequest)
+                                                .compose(applyUiModel())
+                                                .subscribe(uiModel -> {
+                                                    toggleProgress(uiModel.inProgress);
+                                                    if (uiModel.inProgress) {
+                                                        hideKeyboard(leadViewDetailView);
+                                                    }
 
-                                                Throwable error = uiModel.error;
-                                                if (error != null) {
-                                                    showOnFailurePopup(error);
-                                                }
+                                                    Throwable error = uiModel.error;
+                                                    if (error != null) {
+                                                        showOnFailurePopup(error);
+                                                    }
 
-                                                Object data = uiModel.data;
-                                                if (data != null) {
-                                                    alertDialog(getMainActivity(), 0,
-                                                        getResources().getString(
-                                                            R.string.motilal_oswal),
-                                                        "Cross Selling Product Saved Successfully",
-                                                        "Ok", true,
-                                                        (action, data12) -> {
-                                                            if (action == MSFDialog.Action.OK) {
-                                                                leadSection();
-                                                            }
-                                                        });
-                                                }
-                                            }));
-                                } else {
-                                    noInternetConnectionDialog();
-                                }
-
-                                dialog.dismiss();
+                                                    Object data = uiModel.data;
+                                                    if (data != null) {
+                                                        alertDialog(requireContext(), 0,
+                                                                getResources().getString(
+                                                                        R.string.motilal_oswal),
+                                                                "Cross Selling Product Saved Successfully",
+                                                                "Ok", true,
+                                                                (action, data12) -> {
+                                                                    if (action == MSFDialog.Action.OK) {
+                                                                        leadSection();
+                                                                    }
+                                                                });
+                                                    }
+                                                }));
+                            } else {
+                                noInternetConnectionDialog();
                             }
-                        });
 
-                        btnClose.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                hideKeyboard(leadViewDetailView);
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    }
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnClose.setOnClickListener(view12 -> {
+                        hideKeyboard(leadViewDetailView);
+                        dialog.dismiss();
+                    });
+                    dialog.show();
                 }
             });
             if (leadDetailAddProductModel.isDefault()
-                || leadDetailAddProductModel.isCrossSellingProduct()) {
+                    || leadDetailAddProductModel.isCrossSellingProduct()) {
                 holder.llDeleteLeadDetail.setVisibility(View.GONE);
             } else {
                 holder.llDeleteLeadDetail.setVisibility(View.VISIBLE);
@@ -4195,80 +4196,78 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 @Override
                 public void onClick(View view) {
                     if (isLeadEditable()
-                        && !leadDetailAddProductModel.getIsProductDisabled().equals("1")) {
+                            && !leadDetailAddProductModel.getIsProductDisabled().equals("1")) {
                         if (!leadDetailAddProductModel.isDefault()) {
-                            alertDialog(getMainActivity(), 0, "Delete Confirmation",
-                                "Are you sure you want to delete the product", "Yes", "No", true,
-                                new MSFDialog.DialogListener() {
-                                    @Override
-                                    public void alertDialogAction(MSFDialog.Action action,
-                                        Object... data) {
-                                        if (action == MSFDialog.Action.OK) {
-                                            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                                                DeleteLeadCrossSellingProductRequest
-                                                    productRequest =
-                                                    new DeleteLeadCrossSellingProductRequest(
-                                                        etLeadID.getText().toString().trim(),
-                                                        leadDetailAddProductModel.getInterestedIn(),
-                                                        leadDetailAddProductModel.getLeadMappingProductId(),
-                                                        leadDetailAddProductModel.getInterestedIn(),
-                                                        leadDetailAddProductModel.getPrimaryRM(),
-                                                        AccountDetails.getEmployeeCode(),
-                                                        CRMAppUtil.getDBDate(),
-                                                        leadDetailAddProductModel.getStageId(),
-                                                        leadDetailAddProductModel.getStatusId()
-                                                    );
-                                                compositeDisposable.add(
-                                                    saathiApi.deleteLeadCrossSellingProduct(
-                                                        productRequest)
-                                                        .compose(applyUiModel())
-                                                        .subscribe(
-                                                            this::renderDeleteCrossSellingProduct));
-                                            } else {
-                                                noInternetConnectionDialog();
+                            alertDialog(requireContext(), 0, "Delete Confirmation",
+                                    "Are you sure you want to delete the product", "Yes", "No", true,
+                                    new MSFDialog.DialogListener() {
+                                        @Override
+                                        public void alertDialogAction(MSFDialog.Action action,
+                                                                      Object... data) {
+                                            if (action == MSFDialog.Action.OK) {
+                                                if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                                                    DeleteLeadCrossSellingProductRequest
+                                                            productRequest =
+                                                            new DeleteLeadCrossSellingProductRequest(
+                                                                    etLeadID.getText().toString().trim(),
+                                                                    leadDetailAddProductModel.getInterestedIn(),
+                                                                    leadDetailAddProductModel.getLeadMappingProductId(),
+                                                                    leadDetailAddProductModel.getInterestedIn(),
+                                                                    leadDetailAddProductModel.getPrimaryRM(),
+                                                                    userManager.getUser().employeeCode,
+                                                                    CRMAppUtil.getDBDate(),
+                                                                    leadDetailAddProductModel.getStageId(),
+                                                                    leadDetailAddProductModel.getStatusId()
+                                                            );
+                                                    getCompositeDisposable().add(
+                                                            getSaathiApi().deleteLeadCrossSellingProduct(
+                                                                    productRequest)
+                                                                    .compose(applyUiModel())
+                                                                    .subscribe(
+                                                                            this::renderDeleteCrossSellingProduct));
+                                                } else {
+                                                    noInternetConnectionDialog();
+                                                }
                                             }
                                         }
-                                    }
 
-                                    private void renderDeleteCrossSellingProduct(
-                                        UiModel<Object> uiModel) {
-                                        toggleProgress(uiModel.inProgress);
+                                        private void renderDeleteCrossSellingProduct(
+                                                UiModel<Object> uiModel) {
+                                            toggleProgress(uiModel.inProgress);
 
-                                        Throwable error = uiModel.error;
-                                        if (error != null) {
-                                            showOnFailurePopup(error);
+                                            Throwable error = uiModel.error;
+                                            if (error != null) {
+                                                showOnFailurePopup(error);
+                                            }
+
+                                            Object data = uiModel.data;
+                                            if (data != null) {
+                                                alertDialog(requireContext(), 0,
+                                                        getResources().getString(R.string.motilal_oswal),
+                                                        "Products Deleted Successfully",
+                                                        "Ok", true, null);
+                                                LeadDetailAddProductModel
+                                                        model = getProduct(
+                                                        leadDetailAddProductModel.getInterestedIn());
+                                                leadDetailAddProductModelList.remove(model);
+                                                notifyDataSetChanged();
+                                                setListViewHeightBasedOnChildren(lvAddProduct);
+                                            }
                                         }
-
-                                        Object data = uiModel.data;
-                                        if (data != null) {
-                                            alertDialog(getMainActivity(), 0,
-                                                getResources().getString(R.string.motilal_oswal),
-                                                "Products Deleted Successfully",
-                                                "Ok", true, null);
-                                            LeadDetailAddProductModel
-                                                model = getProduct(
-                                                leadDetailAddProductModel.getInterestedIn());
-                                            leadDetailAddProductModelList.remove(model);
-                                            notifyDataSetChanged();
-                                            setListViewHeightBasedOnChildren(lvAddProduct);
-                                        }
-                                    }
-                                });
+                                    });
                         } else {
-                            alertDialog(getMainActivity(), 0,
-                                getResources().getString(R.string.motilal_oswal),
-                                "Can't Delete All Products", "OK", true, null);
+                            alertDialog(requireContext(), 0,
+                                    getResources().getString(R.string.motilal_oswal),
+                                    "Can't Delete All Products", "OK", true, null);
                         }
                     }
                 }
             });
 
-            holder.llAddProduct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
+            holder.llAddProduct.setOnClickListener(view1 -> {
+                if (isLeadEditable() && !leadDetailAddProductModel.getIsProductDisabled()
                         .equals("1")) {
-                        editProduct(leadDetailAddProductModel.getInterestedIn(),
+                    editProduct(leadDetailAddProductModel.getInterestedIn(),
                             leadDetailAddProductModel.getStageId(),
                             leadDetailAddProductModel.getStatusId(),
                             leadDetailAddProductModel.getProductSpecialist(),
@@ -4277,13 +4276,12 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             leadDetailAddProductModel.isDefault(),
                             leadDetailAddProductModel.getIsProSpeEditDisabled(),
                             leadDetailAddProductModel.getProductSpecialistId());
-                    }
                 }
             });
             return view;
         }
 
-        public LeadDetailAddProductModel getProduct(String id) {
+        private LeadDetailAddProductModel getProduct(String id) {
             for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
                 if (model.getInterestedIn().equals(id)) {
                     return model;
@@ -4292,7 +4290,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return null;
         }
 
-        public boolean checkProduct(String productName) {
+        private boolean checkProduct(String productName) {
             for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
                 if (model.getInterestedIn().equalsIgnoreCase(productName)) {
                     return true;
@@ -4301,8 +4299,8 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             return false;
         }
 
-        public void updateProductData(String interestIn, String stageId, String stageValue,
-            String statusId, String statusValue, String productSpecialist, String primaryRM) {
+        private void updateProductData(String interestIn, String stageId, String stageValue,
+                                       String statusId, String statusValue, String productSpecialist, String primaryRM) {
             for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
                 if (model.getInterestedIn().equals(interestIn)) {
                     model.setStageId(stageId);
@@ -4318,18 +4316,19 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
-            final LinearLayout progressLayout) {
-            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-                compositeDisposable.add(saathiApi.getStatusList(new StatusRequest(productId, "1"))
-                    .compose(applyUiModel())
-                    .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout)));
+                                  final LinearLayout progressLayout) {
+            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                getCompositeDisposable().add(
+                        getSaathiApi().getStatusList(new StatusRequest(productId, "1"))
+                                .compose(applyUiModel())
+                                .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
         private void renderNewStatus(UiModel<List<StatusItem>> uiModel,
-            Spinner spStatus, final LinearLayout progressLayout) {
+                                     Spinner spStatus, final LinearLayout progressLayout) {
             if (uiModel.inProgress) {
                 progressLayout.setVisibility(View.VISIBLE);
             } else {
@@ -4349,13 +4348,13 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 for (int i = 0; i < data.size(); i++) {
                     StatusItem statusItem = data.get(i);
                     arrStatus.add(
-                        new RowData(i + 1,
-                            String.valueOf(statusItem.statusID),
-                            stringOrEmpty(statusItem.statusName)
-                        ));
+                            new RowData(i + 1,
+                                    String.valueOf(statusItem.statusID),
+                                    stringOrEmpty(statusItem.statusName)
+                            ));
                 }
                 arrAdapStatus =
-                    new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrStatus);
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrStatus);
                 arrAdapStatus.setDropDownViewResource(R.layout.mdropdown);
                 spStatus.setAdapter(arrAdapStatus);
                 RowData stageData = getSpinnerRowDataById(statusId, arrAdapStatus);
@@ -4366,21 +4365,24 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         private void newGetCrossSellingProductId(final String intrestedIn, final Spinner spStatus,
-            final String statusId, final LinearLayout progressLayout) {
-            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                                 final String statusId, final LinearLayout progressLayout) {
+            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 CrossSellingProductRequest request =
-                    new CrossSellingProductRequest(AccountDetails.getBusinessUnitId(), intrestedIn);
-                compositeDisposable.add(saathiApi.getCrossSellingProduct(request)
-                    .compose(applyUiModel())
-                    .subscribe(uiModel ->
-                        renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
+                        new CrossSellingProductRequest(Objects.requireNonNull(
+                                Objects.requireNonNull(
+                                        userManager.getUser()).currentBusinessProfile.businessUnitId),
+                                intrestedIn);
+                getCompositeDisposable().add(getSaathiApi().getCrossSellingProduct(request)
+                        .compose(applyUiModel())
+                        .subscribe(uiModel ->
+                                renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
         private void renderNewCrossSellingProduct(UiModel<List<CrossSellingProduct>> uiModel,
-            final String statusId, final Spinner spStatus, final LinearLayout progressLayout) {
+                                                  final String statusId, final Spinner spStatus, final LinearLayout progressLayout) {
             if (uiModel.inProgress) {
                 progressLayout.setVisibility(View.VISIBLE);
             } else {
@@ -4401,13 +4403,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 for (int i = 0; i < data.size(); i++) {
                     CrossSellingProduct sellingProduct = data.get(i);
                     arrCrossSellingProductId.add(
-                        new RowData(i + 1,
-                            stringOrEmpty(sellingProduct.productId),
-                            stringOrEmpty(sellingProduct.productName)
-                        ));
+                            new RowData(i + 1,
+                                    stringOrEmpty(sellingProduct.productId),
+                                    stringOrEmpty(sellingProduct.productName)
+                            ));
                 }
-                arrAdapCrossSellingProductId = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrCrossSellingProductId);
+                ArrayAdapter<RowData> arrAdapCrossSellingProductId =
+                        new ArrayAdapter<>(requireContext(),
+                                R.layout.simple_spinner_item, arrCrossSellingProductId);
                 arrAdapCrossSellingProductId.setDropDownViewResource(R.layout.mdropdown);
                 spStatus.setAdapter(arrAdapCrossSellingProductId);
                 RowData stageData = getSpinnerRowDataById(statusId, arrAdapCrossSellingProductId);
@@ -4418,21 +4421,24 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         private void newGetCrossSellingStatus(final Spinner spStatus, final String statusId,
-            final LinearLayout progressLayout) {
-            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                                              final LinearLayout progressLayout) {
+            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 LookupRequest lookupRequest =
-                    new LookupRequest(AccountDetails.getBusinessUnitId(), 111, null, null);
-                compositeDisposable.add(saathiApi.getAllLookup(lookupRequest)
-                    .compose(applyUiModel())
-                    .subscribe(
-                        uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
+                        new LookupRequest(Objects.requireNonNull(
+                                Objects.requireNonNull(
+                                        userManager.getUser()).currentBusinessProfile.businessUnitId), 111,
+                                null, null);
+                getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
+                        .compose(applyUiModel())
+                        .subscribe(
+                                uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
         private void renderCrossSellingStatus(UiModel<List<LookupItem>> uiModel,
-            final Spinner spStatus, final LinearLayout progressLayout) {
+                                              final Spinner spStatus, final LinearLayout progressLayout) {
             if (uiModel.inProgress) {
                 progressLayout.setVisibility(View.VISIBLE);
             } else {
@@ -4440,6 +4446,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             }
 
             Throwable error = uiModel.error;
+            ArrayList<RowData> arrCrossSellingStatus;
             if (error != null) {
                 arrCrossSellingStatus = new ArrayList<>();
                 showOnFailurePopup(error);
@@ -4452,14 +4459,14 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 for (int i = 0; i < data.size(); i++) {
                     LookupItem item = data.get(i);
                     arrCrossSellingStatus.add(
-                        new RowData(i + 1,
-                            String.valueOf(item.lookUpid),
-                            stringOrEmpty(item.lookUpName)
-                        ));
+                            new RowData(i + 1,
+                                    String.valueOf(item.lookUpid),
+                                    stringOrEmpty(item.lookUpName)
+                            ));
                 }
-                arrAdapCrossSellingStatus =
-                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                        arrCrossSellingStatus);
+                ArrayAdapter<RowData> arrAdapCrossSellingStatus =
+                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                arrCrossSellingStatus);
                 arrAdapCrossSellingStatus.setDropDownViewResource(R.layout.mdropdown);
                 spStatus.setAdapter(arrAdapCrossSellingStatus);
                 RowData stageData = getSpinnerRowDataById(statusId, arrAdapCrossSellingStatus);
@@ -4470,22 +4477,23 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         private void lowMargin(String productId, final LinearLayout progressLayout,
-            final LinearLayout llLowMarginAdd, final boolean isDefault) {
-            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                               final LinearLayout llLowMarginAdd, final boolean isDefault) {
+            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 ConfigurationByStatusRequest request =
-                    new ConfigurationByStatusRequest(productId);
-                compositeDisposable.add(saathiApi.getStageWiseConfigurationByStatus(request)
-                    .compose(applyUiModel())
-                    .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
-                        llLowMarginAdd, isDefault)));
+                        new ConfigurationByStatusRequest(productId);
+                getCompositeDisposable().add(
+                        getSaathiApi().getStageWiseConfigurationByStatus(request)
+                                .compose(applyUiModel())
+                                .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
+                                        llLowMarginAdd, isDefault)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
-        public void renderStageWiseConfiguration(UiModel<List<StageWiseConfiguration>> uiModel,
-            final LinearLayout progressLayout, final LinearLayout llLowMarginAdd,
-            final boolean isDefault) {
+        private void renderStageWiseConfiguration(UiModel<List<StageWiseConfiguration>> uiModel,
+                                                  final LinearLayout progressLayout, final LinearLayout llLowMarginAdd,
+                                                  final boolean isDefault) {
             if (uiModel.inProgress) {
                 progressLayout.setVisibility(View.VISIBLE);
             } else {
@@ -4509,20 +4517,20 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                     isLowMargin = true;
                     for (StageWiseConfiguration configuration : data) {
                         lowMarginList.add(
-                            new LowMargin(
-                                stringOrDefault(configuration.fieldDisplayName, "Low Margin"),
-                                stringOrEmpty(configuration.fieldSystemName),
-                                configuration.isMandatory,
-                                configuration.forDefaultProductOnly
-                            ));
+                                new LowMargin(
+                                        stringOrDefault(configuration.fieldDisplayName, "Low Margin"),
+                                        stringOrEmpty(configuration.fieldSystemName),
+                                        configuration.isMandatory,
+                                        configuration.forDefaultProductOnly
+                                ));
                     }
                     llLowMarginAdd.removeAllViews();
 
                     for (LowMargin lowMargin : lowMarginList) {
                         if (isDefault == lowMargin.isDefaultProduct()) {
                             isLowMargin = true;
-                            View childValue = getLayoutInflater()
-                                .inflate(R.layout.include_edittext_lowmargin, null);
+                            @SuppressLint("InflateParams") View childValue = getLayoutInflater()
+                                    .inflate(R.layout.include_edittext_lowmargin, null);
                             TextView tvHead = childValue.findViewById(R.id.tvHead);
                             EditText edHead = childValue.findViewById(R.id.etSection);
                             if (lowMargin.isMandatory()) {
@@ -4548,33 +4556,33 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
         }
 
         private void editProduct(final String interestIn, final String stageId,
-            final String statusId, String productSpecialist, final String leadMappingId,
-            final String asignedTo, final boolean isDefault, String isProductSpecEnabled,
-            String productSpecialistId) {
-            final Dialog dialog = new Dialog(getMainActivity());
+                                 final String statusId, String productSpecialist, final String leadMappingId,
+                                 final String asignedTo, final boolean isDefault, String isProductSpecEnabled,
+                                 String productSpecialistId) {
+            final Dialog dialog = new Dialog(requireContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             Objects.requireNonNull(dialog.getWindow())
-                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.setCanceledOnTouchOutside(false);
             dialog.setContentView(R.layout.dialog_leadview_add_product);
             dialog.getWindow()
-                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                    .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
             dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
             final Spinner spStageDialog = dialog.findViewById(R.id.spStage);
             final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
             final LinearLayout llLowMarginAdd =
-                dialog.findViewById(R.id.lowMarginAdd);
+                    dialog.findViewById(R.id.lowMarginAdd);
             tvspIntrestError = dialog.findViewById(R.id.tvspIntrestError);
             tvspStatusError = dialog.findViewById(R.id.tvspStatusError);
             tvspStageError = dialog.findViewById(R.id.tvspStageError);
             final LinearLayout progressLayout =
-                dialog.findViewById(R.id.customProgress);
+                    dialog.findViewById(R.id.customProgress);
             LinearLayout llInterestedIn = dialog.findViewById(R.id.llInterestedIn);
             Button btnSave = dialog.findViewById(R.id.btnSave);
             Button btnClose = dialog.findViewById(R.id.btnClose);
             final ClearableEditText productSpecialistEdit =
-                dialog.findViewById(R.id.dacProductSpecialist);
+                    dialog.findViewById(R.id.dacProductSpecialist);
             productSpecialistEdit.setText(productSpecialist);
             specialistEdit = productSpecialistId;
             productSpecialistEdit.setClearIconVisible(true);
@@ -4584,27 +4592,20 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             } else {
                 productSpecialistEdit.setEnabled(true);
             }
-            productSpecialistEdit.setListener(new ClearableEditText.Listener() {
-                @Override
-                public void didClearText() {
-                    specialistEdit = "";
-                }
-            });
-            productSpecialistEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            productSpecialistEdit.setListener(() -> specialistEdit = "");
+            productSpecialistEdit.setOnClickListener(v -> {
 
-                    getActivity().getWindow()
+                requireActivity().getWindow()
                         .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    final CustomListPickerDialog searchListProductSpecialist =
-                        new CustomListPickerDialog(getMainActivity());
+                                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                final CustomListPickerDialog searchListProductSpecialist =
+                        new CustomListPickerDialog(requireContext());
 
-                    searchListProductSpecialist.setThreshold(SEARCH_LENTH);
-                    searchListProductSpecialist.show();
-                    searchListProductSpecialist.setCustomTitle(
+                searchListProductSpecialist.setThreshold(SEARCH_LENTH);
+                searchListProductSpecialist.show();
+                searchListProductSpecialist.setCustomTitle(
                         getResources().getString(R.string.str_prod_spl));
-                    CustomListPickerDialog.ListPickerListneable productSpecialistViewListner =
+                CustomListPickerDialog.ListPickerListneable productSpecialistViewListner =
                         new CustomListPickerDialog.ListPickerListneable() {
                             @Override
                             public void onListItemSelect(Parcelable data) {
@@ -4623,34 +4624,26 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 searchProductSpecialist(constraint, searchListProductSpecialist);
                             }
                         };
-                    searchListProductSpecialist.setmListner(productSpecialistViewListner);
-                }
+                searchListProductSpecialist.setmListner(productSpecialistViewListner);
             });
             final ClearableEditText actAssignTo =
-                dialog.findViewById(R.id.actAssignTo);
+                    dialog.findViewById(R.id.actAssignTo);
             actAssignTo.setText(asignedTo);
             actAssignTo.setClearIconVisible(true);
             actAssignTo.setHint(getResources().getString(R.string.str_assing));
 
-            actAssignTo.setListener(new ClearableEditText.Listener() {
-                @Override
-                public void didClearText() {
-                    primaryRMEdit = "";
-                }
-            });
-            actAssignTo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getActivity().getWindow()
+            actAssignTo.setListener(() -> primaryRMEdit = "");
+            actAssignTo.setOnClickListener(v -> {
+                requireActivity().getWindow()
                         .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    final CustomListPickerDialog searchList =
-                        new CustomListPickerDialog(getMainActivity());
-                    searchList.show();
-                    searchList.setCustomTitle(getResources().getString(R.string.str_assing));
+                                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                final CustomListPickerDialog searchList =
+                        new CustomListPickerDialog(requireContext());
+                searchList.show();
+                searchList.setCustomTitle(getResources().getString(R.string.str_assing));
 
-                    searchList.setThreshold(SEARCH_LENTH);
-                    CustomListPickerDialog.ListPickerListneable assingViewListner =
+                searchList.setThreshold(SEARCH_LENTH);
+                CustomListPickerDialog.ListPickerListneable assingViewListner =
                         new CustomListPickerDialog.ListPickerListneable() {
                             @Override
                             public void onListItemSelect(Parcelable data) {
@@ -4669,8 +4662,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                                 searchUserBusinessProfile(constraint, searchList);
                             }
                         };
-                    searchList.setmListner(assingViewListner);
-                }
+                searchList.setmListner(assingViewListner);
             });
             llInterestedIn.setVisibility(View.GONE);
             GetStageSelectList(spStageDialog, stageId, progressLayout);
@@ -4679,7 +4671,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position,
-                    long id) {
+                                           long id) {
                     try {
                         if (tvspStageError != null) {
                             tvspStageError.setVisibility(View.GONE);
@@ -4690,7 +4682,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         newStageNameStr = ((RowData) spStageDialog.getSelectedItem()).getValue();
                         // getSchemeId is ShowPotentialPopup
                         if (((RowData) spStageDialog.getSelectedItem()).getSchmeID()
-                            .equalsIgnoreCase(YES)) {
+                                .equalsIgnoreCase(YES)) {
                             if (spPmsProduct.getSelectedItem().toString().equals(NO)) {
                                 isPMSProductStageStatus = true;
                             }
@@ -4715,7 +4707,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
 
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position,
-                    long id) {
+                                           long id) {
                     try {
                         if (tvspStatusError != null) {
                             tvspStatusError.setVisibility(View.GONE);
@@ -4724,7 +4716,7 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                         lowMarginList.clear();
                         if (position != 0) {
                             lowMargin(((RowData) spStatusDialog.getSelectedItem()).getKey(),
-                                progressLayout, llLowMarginAdd, isDefault);
+                                    progressLayout, llLowMarginAdd, isDefault);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -4737,64 +4729,64 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                 }
             });
 
-            btnSave.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (spStageDialog.getSelectedItemPosition() < 1) {
-                        tvspStageError.setVisibility(View.VISIBLE);
-                        tvspStageError.setText("Select Stage");
-                        //TODO Show Error
-                        return;
-                    }
-                    if (spStatusDialog.getSelectedItemPosition() < 1) {
-                        //TODO Show Error
-                        tvspStatusError.setVisibility(View.VISIBLE);
-                        tvspStatusError.setText("Select Status");
-                        return;
-                    }
-                    Map dataMap = lowMarginSubmit(lowMarginList, isDefault);
-                    if (isLowMargin && dataMap.size() == 0) {
-                        return;
-                    }
-                    final String primaryRM =
+            btnSave.setOnClickListener(view -> {
+                if (spStageDialog.getSelectedItemPosition() < 1) {
+                    tvspStageError.setVisibility(View.VISIBLE);
+                    tvspStageError.setText("Select Stage");
+                    //TODO Show Error
+                    return;
+                }
+                if (spStatusDialog.getSelectedItemPosition() < 1) {
+                    //TODO Show Error
+                    tvspStatusError.setVisibility(View.VISIBLE);
+                    tvspStatusError.setText("Select Status");
+                    return;
+                }
+                Map dataMap = lowMarginSubmit(lowMarginList, isDefault);
+                if (isLowMargin && dataMap.size() == 0) {
+                    return;
+                }
+                final String primaryRM =
                         CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
 
-                    RowData selectedStatus = (RowData) spStatusDialog.getSelectedItem();
-                    if (isPotentialPMSProduct || isPMSProductStageStatus) {
-                        MSFDialog.alertDialog(getActivity(), 0,
+                RowData selectedStatus = (RowData) spStatusDialog.getSelectedItem();
+                if (isPotentialPMSProduct || isPMSProductStageStatus) {
+                    MSFDialog.alertDialog(requireActivity(), 0,
                             getResources().getString(R.string.motilal_oswal),
                             POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
                             new MSFDialog.DialogListener() {
                                 @Override
                                 public void alertDialogAction(MSFDialog.Action action,
-                                    Object... data) {
+                                                              Object... data) {
                                     if (action == MSFDialog.Action.OK) {
                                         updateProduct(
-                                            interestIn,
-                                            leadMappingId,
-                                            primaryRM,
-                                            specialistEdit,
-                                            newStageCodeStr,
-                                            selectedStatus.getKey(),
-                                            selectedStatus.getValue(),
-                                            actAssignTo.getText().toString(), YES, dataMap
+                                                interestIn,
+                                                leadMappingId,
+                                                primaryRM,
+                                                specialistEdit,
+                                                newStageCodeStr,
+                                                selectedStatus.getKey(),
+                                                selectedStatus.getValue(),
+                                                Objects.requireNonNull(actAssignTo.getText()).toString(),
+                                                YES, dataMap
                                         );
                                     } else {
                                         updateProduct(
-                                            interestIn,
-                                            leadMappingId,
-                                            primaryRM,
-                                            specialistEdit,
-                                            newStageCodeStr,
-                                            selectedStatus.getKey(),
-                                            selectedStatus.getValue(),
-                                            actAssignTo.getText().toString(), NO, dataMap
+                                                interestIn,
+                                                leadMappingId,
+                                                primaryRM,
+                                                specialistEdit,
+                                                newStageCodeStr,
+                                                selectedStatus.getKey(),
+                                                selectedStatus.getValue(),
+                                                Objects.requireNonNull(actAssignTo.getText())
+                                                        .toString(), NO, dataMap
                                         );
                                     }
                                 }
                             });
-                    } else {
-                        updateProduct(
+                } else {
+                    updateProduct(
                             interestIn,
                             leadMappingId,
                             primaryRM,
@@ -4802,56 +4794,52 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
                             newStageCodeStr,
                             selectedStatus.getKey(),
                             selectedStatus.getValue(),
-                            actAssignTo.getText().toString(), "", dataMap
-                        );
-                    }
-                    dialog.dismiss();
+                            Objects.requireNonNull(actAssignTo.getText()).toString(), "", dataMap
+                    );
                 }
+                dialog.dismiss();
             });
 
-            btnClose.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    hideKeyboard(leadViewDetailView);
-                    dialog.dismiss();
-                }
+            btnClose.setOnClickListener(view -> {
+                hideKeyboard(leadViewDetailView);
+                dialog.dismiss();
             });
             dialog.show();
         }
 
         void updateProduct(String interestIn, String leadMappingId,
-            String primaryRM, String productSpecialistId, String newStageCodeStr,
-            String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
-            Map dataMap) {
-            if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+                           String primaryRM, String productSpecialistId, String newStageCodeStr,
+                           String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
+                           Map dataMap) {
+            if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 showProgress();
                 UpdateLeadMappingRequest mappingRequest = new UpdateLeadMappingRequest(
-                    etLeadID.getText().toString().trim(),
-                    interestIn,
-                    leadMappingId,
-                    interestIn,
-                    primaryRM,
-                    productSpecialistId,
-                    AccountDetails.getEmployeeCode(),
-                    CRMAppUtil.getDBDate(),
-                    newStageCodeStr,
-                    newStageNameStr,
-                    pmsProductStatus,
-                    statusID,
-                    statusValue,
-                    actAssignTo,
-                    dataMap
+                        etLeadID.getText().toString().trim(),
+                        interestIn,
+                        leadMappingId,
+                        interestIn,
+                        primaryRM,
+                        productSpecialistId,
+                        userManager.getUser().employeeCode,
+                        CRMAppUtil.getDBDate(),
+                        newStageCodeStr,
+                        newStageNameStr,
+                        pmsProductStatus,
+                        statusID,
+                        statusValue,
+                        actAssignTo,
+                        dataMap
                 );
-                compositeDisposable.add(saathiApi.updateLeadProductMapping(mappingRequest)
-                    .compose(applyUiModel())
-                    .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
+                getCompositeDisposable().add(getSaathiApi().updateLeadProductMapping(mappingRequest)
+                        .compose(applyUiModel())
+                        .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
         private void renderUpdateLeadProductMapping(UiModel<List<LeadProductMappingItem>> uiModel,
-            UpdateLeadMappingRequest mappingRequest) {
+                                                    UpdateLeadMappingRequest mappingRequest) {
             toggleProgress(uiModel.inProgress);
             if (uiModel.inProgress) {
                 hideKeyboard(leadViewDetailView);
@@ -4865,43 +4853,44 @@ public class LeadViewDetailFragment extends MOSLCommonFragment
             List<LeadProductMappingItem> data = uiModel.data;
             if (data != null) {
                 if (isLowMargin) {
-                    dashbordFragment();
+                    navigator.openHome();
                 } else {
                     for (LeadProductMappingItem datum : data) {
                         String potentialPMSProduct = stringOrEmpty(datum.isPotentialPMSProduct);
                         isPotentialPMSProduct = potentialPMSProduct.isEmpty();
                         spPmsProduct.setSelection(
-                            getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
+                                getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
 
                         if (String.valueOf(datum.interestedIn)
-                            .equals(mappingRequest.interestedIn)) {
+                                .equals(mappingRequest.interestedIn)) {
                             updateProductData(
-                                mappingRequest.interestedIn,
-                                mappingRequest.stageID,
-                                mappingRequest.stageName,
-                                mappingRequest.statusID,
-                                mappingRequest.statusValue,
-                                mappingRequest.productSpecialist,
-                                mappingRequest.actAssignTo
+                                    mappingRequest.interestedIn,
+                                    mappingRequest.stageID,
+                                    mappingRequest.stageName,
+                                    mappingRequest.statusID,
+                                    mappingRequest.statusValue,
+                                    mappingRequest.productSpecialist,
+                                    mappingRequest.actAssignTo
                             );
                         } else {
                             leadDetailAddProductAdapter.addProduct(
-                                getLeadDetailAddProductModel(datum));
+                                    getLeadDetailAddProductModel(datum));
                         }
                     }
 
-                    alertDialog(getMainActivity(), 0,
-                        getResources().getString(R.string.motilal_oswal),
-                        "Products Updated Successfully", "Ok", true, null);
+                    alertDialog(requireContext(), 0,
+                            getResources().getString(R.string.motilal_oswal),
+                            "Products Updated Successfully", "Ok", true, null);
                 }
             }
         }
 
         public class Holder {
             TextView tvProduct, tvProductSpecialist, tvPrimaryRM, tvStage, tvProductID, tvStatus,
-                tvAddInvestmentProduct;
+                    tvAddInvestmentProduct;
             LinearLayout llDeleteLeadDetail, llAddProduct, llCrossSellingProducts,
-                llChildCrossSellingProduct;
+                    llChildCrossSellingProduct;
         }
     }
+
 }

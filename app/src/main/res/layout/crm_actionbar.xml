@@ -13,7 +13,7 @@
         android:layout_height="?actionBarSize"
         >
 
-        <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnMenu"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_18sdp"
@@ -48,7 +48,7 @@
             android:orientation="horizontal"
             >
             <!--
-                        <android.support.v7.widget.AppCompatImageView
+                        <androidx.appcompat.widget.AppCompatImageView
 
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 >
 
-                <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+              <AutoCompleteTextView
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -81,6 +81,8 @@
                     android:maxLength="90"
                     android:paddingLeft="5dp"
                     android:textSize="@dimen/_12sdp"
+                  android:textColor="@color/black"
+                  android:textColorHint="@color/black"
                     />
 
                 <LinearLayout
@@ -100,7 +102,7 @@
                         style="?android:attr/progressBarStyleSmall"
                         />
 
-                    <android.support.v7.widget.AppCompatImageView
+                  <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/srchImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,7 +128,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -154,7 +156,7 @@
 
                 <view
                     android:id="@+id/ivIcon"
-                    class="android.support.v7.widget.AppCompatImageView"
+                    class="androidx.appcompat.widget.AppCompatImageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/notification_icon"

@@ -48,5 +48,4 @@ data class ClientDetailItem(
   @JvmField @SerializedName("BankAccountNumber") val bankAccountNumber: String?,
   @JvmField @SerializedName("IsOnlyClient") val isOnlyClient: Boolean,
   @JvmField @SerializedName("CreateMeeting") val createMeetingId: Int
-
 )

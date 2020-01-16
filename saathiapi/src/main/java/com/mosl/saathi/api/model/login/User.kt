@@ -3,7 +3,7 @@ package com.mosl.saathi.api.model.login
 import com.google.gson.annotations.SerializedName
 
 data class User(
-  @SerializedName("Id") @JvmField val userId: String,
+  @SerializedName("Id") @JvmField val userId: String?,
   @SerializedName("EmployeeCode") @JvmField val employeeCode: String?,
   @SerializedName("FirstName") @JvmField val firstName: String?,
   @SerializedName("LastName") @JvmField val lastName: String?,

@@ -91,7 +91,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvNameError"
@@ -124,7 +124,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilContactPerson"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etContactPerson"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                             android:textCursorDrawable="@null"
                             android:visibility="gone"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvContactPersonError"
@@ -238,7 +238,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvEmailIdError"
@@ -272,7 +272,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -280,7 +280,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -291,7 +291,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateEmailIdError"
@@ -306,7 +306,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -314,7 +314,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -325,7 +325,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvMobileError"
@@ -340,7 +340,7 @@
                         android:visibility="gone"
                         />
                     <!-- Alternate mobileno-->
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateMobno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -348,7 +348,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateMobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -359,7 +359,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateMobnoError"
@@ -374,7 +374,7 @@
                         android:visibility="gone"
                         />
                     <!-- Alternate mobileno end -->
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLandLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -382,7 +382,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLandLine"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -393,7 +393,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvLandLineError"
@@ -408,7 +408,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEkycMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -416,7 +416,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEkycMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -427,7 +427,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvEkycMobileError"
@@ -442,7 +442,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilPanNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -450,7 +450,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etPanNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -461,7 +461,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvPanNumError"
@@ -476,7 +476,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAadharNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -484,7 +484,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAadharNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -495,7 +495,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAadharNumError"
@@ -571,14 +571,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSourceDetails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -588,7 +588,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvStage"
@@ -752,7 +752,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -760,7 +760,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -770,7 +770,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeCode"
@@ -804,7 +804,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -812,7 +812,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -824,7 +824,7 @@
 
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeName"
@@ -840,7 +840,7 @@
                             />
                     </RelativeLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -848,7 +848,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -861,7 +861,7 @@
 
 
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvRefreeEmailError"
@@ -876,7 +876,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -884,7 +884,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -897,7 +897,7 @@
                             android:textCursorDrawable="@null"
 
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvRefereeMobileError"
@@ -912,14 +912,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -932,7 +932,7 @@
 
                             />
 
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
                     <TextView
                         android:id="@+id/tvProspectRefereeNameError"
                         android:layout_width="wrap_content"
@@ -946,14 +946,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -964,7 +964,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerMobileError"
@@ -980,14 +980,14 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -998,7 +998,7 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerEmailError"
@@ -1052,7 +1052,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1060,7 +1060,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1070,7 +1070,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd1Error"
@@ -1085,7 +1085,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1093,7 +1093,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1103,7 +1103,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd2Error"
@@ -1119,7 +1119,7 @@
                             />
 
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1127,7 +1127,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1137,7 +1137,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvCountry"
@@ -1232,7 +1232,7 @@
                             />
 
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1240,7 +1240,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1253,7 +1253,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvPincodeError"
@@ -1319,7 +1319,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1327,7 +1327,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1338,9 +1338,9 @@
 
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1348,7 +1348,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1358,9 +1358,9 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1368,7 +1368,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1379,7 +1379,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffCountry"
@@ -1474,7 +1474,7 @@
                             />
 
 
-                        <android.support.design.widget.TextInputLayout
+                      <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1482,7 +1482,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                          <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1494,7 +1494,7 @@
                                 android:textCursorDrawable="@null"
 
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                      </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffPincodeError"
@@ -1510,14 +1510,14 @@
                             />
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                  <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                      <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
@@ -1529,7 +1529,7 @@
                             android:textCursorDrawable="@null"
 
                             />
-                    </android.support.design.widget.TextInputLayout>
+                  </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
             </LinearLayout>
 

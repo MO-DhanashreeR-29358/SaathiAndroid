@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class QueryRequest(
 
   @JvmField @SerializedName("Status")
-  val status: Int,
+  val status: Int = 1,
 
   @JvmField @SerializedName("Description")
   val description: String,

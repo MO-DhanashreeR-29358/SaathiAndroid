@@ -7,7 +7,7 @@
     android:orientation="vertical"
     >
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -502,7 +502,7 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadID"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -510,7 +510,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadID"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -521,9 +521,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -531,7 +531,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadCategory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -542,7 +542,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <TextView
@@ -564,7 +564,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLeadName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -572,7 +572,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -584,7 +584,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvNameError"
@@ -599,7 +599,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilDob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -622,7 +622,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAnniversaryError"
@@ -637,7 +637,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAnniversary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -660,9 +660,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreationDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -670,7 +670,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreationDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -681,9 +681,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreatedBy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -691,7 +691,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreatedBy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -702,9 +702,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLastModifiedDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -712,7 +712,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLastModifiedDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -723,16 +723,16 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLastModifiedBy"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -743,9 +743,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -753,7 +753,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etSource"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -764,9 +764,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -774,7 +774,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSource"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -785,9 +785,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProspectSourceDetail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -795,7 +795,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSourceDetail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -808,9 +808,9 @@
                             style="@style/CRMEdittextLeadSelector"
                             />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilCreatedThrough"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -818,7 +818,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreatedThrough"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -829,7 +829,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -882,7 +882,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilContactPerson"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -890,7 +890,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etContactPerson"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -903,7 +903,7 @@
                             android:visibility="gone"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvContactPersonError"
@@ -918,7 +918,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -926,7 +926,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etMobileNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -939,9 +939,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -949,7 +949,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateMobileNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -962,7 +962,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateMobileNumberError"
@@ -978,14 +978,14 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEkycMobileNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -997,10 +997,10 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLandlineNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1008,7 +1008,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLandlineNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1021,7 +1021,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvLandLineError"
@@ -1037,7 +1037,7 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1045,7 +1045,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1058,7 +1058,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvEmailIdError"
@@ -1073,7 +1073,7 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1081,7 +1081,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1094,7 +1094,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvAlternateEmailIdError"
@@ -1109,14 +1109,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etPanNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1129,7 +1129,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvPanNumError"
@@ -1144,14 +1144,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAadharNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1164,7 +1164,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <TextView
@@ -1185,7 +1185,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1193,7 +1193,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1204,7 +1204,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeCode"
@@ -1225,7 +1225,7 @@
                         android:layout_height="wrap_content"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1233,7 +1233,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1245,7 +1245,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeName"
@@ -1261,7 +1261,7 @@
                             />
                     </RelativeLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1269,7 +1269,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1281,9 +1281,9 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -1291,7 +1291,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1304,16 +1304,16 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1326,7 +1326,7 @@
 
                             />
 
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
                     <TextView
                         android:id="@+id/tvProspectRefereeNameError"
                         android:layout_width="wrap_content"
@@ -1340,14 +1340,14 @@
                         android:visibility="gone"
                         />
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1359,7 +1359,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerMobileError"
@@ -1375,14 +1375,14 @@
                         />
 
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1394,7 +1394,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvProspectRefereerEmailError"
@@ -1447,7 +1447,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1455,7 +1455,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1466,7 +1466,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd1Error"
@@ -1481,7 +1481,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1489,7 +1489,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1500,7 +1500,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvAdd2Error"
@@ -1516,7 +1516,7 @@
                             />
 
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1524,7 +1524,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1535,7 +1535,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvCountry"
@@ -1631,7 +1631,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1639,7 +1639,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1652,7 +1652,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvPincodeError"
@@ -1719,7 +1719,7 @@
                         android:orientation="vertical"
                         >
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1727,7 +1727,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1738,9 +1738,9 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1748,7 +1748,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1759,9 +1759,9 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1769,7 +1769,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1780,7 +1780,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffCountry"
@@ -1877,7 +1877,7 @@
                             android:visibility="gone"
                             />
 
-                        <android.support.design.widget.TextInputLayout
+                        <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1885,7 +1885,7 @@
                             app:hintTextAppearance="@style/InputLayout"
                             >
 
-                            <EditText
+                            <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1898,7 +1898,7 @@
                                 android:textCursorDrawable="@null"
                                 style="@style/CRMEdittextLeadSelector"
                                 />
-                        </android.support.design.widget.TextInputLayout>
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
                             android:id="@+id/tvOffPincodeError"
@@ -1915,14 +1915,14 @@
 
                     </LinearLayout>
 
-                    <android.support.design.widget.TextInputLayout
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         >
 
-                        <EditText
+                        <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
@@ -1935,7 +1935,7 @@
                             android:textCursorDrawable="@null"
                             style="@style/CRMEdittextLeadSelector"
                             />
-                    </android.support.design.widget.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -2095,5 +2095,5 @@
 
             </LinearLayout>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

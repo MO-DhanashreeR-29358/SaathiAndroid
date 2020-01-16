@@ -10,18 +10,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
+import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -31,11 +32,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
+import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS_SNAPSHOT_TITLE;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class ProductivityFragment extends MOSLCommonFragment implements View.OnClickListener {
+public class ProductivityFragment extends CommonFragment implements View.OnClickListener {
 
     ArrayList<HashMap<String, String>> hierarchyMapList;
     private View productivityView;
@@ -57,11 +67,14 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         productivityView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_productivity);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUpView(productivityView);
         setUserVisibleHint(true);
         return productivityView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_productivity;
     }
 
     private void setUpView(View productivityView) {
@@ -187,14 +200,14 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
             try {
                 renderTable(data);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -204,7 +217,7 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
                     Gson mGson = new Gson();
                     Type type = new TypeToken<HashMap<String, Object>>() {
@@ -242,7 +255,8 @@ public class ProductivityFragment extends MOSLCommonFragment implements View.OnC
         args.putString(SYSTEM_NAME, widgetSystemName);
         args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+        navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+			true, false);
 
     }
 

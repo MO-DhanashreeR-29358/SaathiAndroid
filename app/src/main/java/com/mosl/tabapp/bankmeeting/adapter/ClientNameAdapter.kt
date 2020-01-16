@@ -1,12 +1,12 @@
 package com.mosl.tabapp.bankmeeting.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.adapter.ClientNameAdapter.MyViewHolder1
 import com.mosl.tabapp.bankmeeting.model.MeetingClientName
@@ -35,13 +35,13 @@ class ClientNameAdapter(
   ) {
     val (clientName) = productList[position]
     holder.tvProductName.text = clientName
-    holder.ivDeleteProduct.setOnClickListener { view ->
+    holder.ivDeleteProduct.setOnClickListener { _ ->
       alertDialog(
         mContext, 0, mContext.resources.getString(R.string.motilal_oswal),
         "Are you sure you want to delete client name: "
             + clientName
             + " ?", "Yes", "No", true
-      ) { action, data ->
+      ) { action, _ ->
         if (action == MSFDialog.Action.OK) {
           deleteDocument(clientName)
         }
@@ -81,7 +81,7 @@ class ClientNameAdapter(
   }
 
   fun addProduct(meetingClientName: MeetingClientName) {
-    if (this.productList == null) {
+    if (this.productList.size == 0) {
       this.productList = ArrayList()
     }
     val hs =

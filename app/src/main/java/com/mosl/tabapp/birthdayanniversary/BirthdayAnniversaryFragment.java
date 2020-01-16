@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,10 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.mosl.app.core.data.UiModel;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.mosl.app.core.data.MOSLResponseWrapper;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest;
@@ -35,9 +36,8 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.model.AccountDetails;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.BirthdayAnniversaryModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.reactivex.disposables.Disposable;
@@ -45,17 +45,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.saathi.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
+import static com.mosl.tabapp.constants.MOSLConstants.EMAIL_ALL_MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.EMAIL_MESSAGE_CLIENT;
+import static com.mosl.tabapp.constants.MOSLConstants.GIFT_SEND;
+import static com.mosl.tabapp.constants.MOSLConstants.LEADPROFILE;
+import static com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by Vijay on 08/03/2017.
  */
 
-public class BirthdayAnniversaryFragment extends MOSLCommonFragment
+public class BirthdayAnniversaryFragment extends CommonFragment
     implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     public static String BELATED_FLAG = "belated";
     public static String TODAY_FLAG = "today";
@@ -126,11 +131,14 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
         birthdayAnniversaryView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_birthday_anniversary);
         setUpView(birthdayAnniversaryView);
-        setAppTitle(getClass().toString(), "Birthday & Anniversary");
+		container.post(() -> setAppTitle("Birthday & Anniversary"));
         setUserVisibleHint(true);
         return birthdayAnniversaryView;
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_birthday_anniversary;
     }
 
     @Override
@@ -160,7 +168,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
             getActivity().getResources().getStringArray(R.array.BirthdayAniversary);
         arrEventType = new ArrayList<String>(Arrays.asList(eventTypeArray));
         arrAdapEventType =
-            new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrEventType);
+            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
         spEventType.setAdapter(arrAdapEventType);
 
@@ -189,7 +197,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                 arrProfile.add(new RowData(i + 1, lookUpId, lookUpName));
             }
             arrAdapProfile =
-                new ArrayAdapter<>(getMainActivity(), R.layout.simple_spinner_item, arrProfile);
+                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfile.setAdapter(arrAdapProfile);
             spProfile.setOnItemSelectedListener(profileInListener);
@@ -197,10 +205,13 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
     }
 
     private void getProfile() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                new LookupRequest(AccountDetails.getBusinessUnitId(), LEADPROFILE, null, null);
-            Disposable subscribe = saathiApi.getAllLookup(request)
+				new LookupRequest(Objects.requireNonNull(
+					Objects.requireNonNull(
+						userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+					null, null);
+            Disposable subscribe = getSaathiApi().getAllLookup(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderAllLookUp);
         } else {
@@ -217,7 +228,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
             birthdayAnniversaryAdapter =
                 new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
             rvBirthdayAnniversary.setLayoutManager(
-                new GridLayoutManager(getMainActivity(), 3));
+                new GridLayoutManager(requireContext(), 3));
             rvBirthdayAnniversary.setAdapter(
                 birthdayAnniversaryAdapter);
             birthdayAnniversaryAdapter.notifyDataSetChanged();
@@ -269,7 +280,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                     new BirthdayAnniversaryAdapter(
                         birthdayAnniversaryList);
                 rvBirthdayAnniversary.setLayoutManager(
-                    new GridLayoutManager(getMainActivity(), 3));
+                    new GridLayoutManager(requireContext(), 3));
                 rvBirthdayAnniversary.setAdapter(
                     birthdayAnniversaryAdapter);
                 birthdayAnniversaryAdapter.notifyDataSetChanged();
@@ -279,7 +290,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                     new BirthdayAnniversaryAdapter(
                         birthdayAnniversaryList);
                 rvBirthdayAnniversary.setLayoutManager(
-                    new GridLayoutManager(getMainActivity(), 3));
+                    new GridLayoutManager(requireContext(), 3));
                 rvBirthdayAnniversary.setAdapter(
                     birthdayAnniversaryAdapter);
                 birthdayAnniversaryAdapter.notifyDataSetChanged();
@@ -304,7 +315,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         String profileId;
         birthdayAnniversaryList = new ArrayList<>();
         birthdayAnniversaryAdapter = new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
-        rvBirthdayAnniversary.setLayoutManager(new GridLayoutManager(getMainActivity(), 3));
+        rvBirthdayAnniversary.setLayoutManager(new GridLayoutManager(requireContext(), 3));
         rvBirthdayAnniversary.setAdapter(birthdayAnniversaryAdapter);
         birthdayAnniversaryAdapter.notifyDataSetChanged();
         if (profileCodeStr.equalsIgnoreCase("-1")) {
@@ -315,7 +326,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
         final String eventType =
             spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
 
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             FiltersItem filtersItem = new FiltersItem();
             ArrayList<String> valueList = new ArrayList<>();
             valueList.add(profileId);
@@ -333,7 +344,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
 
             BirthdayAnniversaryRequest request =
                 new BirthdayAnniversaryRequest(filter, birthdayRequest, true);
-            Disposable subscribe = saathiApi.postBirthdayAnniversary(request)
+            Disposable subscribe = getSaathiApi().postBirthdayAnniversary(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderBirthdayAnniversary);
         } else {
@@ -351,23 +362,23 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
 
         String data = uiModel.data;
         if (data != null) {
-            alertDialog(getMainActivity(), 0,
+            alertDialog(requireContext(), 0,
                 getResources().getString(R.string.motilal_oswal), GIFT_SEND, "Ok", true, null);
         }
     }
 
     private String getErrorMessage(SaathiCommonResponse<?> response) {
         if (response.errors.isEmpty()) {
-            return SERVER_ERROR_OCCURRED;
+            return MOSLResponseWrapper.SERVER_ERROR_OCCURRED;
         } else {
             return response.errors.get(0).message;
         }
     }
 
     private void sendGift(String ucid, String eventType) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             SendGiftRequest request = new SendGiftRequest(ucid, eventType);
-            Disposable subscribe = saathiApi.postSendGift(request)
+            Disposable subscribe = getSaathiApi().postSendGift(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderSendGift);
         } else {
@@ -385,16 +396,17 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
 
         String data = uiModel.data;
         if (data != null) {
-            alertDialog(getMainActivity(), 0,
-                getResources().getString(R.string.motilal_oswal), EMAIL_SEND, "Ok", true, null);
+            alertDialog(requireContext(), 0,
+                getResources().getString(R.string.motilal_oswal), MOSLConstants.EMAIL_SEND, "Ok",
+                true, null);
         }
     }
 
     private void sendEmail(String ucid, String eventType) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             SendEmailRequest request =
                 new SendEmailRequest(ucid, false, eventType + "-T", "E", null, null);
-            Disposable subscribe = saathiApi.postSendEmail(request)
+            Disposable subscribe = getSaathiApi().postSendEmail(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderSendEmail);
         } else {
@@ -403,14 +415,15 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
     }
 
     private void sendEmailAll() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String eventType =
                 (spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A")
                     + (dayType.equalsIgnoreCase(BELATED_FLAG) ? "-L" : "-T");
             SendEmailRequest request =
-                new SendEmailRequest(null, true, eventType, "E", AccountDetails.getEmployeeCode(),
+				new SendEmailRequest(null, true, eventType, "E", Objects.requireNonNull(
+					userManager.getUser()).employeeCode,
                     filterType);
-            Disposable subscribe = saathiApi.postSendEmail(request)
+            Disposable subscribe = getSaathiApi().postSendEmail(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderSendEmail);
         } else {
@@ -424,7 +437,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
             case R.id.ivEmailAll:
                 if (dataFoundFlag) {
                     if (!filterType.equalsIgnoreCase("3")) {
-                        alertDialog(getMainActivity(), 0,
+                        alertDialog(requireContext(), 0,
                             getResources().getString(R.string.motilal_oswal), EMAIL_ALL_MESSAGE,
                             "Yes", "No", true, new MSFDialog.DialogListener() {
                                 @Override
@@ -519,7 +532,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                 holder.ivPopup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final Dialog dialog = new Dialog(getMainActivity());
+                        final Dialog dialog = new Dialog(requireContext());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.getWindow()
                             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -540,7 +553,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                             @Override
                             public void onClick(View view) {
                                 if (!filterType.equalsIgnoreCase("3")) {
-                                    alertDialog(getMainActivity(), 0,
+                                    alertDialog(requireContext(), 0,
                                         getResources().getString(R.string.motilal_oswal),
                                         "Do you want to call?", "Yes", "No", true,
                                         new MSFDialog.DialogListener() {
@@ -550,7 +563,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                                                 if (action == MSFDialog.Action.OK) {
                                                     if (birthdayAnniversaryModel.getContactNo()
                                                         .equalsIgnoreCase("")) {
-                                                        Toast.makeText(getMainActivity(),
+                                                        Toast.makeText(requireContext(),
                                                             "Contact number not available",
                                                             Toast.LENGTH_LONG).show();
                                                     } else {
@@ -560,7 +573,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                                                             + birthdayAnniversaryModel.getContactNo()));
                                                         callIntent.setFlags(
                                                             Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        getMainActivity().startActivity(callIntent);
+                                                        requireContext().startActivity(callIntent);
                                                     }
                                                 }
                                             }
@@ -584,9 +597,9 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                                                 ? MOSLConstants.BIRTHDAY_MESSAGE
                                                 : MOSLConstants.ANNIVERSARY_MESSAGE);
                                         smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        getMainActivity().startActivity(smsIntent);
+                                        requireContext().startActivity(smsIntent);
                                     } else {
-                                        Toast.makeText(getMainActivity(),
+                                        Toast.makeText(requireContext(),
                                             "Contact number not available", Toast.LENGTH_LONG)
                                             .show();
                                     }
@@ -598,7 +611,7 @@ public class BirthdayAnniversaryFragment extends MOSLCommonFragment
                             @Override
                             public void onClick(View view) {
                                 if (!filterType.equalsIgnoreCase("3")) {
-                                    alertDialog(getMainActivity(), 0,
+                                    alertDialog(requireContext(), 0,
                                         getResources().getString(R.string.motilal_oswal),
                                         EMAIL_MESSAGE_CLIENT, "Yes", "No", true,
                                         new MSFDialog.DialogListener() {

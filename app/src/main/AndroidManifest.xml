@@ -19,7 +19,7 @@
         android:required="false"/>
 
     <application
-        android:name="com.mosl.tabapp.CrmApp"
+        android:name="com.mosl.tabapp.SaathiAppImpl"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
@@ -29,7 +29,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/CRMMOSLTheme">
         <activity
-            android:name="com.mosl.tabapp.ui.ImageSliderActivity"
+            android:name=".slider.SliderActivity"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:label="@string/app_name"
@@ -51,31 +51,30 @@
                     android:scheme="app"/>
             </intent-filter>
 
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-            android:name="com.mosl.tabapp.ui.SplashActivity"
+            android:name=".splash.SplashActivityNew"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden">
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts"/>
         </activity>
         <activity
-            android:name="com.mosl.tabapp.ui.LoginActivity"
+            android:name=".login.LoginActivityNew"
             android:configChanges="keyboard|keyboardHidden|orientation|navigation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity
+        <!--<activity
             android:name="com.mosl.tabapp.ui.MOSLCommonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CRMMOSLTheme"/>-->
+
+        <activity
+            android:name=".core.CommonActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"/>
 
@@ -86,11 +85,7 @@
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden"/>
 
-        <receiver android:name="com.mosl.tabapp.common.NetworkStateReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
-            </intent-filter>
-        </receiver>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="dda79f66330d41eeba7f4fcf83cfc3d519aaf942"/>
@@ -98,7 +93,7 @@
             android:name="io.fabric.ApiKey"
             android:value="3cc8c76f5c3a4f08cb553d9080f4c4f1cade791c" />-->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.mosl.tabapp.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -116,8 +111,5 @@
             </intent-filter>
         </service>
 
-        <service
-            android:name=".service.ForegroundService"
-            android:enabled="true"></service>
     </application>
 </manifest>

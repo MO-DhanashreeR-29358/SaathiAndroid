@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -21,26 +21,27 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMValueFormatter;
 import com.mosl.tabapp.common.FilterRowData;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
-import io.reactivex.disposables.Disposable;
+import com.mosl.tabapp.navigation.NavigationConstants;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -49,534 +50,500 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
-import static com.mosl.tabapp.common.FilterRowData.getSpinnerFilterDataByValue;
+import io.reactivex.disposables.Disposable;
+
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
+import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
+import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
+import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
+import static com.mosl.tabapp.constants.MOSLConstants.MAP;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER;
+import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
+import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/14/2017.
  */
 
-public class ClientsLeadsFragment extends MOSLCommonFragment implements View.OnClickListener {
-    static Context mContext;
-    private View leadsView;
-    private HorizontalBarChart mChart;
-    private TextView tvTotal, tv, tvShowMore;
-    private LinearLayout llShowMore;
-    private Spinner spFilter1, spFilter2, spFilter3;
-    private DashboardModel dashboardModel;
-    private String widgetSystemName;
-    private Map addtionalParameterMap = new HashMap<>();
-    private String filterFirst = "", filterSecond = "", filterThird = "";
+public class ClientsLeadsFragment extends CommonFragment implements View.OnClickListener {
+	static Context mContext;
+	private View leadsView;
+	private HorizontalBarChart mChart;
+	private TextView tvTotal, tv, tvShowMore;
+	private LinearLayout llShowMore;
+	private Spinner spFilter1, spFilter2, spFilter3;
+	private DashboardModel dashboardModel;
+	private String widgetSystemName;
+	private Map addtionalParameterMap = new HashMap<>();
 
-    public static ClientsLeadsFragment newInstance(Context context) {
-        ClientsLeadsFragment fragment = new ClientsLeadsFragment();
-        Bundle args = new Bundle();
-        mContext = context;
-        fragment.setArguments(args);
-        return fragment;
-    }
+	public static ClientsLeadsFragment newInstance(Context context) {
+		ClientsLeadsFragment fragment = new ClientsLeadsFragment();
+		Bundle args = new Bundle();
+		mContext = context;
+		fragment.setArguments(args);
+		return fragment;
+	}
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-        leadsView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_lead);
-        setUpView(leadsView);
-        hideAppTitle(getClass().toString());
-        return leadsView;
-    }
+	@Override
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+		Bundle savedInstanceState) {
+		leadsView = super.onCreateView(inflater, container, savedInstanceState);
+		setUpView(leadsView);
+		hideAppTitle();
+		return leadsView;
+	}
 
-    private void setUpView(View leadsView) {
-        spFilter1 = leadsView.findViewById(R.id.spFilter1);
-        spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                int position,
-                long id) {
-                filterFirst = ((FilterRowData) spFilter1.getSelectedItem()).getValue();
-                webServiceCall();
-            }
+	@Override protected int getLayout() {
+		return R.layout.frag_lead;
+	}
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+	private void setUpView(View leadsView) {
+		spFilter1 = leadsView.findViewById(R.id.spFilter1);
+		spFilter1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+				int position,
+				long id) {
+				webServiceCall();
+			}
 
-        spFilter2 = leadsView.findViewById(R.id.spFilter2);
-        spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                int position,
-                long id) {
-                filterSecond = ((FilterRowData) spFilter2.getSelectedItem()).getValue();
-                webServiceCall();
-            }
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+			}
+		});
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+		spFilter2 = leadsView.findViewById(R.id.spFilter2);
+		spFilter2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+				int position,
+				long id) {
+				webServiceCall();
+			}
 
-        spFilter3 = leadsView.findViewById(R.id.spFilter3);
-        spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                int position,
-                long id) {
-                filterThird = ((FilterRowData) spFilter3.getSelectedItem()).getValue();
-                webServiceCall();
-            }
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+			}
+		});
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-            }
-        });
+		spFilter3 = leadsView.findViewById(R.id.spFilter3);
+		spFilter3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
+				int position,
+				long id) {
+				webServiceCall();
+			}
 
-        try {
-            filterFirst = this.getArguments().getString(FILTERFIRST);
-            filterSecond = this.getArguments().getString(FILTERSECOND);
-            filterThird = this.getArguments().getString(FILTERTHIRD);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+			}
+		});
 
-        mChart = leadsView.findViewById(R.id.chart1);
-        mChart.getDescription().setEnabled(false);
-        mChart.setBackgroundColor(Color.WHITE);
-        mChart.setDrawGridBackground(false);
-        mChart.setDrawBarShadow(false);
-        mChart.setHighlightFullBarEnabled(false);
 
-        llShowMore = leadsView.findViewById(R.id.llShowMore);
-        tvTotal = leadsView.findViewById(R.id.tvTotal);
-        tvShowMore = leadsView.findViewById(R.id.tvShowMore);
-        tvShowMore.setPaintFlags(tvShowMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        tv = leadsView.findViewById(R.id.tv);
+		mChart = leadsView.findViewById(R.id.chart1);
+		mChart.getDescription().setEnabled(false);
+		mChart.setBackgroundColor(Color.WHITE);
+		mChart.setDrawGridBackground(false);
+		mChart.setDrawBarShadow(false);
+		mChart.setHighlightFullBarEnabled(false);
 
-        llShowMore.setOnClickListener(this);
+		llShowMore = leadsView.findViewById(R.id.llShowMore);
+		tvTotal = leadsView.findViewById(R.id.tvTotal);
+		tvShowMore = leadsView.findViewById(R.id.tvShowMore);
+		tvShowMore.setPaintFlags(tvShowMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+		tv = leadsView.findViewById(R.id.tv);
 
-        Legend l = mChart.getLegend();
-        l.setTextSize(getResources().getDimension(R.dimen.chart_text_size));
-        l.setWordWrapEnabled(true);
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        l.setDrawInside(false);
+		llShowMore.setOnClickListener(this);
 
-        mChart.getDescription().setEnabled(false);
-        mChart.setPinchZoom(false);
-        mChart.setScaleXEnabled(true);
-        mChart.setScaleYEnabled(false);
-        mChart.setDrawGridBackground(false);
-        mChart.setDrawBarShadow(false);
+		Legend l = mChart.getLegend();
+		l.setTextSize(getResources().getDimension(R.dimen.chart_text_size));
+		l.setWordWrapEnabled(true);
+		l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+		l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+		l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+		l.setDrawInside(false);
 
-        mChart.setDrawValueAboveBar(false);
-        mChart.setHighlightFullBarEnabled(false);
+		mChart.getDescription().setEnabled(false);
+		mChart.setPinchZoom(false);
+		mChart.setScaleXEnabled(true);
+		mChart.setScaleYEnabled(false);
+		mChart.setDrawGridBackground(false);
+		mChart.setDrawBarShadow(false);
 
-        YAxis leftAxis = mChart.getAxisLeft();
-        //  leftAxis.setValueFormatter(new MyAxisValueFormatter());
-        leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
-        mChart.getAxisRight().setEnabled(false);
-        mChart.getAxisLeft().setEnabled(false);
-        dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
+		mChart.setDrawValueAboveBar(false);
+		mChart.setHighlightFullBarEnabled(false);
 
-        if (dashboardModel != null) {
-            DashboardGroupModel groupModel =
-                dashboardModel.getGroupModel(DashboardSystemModel.getLeadSystemName());
-            WidgetModel model;
-            List<WidgetModel> widgetList = groupModel.getWidgetList();
-            if (widgetList != null && widgetList.size() > 0) {
-                if (widgetList.size() == 1) {
-                    model = widgetList.get(0);
-                } else {
-                    model = widgetList.get(1);
-                }
-                widgetSystemName = model.getSystemName();
+		YAxis leftAxis = mChart.getAxisLeft();
+		//  leftAxis.setValueFormatter(new MyAxisValueFormatter());
+		leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+		mChart.getAxisRight().setEnabled(false);
+		mChart.getAxisLeft().setEnabled(false);
+		dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
 
-                //set filter data
-                List<WidgetFilterModel> filterList = model.getWidgetFilterList();
-                if (filterList != null && filterList.size() == 2) {
-                    ArrayAdapter<FilterRowData> adapter1 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(0).getFilterData());
-                    adapter1.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter1.setAdapter(adapter1);
+		if (dashboardModel != null) {
+			DashboardGroupModel groupModel =
+				dashboardModel.getGroupModel(DashboardSystemModel.getLeadSystemName());
+			WidgetModel model;
+			List<WidgetModel> widgetList = groupModel.getWidgetList();
+			if (widgetList != null && widgetList.size() > 0) {
+				if (widgetList.size() == 1) {
+					model = widgetList.get(0);
+				} else {
+					model = widgetList.get(1);
+				}
+				widgetSystemName = model.getSystemName();
 
-                    FilterRowData productDataFirst =
-                        getSpinnerFilterDataByValue(filterFirst, adapter1);
-                    if (productDataFirst != null) {
-                        spFilter1.setSelection(productDataFirst.getPosition());
-                    }
+				//set filter data
+				List<WidgetFilterModel> filterList = model.getWidgetFilterList();
+				if (filterList != null && filterList.size() == 2) {
+					ArrayAdapter<FilterRowData> adapter1 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(0).getFilterData());
+					adapter1.setDropDownViewResource(R.layout.mdropdown);
+					spFilter1.setAdapter(adapter1);
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
 
-                    ArrayAdapter<FilterRowData> adapter2 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(1).getFilterData());
-                    adapter2.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter2.setAdapter(adapter2);
-                    spFilter2.setVisibility(View.VISIBLE);
+					ArrayAdapter<FilterRowData> adapter2 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(1).getFilterData());
+					adapter2.setDropDownViewResource(R.layout.mdropdown);
+					spFilter2.setAdapter(adapter2);
+					spFilter2.setVisibility(View.VISIBLE);
+					spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
 
-                    FilterRowData productDataSecond =
-                        getSpinnerFilterDataByValue(filterSecond, adapter2);
-                    if (productDataSecond != null) {
-                        spFilter2.setSelection(productDataSecond.getPosition());
-                    }
-                }
-                if (filterList != null && filterList.size() == 3) {
-                    ArrayAdapter<FilterRowData> adapter1 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(0).getFilterData());
-                    adapter1.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter1.setAdapter(adapter1);
+				}
+				if (filterList != null && filterList.size() == 3) {
+					ArrayAdapter<FilterRowData> adapter1 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(0).getFilterData());
+					adapter1.setDropDownViewResource(R.layout.mdropdown);
+					spFilter1.setAdapter(adapter1);
 
-                    FilterRowData productDataFirst =
-                        getSpinnerFilterDataByValue(filterFirst, adapter1);
-                    if (productDataFirst != null) {
-                        spFilter1.setSelection(productDataFirst.getPosition());
-                    }
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
+					ArrayAdapter<FilterRowData> adapter2 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(1).getFilterData());
+					adapter2.setDropDownViewResource(R.layout.mdropdown);
+					spFilter2.setAdapter(adapter2);
 
-                    ArrayAdapter<FilterRowData> adapter2 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(1).getFilterData());
-                    adapter2.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter2.setAdapter(adapter2);
+					spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
+					ArrayAdapter<FilterRowData> adapter3 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(2).getFilterData());
+					adapter3.setDropDownViewResource(R.layout.mdropdown);
+					spFilter3.setAdapter(adapter3);
+					spFilter3.setSelection(this.getArguments().getInt(FILTERTHIRD));
+					spFilter2.setVisibility(View.VISIBLE);
+					spFilter3.setVisibility(View.VISIBLE);
+				} else if (filterList != null && filterList.size() == 1) {
+					ArrayAdapter<FilterRowData> adapter1 =
+						new ArrayAdapter<FilterRowData>(requireContext(),
+							android.R.layout.simple_spinner_item,
+							filterList.get(0).getFilterData());
+					adapter1.setDropDownViewResource(R.layout.mdropdown);
+					spFilter1.setAdapter(adapter1);
 
-                    FilterRowData productDataSecond =
-                        getSpinnerFilterDataByValue(filterSecond, adapter2);
-                    if (productDataSecond != null) {
-                        spFilter2.setSelection(productDataSecond.getPosition());
-                    }
+					spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
+				}
+			}
+		}
+	}
 
-                    ArrayAdapter<FilterRowData> adapter3 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(2).getFilterData());
-                    adapter3.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter3.setAdapter(adapter3);
+	private Map<String, String> getAddtionalParameterMap() {
 
-                    FilterRowData productDataThird =
-                        getSpinnerFilterDataByValue(filterThird, adapter3);
-                    if (productDataThird != null) {
-                        spFilter3.setSelection(productDataThird.getPosition());
-                    }
-                    spFilter2.setVisibility(View.VISIBLE);
-                    spFilter3.setVisibility(View.VISIBLE);
-                } else if (filterList != null && filterList.size() == 1) {
-                    ArrayAdapter<FilterRowData> adapter1 =
-                        new ArrayAdapter<FilterRowData>(getActivity(),
-                            android.R.layout.simple_spinner_item,
-                            filterList.get(0).getFilterData());
-                    adapter1.setDropDownViewResource(R.layout.mdropdown);
-                    spFilter1.setAdapter(adapter1);
+		Map<String, String> addtionalParameterMap = new HashMap<>();
+		try {
+			FilterRowData filter1 = (FilterRowData) spFilter1.getSelectedItem();
+			FilterRowData filter2 = (FilterRowData) spFilter2.getSelectedItem();
+			FilterRowData filter3 = (FilterRowData) spFilter3.getSelectedItem();
 
-                    FilterRowData productDataFirst =
-                        getSpinnerFilterDataByValue(filterFirst, adapter1);
-                    if (productDataFirst != null) {
-                        spFilter1.setSelection(productDataFirst.getPosition());
-                    }
-                }
-            }
-        }
-    }
+			if (filter1 != null) {
+				addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
+			}
+			if (filter2 != null) {
+				addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
+			}
+			if (filter3 != null) {
+				addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
+			}
+			addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
-    private Map<String, String> getAddtionalParameterMap() {
+		return addtionalParameterMap;
+	}
 
-        Map<String, String> addtionalParameterMap = new HashMap<>();
-        try {
-            FilterRowData filter1 = (FilterRowData) spFilter1.getSelectedItem();
-            FilterRowData filter2 = (FilterRowData) spFilter2.getSelectedItem();
-            FilterRowData filter3 = (FilterRowData) spFilter3.getSelectedItem();
+	private void renderLeadStackedBarChart(Map<String, Object> responseJsonObj) {
+		tv.setVisibility(View.VISIBLE);
+		llShowMore.setVisibility(View.VISIBLE);
 
-            if (filter1 != null) {
-                addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
-            }
-            if (filter2 != null) {
-                addtionalParameterMap.put(filter2.getKeyValue(), filter2.getValue());
-                filterSecond = filter2.getValue();
-            }
-            if (filter3 != null) {
-                addtionalParameterMap.put(filter3.getKeyValue(), filter3.getValue());
-                filterThird = filter3.getValue();
-            }
-            addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+		ArrayList<String> columnsYAxis = new ArrayList<String>();
+		String total = "";
+		String[] lableString = new String[] {};
 
-        return addtionalParameterMap;
-    }
+		final ArrayList<ArrayList<String>> yAxisListFirst =
+			new ArrayList<>();
 
-    private void renderLeadStackedBarChart(Map<String, Object> responseJsonObj) {
-        tv.setVisibility(View.VISIBLE);
-        llShowMore.setVisibility(View.VISIBLE);
+		List<Map<String, Object>> arrayDetail =
+			(List<Map<String, Object>>) responseJsonObj.get(
+				"Table");
+		if (arrayDetail.size() != 0) {
+			for (int y = 2; y < arrayDetail.size(); y++) {
+				Map<String, Object> objDetail =
+					(Map<String, Object>) arrayDetail.get(y);
+				String stages =
+					objDetail.get("stage").toString().equals("")
+						? "0"
+						: objDetail.get("stage").toString();
+				if (stages.equalsIgnoreCase("Total")) {
+					total =
+						(objDetail.get("Total") == null || objDetail
+							.get("Total")
+							.toString()
+							.equals("")) ? "0"
+							: objDetail.get("Total").toString();
+				}
+			}
+			try {
+				if (responseJsonObj.get("Table1") != null) {
+					List<Map<String, Object>> arrayDetailTotal =
+						(List<Map<String, Object>>) responseJsonObj.get(
+							"Table1");
+					Map<String, Object> jobjFKey =
+						arrayDetailTotal.get(0);
+					for (Object keySetE : jobjFKey.keySet()) {
+						if (keySetE.toString()
+							.equalsIgnoreCase("id")
+							| keySetE.toString()
+							.trim()
+							.equalsIgnoreCase("Total")) {
+						} else {
+							columnsYAxis.add(keySetE.toString());
+						}
+					}
+					for (Map<String, Object> jobj : arrayDetailTotal) {
 
-        ArrayList<String> columnsYAxis = new ArrayList<String>();
-        String total = "";
-        String[] lableString = new String[] {};
+						final ArrayList<String> yAxisList =
+							new ArrayList<String>();
 
-        final ArrayList<ArrayList<String>> yAxisListFirst =
-            new ArrayList<>();
+						for (Object keySetE : columnsYAxis) {
+							if (keySetE.toString()
+								.equalsIgnoreCase("id")
+								|| keySetE.toString()
+								.equalsIgnoreCase("Total")) {
+							} else {
+								yAxisList.add(
+									jobj.get(keySetE).toString());
+							}
+						}
+						yAxisListFirst.add(yAxisList);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-        List<Map<String, Object>> arrayDetail =
-            (List<Map<String, Object>>) responseJsonObj.get(
-                "Table");
-        if (arrayDetail.size() != 0) {
-            for (int y = 2; y < arrayDetail.size(); y++) {
-                Map<String, Object> objDetail =
-                    (Map<String, Object>) arrayDetail.get(y);
-                String stages =
-                    objDetail.get("stage").toString().equals("")
-                        ? "0"
-                        : objDetail.get("stage").toString();
-                if (stages.equalsIgnoreCase("Total")) {
-                    total =
-                        (objDetail.get("Total") == null || objDetail
-                            .get("Total")
-                            .toString()
-                            .equals("")) ? "0"
-                            : objDetail.get("Total").toString();
-                }
-            }
-            try {
-                if (responseJsonObj.get("Table1") != null) {
-                    List<Map<String, Object>> arrayDetailTotal =
-                        (List<Map<String, Object>>) responseJsonObj.get(
-                            "Table1");
-                    Map<String, Object> jobjFKey =
-                        arrayDetailTotal.get(0);
-                    for (Object keySetE : jobjFKey.keySet()) {
-                        if (keySetE.toString()
-                            .equalsIgnoreCase("id")
-                            | keySetE.toString()
-                            .trim()
-                            .equalsIgnoreCase("Total")) {
-                        } else {
-                            columnsYAxis.add(keySetE.toString());
-                        }
-                    }
-                    for (Map<String, Object> jobj : arrayDetailTotal) {
+			if (yAxisListFirst != null
+				&& yAxisListFirst.size() > 0) {
+				lableString = new String[] {
+					yAxisListFirst.get(0).get(0)
+					, yAxisListFirst.get(1).get(0)
+				};
+				yAxisListFirst.get(0).remove(0);
+				yAxisListFirst.get(1).remove(0);
+				tvTotal.setText(total);
+				stackedBarData(columnsYAxis, yAxisListFirst,
+					lableString);
+			}
+		}
+	}
 
-                        final ArrayList<String> yAxisList =
-                            new ArrayList<String>();
+	private void renderClientLead(UiModel<Map<String, Object>> uiModel) {
+		toggleProgress(uiModel.inProgress);
 
-                        for (Object keySetE : columnsYAxis) {
-                            if (keySetE.toString()
-                                .equalsIgnoreCase("id")
-                                || keySetE.toString()
-                                .equalsIgnoreCase("Total")) {
-                            } else {
-                                yAxisList.add(
-                                    jobj.get(keySetE).toString());
-                            }
-                        }
-                        yAxisListFirst.add(yAxisList);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+		Throwable error = uiModel.error;
 
-            if (yAxisListFirst != null
-                && yAxisListFirst.size() > 0) {
-                lableString = new String[] {
-                    yAxisListFirst.get(0).get(0)
-                    , yAxisListFirst.get(1).get(0)
-                };
-                yAxisListFirst.get(0).remove(0);
-                yAxisListFirst.get(1).remove(0);
-                tvTotal.setText(total);
-                stackedBarData(columnsYAxis, yAxisListFirst,
-                    lableString);
-            }
-        }
-    }
+		if (error != null) {
+			showOnFailurePopup(error);
+		}
 
-    private void renderClientLead(UiModel<Map<String, Object>> uiModel) {
-        toggleProgress(uiModel.inProgress);
+		Map<String, Object> data = uiModel.data;
 
-        Throwable error = uiModel.error;
+		if (data != null) {
+			try {
+				renderLeadStackedBarChart(data);
+			} catch (Exception e) {
+				alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
+					SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+			}
+		}
+	}
 
-        if (error != null) {
-            showOnFailurePopup(error);
-        }
+	private void webServiceCall() {
+		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+			String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+			Map<String, String> additionalMap = getAddtionalParameterMap();
 
-        Map<String, Object> data = uiModel.data;
+			ClientRequest request = new ClientRequest(
+				businessProfileId,
+				additionalMap,
+				widgetSystemName,
+				dashboardModel.getProductId(),
+				dashboardModel.getEmployeeCode()
+			);
 
-        if (data != null) {
-            try {
-                renderLeadStackedBarChart(data);
-            } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-            }
-        }
-    }
+			Disposable subscribe = getSaathiApi().getDashboardData(request)
+				.map(responseS -> {
+					Gson mGson = new Gson();
+					Type type = new TypeToken<HashMap<String, Object>>() {
+					}.getType();
+					HashMap<String, Object> response = mGson.fromJson(responseS, type);
+					Map<String, Object> responseJsonObj =
+						(Map<String, Object>) response.get("Response");
+					String status = response.get(STATUS).toString();
+					if (status.equalsIgnoreCase("true")) {
+						return responseJsonObj;
+					} else {
+						String message = response.get(MESSAGE).toString();
+						throw new ServiceFailureException(message, message);
+					}
+				})
+				.compose(applyUiModel())
+				.subscribe(this::renderClientLead);
+		} else {
+			noInternetConnectionDialog();
+		}
+	}
 
-    private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
-            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            Map<String, String> additionalMap = getAddtionalParameterMap();
+	private void stackedBarData(final ArrayList<String> xAxisValue,
+		final ArrayList<ArrayList<String>> yAxisFirst, final String[] lableString) {
+		xAxisValue.remove(0);
 
-            ClientRequest request = new ClientRequest(
-                businessProfileId,
-                additionalMap,
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
-            );
+		Collections.reverse(xAxisValue);
+		try {
+			Collections.reverse(yAxisFirst.get(0));
+			Collections.reverse(yAxisFirst.get(1));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		XAxis xAxis = mChart.getXAxis();
+		xAxis.setDrawGridLines(false);
+		xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+		xAxis.setCenterAxisLabels(true);
+		xAxis.setDrawAxisLine(false);
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
-                .map(responseS -> {
-                    Gson mGson = new Gson();
-                    Type type = new TypeToken<HashMap<String, Object>>() {
-                    }.getType();
-                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                    Map<String, Object> responseJsonObj =
-                        (Map<String, Object>) response.get("Response");
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return responseJsonObj;
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderClientLead);
-        } else {
-            noInternetConnectionDialog();
-        }
-    }
+		xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisValue));
 
-    private void stackedBarData(final ArrayList<String> xAxisValue,
-        final ArrayList<ArrayList<String>> yAxisFirst, final String[] lableString) {
-        xAxisValue.remove(0);
+		ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-        Collections.reverse(xAxisValue);
-        try {
-            Collections.reverse(yAxisFirst.get(0));
-            Collections.reverse(yAxisFirst.get(1));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setDrawGridLines(false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setDrawAxisLine(false);
+		for (int i = 0; i < yAxisFirst.get(0).size(); i++) {
+			try {
+				float val1 = Float.parseFloat(yAxisFirst.get(0).get(i));
+				float val2 = Float.parseFloat(yAxisFirst.get(1).get(i));
+				yVals1.add(new BarEntry(i + 0.5f, new float[] { val1, val2 }));
+			} catch (java.lang.NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}
 
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
+		BarDataSet set1;
 
-                try {
-                    if (value < 0) {
-                        return "";
-                    } else {
-                        return xAxisValue.get((int) value % xAxisValue.size());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        });
+		ArrayList<Integer> colors = new ArrayList<Integer>();
+		int[] VORDIPLOM_COLORS = {
+			Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
+		};
+		for (int c : VORDIPLOM_COLORS)
+			colors.add(c);
+		set1 = new BarDataSet(yVals1, "");
+		set1.setColors(colors);
+		set1.setStackLabels(lableString);
 
-        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+		ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+		dataSets.add(set1);
 
-        for (int i = 0; i < yAxisFirst.get(0).size(); i++) {
-            try {
-                float val1 = Float.parseFloat(yAxisFirst.get(0).get(i));
-                float val2 = Float.parseFloat(yAxisFirst.get(1).get(i));
-                yVals1.add(new BarEntry(i + 0.5f, new float[] { val1, val2 }));
-            } catch (java.lang.NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
+		BarData data = new BarData(dataSets);
+		data.setValueFormatter(new CRMValueFormatter());
+		data.setValueTextColor(Color.WHITE);
+		data.setValueTextSize(13f);
+		data.setBarWidth(0.6f);
 
-        BarDataSet set1;
+		mChart.setData(data);
+		mChart.getLegend().setEnabled(false);
+		mChart.invalidate();
+		mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+			@Override
+			public void onValueSelected(Entry e, Highlight h) {
+				if (e == null) {
+					return;
+				}
+				if (e.getY() == 0.0f) return;
+				mChart.highlightValues(null);
+				addtionalParameterMap.clear();
+				pieChartDetail(e.getX());
+				addtionalParameterMap.put(COL_FILTER, xAxisValue.get((int) (e.getX())));
+				addtionalParameterMap.put(ROW_FILTER, lableString[h.getStackIndex()]);
+				addtionalParameterMap.putAll(getAddtionalParameterMap());
+				Bundle args = new Bundle();
+				args.putString(SYSTEM_NAME, widgetSystemName);
+				args.putString(LABEL, LEAD);
+				args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+				if (lableString[h.getStackIndex()].equalsIgnoreCase("Assigned")) {
+					if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
+						.equalsIgnoreCase("0.0")) {
+						navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
+							args, true, false);
+					}
+				} else {
+					navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+						true, false);
+				}
+			}
 
-        ArrayList<Integer> colors = new ArrayList<Integer>();
-        int[] VORDIPLOM_COLORS = {
-            Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
-        };
-        for (int c : VORDIPLOM_COLORS)
-            colors.add(c);
-        set1 = new BarDataSet(yVals1, "");
-        set1.setColors(colors);
-        set1.setStackLabels(lableString);
+			private void pieChartDetail(float sliceIndex) {
+			}
 
-        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
-        dataSets.add(set1);
+			@Override
+			public void onNothingSelected() {
 
-        BarData data = new BarData(dataSets);
-        data.setValueFormatter(new CRMValueFormatter());
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTextSize(13f);
-        data.setBarWidth(0.6f);
+			}
+		});
+	}
 
-        mChart.setData(data);
-        mChart.getLegend().setEnabled(false);
-        mChart.invalidate();
-        mChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                if (e == null) {
-                    return;
-                }
-                if (e.getY() == 0.0f) return;
-                mChart.highlightValues(null);
-                addtionalParameterMap.clear();
-                pieChartDetail(e.getX());
-                addtionalParameterMap.put(COL_FILTER, xAxisValue.get((int) (e.getX())));
-                addtionalParameterMap.put(ROW_FILTER, lableString[h.getStackIndex()]);
-                addtionalParameterMap.putAll(getAddtionalParameterMap());
-                Bundle args = new Bundle();
-                args.putString(SYSTEM_NAME, widgetSystemName);
-                args.putString(LABEL, LEAD);
-                args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                if (lableString[h.getStackIndex()].equalsIgnoreCase("Assigned")) {
-                    if (!String.valueOf(Float.parseFloat(yAxisFirst.get(1).get((int) (e.getX()))))
-                        .equalsIgnoreCase("0.0")) {
-                        navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                    }
-                } else {
-                    navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-                }
-            }
-
-            private void pieChartDetail(float sliceIndex) {
-            }
-
-            @Override
-            public void onNothingSelected() {
-
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.llShowMore) {
-            Bundle args = new Bundle();
-            ClientsLeadShowFragment clientsFragment =
-                ClientsLeadShowFragment.newInstance(getContext());
-            args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
-            args.putString(SYSTEM_NAME, widgetSystemName);
-            args.putString(FILTERFIRST, filterFirst);
-            args.putString(FILTERSECOND, filterSecond);
-            args.putString(FILTERTHIRD, filterThird);
-            clientsFragment.setArguments(args);
-            getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.llReplaceClientFragment, clientsFragment)
-                .commit();
-        }
-    }
+	@Override
+	public void onClick(View view) {
+		int id = view.getId();
+		if (id == R.id.llShowMore) {
+			Bundle args = new Bundle();
+			ClientsLeadShowFragment clientsFragment =
+					ClientsLeadShowFragment.newInstance();
+			args.putSerializable(DASHBOARD_MODEL, dashboardModel);
+			args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
+			args.putString(SYSTEM_NAME, widgetSystemName);
+			args.putInt(FILTERFIRST, spFilter1.getSelectedItemPosition());
+			args.putInt(FILTERSECOND, spFilter2.getSelectedItemPosition());
+			args.putInt(FILTERTHIRD, spFilter3.getSelectedItemPosition());
+			args.putString(TYPESOFLEAD, LEAD);
+			clientsFragment.setArguments(args);
+			requireActivity().getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.llReplaceClientFragment, clientsFragment)
+				.commit();
+		}
+	}
 }

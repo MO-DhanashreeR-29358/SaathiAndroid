@@ -1,29 +1,20 @@
 package com.mosl.mobile.ekyc.ui;
 
 import android.app.DownloadManager;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
-import com.crashlytics.android.Crashlytics;
+import androidx.fragment.app.FragmentActivity;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
-
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
-
 
 /**
  * Created on 1/11/2016.
@@ -62,14 +53,16 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
 
                 @Override
                 public void onDownloadStart(String url, String userAgent,
-                                            String contentDisposition, String mimetype,
-                                            long contentLength) {
+                    String contentDisposition, String mimetype,
+                    long contentLength) {
                     DownloadManager.Request request = new DownloadManager.Request(
-                            Uri.parse(url));
+                        Uri.parse(url));
 
                     request.allowScanningByMediaScanner();
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
+                    request.setNotificationVisibility(
+                        DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED); //Notify client once download is completed!
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                        fileName);
                     DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                     dm.enqueue(request);
                 }
@@ -83,8 +76,8 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
             });
         } catch (Exception e) {
             e.printStackTrace();
-//            Crashlytics.setUserIdentifier(getUserID()+"-"+getAppLoginID());
-//            Crashlytics.logException(e);
+            //            Crashlytics.setUserIdentifier(getUserID()+"-"+getAppLoginID());
+            //            Crashlytics.logException(e);
         }
     }
 
@@ -112,9 +105,7 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
 
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
-
         }
-
     }
 
     @Override
@@ -129,9 +120,7 @@ public class WebActivity extends FragmentActivity implements MOSLConstants {
                     }
                     return true;
             }
-
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

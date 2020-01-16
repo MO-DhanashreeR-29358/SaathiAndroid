@@ -227,13 +227,13 @@
             android:textSize="@dimen/_10sdp"
             android:visibility="gone" />
 
-        <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
             app:hintTextAppearance="@style/InputLayout">
 
-            <EditText
+          <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etMeetingDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
@@ -241,7 +241,7 @@
                 android:inputType="textMultiLine"
                 android:maxLength="500"
                 android:textCursorDrawable="@null" />
-        </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/tvMeetingDescriptionError"
@@ -316,14 +316,14 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone" />
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilClientCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout">
 
-                <EditText
+              <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etClientCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -331,7 +331,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvClientCodeError"
@@ -345,14 +345,14 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone" />
 
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilClientName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout">
 
-                <EditText
+              <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etClientName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -360,7 +360,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvClientNameError"
@@ -473,20 +473,20 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+      <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
             app:hintTextAppearance="@style/InputLayout">
 
-            <EditText
+          <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCustomerComment"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
                 android:hint="Enter Customer Comment"
                 android:inputType="textMultiLine"
                 android:textCursorDrawable="@null" />
-        </android.support.design.widget.TextInputLayout>
+      </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:id="@+id/llActionables"
             android:layout_width="match_parent"
@@ -550,14 +550,13 @@
                 android:visibility="gone" />
 
 
-
-            <android.support.design.widget.TextInputLayout
+          <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout">
 
-                <EditText
+              <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etCategory"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
@@ -568,7 +567,7 @@
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
                     android:textCursorDrawable="@null" />
-            </android.support.design.widget.TextInputLayout>
+          </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvCategoryCommentsError"
@@ -616,13 +615,13 @@
                     android:visibility="gone" />
 
 
-                <android.support.design.widget.TextInputLayout
+              <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
                     app:hintTextAppearance="@style/InputLayout">
 
-                    <EditText
+                  <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etSubCategory"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_80sdp"
@@ -633,7 +632,7 @@
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
                         android:textCursorDrawable="@null" />
-                </android.support.design.widget.TextInputLayout>
+              </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/tvSubCategoryCommentsError"

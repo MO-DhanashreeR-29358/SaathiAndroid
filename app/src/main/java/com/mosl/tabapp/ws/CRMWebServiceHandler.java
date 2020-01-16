@@ -1,19 +1,14 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
-
+import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
-import com.mosl.saathi.data.MOSLResponseWrapper;
-import com.mosl.tabapp.CrmApp;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
-
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -32,19 +27,19 @@ public class CRMWebServiceHandler {
     private static String LIVE_BASE_URL = "http://saathi.motilaloswal.com:81/api/";
 
     public static final String COLLATERAL_URL_UAT =
-            "http://web20.motilaloswal.com:8000/Brochure/index.html";
+        "http://web20.motilaloswal.com:8000/Brochure/index.html";
     public static final String COLLATERAL_URL_PROD =
-            "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
+        "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
     public static final String INCENTIVE_PDF_URL =
-            "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
+        "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
 
     private static final String BASE_IP_UAT_UPPERMOST = "http://122.184.137.89/";
     private static final String BASE_IP_PROD_UPPERMOST = "https://login.motilaloswal.com/";
 
     private static final String BASE_URL_UAT_UPPERMOST =
-            BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+        BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
     private static final String BASE_URL_PROD_UPPERMOST =
-            BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+        BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
 
     public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
     public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
@@ -95,30 +90,27 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi buildSaathiApi(Context context) {
         RxJava2CallAdapterFactory callAdapterFactory =
-                RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
+            RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client =
-                new OkHttpClient.Builder()
-                        .readTimeout(60, TimeUnit.SECONDS)
-                        .connectTimeout(60, TimeUnit.SECONDS)
-                        .addInterceptor(new HeaderInterceptor(context))
-                        .addInterceptor(new AuthorizationInterceptor(context))
-                        .addInterceptor(loggingInterceptor)
-                        .addInterceptor(new EncryptionInterceptor())
-                        .eventListenerFactory(CrmApp.eventListenerFactory)
-                        .build();
+            new OkHttpClient.Builder()
+                .addInterceptor(new HeaderInterceptor(context))
+                .addInterceptor(new AuthorizationInterceptor(context))
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(new EncryptionInterceptor())
+                .build();
 
         return new Retrofit.Builder().baseUrl(CALL_BASE_URL)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(new MOSLResponseWrapper())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(
-                        callAdapterFactory)
-                .client(client)
-                .build()
-                .create(SaathiApi.class);
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(new MOSLResponseWrapper())
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(
+                callAdapterFactory)
+            .client(client)
+            .build()
+            .create(SaathiApi.class);
     }
 
     public static void initSaathiApi(Context context) {

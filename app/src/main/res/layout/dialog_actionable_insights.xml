@@ -39,7 +39,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatImageView
+      <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,11 +49,11 @@
             app:srcCompat="@drawable/ic_new_actionable_insight_close_image" />
 
     </RelativeLayout>
-    <!-- <android.support.v7.widget.AppCompatImageView
-         android:id="@+id/ivClose"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentRight="true"
-         android:layout_marginBottom="@dimen/_minus10sdp"
-         app:srcCompat="@drawable/ic_new_closed" />-->
+  <!-- <androidx.appcompat.widget.AppCompatImageView
+       android:id="@+id/ivClose"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_marginBottom="@dimen/_minus10sdp"
+       app:srcCompat="@drawable/ic_new_closed" />-->
 </RelativeLayout>

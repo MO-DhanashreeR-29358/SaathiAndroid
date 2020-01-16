@@ -4,48 +4,20 @@ package com.mosl.mobile.ekyc.collateral;
  * Created by raju on 2/8/2017.
  */
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;
 
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
+import androidx.fragment.app.FragmentActivity;
 
-
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-
-import com.crashlytics.android.Crashlytics;
-import com.mosl.mobile.ekyc.R;
-import com.mosl.mobile.ekyc.constants.MOSLConstants;
 import com.mosl.mobile.ekyc.service.WebServiceHandler;
-
-import static com.mosl.mobile.ekyc.model.CommonModel.getAppLoginID;
-import static com.mosl.mobile.ekyc.model.CommonModel.getUserID;
-
 
 /**
  * Created on 1/11/2016.

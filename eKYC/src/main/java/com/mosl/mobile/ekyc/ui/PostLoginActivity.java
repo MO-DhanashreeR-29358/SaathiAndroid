@@ -1,10 +1,9 @@
 package com.mosl.mobile.ekyc.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.crashlytics.android.Crashlytics;
 import com.mosl.mobile.ekyc.R;
 import com.mosl.mobile.ekyc.adapter.AutoCompleteAdapter;
 import com.mosl.mobile.ekyc.constants.MOSLConstants;

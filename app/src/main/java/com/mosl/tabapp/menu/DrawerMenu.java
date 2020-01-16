@@ -1,11 +1,10 @@
 package com.mosl.tabapp.menu;
 
 import android.content.Context;
+import com.mosl.saathi.api.model.splash.ChildMenu;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.AccountDetails;
-import com.mosl.tabapp.model.MenuReport;
-import com.mosl.tabapp.ui.SplashActivity;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -74,7 +73,7 @@ public class DrawerMenu implements MOSLConstants {
 	}
 
 	public static Map<String, Vector<SubMenu>> createCollection(Context context,
-		List<ScreenDetails> groupList) {
+		List<ScreenDetails> groupList, List<ChildMenu> menuReportArrayList) {
 		Vector<SubMenu> ekycSubMenu = new Vector<>();
 		Vector<SubMenu> reportSubMenu = new Vector<>();
 
@@ -83,12 +82,12 @@ public class DrawerMenu implements MOSLConstants {
 		ekycSubMenu.add(new SubMenu(context.getString(R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT),
 			MOSL_MENU_EXISTING_APPLICATIONS_TXT, true));
 
-		if (SplashActivity.menuReportArrayList != null
-			&& !SplashActivity.menuReportArrayList.isEmpty()) {
-			for (MenuReport menuName : SplashActivity.menuReportArrayList) {
+		if (menuReportArrayList != null
+			&& !menuReportArrayList.isEmpty()) {
+			for (ChildMenu menuName : menuReportArrayList) {
 
 				reportSubMenu.add(
-					new SubMenu(menuName.getMenuName(), menuName.getMenuName(), true));
+					new SubMenu(menuName.name, menuName.name, true));
 			}
 		}
 

@@ -4,11 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +11,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import androidx.cardview.widget.CardView;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -34,19 +34,19 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
-import com.mosl.app.core.data.UiModel;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.CRMValueFormatter;
+import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import com.mosl.tabapp.ui.MOSLCommonFragment;
 import io.reactivex.disposables.Disposable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -57,14 +57,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.mosl.app.core.data.UiModelHelper.applyUiModel;
+import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
+import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
+import static com.mosl.tabapp.constants.MOSLConstants.RESPONSE;
+import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
+import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
  * Created by raju on 2/27/2017.
  */
 
-public class TrendsTabFragment extends MOSLCommonFragment {
+public class TrendsTabFragment extends CommonFragment {
     private String CHART_TYPE_LINE = "SpLine";
     private String CHART_TYPE_COLUMN = "Coloumn";
     private String[] mMonths;
@@ -91,12 +96,15 @@ public class TrendsTabFragment extends MOSLCommonFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         trendsView = super.onCreateView(inflater, container, savedInstanceState);
-        attachLayout(R.layout.frag_trends);
-        hideAppTitle(getClass().toString());
+        hideAppTitle();
         setUpView(trendsView);
         setUserVisibleHint(true);
         return trendsView;
 
+    }
+
+    @Override protected int getLayout() {
+        return R.layout.frag_trends;
     }
 
     public static TrendsTabFragment newInstance(Context context) {
@@ -125,7 +133,8 @@ public class TrendsTabFragment extends MOSLCommonFragment {
         }
         horizontalRecyclerView = (RecyclerView) trendsView.findViewById(R.id.horizontalRecyclerView);
         horizontalAdapter = new HorizontalAdapter(subWidgetModelList);
-        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(getMainActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager horizontalLayoutManagaer =
+            new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         horizontalRecyclerView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
@@ -402,7 +411,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
     }
 
     private void webServiceCall(final String widgetSystemName) {
-        if (CRMAppUtil.isNetworkEnabled(getMainActivity())) {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
                 businessProfileId,
@@ -412,7 +421,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
                 dashboardModel.getEmployeeCode()
             );
 
-            Disposable subscribe = saathiApi.getDashboardData(request)
+            Disposable subscribe = getSaathiApi().getDashboardData(request)
                 .map(responseS -> {
 
                     JSONObject response = new JSONObject(responseS);
@@ -444,7 +453,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
             try {
                 renderGraph(jsonArray);
             } catch (Exception e) {
-                alertDialog(getMainActivity(), 0, getResources().getString(R.string.motilal_oswal),
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
                     SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
@@ -514,11 +523,11 @@ public class TrendsTabFragment extends MOSLCommonFragment {
 
 
         @Override
-        public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_target_achievement_list, parent, false);
 
-            return new HorizontalAdapter.MyViewHolder(itemView);
+            return new MyViewHolder(itemView);
         }
 
         public void selectCategory(String name) {
@@ -533,7 +542,7 @@ public class TrendsTabFragment extends MOSLCommonFragment {
         }
 
         @Override
-        public void onBindViewHolder(final HorizontalAdapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
             final DashboardGroupModel widgetModel = widgetModelList.get(position);
             if (widgetModel.isSelected()) {
 
@@ -575,13 +584,15 @@ public class TrendsTabFragment extends MOSLCommonFragment {
         }
 
         public void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(context).load(imageUrl)
+            Glide.with(requireContext())
+                .load(imageUrl)
                     //remove Chache
                     .asBitmap().placeholder(R.drawable.ic_white).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                        RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                            resource);
                     //circularBitmapDrawable.setCircular(true);
                     imageView.setImageDrawable(circularBitmapDrawable);
                 }

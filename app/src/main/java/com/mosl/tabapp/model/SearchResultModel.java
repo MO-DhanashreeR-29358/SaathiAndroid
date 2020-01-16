@@ -2,6 +2,8 @@ package com.mosl.tabapp.model;
 
 import java.io.Serializable;
 
+import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_TYPE_DASHBOARD_HINT;
+
 /**
  * Created by srv_admin on 2/3/2016.
  */
@@ -13,7 +15,7 @@ public class SearchResultModel implements Serializable {
     private String email;
     private String leadOwner;
     private String UCID = "0";
-    private int oaoUserId = 0;
+    private Integer oaoUserId = 0;
     private boolean expanded;
     private String sourceName;
     private String prospectSourceName;
@@ -29,7 +31,6 @@ public class SearchResultModel implements Serializable {
     private String searchType;
     private String clientCode="0";
     private int createMeetingId = 0;
-
     public SearchResultModel(String searchType, String empCode, String name, String businessProfileId, String businessProfileName, String productId) {
         this.searchType = searchType;
         this.empCode = empCode;
@@ -159,6 +160,10 @@ public class SearchResultModel implements Serializable {
         return searchType;
     }
 
+    public boolean isEmpType(String searchType) {
+        return searchType.equals(SEARCH_TYPE_DASHBOARD_HINT);
+    }
+
     public void setSearchType(String searchType) {
         this.searchType = searchType;
     }
@@ -169,6 +174,10 @@ public class SearchResultModel implements Serializable {
 
     public void setOaoUserId(Integer oaoUserId) {
         this.oaoUserId = oaoUserId;
+    }
+
+    public boolean isOaoUserIdValid() {
+        return oaoUserId != null && oaoUserId > 0;
     }
 
     public boolean isExpanded() {
@@ -213,6 +222,10 @@ public class SearchResultModel implements Serializable {
 
     public String getClientCode() {
         return clientCode;
+    }
+
+    public boolean hasClientCode() {
+        return !clientCode.isEmpty() && !clientCode.equals("0");
     }
 
     public void setClientCode(String clientCode) {

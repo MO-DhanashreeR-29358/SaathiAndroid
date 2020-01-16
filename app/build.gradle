@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-android-extensions'
 
 def gitSha() {
   def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
@@ -87,21 +88,21 @@ android {
 
   buildTypes {
     release {
-      debuggable false
-      multiDexEnabled true
-      multiDexKeepFile file('multidex-config.txt')
       minifyEnabled true
       shrinkResources true
-      proguardFile 'proguard-library.pro'
+      multiDexEnabled true
       proguardFile 'proguard-crashlytics.pro'
       proguardFile 'proguard-gson.pro'
       proguardFile 'proguard-slidingpanel.pro'
-      proguardFile 'proguard-saxparser.pro'
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      proguardFile 'proguard-dagger.pro'
+      proguardFile 'proguard-retrofit.pro'
+      proguardFile 'proguard-okhttp.pro'
+      proguardFile 'proguard-simple-xml.pro'
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
     }
     debug {
+      applicationIdSuffix '.debug'
       multiDexEnabled true
-      multiDexKeepFile file('multidex-config.txt')
       debuggable true
       ext.enableCrashlytics = false
       ext.alwaysUpdateBuildId = false
@@ -120,21 +121,23 @@ android {
 }
 
 dependencies {
-  implementation project(':TabLibrary')
-  //  implementation project(':eKYC')
-  implementation project(':saathiapi')
-  implementation project(':data')
+  implementation project (':appuser')
+  implementation project (':data')
+  implementation project (':saathiapi')
+  implementation project (':shared')
+  implementation project (':domain')
   implementation(deps.crashlytics) {
     transitive = true
   }
-  implementation deps.support.design
-  implementation deps.support.cardview
-  implementation deps.support.customtabs
-  implementation deps.support.support
-  implementation deps.support.appcompat
-  implementation deps.support.recyclerview
-  implementation deps.support.drawable
-  implementation deps.multidex
+
+  implementation deps.androidx.material
+  implementation deps.androidx.appcompat
+  implementation deps.androidx.cardview
+  implementation deps.androidx.browser
+  implementation deps.androidx.fragment
+  implementation deps.androidx.recylerview
+  implementation deps.androidx.vectordrawable
+  debugImplementation deps.androidx.multidex
   implementation deps.pagerslidingtabstrip
   implementation deps.sdpAndroid
   implementation deps.circleImageView
@@ -148,40 +151,59 @@ dependencies {
   implementation deps.constraintLayout
   testImplementation deps.testing.junit
   androidTestImplementation(deps.testing.espresso.core)
-
   implementation deps.timber
   implementation deps.imageLoader
   implementation deps.commonsLang
   implementation deps.segmented
-  implementation deps.circleIndicator
   implementation deps.htmlTextview
   // stetho
   debugImplementation deps.stetho.stetho
   debugImplementation deps.stetho.okhttp
   // Room
-  implementation deps.room.roomRuntime
-  kapt deps.room.roomCompiler
-  kapt deps.dataBindCompiler
+  implementation deps.room.runtime
+  kapt deps.room.compiler
+//  kapt deps.dataBindCompiler
   implementation deps.kotlin
   implementation deps.location
   //workmanager
   implementation deps.work
-  //  implementation(name: 'nsdl-esign-2.1-v-1.2', ext: 'aar')
-
+  debugImplementation deps.leakCanary.debug
+  kapt deps.dataBinding
   implementation deps.retrofit.core
   implementation deps.okHttp.core
   implementation deps.okHttp.logger
   implementation deps.retrofit.gson
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
-  implementation deps.rx.relay
+  implementation deps.rx.kotlin
   implementation deps.rxBinding.core
-  implementation deps.rxBinding.V4
+  implementation deps.rx.preferences
+//  implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
   implementation deps.retrofit.scalar
-  implementation deps.mofslArtifacts.validator
-}
+  api deps.mofslArtifacts.appcore
+  api deps.mofslArtifacts.appcoreui
+  api deps.mofslArtifacts.validator
+  api deps.mofslArtifacts.groupie
 
+  // Dagger
+
+  implementation deps.dagger.core
+  kapt deps.dagger.compiler
+  implementation deps.dagger.android
+  kapt deps.dagger.androidCompiler
+
+  //groupie
+  implementation deps.groupie.core
+  implementation deps.groupie.dataBinding
+
+  implementation deps.picasso
+}
+kapt {
+  javacOptions {
+    option("-Xmaxerrs", 2000)
+  }
+}
 apply plugin: 'com.google.gms.google-services'

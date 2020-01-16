@@ -2,39 +2,25 @@ package com.mosl.tabapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.CallSuper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.annotation.CallSuper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.core.rx.Dispatchers;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
-import com.mosl.saathi.data.MOSLResponseWrapper;
 import com.mosl.tabapp.R;
-import com.mosl.tabapp.calendar.CalendarAppointsListFragment;
 import com.mosl.tabapp.constants.MOSLConstants;
-import com.mosl.tabapp.dashboard.DashboardFragment;
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment;
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment;
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment;
-import com.mosl.tabapp.leadViewDetail.DocumentFragment;
-import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment;
-import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment;
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment;
-import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment;
-import com.mosl.tabapp.leadcreation.LeadCreationFragment;
-import com.mosl.tabapp.pendingApproval.PendingApprovalFragment;
-import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment;
-import com.mosl.tabapp.smt.SMTFragment;
 import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.Map;
@@ -82,12 +68,12 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
     }
 
     public void hideAppTitle(String className) {
-        ((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
+        //((MOSLCommonActivity) getMainActivity()).hideAppTitle(className);
     }
 
-    public FragmentActivity getMainActivity() {
+    public Context getMainActivity() {
         if (context != null) {
-            return context;
+            return requireContext();
         } else {
             return super.requireActivity();
         }
@@ -110,71 +96,71 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
                            final boolean addStack) {
         InputMethodManager inputManager =
                 (InputMethodManager) getMainActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputManager.isAcceptingText() && getMainActivity().getCurrentFocus() != null) {
+        if (inputManager.isAcceptingText() && requireActivity().getCurrentFocus() != null) {
             inputManager.hideSoftInputFromWindow(
-                    getMainActivity().getCurrentFocus().getWindowToken(),
+                requireActivity().getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
         }
         MOSLCommonFragment fragment = null;
         switch (id) {
             case SECOND_CLICK_DASHBORD:
-                fragment = new DashboardSecondLevelFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardSecondLevelFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_CREATE_MEETING:
-                fragment = new CreateMeetingFragment();
+                //fragment = new CreateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_CLIENT_MEETING:
-                fragment = new CalendarAppointsListFragment();
+                //fragment = new CalendarAppointsListFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SET_APPOINTMENT:
-                fragment = new SetAppointmentFragment();
+                //fragment = new SetAppointmentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_UPDATE_MEETING:
-                fragment = new UpdateMeetingFragment();
+                //fragment = new UpdateMeetingFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_VIEW_MAIN:
-                fragment = new LeadViewMainFragment();
+                //fragment = new LeadViewMainFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT:
-                fragment = new DashboardHierarchyFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardHierarchyFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_CREATION:
-                fragment = new LeadCreationFragment();
-                fragment.setArguments(bundle);
+                //fragment = new LeadCreationFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_ACTIVITIES_DETAIL:
-                fragment = new LeadActivitiesDetailFragment();
+                //fragment = new LeadActivitiesDetailFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_LEAD_DOCUMENT:
-                fragment = new DocumentFragment();
+                //fragment = new DocumentFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_APPROVAL:
-                fragment = new PendingApprovalFragment();
+                //fragment = new PendingApprovalFragment();
                 fragment.setArguments(bundle);
                 break;
             case NAV_TO_PENDING_FOR_APPROVAL:
-                fragment = new PendingForApprovalFragment();
-                fragment.setArguments(bundle);
+                //fragment = new PendingForApprovalFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_ADVISORY_DASHBOARD:
-                fragment = new DashboardFragment();
-                fragment.setArguments(bundle);
+                //fragment = new DashboardFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_SECOND_LEVEL_REPORT:
-                fragment = new SecondLevelReportFragment();
-                fragment.setArguments(bundle);
+                //fragment = new SecondLevelReportFragment();
+                //fragment.setArguments(bundle);
                 break;
             case NAV_TO_WEB_VIEW:
-                fragment = new SMTFragment();
+                //fragment = new SMTFragment();
                 fragment.setArguments(bundle);
                 break;
         }
@@ -259,7 +245,7 @@ public class MOSLCommonFragment extends Fragment implements MOSLConstants {
 
     public void dashbordFragment() {
         ((MOSLCommonActivity) getMainActivity()).setupDefaultFragment(
-                getMainActivity().getIntent());
+            requireActivity().getIntent());
     }
 
     public void gotoEkycPage(int gotoEkyc, Map hashMap) {

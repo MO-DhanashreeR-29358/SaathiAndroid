@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.mosl.tabapp.core.CommonActivity"
+        tools:openDrawer="start"
+        >
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/root_coordinator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                >
+
+                <FrameLayout
+                    android:id="@+id/activityFrameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    />
+
+                <com.mosl.app.coreui.views.BlockingProgressLayout
+                    android:id="@+id/progress_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
+            </FrameLayout>
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/SaathiTheme.AppBarOverlay"
+                >
+
+                <com.mosl.tabapp.actionbar.Actionbar
+                    android:id="@+id/action_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:popupTheme="@style/SaathiTheme.PopupOverlay"
+                    />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <com.mosl.app.coreui.views.NonConsumingScrimInsetsFrameLayout
+            android:layout_width="@dimen/drawerWidth"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:fitsSystemWindows="true"
+            app:insetForeground="#4000"
+            >
+
+            <com.mosl.tabapp.drawermenu.DrawerMenuView
+                android:id="@+id/drawer_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </com.mosl.app.coreui.views.NonConsumingScrimInsetsFrameLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+</layout>
