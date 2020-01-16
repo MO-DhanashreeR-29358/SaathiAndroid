@@ -56,11 +56,6 @@
     <string name="hint_text_employee_code">Employee Code</string>
     <string name="hint_text_password">Password</string>
 
-    <string name="mgs_update_address">Kindly update address and move lead to C3 Stage.</string>
-    <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
-    <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
-
-
     <!--franchise-lead & lead creation-->
 
 
@@ -198,7 +193,6 @@
     <string name="txt_label_reschedule_appointment">Reschedule appointment</string>
     <string name="txt_label_approved">Approved</string>
     <string name="txt_label_pending_approvals">Pending Approvals</string>
-    <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
     <string name="txt_label_incentive">Incentive</string>
     <string name="txt_label_parameters">Parameters</string>
     <string name="txt_label_performance">Performance</string>

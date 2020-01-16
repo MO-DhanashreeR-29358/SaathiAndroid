@@ -181,7 +181,7 @@ public interface MOSLConstants extends LabelConfig {
     String MOBILE = "Mobile";
     String LEAD_OWNER = "LeadOwner";
     String EMAIL = "Email";
-  String CREATE_MEETING_ID = "CreateMeeting";
+    String CREATE_MEETING_ID = "CreateMeeting";
     String OAOUSERID = "OAOUserID";
     //DefaultBusinessProfile
     String AU_BANK_SALES_SUPPORT = "1142";
@@ -394,7 +394,6 @@ public interface MOSLConstants extends LabelConfig {
 
     String STRING_MAP = "map";
     String STRING_TITLE = "title";
-    String CREATE_MEETING_ID = "CreateMeeting";
 
 }
 
