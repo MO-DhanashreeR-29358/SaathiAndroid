@@ -99,7 +99,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
     };
     private Spinner spTargetVsAchivementFilter;
     private DashboardModel dashboardModel;
-    private String widgetSystemName;
+    private String widgetSystemName = "";
     private String leftStr, rightStr, centerStr;
     private Map addtionalParameterMap = new HashMap<>();
     private Map NewaddtionalParameterMap = new HashMap<>();
