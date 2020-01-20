@@ -29,6 +29,7 @@ import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 
+
 class SplashActivityNew : LeanBaseActivity() {
     lateinit var disposables: CompositeDisposable
     lateinit var binding: ActivitySplashBinding
@@ -66,20 +67,22 @@ class SplashActivityNew : LeanBaseActivity() {
             // No network
             if (count < 2) {
                 count++
-                showConfirmation(
-                    message = "Application needs network to proceed",
-                    cancelable = true,
-                    title = getString(R.string.alert_dialog_title),
-                    positiveButton = R.string.button_label_retrieve,
-                    negativeButton = R.string.button_label_exit
-                )
-                { positiveClicked ->
-                    if (positiveClicked) {
-                        checkNetwork()
-                    } else {
-                        finish()
+                if (!(this).isFinishing) { //show dialog
+                    showConfirmation(
+                        message = "Application needs network to proceed",
+                        cancelable = true,
+                        title = getString(R.string.alert_dialog_title),
+                        positiveButton = R.string.button_label_retrieve,
+                        negativeButton = R.string.button_label_exit
+                    )
+                    { positiveClicked ->
+                        if (positiveClicked) {
+                            checkNetwork()
+                        } else {
+                            finish()
+                        }
+                        Unit
                     }
-                    Unit
                 }
             } else {
                 actionableAlert(
