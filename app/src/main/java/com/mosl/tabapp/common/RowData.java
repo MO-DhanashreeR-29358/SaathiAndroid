@@ -2,20 +2,17 @@ package com.mosl.tabapp.common;
 
 import android.widget.ArrayAdapter;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Created by Vijay on 28/03/2017.
  */
 
 public class RowData implements Serializable {
-    int position;
-    String key;
-    String value;
-    String schmeID, schename, schemeSelID, marDep;
+    private int position;
+    private String key;
+    private String value;
+    private String schmeID, schename, schemeSelID, marDep;
 
     public RowData(String key, String value) {
         this.key = key;
@@ -114,7 +111,7 @@ public class RowData implements Serializable {
             return null;
         }
         for (int i = 0; i < arrayAdapter.getCount(); i++) {
-            if (Objects.requireNonNull(arrayAdapter.getItem(i)).getValue().equalsIgnoreCase(value)) {
+            if (arrayAdapter.getItem(i).getValue().equalsIgnoreCase(value)) {
                 return arrayAdapter.getItem(i);
             }
         }
@@ -126,14 +123,13 @@ public class RowData implements Serializable {
             return null;
         }
         for (int i = 0; i < arrayAdapter.getCount(); i++) {
-            if (Objects.requireNonNull(arrayAdapter.getItem(i)).getKey().equalsIgnoreCase(id)) {
+            if (arrayAdapter.getItem(i).getKey().equalsIgnoreCase(id)) {
                 return arrayAdapter.getItem(i);
             }
         }
         return null;
     }
 
-    @NotNull
     @Override
     public String toString() {
         return value;
