@@ -30,7 +30,6 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   fun inject(target: HeaderInterceptor)
 
-  fun inject(target: BankEmployeeAdapter)
   @Component.Builder
   interface Builder {
     @BindsInstance

@@ -1,7 +1,6 @@
 package com.mosl.tabapp
 
 import com.mosl.tabapp.actionbar.Actionbar
-import com.mosl.tabapp.bankmeeting.adapter.BankEmployeeAdapter
 import com.mosl.tabapp.drawermenu.DrawerMenuView
 import com.mosl.tabapp.service.ServiceModule
 import com.mosl.tabapp.service.location.DataSyncWorker
@@ -31,7 +30,6 @@ interface AppComponent : AndroidInjector<SaathiAppImpl> {
 
   fun inject(target: HeaderInterceptor)
 
-  fun inject(target: BankEmployeeAdapter)
   @Component.Builder
   interface Builder {
     @BindsInstance

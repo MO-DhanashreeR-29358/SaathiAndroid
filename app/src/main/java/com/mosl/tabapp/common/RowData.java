@@ -2,7 +2,10 @@ package com.mosl.tabapp.common;
 
 import android.widget.ArrayAdapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created by Vijay on 28/03/2017.
@@ -103,11 +106,6 @@ public class RowData implements Serializable {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
-        return value;
-    }
-
     public static RowData getSpinnerRowDataByValue(String value, ArrayAdapter<RowData> arrayAdapter) {
         if (CRMAppUtil.isBlank(value)) {
             return null;
@@ -116,7 +114,7 @@ public class RowData implements Serializable {
             return null;
         }
         for (int i = 0; i < arrayAdapter.getCount(); i++) {
-            if (arrayAdapter.getItem(i).getValue().equalsIgnoreCase(value)) {
+            if (Objects.requireNonNull(arrayAdapter.getItem(i)).getValue().equalsIgnoreCase(value)) {
                 return arrayAdapter.getItem(i);
             }
         }
@@ -128,10 +126,16 @@ public class RowData implements Serializable {
             return null;
         }
         for (int i = 0; i < arrayAdapter.getCount(); i++) {
-            if (arrayAdapter.getItem(i).getKey().equalsIgnoreCase(id)) {
+            if (Objects.requireNonNull(arrayAdapter.getItem(i)).getKey().equalsIgnoreCase(id)) {
                 return arrayAdapter.getItem(i);
             }
         }
         return null;
+    }
+
+    @NotNull
+    @Override
+    public String toString() {
+        return value;
     }
 }
