@@ -97,13 +97,6 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-//    private static OkHttpClient.Builder createOkHttpClient() {
-//
-//        return new OkHttpClient.Builder()
-//                .readTimeout(60, TimeUnit.SECONDS)
-//                .connectTimeout(60, TimeUnit.SECONDS);
-//    }
-
     private static OkHttpClient.Builder createOkHttpClient(@Nullable CertificatePinner pinner) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
