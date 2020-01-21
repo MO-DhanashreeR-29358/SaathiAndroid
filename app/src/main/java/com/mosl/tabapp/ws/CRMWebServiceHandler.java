@@ -2,9 +2,13 @@ package com.mosl.tabapp.ws;
 
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.mosl.app.core.data.MOSLResponseWrapper;
+import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.rx.DispatchersKt;
 import com.mosl.saathi.api.SaathiApi;
+import com.mosl.tabapp.CertPinProviderImpl;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
@@ -13,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -92,11 +97,21 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-    private static OkHttpClient.Builder createOkHttpClient() {
+//    private static OkHttpClient.Builder createOkHttpClient() {
+//
+//        return new OkHttpClient.Builder()
+//                .readTimeout(60, TimeUnit.SECONDS)
+//                .connectTimeout(60, TimeUnit.SECONDS);
+//    }
 
-        return new OkHttpClient.Builder()
+    private static OkHttpClient.Builder createOkHttpClient(@Nullable CertificatePinner pinner) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS);
+        if (pinner != null) {
+            builder.certificatePinner(pinner);
+        }
+        return builder;
     }
 
     private static SaathiApi buildSaathiApi(Context context) {
@@ -107,8 +122,9 @@ public class CRMWebServiceHandler {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
+        CertPinProvider certPinProvider = CertPinProviderImpl.INSTANCE;
 
-        OkHttpClient client = createOkHttpClient()
+        OkHttpClient client = createOkHttpClient(certPinProvider.getPinner())
                 .addInterceptor(new HeaderInterceptor(context))
                 .addInterceptor(new AuthorizationInterceptor(context))
                 .addInterceptor(loggingInterceptor)
