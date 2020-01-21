@@ -1,7 +1,9 @@
 package com.mosl.tabapp.common;
 
 import android.widget.EditText;
+
 import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,15 +84,9 @@ public class CRMValidationRule {
         }
         input = input.trim();
 
-        if (input.length() != 10) {
-            return false;
-        }
-        int start = Integer.parseInt(input.charAt(0) + "");
-       /* if (start < 7) {
-            return false;
-        }*/
-        return true;
+        return input.length() == 10;
     }
+
     public static boolean validateRefreeCode(String input) {
         if (CRMAppUtil.isBlank(input)) {
             return false;
@@ -102,6 +98,7 @@ public class CRMValidationRule {
 
         return true;
     }
+
     public static boolean validateRefreeName(String input) {
         if (CRMAppUtil.isBlank(input)) {
             return false;
