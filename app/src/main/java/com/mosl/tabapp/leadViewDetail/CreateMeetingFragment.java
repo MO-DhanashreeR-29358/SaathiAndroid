@@ -1996,7 +1996,9 @@ public class CreateMeetingFragment extends CommonFragment
                 dialogAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener((parent, view, position, id) -> {
 
-            EmployeeModel clientModel = attendeeAdapter.getItem(position);
+            EmployeeModel clientModel = attendeeAdapter.getCount() > position ?
+                    attendeeAdapter.getItem(position) : new EmployeeModel("", false);
+
             boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList,
                     clientModel.getAttendeeCode());
             if (!has) {
@@ -2040,7 +2042,7 @@ public class CreateMeetingFragment extends CommonFragment
                 dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener((parent, view, position, id) -> {
 
-            SplAttendeeModel clientModel = splAttendeeAdapter.getItem(position);
+            SplAttendeeModel clientModel = splAttendeeAdapter.getCount() > position ? splAttendeeAdapter.getItem(position) : new SplAttendeeModel("");
             boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList,
                     clientModel.getAttendeeCode());
 

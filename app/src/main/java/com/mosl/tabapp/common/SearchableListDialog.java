@@ -17,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+
 import com.mosl.tabapp.R;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -128,7 +130,7 @@ public class SearchableListDialog extends DialogFragment implements
         _listViewItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!listAdapter.getItem(position).toString().equalsIgnoreCase("")) {
+                if (listAdapter.getCount() > position && !listAdapter.getItem(position).toString().equalsIgnoreCase("")) {
                     _searchableItem.onSearchableItemClicked(listAdapter.getItem(position), position);
                     InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context
                             .INPUT_METHOD_SERVICE);
