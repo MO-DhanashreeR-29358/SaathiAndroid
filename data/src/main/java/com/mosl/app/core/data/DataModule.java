@@ -3,6 +3,7 @@ package com.mosl.app.core.data;
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor;
 import com.mosl.app.core.data.interceptor.HeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
+import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.data.util.HttpListenerFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
@@ -23,9 +25,15 @@ public abstract class DataModule {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }*/
 
-    static OkHttpClient.Builder createOkHttpClient() {
-        return new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
+    private static OkHttpClient.Builder createOkHttpClient(CertificatePinner pinner) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS);
+
+        if (pinner != null) {
+            builder.certificatePinner(pinner);
+        }
+
+        return builder;
     }
 
     @Provides
@@ -37,8 +45,8 @@ public abstract class DataModule {
     @Provides
     @Singleton
     @Named("BaseOkClient")
-    static OkHttpClient provideBaseOkHttpClient(Cache okHttpCache) {
-        return createOkHttpClient().cache(okHttpCache).build();
+    static OkHttpClient provideBaseOkHttpClient(Cache okHttpCache, CertPinProvider pinProvider) {
+        return createOkHttpClient(pinProvider.getPinner()).cache(okHttpCache).build();
     }
 
     @Provides
