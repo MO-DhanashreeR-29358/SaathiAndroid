@@ -11,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -47,15 +49,18 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
-import io.reactivex.disposables.Disposable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -583,7 +588,7 @@ public class TrendsTabFragment extends CommonFragment {
 
         }
 
-        public void setImage(String imageUrl, final ImageView imageView) {
+        void setImage(String imageUrl, final ImageView imageView) {
             Glide.with(requireContext())
                 .load(imageUrl)
                     //remove Chache
@@ -591,7 +596,7 @@ public class TrendsTabFragment extends CommonFragment {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
-                        RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                            RoundedBitmapDrawableFactory.create(getResources(),
                             resource);
                     //circularBitmapDrawable.setCircular(true);
                     imageView.setImageDrawable(circularBitmapDrawable);

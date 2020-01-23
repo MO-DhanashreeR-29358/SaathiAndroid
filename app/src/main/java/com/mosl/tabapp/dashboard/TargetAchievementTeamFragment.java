@@ -16,12 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -52,13 +54,15 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import io.reactivex.disposables.Disposable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -1064,7 +1068,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
             });
         }
 
-        public void setImage(String imageUrl, final ImageView imageView) {
+        void setImage(String imageUrl, final ImageView imageView) {
 
             Glide.with(requireContext())
                 .load(imageUrl)
@@ -1077,7 +1081,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                RoundedBitmapDrawableFactory.create(getResources(),
                                 resource);
                         //circularBitmapDrawable.setCircular(true);
                         imageView.setImageDrawable(circularBitmapDrawable);
