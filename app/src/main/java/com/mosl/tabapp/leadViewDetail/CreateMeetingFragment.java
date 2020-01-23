@@ -930,11 +930,12 @@ public class CreateMeetingFragment extends CommonFragment
                     meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
                     meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
                     meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+                    isMockLocation(meetingApptModel);
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            isMockLocation(meetingApptModel);
         };
         mainHandler.post(myRunnable);
     }
