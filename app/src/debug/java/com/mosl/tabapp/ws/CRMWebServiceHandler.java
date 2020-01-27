@@ -97,14 +97,11 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-    private static OkHttpClient.Builder createOkHttpClient(@Nullable CertificatePinner pinner) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
+    private static OkHttpClient.Builder createOkHttpClient() {
+
+        return new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS);
-        if (pinner != null) {
-            builder.certificatePinner(pinner);
-        }
-        return builder;
     }
 
     private static SaathiApi buildSaathiApi(Context context) {
@@ -117,7 +114,7 @@ public class CRMWebServiceHandler {
 
         CertPinProvider certPinProvider = CertPinProviderImpl.INSTANCE;
 
-        OkHttpClient client = createOkHttpClient(certPinProvider.getPinner())
+        OkHttpClient client = createOkHttpClient()
                 .addInterceptor(new HeaderInterceptor(context))
                 .addInterceptor(new AuthorizationInterceptor(context))
                 .addInterceptor(loggingInterceptor)
