@@ -2335,7 +2335,7 @@ public class DashboardFragment extends CommonFragment
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(getResources(),
+                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
                                             resource);
                             holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
                         }
