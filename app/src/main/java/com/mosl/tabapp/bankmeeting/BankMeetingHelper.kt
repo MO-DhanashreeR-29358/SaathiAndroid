@@ -103,16 +103,16 @@ fun FragmentAuBankMeetingBinding.showValidationMsg(msg: Int) {
             etSubject.requestFocus()
         }
         9 -> {
-            ilClientName.error = context.getString(R.string.validate_client_name)
-            etClientName.requestFocus()
-        }
-        10 -> {
             ilMobileNumber.error = context.getString(R.string.validate_client_mobile_no)
             etMobileNumber.requestFocus()
         }
-        11 -> {
+        10 -> {
             ilMobileNumber.error = context.getString(R.string.validate_invalid_mobile_number)
             etMobileNumber.requestFocus()
+        }
+        11 -> {
+            ilClientName.error = context.getString(R.string.validate_client_name)
+            etClientName.requestFocus()
         }
     }
 
