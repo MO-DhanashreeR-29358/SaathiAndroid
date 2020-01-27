@@ -138,6 +138,7 @@
     <string name="button_label_save">Save</string>
     <string name="button_label_reset">Reset</string>
     <string name="text_hint_label_enter_sub_broker">Enter SubBroker*</string>
+    <string name="text_hint_label_client_mobile_no">Enter Client Mobile No*</string>
     <string name="text_hint_label_enter_bank_employee">Enter Bank Employee*</string>
     <string name="text_hint_label_enter_subject">Enter Subject*</string>
     <string name="text_hint_label_enter_client">Enter Client Name*</string>
@@ -156,6 +157,8 @@
     <string name="validate_sub_broker">Enter SubBroker</string>
     <string name="validate_subject">Enter Subject</string>
     <string name="validate_client_name">Enter Client Name</string>
+    <string name="validate_client_mobile_no">Enter Client Mobile Number</string>
+    <string name="validate_invalid_mobile_number">Invalid Mobile Number.</string>
     <string name="text_label_from_date">From Date</string>
     <string name="text_label_to_date">To Date</string>
 

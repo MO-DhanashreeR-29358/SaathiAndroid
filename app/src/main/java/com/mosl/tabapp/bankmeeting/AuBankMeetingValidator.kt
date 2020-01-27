@@ -45,6 +45,14 @@ fun BankMeetingInput.validateForm(binding: FragmentAuBankMeetingBinding): Boolea
       binding.showValidationMsg(9)
       return false
     }
+    this.isClientNameVisible && this.clientMobileNumber.isEmpty() -> {
+      binding.showValidationMsg(10)
+      return false
+    }
+    this.isClientNameVisible && this.clientMobileNumber.length < 10 -> {
+      binding.showValidationMsg(11)
+      return false
+    }
     else -> return true
   }
 

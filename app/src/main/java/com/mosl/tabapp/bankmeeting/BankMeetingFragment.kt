@@ -529,10 +529,11 @@ class BankMeetingFragment : CommonFragment() {
         binding.apply {
             clientNameList.clear()
             when (spMeetingType.getMeetingType()) {
-                PERSONAL_MEETING -> {
+                BRANCH_VISIT -> {
                     groupBankBranch.toggelVisibility(true)
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(false)
+                    ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
                 }
@@ -540,13 +541,15 @@ class BankMeetingFragment : CommonFragment() {
                     groupBankBranch.toggelVisibility(true)
                     ilSubject.toggelInputLayoutVisibility(true)
                     ilClientName.toggelInputLayoutVisibility(false)
+                    ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
                 }
-                JOINT_MEETING -> {
+                CLIENT_MEETING -> {
                     groupBankBranch.toggelVisibility(true)
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(true)
+                    ilMobileNumber.toggelInputLayoutVisibility(true)
                     rvClientName.visibility = View.VISIBLE
                     callBankList()
                 }
@@ -554,6 +557,7 @@ class BankMeetingFragment : CommonFragment() {
                     groupBankBranch.toggelVisibility(false)
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(false)
+                    ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                 }
             }
@@ -655,6 +659,11 @@ class BankMeetingFragment : CommonFragment() {
         return binding.etSubject.text.toString()
     }
 
+    private fun getMobileNumber(): String {
+
+        return binding.etMobileNumber.text.toString()
+    }
+
     private fun getBankEmployee(): String {
         var employeeId = ""
         for (a in addedBankEmployeeList) {
@@ -751,19 +760,21 @@ class BankMeetingFragment : CommonFragment() {
                 bankEmployeeCode = getBankEmployee(),
                 subject = getSubject(),
                 isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training"),
-                isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Joint Meeting"),
+                isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Client Meeting"),
+                clientMobileNumber = getMobileNumber(),
                 clientName = clientNameValue
+
             )
         }
     }
 
     companion object {
-        const val PERSONAL_MEETING = 1
+        const val BRANCH_VISIT = 1
         const val TRAINING = 2
-        const val JOINT_MEETING = 3
-        const val PersonalMeeting = "Personal Meeting"
+        const val CLIENT_MEETING = 3
+        const val BranchVisit = "Branch Visit/ Met AU Emp."
         const val TrainingValue = "Training"
-        const val JointMeeting = "Joint Meeting"
+        const val ClientMeeting = "Client Meeting"
 
         fun listHasEmployee(
             addedAttendeeModelList: List<AddedBankEmployeeModel>?,

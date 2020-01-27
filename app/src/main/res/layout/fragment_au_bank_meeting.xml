@@ -292,6 +292,7 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <RelativeLayout
                 android:id="@+id/ll_bank_employee"
                 android:layout_width="match_parent"
@@ -430,6 +431,26 @@
                 />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_mobile_number"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_hint_label_client_mobile_no"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="10" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_client_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -437,7 +458,7 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name"
+                app:layout_constraintTop_toBottomOf="@+id/il_mobile_number"
                 tools:visibility="visible"
                 >
 
