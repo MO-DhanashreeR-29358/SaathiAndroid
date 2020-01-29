@@ -155,7 +155,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         LeadViewHistoryFragment leadViewHistoryFragment;
         LeadViewInteractionFragment leadViewInteractionFragment;
         pageListLeadView = new ArrayList<>();
-        if (leadId.equalsIgnoreCase("0")) {
+        if (leadId != null && leadId.equalsIgnoreCase("0")) {
             headingClient[0] = DETAILS;
             headingClient[1] = ACTIVITIES;
             headingClient[2] = MAPPING_HISTORY;

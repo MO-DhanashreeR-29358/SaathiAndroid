@@ -5,15 +5,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
+import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.model.*
@@ -41,6 +45,11 @@ class SplashActivityNew : LeanBaseActivity() {
     lateinit var shortcutHelper: ShortcutHelper
     private val handler = Handler()
     private var count = 0
+
+    @Inject
+    @field:RemoteConfigData
+    lateinit var remoteCongigData: StringPreference
+
     override fun getLayout(): Int {
         return R.layout.activity_splash
     }
@@ -104,6 +113,26 @@ class SplashActivityNew : LeanBaseActivity() {
                 .compose(applyUiModel())
                 .subscribe(this::renderVersionData)
         )
+
+
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(100)
+            .build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val saathiInit =
+                        remoteConfig.getString(getString(R.string.saathi_init))
+                    if (saathiInit != null && !saathiInit.isEmpty()) {
+                        remoteCongigData.set(saathiInit)
+
+                    }
+                }
+            }
+
     }
 
     fun toggleProgressBar(show: Boolean) {

@@ -4,25 +4,19 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import com.mosl.annotations.ActivityScoped
 import com.mosl.app.core.utils.toast
 import com.mosl.mobile.user.login.UserManager
-import com.mosl.navigator.ActivityNavigationEntry
-import com.mosl.navigator.BaseNavigator
-import com.mosl.navigator.FragmentNavigationEntry
-import com.mosl.navigator.NavigationEntry
-import com.mosl.navigator.NavigationHelper
-import com.mosl.navigator.NavigationRequest
-import com.mosl.navigator.Navigator
-import com.mosl.navigator.asFragmentEntry
+import com.mosl.navigator.*
+import com.mosl.tabapp.banner.BannerFragment
+import com.mosl.tabapp.banner.BannerNavigator
+import com.mosl.tabapp.banner.BannerScreenData
+import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
 import com.mosl.tabapp.common.EkycSecurityUtil
-import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
-import com.mosl.tabapp.ekyc.EkycNavigator
-import com.mosl.tabapp.ekyc.NEW
-import com.mosl.tabapp.ekyc.OUTPUT
-import com.mosl.tabapp.ekyc.PLAY_STORE_URL
-import com.mosl.tabapp.ekyc.RESUME
-import com.mosl.tabapp.ekyc.getDataForEkyc
+import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.ekyc.*
+import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
 import javax.inject.Inject
 
 @ActivityScoped
@@ -31,7 +25,7 @@ class ScreenNavigatorImpl @Inject constructor(
   protected val navigationHelper: NavigationHelper,
   val userManager: UserManager,
   val navigator: Navigator
-) : BaseNavigator, EkycNavigator {
+) : BaseNavigator, EkycNavigator, BannerNavigator {
 
   override fun openPage(
     pageId: Int,
@@ -141,6 +135,36 @@ class ScreenNavigatorImpl @Inject constructor(
     }
   }
 
+    override fun openUrlInWebView(url: String) {
+        val bundle = Bundle().apply {
+            putString(MOSLConstants.URL_PATH, url)
+        }
+        openPage(NAVIGATE_TO_SALES_BROCHURE, bundle, true)
+    }
+
+    override fun openUrlInAppCrome(url: String) {
+        val intent = CustomTabsIntent.Builder()
+            .build()
+        intent.launchUrl(activity, Uri.parse(url))
+    }
+
+    override fun openUrlInBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(url)
+        activity.startActivity(intent)
+    }
+
+
+    override fun openBannerDialog(data: BannerScreenData) {
+        val bundle = Bundle().apply {
+            putParcelable(ARG_BANNER_SCREEN_DATA, data)
+        }
+
+        BannerFragment().apply {
+            arguments = bundle
+        }
+            .show(activity.supportFragmentManager, "Banner Dialog Fragment")
+    }
 
   override fun openPage(
     pageId: Int,

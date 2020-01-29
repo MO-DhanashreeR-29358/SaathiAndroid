@@ -2,6 +2,8 @@ package com.mosl.tabapp
 
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
+import com.mosl.tabapp.banner.BannerFragment
+import com.mosl.tabapp.banner.BannerModule
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
@@ -63,6 +65,9 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector(modules = [AuLeadsModule::class])
     abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
+
+    @ContributesAndroidInjector(modules = [BannerModule::class])
+    abstract fun provideBannerFragmentFactory(): BannerFragment
 
     @ContributesAndroidInjector(modules = [AuTargetModule::class])
     abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetFragment
