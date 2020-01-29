@@ -2,8 +2,6 @@ package com.mosl.tabapp.ws;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -17,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

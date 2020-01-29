@@ -708,7 +708,7 @@ class BankMeetingFragment : CommonFragment() {
     private fun resetFields() {
         binding.apply {
             etMeetingDescription.setText("")
-            tvDate.text = ""
+            tvDate.setText("")
             spMeetingType.setSelection(0)
             spMeetingDuration.setSelection(0)
             spBank.setSelection(0)
