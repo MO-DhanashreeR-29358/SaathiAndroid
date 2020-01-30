@@ -1,4 +1,4 @@
-package com.mosl.amc.data.util
+package com.mosl.tabapp
 
 import com.mosl.app.core.data.util.CertPinProvider
 import okhttp3.CertificatePinner
