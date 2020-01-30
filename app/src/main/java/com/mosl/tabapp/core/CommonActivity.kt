@@ -140,7 +140,7 @@ class CommonActivity : BaseActivity(),
         remoteConfigModel =
             gson.fromJson(remoteCongigData.get(), RemoteConfigModel::class.java)
 
-        if (remoteConfigModel.isConfigured) {
+        if (remoteConfigModel.isConfigured && !userManager.user.isAufsb() && !userManager.user.isAuBankSalesSupport()) {
             openBanner(remoteConfigModel)
         }
 
