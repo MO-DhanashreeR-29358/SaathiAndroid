@@ -2323,7 +2323,7 @@ public class DashboardFragment extends CommonFragment
 
             final Map<String, String> addtionalParameterMap = new HashMap<>();
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-            Glide.with(getContext())
+            Glide.with(requireContext())
                     .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
                     //remove Chache
                     .asBitmap()
