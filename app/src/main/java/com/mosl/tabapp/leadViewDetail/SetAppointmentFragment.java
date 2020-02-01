@@ -73,6 +73,7 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.R.string.motilal_oswal;
@@ -923,15 +924,20 @@ public class SetAppointmentFragment extends CommonFragment
         btnSubmit = dialogDateTime.findViewById(R.id.btnSubmit);
         dpFromDate.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDate != null) {
-            String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYear = year;
-                        month = monthOfYear + 1;
-                        day = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDate.split("-");
+                dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYear = year;
+                            month = monthOfYear + 1;
+                            day = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -972,11 +978,16 @@ public class SetAppointmentFragment extends CommonFragment
                 tvAPPDateError.setVisibility(View.GONE);
             }
             String meetingDate = stringArray(tvApppointmentDateTime.getText().toString());
-            String[] newstartDate = meetingDate.split("-");
-            tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
-                            minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+            try {
+                String[] newstartDate = meetingDate.split("-");
+                tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
+                                minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
 
             dialogDateTime.dismiss();
             tvStartDateError.setVisibility(View.GONE);
@@ -1005,16 +1016,20 @@ public class SetAppointmentFragment extends CommonFragment
 
         dpFromDateStartTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateStartDate != null) {
-            String[] dateSplit = mainFromDateStartDate.split("-");
-            dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]),
-                    Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDateStartDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYearStartDate = year;
-                        monthStartDate = monthOfYear + 1;
-                        dayStartDate = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDateStartDate.split("-");
+                dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]),
+                        Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDateStartDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYearStartDate = year;
+                            monthStartDate = monthOfYear + 1;
+                            dayStartDate = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
         } else {
             dpFromDateStartTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -1053,31 +1068,35 @@ public class SetAppointmentFragment extends CommonFragment
                                 minuteStartDate));
             }
             String splitstartDate = stringArray(tvStartDateTime.getText().toString());
-            String[] newstartDate = splitstartDate.split("-");
-            String splitEndDate = stringArray(tvEndDateTime.getText().toString());
-            String[] newEndDate = splitEndDate.split("-");
-            tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                            hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
+            try {
+                String[] newstartDate = splitstartDate.split("-");
+                String splitEndDate = stringArray(tvEndDateTime.getText().toString());
+                String[] newEndDate = splitEndDate.split("-");
+                tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                                hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
 
-            Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
-            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
-                    minuteEndDate);
-            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                    hourStartDate, minuteStartDate);
-            if (startDate.before(endDate)) {
-                tvEndDateError.setVisibility(View.GONE);
-            }
+                Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                        Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                        minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                        hourStartDate, minuteStartDate);
+                if (startDate.before(endDate)) {
+                    tvEndDateError.setVisibility(View.GONE);
+                }
 
-            if (meetingDate.getTime() > startDate.getTime()) {
-                Toast.makeText(getActivity(), START_TIME_ERROR, Toast.LENGTH_SHORT).show();
-            } else {
-                dialogDateTime.dismiss();
-                tvStartDateError.setVisibility(View.GONE);
-                dialogDateTime.dismiss();
+                if (meetingDate.getTime() > startDate.getTime()) {
+                    Toast.makeText(getActivity(), START_TIME_ERROR, Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogDateTime.dismiss();
+                    tvStartDateError.setVisibility(View.GONE);
+                    dialogDateTime.dismiss();
+                }
+            } catch (Exception e) {
+                Timber.d(e, TAG);
             }
         });
 
@@ -1104,16 +1123,21 @@ public class SetAppointmentFragment extends CommonFragment
 
         dpFromDateEndTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateEndDate != null) {
-            String[] dateSplit = mainFromDateEndDate.split("-");
-            dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]),
-                    Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDateEndDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYearEndDate = year;
-                        monthEndDate = monthOfYear + 1;
-                        dayEndDate = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDateEndDate.split("-");
+                dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]),
+                        Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDateEndDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYearEndDate = year;
+                            monthEndDate = monthOfYear + 1;
+                            dayEndDate = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDateEndTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -1152,30 +1176,35 @@ public class SetAppointmentFragment extends CommonFragment
                                 minuteEndDate));
             }
             String splitstartDate = stringArray(tvStartDateTime.getText().toString());
-            String[] newstartDate = splitstartDate.split("-");
-            String splitEndDate = stringArray(tvEndDateTime.getText().toString());
-            String[] newEndDate = splitEndDate.split("-");
-            tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                            Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]),
-                            hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
+            try {
+                String[] newstartDate = splitstartDate.split("-");
+                String splitEndDate = stringArray(tvEndDateTime.getText().toString());
+                String[] newEndDate = splitEndDate.split("-");
+                tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                                Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]),
+                                hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
 
-            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
-                    minuteEndDate);
-            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                    hourStartDate, minuteStartDate);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                        Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                        minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                        hourStartDate, minuteStartDate);
+                if (startDate.after(endDate)) {
+                    Toast.makeText(getActivity(), END_TIME_ERROR, Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogDateTime.dismiss();
+                    tvEndDateError.setVisibility(View.GONE);
+                }
+                if (endDate.getTime() > startDate.getTime()) {
+                    tvEndDateError.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
 
-            if (startDate.after(endDate)) {
-                Toast.makeText(getActivity(), END_TIME_ERROR, Toast.LENGTH_SHORT).show();
-            } else {
-                dialogDateTime.dismiss();
-                tvEndDateError.setVisibility(View.GONE);
-            }
-            if (endDate.getTime() > startDate.getTime()) {
-                tvEndDateError.setVisibility(View.GONE);
-            }
+
         });
 
         dialogDateTime.show();
@@ -1248,14 +1277,16 @@ public class SetAppointmentFragment extends CommonFragment
 
     private void setCallenderDate() {
         mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
-
-        String[] dateArray = Objects.requireNonNull(mainFromDate).split("-");
-        currentYear = ((Integer.parseInt(dateArray[0])));
-
-        currentYearStartDate = currentYear;
-        currentYearEndDate = currentYear;
-        month = ((Integer.parseInt(dateArray[1])));
-        day = ((Integer.parseInt(dateArray[2])));
+        try {
+            String[] dateArray = Objects.requireNonNull(mainFromDate).split("-");
+            currentYear = ((Integer.parseInt(dateArray[0])));
+            currentYearStartDate = currentYear;
+            currentYearEndDate = currentYear;
+            month = ((Integer.parseInt(dateArray[1])));
+            day = ((Integer.parseInt(dateArray[2])));
+        } catch (Exception e) {
+            Timber.d(e, TAG);
+        }
 
         mainFromDateEndDate = mainFromDate;
         mainFromDateStartDate = mainFromDate;

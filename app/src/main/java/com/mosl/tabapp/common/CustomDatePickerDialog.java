@@ -18,6 +18,8 @@ import com.mosl.tabapp.R;
 import java.util.Calendar;
 import java.util.Date;
 
+import timber.log.Timber;
+
 /**
  * Created by Featsystem on 21-02-2017.
  */
@@ -32,6 +34,7 @@ public class CustomDatePickerDialog extends Dialog implements DatePickerDialog.O
     String date = "";
     boolean isMaxDate;
     Date maxDate;
+    private final static String TAG = CustomDatePickerDialog.class.getSimpleName();
 
     public CustomDatePickerDialog(Context context, boolean defaultDate, String date, boolean isMaxDate, DatePickerListener datePickerListener) {
         super(context);
@@ -74,17 +77,21 @@ public class CustomDatePickerDialog extends Dialog implements DatePickerDialog.O
         }
 
         datePicker.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
-        dateSplit = mainFromDate.split("-");
 
         if (!mainFromDate.equals("")) {
-            dateSplit = mainFromDate.split("-");
+            try {
+                dateSplit = mainFromDate.split("-");
+                dateSplit = mainFromDate.split("-");
+                datePicker.init(Integer.parseInt(dateSplit[2]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[0]), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        mainFromDate = prefix(dayOfMonth) + "-" + prefix(monthOfYear + 1) + "-" + year;
+                    }
+                });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
 
-            datePicker.init(Integer.parseInt(dateSplit[2]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[0]), new DatePicker.OnDateChangedListener() {
-                @Override
-                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mainFromDate = prefix(dayOfMonth) + "-" + prefix(monthOfYear + 1) + "-" + year;
-                }
-            });
         } else {
 
             int currentMonth = today.get(Calendar.MONTH) + 1;

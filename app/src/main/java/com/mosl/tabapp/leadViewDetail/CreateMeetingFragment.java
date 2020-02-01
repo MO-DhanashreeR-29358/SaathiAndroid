@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.KeyEvent;
@@ -94,10 +93,10 @@ import javax.inject.Inject;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
@@ -156,6 +155,7 @@ import static java.lang.String.format;
 
 public class CreateMeetingFragment extends CommonFragment
         implements View.OnClickListener, TextView.OnEditorActionListener {
+    final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
     private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
@@ -577,21 +577,14 @@ public class CreateMeetingFragment extends CommonFragment
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
 
         etCustomerComment = createMeetingView.findViewById(R.id.etCustomerComment);
-        etCustomerComment.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etMeetingDescription = createMeetingView.findViewById(R.id.etMeetingDescription);
-        etMeetingDescription.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etCategory = createMeetingView.findViewById(R.id.etCategory);
-        etCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etSubCategory = createMeetingView.findViewById(R.id.etSubCategory);
-        etSubCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etClientCode = createMeetingView.findViewById(R.id.etClientCode);
         etClientName = createMeetingView.findViewById(R.id.etClientName);
         etAmount = createMeetingView.findViewById(R.id.etAmount);
         etLocation = createMeetingView.findViewById(R.id.etLocation);
         etPinCode = createMeetingView.findViewById(R.id.etPinCode);
-        etLocation.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         llSubcategory = createMeetingView.findViewById(R.id.llSubcategory);
 
         spCategory = createMeetingView.findViewById(R.id.spCategory);
@@ -630,12 +623,16 @@ public class CreateMeetingFragment extends CommonFragment
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
         fromDat = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-        String[] dateArray = Objects.requireNonNull(mainToDate).split("-");
-        currentYear = ((Integer.parseInt(dateArray[0])));
-        month = ((Integer.parseInt(dateArray[1])));
-        day = ((Integer.parseInt(dateArray[2])));
-        AddedAttendeeModel.setAttendeeUserEmplyeeCode(
-                Objects.requireNonNull(userManager.getUser()).employeeCode);
+        try {
+            String[] dateArray = Objects.requireNonNull(mainToDate).split("-");
+            currentYear = ((Integer.parseInt(dateArray[0])));
+            month = ((Integer.parseInt(dateArray[1])));
+            day = ((Integer.parseInt(dateArray[2])));
+            AddedAttendeeModel.setAttendeeUserEmplyeeCode(
+                    Objects.requireNonNull(userManager.getUser()).employeeCode);
+        } catch (Exception e) {
+            Timber.d(e, TAG);
+        }
         if (userManager.getUser().isFranchise()
                 || userManager.getUser().isIFA()) {
             linaerLayoutNew.setVisibility(View.VISIBLE);
@@ -1867,15 +1864,20 @@ public class CreateMeetingFragment extends CommonFragment
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
 
         if (mainFromDate != null) {
-            String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYear = year;
-                        month = monthOfYear + 1;
-                        day = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDate.split("-");
+                dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYear = year;
+                            month = monthOfYear + 1;
+                            day = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {

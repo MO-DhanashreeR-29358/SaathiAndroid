@@ -238,6 +238,7 @@
             android:inputType="textMultiLine"
             android:maxLength="500"
             android:textCursorDrawable="@null"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
             />
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -508,7 +509,7 @@
             android:hint="Enter Customer Comment"
             android:inputType="textMultiLine"
             android:textCursorDrawable="@null"
-
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
             />
       </com.google.android.material.textfield.TextInputLayout>
 
@@ -638,7 +639,7 @@
               android:inputType="textMultiLine"
               android:maxLength="500"
               android:textCursorDrawable="@null"
-
+              android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
               />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -793,9 +794,9 @@
               android:maxLength="500"
               android:overScrollMode="always"
               android:scrollbarStyle="insideInset"
-
               android:scrollbars="vertical"
               android:textCursorDrawable="@null"
+              android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
               />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -867,6 +868,7 @@
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
                 android:textCursorDrawable="@null"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                 />
           </com.google.android.material.textfield.TextInputLayout>
 

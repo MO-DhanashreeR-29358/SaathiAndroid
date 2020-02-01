@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -63,9 +62,9 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -162,6 +161,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private Spinner spMeetingObjective;
     private TextView tvMeetingObjectiveError;
     private boolean mandatory = true;
+    private final static String TAG = UpdateMeetingFragment.class.getSimpleName();
     private AdapterView.OnItemSelectedListener selectSubCategoryListener =
             new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -416,15 +416,9 @@ public class UpdateMeetingFragment extends CommonFragment
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
 
         etCustomerComment = createMeetingView.findViewById(R.id.etCustomerComment);
-        etCustomerComment.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etMeetingDescription = createMeetingView.findViewById(R.id.etMeetingDescription);
-        etMeetingDescription.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etCategory = createMeetingView.findViewById(R.id.etCategory);
-        etCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etSubCategory = createMeetingView.findViewById(R.id.etSubCategory);
-        etSubCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etClientCode = createMeetingView.findViewById(R.id.etClientCode);
         etClientName = createMeetingView.findViewById(R.id.etClientName);
 
@@ -821,15 +815,18 @@ public class UpdateMeetingFragment extends CommonFragment
             setCountForSpecial(addedSplAttendeeCount);
             setCount(addedAttendeeCount);
             selectProduct(productTypeID);
-
-            String[] metadataArray = MeetingDate.split("T");
-            String[] dateArray = metadataArray[0].split("-");
-            String[] timeArray = metadataArray[1].split(":");
-            currentYear = ((Integer.parseInt(dateArray[0])));
-            month = ((Integer.parseInt(dateArray[1])));
-            day = ((Integer.parseInt(dateArray[2])));
-            hour = ((Integer.parseInt(timeArray[0])));
-            minute = ((Integer.parseInt(timeArray[1])));
+            try {
+                String[] metadataArray = MeetingDate.split("T");
+                String[] dateArray = metadataArray[0].split("-");
+                String[] timeArray = metadataArray[1].split(":");
+                currentYear = ((Integer.parseInt(dateArray[0])));
+                month = ((Integer.parseInt(dateArray[1])));
+                day = ((Integer.parseInt(dateArray[2])));
+                hour = ((Integer.parseInt(timeArray[0])));
+                minute = ((Integer.parseInt(timeArray[1])));
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
             etMeetingDescription.setText(MeetingDescription);
             etCustomerComment.setText(CustomerRemark);
             etCategory.setText(CategoryDescription);

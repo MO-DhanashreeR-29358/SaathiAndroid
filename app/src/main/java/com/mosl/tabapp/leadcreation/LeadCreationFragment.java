@@ -28,7 +28,9 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -76,9 +78,11 @@ import com.mosl.tabapp.model.LeadCreationModel;
 import com.mosl.tabapp.model.LeadCreationProductMapping;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+
+import org.droidparts.widget.ClearableEditText;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -88,13 +92,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
-import org.droidparts.widget.ClearableEditText;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
@@ -569,22 +574,15 @@ public class LeadCreationFragment extends CommonFragment
 		etProspectRefereerEmail = leadCreationView.findViewById(R.id.etProspectRefereerEmail);
 
 		etAdd1 = leadCreationView.findViewById(R.id.etAdd1);
-		etAdd1.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etAdd2 = leadCreationView.findViewById(R.id.etAdd2);
-		etAdd2.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etAdd3 = leadCreationView.findViewById(R.id.etAdd3);
-		etAdd3.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etPincode = leadCreationView.findViewById(R.id.etPincode);
 
 		etOffAdd1 = leadCreationView.findViewById(R.id.etOffAdd1);
-		etOffAdd1.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etOffAdd2 = leadCreationView.findViewById(R.id.etOffAdd2);
-		etOffAdd2.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etOffAdd3 = leadCreationView.findViewById(R.id.etOffAdd3);
-		etOffAdd3.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 		etOffPincode = leadCreationView.findViewById(R.id.etOffPincode);
 		etComments = leadCreationView.findViewById(R.id.etComments);
-		etComments.setFilters(new InputFilter[] { filterOnlyAlphabetAndNumbersAnsAllowedChar });
 
 		ilName = leadCreationView.findViewById(R.id.ilName);
 		tvAlternateMobError = leadCreationView.findViewById(R.id.tvAlternateMobnoError);
@@ -722,16 +720,6 @@ public class LeadCreationFragment extends CommonFragment
 					};
 				searchList.setmListner(assingViewListner);
 			}
-		});
-		etRefreeName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-		etContactPerson.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-		etName.setFilters(new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-		etProspectRefereeName.setFilters(
-			new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-		etProspectSourceDetails.setFilters(
-			new InputFilter[] { CRMAppUtil.filterOnlyAlphabetAndNumbers });
-		etRefreeCode.setFilters(new InputFilter[] {
-			CRMAppUtil.filterOnlyAlphabetAndNumbers, new InputFilter.AllCaps()
 		});
 
 		etRefreeCode.setOnFocusChangeListener(new View.OnFocusChangeListener() {

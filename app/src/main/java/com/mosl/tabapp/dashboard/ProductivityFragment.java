@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -23,7 +24,7 @@ import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.disposables.Disposable;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -73,7 +76,8 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         return productivityView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_productivity;
     }
 
@@ -89,7 +93,9 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
             DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getProductivitySystemName());
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
-            model = widgetList.get(2);
+            if (widgetList.size() >= 2) {
+                model = widgetList.get(2);
+            }
             widgetSystemName = model.getSystemName();
             webServiceCall();
 
@@ -114,11 +120,11 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
         hierarchyMapList = new ArrayList<HashMap<String, String>>();
         secondClickTableAdapter =
-            new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+                new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
         table.setAdapter(secondClickTableAdapter);
         List<Map<String, Object>> arrayDetail =
-            (List<Map<String, Object>>) responseJsonObj.get(
-                "Table");
+                (List<Map<String, Object>>) responseJsonObj.get(
+                        "Table");
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> columnsHeader = new ArrayList<String>();
 
@@ -146,19 +152,19 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                         map.put("flg_empcode", objDetail.get("flg_empcode").toString());
                     } else {
                         String columnData = (objDetail.get(column) == null
-                            || objDetail.get(column).toString() == null) ? ""
-                            : objDetail.get(column).toString();
+                                || objDetail.get(column).toString() == null) ? ""
+                                : objDetail.get(column).toString();
 
                         if (objDetail.get(column) instanceof Number) {
                             String strValue = objDetail.get(column).toString().trim();
                             if (strValue.indexOf(".") > -1
-                                && !strValue.endsWith(".0")
-                                && !strValue.endsWith(".00")) {
+                                    && !strValue.endsWith(".0")
+                                    && !strValue.endsWith(".00")) {
                                 columnData = String.format("%.2f",
-                                    Double.parseDouble(objDetail.get(column).toString()));
+                                        Double.parseDouble(objDetail.get(column).toString()));
                             } else {
                                 columnData = String.format("%.0f",
-                                    Double.parseDouble(objDetail.get(column).toString()));
+                                        Double.parseDouble(objDetail.get(column).toString()));
                             }
                         }
 
@@ -201,7 +207,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                 renderTable(data);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
@@ -210,31 +216,31 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                getAddtionalParameterMap(),
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    getAddtionalParameterMap(),
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
 
             Disposable subscribe = getSaathiApi().getDashboardData(request)
-                .map(responseS -> {
-                    Gson mGson = new Gson();
-                    Type type = new TypeToken<HashMap<String, Object>>() {
-                    }.getType();
-                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                    Map<String, Object> responseJsonObj =
-                        (Map<String, Object>) response.get("Response");
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return responseJsonObj;
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderProductivity);
+                    .map(responseS -> {
+                        Gson mGson = new Gson();
+                        Type type = new TypeToken<HashMap<String, Object>>() {
+                        }.getType();
+                        HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                        Map<String, Object> responseJsonObj =
+                                (Map<String, Object>) response.get("Response");
+                        String status = response.get(STATUS).toString();
+                        if (status.equalsIgnoreCase("true")) {
+                            return responseJsonObj;
+                        } else {
+                            String message = response.get(MESSAGE).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::renderProductivity);
         } else {
             noInternetConnectionDialog();
         }
@@ -256,7 +262,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
         navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-			true, false);
+                true, false);
 
     }
 

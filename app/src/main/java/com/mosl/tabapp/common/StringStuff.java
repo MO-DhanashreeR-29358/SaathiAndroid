@@ -89,21 +89,7 @@ public class StringStuff {
         return input;
     }
 
-    public static String commaINRDecorator(String input) {
-        if (input == null) return "";
-        if (input.equals("--") || input.trim().length() == 0) return input;
 
-        String decimalSeparator[] = input.split("\\.");
-        String decimalValues = decimalSeparator.length > 1 ? "." + decimalSeparator[1] : "";
-        double value = toDbl(decimalSeparator[0]);
-        try {
-            String output = patternINRCommaDecorator.format(value) + decimalValues;
-            if (input.startsWith("-") && !output.contains("-")) output = "-" + output;
-            return output;
-        } catch (Exception ignored) {
-        }
-        return input;
-    }
 
     /**
      * Example:it convert String to double value
