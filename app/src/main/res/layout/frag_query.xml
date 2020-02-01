@@ -39,6 +39,7 @@
                 android:background="@color/white"
                 android:gravity="top"
                 android:hint="Query Description"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789,@!#&amp;()_"
                 android:maxLength="500" />
 
             <requestFocus />

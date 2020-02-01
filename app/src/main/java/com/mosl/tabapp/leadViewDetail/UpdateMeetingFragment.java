@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -66,7 +65,6 @@ import okhttp3.RequestBody;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -418,15 +416,9 @@ public class UpdateMeetingFragment extends CommonFragment
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
 
         etCustomerComment = createMeetingView.findViewById(R.id.etCustomerComment);
-        etCustomerComment.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etMeetingDescription = createMeetingView.findViewById(R.id.etMeetingDescription);
-        etMeetingDescription.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etCategory = createMeetingView.findViewById(R.id.etCategory);
-        etCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etSubCategory = createMeetingView.findViewById(R.id.etSubCategory);
-        etSubCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etClientCode = createMeetingView.findViewById(R.id.etClientCode);
         etClientName = createMeetingView.findViewById(R.id.etClientName);
 

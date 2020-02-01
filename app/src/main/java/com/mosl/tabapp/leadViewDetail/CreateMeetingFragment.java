@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.KeyEvent;
@@ -98,7 +97,6 @@ import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
@@ -579,21 +577,14 @@ public class CreateMeetingFragment extends CommonFragment
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
 
         etCustomerComment = createMeetingView.findViewById(R.id.etCustomerComment);
-        etCustomerComment.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etMeetingDescription = createMeetingView.findViewById(R.id.etMeetingDescription);
-        etMeetingDescription.setFilters(
-                new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etCategory = createMeetingView.findViewById(R.id.etCategory);
-        etCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etSubCategory = createMeetingView.findViewById(R.id.etSubCategory);
-        etSubCategory.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etClientCode = createMeetingView.findViewById(R.id.etClientCode);
         etClientName = createMeetingView.findViewById(R.id.etClientName);
         etAmount = createMeetingView.findViewById(R.id.etAmount);
         etLocation = createMeetingView.findViewById(R.id.etLocation);
         etPinCode = createMeetingView.findViewById(R.id.etPinCode);
-        etLocation.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         llSubcategory = createMeetingView.findViewById(R.id.llSubcategory);
 
         spCategory = createMeetingView.findViewById(R.id.spCategory);

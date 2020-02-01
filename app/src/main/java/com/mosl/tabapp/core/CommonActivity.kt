@@ -59,434 +59,441 @@ class CommonActivity : BaseActivity(),
     QuickAction.OnActionItemClickListener,
     ConvertToEkyc, MsgDialog {
 
-  lateinit var binding: ActivityCommonbaseBinding
-  @Inject
-  lateinit var activityNavHelper: ActivityNavigationHelper
+    lateinit var binding: ActivityCommonbaseBinding
+    @Inject
+    lateinit var activityNavHelper: ActivityNavigationHelper
 
-  @Inject
-  lateinit var userManager: UserManager
-  @Inject
-  lateinit var loginRepository: LoginRepositoryImpl
-  @Inject
-  lateinit var fragmentResolver: FragmentResolver
-  var globalTitles = HashMap<String, AppTitle>()
-  @Inject
-  lateinit var screenNavigator: ScreenNavigatorImpl
-  @Inject
-  lateinit var navigationHelper: NavigationHelper
-  @Inject @field:FcmToken lateinit var tokenPref: Preference<String>
-  @Inject
-  lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
-  @Inject
-  lateinit var shortcutHelper: ShortcutHelper
-  private var searchType = SEARCH_TYPE_LEAD
-  @Inject
-  lateinit var eventListenerFactory: HttpListenerFactory
-  private lateinit var locationWorkManager: WorkManager
-  private lateinit var dataSyncWorkManager: WorkManager
-  private lateinit var compressionLocationWorkId: UUID
-  private lateinit var compressionDataSyncWorkId: UUID
-  internal var snackbar: Snackbar? = null
+    @Inject
+    lateinit var userManager: UserManager
+    @Inject
+    lateinit var loginRepository: LoginRepositoryImpl
+    @Inject
+    lateinit var fragmentResolver: FragmentResolver
+    var globalTitles = HashMap<String, AppTitle>()
+    @Inject
+    lateinit var screenNavigator: ScreenNavigatorImpl
+    @Inject
+    lateinit var navigationHelper: NavigationHelper
+    @Inject
+    @field:FcmToken
+    lateinit var tokenPref: Preference<String>
+    @Inject
+    lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
+    @Inject
+    lateinit var shortcutHelper: ShortcutHelper
+    private var searchType = SEARCH_TYPE_LEAD
+    @Inject
+    lateinit var eventListenerFactory: HttpListenerFactory
+    private lateinit var locationWorkManager: WorkManager
+    private lateinit var dataSyncWorkManager: WorkManager
+    private lateinit var compressionLocationWorkId: UUID
+    private lateinit var compressionDataSyncWorkId: UUID
+    internal var snackbar: Snackbar? = null
 
-  override fun getLayout(): Int {
-    return R.layout.activity_commonbase
-  }
+    override fun getLayout(): Int {
+        return R.layout.activity_commonbase
+    }
 
-  override fun onCreate(
-    savedInstanceState: Bundle?
-  ) {
-    super.onCreate(savedInstanceState)
-    binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
-    binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
-    binding.actionBar.setNotification(OnClickListener {
-      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
-    })
-    binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
-    binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
-    binding.actionBar.autoCompleteAdapter.setConvertToEkycListener(this)
-    binding.actionBar.autoCompleteAdapter.setErrorMsgDialogListener(this)
-    hideAppTitle()
-    setupMenuDrawer()
-    if (savedInstanceState == null) {
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
+        binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
+        binding.actionBar.setNotification(OnClickListener {
+            screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION, true)
+        })
+        binding.actionBar.srchImg.setOnClickListener { v -> openSearchOptions(v) }
+        binding.actionBar.autoCompleteAdapter.setScreenNavigator(screenNavigator)
+        binding.actionBar.autoCompleteAdapter.setConvertToEkycListener(this)
+        binding.actionBar.autoCompleteAdapter.setErrorMsgDialogListener(this)
+        hideAppTitle()
+        setupMenuDrawer()
+        if (savedInstanceState == null) {
 //      screenNavigator.openHome()
 
-      activityNavHelper.loadIntent(intent)
-    } else {
-      globalTitles = savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
+            activityNavHelper.loadIntent(intent)
+        } else {
+            globalTitles =
+                savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
+        }
+
+        locationWorkManager = WorkManager.getInstance()
+        dataSyncWorkManager = WorkManager.getInstance()
+
+        if (!userManager.user.isAufsb()) {
+            startWorkManager()
+        }
+        setupObservables()
+
     }
 
-    locationWorkManager = WorkManager.getInstance()
-    dataSyncWorkManager = WorkManager.getInstance()
+    //quick dialog
+    fun openSearchOptions(v: View) {
+        val acLead = ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this)
+        val acCleint = ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this)
+        val acDadhBoard =
+            ActionItem(ID_EMP, "Dashboard for", getChecedStateIcon(SEARCH_TYPE_EMP), this)
 
-    startWorkManager()
-    setupObservables()
+        val quickAction = QuickAction(this, QuickAction.VERTICAL)
+        quickAction.addActionItem(acLead)
+        quickAction.addActionItem(acCleint)
+        if (!userManager.user.isAufsb()) {
+            quickAction.addActionItem(acDadhBoard)
+        }
 
-  }
-
-  //quick dialog
-  fun openSearchOptions(v: View) {
-    val acLead = ActionItem(ID_LEAD, "Lead", getChecedStateIcon(SEARCH_TYPE_LEAD), this)
-    val acCleint = ActionItem(ID_CLEINT, "Client", getChecedStateIcon(SEARCH_TYPE_CLIENT), this)
-    val acDadhBoard = ActionItem(ID_EMP, "Dashboard for", getChecedStateIcon(SEARCH_TYPE_EMP), this)
-
-    val quickAction = QuickAction(this, QuickAction.VERTICAL)
-    quickAction.addActionItem(acLead)
-    quickAction.addActionItem(acCleint)
-    if (!userManager.user.isAufsb()) {
-      quickAction.addActionItem(acDadhBoard)
+        quickAction.setOnActionItemClickListener(this)
+        quickAction.show(v)
     }
 
-    quickAction.setOnActionItemClickListener(this)
-    quickAction.show(v)
-  }
-
-  private fun getChecedStateIcon(data: String): Int {
-    return if (searchType.equals(data, ignoreCase = true)) {
-      R.drawable.ic_check_black
-    } else {
-      R.drawable.ic_check_blank
+    private fun getChecedStateIcon(data: String): Int {
+        return if (searchType.equals(data, ignoreCase = true)) {
+            R.drawable.ic_check_black
+        } else {
+            R.drawable.ic_check_blank
+        }
     }
-  }
 
-  //search option listen
-  override fun onItemClick(
-    source: QuickAction,
-    pos: Int,
-    actionId: Int
-  ) {
+    //search option listen
+    override fun onItemClick(
+        source: QuickAction,
+        pos: Int,
+        actionId: Int
+    ) {
 
-    when (actionId) {
-      ID_LEAD -> {
-        searchType = SEARCH_TYPE_LEAD
-        binding.actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT)
-      }
-      ID_CLEINT -> {
-        searchType = SEARCH_TYPE_CLIENT
-        binding.actionBar.setSearchHint(SEARCH_TYPE_CLIENT_HINT)
-      }
-      ID_EMP -> {
-        searchType = SEARCH_TYPE_EMP
-        binding.actionBar.setSearchHint(SEARCH_TYPE_DASHBOARD_HINT)
-      }
-    }
-  }
-
-  private fun networkConstraints(): Constraints {
-    return Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build()
-  }
-
-  private fun startWorkManager() {
-    val periodicDataSyncWork = PeriodicWorkRequest.Builder(
-        DataSyncWorker::class.java, 32,
-        TimeUnit.MINUTES
-    )
-        .setConstraints(networkConstraints())
-        .build()
-
-    val periodicLocationWork = PeriodicWorkRequest.Builder(
-        LocationWorker::class.java, 15,
-        TimeUnit.MINUTES
-    )
-        .setConstraints(networkConstraints())
-        .build()
-
-    locationWorkManager.enqueue(periodicLocationWork)
-    dataSyncWorkManager.enqueue(periodicDataSyncWork)
-
-    compressionDataSyncWorkId = periodicDataSyncWork.id
-    compressionLocationWorkId = periodicLocationWork.id
-  }
-
-  private fun setupObservables() {
-    val mainThread = dispatchers.main
-    disposable.add(
-
-        tokenPref.asObservable().distinctUntilChanged()
-            .map { _ -> tokenPref.get() }
-            .filter { token -> !token.equals("0") }
-            .switchMap { token ->
-              fcmTokenSyncHelper.saveToken(token)
-                  .compose(applyUiModel())
+        when (actionId) {
+            ID_LEAD -> {
+                searchType = SEARCH_TYPE_LEAD
+                binding.actionBar.setSearchHint(SEARCH_TYPE_LEAD_HINT)
             }
-            .subscribe())
-
-      val Threshold = TimeUnit.SECONDS.toNanos(10)
-    eventListenerFactory.getApiStatsObservable()
-      .filter { callTime -> callTime > Threshold }
-      .observeOn(mainThread)
-      .subscribe { ignored ->
-        val snackbar1 = snackbar
-        if (snackbar1 == null || snackbar1.isShown) {
-          snackbar = showConnectivityIssueSnackbar()
+            ID_CLEINT -> {
+                searchType = SEARCH_TYPE_CLIENT
+                binding.actionBar.setSearchHint(SEARCH_TYPE_CLIENT_HINT)
+            }
+            ID_EMP -> {
+                searchType = SEARCH_TYPE_EMP
+                binding.actionBar.setSearchHint(SEARCH_TYPE_DASHBOARD_HINT)
+            }
         }
-      }.addTo(disposable)
-  }
+    }
 
-  private fun openMenuDrawer() {
-    binding.drawerLayout.openDrawer(GravityCompat.START)
-  }
+    private fun networkConstraints(): Constraints {
+        return Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    }
 
-  private fun setupMenuDrawer() {
-    binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-      override fun onDrawerSlide(
-        drawerView: View,
-        slideOffset: Float
-      ) {
-      }
+    private fun startWorkManager() {
+        val periodicDataSyncWork = PeriodicWorkRequest.Builder(
+            DataSyncWorker::class.java, 32,
+            TimeUnit.MINUTES
+        )
+            .setConstraints(networkConstraints())
+            .build()
 
-      override fun onDrawerOpened(drawerView: View) {}
+        val periodicLocationWork = PeriodicWorkRequest.Builder(
+            LocationWorker::class.java, 15,
+            TimeUnit.MINUTES
+        )
+            .setConstraints(networkConstraints())
+            .build()
 
-      @SuppressLint("SwitchIntDef")
-      override fun onDrawerClosed(drawerView: View) {
-        activityNavHelper.handlePendingMenuAction(this@CommonActivity)
-      }
+        locationWorkManager.enqueue(periodicLocationWork)
+        dataSyncWorkManager.enqueue(periodicDataSyncWork)
 
-      override fun onDrawerStateChanged(newState: Int) {
+        compressionDataSyncWorkId = periodicDataSyncWork.id
+        compressionLocationWorkId = periodicLocationWork.id
+    }
 
-      }
-    })
-    binding.drawerMenu.onMenuClicked()
-        .subscribe { menu ->
-          if (menu.pageId == NavigationConstants.NAVIGATE_TO_LOGOUT) {
-            logoutCustomer()
-            binding.drawerLayout.closeDrawers()
-          }
+    private fun setupObservables() {
+        val mainThread = dispatchers.main
+        disposable.add(
 
-          activityNavHelper.onMenuClicked(menu)
+            tokenPref.asObservable().distinctUntilChanged()
+                .map { _ -> tokenPref.get() }
+                .filter { token -> !token.equals("0") }
+                .switchMap { token ->
+                    fcmTokenSyncHelper.saveToken(token)
+                        .compose(applyUiModel())
+                }
+                .subscribe())
 
-          binding.drawerMenu.selectItem(menu)
-          binding.drawerLayout.closeDrawers()
-        }
-        .addTo(disposable)
+        val Threshold = TimeUnit.SECONDS.toNanos(10)
+        eventListenerFactory.getApiStatsObservable()
+            .filter { callTime -> callTime > Threshold }
+            .observeOn(mainThread)
+            .subscribe { ignored ->
+                val snackbar1 = snackbar
+                if (snackbar1 == null || snackbar1.isShown) {
+                    snackbar = showConnectivityIssueSnackbar()
+                }
+            }.addTo(disposable)
+    }
 
-    binding.drawerMenu.onCloseClicked()
-        .subscribe() { _ ->
-          binding.drawerLayout.closeDrawers()
-        }
-        .addTo(disposable)
-  }
+    private fun openMenuDrawer() {
+        binding.drawerLayout.openDrawer(GravityCompat.START)
+    }
 
-  internal fun logoutCustomer() {
-    MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
-        getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, _ ->
-      if (action === Action.OK) {
+    private fun setupMenuDrawer() {
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(
+                drawerView: View,
+                slideOffset: Float
+            ) {
+            }
 
-        doLogout()
-      }
-    })
-  }
+            override fun onDrawerOpened(drawerView: View) {}
 
-  private fun doLogout() {
-    val notificationManager = getSystemService(
-        Context.NOTIFICATION_SERVICE
-    ) as NotificationManager
-    notificationManager.cancelAll()
-    val user = userManager.user
-    val logoutInfo = LogoutInfo(
-        userId = user.userId, token = user.token,
-        businessUnitId = user.currentBusinessProfile.businessUnitId ?: "0"
-    )
-    disposable.add(loginRepository.logout(logoutInfo)
-        .toSingleDefault(true).toObservable()
-        .compose(applyUiModel())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { uiModel ->
-          toggleProgressBar(uiModel.inProgress)
+            @SuppressLint("SwitchIntDef")
+            override fun onDrawerClosed(drawerView: View) {
+                activityNavHelper.handlePendingMenuAction(this@CommonActivity)
+            }
 
-          uiModel.onSuccess {
-            Timber.d("Logout Successfully")
+            override fun onDrawerStateChanged(newState: Int) {
 
-            openLogin()
-          }
-
-          uiModel.onFailure {
-            showOnFailurePopup(it)
-          }
+            }
         })
-  }
+        binding.drawerMenu.onMenuClicked()
+            .subscribe { menu ->
+                if (menu.pageId == NavigationConstants.NAVIGATE_TO_LOGOUT) {
+                    logoutCustomer()
+                    binding.drawerLayout.closeDrawers()
+                }
 
-  fun openLogin() {
-    //open image slider instead of splash
+                activityNavHelper.onMenuClicked(menu)
 
-    locationWorkManager.cancelWorkById(compressionLocationWorkId)
-    dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
+                binding.drawerMenu.selectItem(menu)
+                binding.drawerLayout.closeDrawers()
+            }
+            .addTo(disposable)
 
-    shortcutHelper.setLogoutUserShortcuts()
-    val login = Intent(this, SplashActivityNew::class.java)
-    startActivity(login)
-    finish()
-  }
-
-  fun toggleProgressBar(show: Boolean) {
-    if (show) {
-      showProgress()
-    } else {
-      hideProgress()
-    }
-  }
-
-  fun showOnFailurePopup(t: Throwable) {
-    val message: String
-    if (t is ServiceFailureException) {
-      message = t.errorMessage
-    } else {
-      message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED
-    }
-    MSFDialog.alertDialog(
-        applicationContext, 0,
-        resources.getString(R.string.app_name),
-        message, "OK", true, null
-    )
-  }
-
-  override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putSerializable(PAGE_TITLES, globalTitles)
-  }
-
-  override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun clearTitles() {
-    globalTitles.clear()
-  }
-
-  override fun getContainerViewId(): Int {
-    return R.id.activityFrameLayout
-  }
-
-  override fun getFragment(pageId: Int): Fragment? {
-    return fragmentResolver.resolve(pageId)
-  }
-
-  override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
-    fragTransitionHelper.navigateTo(fragmentEntry)
-  }
-
-  override fun hideAppTitle() {
-    binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
-  }
-
-  override fun hideProgress() {
-    binding.progressBar.visibility = View.GONE
-  }
-
-  override fun setAppTitle(
-    page: String,
-    appTitle: AppTitle?
-  ) {
-    Timber.d("ActionBarNew Set Title for %s, to %s", page, appTitle)
-    val pageTitle: AppTitle = appTitle ?: globalTitles[page] ?: AppTitle.EMPTY
-
-    globalTitles[page] = pageTitle
-    binding.actionBar.setTitleAndOverflow(pageTitle)
-  }
-
-  override fun showProgress() {
-    binding.progressBar.visibility = View.VISIBLE
-  }
-
-  override fun hideOverflowMenu() {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun selectMenu(label: Int) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun setOverflowClickListener(listener: OnClickListener?) {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun showOverflowMenu() {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun onBackPressed() {
-    if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-      binding.drawerLayout.closeDrawers()
-      return
+        binding.drawerMenu.onCloseClicked()
+            .subscribe() { _ ->
+                binding.drawerLayout.closeDrawers()
+            }
+            .addTo(disposable)
     }
 
-    if (binding.progressBar.visibility == View.VISIBLE) {
-      binding.progressBar.visibility = View.GONE
-      return
+    internal fun logoutCustomer() {
+        MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
+            getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, _ ->
+                if (action === Action.OK) {
+
+                    doLogout()
+                }
+            })
     }
 
-    if (navigationHelper.onBackPressed()) {
-      return
+    private fun doLogout() {
+        val notificationManager = getSystemService(
+            Context.NOTIFICATION_SERVICE
+        ) as NotificationManager
+        notificationManager.cancelAll()
+        val user = userManager.user
+        val logoutInfo = LogoutInfo(
+            userId = user.userId, token = user.token,
+            businessUnitId = user.currentBusinessProfile.businessUnitId ?: "0"
+        )
+        disposable.add(loginRepository.logout(logoutInfo)
+            .toSingleDefault(true).toObservable()
+            .compose(applyUiModel())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { uiModel ->
+                toggleProgressBar(uiModel.inProgress)
+
+                uiModel.onSuccess {
+                    Timber.d("Logout Successfully")
+
+                    openLogin()
+                }
+
+                uiModel.onFailure {
+                    showOnFailurePopup(it)
+                }
+            })
     }
 
-    if (navigationHelper.canGoBack()) {
-      screenNavigator.goBack()
-      return
-    }
-    exitPopup()
-  }
+    fun openLogin() {
+        //open image slider instead of splash
 
-  internal fun showConnectivityIssueSnackbar(): Snackbar {
-    val snackbar = Snackbar.make(binding.rootCoordinator, R.string.network_connection_slow, 10000)
-    snackbar.setAction(R.string.button_label_ok) { v -> snackbar.dismiss() }
-    snackbar.show()
-    return snackbar
-  }
+        locationWorkManager.cancelWorkById(compressionLocationWorkId)
+        dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
 
-  override fun gotoEkycPage(ekycModule: EkycModule) {
-    Timber.d("ekyc module %s", ekycModule.toString())
-    activityNavHelper.convertEkycApi(this, ekycModule)
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    globalTitles.clear()
-    disposable.clear()
-  }
-
-  fun exitPopup() {
-    MSFDialog.alertDialog(
-        this, 0, getString(R.string.motilal_oswal),
-        "Do you want to exit the application?", "Yes",
-        "No", true
-    ) { action, _ ->
-      if (action == Action.OK) {
+        shortcutHelper.setLogoutUserShortcuts()
+        val login = Intent(this, SplashActivityNew::class.java)
+        startActivity(login)
         finish()
-      }
     }
-  }
 
-  override fun erroMsgDialog(msg: String) {
-    com.mosl.tabapp.ui.MSFDialog.alertDialog(
-        this, 0,
-      resources.getString(R.string.motilal_oswal), msg, MOSLConstants.OK, true,
-        null
-    )
-  }
+    fun toggleProgressBar(show: Boolean) {
+        if (show) {
+            showProgress()
+        } else {
+            hideProgress()
+        }
+    }
 
-  companion object {
-    const val IS_LOGGED_IN_SUCESS = "isLoggedIn"
-    const val PAGE_TITLES = "pageTitles"
-    const val ARG_PAGE_ID = "pageId"
-    const val SEARCH_TYPE_LEAD = "Lead"
-    const val SEARCH_TYPE_CLIENT = "Client"
-    const val SEARCH_TYPE_EMP = "Employee"
-    const val SEARCH_TYPE_LEAD_HINT = "Search Lead"
-    const val SEARCH_TYPE_CLIENT_HINT = "Search Client"
-    const val SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for"
-    const val ID_LEAD = 1
-    const val ID_CLEINT = 2
-    const val ID_EMP = 3
-  }
+    fun showOnFailurePopup(t: Throwable) {
+        val message: String
+        if (t is ServiceFailureException) {
+            message = t.errorMessage
+        } else {
+            message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED
+        }
+        MSFDialog.alertDialog(
+            applicationContext, 0,
+            resources.getString(R.string.app_name),
+            message, "OK", true, null
+        )
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(PAGE_TITLES, globalTitles)
+    }
+
+    override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
+        TODO(
+            "not implemented"
+        ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun clearTitles() {
+        globalTitles.clear()
+    }
+
+    override fun getContainerViewId(): Int {
+        return R.id.activityFrameLayout
+    }
+
+    override fun getFragment(pageId: Int): Fragment? {
+        return fragmentResolver.resolve(pageId)
+    }
+
+    override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
+        fragTransitionHelper.navigateTo(fragmentEntry)
+    }
+
+    override fun hideAppTitle() {
+        binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
+    }
+
+    override fun hideProgress() {
+        binding.progressBar.visibility = View.GONE
+    }
+
+    override fun setAppTitle(
+        page: String,
+        appTitle: AppTitle?
+    ) {
+        Timber.d("ActionBarNew Set Title for %s, to %s", page, appTitle)
+        val pageTitle: AppTitle = appTitle ?: globalTitles[page] ?: AppTitle.EMPTY
+
+        globalTitles[page] = pageTitle
+        binding.actionBar.setTitleAndOverflow(pageTitle)
+    }
+
+    override fun showProgress() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideOverflowMenu() {
+        TODO(
+            "not implemented"
+        ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun selectMenu(label: Int) {
+        TODO(
+            "not implemented"
+        ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setOverflowClickListener(listener: OnClickListener?) {
+        TODO(
+            "not implemented"
+        ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showOverflowMenu() {
+        TODO(
+            "not implemented"
+        ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawers()
+            return
+        }
+
+        if (binding.progressBar.visibility == View.VISIBLE) {
+            binding.progressBar.visibility = View.GONE
+            return
+        }
+
+        if (navigationHelper.onBackPressed()) {
+            return
+        }
+
+        if (navigationHelper.canGoBack()) {
+            screenNavigator.goBack()
+            return
+        }
+        exitPopup()
+    }
+
+    internal fun showConnectivityIssueSnackbar(): Snackbar {
+        val snackbar =
+            Snackbar.make(binding.rootCoordinator, R.string.network_connection_slow, 10000)
+        snackbar.setAction(R.string.button_label_ok) { v -> snackbar.dismiss() }
+        snackbar.show()
+        return snackbar
+    }
+
+    override fun gotoEkycPage(ekycModule: EkycModule) {
+        Timber.d("ekyc module %s", ekycModule.toString())
+        activityNavHelper.convertEkycApi(this, ekycModule)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        globalTitles.clear()
+        disposable.clear()
+    }
+
+    fun exitPopup() {
+        MSFDialog.alertDialog(
+            this, 0, getString(R.string.motilal_oswal),
+            "Do you want to exit the application?", "Yes",
+            "No", true
+        ) { action, _ ->
+            if (action == Action.OK) {
+                finish()
+            }
+        }
+    }
+
+    override fun erroMsgDialog(msg: String) {
+        com.mosl.tabapp.ui.MSFDialog.alertDialog(
+            this, 0,
+            resources.getString(R.string.motilal_oswal), msg, MOSLConstants.OK, true,
+            null
+        )
+    }
+
+    companion object {
+        const val IS_LOGGED_IN_SUCESS = "isLoggedIn"
+        const val PAGE_TITLES = "pageTitles"
+        const val ARG_PAGE_ID = "pageId"
+        const val SEARCH_TYPE_LEAD = "Lead"
+        const val SEARCH_TYPE_CLIENT = "Client"
+        const val SEARCH_TYPE_EMP = "Employee"
+        const val SEARCH_TYPE_LEAD_HINT = "Search Lead"
+        const val SEARCH_TYPE_CLIENT_HINT = "Search Client"
+        const val SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for"
+        const val ID_LEAD = 1
+        const val ID_CLEINT = 2
+        const val ID_EMP = 3
+    }
 }

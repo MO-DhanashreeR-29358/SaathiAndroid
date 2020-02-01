@@ -92,38 +92,40 @@ class LocationWorker(
     }
 
     fun onLocationChanged(location: Location) {
-        var geoArea = ""
-        var geoPincode = ""
-
-        val geocoder = Geocoder(context, Locale.getDefault())
         try {
+            var geoArea = ""
+            var geoPincode = ""
+
+            val geocoder = Geocoder(context, Locale.getDefault())
+
             val addressList = geocoder.getFromLocation(location.latitude, location.longitude, 1)
             geoArea = addressList[0].getAddressLine(0)
             geoPincode = addressList[0].postalCode ?: "000000"
+
+            val locationData = LocationData(
+                location.latitude.toString(),
+                location.longitude.toString(), getDeviceID(context.contentResolver),
+                userManager.getUser()?.employeeCode,
+                AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()),
+                location.accuracy.toString(),
+                geoArea, geoPincode
+            )
+            if (!isLocationFromMockProvider(context, location)) {
+                val db1 = SaathiAppNew.get()
+                    .getDB()
+                Observable.just(db1)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe { db ->
+                        db?.daoAccess()
+                            ?.insertLocationList(locationData)
+                    }
+                    .addTo(disposable)
+
+                Timber.tag("Location Data entered")
+                    .d(locationData.toString())
+            }
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-        val locationData = LocationData(
-            location.latitude.toString(),
-            location.longitude.toString(), getDeviceID(context.contentResolver),
-            userManager.getUser()?.employeeCode,
-            AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()),
-            location.accuracy.toString(),
-            geoArea, geoPincode
-        )
-        if (!isLocationFromMockProvider(context, location)) {
-            val db1 = SaathiAppNew.get()
-                .getDB()
-            Observable.just(db1)
-                .subscribeOn(Schedulers.io())
-                .subscribe { db ->
-                    db?.daoAccess()
-                        ?.insertLocationList(locationData)
-                }
-                .addTo(disposable)
-
-            Timber.tag("Location Data entered")
-                .d(locationData.toString())
         }
     }
 

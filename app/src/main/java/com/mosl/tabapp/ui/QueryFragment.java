@@ -4,23 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.query.QueryItem;
 import com.mosl.saathi.api.model.query.QueryRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.model.AccountDetails;
+
 import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
@@ -68,7 +68,6 @@ QueryFragment extends MOSLCommonFragment implements View.OnClickListener {
 
 
         edQueryText = (EditText) queryView.findViewById(R.id.edQueryText);
-        edQueryText.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         btnSubmit = (Button) queryView.findViewById(R.id.btnSubmit);
         btnReset = (Button) queryView.findViewById(R.id.btnReset);
 

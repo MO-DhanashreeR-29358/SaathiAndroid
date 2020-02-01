@@ -139,7 +139,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
-import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
 import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
@@ -656,9 +655,6 @@ public class LeadViewDetailFragment extends CommonFragment
         etLandlineNumber = leadViewDetailView.findViewById(R.id.etLandlineNumber);
         etEmail = leadViewDetailView.findViewById(R.id.etEmail);
         etRefereeCode = leadViewDetailView.findViewById(R.id.etRefereeCode);
-        etRefereeCode.setFilters(new InputFilter[]{
-                CRMAppUtil.filterOnlyAlphabetAndNumbers, new InputFilter.AllCaps()
-        });
         pbLoadingIndicatorRefreeCode =
                 leadViewDetailView.findViewById(R.id.pbLoadingIndicatorRefreeCode);
         pbLoadingIndicatorRefreeName =
@@ -679,33 +675,20 @@ public class LeadViewDetailFragment extends CommonFragment
         etProspectRefereeName = leadViewDetailView.findViewById(R.id.etProspectRefereeName);
         etProspectRefereerMobile = leadViewDetailView.findViewById(R.id.etProspectRefereerMobile);
         etProspectRefereerEmail = leadViewDetailView.findViewById(R.id.etProspectRefereerEmail);
-        etContactPerson.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
-        etRefereeName.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
-        etProspectRefereeName.setFilters(
-                new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
-        etLeadName.setFilters(new InputFilter[]{CRMAppUtil.filterOnlyAlphabetAndNumbers});
-
         ilLeadName = leadViewDetailView.findViewById(R.id.ilLeadName);
         NewDataLinearLayout =
                 leadViewDetailView.findViewById(R.id.newDataLinearLayout);
 
         etAdd1 = leadViewDetailView.findViewById(R.id.etAdd1);
-        etAdd1.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etAdd2 = leadViewDetailView.findViewById(R.id.etAdd2);
-        etAdd2.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etAdd3 = leadViewDetailView.findViewById(R.id.etAdd3);
-        etAdd3.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etPincode = leadViewDetailView.findViewById(R.id.etPincode);
 
         etOffAdd1 = leadViewDetailView.findViewById(R.id.etOffAdd1);
-        etOffAdd1.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffAdd2 = leadViewDetailView.findViewById(R.id.etOffAdd2);
-        etOffAdd2.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffAdd3 = leadViewDetailView.findViewById(R.id.etOffAdd3);
-        etOffAdd3.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
         etOffPincode = leadViewDetailView.findViewById(R.id.etOffPincode);
         etComments = leadViewDetailView.findViewById(R.id.etComments);
-        etComments.setFilters(new InputFilter[]{filterOnlyAlphabetAndNumbersAnsAllowedChar});
 
         spCity = leadViewDetailView.findViewById(R.id.spCity);
         spState = leadViewDetailView.findViewById(R.id.spState);
