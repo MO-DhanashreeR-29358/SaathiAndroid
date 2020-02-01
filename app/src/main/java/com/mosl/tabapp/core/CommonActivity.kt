@@ -134,7 +134,9 @@ class CommonActivity : BaseActivity(),
         locationWorkManager = WorkManager.getInstance()
         dataSyncWorkManager = WorkManager.getInstance()
 
-        startWorkManager()
+        if (!userManager.user.isAufsb()) {
+            startWorkManager()
+        }
         setupObservables()
 
         remoteConfigModel =
