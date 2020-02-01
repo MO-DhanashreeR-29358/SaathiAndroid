@@ -623,7 +623,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(getResources(),
+                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
                                             resource);
                             //circularBitmapDrawable.setCircular(true);
                             imageView.setImageDrawable(circularBitmapDrawable);

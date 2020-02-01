@@ -94,6 +94,7 @@ import javax.inject.Inject;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -156,6 +157,7 @@ import static java.lang.String.format;
 
 public class CreateMeetingFragment extends CommonFragment
         implements View.OnClickListener, TextView.OnEditorActionListener {
+    final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
     private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
@@ -630,12 +632,16 @@ public class CreateMeetingFragment extends CommonFragment
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
         fromDat = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd");
-        String[] dateArray = Objects.requireNonNull(mainToDate).split("-");
-        currentYear = ((Integer.parseInt(dateArray[0])));
-        month = ((Integer.parseInt(dateArray[1])));
-        day = ((Integer.parseInt(dateArray[2])));
-        AddedAttendeeModel.setAttendeeUserEmplyeeCode(
-                Objects.requireNonNull(userManager.getUser()).employeeCode);
+        try {
+            String[] dateArray = Objects.requireNonNull(mainToDate).split("-");
+            currentYear = ((Integer.parseInt(dateArray[0])));
+            month = ((Integer.parseInt(dateArray[1])));
+            day = ((Integer.parseInt(dateArray[2])));
+            AddedAttendeeModel.setAttendeeUserEmplyeeCode(
+                    Objects.requireNonNull(userManager.getUser()).employeeCode);
+        } catch (Exception e) {
+            Timber.d(e, TAG);
+        }
         if (userManager.getUser().isFranchise()
                 || userManager.getUser().isIFA()) {
             linaerLayoutNew.setVisibility(View.VISIBLE);
@@ -1867,15 +1873,20 @@ public class CreateMeetingFragment extends CommonFragment
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
 
         if (mainFromDate != null) {
-            String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYear = year;
-                        month = monthOfYear + 1;
-                        day = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDate.split("-");
+                dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYear = year;
+                            month = monthOfYear + 1;
+                            day = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {

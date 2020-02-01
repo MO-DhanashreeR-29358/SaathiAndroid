@@ -157,7 +157,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 public class LeadViewDetailFragment extends CommonFragment
         implements View.OnClickListener, MOSLConstants {
 
-    final public static String TAG = LeadViewDetailFragment.class.getSimpleName();
+    private final static String TAG = LeadViewDetailFragment.class.getSimpleName();
     private static final String SectionTagPrefix = "Section";
     private static final String TextBox = "TextBox";
     private static final String DropDown = "DropDown";
@@ -1950,10 +1950,10 @@ public class LeadViewDetailFragment extends CommonFragment
         etLandlineNumber.setText(contact.landlineNo);
         etAlternateMobileNumber.setText(contact.alternateMobileNo);
 
-        String[] newDob = stringOrEmpty(contact.dOB).split("T");
-        String[] newDoa = stringOrEmpty(contact.dOA).split("T");
 
         try {
+            String[] newDoa = stringOrEmpty(contact.dOA).split("T");
+            String[] newDob = stringOrEmpty(contact.dOB).split("T");
             if (!newDob[0].isEmpty()) {
                 Date Dob = CRMAppUtil.getDate(newDob[0], "yyyy-MM-dd");
                 etDob.setText(CRMAppUtil.getDateStr(Dob, "dd-MM-yyyy"));

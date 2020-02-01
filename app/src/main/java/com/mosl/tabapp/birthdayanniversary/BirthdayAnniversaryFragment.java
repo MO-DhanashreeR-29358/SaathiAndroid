@@ -17,8 +17,10 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
@@ -39,13 +41,16 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.BirthdayAnniversaryModel;
 import com.mosl.tabapp.ui.MSFDialog;
-import info.hoang8f.android.segmented.SegmentedGroup;
-import io.reactivex.disposables.Disposable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import info.hoang8f.android.segmented.SegmentedGroup;
+import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -61,14 +66,11 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  */
 
 public class BirthdayAnniversaryFragment extends CommonFragment
-    implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+        implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+    private final static String TAG = BirthdayAnniversaryFragment.class.getSimpleName();
     public static String BELATED_FLAG = "belated";
     public static String TODAY_FLAG = "today";
     public static String UPCOMING_FLAG = "upcoming";
-    //    public static String UPCOMING_FLAG = "1";
-    //    public static String UPCOMING_FLAG = "2";
-    //    public static String UPCOMING_FLAG = "3";
-
     private View birthdayAnniversaryView;
     private RecyclerView rvBirthdayAnniversary;
     private Spinner spProfile, spEventType;
@@ -86,58 +88,59 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private String filterType = "2", dayType = TODAY_FLAG;
 
     private AdapterView.OnItemSelectedListener profileInListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    profileCodeStr = ((RowData) spProfile.getSelectedItem()).getKey();
-                    profileNameStr = ((RowData) spProfile.getSelectedItem()).getValue();
-                    getData();
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        profileCodeStr = ((RowData) spProfile.getSelectedItem()).getKey();
+                        profileNameStr = ((RowData) spProfile.getSelectedItem()).getValue();
+                        getData();
                 /* if (profileCodeStr.equalsIgnoreCase("-1")) {
                     getData("", spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A");
                 } else {
                     getData(profileNameStr, spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A");
                 }*/
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-    private AdapterView.OnItemSelectedListener eventTypeInListener =
-        new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    if (profileCodeStr != null) {
-                        getData();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
                 }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        };
+                }
+            };
+    private AdapterView.OnItemSelectedListener eventTypeInListener =
+            new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    try {
+                        if (profileCodeStr != null) {
+                            getData();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         birthdayAnniversaryView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(birthdayAnniversaryView);
-		container.post(() -> setAppTitle("Birthday & Anniversary"));
+        container.post(() -> setAppTitle("Birthday & Anniversary"));
         setUserVisibleHint(true);
         return birthdayAnniversaryView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_birthday_anniversary;
     }
 
@@ -161,14 +164,14 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         segmentedGroup = (SegmentedGroup) birthdayAnniversaryView.findViewById(R.id.segmentedGroup);
         spEventType.setOnItemSelectedListener(eventTypeInListener);
         rvBirthdayAnniversary =
-            (RecyclerView) birthdayAnniversaryView.findViewById(R.id.rvBirthdayAnniversary);
+                (RecyclerView) birthdayAnniversaryView.findViewById(R.id.rvBirthdayAnniversary);
         tvNoData = (TextView) birthdayAnniversaryView.findViewById(R.id.tvNoData);
         ivEmailAll = (ImageView) birthdayAnniversaryView.findViewById(R.id.ivEmailAll);
         String[] eventTypeArray =
-            getActivity().getResources().getStringArray(R.array.BirthdayAniversary);
+                getActivity().getResources().getStringArray(R.array.BirthdayAniversary);
         arrEventType = new ArrayList<String>(Arrays.asList(eventTypeArray));
         arrAdapEventType =
-            new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
+                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
         arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
         spEventType.setAdapter(arrAdapEventType);
 
@@ -197,7 +200,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                 arrProfile.add(new RowData(i + 1, lookUpId, lookUpName));
             }
             arrAdapProfile =
-                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
+                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
             arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
             spProfile.setAdapter(arrAdapProfile);
             spProfile.setOnItemSelectedListener(profileInListener);
@@ -207,13 +210,13 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private void getProfile() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-				new LookupRequest(Objects.requireNonNull(
-					Objects.requireNonNull(
-						userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
-					null, null);
+                    new LookupRequest(Objects.requireNonNull(
+                            Objects.requireNonNull(
+                                    userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+                            null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderAllLookUp);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderAllLookUp);
         } else {
             noInternetConnectionDialog();
         }
@@ -226,16 +229,16 @@ public class BirthdayAnniversaryFragment extends CommonFragment
 
         if (error != null) {
             birthdayAnniversaryAdapter =
-                new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
+                    new BirthdayAnniversaryAdapter(birthdayAnniversaryList);
             rvBirthdayAnniversary.setLayoutManager(
-                new GridLayoutManager(requireContext(), 3));
+                    new GridLayoutManager(requireContext(), 3));
             rvBirthdayAnniversary.setAdapter(
-                birthdayAnniversaryAdapter);
+                    birthdayAnniversaryAdapter);
             birthdayAnniversaryAdapter.notifyDataSetChanged();
             dataFoundFlag = false;
             tvNoData.setVisibility(View.VISIBLE);
             final String eventType =
-                spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+                    spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
             setNoDataText(eventType);
             showOnFailurePopup(error);
         }
@@ -244,7 +247,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         if (item != null) {
             List<BirthdayAnniversaryData> birthdayAnniversaryDataList = item.data;
             final String eventType =
-                spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+                    spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
             if (birthdayAnniversaryDataList.size() != 0) {
                 for (int i = 0; i < birthdayAnniversaryDataList.size(); i++) {
                     BirthdayAnniversaryData data = birthdayAnniversaryDataList.get(i);
@@ -264,35 +267,35 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                     boolean anniversoryFlag = data.anniversaryFlag;
 
                     birthdayAnniversaryList.add(
-                        new BirthdayAnniversaryModel(clientName,
-                            clientCode, ucid,
-                            eventType.equals("B") ? dob
-                                : aniversaryDate, email, mobile,
-                            eventType.equals("B") ? noOfYearBirthday
-                                : aniversaryCount,
-                            eventType.equals("B") ? "Birthday"
-                                : "Anniversary",
-                            eventType.equals("B") ? birthdayFlag
-                                : anniversoryFlag, eventType));
+                            new BirthdayAnniversaryModel(clientName,
+                                    clientCode, ucid,
+                                    eventType.equals("B") ? dob
+                                            : aniversaryDate, email, mobile,
+                                    eventType.equals("B") ? noOfYearBirthday
+                                            : aniversaryCount,
+                                    eventType.equals("B") ? "Birthday"
+                                            : "Anniversary",
+                                    eventType.equals("B") ? birthdayFlag
+                                            : anniversoryFlag, eventType));
                 }
                 tvNoData.setVisibility(View.GONE);
                 birthdayAnniversaryAdapter =
-                    new BirthdayAnniversaryAdapter(
-                        birthdayAnniversaryList);
+                        new BirthdayAnniversaryAdapter(
+                                birthdayAnniversaryList);
                 rvBirthdayAnniversary.setLayoutManager(
-                    new GridLayoutManager(requireContext(), 3));
+                        new GridLayoutManager(requireContext(), 3));
                 rvBirthdayAnniversary.setAdapter(
-                    birthdayAnniversaryAdapter);
+                        birthdayAnniversaryAdapter);
                 birthdayAnniversaryAdapter.notifyDataSetChanged();
                 dataFoundFlag = true;
             } else {
                 birthdayAnniversaryAdapter =
-                    new BirthdayAnniversaryAdapter(
-                        birthdayAnniversaryList);
+                        new BirthdayAnniversaryAdapter(
+                                birthdayAnniversaryList);
                 rvBirthdayAnniversary.setLayoutManager(
-                    new GridLayoutManager(requireContext(), 3));
+                        new GridLayoutManager(requireContext(), 3));
                 rvBirthdayAnniversary.setAdapter(
-                    birthdayAnniversaryAdapter);
+                        birthdayAnniversaryAdapter);
                 birthdayAnniversaryAdapter.notifyDataSetChanged();
                 dataFoundFlag = false;
                 tvNoData.setVisibility(View.VISIBLE);
@@ -304,10 +307,10 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private void setNoDataText(String eventType) {
         if (eventType.equalsIgnoreCase("B")) {
             tvNoData.setText(
-                "No clients having Birthday " + dayType);
+                    "No clients having Birthday " + dayType);
         } else {
             tvNoData.setText(
-                "No clients having Anniversary " + dayType);
+                    "No clients having Anniversary " + dayType);
         }
     }
 
@@ -324,7 +327,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
             profileId = profileNameStr;
         }
         final String eventType =
-            spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
+                spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A";
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             FiltersItem filtersItem = new FiltersItem();
@@ -340,13 +343,13 @@ public class BirthdayAnniversaryFragment extends CommonFragment
             String calculatedPage = "0";
             String totalCount = "0";
             Request birthdayRequest =
-                new Request(dayType, totalCount, REPORT_PAGE_SIZE, eventType, calculatedPage, page);
+                    new Request(dayType, totalCount, REPORT_PAGE_SIZE, eventType, calculatedPage, page);
 
             BirthdayAnniversaryRequest request =
-                new BirthdayAnniversaryRequest(filter, birthdayRequest, true);
+                    new BirthdayAnniversaryRequest(filter, birthdayRequest, true);
             Disposable subscribe = getSaathiApi().postBirthdayAnniversary(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderBirthdayAnniversary);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderBirthdayAnniversary);
         } else {
             noInternetConnectionDialog();
         }
@@ -363,7 +366,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         String data = uiModel.data;
         if (data != null) {
             alertDialog(requireContext(), 0,
-                getResources().getString(R.string.motilal_oswal), GIFT_SEND, "Ok", true, null);
+                    getResources().getString(R.string.motilal_oswal), GIFT_SEND, "Ok", true, null);
         }
     }
 
@@ -379,8 +382,8 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             SendGiftRequest request = new SendGiftRequest(ucid, eventType);
             Disposable subscribe = getSaathiApi().postSendGift(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderSendGift);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSendGift);
         } else {
             noInternetConnectionDialog();
         }
@@ -397,18 +400,18 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         String data = uiModel.data;
         if (data != null) {
             alertDialog(requireContext(), 0,
-                getResources().getString(R.string.motilal_oswal), MOSLConstants.EMAIL_SEND, "Ok",
-                true, null);
+                    getResources().getString(R.string.motilal_oswal), MOSLConstants.EMAIL_SEND, "Ok",
+                    true, null);
         }
     }
 
     private void sendEmail(String ucid, String eventType) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             SendEmailRequest request =
-                new SendEmailRequest(ucid, false, eventType + "-T", "E", null, null);
+                    new SendEmailRequest(ucid, false, eventType + "-T", "E", null, null);
             Disposable subscribe = getSaathiApi().postSendEmail(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderSendEmail);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSendEmail);
         } else {
             noInternetConnectionDialog();
         }
@@ -417,15 +420,15 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private void sendEmailAll() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String eventType =
-                (spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A")
-                    + (dayType.equalsIgnoreCase(BELATED_FLAG) ? "-L" : "-T");
+                    (spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A")
+                            + (dayType.equalsIgnoreCase(BELATED_FLAG) ? "-L" : "-T");
             SendEmailRequest request =
-				new SendEmailRequest(null, true, eventType, "E", Objects.requireNonNull(
-					userManager.getUser()).employeeCode,
-                    filterType);
+                    new SendEmailRequest(null, true, eventType, "E", Objects.requireNonNull(
+                            userManager.getUser()).employeeCode,
+                            filterType);
             Disposable subscribe = getSaathiApi().postSendEmail(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderSendEmail);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSendEmail);
         } else {
             noInternetConnectionDialog();
         }
@@ -438,16 +441,16 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                 if (dataFoundFlag) {
                     if (!filterType.equalsIgnoreCase("3")) {
                         alertDialog(requireContext(), 0,
-                            getResources().getString(R.string.motilal_oswal), EMAIL_ALL_MESSAGE,
-                            "Yes", "No", true, new MSFDialog.DialogListener() {
-                                @Override
-                                public void alertDialogAction(MSFDialog.Action action,
-                                    Object... data) {
-                                    if (action == MSFDialog.Action.OK) {
-                                        sendEmailAll();
+                                getResources().getString(R.string.motilal_oswal), EMAIL_ALL_MESSAGE,
+                                "Yes", "No", true, new MSFDialog.DialogListener() {
+                                    @Override
+                                    public void alertDialogAction(MSFDialog.Action action,
+                                                                  Object... data) {
+                                        if (action == MSFDialog.Action.OK) {
+                                            sendEmailAll();
+                                        }
                                     }
-                                }
-                            });
+                                });
                     }
                 }
                 break;
@@ -484,7 +487,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     }
 
     public class BirthdayAnniversaryAdapter
-        extends RecyclerView.Adapter<BirthdayAnniversaryAdapter.MyViewHolder> {
+            extends RecyclerView.Adapter<BirthdayAnniversaryAdapter.MyViewHolder> {
 
         private List<BirthdayAnniversaryModel> birthdayAnniversaryList;
 
@@ -495,7 +498,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_recycler_birthday_anniversary, parent, false);
+                    .inflate(R.layout.item_recycler_birthday_anniversary, parent, false);
 
             return new MyViewHolder(itemView);
         }
@@ -503,24 +506,27 @@ public class BirthdayAnniversaryFragment extends CommonFragment
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             final BirthdayAnniversaryModel birthdayAnniversaryModel =
-                birthdayAnniversaryList.get(position);
-            String[] birthDate = birthdayAnniversaryModel.getBirthday().split("T");
-            Date dateformat = CRMAppUtil.getDate(birthDate[0], "yyyy-MM-dd");
-            String date = CRMAppUtil.getDateStr(dateformat, "dd MMM yyyy");
+                    birthdayAnniversaryList.get(position);
+            try {
+                String[] birthDate = birthdayAnniversaryModel.getBirthday().split("T");
+                Date dateformat = CRMAppUtil.getDate(birthDate[0], "yyyy-MM-dd");
+                String date = CRMAppUtil.getDateStr(dateformat, "dd MMM yyyy");
+                holder.tvDate.setText(date);
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
             holder.tvClientName.setText(birthdayAnniversaryModel.getClientName());
             if (birthdayAnniversaryModel.getClientCode().equalsIgnoreCase("0") || isBlank(
-                birthdayAnniversaryModel.getClientCode())) {
+                    birthdayAnniversaryModel.getClientCode())) {
                 holder.tvClientCode.setText(birthdayAnniversaryModel.getUcid());
             } else {
                 holder.tvClientCode.setText(birthdayAnniversaryModel.getClientCode());
             }
-            holder.tvDate.setText(date);
-            //            holder.tvDate.setText(birthdayAnniversaryModel.getBirthday());
             holder.tvEvent.setText(
-                birthdayAnniversaryModel.getTotalYears()
-                    + CRMAppUtil.getDayOfMonthSuffix(
-                    Integer.parseInt(birthdayAnniversaryModel.getTotalYears()))
-                    + birthdayAnniversaryModel.getTitle());
+                    birthdayAnniversaryModel.getTotalYears()
+                            + CRMAppUtil.getDayOfMonthSuffix(
+                            Integer.parseInt(birthdayAnniversaryModel.getTotalYears()))
+                            + birthdayAnniversaryModel.getTitle());
             if (birthdayAnniversaryModel.getTitle().equals("Birthday")) {
                 holder.ivBirthdayAnniversary.setBackgroundResource(R.drawable.ic_bday);
             } else {
@@ -535,12 +541,12 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                         final Dialog dialog = new Dialog(requireContext());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         dialog.getWindow()
-                            .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.setContentView(R.layout.dialog_birthday_anniversary);
                         dialog.getWindow()
-                            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT);
+                                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
                         dialog.setCanceledOnTouchOutside(false);
 
                         ImageView ivClose = (ImageView) dialog.findViewById(R.id.ivClose);
@@ -554,30 +560,30 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                             public void onClick(View view) {
                                 if (!filterType.equalsIgnoreCase("3")) {
                                     alertDialog(requireContext(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        "Do you want to call?", "Yes", "No", true,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    if (birthdayAnniversaryModel.getContactNo()
-                                                        .equalsIgnoreCase("")) {
-                                                        Toast.makeText(requireContext(),
-                                                            "Contact number not available",
-                                                            Toast.LENGTH_LONG).show();
-                                                    } else {
-                                                        Intent callIntent =
-                                                            new Intent(Intent.ACTION_DIAL);
-                                                        callIntent.setData(Uri.parse("tel:"
-                                                            + birthdayAnniversaryModel.getContactNo()));
-                                                        callIntent.setFlags(
-                                                            Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                        requireContext().startActivity(callIntent);
+                                            getResources().getString(R.string.motilal_oswal),
+                                            "Do you want to call?", "Yes", "No", true,
+                                            new MSFDialog.DialogListener() {
+                                                @Override
+                                                public void alertDialogAction(MSFDialog.Action action,
+                                                                              Object... data) {
+                                                    if (action == MSFDialog.Action.OK) {
+                                                        if (birthdayAnniversaryModel.getContactNo()
+                                                                .equalsIgnoreCase("")) {
+                                                            Toast.makeText(requireContext(),
+                                                                    "Contact number not available",
+                                                                    Toast.LENGTH_LONG).show();
+                                                        } else {
+                                                            Intent callIntent =
+                                                                    new Intent(Intent.ACTION_DIAL);
+                                                            callIntent.setData(Uri.parse("tel:"
+                                                                    + birthdayAnniversaryModel.getContactNo()));
+                                                            callIntent.setFlags(
+                                                                    Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                            requireContext().startActivity(callIntent);
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        });
+                                            });
                                     dialog.dismiss();
                                 }
                             }
@@ -587,21 +593,21 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                             public void onClick(View view) {
                                 if (!filterType.equalsIgnoreCase("3")) {
                                     if (!(birthdayAnniversaryModel.getContactNo()
-                                        .equals("android.intent.action.VIEW"))) {
+                                            .equals("android.intent.action.VIEW"))) {
                                         Intent smsIntent = new Intent("");
                                         smsIntent.setData(Uri.parse("smsto:" + Uri.encode(
-                                            birthdayAnniversaryModel.getContactNo())));
+                                                birthdayAnniversaryModel.getContactNo())));
                                         smsIntent.putExtra("sms_body",
-                                            birthdayAnniversaryModel.getTitle()
-                                                .equalsIgnoreCase("birthday")
-                                                ? MOSLConstants.BIRTHDAY_MESSAGE
-                                                : MOSLConstants.ANNIVERSARY_MESSAGE);
+                                                birthdayAnniversaryModel.getTitle()
+                                                        .equalsIgnoreCase("birthday")
+                                                        ? MOSLConstants.BIRTHDAY_MESSAGE
+                                                        : MOSLConstants.ANNIVERSARY_MESSAGE);
                                         smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         requireContext().startActivity(smsIntent);
                                     } else {
                                         Toast.makeText(requireContext(),
-                                            "Contact number not available", Toast.LENGTH_LONG)
-                                            .show();
+                                                "Contact number not available", Toast.LENGTH_LONG)
+                                                .show();
                                     }
                                     dialog.dismiss();
                                 }
@@ -612,18 +618,18 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                             public void onClick(View view) {
                                 if (!filterType.equalsIgnoreCase("3")) {
                                     alertDialog(requireContext(), 0,
-                                        getResources().getString(R.string.motilal_oswal),
-                                        EMAIL_MESSAGE_CLIENT, "Yes", "No", true,
-                                        new MSFDialog.DialogListener() {
-                                            @Override
-                                            public void alertDialogAction(MSFDialog.Action action,
-                                                Object... data) {
-                                                if (action == MSFDialog.Action.OK) {
-                                                    sendEmail(birthdayAnniversaryModel.getUcid(),
-                                                        birthdayAnniversaryModel.getEventType());
+                                            getResources().getString(R.string.motilal_oswal),
+                                            EMAIL_MESSAGE_CLIENT, "Yes", "No", true,
+                                            new MSFDialog.DialogListener() {
+                                                @Override
+                                                public void alertDialogAction(MSFDialog.Action action,
+                                                                              Object... data) {
+                                                    if (action == MSFDialog.Action.OK) {
+                                                        sendEmail(birthdayAnniversaryModel.getUcid(),
+                                                                birthdayAnniversaryModel.getEventType());
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
                                     dialog.dismiss();
                                 }
                             }
@@ -633,7 +639,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                             public void onClick(View view) {
                                 if (!birthdayAnniversaryModel.isGiftFlag()) {
                                     sendGift(birthdayAnniversaryModel.getUcid(),
-                                        birthdayAnniversaryModel.getEventType());
+                                            birthdayAnniversaryModel.getEventType());
                                 }
                                 dialog.dismiss();
                             }
@@ -663,7 +669,7 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                 tvDate = (TextView) itemView.findViewById(R.id.tvDate);
                 tvEvent = (TextView) itemView.findViewById(R.id.tvEvent);
                 ivBirthdayAnniversary =
-                    (ImageView) itemView.findViewById(R.id.ivBirthdayAnniversary);
+                        (ImageView) itemView.findViewById(R.id.ivBirthdayAnniversary);
                 ivPopup = (ImageView) itemView.findViewById(R.id.ivPopup);
                 //                final BirthdayAnniversaryModel model = data.get(position);
 

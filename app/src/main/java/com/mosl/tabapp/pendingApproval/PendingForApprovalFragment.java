@@ -52,6 +52,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -80,6 +81,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private Dialog dialog;
     private Calendar today;
     private LinearLayout llButton;
+    private final static String TAG = PendingForApprovalFragment.class.getSimpleName();
     private AdapterView.OnItemSelectedListener selectEmployeeListener =
             new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -244,35 +246,39 @@ public class PendingForApprovalFragment extends CommonFragment
 
         dpToDate.setMaxDate(System.currentTimeMillis() - 1000);
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
+        try {
+            if (mainFromDate != null) {
+                String[] dateSplit = mainFromDate.split("-");
+                dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+            } else {
+                dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                        today.getFirstDayOfWeek(), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+            }
 
-        if (mainFromDate != null) {
-            String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
-        } else {
-            dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                    today.getFirstDayOfWeek(), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+            if (mainFromDate != null) {
+                String[] dateSplit = mainToDate.split("-");
+                dpToDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> mainToDate =
+                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+            } else {
+                dpToDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+                        today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
+
+                            today.set(year, monthOfYear, dayOfMonth);
+                            long dayy = today.getActualMaximum(Calendar.DATE);
+                            mainToDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                        });
+            }
+        } catch (Exception e) {
+            Timber.d(e, TAG);
         }
 
-        if (mainFromDate != null) {
-            String[] dateSplit = mainToDate.split("-");
-            dpToDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> mainToDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
-        } else {
-            dpToDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                    today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
-
-                        today.set(year, monthOfYear, dayOfMonth);
-                        long dayy = today.getActualMaximum(Calendar.DATE);
-                        mainToDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                    });
-        }
 
         close.setOnClickListener(v -> dialog.dismiss());
 

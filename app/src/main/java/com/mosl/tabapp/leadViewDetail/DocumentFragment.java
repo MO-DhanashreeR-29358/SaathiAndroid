@@ -28,11 +28,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest;
 import com.mosl.saathi.api.model.documents.DocumentsRequest;
@@ -47,7 +49,9 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.DocumentModel;
 import com.mosl.tabapp.ui.MSFDialog;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -62,7 +66,8 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
@@ -361,8 +366,8 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 
 				fileName = CRMAppUtil.getFilenameWithoutExtension(fileName) + "." + extention;
 			}
-			String[] tokens = fileName.split("\\.(?=[^\\.]+$)");
 			try {
+				String[] tokens = fileName.split("\\.(?=[^\\.]+$)");
 				if (!isFileAllowed(tokens[1], ALLOWED_FILE_TYPE)) {
 					alertDialog(requireContext(), 0,
 						getResources().getString(R.string.motilal_oswal),

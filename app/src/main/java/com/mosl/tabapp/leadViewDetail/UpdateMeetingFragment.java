@@ -63,6 +63,7 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.filterOnlyAlphabetAndNumbersAnsAllowedChar;
@@ -162,6 +163,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private Spinner spMeetingObjective;
     private TextView tvMeetingObjectiveError;
     private boolean mandatory = true;
+    private final static String TAG = UpdateMeetingFragment.class.getSimpleName();
     private AdapterView.OnItemSelectedListener selectSubCategoryListener =
             new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -821,15 +823,18 @@ public class UpdateMeetingFragment extends CommonFragment
             setCountForSpecial(addedSplAttendeeCount);
             setCount(addedAttendeeCount);
             selectProduct(productTypeID);
-
-            String[] metadataArray = MeetingDate.split("T");
-            String[] dateArray = metadataArray[0].split("-");
-            String[] timeArray = metadataArray[1].split(":");
-            currentYear = ((Integer.parseInt(dateArray[0])));
-            month = ((Integer.parseInt(dateArray[1])));
-            day = ((Integer.parseInt(dateArray[2])));
-            hour = ((Integer.parseInt(timeArray[0])));
-            minute = ((Integer.parseInt(timeArray[1])));
+            try {
+                String[] metadataArray = MeetingDate.split("T");
+                String[] dateArray = metadataArray[0].split("-");
+                String[] timeArray = metadataArray[1].split(":");
+                currentYear = ((Integer.parseInt(dateArray[0])));
+                month = ((Integer.parseInt(dateArray[1])));
+                day = ((Integer.parseInt(dateArray[2])));
+                hour = ((Integer.parseInt(timeArray[0])));
+                minute = ((Integer.parseInt(timeArray[1])));
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
             etMeetingDescription.setText(MeetingDescription);
             etCustomerComment.setText(CustomerRemark);
             etCategory.setText(CategoryDescription);

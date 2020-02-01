@@ -3,9 +3,13 @@ package com.mosl.tabapp.model;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import java.io.Serializable;
 
+import timber.log.Timber;
+
 public class LeadFieldValueModel implements Serializable {
+    private final static String TAG = LeadFieldValueModel.class.getSimpleName();
     private String LeadField_Value = "";
     private static String leadid = "";
     private String LF_SysName = "";
@@ -85,7 +89,12 @@ public class LeadFieldValueModel implements Serializable {
     }
 
     public void setDropdownValueArr(String dropdownValueArr, String seperator) {
-        DropdownValueArr = dropdownValueArr.split(seperator);
+        try {
+            DropdownValueArr = dropdownValueArr.split(seperator);
+        } catch (Exception e) {
+            Timber.d(e, TAG);
+        }
+
     }
 
 //    public int getFieldSectionId() {
