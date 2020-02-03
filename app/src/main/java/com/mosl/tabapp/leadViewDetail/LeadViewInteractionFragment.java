@@ -13,11 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest;
 import com.mosl.tabapp.R;
@@ -26,8 +29,10 @@ import com.mosl.tabapp.common.CustomWebViewDialog;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +41,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -56,546 +63,548 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  */
 
 public class LeadViewInteractionFragment extends CommonFragment
-	implements AdapterView.OnItemSelectedListener {
-	private View leadViewInteractionView;
-	private ViewPager viewPager;
-	private Spinner spInteraction;
-	private TableFixHeaders table;
-	private String mUcid;
-	private String serviceUrl = "";
-	private TextView tvNochart;
-	private boolean isTabClick;
-	private String leadId = "";
+        implements AdapterView.OnItemSelectedListener {
+    private View leadViewInteractionView;
+    private ViewPager viewPager;
+    private Spinner spInteraction;
+    private TableFixHeaders table;
+    private String mUcid;
+    private String serviceUrl = "";
+    private TextView tvNochart;
+    private boolean isTabClick;
+    private String leadId = "";
 
-	public static LeadViewInteractionFragment newInstance(int position, String type, String leadID,
-		String mUcid) {
-		LeadViewInteractionFragment fragment = new LeadViewInteractionFragment();
-		Bundle args = new Bundle();
-		args.putInt("Position", position);
-		args.putString("Type", type);
-		args.putString(LEAD_ID, leadID);
-		args.putString(UCID, mUcid);
-		fragment.setArguments(args);
-		return fragment;
-	}
+    public static LeadViewInteractionFragment newInstance(int position, String type, String leadID,
+                                                          String mUcid) {
+        LeadViewInteractionFragment fragment = new LeadViewInteractionFragment();
+        Bundle args = new Bundle();
+        args.putInt("Position", position);
+        args.putString("Type", type);
+        args.putString(LEAD_ID, leadID);
+        args.putString(UCID, mUcid);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
-	/**
-	 * this is to remove line feeds an from jtml String
-	 */
-	private static String getHtmlSafeString(String data) {
-		return data.replace("\r", "").replace("\n", "").replace("\t", "");
-	}
+    /**
+     * this is to remove line feeds an from jtml String
+     */
+    private static String getHtmlSafeString(String data) {
+        return data.replace("\r", "").replace("\n", "").replace("\t", "");
+    }
 
-	@Override protected int getLayout() {
-		return R.layout.frag_leadview_interactionn;
-	}
+    @Override
+    protected int getLayout() {
+        return R.layout.frag_leadview_interactionn;
+    }
 
-	//Case end
-	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-		Bundle savedInstanceState) {
-		leadViewInteractionView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_leadview_interactionn);
-		setUpView(Objects.requireNonNull(leadViewInteractionView));
-		setUserVisibleHint(true);
+    //Case end
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        leadViewInteractionView = super.onCreateView(inflater, container, savedInstanceState);
+        //attachLayout(R.layout.frag_leadview_interactionn);
+        setUpView(Objects.requireNonNull(leadViewInteractionView));
+        setUserVisibleHint(true);
 
-		return leadViewInteractionView;
-	}
+        return leadViewInteractionView;
+    }
 
-	@SuppressLint("ClickableViewAccessibility") private void setUpView(View leadViewDetailView) {
-		leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID, "0");
-		mUcid = this.getArguments().getString(UCID, "0");
-		mUcid = (mUcid != null && !CRMAppUtil.isBlank(mUcid)) ? mUcid : "0";
-		spInteraction = leadViewDetailView.findViewById(R.id.spHistory);
-		tvNochart = leadViewDetailView.findViewById(R.id.tvNochart);
-		table = leadViewDetailView.findViewById(R.id.table);
-		NestedScrollView nestedScrollView =
-			leadViewDetailView.findViewById(R.id.nestedScrollView);
-		nestedScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-		nestedScrollView.setFocusable(true);
-		nestedScrollView.setFocusableInTouchMode(true);
-		nestedScrollView.setOnTouchListener((v, event) -> {
-			v.requestFocusFromTouch();
-			return false;
-		});
-		table.allowTouchEvent(false);
-	}
+    @SuppressLint("ClickableViewAccessibility")
+    private void setUpView(View leadViewDetailView) {
+        leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID, "0");
+        mUcid = this.getArguments().getString(UCID, "0");
+        mUcid = (mUcid != null && !CRMAppUtil.isBlank(mUcid)) ? mUcid : "0";
+        spInteraction = leadViewDetailView.findViewById(R.id.spHistory);
+        tvNochart = leadViewDetailView.findViewById(R.id.tvNochart);
+        table = leadViewDetailView.findViewById(R.id.table);
+        NestedScrollView nestedScrollView =
+                leadViewDetailView.findViewById(R.id.nestedScrollView);
+        nestedScrollView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+        nestedScrollView.setFocusable(true);
+        nestedScrollView.setFocusableInTouchMode(true);
+        nestedScrollView.setOnTouchListener((v, event) -> {
+            v.requestFocusFromTouch();
+            return false;
+        });
+        table.allowTouchEvent(false);
+    }
 
-	//region server call
+    //region server call
 
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		try {
-			super.setUserVisibleHint(isVisibleToUser);
-			if (isVisibleToUser && leadViewInteractionView != null && (viewPager.getCurrentItem()
-				== Objects
-				.requireNonNull(this.getArguments())
-				.getInt("Position"))) {
-				String[] eventTypeArray = Objects.requireNonNull(getActivity())
-					.getResources()
-					.getStringArray(R.array.LeadInteraction);
-				ArrayList<String> arrEventType =
-					new ArrayList<String>(Arrays.asList(eventTypeArray));
-				ArrayAdapter<String> arrAdapEventType =
-					new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-						arrEventType);
-				arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
-				spInteraction.setAdapter(arrAdapEventType);
-				spInteraction.setOnItemSelectedListener(LeadViewInteractionFragment.this);
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        try {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser && leadViewInteractionView != null && (viewPager.getCurrentItem()
+                    == Objects
+                    .requireNonNull(this.getArguments())
+                    .getInt("Position"))) {
+                String[] eventTypeArray = Objects.requireNonNull(getActivity())
+                        .getResources()
+                        .getStringArray(R.array.LeadInteraction);
+                ArrayList<String> arrEventType =
+                        new ArrayList<String>(Arrays.asList(eventTypeArray));
 
-				serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
-				getInteractionMapping(serviceUrl);
-				isTabClick = false;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+                ArrayAdapter<String> arrAdapEventType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+                spInteraction.setAdapter(arrAdapEventType);
+                AdapterUtils.setSpinnerData(arrAdapEventType, spInteraction, arrEventType);
 
-	private void render(UiModel<List<Map<String, Object>>> uiModel) {
-		toggleProgress(uiModel.inProgress);
+                spInteraction.setOnItemSelectedListener(LeadViewInteractionFragment.this);
+                serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
+                getInteractionMapping(serviceUrl);
+                isTabClick = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		Throwable error = uiModel.error;
-		if (error != null) {
-			error.printStackTrace();
-			table.setVisibility(View.GONE);
-			tvNochart.setVisibility(View.VISIBLE);
-			showOnFailurePopup(error);
-		}
+    private void render(UiModel<List<Map<String, Object>>> uiModel) {
+        toggleProgress(uiModel.inProgress);
 
-		List<Map<String, Object>> data = uiModel.data;
-		if (data != null) {
-			try {
-				renderTable(data);
-			} catch (Exception e) {
-				e.printStackTrace();
-				table.setVisibility(View.GONE);
-				tvNochart.setVisibility(View.VISIBLE);
-				alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-					SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
-			}
-		}
-	}
+        Throwable error = uiModel.error;
+        if (error != null) {
+            error.printStackTrace();
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+            showOnFailurePopup(error);
+        }
 
-	private void getInteractionMapping(String serviceMethod) {
-		isTabClick = true;
-		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-			LeadInteractionRequest leadInteractionRequest = new LeadInteractionRequest();
-			leadInteractionRequest.request.leadId = this.leadId;
-			leadInteractionRequest.request.uCID = this.mUcid;
-			Observable<String> interactiveObs;
-			switch (serviceMethod) {
-				case "TalismaInteractionRequest/TalismaRequestGet": {
-					interactiveObs = getSaathiApi().getInteraction(leadInteractionRequest);
-					break;
-				}
+        List<Map<String, Object>> data = uiModel.data;
+        if (data != null) {
+            try {
+                renderTable(data);
+            } catch (Exception e) {
+                e.printStackTrace();
+                table.setVisibility(View.GONE);
+                tvNochart.setVisibility(View.VISIBLE);
+                alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+            }
+        }
+    }
 
-				case "Client/GetClientBirthdayAnniversaryWishLog": {
-					interactiveObs =
-						getSaathiApi().getBirthdayAnniversaryEvent(leadInteractionRequest);
-					break;
-				}
+    private void getInteractionMapping(String serviceMethod) {
+        isTabClick = true;
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            LeadInteractionRequest leadInteractionRequest = new LeadInteractionRequest();
+            leadInteractionRequest.request.leadId = this.leadId;
+            leadInteractionRequest.request.uCID = this.mUcid;
+            Observable<String> interactiveObs;
+            switch (serviceMethod) {
+                case "TalismaInteractionRequest/TalismaRequestGet": {
+                    interactiveObs = getSaathiApi().getInteraction(leadInteractionRequest);
+                    break;
+                }
 
-				default: {
-					interactiveObs = getSaathiApi().getSeminarEvent(leadInteractionRequest);
-				}
-			}
+                case "Client/GetClientBirthdayAnniversaryWishLog": {
+                    interactiveObs =
+                            getSaathiApi().getBirthdayAnniversaryEvent(leadInteractionRequest);
+                    break;
+                }
 
-			Disposable subscribe = interactiveObs
-				.map(responseS -> {
-					Gson mGson = new Gson();
-					Type type = new TypeToken<HashMap<String, Object>>() {
-					}.getType();
-					HashMap<String, Object> response = mGson.fromJson(responseS, type);
-					Map<String, Object> responseJsonObj =
-						(Map<String, Object>) response.get("Response");
-					List<Map<String, Object>> tableResponseList =
-						(List<Map<String, Object>>) responseJsonObj.get(
-							"Data");
-					String status = Objects.requireNonNull(response.get(STATUS)).toString();
-					if (status.equalsIgnoreCase("true")) {
-						return tableResponseList;
-					} else {
-						String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
-						throw new ServiceFailureException(message, message);
-					}
-				})
-				.compose(applyUiModel())
-				.subscribe(this::render);
-		} else {
-			noInternetConnectionDialog();
-		}
-	}
+                default: {
+                    interactiveObs = getSaathiApi().getSeminarEvent(leadInteractionRequest);
+                }
+            }
 
-	@SuppressLint("DefaultLocale") private void renderTable(List<Map<String, Object>> tableList) {
-		SecondClickTableAdapter secondClickTableAdapter =
-			new SecondClickTableAdapter(requireContext(), new ArrayList<HashMap<String, String>>());
-		table.setAdapter(secondClickTableAdapter);
+            Disposable subscribe = interactiveObs
+                    .map(responseS -> {
+                        Gson mGson = new Gson();
+                        Type type = new TypeToken<HashMap<String, Object>>() {
+                        }.getType();
+                        HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                        Map<String, Object> responseJsonObj =
+                                (Map<String, Object>) response.get("Response");
+                        List<Map<String, Object>> tableResponseList =
+                                (List<Map<String, Object>>) responseJsonObj.get(
+                                        "Data");
+                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        if (status.equalsIgnoreCase("true")) {
+                            return tableResponseList;
+                        } else {
+                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::render);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
 
-		ArrayList<String> columns = new ArrayList<String>();
-		ArrayList<String> columnsHeader = new ArrayList<String>();
+    @SuppressLint("DefaultLocale")
+    private void renderTable(List<Map<String, Object>> tableList) {
+        SecondClickTableAdapter secondClickTableAdapter =
+                new SecondClickTableAdapter(requireContext(), new ArrayList<HashMap<String, String>>());
+        table.setAdapter(secondClickTableAdapter);
 
-		if (tableList.size() != 0) {
-			for (int y = 0; y < tableList.size(); y++) {
-				Map<String, Object> objDetail = tableList.get(y);
+        ArrayList<String> columns = new ArrayList<String>();
+        ArrayList<String> columnsHeader = new ArrayList<String>();
 
-				if (columns.size() == 0) {
-					for (Object columnName : objDetail.keySet()) {
-						columns.add(columnName.toString());
-						if (columnName.toString().equalsIgnoreCase("lead_id")) {
-							columnName = columnName.toString().toUpperCase();
-						}
-						columnsHeader.add(getRefreshColumnName(columnName.toString()));
-					}
-					String[] stockArr = new String[columnsHeader.size()];
-					stockArr = columnsHeader.toArray(stockArr);
-					secondClickTableAdapter.setHeaders(stockArr);
-				}
-				LinkedHashMap<String, String> hm = new LinkedHashMap<>();
-				for (String column : columns) {
-					String columnData =
-						objDetail.get(column) == null
-							? "" : Objects.requireNonNull(objDetail.get(column)).toString();
+        if (tableList.size() != 0) {
+            for (int y = 0; y < tableList.size(); y++) {
+                Map<String, Object> objDetail = tableList.get(y);
 
-					if (objDetail.get(column) instanceof Number) {
-						String strValue =
-							Objects.requireNonNull(objDetail.get(column)).toString().trim();
+                if (columns.size() == 0) {
+                    for (Object columnName : objDetail.keySet()) {
+                        columns.add(columnName.toString());
+                        if (columnName.toString().equalsIgnoreCase("lead_id")) {
+                            columnName = columnName.toString().toUpperCase();
+                        }
+                        columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                    }
+                    String[] stockArr = new String[columnsHeader.size()];
+                    stockArr = columnsHeader.toArray(stockArr);
+                    secondClickTableAdapter.setHeaders(stockArr);
+                }
+                LinkedHashMap<String, String> hm = new LinkedHashMap<>();
+                for (String column : columns) {
+                    String columnData =
+                            objDetail.get(column) == null
+                                    ? "" : Objects.requireNonNull(objDetail.get(column)).toString();
 
-						if (strValue.contains(".")
-							&& !strValue.endsWith(".0")
-							&& !strValue.endsWith(".00")) {
-							columnData = String.format("%.2f",
-								Double.parseDouble(
-									Objects.requireNonNull(objDetail.get(column)).toString()));
-						} else {
-							columnData = String.format("%.0f",
-								Double.parseDouble(
-									Objects.requireNonNull(objDetail.get(column)).toString()));
-						}
-					}
-					if (column.equalsIgnoreCase("lead_id")) {
-						column = column.toUpperCase();
-					}
-					if (columnData.contains("T")) {
-						columnData =
-							CRMAppUtil.getDateStrT(columnData, mFormat, DATE_FORMAT_TO_DISPLAY);
-					}
-					hm.put(getRefreshColumnName(column), columnData.trim());
-				}
-				secondClickTableAdapter.add(hm);
-			}
-			secondClickTableAdapter.notifyDataSetChanged();
-			table.setVisibility(View.VISIBLE);
-			tvNochart.setVisibility(View.GONE);
-		} else {
-			table.setVisibility(View.GONE);
-			tvNochart.setVisibility(View.VISIBLE);
-		}
-	}
+                    if (objDetail.get(column) instanceof Number) {
+                        String strValue =
+                                Objects.requireNonNull(objDetail.get(column)).toString().trim();
 
-	//endregion
-	//region selection logic
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		switch (position) {
-			case 0: {
-				if (isTabClick) {
-					serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
-					getInteractionMapping(serviceUrl);
-				}
-			}
-			break;
-			case 1: {
-				serviceUrl = "Client/GetClientBirthdayAnniversaryWishLog";
-				getInteractionMapping(serviceUrl);
-			}
-			break;
-			case 2: {
-				serviceUrl = "Event/GetEventSeminarAttendedList";
-				getInteractionMapping(serviceUrl);
-			}
-			break;
-		}
-	}
+                        if (strValue.contains(".")
+                                && !strValue.endsWith(".0")
+                                && !strValue.endsWith(".00")) {
+                            columnData = String.format("%.2f",
+                                    Double.parseDouble(
+                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                        } else {
+                            columnData = String.format("%.0f",
+                                    Double.parseDouble(
+                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                        }
+                    }
+                    if (column.equalsIgnoreCase("lead_id")) {
+                        column = column.toUpperCase();
+                    }
+                    if (columnData.contains("T")) {
+                        columnData =
+                                CRMAppUtil.getDateStrT(columnData, mFormat, DATE_FORMAT_TO_DISPLAY);
+                    }
+                    hm.put(getRefreshColumnName(column), columnData.trim());
+                }
+                secondClickTableAdapter.add(hm);
+            }
+            secondClickTableAdapter.notifyDataSetChanged();
+            table.setVisibility(View.VISIBLE);
+            tvNochart.setVisibility(View.GONE);
+        } else {
+            table.setVisibility(View.GONE);
+            tvNochart.setVisibility(View.VISIBLE);
+        }
+    }
 
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
+    //endregion
+    //region selection logic
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0: {
+                if (isTabClick) {
+                    serviceUrl = "TalismaInteractionRequest/TalismaRequestGet";
+                    getInteractionMapping(serviceUrl);
+                }
+            }
+            break;
+            case 1: {
+                serviceUrl = "Client/GetClientBirthdayAnniversaryWishLog";
+                getInteractionMapping(serviceUrl);
+            }
+            break;
+            case 2: {
+                serviceUrl = "Event/GetEventSeminarAttendedList";
+                getInteractionMapping(serviceUrl);
+            }
+            break;
+        }
+    }
 
-	}
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
-	//endregion
-	public void setViewPager(ViewPager viewPager) {
-		this.viewPager = viewPager;
-	}
+    }
 
-	//endregion
-	//region common addapter logic
-	private class CommonHeader {
-		private final String name;
-		private final List<Item> list;
+    //endregion
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
 
-		CommonHeader(String name) {
-			this.name = name;
-			list = new ArrayList<Item>();
-		}
+    //endregion
+    //region common addapter logic
+    private class CommonHeader {
+        private final String name;
+        private final List<Item> list;
 
-		public int size() {
-			return list.size();
-		}
+        CommonHeader(String name) {
+            this.name = name;
+            list = new ArrayList<Item>();
+        }
 
-		public Item get(int i) {
-			return list.get(i);
-		}
-	}
+        public int size() {
+            return list.size();
+        }
 
-	private class Item {
-		private final String[] data;
+        public Item get(int i) {
+            return list.get(i);
+        }
+    }
 
-		private Item(String[] rowData) {
-			data = rowData;
-		}
-	}
+    private class Item {
+        private final String[] data;
 
-	public class SecondClickTableAdapter extends BaseTableAdapter {
-		private final CommonHeader[] commonHeaders;
-		HashMap hashMap;
-		ArrayList<HashMap<String, String>> hashArray;
-		private String[] headers = {};
-		private LayoutInflater inflater = null;
-		private int btnindex = -1;
+        private Item(String[] rowData) {
+            data = rowData;
+        }
+    }
 
-		private SecondClickTableAdapter(Context context,
-			ArrayList<HashMap<String, String>> hashArray) {
-			commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
-			this.hashArray = hashArray;
-		}
+    public class SecondClickTableAdapter extends BaseTableAdapter {
+        private final CommonHeader[] commonHeaders;
+        HashMap hashMap;
+        ArrayList<HashMap<String, String>> hashArray;
+        private String[] headers = {};
+        private LayoutInflater inflater = null;
+        private int btnindex = -1;
 
-		public String[] getHeaders() {
-			return headers;
-		}
+        private SecondClickTableAdapter(Context context,
+                                        ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
+            this.hashArray = hashArray;
+        }
 
-		public void setHeaders(String[] headers) {
-			this.headers = headers;
-		}
+        public String[] getHeaders() {
+            return headers;
+        }
 
-		@Override
-		public int getRowCount() {
-			return commonHeaders[0].list.size();
-		}
+        public void setHeaders(String[] headers) {
+            this.headers = headers;
+        }
 
-		public void add(HashMap<String, String> row) {
-			hashArray.add(row);
+        @Override
+        public int getRowCount() {
+            return commonHeaders[0].list.size();
+        }
 
-			String[] rowData = new String[headers.length];
-			int ctr = 0;
-			for (String columnName : headers) {
-				String value = Objects.requireNonNull(row.get(columnName)).toString();
-				rowData[ctr] = value;
-				ctr++;
-			}
+        public void add(HashMap<String, String> row) {
+            hashArray.add(row);
 
-			commonHeaders[0].list.add(new Item(rowData));
-		}
+            String[] rowData = new String[headers.length];
+            int ctr = 0;
+            for (String columnName : headers) {
+                String value = Objects.requireNonNull(row.get(columnName)).toString();
+                rowData[ctr] = value;
+                ctr++;
+            }
 
-		@Override
-		public int getColumnCount() {
-			return headers.length;
-		}
+            commonHeaders[0].list.add(new Item(rowData));
+        }
 
-		@Override
-		public View getView(final int row, int column, View convertView, ViewGroup parent) {
-			final View view;
+        @Override
+        public int getColumnCount() {
+            return headers.length;
+        }
 
-			switch (getItemViewType(row, column)) {
-				case 0:
-					view = getFirstHeader(row, column, convertView, parent);
-					break;
-				case 1:
-					view = getHeader(row, column, convertView, parent);
-					break;
-				case 2:
-					view = getFirstBody(row, column, convertView, parent);
+        @Override
+        public View getView(final int row, int column, View convertView, ViewGroup parent) {
+            final View view;
 
-					break;
-				case 3:
-					if (column == btnindex) {
-						view = getBodyWithButton(row, column, convertView, parent);
-					} else {
-						view = getBody(row, column, convertView, parent);
-					}
+            switch (getItemViewType(row, column)) {
+                case 0:
+                    view = getFirstHeader(row, column, convertView, parent);
+                    break;
+                case 1:
+                    view = getHeader(row, column, convertView, parent);
+                    break;
+                case 2:
+                    view = getFirstBody(row, column, convertView, parent);
 
-					view.setOnClickListener(v -> {
-						String strHtml = "";
-						if (!isBlank(getValue(row, DETAILS))) {
-							strHtml = getValue(row, DETAILS);
-							final CustomWebViewDialog webViewTextDialog =
-								new CustomWebViewDialog(requireContext());
+                    break;
+                case 3:
+                    if (column == btnindex) {
+                        view = getBodyWithButton(row, column, convertView, parent);
+                    } else {
+                        view = getBody(row, column, convertView, parent);
+                    }
 
-							webViewTextDialog.show();
-							webViewTextDialog.setTextHtml(getHtmlSafeString(strHtml));
-							webViewTextDialog.setTextTitle(DETAILS);
-						} else {
-							strHtml = "";
-						}
-					});
-					break;
-				case 4:
-					view = getFamilyView(row, column, convertView, parent);
-					break;
-				default:
-					throw new RuntimeException("runtime exception");
-			}
-			return view;
-		}
+                    view.setOnClickListener(v -> {
+                        String strHtml = "";
+                        if (!isBlank(getValue(row, DETAILS))) {
+                            strHtml = getValue(row, DETAILS);
+                            final CustomWebViewDialog webViewTextDialog =
+                                    new CustomWebViewDialog(requireContext());
 
-		private String getValue(int row, String... keys) {
-			for (String key : keys) {
-				String value = hashArray.get(row).get(key);
-				if (value != null) {
-					return value;
-				}
-			}
-			return "";
-		}
+                            webViewTextDialog.show();
+                            webViewTextDialog.setTextHtml(getHtmlSafeString(strHtml));
+                            webViewTextDialog.setTextTitle(DETAILS);
+                        } else {
+                            strHtml = "";
+                        }
+                    });
+                    break;
+                case 4:
+                    view = getFamilyView(row, column, convertView, parent);
+                    break;
+                default:
+                    throw new RuntimeException("runtime exception");
+            }
+            return view;
+        }
 
-		//click on symbol header
-		private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
-			inflater = LayoutInflater.from(getActivity());
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
-			}
-			RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);
-			TextView head = (convertView.findViewById(android.R.id.text1));
-			try {
-				head.setText(headers[0]);
-			} catch (Exception e) {
-				tvNochart.setVisibility(View.VISIBLE);
-				relativeLayout.setVisibility(View.GONE);
+        private String getValue(int row, String... keys) {
+            for (String key : keys) {
+                String value = hashArray.get(row).get(key);
+                if (value != null) {
+                    return value;
+                }
+            }
+            return "";
+        }
 
-				e.printStackTrace();
-			}
+        //click on symbol header
+        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+            inflater = LayoutInflater.from(getActivity());
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
+            }
+            RelativeLayout relativeLayout = convertView.findViewById(R.id.relativeLayout);
+            TextView head = (convertView.findViewById(android.R.id.text1));
+            try {
+                head.setText(headers[0]);
+            } catch (Exception e) {
+                tvNochart.setVisibility(View.VISIBLE);
+                relativeLayout.setVisibility(View.GONE);
 
-			return convertView;
-		}
+                e.printStackTrace();
+            }
 
-		//click on header other than symbol
-		private View getHeader(int row, int column, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_table_header, parent, false);
-			}
-			TextView head = (convertView.findViewById(android.R.id.text1));
-			head.setText(headers[column]);
+            return convertView;
+        }
 
-			//Getting colum index of detail button
-			if (headers[column].equalsIgnoreCase(DETAILS)) {
-				btnindex = column;
-			}
-			return convertView;
-		}
+        //click on header other than symbol
+        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_header, parent, false);
+            }
+            TextView head = (convertView.findViewById(android.R.id.text1));
+            head.setText(headers[column]);
 
-		private View getFirstBody(int row, int column, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_table_first, parent, false);
-			}
-			LinearLayout listLayout = convertView.findViewById(R.id.item_table_first);
-			listLayout.setBackgroundResource(
-				row % 2 == 0 ? R.color.alternateBackground : R.color.white);
-			final TextView tv_table_first = convertView.findViewById(R.id.tv_table_first);
-			tv_table_first.setText(getDevice(row).data[column + 1]);
+            //Getting colum index of detail button
+            if (headers[column].equalsIgnoreCase(DETAILS)) {
+                btnindex = column;
+            }
+            return convertView;
+        }
 
-			return convertView;
-		}
+        private View getFirstBody(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_first, parent, false);
+            }
+            LinearLayout listLayout = convertView.findViewById(R.id.item_table_first);
+            listLayout.setBackgroundResource(
+                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+            final TextView tv_table_first = convertView.findViewById(R.id.tv_table_first);
+            tv_table_first.setText(getDevice(row).data[column + 1]);
 
-		private View getBody(final int row, int column, View convertView, ViewGroup parent) {
-			convertView = inflater.inflate(R.layout.item_table, parent, false);
-			// }
-			LinearLayout listLayout = convertView.findViewById(R.id.item_table);
-			listLayout.setBackgroundResource(
-				row % 2 == 0 ? R.color.alternateBackground : R.color.white);
-			((TextView) convertView.findViewById(android.R.id.text1)).setText(
-				getDevice(row).data[column]);
-			TextView text1 = convertView.findViewById(android.R.id.text1);
-			text1.setBackgroundResource(0);
-			return convertView;
-		}
+            return convertView;
+        }
 
-		private View getBodyWithButton(final int row, int column, View convertView,
-			ViewGroup parent) {
-			convertView = inflater.inflate(R.layout.item_table_button, parent, false);
-			((Button) convertView.findViewById(R.id.tButton)).setText(DETAILS);
-			return convertView;
-		}
+        private View getBody(final int row, int column, View convertView, ViewGroup parent) {
+            convertView = inflater.inflate(R.layout.item_table, parent, false);
+            // }
+            LinearLayout listLayout = convertView.findViewById(R.id.item_table);
+            listLayout.setBackgroundResource(
+                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(
+                    getDevice(row).data[column]);
+            TextView text1 = convertView.findViewById(android.R.id.text1);
+            text1.setBackgroundResource(0);
+            return convertView;
+        }
 
-		private View getFamilyView(int row, int column, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.item_table_family, parent, false);
-			}
-			final String string;
-			if (column == -1) {
-				string = getFamily(row).name;
-			} else {
-				string = "";
-			}
-			((TextView) convertView.findViewById(android.R.id.text1)).setText(string);
-			return convertView;
-		}
+        private View getBodyWithButton(final int row, int column, View convertView,
+                                       ViewGroup parent) {
+            convertView = inflater.inflate(R.layout.item_table_button, parent, false);
+            ((Button) convertView.findViewById(R.id.tButton)).setText(DETAILS);
+            return convertView;
+        }
 
-		@Override
-		public int getWidth(int column) {
-			int widthSize = 0;
-			if (column == -1) {
-				widthSize = getResources().getDimensionPixelSize(R.dimen._90sdp);
-			}
-			for (int i = 0; i < column; i++) {
-				widthSize = getResources().getDimensionPixelSize(R.dimen._135sdp);
-			}
-			return widthSize;
-		}
+        private View getFamilyView(int row, int column, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.item_table_family, parent, false);
+            }
+            final String string;
+            if (column == -1) {
+                string = getFamily(row).name;
+            } else {
+                string = "";
+            }
+            ((TextView) convertView.findViewById(android.R.id.text1)).setText(string);
+            return convertView;
+        }
 
-		@Override
-		public int getHeight(int row) {
-			final int height;
-			if (row == -1) {
-				height = getResources().getDimensionPixelSize(R.dimen._40sdp);
-			} else {
-				height = getResources().getDimensionPixelSize(R.dimen._40sdp);
-			}
-			return height;
-		}
+        @Override
+        public int getWidth(int column) {
+            int widthSize = 0;
+            if (column == -1) {
+                widthSize = getResources().getDimensionPixelSize(R.dimen._90sdp);
+            }
+            for (int i = 0; i < column; i++) {
+                widthSize = getResources().getDimensionPixelSize(R.dimen._135sdp);
+            }
+            return widthSize;
+        }
 
-		@Override
-		public int getItemViewType(int row, int column) {
-			final int itemViewType;
-			if (row == -1 && column == -1) {
-				itemViewType = 0;
-			} else if (row == -1) {
-				itemViewType = 1;
-			} else if (column == -1) {
-				itemViewType = 2;
-			} else {
-				itemViewType = 3;
-			}
-			return itemViewType;
-		}
+        @Override
+        public int getHeight(int row) {
+            final int height;
+            if (row == -1) {
+                height = getResources().getDimensionPixelSize(R.dimen._40sdp);
+            } else {
+                height = getResources().getDimensionPixelSize(R.dimen._40sdp);
+            }
+            return height;
+        }
 
-		private CommonHeader getFamily(int row) {
-			int family = 0;
-			while (row >= 0) {
-				row -= commonHeaders[family].size();
-			}
-			return commonHeaders[family];
-		}
+        @Override
+        public int getItemViewType(int row, int column) {
+            final int itemViewType;
+            if (row == -1 && column == -1) {
+                itemViewType = 0;
+            } else if (row == -1) {
+                itemViewType = 1;
+            } else if (column == -1) {
+                itemViewType = 2;
+            } else {
+                itemViewType = 3;
+            }
+            return itemViewType;
+        }
 
-		private Item getDevice(int row) {
-			int family = 0;
-			while (row >= 0) {
-				row -= commonHeaders[family].size();
-			}
-			return commonHeaders[family].get(row + commonHeaders[family].size());
-		}
+        private CommonHeader getFamily(int row) {
+            int family = 0;
+            while (row >= 0) {
+                row -= commonHeaders[family].size();
+            }
+            return commonHeaders[family];
+        }
 
-		@Override
-		public int getViewTypeCount() {
-			return 5;
-		}
-	}
+        private Item getDevice(int row) {
+            int family = 0;
+            while (row >= 0) {
+                row -= commonHeaders[family].size();
+            }
+            return commonHeaders[family].get(row + commonHeaders[family].size());
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 5;
+        }
+    }
 }
