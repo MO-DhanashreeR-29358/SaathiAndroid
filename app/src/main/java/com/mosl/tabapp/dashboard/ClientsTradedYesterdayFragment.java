@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem;
@@ -19,12 +20,16 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -39,53 +44,48 @@ import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
  */
 
 public class ClientsTradedYesterdayFragment extends CommonFragment
-    implements View.OnClickListener {
-    private View clientYesterdayView;
-    static Context mContext;
+        implements View.OnClickListener {
     private DashboardModel dashboardModel;
     private String widgetSystemName;
     private String groupName;
     private Map addtionalParameterMap = new HashMap<>();
     private ArrayList<HashMap<String, String>> arrayListClient =
-        new ArrayList<HashMap<String, String>>();
+            new ArrayList<HashMap<String, String>>();
     private TableLayout tableLayout;
-    boolean dataFoundFlag;
 
-    private Integer familyCount = 0;
     private View pBar;
     private TextView tvNochart;
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-        Bundle savedInstanceState) {
-        clientYesterdayView = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View clientYesterdayView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(clientYesterdayView);
         hideAppTitle();
-        setUserVisibleHint(true);
         return clientYesterdayView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_client_traded;
     }
 
     public static ClientsTradedYesterdayFragment newInstance(Context context) {
         ClientsTradedYesterdayFragment fragment = new ClientsTradedYesterdayFragment();
         Bundle args = new Bundle();
-        mContext = context;
         fragment.setArguments(args);
         return fragment;
     }
 
     private void setUpView(View clientsView) {
-        tableLayout = (TableLayout) clientsView.findViewById(R.id.tableLayout);
+        tableLayout = clientsView.findViewById(R.id.tableLayout);
         pBar = clientsView.findViewById(R.id.pBar);
-        tvNochart = (TextView) clientsView.findViewById(R.id.tvNochart);
+        tvNochart = clientsView.findViewById(R.id.tvNochart);
 
         dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
         if (dashboardModel != null) {
             DashboardGroupModel groupModel =
-                dashboardModel.getGroupModel(DashboardSystemModel.getClientTradedSystemName());
+                    dashboardModel.getGroupModel(DashboardSystemModel.getClientTradedSystemName());
             WidgetModel model;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
             if (widgetList != null && widgetList.size() > 0) {
@@ -98,6 +98,7 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                 groupName = model.getName();
             }
         }
+        webServiceCall();
     }
 
     private Map<String, String> getAddtionalParameterMap() {
@@ -129,7 +130,6 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                 fieldData.put("REVENUEGENERATED", RevenueGenerated);
                 arrayListClient.add(fieldData);
             }
-            dataFoundFlag = true;
             incentiveDynamicView(arrayListClient);
         }
     }
@@ -161,15 +161,15 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                getAddtionalParameterMap(),
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    getAddtionalParameterMap(),
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
             Disposable subscribe = getSaathiApi().getClientsTradedYesterday(request)
-                .compose(applyUiModel())
-                .subscribe(this::render);
+                    .compose(applyUiModel())
+                    .subscribe(this::render);
         } else {
             noInternetConnectionDialog();
         }
@@ -179,7 +179,7 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
     private void incentiveDynamicView(ArrayList<HashMap<String, String>> arrayListClient) {
         tableLayout.removeAllViews();
         try {
-            LayoutInflater inFla = getActivity().getLayoutInflater();
+            LayoutInflater inFla = requireActivity().getLayoutInflater();
             View tableRowH = inFla.inflate(R.layout.frag_client_traded_top, null);
 
             tableLayout.addView(tableRowH);
@@ -190,50 +190,44 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                     String noofclients = arrayListClient.get(i).get("NOOFCLIENTS");
                     String revenuegenerated = arrayListClient.get(i).get("REVENUEGENERATED");
                     View tableRow = inFla.inflate(R.layout.frag_client_traded_bottom, null);
-                    final TextView tvSegment = (TextView) tableRow.findViewById(R.id.tvSegment);
+                    final TextView tvSegment = tableRow.findViewById(R.id.tvSegment);
                     final TextView tvNoOfClients =
-                        (TextView) tableRow.findViewById(R.id.tvNoOfClients);
+                            tableRow.findViewById(R.id.tvNoOfClients);
                     final TextView tvRevenueGenerated =
-                        (TextView) tableRow.findViewById(R.id.tvRevenueGenerated);
+                            tableRow.findViewById(R.id.tvRevenueGenerated);
 
                     tvSegment.setText(revenuetype);
                     tvNoOfClients.setText(noofclients);
                     tvRevenueGenerated.setText(revenuegenerated);
-                    tvNoOfClients.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addtionalParameterMap.clear();
-                            addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
-                            Bundle args = new Bundle();
-                            args.putString(SYSTEM_NAME, widgetSystemName);
-                            args.putString(LABEL, groupName);
-                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            if (!tvNoOfClients.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigator.openPage(
+                    tvNoOfClients.setOnClickListener(view -> {
+                        addtionalParameterMap.clear();
+                        addtionalParameterMap.putAll(getAddtionalParameterMap());
+                        addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
+                        Bundle args = new Bundle();
+                        args.putString(SYSTEM_NAME, widgetSystemName);
+                        args.putString(LABEL, groupName);
+                        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                        if (!tvNoOfClients.getText().toString().trim().equalsIgnoreCase("0")) {
+                            navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
                                     true, false);
-                            }
                         }
                     });
-                    tvRevenueGenerated.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addtionalParameterMap.clear();
-                            addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
-                            Bundle args = new Bundle();
-                            args.putString(SYSTEM_NAME, widgetSystemName);
-                            args.putString(LABEL, groupName);
-                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            if (!tvRevenueGenerated.getText()
+                    tvRevenueGenerated.setOnClickListener(view -> {
+                        addtionalParameterMap.clear();
+                        addtionalParameterMap.putAll(getAddtionalParameterMap());
+                        addtionalParameterMap.put(ROW_FILTER, tvSegment.getText().toString());
+                        Bundle args = new Bundle();
+                        args.putString(SYSTEM_NAME, widgetSystemName);
+                        args.putString(LABEL, groupName);
+                        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                        if (!tvRevenueGenerated.getText()
                                 .toString()
                                 .trim()
                                 .equalsIgnoreCase("0")) {
-                                navigator.openPage(
+                            navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
                                     true, false);
-                            }
                         }
                     });
                     //  }
@@ -245,22 +239,6 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        try {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser && clientYesterdayView != null) {
-                webServiceCall();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void clientShowProgress() {
-        pBar.setVisibility(View.VISIBLE);
     }
 
     private void clientHideProgress() {

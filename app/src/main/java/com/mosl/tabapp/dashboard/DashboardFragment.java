@@ -764,7 +764,7 @@ public class DashboardFragment extends CommonFragment
     private void loadBusinessSnapShotAdvisor() {
         setTabActivre(btnBusinessSnapshotAdvisor);
         Bundle args = new Bundle();
-        BusSnapshotAdvFragment leadsFragment = BusSnapshotAdvFragment.newInstance(getContext());
+        BusSnapshotAdvFragment leadsFragment = new BusSnapshotAdvFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -790,7 +790,7 @@ public class DashboardFragment extends CommonFragment
     private void loadLeadBusinessSnapShot() {
         setTabActivre(btnBusinessSnapshot);
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
+        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -801,7 +801,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadClients() {
         setTabActivre(btnClient);
-        ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
+        ClientsFragment clientsFragment = new ClientsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -878,7 +878,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadBusinessSnapShot() {
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
+        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
