@@ -1,7 +1,6 @@
 package com.mosl.tabapp.pendingApproval;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem;
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest;
@@ -34,6 +33,7 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -43,7 +43,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -54,76 +53,47 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class PendingForApprovalFragment extends CommonFragment
         implements View.OnClickListener, MOSLConstants {
 
-    private View pendingForApprovalView;
     private Spinner spProfileChange, spSelectEmployee;
     private TableFixHeaders table;
     private PendingApprovalTableAdapter pendingApprovalTableAdapter;
     private TextView tvNochart, tvStartDate, tvEndDate;
-    private LinkedHashMap lMap;
     private String clickedOn = "";
     private int click = 1;
     private boolean isAllChecked = false;
     private boolean isSingleAllChecked = false;
     private CheckBox cbClientName;
     private ArrayList<String> selectedRowList = new ArrayList<>();
-    //will be used to hold the clientid of selected rows by clicking checkboxes
-    private Map<Integer, Boolean> selectedRowMap = new HashMap<Integer, Boolean>();
+    private Map<Integer, Boolean> selectedRowMap = new HashMap<>();
     private String employeeCodeStr, profileCodeStr;
-    private String mainFromDate, mainToDate, toPostingDate, fromPostingDate, brFromDate, brToDate;
+    private String mainFromDate, mainToDate, toPostingDate, fromPostingDate;
     private Date fromDat, toDate;
     private Dialog dialog;
     private Calendar today;
     private LinearLayout llButton;
     private final static String TAG = PendingForApprovalFragment.class.getSimpleName();
-    private AdapterView.OnItemSelectedListener selectEmployeeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        employeeCodeStr = ((RowData) spSelectEmployee.getSelectedItem()).getKey();
-                        isDataPresent();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-
-    public static PendingForApprovalFragment newInstance(Context context) {
-        PendingForApprovalFragment fragment = new PendingForApprovalFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
+        container.post(() -> setAppTitle("Pending For Approvals"));
+        setUpView(pendingForApprovalView);
+        return pendingForApprovalView;
     }
 
-    private AdapterView.OnItemSelectedListener selectProfileListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        profileCodeStr = ((RowData) spProfileChange.getSelectedItem()).getKey();
-                        isDataPresent();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
+    @Override
+    protected int getLayout() {
+        return R.layout.frag_pending_for_approval;
+    }
 
     private void setUpView(View pendingForApprovalView) {
 
@@ -152,22 +122,41 @@ public class PendingForApprovalFragment extends CommonFragment
         btnReject.setOnClickListener(this);
         tvNochart = pendingForApprovalView.findViewById(R.id.tvNochart);
         llButton = pendingForApprovalView.findViewById(R.id.llButton);
+
+        getApprovelReqestUserList();
+
+
     }
 
-    @Override
-    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        pendingForApprovalView = super.onCreateView(inflater, container, savedInstanceState);
-        container.post(() -> setAppTitle("Pending For Approvals"));
-        setUpView(pendingForApprovalView);
-        setUserVisibleHint(true);
-        return pendingForApprovalView;
+
+    private void getSpinnerSelection() {
+        disposable.add(
+                itemSelections(spSelectEmployee)
+                        .filter(InvalidSelectionPredicate)
+                        .subscribe(xyz -> {
+                            employeeCodeStr = getEmployee().getKey();
+                            isDataPresent();
+                        }));
+
+        disposable.add(
+                itemSelections(spProfileChange)
+                        .filter(InvalidSelectionPredicate)
+                        .subscribe(xyz -> {
+                            profileCodeStr = getProfile().getKey();
+                            isDataPresent();
+                        }));
+
     }
 
-    @Override
-    protected int getLayout() {
-        return R.layout.frag_pending_for_approval;
+
+    private RowData getEmployee() {
+        return (RowData) spSelectEmployee.getSelectedItem();
     }
+
+    private RowData getProfile() {
+        return (RowData) spProfileChange.getSelectedItem();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -215,19 +204,6 @@ public class PendingForApprovalFragment extends CommonFragment
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        try {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser && pendingForApprovalView != null) {
-                getApprovelReqestUserList();
-                getApprovelReqestFieldList(
-                        Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private void selectDate() {
         today = Calendar.getInstance();
@@ -270,7 +246,6 @@ public class PendingForApprovalFragment extends CommonFragment
                         today.get(Calendar.DAY_OF_MONTH), (view, year, monthOfYear, dayOfMonth) -> {
 
                             today.set(year, monthOfYear, dayOfMonth);
-                            long dayy = today.getActualMaximum(Calendar.DATE);
                             mainToDate =
                                     year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
                         });
@@ -301,9 +276,7 @@ public class PendingForApprovalFragment extends CommonFragment
                     toPostingDate = CRMAppUtil.getDateStr(toDate, DATE_FORMAT_OF_DD_MMM_YYYY);
                     tvEndDate.setText(toPostingDate);
                 }
-                RowData subEmployeeData = (RowData) spSelectEmployee.getSelectedItem();
-                RowData subProfileData = (RowData) spProfileChange.getSelectedItem();
-                webServiceCall(subEmployeeData.getKey(), subProfileData.getKey());
+                webServiceCall(getEmployee().getKey(), getProfile().getKey());
                 dialog.dismiss();
             }
         });
@@ -336,11 +309,10 @@ public class PendingForApprovalFragment extends CommonFragment
                 String lookUpName = stringOrEmpty(item.referenceName);
                 arrProfile.add(new RowData(i, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapProfile =
-                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrProfile);
-            arrAdapProfile.setDropDownViewResource(R.layout.mdropdown);
+
+            ArrayAdapter<RowData> arrAdapProfile = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spProfileChange.setAdapter(arrAdapProfile);
-            spProfileChange.setOnItemSelectedListener(selectProfileListener);
+            AdapterUtils.setSpinnerData(arrAdapProfile, spProfileChange, arrProfile);
             arrAdapProfile.notifyDataSetChanged();
 
             String entityField =
@@ -351,9 +323,11 @@ public class PendingForApprovalFragment extends CommonFragment
                 spProfileChange.setSelection(entityFieldID.getPosition());
             }
         }
+
+        getSpinnerSelection();
     }
 
-    private void getApprovelReqestFieldList(final String entityField) {
+    private void getApprovelReqestFieldList() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
                     new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
@@ -384,14 +358,15 @@ public class PendingForApprovalFragment extends CommonFragment
                 String lookUpName = stringOrEmpty(item.name);
                 arrEmployee.add(new RowData(i, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapEmployee = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrEmployee);
-            arrAdapEmployee.setDropDownViewResource(R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapEmployee = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSelectEmployee.setAdapter(arrAdapEmployee);
-            spSelectEmployee.setOnItemSelectedListener(
-                    selectEmployeeListener);
+            AdapterUtils.setSpinnerData(arrAdapEmployee, spSelectEmployee, arrEmployee);
+
             arrAdapEmployee.notifyDataSetChanged();
         }
+
+        getApprovelReqestFieldList();
+
     }
 
     private void getApprovelReqestUserList() {
@@ -430,8 +405,8 @@ public class PendingForApprovalFragment extends CommonFragment
 
     private void renderTable(JSONArray arrayDetail) throws JSONException {
         pendingApprovalTableAdapter =
-                new PendingApprovalTableAdapter(requireActivity(),
-                        new ArrayList<HashMap<String, String>>());
+                new PendingApprovalTableAdapter(
+                        new ArrayList<>());
         table.setAdapter(pendingApprovalTableAdapter);
         selectedRowList.clear();
         selectedRowMap.clear();
@@ -576,7 +551,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
         CommonHeader(String name) {
             this.name = name;
-            list = new ArrayList<Item>();
+            list = new ArrayList<>();
         }
 
         public int size() {
@@ -691,8 +666,7 @@ public class PendingForApprovalFragment extends CommonFragment
         ArrayList<HashMap<String, String>> hashArray;
         private LayoutInflater inflater = null;
 
-        private PendingApprovalTableAdapter(Context context,
-                                            ArrayList<HashMap<String, String>> hashArray) {
+        private PendingApprovalTableAdapter(ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
 
@@ -737,10 +711,10 @@ public class PendingForApprovalFragment extends CommonFragment
 
             switch (getItemViewType(row, column)) {
                 case 0:
-                    view = getFirstHeader(row, column, convertView, parent);
+                    view = getFirstHeader(column, convertView, parent);
                     break;
                 case 1:
-                    view = getHeader(row, column, convertView, parent);
+                    view = getHeader(column, convertView, parent);
                     break;
                 case 2:
                     view = getFirstBody(row, column, convertView, parent);
@@ -760,7 +734,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
         //click on symbol header
 
-        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+        private View getFirstHeader(int column, View convertView, ViewGroup parent) {
             inflater = LayoutInflater.from(requireContext());
             if (convertView == null) {
                 convertView =
@@ -822,7 +796,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
         private void sortByAMCName(Integer sortVal) {
             String sortCol = EMPLOYEE_CODE_APP;
-            ArrayList<String> out = new ArrayList<String>();
+            ArrayList<String> out = new ArrayList<>();
             for (int j = 0; j < hashArray.size(); j++) {
                 LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
                 String val = (String) linkedHashMap.get(sortCol);
@@ -830,11 +804,7 @@ public class PendingForApprovalFragment extends CommonFragment
             }
 
             if (sortVal == 1) {
-                Collections.sort(out, new Comparator<String>() {
-                    public int compare(String c1, String c2) {
-                        return c1.compareTo(c2);
-                    }
-                });
+                Collections.sort(out, String::compareTo);
             } else {
                 Collections.reverse(out);
             }
@@ -860,11 +830,11 @@ public class PendingForApprovalFragment extends CommonFragment
         }
 
         //click on header other than symbol
-        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+        private View getHeader(int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header, parent, false);
             }
-            TextView head = ((TextView) convertView.findViewById(android.R.id.text1));
+            TextView head = (convertView.findViewById(android.R.id.text1));
             if (clickedOn.equals(headers[column]) && click > 1) {
                 head.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.up_button, 0);
             } else {
@@ -881,8 +851,8 @@ public class PendingForApprovalFragment extends CommonFragment
 
                     boolean isNumber = sortCol.equals(REJECTED);
 
-                    ArrayList<String> outStr = new ArrayList<String>();
-                    ArrayList<Double> outDbl = new ArrayList<Double>();
+                    ArrayList<String> outStr = new ArrayList<>();
+                    ArrayList<Double> outDbl = new ArrayList<>();
 
                     for (int j = 0; j < hashArray.size(); j++) {
                         LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
@@ -898,11 +868,7 @@ public class PendingForApprovalFragment extends CommonFragment
                         TextView temp = (TextView) v;
                         clickedOn = temp.getText().toString();
                         if (click == 1) {
-                            Collections.sort(outDbl, new Comparator<Double>() {
-                                public int compare(Double c1, Double c2) {
-                                    return c1.compareTo(c2);
-                                }
-                            });
+                            Collections.sort(outDbl, Double::compareTo);
                             click++;
                         } else if (click > 1) {
                             Collections.reverse(outDbl);
@@ -933,11 +899,7 @@ public class PendingForApprovalFragment extends CommonFragment
                         TextView temp = (TextView) v;
                         clickedOn = temp.getText().toString();
                         if (click == 1) {
-                            Collections.sort(outStr, new Comparator<String>() {
-                                public int compare(String c1, String c2) {
-                                    return c1.compareTo(c2);
-                                }
-                            });
+                            Collections.sort(outStr, String::compareTo);
                             click++;
                         } else if (click > 1) {
                             Collections.reverse(outStr);
@@ -1059,8 +1021,6 @@ public class PendingForApprovalFragment extends CommonFragment
             final int height;
             if (row == -1) {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
-            } else if (isFamily(row)) {
-                height = 0;
             } else {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
             }
@@ -1074,8 +1034,6 @@ public class PendingForApprovalFragment extends CommonFragment
                 itemViewType = 0;
             } else if (row == -1) {
                 itemViewType = 1;
-            } else if (isFamily(row)) {
-                itemViewType = 4;
             } else if (column == -1) {
                 itemViewType = 2;
             } else {
@@ -1084,14 +1042,6 @@ public class PendingForApprovalFragment extends CommonFragment
             return itemViewType;
         }
 
-        private boolean isFamily(int row) {
-
-            if (row == -1 || row == 0) {
-                int family = 0;
-                return false;
-            }
-            return false;
-        }
 
         private CommonHeader getFamily(int row) {
             int family = 0;
