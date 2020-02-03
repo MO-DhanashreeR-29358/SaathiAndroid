@@ -30,7 +30,6 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
@@ -349,12 +348,8 @@ class CommonActivity : BaseActivity(),
             Context.NOTIFICATION_SERVICE
         ) as NotificationManager
         notificationManager.cancelAll()
-        val user = userManager.user
-        val logoutInfo = LogoutInfo(
-            userId = user.userId, token = user.token,
-            businessUnitId = user.currentBusinessProfile.businessUnitId ?: "0"
-        )
-        disposable.add(loginRepository.logout(logoutInfo)
+        disposable.add(
+            loginRepository.logout()
             .toSingleDefault(true).toObservable()
             .compose(applyUiModel())
             .observeOn(AndroidSchedulers.mainThread())
