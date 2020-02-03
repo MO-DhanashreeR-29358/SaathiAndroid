@@ -16,6 +16,8 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.Preference
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
@@ -138,13 +140,35 @@ class CommonActivity : BaseActivity(),
             startWorkManager()
         }
         setupObservables()
+        setBanner()
 
-        remoteConfigModel =
-            gson.fromJson(remoteCongigData.get(), RemoteConfigModel::class.java)
 
-        if (remoteConfigModel.isConfigured && !userManager.user.isAufsb() && !userManager.user.isAuBankSalesSupport()) {
-            openBanner(remoteConfigModel)
-        }
+    }
+
+    private fun setBanner() {
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(100)
+            .build()
+        remoteConfig.setConfigSettingsAsync(configSettings)
+
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val saathiInit =
+                        remoteConfig.getString(getString(R.string.saathi_init))
+                    if (saathiInit != null && !saathiInit.isEmpty()) {
+                        remoteConfigModel =
+                            gson.fromJson(saathiInit, RemoteConfigModel::class.java)
+
+                        if (remoteConfigModel.isConfigured && !userManager.user.isAufsb() && !userManager.user.isAuBankSalesSupport()) {
+                            openBanner(remoteConfigModel)
+                        }
+                        remoteCongigData.set(saathiInit)
+
+                    }
+                }
+            }
 
     }
 
