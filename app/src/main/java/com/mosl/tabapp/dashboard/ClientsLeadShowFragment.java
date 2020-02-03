@@ -231,7 +231,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             CommonFragment leadsFragment;
             if (Objects.requireNonNull(Objects.requireNonNull(this.getArguments()).
                     getString(TYPESOFLEAD)).equalsIgnoreCase(LEAD)) {
-                leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+                leadsFragment = new ClientsLeadsFragment();
             } else {
                 leadsFragment = new AuLeadsFragment();
                 args.putInt(FLT_BANKNAME, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKNAME));

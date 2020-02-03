@@ -727,7 +727,7 @@ public class DashboardFragment extends CommonFragment
     private void loadLead() {
         Bundle args = new Bundle();
         setTabActivre(btnLeads);
-        ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+        ClientsLeadsFragment leadsFragment = new ClientsLeadsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -752,7 +752,7 @@ public class DashboardFragment extends CommonFragment
     private void loadProductivity() {
         Bundle args = new Bundle();
         setTabActivre(btnProductivity);
-        ProductivityFragment productivityFragment = ProductivityFragment.newInstance(getContext());
+        ProductivityFragment productivityFragment = new ProductivityFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         productivityFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
