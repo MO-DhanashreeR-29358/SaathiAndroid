@@ -2,7 +2,6 @@ package com.mosl.tabapp.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,6 +21,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem;
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest;
@@ -35,6 +34,7 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +51,9 @@ import java.util.Objects;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY;
@@ -86,28 +88,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
     private String branchCode;
     private String leadId = "0", ucid = "0";
     private TextView txtLables;
-    private AdapterView.OnItemSelectedListener selectBranchListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        branchCode = ((RowData) spBranch.getSelectedItem()).getValue();
-                        if (branchCode.equalsIgnoreCase("Select")) {
-                            branchCode = "";
-                        } else {
-                            branchCode = ((RowData) spBranch.getSelectedItem()).getValue();
-                        }
-                        isDataPresent();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
 
     private void setUpView(View reportView) {
         widgetSystemName =
@@ -143,8 +124,6 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 
         setUpView(Objects.requireNonNull(reportView));
         hideAppTitle();
-        setUserVisibleHint(true);
-
         return reportView;
     }
 
@@ -172,15 +151,30 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
                 arrSelectBranch.add(
                         new RowData(i + 1, businessUnitId, branchCode));
             }
-            ArrayAdapter<RowData> arrAdapSelectBranch = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectBranch);
-            arrAdapSelectBranch.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectBranch = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spBranch.setAdapter(arrAdapSelectBranch);
-            spBranch.setOnItemSelectedListener(selectBranchListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectBranch, spBranch, arrSelectBranch);
             arrAdapSelectBranch.notifyDataSetChanged();
             arrAdapSelectBranch.setNotifyOnChange(true);
+            getSpinnerSelection();
         }
+    }
+
+    private void getSpinnerSelection() {
+        disposable.add(
+                itemSelections(spBranch)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            branchCode = ((RowData) spBranch.getSelectedItem()).getValue();
+                            if (branchCode.equalsIgnoreCase("Select")) {
+                                branchCode = "";
+                            } else {
+                                branchCode = ((RowData) spBranch.getSelectedItem()).getValue();
+                            }
+                            isDataPresent();
+                        }));
+
     }
 
     private void selectBranch() {
@@ -244,14 +238,13 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
     private void renderTable(HashMap<String, Object> response) {
         hideProgress();
         SecondClickTableAdapter secondClickTableAdapter =
-                new SecondClickTableAdapter(Objects.requireNonNull(getActivity()),
-                        new ArrayList<HashMap<String, String>>());
+                new SecondClickTableAdapter(new ArrayList<>());
         table.setAdapter(secondClickTableAdapter);
         Map<String, Object> responseJSONObject = (Map<String, Object>) response.get("Response");
         List<Map<String, Object>> arrayDetail =
                 (List<Map<String, Object>>) responseJSONObject.get("Data");
-        ArrayList<String> columns = new ArrayList<String>();
-        ArrayList<String> columnsHeader = new ArrayList<String>();
+        ArrayList<String> columns = new ArrayList<>();
+        ArrayList<String> columnsHeader = new ArrayList<>();
 
         if (Objects.requireNonNull(arrayDetail).size() != 0) {
             for (int y = 0; y < arrayDetail.size(); y++) {
@@ -452,7 +445,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 
         CommonHeader(String name) {
             this.name = name;
-            list = new ArrayList<Item>();
+            list = new ArrayList<>();
         }
 
         public int size() {
@@ -478,8 +471,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
         private String[] headers = {};
         private LayoutInflater inflater = null;
 
-        SecondClickTableAdapter(Context context,
-                                ArrayList<HashMap<String, String>> hashArray) {
+        SecondClickTableAdapter(ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
         }
@@ -522,10 +514,10 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 
             switch (getItemViewType(row, column)) {
                 case 0:
-                    view = getFirstHeader(row, column, convertView, parent);
+                    view = getFirstHeader(convertView, parent);
                     break;
                 case 1:
-                    view = getHeader(row, column, convertView, parent);
+                    view = getHeader(column, convertView, parent);
                     break;
                 case 2:
                     view = getFirstBody(row, column, convertView, parent);
@@ -621,7 +613,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
         }
 
         //click on symbol header
-        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+        private View getFirstHeader(View convertView, ViewGroup parent) {
             inflater = LayoutInflater.from(getActivity());
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
@@ -641,7 +633,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
             return convertView;
         }
 
-        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+        private View getHeader(int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header, parent, false);
             }
