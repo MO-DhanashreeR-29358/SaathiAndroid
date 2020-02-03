@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +34,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.target.Table1Item;
@@ -53,6 +53,7 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.navigation.NavigationConstants;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,7 +66,9 @@ import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
 import static com.mosl.tabapp.constants.MOSLConstants.KEY;
 import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
@@ -97,7 +100,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
             Color.rgb(254, 46, 46), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
             Color.rgb(254, 46, 46)
     };
-    private Spinner spTargetVsAchivementFilter;
+    private Spinner spPeriod;
     private DashboardModel dashboardModel;
     private String widgetSystemName = "";
     private String leftStr, rightStr, centerStr;
@@ -166,32 +169,18 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         linearLayoutLeft = targetView.findViewById(R.id.linearLayoutLeft);
         linearLayoutCenter = targetView.findViewById(R.id.linearLayoutCenter);
         linearLayoutRight = targetView.findViewById(R.id.linearLayoutRight);
-        spTargetVsAchivementFilter =
-                targetView.findViewById(R.id.spTargetVsAchivementFilter);
+        spPeriod =
+                targetView.findViewById(R.id.spPeriod);
         DashboardGroupModel groupModel =
                 dashboardModel.getGroupModel(DashboardSystemModel.getTargetAchivementSystemName());
         //set filter data
         List<WidgetFilterModel> filterList = groupModel.getGroupFilterList();
         if (filterList != null && filterList.size() == 1) {
-            ArrayAdapter<FilterRowData> adapter1 =
-                    new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item,
-                            filterList.get(0).getFilterData());
-            adapter1.setDropDownViewResource(R.layout.mdropdown);
-            spTargetVsAchivementFilter.setAdapter(adapter1);
+            ArrayAdapter<FilterRowData> periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            spPeriod.setAdapter(periodAdapter);
+            AdapterUtils.setSpinnerData(periodAdapter, spPeriod, filterList.get(0).getFilterData());
+            getSpinnerSelection();
         }
-        spTargetVsAchivementFilter.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                                               int position, long id) {
-                        webServiceCall();
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parentView) {
-                        // your code here
-                    }
-                });
         HorizontalAdapter horizontalAdapter = new HorizontalAdapter(widgetModelList);
         LinearLayoutManager horizontalLayoutManagaer =
                 new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -202,20 +191,33 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         linearLayoutLeft.setOnClickListener(this);
         linearLayoutCenter.setOnClickListener(this);
         linearLayoutRight.setOnClickListener(this);
+
+    }
+
+    private void getSpinnerSelection() {
+        disposable.add(
+                itemSelections(spPeriod).
+                        filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> webServiceCall()));
+
     }
 
     private Map<String, String> getAddtionalParameterMap() {
 
         Map<String, String> addtionalParameterMap = new HashMap<>();
         try {
-            FilterRowData filter1 = (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-            addtionalParameterMap.put(filter1.getKeyValue(), filter1.getValue());
+            addtionalParameterMap.put(getPeriod().getKeyValue(), getPeriod().getValue());
             addtionalParameterMap.put(SELF_KEY, dashboardModel.getDashboardFor());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return addtionalParameterMap;
+    }
+
+    private FilterRowData getPeriod() {
+        return (FilterRowData) spPeriod.getSelectedItem();
     }
 
     private void populateTotalClientPieChartBroking(
@@ -426,9 +428,8 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                             if (!displayText.equalsIgnoreCase("Target")) {
                                 txtLeftStr.setText(displayText);
                             } else {
-                                FilterRowData filter1 =
-                                        (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+
+                                if (getPeriod().getValue().equalsIgnoreCase("DAY") || getPeriod().getValue()
                                         .equalsIgnoreCase("WTD")) {
                                     txtLeftStr.setText(String.format("MTD %s", displayText));
                                 } else {
@@ -458,9 +459,8 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                             if (!displayText.equalsIgnoreCase("Target")) {
                                 txtLeftStr.setText(displayText);
                             } else {
-                                FilterRowData filter1 =
-                                        (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+
+                                if (getPeriod().getValue().equalsIgnoreCase("DAY") || getPeriod().getValue()
                                         .equalsIgnoreCase("WTD")) {
                                     txtLeftStr.setText(String.format("MTD %s", displayText));
                                 } else {
@@ -486,9 +486,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                             if (!displayText.equalsIgnoreCase("Target")) {
                                 txtLeftStr.setText(displayText);
                             } else {
-                                FilterRowData filter1 =
-                                        (FilterRowData) spTargetVsAchivementFilter.getSelectedItem();
-                                if (filter1.getValue().equalsIgnoreCase("DAY") || filter1.getValue()
+                                if (getPeriod().getValue().equalsIgnoreCase("DAY") || getPeriod().getValue()
                                         .equalsIgnoreCase("WTD")) {
                                     txtLeftStr.setText(String.format("MTD %s", displayText));
                                 } else {
