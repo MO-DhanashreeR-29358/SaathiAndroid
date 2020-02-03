@@ -1137,31 +1137,6 @@ public class LeadCreationFragment extends CommonFragment
         }
     }
 
-    private void getCitySpinnerSelection() {
-        disposable.add(
-                itemSelections(spCity)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
-                            tvCityError.setVisibility(View.GONE);
-                            if (cbSameAs.isChecked()) {
-                                RowData dataCity = RowData.getSpinnerRowDataById(cityCodeStr, arrAdapCity);
-                                if (dataCity != null) {
-                                    spOffCity.setSelection(dataCity.getPosition());
-                                }
-                            }
-                        }));
-        disposable.add(
-                itemSelections(spOffCity)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            offCityCodeStr = ((RowData) spOffCity.getSelectedItem()).getKey();
-                            tvOffCityError.setVisibility(View.GONE);
-                        }));
-    }
-
     private void getStateSpinnerSelection() {
         disposable.add(
                 itemSelections(spState)
@@ -1205,9 +1180,86 @@ public class LeadCreationFragment extends CommonFragment
                             }
                             tvOffStateError.setVisibility(View.GONE);
                         }));
+
+
+    }
+
+    private void getCitySpinnerSelection() {
+        disposable.add(
+                itemSelections(spCity)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            cityCodeStr = ((RowData) spCity.getSelectedItem()).getKey();
+                            tvCityError.setVisibility(View.GONE);
+                            if (cbSameAs.isChecked()) {
+                                RowData dataCity = RowData.getSpinnerRowDataById(cityCodeStr, arrAdapCity);
+                                if (dataCity != null) {
+                                    spOffCity.setSelection(dataCity.getPosition());
+                                }
+                            }
+                        }));
+        disposable.add(
+                itemSelections(spOffCity)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            offCityCodeStr = ((RowData) spOffCity.getSelectedItem()).getKey();
+                            tvOffCityError.setVisibility(View.GONE);
+                        }));
     }
 
     private void getSpinnerSelection() {
+        disposable.add(
+                itemSelections(spCategory)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
+                            categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
+                            String sysName = ((RowData) spCategory.getSelectedItem()).getSchmeID();
+                            tvCategoryError.setVisibility(View.GONE);
+                            if (!sysName.equalsIgnoreCase("INDIVIDUAL")) {
+                                isIndividualsFlag = false;
+                                etContactPerson.setVisibility(View.VISIBLE);
+                            } else {
+                                isIndividualsFlag = true;
+                                etContactPerson.setVisibility(View.GONE);
+                            }
+
+                            ilName.setHint(categoryNameStr + " Name*");
+                        }));
+        disposable.add(
+                itemSelections(spProfession)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            professionCodeStr = ((RowData) spProfession.getSelectedItem()).getKey();
+                        }));
+        disposable.add(
+                itemSelections(spInterestIn)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            interestInCodeStr = ((RowData) spInterestIn.getSelectedItem()).getKey();
+                            interestInNameStr = ((RowData) spInterestIn.getSelectedItem()).getValue();
+                            if (!interestInCodeStr.equalsIgnoreCase("-1")) {
+                                getProductType(interestInCodeStr);
+                                spProductType.setEnabled(true);
+                            } else {
+                                spProductType.setSelection(0, true);
+                                spProductType.setEnabled(false);
+                            }
+                            tvInterestInError.setVisibility(View.GONE);
+                        }));
+        disposable.add(
+                itemSelections(spProductType)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            productTypeCodeStr = ((RowData) spProductType.getSelectedItem()).getKey();
+                            tvProductTypeError.setVisibility(View.GONE);
+                        }));
 
         disposable.add(
                 itemSelections(spSource)
@@ -1237,28 +1289,6 @@ public class LeadCreationFragment extends CommonFragment
                             tvProspectSourceError.setVisibility(View.GONE);
                         }));
         disposable.add(
-                itemSelections(spProfession)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            professionCodeStr = ((RowData) spProfession.getSelectedItem()).getKey();
-                        }));
-        disposable.add(
-                itemSelections(spStatus)
-                        .filter(InvalidSelectionPredicate)
-                        .subscribe(xyz -> {
-                            statusCodeStr = ((RowData) spStatus.getSelectedItem()).getKey();
-                            tvStatusError.setVisibility(View.GONE);
-                        }));
-        disposable.add(
-                itemSelections(spProductType)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            productTypeCodeStr = ((RowData) spProductType.getSelectedItem()).getKey();
-                            tvProductTypeError.setVisibility(View.GONE);
-                        }));
-        disposable.add(
                 itemSelections(spStage)
                         .filter(InvalidSelectionPredicate)
                         .subscribe(xyz -> {
@@ -1266,6 +1296,16 @@ public class LeadCreationFragment extends CommonFragment
                             getStatus(stageCodeStr);
                             tvStageError.setVisibility(View.GONE);
                         }));
+
+        disposable.add(
+                itemSelections(spStatus)
+                        .filter(InvalidSelectionPredicate)
+                        .subscribe(xyz -> {
+                            statusCodeStr = ((RowData) spStatus.getSelectedItem()).getKey();
+                            tvStatusError.setVisibility(View.GONE);
+                        }));
+
+
         disposable.add(
                 itemSelections(spCountry)
                         .filter(InvalidSelectionPredicate)
@@ -1301,41 +1341,7 @@ public class LeadCreationFragment extends CommonFragment
                             }
                             tvOffCountryError.setVisibility(View.GONE);
                         }));
-        disposable.add(
-                itemSelections(spInterestIn)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            interestInCodeStr = ((RowData) spInterestIn.getSelectedItem()).getKey();
-                            interestInNameStr = ((RowData) spInterestIn.getSelectedItem()).getValue();
-                            if (!interestInCodeStr.equalsIgnoreCase("-1")) {
-                                getProductType(interestInCodeStr);
-                                spProductType.setEnabled(true);
-                            } else {
-                                spProductType.setSelection(0, true);
-                                spProductType.setEnabled(false);
-                            }
-                            tvInterestInError.setVisibility(View.GONE);
-                        }));
-        disposable.add(
-                itemSelections(spCategory)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
-                            categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
-                            String sysName = ((RowData) spCategory.getSelectedItem()).getSchmeID();
-                            tvCategoryError.setVisibility(View.GONE);
-                            if (!sysName.equalsIgnoreCase("INDIVIDUAL")) {
-                                isIndividualsFlag = false;
-                                etContactPerson.setVisibility(View.VISIBLE);
-                            } else {
-                                isIndividualsFlag = true;
-                                etContactPerson.setVisibility(View.GONE);
-                            }
 
-                            ilName.setHint(categoryNameStr + " Name*");
-                        }));
 
     }
 
