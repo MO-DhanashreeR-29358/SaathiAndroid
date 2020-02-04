@@ -42,20 +42,26 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_search" />
+
                 <AutoCompleteTextView
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@android:color/transparent"
-                    android:drawableStart="@drawable/ic_msearch"
                     android:dropDownWidth="wrap_content"
                     android:dropDownHeight="match_parent"
                     android:gravity="center_vertical"
                     android:hint="@string/SS_SEARCH_HINT_TXT"
+                    android:layout_marginStart="@dimen/_25sdp"
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:maxLength="90"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="@dimen/_12sdp" />
