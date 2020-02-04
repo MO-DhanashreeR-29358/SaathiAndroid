@@ -40,216 +40,229 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class Actionbar @JvmOverloads constructor(
-  context: Context,
-  attrs: AttributeSet? = null,
-  defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : RelativeLayout(context, attrs, defStyleAttr), SearchResultClickListener {
 
-  @Inject
-  lateinit var saathiApi: SaathiApi
-  @Inject
-  lateinit var userManager: UserManager
-  internal lateinit var mTitleView: TextView
-  internal lateinit var tvMsgCount: TextView
-  internal lateinit var mHomeBtn: ImageView
-  internal lateinit var srchImg: ImageView
-  internal lateinit var ivIcon: ImageView
-  internal lateinit var btnNotification: ImageView
-  internal lateinit var searchBoxView: AutoCompleteTextView
-  internal lateinit var llSearch: LinearLayout
-  internal lateinit var autoCompleteAdapter: AutoCompleteAdapter
-  internal lateinit var pbLoadingIndicator: ProgressBar
-  internal var disposable: CompositeDisposable
+    @Inject
+    lateinit var saathiApi: SaathiApi
+    @Inject
+    lateinit var userManager: UserManager
+    internal lateinit var mTitleView: TextView
+    internal lateinit var mHomeBtn: ImageView
+    internal lateinit var srchImg: ImageView
+    internal lateinit var btnNotification: ImageView
+    internal lateinit var searchBoxView: AutoCompleteTextView
+    internal lateinit var llSearch: LinearLayout
+    internal lateinit var autoCompleteAdapter: AutoCompleteAdapter
+    internal lateinit var pbLoadingIndicator: ProgressBar
+    internal var disposable: CompositeDisposable
 
-  init {
-    context.applicationContext.obtain<AppComponent>(AppComponent::class.java)
-        .inject(this)
-    LayoutInflater.from(context)
-        .inflate(R.layout.crm_actionbar, this, true)
-    disposable = CompositeDisposable()
-  }
+    init {
+        context.applicationContext.obtain<AppComponent>(AppComponent::class.java)
+            .inject(this)
+        LayoutInflater.from(context)
+            .inflate(R.layout.crm_actionbar, this, true)
+        disposable = CompositeDisposable()
+    }
 
-  override fun onFinishInflate() {
-    super.onFinishInflate()
-    mHomeBtn = findViewById(R.id.btnMenu)
-    srchImg = findViewById(R.id.srchImg)
-    btnNotification = findViewById(R.id.btnNotification)
-    searchBoxView = findViewById(R.id.searchText)
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        mHomeBtn = findViewById(R.id.btnMenu)
+        srchImg = findViewById(R.id.srchImg)
+        btnNotification = findViewById(R.id.btnNotification)
+        searchBoxView = findViewById(R.id.searchText)
 
-    mTitleView = findViewById(R.id.appTitle)
-    tvMsgCount = findViewById(R.id.tvMsgCount)
-    pbLoadingIndicator = findViewById(R.id.pbLoadingIndicator)
-    searchBoxView.setDropDownBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-    ivIcon = findViewById(R.id.ivIcon) as ImageView
-    llSearch = findViewById(R.id.llSearch)
+        mTitleView = findViewById(R.id.appTitle)
+        pbLoadingIndicator = findViewById(R.id.pbLoadingIndicator)
+        searchBoxView.setDropDownBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        llSearch = findViewById(R.id.llSearch)
 
-    autoCompleteAdapter = AutoCompleteAdapter(context, userManager, this)
-    searchBoxView.setAdapter(autoCompleteAdapter)
+        autoCompleteAdapter = AutoCompleteAdapter(context, userManager, this)
+        searchBoxView.setAdapter(autoCompleteAdapter)
 
-    val searchObs = searchBoxView.textChanges()
-        .filter { t -> t.isNotEmpty() && t.isNotBlank() }
-        .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
-        .map(CharSequenceToString)
-        .distinctUntilChanged()
-        .share()
+        val searchObs = searchBoxView.textChanges()
+            .filter { t -> t.isNotEmpty() && t.isNotBlank() }
+            .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
+            .map(CharSequenceToString)
+            .distinctUntilChanged()
+            .share()
 
-    searchObs.map(MapStringIsBlank)
-        .subscribe(this::toggleSearchState)
-        .addTo(disposable)
+        searchObs.map(MapStringIsBlank)
+            .subscribe(this::toggleSearchState)
+            .addTo(disposable)
 
-    searchObs.filter { it.length > 2 }
-        .switchMap {
-          saathiApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
-              .map { t: List<SearchResponse> ->
-                if (t.isNotEmpty()) {
-                  t.map { searchResponse: SearchResponse ->
-                    val jsonObject = JSONObject(searchResponse.metaData)
-                    if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
-                      val empCode = jsonObject.getString(EMPLOYEE_CODE)
-                      val name = jsonObject.getString(NAME)
-                      val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
-                      val businessProfileId = jsonObject.getString(PROFILE_ID)
-                      val productId = jsonObject.getString(PRODUCT_ID)
-                      SearchResultModel(
-                          getSearchHint(), empCode, name, businessProfileId, businessProfile,
-                          productId
-                      )
-                    } else {
-                      val ucid = jsonObject.getString(UCID)
-                      val leadid = jsonObject.getString(LEADID)
-                      val name = jsonObject.getString(NAME)
-                      val mobile = jsonObject.getString(MOBILE)
-                      val email = jsonObject.getString(EMAIL)
-                      val sourceName = jsonObject.optString(SOURCENAME) ?: ""
-                      val prospectSourceName = jsonObject.optString(PROSPECTSOURCENAME) ?: ""
-                      val prospectSourceDetails = jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
-                      val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
-                      val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
-                      val oaoUserId = jsonObject.getInt(OAOUSERID)
-                      val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
-                      val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID) ?: 0
-                      SearchResultModel(
-                          getSearchHint(), leadid, name, mobile, email, ucid, leadOwner, oaoUserId,
-                          sourceName, prospectSourceName,
-                          prospectSourceDetails, interestedIn, clientCode, createMeetingId
-                      )
+        searchObs.filter { it.length > 2 }
+            .switchMap {
+                saathiApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
+                    .map { t: List<SearchResponse> ->
+                        if (t.isNotEmpty()) {
+                            t.map { searchResponse: SearchResponse ->
+                                val jsonObject = JSONObject(searchResponse.metaData)
+                                if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
+                                    val empCode = jsonObject.getString(EMPLOYEE_CODE)
+                                    val name = jsonObject.getString(NAME)
+                                    val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
+                                    val businessProfileId = jsonObject.getString(PROFILE_ID)
+                                    val productId = jsonObject.getString(PRODUCT_ID)
+                                    SearchResultModel(
+                                        getSearchHint(),
+                                        empCode,
+                                        name,
+                                        businessProfileId,
+                                        businessProfile,
+                                        productId
+                                    )
+                                } else {
+                                    val ucid = jsonObject.getString(UCID)
+                                    val leadid = jsonObject.getString(LEADID)
+                                    val name = jsonObject.getString(NAME)
+                                    val mobile = jsonObject.getString(MOBILE)
+                                    val email = jsonObject.getString(EMAIL)
+                                    val sourceName = jsonObject.optString(SOURCENAME) ?: ""
+                                    val prospectSourceName =
+                                        jsonObject.optString(PROSPECTSOURCENAME) ?: ""
+                                    val prospectSourceDetails =
+                                        jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
+                                    val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
+                                    val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
+                                    val oaoUserId = jsonObject.getInt(OAOUSERID)
+                                    val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
+                                    val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
+                                    SearchResultModel(
+                                        getSearchHint(),
+                                        leadid,
+                                        name,
+                                        mobile,
+                                        email,
+                                        ucid,
+                                        leadOwner,
+                                        oaoUserId,
+                                        sourceName,
+                                        prospectSourceName,
+                                        prospectSourceDetails,
+                                        interestedIn,
+                                        clientCode,
+                                        createMeetingId
+                                    )
+                                }
+                            }
+                        } else {
+                            listOf(
+                                SearchResultModel(
+                                    "", "", NO_RECORDS_FOUND, "", "",
+                                    ""
+                                )
+                            )
+                        }
                     }
-                  }
-                } else {
-                  listOf(
-                      SearchResultModel(
-                          "", "", NO_RECORDS_FOUND, "", "",
-                          ""
-                      )
-                  )
-                }
-              }
-              .compose(applyUiModel())
+                    .compose(applyUiModel())
+            }
+            .subscribe(this::renderSearchResult)
+            .addTo(disposable)
+    }
+
+    fun getSearchType(): String {
+        return when (getSearchHint()) {
+            SEARCH_TYPE_LEAD_HINT -> SEARCH_TYPE_LEAD
+            SEARCH_TYPE_CLIENT_HINT -> SEARCH_TYPE_CLIENT
+            else -> SEARCH_TYPE_EMP
         }
-        .subscribe(this::renderSearchResult)
-        .addTo(disposable)
-  }
-
-  fun getSearchType(): String {
-    return when (getSearchHint()) {
-      SEARCH_TYPE_LEAD_HINT -> SEARCH_TYPE_LEAD
-      SEARCH_TYPE_CLIENT_HINT -> SEARCH_TYPE_CLIENT
-      else -> SEARCH_TYPE_EMP
-    }
-  }
-
-  override fun onSearchResultClick() {
-    hideKeyBoard(searchBoxView)
-    setSearchText("")
-  }
-
-  fun setSearchText(text: String) {
-    searchBoxView.setText(text)
-  }
-
-  fun renderSearchResult(
-    uiModel: UiModel<List<SearchResultModel>>
-  ) {
-    toggleSearchProgress(uiModel.inProgress)
-
-    uiModel.onFailure {
-      Timber.d(uiModel.error)
-      autoCompleteAdapter.notifyDataSetInvalidated()
     }
 
-    uiModel.onSuccess {
-      autoCompleteAdapter.setResultList(it)
-      if (it.isNotEmpty()) {
-        searchBoxView.showDropDown()
-      }
+    override fun onSearchResultClick() {
+        hideKeyBoard(searchBoxView)
+        setSearchText("")
     }
-  }
 
-  fun toggleSearchProgress(show: Boolean) {
-    if (show) {
-      pbLoadingIndicator.visibility = View.VISIBLE
-    } else {
-      pbLoadingIndicator.visibility = View.GONE
+    fun setSearchText(text: String) {
+        searchBoxView.setText(text)
     }
-  }
 
-  fun toggleSearchState(queryEmpty: Boolean) {
-    if (queryEmpty) {
-      autoCompleteAdapter.setResultList(emptyList())
+    fun renderSearchResult(
+        uiModel: UiModel<List<SearchResultModel>>
+    ) {
+        toggleSearchProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d(uiModel.error)
+            autoCompleteAdapter.notifyDataSetInvalidated()
+        }
+
+        uiModel.onSuccess {
+            autoCompleteAdapter.setResultList(it)
+            if (it.isNotEmpty()) {
+                searchBoxView.showDropDown()
+            }
+        }
     }
-  }
 
-  fun getSearchText(): String {
-    return searchBoxView.text.toString()
-        .trim()
-  }
-
-  fun setHomeAction(onClickAction: View.OnClickListener) {
-    mHomeBtn.setOnClickListener(onClickAction)
-    mHomeBtn.visibility = View.VISIBLE
-  }
-
-  fun setNotification(onClickAction: OnClickListener) {
-    btnNotification.setOnClickListener(onClickAction)
-  }
-
-  fun setSearchHint(hint: CharSequence) {
-    searchBoxView.setText("")
-    searchBoxView.hint = hint
-  }
-
-  fun getSearchHint(): String {
-    return searchBoxView.hint.toString()
-  }
-
-  fun setTitleAndOverflow(appTitle: AppTitle) {
-    if (appTitle.hasTitle()) {
-      if (appTitle.hasStringRes()) {
-        mTitleView.setText(appTitle.title)
-      } else {
-        mTitleView.text = appTitle.titleStr
-      }
-      mTitleView.visibility = View.VISIBLE
-    } else {
-      hideTitleBar()
+    fun toggleSearchProgress(show: Boolean) {
+        if (show) {
+            pbLoadingIndicator.visibility = View.VISIBLE
+        } else {
+            pbLoadingIndicator.visibility = View.GONE
+        }
     }
-  }
 
-  fun hideTitleBar() {
-    mTitleView.text = ""
-    mTitleView.visibility = View.GONE
-    mTitleView.visibility = View.GONE
-  }
+    fun toggleSearchState(queryEmpty: Boolean) {
+        if (queryEmpty) {
+            autoCompleteAdapter.setResultList(emptyList())
+        }
+    }
 
-  override fun onDetachedFromWindow() {
-    disposable.clear()
-    super.onDetachedFromWindow()
-  }
+    fun getSearchText(): String {
+        return searchBoxView.text.toString()
+            .trim()
+    }
 
-  companion object {
-    const val SEARCH_TYPE_EMP = "Employee"
-    const val SEARCH_TYPE_LEAD = "Lead"
-    const val SEARCH_TYPE_CLIENT = "Client"
-  }
+    fun setHomeAction(onClickAction: OnClickListener) {
+        mHomeBtn.setOnClickListener(onClickAction)
+        mHomeBtn.visibility = View.VISIBLE
+    }
+
+    fun setNotification(onClickAction: OnClickListener) {
+        btnNotification.setOnClickListener(onClickAction)
+    }
+
+    fun setSearchHint(hint: CharSequence) {
+        searchBoxView.setText("")
+        searchBoxView.hint = hint
+    }
+
+    fun getSearchHint(): String {
+        return searchBoxView.hint.toString()
+    }
+
+    fun setTitleAndOverflow(appTitle: AppTitle) {
+        if (appTitle.hasTitle()) {
+            if (appTitle.hasStringRes()) {
+                mTitleView.setText(appTitle.title)
+            } else {
+                mTitleView.text = appTitle.titleStr
+            }
+            mTitleView.visibility = View.VISIBLE
+        } else {
+            hideTitleBar()
+        }
+    }
+
+    fun hideTitleBar() {
+        mTitleView.text = ""
+        mTitleView.visibility = View.GONE
+        mTitleView.visibility = View.GONE
+    }
+
+    override fun onDetachedFromWindow() {
+        disposable.clear()
+        super.onDetachedFromWindow()
+    }
+
+    companion object {
+        const val SEARCH_TYPE_EMP = "Employee"
+        const val SEARCH_TYPE_LEAD = "Lead"
+        const val SEARCH_TYPE_CLIENT = "Client"
+    }
 
 }

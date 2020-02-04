@@ -4,180 +4,102 @@
     android:id="@+id/actionBarNew"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/secondaryBackground"
-    >
+    android:background="@color/secondaryBackground">
 
     <RelativeLayout
         android:id="@+id/rl_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize"
-        >
+        android:layout_height="?actionBarSize">
 
-      <androidx.appcompat.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnMenu"
             android:layout_width="@dimen/_32sdp"
             android:layout_height="@dimen/_18sdp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerVertical="true"
             android:background="@null"
             android:padding="@dimen/_6sdp"
-            app:srcCompat="@drawable/ic_updated_menu"
-            />
+            app:srcCompat="@drawable/ic_updated_menu" />
 
-        <LinearLayout
-            android:layout_width="0px"
-            android:layout_height="0px"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            />
 
         <LinearLayout
             android:id="@+id/llSearch"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/_4sdp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="@dimen/_4sdp"
-            android:layout_toLeftOf="@+id/btnNotification"
-            android:layout_toRightOf="@+id/btnMenu"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="@dimen/_4sdp"
+            android:layout_toStartOf="@+id/btnNotification"
+            android:layout_toEndOf="@+id/btnMenu"
             android:background="@drawable/textborder"
-            android:orientation="horizontal"
-            >
-            <!--
-                        <androidx.appcompat.widget.AppCompatImageView
+            android:orientation="horizontal">
 
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/_3sdp"
-                            android:layout_marginLeft="5dp"
-                            android:background="@android:color/transparent"
-                            app:srcCompat="@drawable/ic_new_search" />-->
-            <!-- app:srcCompat="@drawable/ic_new_search"-->
-            <!--  <FrameLayout
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content">-->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="horizontal">
 
-              <AutoCompleteTextView
+                <AutoCompleteTextView
                     android:id="@+id/searchText"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:autoText="false"
                     android:background="@android:color/transparent"
-                    android:drawableLeft="@drawable/ic_msearch"
-                    android:dropDownHeight="match_parent"
+                    android:drawableStart="@drawable/ic_msearch"
                     android:dropDownWidth="wrap_content"
+                    android:dropDownHeight="match_parent"
                     android:gravity="center_vertical"
                     android:hint="@string/SS_SEARCH_HINT_TXT"
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:maxLength="90"
-                    android:paddingLeft="5dp"
-                    android:textSize="@dimen/_12sdp"
-                  android:textColor="@color/black"
-                  android:textColorHint="@color/black"
-                    />
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/black"
+                    android:textSize="@dimen/_12sdp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|center"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_gravity="end|center"
+                    android:orientation="horizontal">
 
                     <ProgressBar
                         android:id="@+id/pbLoadingIndicator"
-                        android:visibility="gone"
+                        style="?android:attr/progressBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginRight="5dp"
-                        style="?android:attr/progressBarStyleSmall"
-                        />
+                        android:layout_marginEnd="5dp"
+                        android:visibility="gone" />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/srchImg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_3sdp"
                         android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/ic_arrow_down_black"
-                        />
+                        app:srcCompat="@drawable/ic_arrow_down_black" />
 
-                    <!--   <TextView
-                           android:id="@+id/tvMsgCount"
-                           android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:layout_alignParentRight="true"
-                           android:layout_centerVertical="true"
-                           android:layout_marginLeft="@dimen/_2sdp"
-                           android:layout_marginRight="@dimen/_10sdp"
-                           android:text="0"/>
-                           -->
                 </LinearLayout>
 
-                <!-- app:srcCompat="@drawable/ic_new_search"-->
             </FrameLayout>
 
         </LinearLayout>
 
-      <androidx.appcompat.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btnNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/_2sdp"
-            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_new_notification_icon"
-            />
+            app:srcCompat="@drawable/ic_new_notification_icon" />
 
-        <FrameLayout
-            android:id="@+id/flLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/_4sdp"
-            >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-
-                <view
-                    android:id="@+id/ivIcon"
-                    class="androidx.appcompat.widget.AppCompatImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/notification_icon"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_bubble"
-                    />
-
-                <TextView
-                    android:id="@+id/tvMsgCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginRight="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="visible"
-                    />
-            </RelativeLayout>
-
-        </FrameLayout>
 
     </RelativeLayout>
 
@@ -189,17 +111,16 @@
         android:background="@color/titleBarBackground"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:paddingBottom="4dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
         android:paddingTop="4dp"
+        android:paddingRight="24dp"
+        android:paddingBottom="4dp"
         android:singleLine="true"
-        android:text="Title"
+        android:text="@string/txt_lable_title"
         android:textColor="@color/alternateTextColor"
         android:textSize="@dimen/appTitleTextSize"
         android:textStyle="bold"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
 
 </RelativeLayout>

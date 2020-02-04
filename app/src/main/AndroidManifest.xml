@@ -68,10 +68,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <!--<activity
-            android:name="com.mosl.tabapp.ui.MOSLCommonActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CRMMOSLTheme"/>-->
+
 
         <activity
             android:name=".core.CommonActivity"
