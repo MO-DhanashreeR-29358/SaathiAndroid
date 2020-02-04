@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -91,8 +90,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 
 
     private void setUpView(View reportView) {
-        widgetSystemName =
-                Objects.requireNonNull(this.getArguments()).getString(MOSLConstants.SYSTEM_NAME);
+        widgetSystemName = this.getArguments().getString(MOSLConstants.SYSTEM_NAME);
 
         tvNochart = reportView.findViewById(R.id.tvNochart);
         txtLables = reportView.findViewById(R.id.txtLables);
@@ -122,7 +120,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View reportView = super.onCreateView(inflater, container, savedInstanceState);
 
-        setUpView(Objects.requireNonNull(reportView));
+        setUpView(reportView);
         hideAppTitle();
         return reportView;
     }
@@ -210,7 +208,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
             LeadReportRequest
                     request =
                     new LeadReportRequest(0, CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd"), false,
-                            Objects.requireNonNull(userManager.getUser()).employeeCode,
+                            userManager.getUser().employeeCode,
                             REPORT_PAGE_SIZE, 0, 0, 0, widgetSystemName, "-1",
                             CRMAppUtil.getDateStr(toDate, "yyyy-MM-dd"), branchCode);
             Disposable subscribe = getSaathiApi().postLeadReport(request)
@@ -219,11 +217,11 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
                         Type type = new TypeToken<HashMap<String, Object>>() {
                         }.getType();
                         HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        String status = response.get(STATUS).toString();
                         if (status.equalsIgnoreCase("true")) {
                             return response;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -246,7 +244,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> columnsHeader = new ArrayList<>();
 
-        if (Objects.requireNonNull(arrayDetail).size() != 0) {
+        if (arrayDetail.size() != 0) {
             for (int y = 0; y < arrayDetail.size(); y++) {
                 Map<String, Object> objDetail = arrayDetail.get(y);
 
@@ -268,22 +266,20 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
                 for (String column : columns) {
                     String columnData =
                             objDetail.get(column) == null
-                                    ? "" : Objects.requireNonNull(objDetail.get(column)).toString();
+                                    ? "" : objDetail.get(column).toString();
 
                     if (objDetail.get(column) instanceof Number) {
                         String strValue =
-                                Objects.requireNonNull(objDetail.get(column)).toString().trim();
+                                objDetail.get(column).toString().trim();
 
                         if (strValue.contains(".")
                                 && !strValue.endsWith(".0")
                                 && !strValue.endsWith(".00")) {
                             columnData = String.format("%.2f",
-                                    Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                    Double.parseDouble(objDetail.get(column).toString()));
                         } else {
                             columnData = String.format("%.0f",
-                                    Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                    Double.parseDouble(objDetail.get(column).toString()));
                         }
                     }
                     if (column.equalsIgnoreCase("lead_id")) {
@@ -316,8 +312,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
         today = Calendar.getInstance();
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
-                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
         dialog.getWindow()
                 .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -432,7 +427,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
     public void onFragmentReopened(@NotNull Bundle args) {
         super.onFragmentReopened(args);
         widgetSystemName =
-                Objects.requireNonNull(args).getString(MOSLConstants.SYSTEM_NAME);
+                args.getString(MOSLConstants.SYSTEM_NAME);
         titleName = args.getString(MOSLConstants.NAME);
         txtLables.setText(titleName);
         selectBranch();

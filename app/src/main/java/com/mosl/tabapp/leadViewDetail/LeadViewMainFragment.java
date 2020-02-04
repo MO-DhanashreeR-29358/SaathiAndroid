@@ -43,7 +43,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -102,13 +101,13 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
                              Bundle savedInstanceState) {
         View leadViewMainView = super.onCreateView(inflater, container, savedInstanceState);
         getUserID(this.getArguments());
-        setUpView(Objects.requireNonNull(leadViewMainView));
+        setUpView(leadViewMainView);
         return leadViewMainView;
     }
 
     private void getUserID(Bundle args) {
         try {
-            leadId = Objects.requireNonNull(args).getString(LEAD_ID);
+            leadId = args.getString(LEAD_ID);
             if (args.containsKey(UCID)) {
                 mUCID = args.getString(UCID, "0").equals("") ? "0"
                         : args.getString(UCID, "0");
@@ -161,7 +160,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             headingClient[2] = MAPPING_HISTORY;
             headingClient[3] = MAPPING_INTERACTION;
             leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
-                    Objects.requireNonNull(this.getArguments()).getString(LEAD_ID), mUCID);
+                    this.getArguments().getString(LEAD_ID), mUCID);
             leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
                     this.getArguments().getString(LEAD_ID), mUCID);
             leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(2, MAPPING_HISTORY,
@@ -213,12 +212,12 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         //Go to section
         NotificationData section =
-                Objects.requireNonNull(this.getArguments()).getParcelable(NOTIFICATION_DATA);
+                this.getArguments().getParcelable(NOTIFICATION_DATA);
         //TODO  change meeting to ACTIVITIES
         if (section == null) {
             vpLeadView.setCurrentItem(0);
         } else {
-            if (Objects.requireNonNull(section.getSection()).equalsIgnoreCase("ACTIVITIES")) {
+            if (section.getSection().equalsIgnoreCase("ACTIVITIES")) {
                 vpLeadView.setCurrentItem(1);
             } else {
                 vpLeadView.setCurrentItem(0);
@@ -328,7 +327,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             prospectSourceDetail = stringOrEmpty(String.valueOf(data.leadSourceDetailsID));
             oaoUserId = data.oAOUserid;
             List<LeadProductMappingItem> productMapping = data.leadProductMapping;
-            if (Objects.requireNonNull(productMapping).size() != 0) {
+            if (productMapping.size() != 0) {
                 for (int i = 0; i < productMapping.size(); i++) {
                     LeadProductMappingItem item = productMapping.get(i);
                     String clientCode = stringOrEmpty(item.clientCode);
@@ -365,7 +364,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     private void leadViewDialog() {
         final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_leadview);
@@ -381,7 +380,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         ImageView ivOpenAccount = dialog.findViewById(R.id.ivOpenAccount);
         ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
         ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
-        if (Objects.requireNonNull(userManager.getUser()).isAufsb()) {
+        if (userManager.getUser().isAufsb()) {
             ivCreateMeeting.setVisibility(View.GONE);
             ivSetAppointment.setVisibility(View.GONE);
             ivSuggestMe.setVisibility(View.GONE);
@@ -411,35 +410,18 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         ivOaoForm.setOnClickListener(view -> {
             dialog.dismiss();
-            //HashMap map = new HashMap();
-            //map.put(NEW_USERID, oaoUserId.toString());
-            //map.put(BRANCHEMPCODE, AccountDetails.getEmployeeCode());
-            //map.put(COMMANDTYPE, "RESUME");
-            //map.put(APPLICATIONTYPE, "CRM");
-            //map.put(OSTYPE, "ANDROID");
-            //map.put(APPLOGINID, AccountDetails.getEmployeeCode());
-            //map.put(TOKENKEY, AccountDetails.getToken());
-            //map.put(ISAUFSB, AccountDetails.isAufsb());
-            //gotoNewEkyc(getInputBody(map));
+
             ekycNavigator.openNewEkycApp(true, oaoUserId.toString());
         });
         ivOpenAccount.setOnClickListener(view -> {
             dialog.dismiss();
-            //Map inpuMap = new HashMap();
-            //inpuMap.put(MOBILE, mobileNo);
-            //inpuMap.put(EMAIL, email);
-            //inpuMap.put(LEAD_OWNER, LeadOwner);
-            //inpuMap.put(SOURCENAME, sourceName);
-            //inpuMap.put(PROSPECT_SOURCENAME, prospectSourceName);
-            //inpuMap.put(PROSPECT_SOURCEDETAIL, prospectSourceDetail);
-            //inpuMap.put(INTRESTEDIN, intrestedIn);
-            //inpuMap.put(ISAUFSB, userManager.getUser().isAufsb());
+
             gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
                     prospectSourceDetail, intrestedIn));
         });
         ivCreateMeeting.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
+            bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
             bundle.putString(UCID, mUCID);
             if (createMeetingId == 0) {
                 navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
@@ -454,7 +436,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         });
         ivSetAppointment.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString(LEAD_ID, Objects.requireNonNull(getArguments()).getString(LEAD_ID));
+            bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
             bundle.putString(UCID, mUCID);
             navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
             dialog.dismiss();
@@ -520,8 +502,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             RegisterProspectOnlineRequest request =
                     new RegisterProspectOnlineRequest(
-                            Objects.requireNonNull(
-                                    Objects.requireNonNull(this.getArguments()).getString(LEAD_ID)), mUCID);
+                            this.getArguments().getString(LEAD_ID), mUCID);
             Disposable subscribe = getSaathiApi().getRegisterProspectOnline(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderSuggestMe);

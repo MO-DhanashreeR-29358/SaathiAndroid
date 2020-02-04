@@ -668,19 +668,18 @@ public class DashboardFragment extends CommonFragment
             } else if (id == R.id.rlFreshRegistration) {
                 Map<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, requireNonNull(userManager.getUser()).employeeCode);
+                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
                 map.put(COMMANDTYPE, "NEW");
                 map.put(APPLICATIONTYPE, "CRM");
                 map.put(OSTYPE, "ANDROID");
                 map.put(APPLOGINID, userManager.getUser().employeeCode);
                 map.put(TOKENKEY, userManager.getUser().token);
                 map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
-                //gotoNewEkyc(getInputBody(map));
                 ekycNavigator.openNewEkycApp(false, "");
             } else if (id == R.id.rlExisting) {
                 HashMap<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, requireNonNull(userManager.getUser()).employeeCode);
+                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
                 map.put(COMMANDTYPE, "RESUME");
                 map.put(APPLICATIONTYPE, "CRM");
                 map.put(OSTYPE, "ANDROID");
@@ -2322,7 +2321,7 @@ public class DashboardFragment extends CommonFragment
 
             final Map<String, String> addtionalParameterMap = new HashMap<>();
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-            Glide.with(requireContext())
+            Glide.with(mContext)
                     .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
                     //remove Chache
                     .asBitmap()
@@ -2334,7 +2333,7 @@ public class DashboardFragment extends CommonFragment
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(),
                                             resource);
                             holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
                         }

@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,8 +101,7 @@ public class LeadViewInteractionFragment extends CommonFragment
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         leadViewInteractionView = super.onCreateView(inflater, container, savedInstanceState);
-        //attachLayout(R.layout.frag_leadview_interactionn);
-        setUpView(Objects.requireNonNull(leadViewInteractionView));
+        setUpView(leadViewInteractionView);
         setUserVisibleHint(true);
 
         return leadViewInteractionView;
@@ -111,7 +109,7 @@ public class LeadViewInteractionFragment extends CommonFragment
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View leadViewDetailView) {
-        leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID, "0");
+        leadId = this.getArguments().getString(LEAD_ID, "0");
         mUcid = this.getArguments().getString(UCID, "0");
         mUcid = (mUcid != null && !CRMAppUtil.isBlank(mUcid)) ? mUcid : "0";
         spInteraction = leadViewDetailView.findViewById(R.id.spHistory);
@@ -139,11 +137,11 @@ public class LeadViewInteractionFragment extends CommonFragment
                     == Objects
                     .requireNonNull(this.getArguments())
                     .getInt("Position"))) {
-                String[] eventTypeArray = Objects.requireNonNull(getActivity())
+                String[] eventTypeArray = requireActivity()
                         .getResources()
                         .getStringArray(R.array.LeadInteraction);
                 ArrayList<String> arrEventType =
-                        new ArrayList<String>(Arrays.asList(eventTypeArray));
+                        new ArrayList<>(Arrays.asList(eventTypeArray));
 
                 ArrayAdapter<String> arrAdapEventType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                 spInteraction.setAdapter(arrAdapEventType);
@@ -219,11 +217,11 @@ public class LeadViewInteractionFragment extends CommonFragment
                         List<Map<String, Object>> tableResponseList =
                                 (List<Map<String, Object>>) responseJsonObj.get(
                                         "Data");
-                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        String status = response.get(STATUS).toString();
                         if (status.equalsIgnoreCase("true")) {
                             return tableResponseList;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -237,11 +235,11 @@ public class LeadViewInteractionFragment extends CommonFragment
     @SuppressLint("DefaultLocale")
     private void renderTable(List<Map<String, Object>> tableList) {
         SecondClickTableAdapter secondClickTableAdapter =
-                new SecondClickTableAdapter(requireContext(), new ArrayList<HashMap<String, String>>());
+                new SecondClickTableAdapter(new ArrayList<>());
         table.setAdapter(secondClickTableAdapter);
 
-        ArrayList<String> columns = new ArrayList<String>();
-        ArrayList<String> columnsHeader = new ArrayList<String>();
+        ArrayList<String> columns = new ArrayList<>();
+        ArrayList<String> columnsHeader = new ArrayList<>();
 
         if (tableList.size() != 0) {
             for (int y = 0; y < tableList.size(); y++) {
@@ -263,22 +261,22 @@ public class LeadViewInteractionFragment extends CommonFragment
                 for (String column : columns) {
                     String columnData =
                             objDetail.get(column) == null
-                                    ? "" : Objects.requireNonNull(objDetail.get(column)).toString();
+                                    ? "" : objDetail.get(column).toString();
 
                     if (objDetail.get(column) instanceof Number) {
                         String strValue =
-                                Objects.requireNonNull(objDetail.get(column)).toString().trim();
+                                objDetail.get(column).toString().trim();
 
                         if (strValue.contains(".")
                                 && !strValue.endsWith(".0")
                                 && !strValue.endsWith(".00")) {
                             columnData = String.format("%.2f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                            objDetail.get(column).toString()));
                         } else {
                             columnData = String.format("%.0f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                            objDetail.get(column).toString()));
                         }
                     }
                     if (column.equalsIgnoreCase("lead_id")) {
@@ -332,7 +330,7 @@ public class LeadViewInteractionFragment extends CommonFragment
     }
 
     //endregion
-    public void setViewPager(ViewPager viewPager) {
+    void setViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
     }
 
@@ -344,7 +342,7 @@ public class LeadViewInteractionFragment extends CommonFragment
 
         CommonHeader(String name) {
             this.name = name;
-            list = new ArrayList<Item>();
+            list = new ArrayList<>();
         }
 
         public int size() {
@@ -366,14 +364,13 @@ public class LeadViewInteractionFragment extends CommonFragment
 
     public class SecondClickTableAdapter extends BaseTableAdapter {
         private final CommonHeader[] commonHeaders;
-        HashMap hashMap;
         ArrayList<HashMap<String, String>> hashArray;
         private String[] headers = {};
         private LayoutInflater inflater = null;
         private int btnindex = -1;
 
-        private SecondClickTableAdapter(Context context,
-                                        ArrayList<HashMap<String, String>> hashArray) {
+        private SecondClickTableAdapter(
+                ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
         }
@@ -397,7 +394,7 @@ public class LeadViewInteractionFragment extends CommonFragment
             String[] rowData = new String[headers.length];
             int ctr = 0;
             for (String columnName : headers) {
-                String value = Objects.requireNonNull(row.get(columnName)).toString();
+                String value = row.get(columnName);
                 rowData[ctr] = value;
                 ctr++;
             }
@@ -416,10 +413,10 @@ public class LeadViewInteractionFragment extends CommonFragment
 
             switch (getItemViewType(row, column)) {
                 case 0:
-                    view = getFirstHeader(row, column, convertView, parent);
+                    view = getFirstHeader(convertView, parent);
                     break;
                 case 1:
-                    view = getHeader(row, column, convertView, parent);
+                    view = getHeader(column, convertView, parent);
                     break;
                 case 2:
                     view = getFirstBody(row, column, convertView, parent);
@@ -427,23 +424,20 @@ public class LeadViewInteractionFragment extends CommonFragment
                     break;
                 case 3:
                     if (column == btnindex) {
-                        view = getBodyWithButton(row, column, convertView, parent);
+                        view = getBodyWithButton(convertView, parent);
                     } else {
                         view = getBody(row, column, convertView, parent);
                     }
 
                     view.setOnClickListener(v -> {
-                        String strHtml = "";
                         if (!isBlank(getValue(row, DETAILS))) {
-                            strHtml = getValue(row, DETAILS);
+                            String strHtml = getValue(row, DETAILS);
                             final CustomWebViewDialog webViewTextDialog =
                                     new CustomWebViewDialog(requireContext());
 
                             webViewTextDialog.show();
                             webViewTextDialog.setTextHtml(getHtmlSafeString(strHtml));
                             webViewTextDialog.setTextTitle(DETAILS);
-                        } else {
-                            strHtml = "";
                         }
                     });
                     break;
@@ -467,7 +461,7 @@ public class LeadViewInteractionFragment extends CommonFragment
         }
 
         //click on symbol header
-        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+        private View getFirstHeader(View convertView, ViewGroup parent) {
             inflater = LayoutInflater.from(getActivity());
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
@@ -487,7 +481,7 @@ public class LeadViewInteractionFragment extends CommonFragment
         }
 
         //click on header other than symbol
-        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+        private View getHeader(int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header, parent, false);
             }
@@ -527,7 +521,7 @@ public class LeadViewInteractionFragment extends CommonFragment
             return convertView;
         }
 
-        private View getBodyWithButton(final int row, int column, View convertView,
+        private View getBodyWithButton(View convertView,
                                        ViewGroup parent) {
             convertView = inflater.inflate(R.layout.item_table_button, parent, false);
             ((Button) convertView.findViewById(R.id.tButton)).setText(DETAILS);

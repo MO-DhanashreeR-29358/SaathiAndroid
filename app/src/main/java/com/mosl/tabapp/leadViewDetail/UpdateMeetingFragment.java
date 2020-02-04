@@ -58,7 +58,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
@@ -175,7 +174,7 @@ public class UpdateMeetingFragment extends CommonFragment
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
-        meetingId = Objects.requireNonNull(this.getArguments()).getString(MEETING, "0");
+        meetingId = this.getArguments().getString(MEETING, "0");
         getMeetingById(meetingId);
         container.post(() -> setAppTitle("Update Meeting"));
         meetingObjective();
@@ -259,7 +258,7 @@ public class UpdateMeetingFragment extends CommonFragment
         tvAttendeeCount.setOnClickListener(this);
         tvSplAttendeeCount.setOnClickListener(this);
         try {
-            leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID, "0");
+            leadId = this.getArguments().getString(LEAD_ID, "0");
             tvProduct.setText(
                     String.format("Appointments-%s", this.getArguments().getString(PRODUCT)));
             tvMeetingDate.setText(this.getArguments().getString(DATE));
@@ -271,8 +270,7 @@ public class UpdateMeetingFragment extends CommonFragment
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
         AddedAttendeeModel.setAttendeeUserEmplyeeCode(
-                Objects.requireNonNull(userManager.getUser()).employeeCode);
-        //  selectProduct(null);
+                userManager.getUser().employeeCode);
         if (userManager.getUser().isFranchise()
                 || userManager.getUser().isIFA()) {
             linaerLayoutNew.setVisibility(View.VISIBLE);
@@ -829,9 +827,8 @@ public class UpdateMeetingFragment extends CommonFragment
     private void category(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), CATEGORY,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, CATEGORY,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -879,9 +876,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             meetingDuration(meetingId);
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, INTERESTEDIN,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -935,9 +931,8 @@ public class UpdateMeetingFragment extends CommonFragment
     private void subCategory(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), SUBCATEGORY,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, SUBCATEGORY,
                             categoryCodeStr,
                             null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
@@ -988,9 +983,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             activityType(ActivityTypeID);
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId),
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId,
                             MEETINGDURATION, null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1033,9 +1027,8 @@ public class UpdateMeetingFragment extends CommonFragment
     private void meetingObjective() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId),
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId,
                             MEETINGOBJECTIVE, null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1082,9 +1075,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             actionables(ActionableID);
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIVITYTYPE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, ACTIVITYTYPE,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1134,9 +1126,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             baClient();
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId),
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId,
                             MEETINGREASON,
                             activityTypeCodeStr, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
@@ -1179,9 +1170,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             outStation();
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId),
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId,
                             BACLIENTMEETING,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
@@ -1223,9 +1213,8 @@ public class UpdateMeetingFragment extends CommonFragment
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId),
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId,
                             OUTSTATIONMEETING,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
@@ -1273,9 +1262,8 @@ public class UpdateMeetingFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             category(CategoryID);
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIONABLES,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, ACTIONABLES,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1290,7 +1278,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private void dialogAddedSplAttendee() {
         final Dialog dialogAddedSplAttendee = new Dialog(requireContext());
         dialogAddedSplAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAddedSplAttendee.getWindow())
+        dialogAddedSplAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedSplAttendee.setContentView(R.layout.dialog_addedd_spl_attendee_list);
         TextView tvEmpty = dialogAddedSplAttendee.findViewById(R.id.tvEmpty);
@@ -1309,7 +1297,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private void dialogAddedAttendee() {
         final Dialog dialogAddedAttendee = new Dialog(requireContext());
         dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAddedAttendee.getWindow())
+        dialogAddedAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedAttendee.setContentView(R.layout.dialog_addedd_attendee_list);
         TextView tvEmpty = dialogAddedAttendee.findViewById(R.id.tvEmpty);
@@ -1328,7 +1316,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private void dialogAttendee() {
         final Dialog dialogAttendeeList = new Dialog(requireContext());
         dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAttendeeList.getWindow())
+        dialogAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogAttendeeList.getWindow()
@@ -1375,7 +1363,7 @@ public class UpdateMeetingFragment extends CommonFragment
     private void dialogSplAttendee() {
         final Dialog dialogSplAttendeeList = new Dialog(requireContext());
         dialogSplAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogSplAttendeeList.getWindow())
+        dialogSplAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogSplAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogSplAttendeeList.getWindow()
@@ -1447,7 +1435,7 @@ public class UpdateMeetingFragment extends CommonFragment
                         if (action == MSFDialog.Action.OK) {
                             Bundle bundle = new Bundle();
                             bundle.putString(LEAD_ID,
-                                    Objects.requireNonNull(getArguments()).getString(LEAD_ID));
+                                    getArguments().getString(LEAD_ID));
                             bundle.putString(UCID,
                                     getArguments().getString(UCID));
                             navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
@@ -1572,8 +1560,7 @@ public class UpdateMeetingFragment extends CommonFragment
                                         String employeeCode = stringOrEmpty(item.employeeCode);
                                         String BranchCode = stringOrEmpty(item.branchCode);
                                         if (employeeCode.equalsIgnoreCase(
-                                                Objects.requireNonNull(
-                                                        userManager.getUser()).employeeCode)) {
+                                                userManager.getUser().employeeCode)) {
                                             continue;
                                         }
                                         modelList.add(new EmployeeModel(employeeName, employeeCode,

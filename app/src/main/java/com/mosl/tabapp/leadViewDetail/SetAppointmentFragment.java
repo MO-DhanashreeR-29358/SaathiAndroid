@@ -69,7 +69,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
@@ -194,7 +193,7 @@ public class SetAppointmentFragment extends CommonFragment
         View setAppointmentView = super.onCreateView(inflater, container, savedInstanceState);
         container.post(() -> setAppTitle("Set Appointment"));
         try {
-            mUCID = Objects.requireNonNull(this.getArguments())
+            mUCID = this.getArguments()
                     .getString(UCID, "0")
                     .equalsIgnoreCase("") ? "0"
                     : this.getArguments().getString(UCID, "0");
@@ -215,7 +214,7 @@ public class SetAppointmentFragment extends CommonFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setUpView(Objects.requireNonNull(setAppointmentView));
+        setUpView(setAppointmentView);
         if (!mUCID.equalsIgnoreCase("0")) {
             getClientDetail(mUCID);
             setProfileImage(mUCID);
@@ -549,7 +548,7 @@ public class SetAppointmentFragment extends CommonFragment
                         if (action == MSFDialog.Action.OK) {
                             Bundle bundle = new Bundle();
                             bundle.putString(LEAD_ID,
-                                    Objects.requireNonNull(getArguments()).getString(LEAD_ID));
+                                    getArguments().getString(LEAD_ID));
                             bundle.putString(UCID,
                                     getArguments().getString(UCID));
                             navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
@@ -561,7 +560,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAddedSplAttendee() {
         final Dialog dialogAddedSplAttendee = new Dialog(requireContext());
         dialogAddedSplAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(Objects.requireNonNull(dialogAddedSplAttendee.getWindow()))
+        dialogAddedSplAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedSplAttendee.setContentView(R.layout.dialog_addedd_spl_attendee_list);
         dialogAddedSplAttendee.getWindow()
@@ -578,7 +577,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAddedAttendee() {
         final Dialog dialogAddedAttendee = new Dialog(requireContext());
         dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAddedAttendee.getWindow())
+        dialogAddedAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedAttendee.setContentView(R.layout.dialog_addedd_attendee_list);
         TextView tvEmpty = dialogAddedAttendee.findViewById(R.id.tvEmpty);
@@ -597,7 +596,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAttendee() {
         final Dialog dialogAttendeeList = new Dialog(requireContext());
         dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAttendeeList.getWindow())
+        dialogAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogAttendeeList.getWindow()
@@ -643,7 +642,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogSplAttendee() {
         final Dialog dialogSplAttendeeList = new Dialog(requireContext());
         dialogSplAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogSplAttendeeList.getWindow())
+        dialogSplAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogSplAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogSplAttendeeList.getWindow()
@@ -793,10 +792,10 @@ public class SetAppointmentFragment extends CommonFragment
             String leadId = stringOrEmpty(valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
             Contact contact = data.contact;
-            String name = stringOrEmpty(Objects.requireNonNull(contact).name);
+            String name = stringOrEmpty(contact.name);
 
             List<LeadProductMappingItem> leadProductMapping = data.leadProductMapping;
-            for (int i = 0; i < Objects.requireNonNull(leadProductMapping).size(); i++) {
+            for (int i = 0; i < leadProductMapping.size(); i++) {
                 LeadProductMappingItem item = leadProductMapping.get(i);
                 String clientCode = stringOrEmpty(item.clientCode);
                 String stageName = stringOrEmpty(item.stageName);
@@ -817,9 +816,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectProduct(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, INTERESTEDIN,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -875,7 +873,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialogDateTime.setContentView(R.layout.date_picker);
@@ -967,7 +965,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
         dialogDateTime.getWindow()
@@ -1074,7 +1072,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
         dialogDateTime.getWindow()
@@ -1182,9 +1180,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectWeekDay(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), DAYS, null,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, DAYS, null,
                             null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1242,7 +1239,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void setCallenderDate() {
         mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
         try {
-            String[] dateArray = Objects.requireNonNull(mainFromDate).split("-");
+            String[] dateArray = mainFromDate.split("-");
             currentYear = ((Integer.parseInt(dateArray[0])));
             currentYearStartDate = currentYear;
             currentYearEndDate = currentYear;
@@ -1274,9 +1271,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void activityType(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIVITYTYPE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, ACTIVITYTYPE,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1395,7 +1391,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (status == 1) {
                 if (!defaultAttendee) {
                     //TODO ignore self object
-                    if (Objects.requireNonNull(str_AttendeeType).trim().equalsIgnoreCase("R")) {
+                    if (str_AttendeeType.trim().equalsIgnoreCase("R")) {
                         AddedAttendeeModel attendTmp =
                                 new AddedAttendeeModel(str_AttendeeType, attended, str_AttendeeEmpName,
                                         str_AttendeeEmpcode, str_meetingAttendeeCode);
@@ -1465,9 +1461,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void getRepeatMode(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), REPEATMODE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, REPEATMODE,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1515,9 +1510,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectWeek(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), WEEKS, null,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, WEEKS, null,
                             null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())

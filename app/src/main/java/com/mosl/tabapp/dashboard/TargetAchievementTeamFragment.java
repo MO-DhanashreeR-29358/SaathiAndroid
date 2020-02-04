@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -869,7 +870,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private List<WidgetModel> widgetModelList;
-
+        private Context context;
         HorizontalAdapter(List<WidgetModel> widgetModelList) {
             this.widgetModelList = widgetModelList;
         }
@@ -879,7 +880,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_target_achievement_list, parent, false);
-
+            context = parent.getContext();
             return new MyViewHolder(itemView);
         }
 
@@ -936,7 +937,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
 
         void setImage(String imageUrl, final ImageView imageView) {
 
-            Glide.with(requireContext())
+            Glide.with(context)
                     .load(imageUrl)
                     .asBitmap()
                     .placeholder(R.drawable.ic_white)
@@ -947,7 +948,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                    RoundedBitmapDrawableFactory.create(context.getResources(),
                                             resource);
                             imageView.setImageDrawable(circularBitmapDrawable);
                         }

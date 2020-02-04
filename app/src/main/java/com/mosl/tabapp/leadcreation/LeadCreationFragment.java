@@ -92,7 +92,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -1093,9 +1092,9 @@ public class LeadCreationFragment extends CommonFragment
     private void getCategory() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), LEADCATEGORY,
+                    new LookupRequest(
+
+                            userManager.getUser().currentBusinessProfile.businessUnitId, LEADCATEGORY,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1341,9 +1340,8 @@ public class LeadCreationFragment extends CommonFragment
     private void getProfession() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), PROFESSIONID,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, PROFESSIONID,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1384,9 +1382,8 @@ public class LeadCreationFragment extends CommonFragment
     private void getInterestIn() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, INTERESTEDIN,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1429,9 +1426,8 @@ public class LeadCreationFragment extends CommonFragment
     private void getProductType(String productId) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest lookupRequest =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), PRODUCTTYPE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, PRODUCTTYPE,
                             productId, null);
             Disposable disposable = getSaathiApi().getAllLookup(lookupRequest)
                     .compose(applyUiModel())
@@ -1472,9 +1468,8 @@ public class LeadCreationFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             Disposable disposable =
                     getSaathiApi().getSourceList(
-                            new SourceListRequest(Objects.requireNonNull(
-                                    Objects.requireNonNull(
-                                            userManager.getUser()).currentBusinessProfile.businessUnitId)))
+                            new SourceListRequest(
+                                    userManager.getUser().currentBusinessProfile.businessUnitId))
                             .compose(applyUiModel())
                             .subscribe(this::renderSourceList);
         } else {
@@ -1549,9 +1544,8 @@ public class LeadCreationFragment extends CommonFragment
     private void getStage() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             Disposable disposable = getSaathiApi().getStageList(
-                    new StageRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId)))
+                    new StageRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId))
                     .compose(applyUiModel())
                     .subscribe(this::renderStage);
         } else {
@@ -2151,16 +2145,13 @@ public class LeadCreationFragment extends CommonFragment
         AddressDetailModel residenceAddress = new AddressDetailModel(RESIDENCEADDRESS, etAdd1.getText().toString().trim(),
                 etAdd2.getText().toString().trim(), etAdd3.getText().toString().trim(),
                 countryCodeStr, stateCodeStr, cityCodeStr, etPincode.getText().toString().trim(),
-                cbPrimaryAddress.isChecked(), Objects.requireNonNull(
-                Objects.requireNonNull(
-                        userManager.getUser()).currentBusinessProfile.businessUnitId));
+                cbPrimaryAddress.isChecked(),
+                userManager.getUser().currentBusinessProfile.businessUnitId);
         AddressDetailModel officeAddress = new AddressDetailModel(OFFICEADDRESS, etOffAdd1.getText().toString().trim(),
                 etOffAdd2.getText().toString().trim(), etOffAdd3.getText().toString().trim(),
                 offCountryCodeStr, offStateCodeStr, offCityCodeStr,
                 etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
-                Objects.requireNonNull(
-                        Objects.requireNonNull(
-                                userManager.getUser()).currentBusinessProfile.businessUnitId));
+                userManager.getUser().currentBusinessProfile.businessUnitId);
 
         LeadCreationModel leadCreationModel = new LeadCreationModel();
         leadCreationModel.seteMail(etEmailId.getText().toString().trim());
@@ -2171,8 +2162,7 @@ public class LeadCreationFragment extends CommonFragment
         leadCreationModel.setEkycMobileNo(etEkycMobile.getText().toString().trim());
         leadCreationModel.setPanNo(etPanNum.getText().toString().trim());
         leadCreationModel.setAadharNo(etAadharNum.getText().toString().trim());
-        leadCreationModel.setBusinessUnitID(Objects.requireNonNull(
-                Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId));
+        leadCreationModel.setBusinessUnitID(userManager.getUser().currentBusinessProfile.businessUnitId);
         leadCreationModel.setLeadCategoryID(categoryCodeStr);
         leadCreationModel.setContactPerson(etContactPerson.getText().toString().trim());
         leadCreationModel.setSourceID(sourceCodeStr);
@@ -2348,7 +2338,7 @@ public class LeadCreationFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             TransferLeadRequest transferLeadRequest = new TransferLeadRequest(
                     etMobile.getText().toString().trim(),
-                    Objects.requireNonNull(userManager.getUser()).employeeCode
+                    userManager.getUser().employeeCode
             );
             Disposable disposable = getSaathiApi().transferLead(transferLeadRequest)
                     .map(response -> {

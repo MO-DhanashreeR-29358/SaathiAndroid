@@ -129,7 +129,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -300,7 +299,7 @@ public class LeadViewDetailFragment extends CommonFragment
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         leadViewDetailView = super.onCreateView(inflater, container, savedInstanceState);
-        setUpView(Objects.requireNonNull(leadViewDetailView));
+        setUpView(leadViewDetailView);
         setUserVisibleHint(true);
         return leadViewDetailView;
     }
@@ -314,9 +313,9 @@ public class LeadViewDetailFragment extends CommonFragment
         try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && leadViewDetailView != null && viewPager.getCurrentItem() == 0) {
-                if (!Objects.requireNonNull(this.getArguments())
-                        .getString(LEAD_ID)
-                        .equalsIgnoreCase("0")) {
+                if (this.getArguments().containsKey(LEAD_ID) && !this.getArguments()
+                        .getString(LEAD_ID, "0")
+                        .equals("0")) {
                     setEnableDisable(false);
                     leadSection();
                 } else {
@@ -509,10 +508,10 @@ public class LeadViewDetailFragment extends CommonFragment
         getInterestIn();
         llClient.setVisibility(View.VISIBLE);
         llClientPortfolioDetails.setVisibility(View.VISIBLE);
-        webServiceportfolioSnapshot(Objects.requireNonNull(this.getArguments()).getString(UCID));
+        webServiceportfolioSnapshot(this.getArguments().getString(UCID, "0"));
         webServicePL(this.getArguments().getString(UCID));
         getClientDetail(Integer.parseInt(
-                Objects.requireNonNull(this.getArguments().getString(UCID))));
+                this.getArguments().getString(UCID, "0")));
         toggleSectionExpansion(llClientDetail, tvClientDetail);
     }
 
@@ -1105,7 +1104,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Observable<String> refreeNameObs = RxTextView.afterTextChangeEvents(etRefereeName)
                 .filter(event -> event.getView().isFocused())
-                .map(query -> Objects.requireNonNull(query.getEditable()).toString().trim())
+                .map(query -> query.getEditable().toString().trim())
                 .debounce(1000, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .share();
 
@@ -1456,9 +1455,8 @@ public class LeadViewDetailFragment extends CommonFragment
     private void getProfession() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), PROFESSIONID,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, PROFESSIONID,
                             null, null);
             getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1501,9 +1499,7 @@ public class LeadViewDetailFragment extends CommonFragment
     private void getInterestIn() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                    new LookupRequest(userManager.getUser().currentBusinessProfile.businessUnitId, INTERESTEDIN,
                             null, null);
             getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -2010,9 +2006,8 @@ public class LeadViewDetailFragment extends CommonFragment
     private void selectProfile() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, LEADPROFILE,
                             null, null);
             getCompositeDisposable().add(getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -2052,7 +2047,7 @@ public class LeadViewDetailFragment extends CommonFragment
     private void addProductDialog() {
         final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_leadview_add_product);
@@ -2280,7 +2275,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                 if (data != null) {
                                     final ArrayList<EmployeeModel> modelList = new ArrayList<>();
                                     for (ProductSpecialistItem datum : data) {
-                                        if (Objects.requireNonNull(userManager.getUser()).employeeCode
+                                        if (userManager.getUser().employeeCode
                                                 .equalsIgnoreCase(datum.employeeCode)) {
                                             continue;
                                         }
@@ -2453,8 +2448,8 @@ public class LeadViewDetailFragment extends CommonFragment
             return false;
         } else
             //
-            if (!isBlank(Objects.requireNonNull(etDob.getText()).toString()) & !isBlank(
-                    Objects.requireNonNull(etAnniversary.getText()).toString())) {
+            if (!isBlank(etDob.getText().toString()) & !isBlank(
+                    etAnniversary.getText().toString())) {
                 try {
                     Date dobDate = getDBDateFrom(etDob.getText().toString().trim(), "dd-MM-yyyy");
                     Date anniDate =
@@ -2613,8 +2608,9 @@ public class LeadViewDetailFragment extends CommonFragment
         String innerSectionExpansion = "InnerSectionExpansion";
         switch (view.getId()) {
             case R.id.llEditLeadDetail:
-                if (!Objects.requireNonNull(this.getArguments().getString(LEAD_ID))
-                        .equalsIgnoreCase("0")) {
+                if (this.getArguments().containsKey(LEAD_ID) && !this.getArguments()
+                        .getString(LEAD_ID, "0")
+                        .equals("0")) {
                     if (isLeadEditable()) {
                         if (editableFlag) {
                             setEnableDisable(true);
@@ -2629,8 +2625,8 @@ public class LeadViewDetailFragment extends CommonFragment
             case R.id.etDob:
                 try {
                     CustomDatePickerDialog dobDatePicker =
-                            new CustomDatePickerDialog(getContext(), false, Objects.requireNonNull(
-                                    etDob.getText()).toString(),
+                            new CustomDatePickerDialog(getContext(), false,
+                                    etDob.getText().toString(),
                                     true, date -> {
                                 tvAnniversaryError.setVisibility(View.GONE);
                                 etDob.setText(date);
@@ -2645,7 +2641,7 @@ public class LeadViewDetailFragment extends CommonFragment
                 try {
                     CustomDatePickerDialog anniversaryDatePicker =
                             new CustomDatePickerDialog(getContext(), false,
-                                    Objects.requireNonNull(etAnniversary.getText()).toString(), true,
+                                    etAnniversary.getText().toString(), true,
                                     date -> {
                                         tvAnniversaryError.setVisibility(View.GONE);
                                         etAnniversary.setText(date);
@@ -2675,8 +2671,8 @@ public class LeadViewDetailFragment extends CommonFragment
             break;
             case R.id.tvDocuments:
                 args.putString(LEAD_ID,
-                        Objects.requireNonNull(this.getArguments()).getString(LEAD_ID));
-                args.putString(UCID, this.getArguments().getString(UCID));
+                        this.getArguments().getString(LEAD_ID, "0"));
+                args.putString(UCID, this.getArguments().getString(UCID, "0"));
                 navigator.openPage(NAVIGATE_TO_DOCUMENT, args, true, false);
                 break;
             case R.id.cbPrimaryAddress:
@@ -2835,8 +2831,7 @@ public class LeadViewDetailFragment extends CommonFragment
                 getJsonSafeString(etAdd3.getText().toString().trim()), countryCodeStr,
                 stateCodeStr,
                 cityCodeStr, etPincode.getText().toString().trim(),
-                cbPrimaryAddress.isChecked(), Objects.requireNonNull(
-                Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId)));
+                cbPrimaryAddress.isChecked(), userManager.getUser().currentBusinessProfile.businessUnitId));
         addressDetailList.add(new AddressDetailModel(OFFICEADDRESS,
                 getJsonSafeString(etOffAdd1.getText().toString().trim()),
                 getJsonSafeString(etOffAdd2.getText().toString().trim()),
@@ -2844,9 +2839,7 @@ public class LeadViewDetailFragment extends CommonFragment
                 stateCodeStr,
                 cityCodeStr,
                 etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
-                Objects.requireNonNull(
-                        Objects.requireNonNull(
-                                userManager.getUser()).currentBusinessProfile.businessUnitId)));
+                userManager.getUser().currentBusinessProfile.businessUnitId));
 
         LeadDetailModel leadDetailModel = new LeadDetailModel();
         leadDetailModel.setSameAsAbove(cbSameAs.isChecked());
@@ -2864,14 +2857,14 @@ public class LeadViewDetailFragment extends CommonFragment
                 etProspectRefereerMobile.getText().toString().trim());
         leadDetailModel.setProspectRefereEmail(etProspectRefereerEmail.getText().toString().trim());
         try {
-            if (!isBlank(Objects.requireNonNull(etDob.getText()).toString())) {
+            if (!isBlank(etDob.getText().toString())) {
                 String strDob = etDob.getText().toString().trim();
                 leadDetailModel.setDob(CRMAppUtil.getDateFromString(strDob, CAL_DATE_FORMAT,
                         DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
             } else {
                 leadDetailModel.setDob("");
             }
-            if (!isBlank(Objects.requireNonNull(etAnniversary.getText()).toString())) {
+            if (!isBlank(etAnniversary.getText().toString())) {
                 String strANN = etAnniversary.getText().toString().trim();
                 leadDetailModel.setAnniversary(CRMAppUtil.getDateFromString(strANN, CAL_DATE_FORMAT,
                         DATE_FORMAT_TO_SERVER_MEETING_SEND) + "T00:00:00");
@@ -2882,8 +2875,7 @@ public class LeadViewDetailFragment extends CommonFragment
             e.printStackTrace();
         }
         leadDetailModel.setLeadID(etLeadID.getText().toString().trim());
-        leadDetailModel.setBusinessUnitID(Objects.requireNonNull(
-                Objects.requireNonNull(userManager.getUser()).currentBusinessProfile.businessUnitId));
+        leadDetailModel.setBusinessUnitID(userManager.getUser().currentBusinessProfile.businessUnitId);
         leadDetailModel.setContactPerson(etContactPerson.getText().toString().trim());
         leadDetailModel.setSourceID(sourceID);
         leadDetailModel.setLeadSourceID(leadProspetSourceID);
@@ -2919,9 +2911,8 @@ public class LeadViewDetailFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String stageID = isBlank(stageId) ? null : stageId;
             getCompositeDisposable().add(getSaathiApi().getStageList(
-                    new StageRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), stageID))
+                    new StageRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, stageID))
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderStage(uiModel, spStageDialog, progressLayout)));
         } else {
@@ -2969,9 +2960,7 @@ public class LeadViewDetailFragment extends CommonFragment
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String stageID = isBlank(stageId) ? null : stageId;
             StageMobileRequest mobileRequest =
-                    new StageMobileRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), stageID);
+                    new StageMobileRequest(userManager.getUser().currentBusinessProfile.businessUnitId, stageID);
             getCompositeDisposable().add(getSaathiApi().getStageMobileList(mobileRequest)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
@@ -3216,7 +3205,7 @@ public class LeadViewDetailFragment extends CommonFragment
         if (MSFStatistics.isNetworkEnabled(requireContext())) {
             getCompositeDisposable().add(getSaathiApi().getClientSummary(
                     "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
-                    Objects.requireNonNull(userManager.getUser()).userId, ucid)
+                    userManager.getUser().userId, ucid)
                     .compose(applyUiModel())
                     .subscribe(this::renderClientSummary));
         } else {
@@ -3384,7 +3373,7 @@ public class LeadViewDetailFragment extends CommonFragment
         if (MSFStatistics.isNetworkEnabled(requireContext())) {
             getCompositeDisposable().add(getSaathiApi().getClientGainLossSummary(
                     "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientGainLossSummary",
-                    Objects.requireNonNull(userManager.getUser()).userId, ucid)
+                    userManager.getUser().userId, ucid)
                     .compose(applyUiModel())
                     .subscribe(this::renderGainLossSummary));
         } else {
@@ -3590,7 +3579,7 @@ public class LeadViewDetailFragment extends CommonFragment
     private void dialogUpdateProfile() {
         final Dialog dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(R.layout.dialog_update_profile);
@@ -3760,7 +3749,7 @@ public class LeadViewDetailFragment extends CommonFragment
                     public void onClick(View v) {
                         final Dialog dialog = new Dialog(requireContext());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        Objects.requireNonNull(dialog.getWindow())
+                        dialog.getWindow()
                                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.setContentView(
@@ -3863,7 +3852,7 @@ public class LeadViewDetailFragment extends CommonFragment
                         .equals("1")) {
                     final Dialog dialog = new Dialog(requireContext());
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    Objects.requireNonNull(dialog.getWindow())
+                    dialog.getWindow()
                             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setContentView(R.layout.dialog_leadview_add_cross_selling_product);
@@ -4151,9 +4140,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                                  final String statusId, final LinearLayout progressLayout) {
             if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 CrossSellingProductRequest request =
-                        new CrossSellingProductRequest(Objects.requireNonNull(
-                                Objects.requireNonNull(
-                                        userManager.getUser()).currentBusinessProfile.businessUnitId),
+                        new CrossSellingProductRequest(userManager.getUser().currentBusinessProfile.businessUnitId,
                                 intrestedIn);
                 getCompositeDisposable().add(getSaathiApi().getCrossSellingProduct(request)
                         .compose(applyUiModel())
@@ -4206,9 +4193,8 @@ public class LeadViewDetailFragment extends CommonFragment
                                               final LinearLayout progressLayout) {
             if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 LookupRequest lookupRequest =
-                        new LookupRequest(Objects.requireNonNull(
-                                Objects.requireNonNull(
-                                        userManager.getUser()).currentBusinessProfile.businessUnitId), 111,
+                        new LookupRequest(
+                                userManager.getUser().currentBusinessProfile.businessUnitId, 111,
                                 null, null);
                 getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
                         .compose(applyUiModel())
@@ -4341,7 +4327,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                  String productSpecialistId) {
             final Dialog dialog = new Dialog(requireContext());
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            Objects.requireNonNull(dialog.getWindow())
+            dialog.getWindow()
                     .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.setCanceledOnTouchOutside(false);
             dialog.setContentView(R.layout.dialog_leadview_add_product);
@@ -4518,8 +4504,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                             specialistEdit,
                                             newStageCodeStr,
                                             selectedStatus.getKey(),
-                                            selectedStatus.getValue(),
-                                            Objects.requireNonNull(actAssignTo.getText()).toString(),
+                                            selectedStatus.getValue(), actAssignTo.getText().toString(),
                                             YES, dataMap
                                     );
                                 } else {
@@ -4531,7 +4516,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                             newStageCodeStr,
                                             selectedStatus.getKey(),
                                             selectedStatus.getValue(),
-                                            Objects.requireNonNull(actAssignTo.getText())
+                                            actAssignTo.getText()
                                                     .toString(), NO, dataMap
                                     );
                                 }
@@ -4545,7 +4530,7 @@ public class LeadViewDetailFragment extends CommonFragment
                             newStageCodeStr,
                             selectedStatus.getKey(),
                             selectedStatus.getValue(),
-                            Objects.requireNonNull(actAssignTo.getText()).toString(), "", dataMap
+                            actAssignTo.getText().toString(), "", dataMap
                     );
                 }
                 dialog.dismiss();

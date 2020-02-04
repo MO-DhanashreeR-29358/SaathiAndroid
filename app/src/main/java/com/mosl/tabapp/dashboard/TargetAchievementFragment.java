@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -62,7 +63,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 
@@ -137,10 +137,10 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
     public void setUpView(View targetView) {
         List<WidgetModel> widgetModelList = new ArrayList<>();
         try {
-            dashboardModel = (DashboardModel) Objects.requireNonNull(this.getArguments()).
+            dashboardModel = (DashboardModel) this.getArguments().
                     getSerializable(DASHBOARD_MODEL);
             widgetModelList =
-                    Objects.requireNonNull(dashboardModel).
+                    dashboardModel.
                             getGroupModel(DashboardSystemModel.getTargetAchivementSystemName())
                             .getWidgetList();
             if (widgetModelList.size() < 3) {
@@ -545,7 +545,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private List<WidgetModel> widgetModelList;
-
+        private Context context;
         private HorizontalAdapter(List<WidgetModel> widgetModelList) {
             this.widgetModelList = widgetModelList;
         }
@@ -555,7 +555,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         public HorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_target_achievement_list, parent, false);
-
+            context = parent.getContext();
             return new HorizontalAdapter.MyViewHolder(itemView);
         }
 
@@ -609,7 +609,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
         }
 
         private void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(requireContext())
+            Glide.with(context)
                     .load(imageUrl)
                     //remove Chache
                     .asBitmap()
@@ -621,9 +621,8 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                    RoundedBitmapDrawableFactory.create(context.getResources(),
                                             resource);
-                            //circularBitmapDrawable.setCircular(true);
                             imageView.setImageDrawable(circularBitmapDrawable);
                         }
                     });

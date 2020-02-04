@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -57,7 +58,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import io.reactivex.disposables.Disposable;
@@ -128,7 +128,7 @@ public class TrendsTabFragment extends CommonFragment {
 
     private void setChartData(List<List<ChartDataModel>> arrayLists) {
         try {
-            LayoutInflater inFla = Objects.requireNonNull(getActivity()).getLayoutInflater();
+            LayoutInflater inFla = requireActivity().getLayoutInflater();
             for (int i = 0; i < arrayLists.size(); i++) {
                 View tableRow = inFla.inflate(R.layout.combined_chartlayout, null);
                 CombinedChart mChart = tableRow.findViewById(R.id.mChart);
@@ -457,7 +457,7 @@ public class TrendsTabFragment extends CommonFragment {
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private List<DashboardGroupModel> widgetModelList;
-
+        private Context context;
         HorizontalAdapter(List<DashboardGroupModel> widgetModelList) {
             this.widgetModelList = widgetModelList;
         }
@@ -467,7 +467,7 @@ public class TrendsTabFragment extends CommonFragment {
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_target_achievement_list, parent, false);
-
+            context = parent.getContext();
             return new MyViewHolder(itemView);
         }
 
@@ -522,14 +522,14 @@ public class TrendsTabFragment extends CommonFragment {
         }
 
         void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(requireContext())
+            Glide.with(context)
                     .load(imageUrl)
                     //remove Chache
                     .asBitmap().placeholder(R.drawable.ic_white).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                            RoundedBitmapDrawableFactory.create(context.getResources(),
                                     resource);
                     imageView.setImageDrawable(circularBitmapDrawable);
                 }

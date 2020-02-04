@@ -10,7 +10,6 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Shefali on 3/1/2016.
@@ -56,7 +55,7 @@ public class SearchableSpinner extends Spinner implements View.OnTouchListener,
                     for (int i = 0; i < adapter.getCount(); i++) {
                         if (adapter.getCount() == 2) {
                             _items.add(adapter.getItem(i));
-                            if (!Objects.requireNonNull(adapter.getItem(i)).toString().equalsIgnoreCase("select")) {
+                            if (!adapter.getItem(i).toString().equalsIgnoreCase("select")) {
                                 _items.add("");
                             }
                         } else {

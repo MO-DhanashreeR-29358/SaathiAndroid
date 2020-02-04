@@ -41,7 +41,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -101,8 +100,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		activitiesView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_lead_activities);
-		setUpView(Objects.requireNonNull(activitiesView));
+		setUpView(activitiesView);
 		setUserVisibleHint(true);
 		return activitiesView;
 	}
@@ -311,7 +309,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	private void leadViewDialog(final LeadActivitiesAppointModel appointmentModel) {
 		final Dialog dialog = new Dialog(requireContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		Objects.requireNonNull(dialog.getWindow())
+		dialog.getWindow()
 			.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.setContentView(R.layout.dialog_appointments);
@@ -328,7 +326,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 		String timeStr = appointmentModel.getTime(); //4:05PM
 		Date apptDate = CRMAppUtil.getDate(dateStr + " " + timeStr, "dd MMM yyyy h:mma");
 
-		if (CRMAppUtil.isBeforeDate(Objects.requireNonNull(apptDate))) {
+		if (CRMAppUtil.isBeforeDate(apptDate)) {
 			ivUpdateMeeting.setVisibility(
 				View.VISIBLE);//updaet meeting allowed only when appointment date is less than current date
 		} else {
@@ -480,7 +478,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 			holder.tvAppointmentType.setText(
 				String.format("Appointment for %s", appointmentModel.getProduct()));
 			holder.relativeLayout.setOnClickListener(view -> {
-				if (Objects.requireNonNull(userManager.getUser()).employeeCode
+				if (userManager.getUser().employeeCode
 					.equalsIgnoreCase(appointmentModel.getCreatedBy())) {
 					leadViewDialog(appointmentModel);
 				}

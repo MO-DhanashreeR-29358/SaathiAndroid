@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 
@@ -86,12 +85,12 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
             if (widgetList.size() >= 2) {
                 model = widgetList.get(2);
             }
-            widgetSystemName = Objects.requireNonNull(model).getSystemName();
+            widgetSystemName = model.getSystemName();
             webServiceCall();
 
         }
 
-        if (Objects.requireNonNull(dashboardModel).getDashboardFor().equals("TEAM")) {
+        if (dashboardModel.getDashboardFor().equals("TEAM")) {
             llShowMore.setVisibility(View.VISIBLE);
         }
 

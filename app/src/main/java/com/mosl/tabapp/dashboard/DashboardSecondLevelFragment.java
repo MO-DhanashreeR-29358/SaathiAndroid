@@ -46,7 +46,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -117,7 +116,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
                              Bundle savedInstanceState) {
         View secondClickView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(secondClickView);
-        if (Objects.requireNonNull(getArguments()).containsKey(FILTER_LIST) && getArguments().containsKey(SPINNER_LIST)) {
+        if (getArguments().containsKey(FILTER_LIST) && getArguments().containsKey(SPINNER_LIST)) {
             spinnerDataFlag = true;
         } else {
             spinnerDataFlag = false;
@@ -213,7 +212,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
         if (!isActionable.trim().equalsIgnoreCase(ACTIONABLE)) {
             webServiceCall();
         } else if (isActionable.trim().equalsIgnoreCase(ACTIONABLE)
-                && !Objects.requireNonNull(getArguments()).containsKey(
+                && !getArguments().containsKey(
                 SPINNER_LIST)
                 && !getArguments().containsKey(FILTER_LIST)) {
             webServiceCall();
@@ -377,7 +376,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
         if (!isBlank(typeFilterString)) {
             addtionalParameterMap.put(ROW_FILTER, typeFilterString);
         }
-        if (Objects.requireNonNull(this.getArguments()).getString(LABEL).trim().equalsIgnoreCase(ACTIONABLE)) {
+        if (this.getArguments().getString(LABEL).trim().equalsIgnoreCase(ACTIONABLE)) {
             addtionalParameterMap.put(WIDGETTYPE, typeFilterString);
         }
 

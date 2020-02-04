@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,8 +90,7 @@ public class LeadViewHistoryFragment extends CommonFragment
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         leadViewHistoryView = super.onCreateView(inflater, container, savedInstanceState);
-        //attachLayout(R.layout.frag_leadview_history);
-        setUpView(Objects.requireNonNull(leadViewHistoryView));
+        setUpView(leadViewHistoryView);
         setUserVisibleHint(true);
 
         return leadViewHistoryView;
@@ -100,7 +98,7 @@ public class LeadViewHistoryFragment extends CommonFragment
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View leadViewDetailView) {
-        leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID, "0");
+        leadId = this.getArguments().getString(LEAD_ID, "0");
         mUcid = this.getArguments().getString(UCID, "0");
         mUcid = (mUcid != null && !CRMAppUtil.isBlank(mUcid)) ? mUcid : "0";
         spHistory = leadViewDetailView.findViewById(R.id.spHistory);
@@ -169,15 +167,15 @@ public class LeadViewHistoryFragment extends CommonFragment
                     .getInt("Position"))) {
                 String[] eventTypeArray = new String[0];
                 if (!leadId.equalsIgnoreCase("0") && !mUcid.equalsIgnoreCase("0")) {
-                    eventTypeArray = Objects.requireNonNull(getActivity())
+                    eventTypeArray = requireContext()
                             .getResources()
                             .getStringArray(R.array.LeadClientHistory);
                 } else if (!leadId.equalsIgnoreCase("0")) {
-                    eventTypeArray = Objects.requireNonNull(getActivity())
+                    eventTypeArray = requireContext()
                             .getResources()
                             .getStringArray(R.array.LeadHistory);
                 } else if (!mUcid.equalsIgnoreCase("0")) {
-                    eventTypeArray = Objects.requireNonNull(getActivity())
+                    eventTypeArray = requireContext()
                             .getResources()
                             .getStringArray(R.array.ClientHistory);
                 }
@@ -209,7 +207,7 @@ public class LeadViewHistoryFragment extends CommonFragment
     @SuppressLint("DefaultLocale")
     private void renderTable(List<Map<String, Object>> tableList) {
         SecondClickTableAdapter secondClickTableAdapter =
-                new SecondClickTableAdapter(getActivity(), new ArrayList<>());
+                new SecondClickTableAdapter(new ArrayList<>());
         table.setAdapter(secondClickTableAdapter);
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> columnsHeader = new ArrayList<>();
@@ -240,11 +238,11 @@ public class LeadViewHistoryFragment extends CommonFragment
                 for (String column : columns) {
                     String columnData =
                             objDetail.get(column) == null ? ""
-                                    : Objects.requireNonNull(objDetail.get(column)).toString();
+                                    : objDetail.get(column).toString();
 
                     if (objDetail.get(
                             column) instanceof Number) {
-                        String strValue = Objects.requireNonNull(objDetail.get(column))
+                        String strValue = objDetail.get(column)
                                 .toString()
                                 .trim();
 
@@ -253,12 +251,12 @@ public class LeadViewHistoryFragment extends CommonFragment
                                 && !strValue.endsWith(".00")) {
                             columnData = String.format("%.2f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column))
+                                            objDetail.get(column)
                                                     .toString()));
                         } else {
                             columnData = String.format("%.0f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column))
+                                            objDetail.get(column)
                                                     .toString()));
                         }
                     }
@@ -357,7 +355,7 @@ public class LeadViewHistoryFragment extends CommonFragment
                         if (status.equalsIgnoreCase("true")) {
                             return tableResponseList;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -401,8 +399,8 @@ public class LeadViewHistoryFragment extends CommonFragment
         private String[] headers = {};
         private LayoutInflater inflater = null;
 
-        private SecondClickTableAdapter(Context context,
-                                        ArrayList<HashMap<String, String>> hashArray) {
+        private SecondClickTableAdapter(
+                ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
         }
@@ -426,7 +424,7 @@ public class LeadViewHistoryFragment extends CommonFragment
             String[] rowData = new String[headers.length];
             int ctr = 0;
             for (String columnName : headers) {
-                String value = Objects.requireNonNull(row.get(columnName)).toString();
+                String value = row.get(columnName);
                 rowData[ctr] = value;
                 ctr++;
             }

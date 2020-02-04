@@ -48,7 +48,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -209,7 +208,7 @@ public class PendingForApprovalFragment extends CommonFragment
         today = Calendar.getInstance();
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
         dialog.getWindow()
@@ -316,7 +315,7 @@ public class PendingForApprovalFragment extends CommonFragment
             arrAdapProfile.notifyDataSetChanged();
 
             String entityField =
-                    Objects.requireNonNull(this.getArguments()).getString(ENTITY_FIELD);
+                    this.getArguments().getString(ENTITY_FIELD);
 
             RowData entityFieldID = getSpinnerRowDataById(entityField, arrAdapProfile);
             if (entityFieldID != null) {
@@ -330,7 +329,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestFieldList() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-                    new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
+                    new ApprovelRequest(userManager.getUser().employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalFieldList(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderApprovalField);
@@ -372,7 +371,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private void getApprovelReqestUserList() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             ApprovelRequest request =
-                    new ApprovelRequest(Objects.requireNonNull(userManager.getUser()).employeeCode);
+                    new ApprovelRequest(userManager.getUser().employeeCode);
             Disposable subscribe = getSaathiApi().getApprovalUserList(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderApprovalUser);
@@ -524,7 +523,7 @@ public class PendingForApprovalFragment extends CommonFragment
 
             ApprovalListRequest request =
                     new ApprovalListRequest(emoloyeeStr, "1", REPORT_PAGE_SIZE,
-                            Objects.requireNonNull(userManager.getUser()).employeeCode, "0",
+                            userManager.getUser().employeeCode, "0",
                             updatedStartDate, updatedEndDate,
                             profileStr);
             Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
@@ -858,7 +857,7 @@ public class PendingForApprovalFragment extends CommonFragment
                         LinkedHashMap linkedHashMap = (LinkedHashMap) hashArray.get(j);
                         String val = (String) linkedHashMap.get(sortCol);
                         if (isNumber) {
-                            outDbl.add(Double.valueOf(Objects.requireNonNull(val)));
+                            outDbl.add(Double.valueOf(val));
                         } else {
                             outStr.add(val);
                         }
@@ -887,7 +886,7 @@ public class PendingForApprovalFragment extends CommonFragment
                                         (LinkedHashMap) tempHashArray.get(j);
                                 String sortColVal = (String) sortLinkedMap.get(sortCol);
                                 double sortColValue = Double.parseDouble(
-                                        Objects.requireNonNull(sortColVal));
+                                        sortColVal);
                                 int retval = Double.compare(sortedValue, sortColValue);
                                 if (retval == 0) {
                                     pendingApprovalTableAdapter.add(sortLinkedMap);

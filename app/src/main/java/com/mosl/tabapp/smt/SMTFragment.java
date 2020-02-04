@@ -13,12 +13,14 @@ import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
+
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import java.util.HashMap;
-import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -35,9 +37,8 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		view = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_webview);
 		hideAppTitle();
-		setUpView(Objects.requireNonNull(this.getArguments()).getString(URL_PATH));
+		setUpView(this.getArguments().getString(URL_PATH));
 
 		return view;
 	}
@@ -63,7 +64,7 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 				request.setNotificationVisibility(
 					DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 				DownloadManager dm =
-					(DownloadManager) Objects.requireNonNull(getContext())
+						(DownloadManager) requireContext()
 						.getSystemService(DOWNLOAD_SERVICE);
 				dm.enqueue(request);
 				progressBar.setVisibility(View.GONE);
@@ -76,7 +77,7 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	@Override public void openEkyc(String OAOUserId) {
 		HashMap<String, String> map = new HashMap();
 		map.put(NEW_USERID, OAOUserId);
-		map.put(BRANCHEMPCODE, Objects.requireNonNull(userManager.getUser()).employeeCode);
+		map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
 		map.put(COMMANDTYPE, "RESUME");
 		map.put(APPLICATIONTYPE, "CRM");
 		map.put(OSTYPE, "ANDROID");

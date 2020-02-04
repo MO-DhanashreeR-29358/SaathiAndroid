@@ -65,7 +65,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -149,9 +148,9 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 		Bundle savedInstanceState) {
 		documentView = super.onCreateView(inflater, container, savedInstanceState);
 		container.post(() -> setAppTitle("Documents"));
-		setUpView(Objects.requireNonNull(documentView));
+		setUpView(documentView);
 		try {
-			leadId = Objects.requireNonNull(this.getArguments()).getString(LEAD_ID);
+			leadId = this.getArguments().getString(LEAD_ID);
 			ucid = this.getArguments().getString(UCID);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,7 +162,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 	private void dialogAddDocument() {
 		dialog = new Dialog(requireContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		Objects.requireNonNull(dialog.getWindow())
+		dialog.getWindow()
 			.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.setContentView(R.layout.dialog_add_document);
 		dialog.getWindow()
@@ -236,7 +235,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 				}
 			} else if (requestCode == SELECT_FILE) {
 				imageToUploadUri = data.getData();
-				actualImage = new File(Objects.requireNonNull(imageToUploadUri).getPath());
+				actualImage = new File(imageToUploadUri.getPath());
 				uploadFile(actualImage, imageToUploadUri);
 			}
 		}
@@ -245,7 +244,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 	@Override public void onClick(View view) {
 		if (view.getId() == R.id.rlAddDoc) {
 			if (documentAdapter.getCount() <= FILE_UPLOAD_COUNT_LIMT) {
-				if (hasAllPermission(getActivity(), permissionsArr)) {
+				if (hasAllPermission(requireContext(), permissionsArr)) {
 					dialogAddDocument();
 				} else {
 					ActivityCompat.requestPermissions(requireActivity(), permissionsArr,
@@ -345,7 +344,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 
 				ParcelFileDescriptor pfd =
 					requireContext().getContentResolver().openFileDescriptor(fileUri, "r");
-				FileDescriptor fd = Objects.requireNonNull(pfd).getFileDescriptor();
+				FileDescriptor fd = pfd.getFileDescriptor();
 				is = new FileInputStream(fd);
 				filePath = fileToupload.getAbsolutePath();
 			} catch (Exception e) {
@@ -360,7 +359,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 
 			String fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
 			final String mimeType =
-				Objects.requireNonNull(getActivity()).getContentResolver().getType(fileUri);
+					requireActivity().getContentResolver().getType(fileUri);
 			if (mimeType != null) {
 				String extention = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
 
@@ -411,7 +410,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 		if (data != null) {
 			documentAdapter.updateDocumentName(id, documentName);
 
-			alertDialog(getActivity(), 0,
+			alertDialog(requireContext(), 0,
 				getResources().getString(R.string.motilal_oswal),
 				DOCUMENT_RENAME, "OK", true, null);
 		}
@@ -442,7 +441,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 		String data = uiModel.data;
 		if (data != null) {
 			documentAdapter.deleteDocument(id);
-			alertDialog(getActivity(), 0,
+			alertDialog(requireContext(), 0,
 				getResources().getString(R.string.motilal_oswal),
 				DOCUMENT_DELETED, "OK", true,
 				(action, data1) -> {
@@ -676,7 +675,7 @@ public class DocumentFragment extends CommonFragment implements View.OnClickList
 				dialog = new Dialog(requireContext());
 				dialog.setTitle("Rename");
 				dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-				Objects.requireNonNull(dialog.getWindow())
+				dialog.getWindow()
 					.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 				dialog.setContentView(R.layout.list_edit_popup);
 				dialog.getWindow()

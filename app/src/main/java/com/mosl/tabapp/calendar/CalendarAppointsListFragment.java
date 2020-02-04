@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -65,14 +64,14 @@ public class CalendarAppointsListFragment extends CommonFragment
                              Bundle savedInstanceState) {
         View calendarView = super.onCreateView(inflater, container, savedInstanceState);
         container.post(() -> setAppTitle("Calendar"));
-        setUpView(Objects.requireNonNull(calendarView));
+        setUpView(calendarView);
         return calendarView;
     }
 
     private void setUpView(View calendarView) {
         tvStartDate = calendarView.findViewById(R.id.tvDate);
         tvNochart = calendarView.findViewById(R.id.tvNochart);
-        String mainToDate = Objects.requireNonNull(this.getArguments()).getString(DATE);
+        String mainToDate = this.getArguments().getString(DATE);
         fromPostingDate = mainToDate;
         mainToDate = getDateFromString(mainToDate, DATE_FORMAT_TO_SERVER_MEETING_SEND,
                 DATE_FORMAT_OF_DD_MMM_YYYY);
@@ -111,7 +110,7 @@ public class CalendarAppointsListFragment extends CommonFragment
         Calendar today = Calendar.getInstance();
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker);
         dialog.getWindow()
@@ -241,8 +240,8 @@ public class CalendarAppointsListFragment extends CommonFragment
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             CalenderRequest request =
-                    new CalenderRequest(selectionDate, "A", Objects.requireNonNull(
-                            userManager.getUser()).employeeCode);
+                    new CalenderRequest(selectionDate, "A",
+                            userManager.getUser().employeeCode);
             Disposable subscribe = getSaathiApi().postCalenderByDate(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderCalender);

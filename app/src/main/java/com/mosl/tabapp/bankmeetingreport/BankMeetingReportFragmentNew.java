@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -99,7 +98,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
         today = Calendar.getInstance();
         dialog = new Dialog(requireContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialog.getWindow())
+        dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker_from_to);
         dialog.getWindow()
@@ -201,11 +200,11 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                         Type type = new TypeToken<HashMap<String, Object>>() {
                         }.getType();
                         HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        String status = response.get(STATUS).toString();
                         if (status.equalsIgnoreCase("true")) {
                             return response;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -250,11 +249,11 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                         Type type = new TypeToken<HashMap<String, Object>>() {
                         }.getType();
                         HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        String status = response.get(STATUS).toString();
                         if (status.equalsIgnoreCase("true")) {
                             return response;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -293,7 +292,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<String> columnsHeader = new ArrayList<String>();
 
-        if (Objects.requireNonNull(arrayDetail).size() != 0) {
+        if (arrayDetail.size() != 0) {
             for (int y = 0; y < arrayDetail.size(); y++) {
                 Map<String, Object> objDetail = arrayDetail.get(y);
 
@@ -315,22 +314,22 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                 for (String column : columns) {
                     String columnData =
                             objDetail.get(column) == null
-                                    ? "" : Objects.requireNonNull(objDetail.get(column)).toString();
+                                    ? "" : objDetail.get(column).toString();
 
                     if (objDetail.get(column) instanceof Number) {
                         String strValue =
-                                Objects.requireNonNull(objDetail.get(column)).toString().trim();
+                                objDetail.get(column).toString().trim();
 
                         if (strValue.contains(".")
                                 && !strValue.endsWith(".0")
                                 && !strValue.endsWith(".00")) {
                             columnData = String.format("%.2f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                            objDetail.get(column).toString()));
                         } else {
                             columnData = String.format("%.0f",
                                     Double.parseDouble(
-                                            Objects.requireNonNull(objDetail.get(column)).toString()));
+                                            objDetail.get(column).toString()));
                         }
                     }
                     if (column.equalsIgnoreCase("lead_id")) {

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 
@@ -167,10 +166,10 @@ public class NotificationFragment extends CommonFragment
         if (dataStr == null || dataStr.length() < 1) {
             navigator.openHome();
         }
-        NotificationData data = new NotificationData(Objects.requireNonNull(dataStr));
-        if (Objects.requireNonNull(data.getPage()).equalsIgnoreCase("LEADVIEW")) {
+        NotificationData data = new NotificationData(dataStr);
+        if (data.getPage().equalsIgnoreCase("LEADVIEW")) {
             Bundle bundle = new Bundle();
-            String leadId = Objects.requireNonNull(data.getParamMap()).get(LEAD_ID);
+            String leadId = data.getParamMap().get(LEAD_ID);
             String ucid = data.getParamMap().get(UCID);
             ucid = (ucid == null || ucid.equalsIgnoreCase("")) ? "0" : ucid;
             leadId = (leadId == null || leadId.equalsIgnoreCase("")) ? "0" : leadId;

@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -98,7 +97,7 @@ public class LeadProfilingFragment extends CommonFragment
         try {
 
             leadId =
-                    Objects.requireNonNull(this.getArguments()).getString(MOSLConstants.LEAD_ID, "");
+                    this.getArguments().getString(MOSLConstants.LEAD_ID, "0");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -419,9 +418,8 @@ public class LeadProfilingFragment extends CommonFragment
         boolean mCoutFlagFirstGroup = false;
         for (ProfileQuestionGroup group : profileModel.getProfileQuestionGroup()) {
             String groupName = group.getGroupName();
-            //  LinearLayout groupLayout = new LinearLayout(getActivity());
             @SuppressLint("InflateParams") ViewGroup groupLayout =
-                    (ViewGroup) Objects.requireNonNull(getActivity())
+                    (ViewGroup) requireActivity()
                             .getLayoutInflater()
                             .inflate(R.layout.include_section
                                     , null);
@@ -584,9 +582,9 @@ public class LeadProfilingFragment extends CommonFragment
                                                 View hideViewHead = questionList.get(
                                                         mOptions.getHideDepedentQuestion() + Head);
                                                 if (mOptions.isHide().equalsIgnoreCase("N")) {
-                                                    Objects.requireNonNull(hideView)
+                                                    hideView
                                                             .setVisibility(View.VISIBLE);
-                                                    Objects.requireNonNull(hideViewHead)
+                                                    hideViewHead
                                                             .setVisibility(View.VISIBLE);
                                                 } else if (mOptions.isHide()
                                                         .equalsIgnoreCase("Y")) {
@@ -602,9 +600,9 @@ public class LeadProfilingFragment extends CommonFragment
                                                             }
                                                         }
                                                     }
-                                                    Objects.requireNonNull(hideView)
+                                                    hideView
                                                             .setVisibility(View.GONE);
-                                                    Objects.requireNonNull(hideViewHead)
+                                                    hideViewHead
                                                             .setVisibility(View.GONE);
                                                 }
                                             }

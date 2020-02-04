@@ -34,7 +34,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import io.reactivex.disposables.Disposable;
@@ -85,7 +84,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View leadShowView = super.onCreateView(inflater, container, savedInstanceState);
-        setUpView(Objects.requireNonNull(leadShowView));
+        setUpView(leadShowView);
         hideAppTitle();
         return leadShowView;
     }
@@ -100,7 +99,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         tvNochart = leadShowView.findViewById(R.id.tvNochart);
         TextView tvShowLess = leadShowView.findViewById(R.id.tvShowLess);
         tvShowLess.setPaintFlags(tvShowLess.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        dashboardModel = (DashboardModel) Objects.requireNonNull(this.getArguments()).getSerializable(DASHBOARD_MODEL);
+        dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
         try {
             map = (HashMap<String, String>) this.getArguments().getSerializable(MAP);
             widgetSystemName = this.getArguments().getString(SYSTEM_NAME);
@@ -125,7 +124,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> header = new ArrayList<String>();
 
-        if (Objects.requireNonNull(arrayDetail).size() != 0) {
+        if (arrayDetail.size() != 0) {
 
             for (int y = 2; y < arrayDetail.size(); y++) {
                 Map<String, Object> objDetailSecond =
@@ -135,8 +134,8 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                         columns.add(keySetE.toString());
                     }
                     for (String column : columns) {
-                        String columnData = Objects.requireNonNull(objDetailSecond.get(column)).toString().equals("") ? ""
-                                : Objects.requireNonNull(objDetailSecond.get(column)).toString();
+                        String columnData = objDetailSecond.get(column).toString().equals("") ? ""
+                                : objDetailSecond.get(column).toString();
                         header.add(columnData);
                     }
                     String[] stockArr = new String[header.size()];
@@ -152,9 +151,9 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 LinkedHashMap<String, String> hm = new LinkedHashMap<>();
                 for (String column : columns) {
                     String columnData =
-                            Objects.requireNonNull(objDetail.get(column))
+                            objDetail.get(column)
                                     .toString()
-                                    .equals("") ? "0" : Objects.requireNonNull(objDetail.get(column)).toString();
+                                    .equals("") ? "0" : objDetail.get(column).toString();
                     hm.put(column, columnData);
                 }
                 leadTableAdapter.add(hm);
@@ -208,11 +207,11 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                         HashMap<String, Object> response = mGson.fromJson(responseS, type);
                         Map<String, Object> responseJsonObj =
                                 (Map<String, Object>) response.get("Response");
-                        String status = Objects.requireNonNull(response.get(STATUS)).toString();
+                        String status = response.get(STATUS).toString();
                         if (status.equalsIgnoreCase("true")) {
                             return responseJsonObj;
                         } else {
-                            String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+                            String message = response.get(MESSAGE).toString();
                             throw new ServiceFailureException(message, message);
                         }
                     })
@@ -229,19 +228,19 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
         if (id == R.id.tvShowLess) {
             Bundle args = new Bundle();
             CommonFragment leadsFragment;
-            if (Objects.requireNonNull(Objects.requireNonNull(this.getArguments()).
-                    getString(TYPESOFLEAD)).equalsIgnoreCase(LEAD)) {
+            if (this.getArguments().
+                    getString(TYPESOFLEAD).equalsIgnoreCase(LEAD)) {
                 leadsFragment = new ClientsLeadsFragment();
             } else {
                 leadsFragment = new AuLeadsFragment();
-                args.putInt(FLT_BANKNAME, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKNAME));
-                args.putInt(FLT_BANKBRANCHCODE, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKBRANCHCODE));
-                args.putInt(FLT_BANKSUBBROKERCODE, Objects.requireNonNull(this.getArguments()).getInt(FLT_BANKSUBBROKERCODE));
+                args.putInt(FLT_BANKNAME, this.getArguments().getInt(FLT_BANKNAME));
+                args.putInt(FLT_BANKBRANCHCODE, this.getArguments().getInt(FLT_BANKBRANCHCODE));
+                args.putInt(FLT_BANKSUBBROKERCODE, this.getArguments().getInt(FLT_BANKSUBBROKERCODE));
             }
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            args.putInt(FILTERFIRST, Objects.requireNonNull(this.getArguments()).getInt(FILTERFIRST));
-            args.putInt(FILTERSECOND, Objects.requireNonNull(this.getArguments()).getInt(FILTERSECOND));
-            args.putInt(FILTERTHIRD, Objects.requireNonNull(this.getArguments()).getInt(FILTERTHIRD));
+            args.putInt(FILTERFIRST, this.getArguments().getInt(FILTERFIRST));
+            args.putInt(FILTERSECOND, this.getArguments().getInt(FILTERSECOND));
+            args.putInt(FILTERTHIRD, this.getArguments().getInt(FILTERTHIRD));
             leadsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -284,7 +283,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 Set<Integer> childListSet = childMap.keySet();
                 for (Integer childIdFromMap : childListSet) {
                     if (childId == childIdFromMap.intValue()) {
-                        return Objects.requireNonNull(childMap.get(childIdFromMap)).toString();
+                        return childMap.get(childIdFromMap).toString();
                     }
                 }
             }
@@ -308,9 +307,9 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             if (jsonArray == null) return;
             for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
                 Map<String, Object> jsonRowObject = jsonArray.get(ctr);
-                int groupId = Integer.parseInt(Objects.requireNonNull(jsonRowObject.get("GroupId")).toString());
-                int childid = Integer.parseInt(Objects.requireNonNull(jsonRowObject.get("childid")).toString());
-                String rowFilter = Objects.requireNonNull(jsonRowObject.get("RowFilter")).toString();
+                int groupId = Integer.parseInt(jsonRowObject.get("GroupId").toString());
+                int childid = Integer.parseInt(jsonRowObject.get("childid").toString());
+                String rowFilter = jsonRowObject.get("RowFilter").toString();
 
                 List<Map> childList = (List) tabaleHeaderMap.get(groupId);
                 if (childList == null) {
@@ -400,18 +399,18 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                     view.setOnClickListener(view1 -> {
                         int newColumn = column + 1;
                         Set<String> stringSet = hashArray.get(row).keySet();
-                        String columnName = Objects.requireNonNull(stringSet.toArray())[newColumn].toString();
+                        String columnName = stringSet.toArray()[newColumn].toString();
                         addtionalParameterMap.clear();
                         addtionalParameterMap.put(COL_FILTER, columnName);
-                        addtionalParameterMap.put(ROW_FILTER, Objects.requireNonNull(getRowKeyName(
-                                Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))));
+                        addtionalParameterMap.put(ROW_FILTER, getRowKeyName(
+                                Double.parseDouble(hashArray.get(row).get("id"))));
                         addtionalParameterMap.putAll(map);
                         Bundle args = new Bundle();
                         args.putString(SYSTEM_NAME, widgetSystemName);
                         args.putString(LABEL, LEAD);
                         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
                         lMap = (LinkedHashMap) hashArray.get(row);
-                        String columnData = Objects.requireNonNull(lMap.get(columnName)).toString();
+                        String columnData = lMap.get(columnName).toString();
                         if (!columnData.trim().equalsIgnoreCase("0")) {
                             navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
@@ -477,7 +476,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
 
             try {
                 if (hashArray.get(row).get("id") != null && isGroup(
-                        Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))) {
+                        Double.parseDouble(hashArray.get(row).get("id")))) {
                     tv_table_first.setTypeface(null, Typeface.BOLD);
                     tv_table_first.setTextColor(getResources().getColor(R.color.flush_orange));
                     listLayout.setBackgroundResource(R.color.lead_self_back);
@@ -513,7 +512,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             }
             TextView text1 = convertView.findViewById(android.R.id.text1);
             if (hashArray.get(row).get("id") != null && isGroup(
-                    Double.parseDouble(Objects.requireNonNull(hashArray.get(row).get("id"))))) {
+                    Double.parseDouble(hashArray.get(row).get("id")))) {
                 text1.setTextColor(getResources().getColor(R.color.flush_orange));
                 listLayout.setBackgroundResource(R.color.lead_self_back);
             } else if (hashArray.get(row).get("stage") != null && hashArray.get(row)

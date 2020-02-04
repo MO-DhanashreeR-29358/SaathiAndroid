@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 import io.reactivex.disposables.Disposable;
@@ -166,9 +165,8 @@ public class BirthdayAnniversaryFragment extends CommonFragment
     private void getProfile() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), LEADPROFILE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, LEADPROFILE,
                             null, null);
             Disposable subscribe = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -370,8 +368,8 @@ public class BirthdayAnniversaryFragment extends CommonFragment
                     (spEventType.getSelectedItem().toString().equalsIgnoreCase("Birthday") ? "B" : "A")
                             + (dayType.equalsIgnoreCase(BELATED_FLAG) ? "-L" : "-T");
             SendEmailRequest request =
-                    new SendEmailRequest(null, true, eventType, "E", Objects.requireNonNull(
-                            userManager.getUser()).employeeCode,
+                    new SendEmailRequest(null, true, eventType, "E",
+                            userManager.getUser().employeeCode,
                             filterType);
             Disposable subscribe = getSaathiApi().postSendEmail(request)
                     .compose(applyUiModel())
