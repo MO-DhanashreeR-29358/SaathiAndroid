@@ -6,7 +6,7 @@ import android.widget.TextView
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.base.BaseFragment
-import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 open class CommonFragment : BaseFragment() {
   @Inject
-  internal lateinit var userManager: UserManager
+  internal lateinit var userManager: UserManagerImpl
   @Inject
   internal lateinit var navigator: ScreenNavigatorImpl
   val saathiApi = CRMWebServiceHandler.getSaathiApi()

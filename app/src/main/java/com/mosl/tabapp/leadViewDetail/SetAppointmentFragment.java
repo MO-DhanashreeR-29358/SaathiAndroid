@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -60,6 +60,7 @@ import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -75,7 +76,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import timber.log.Timber;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.R.string.motilal_oswal;
 import static com.mosl.tabapp.R.string.txt_label_reschedule_appointment;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -154,99 +157,7 @@ public class SetAppointmentFragment extends CommonFragment
     private String mUCID = "0";
     private TextView tvStartDateError, tvEndDateError;
     private TextView tvAPPDateError;
-    private AdapterView.OnItemSelectedListener selectProductListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvProductTypeSpError.setVisibility(View.GONE);
 
-                        productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    //weekDayCodeStr,weekDayNameStr
-    private AdapterView.OnItemSelectedListener selectWeekDayListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvRepeatWeekdayError.setVisibility(View.GONE);
-                        weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectActivityTypeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                        tvActivityTypeError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    //endregion
-    //region DropDown listner
-    private AdapterView.OnItemSelectedListener selectWeekListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvRepeatTypeSpError.setVisibility(View.GONE);
-                        weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectRepeteModeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-
-                        if (position > 0) {
-                            llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
-                        } else {
-                            llRepeteOnDaysPannel.setVisibility(View.GONE);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
 
     //endregion
     //deos dedup on list
@@ -292,7 +203,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (meetingId != null && !meetingId.equalsIgnoreCase("0")) {
                 //Editt mode
                 createMode = false;
-                getAppointmentDetailsFromServer(meetingId);
+                getAppointmentDetailsFromServer();
             } else {
                 //Create mode
                 selectProduct("");
@@ -314,6 +225,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         return setAppointmentView;
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View setAppointmentView) {
@@ -391,6 +303,65 @@ public class SetAppointmentFragment extends CommonFragment
             tvNewAppointment.setText(getString(txt_label_reschedule_appointment));
         }
     }
+
+    private void setProductSpinnerSelection() {
+        disposable.add(
+                itemSelections(spSelectProduct)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvProductTypeSpError.setVisibility(View.GONE);
+                            productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setWeekDaySpinnerSelection() {
+        disposable.add(
+                itemSelections(spSelectWeekDay)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvRepeatWeekdayError.setVisibility(View.GONE);
+                            weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setActivityTypeSpinnerSelection() {
+        disposable.add(
+                itemSelections(spActivityType)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
+                            tvActivityTypeError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setRepeatWeekSpinnerSelection() {
+        disposable.add(
+                itemSelections(spRepeateWeek)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvRepeatTypeSpError.setVisibility(View.GONE);
+                            weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setRepeatOnSpinnerSelection() {
+        disposable.add(
+                itemSelections(spRepeateOn)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(position -> {
+                            if (position > 0) {
+                                llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
+                            } else {
+                                llRepeteOnDaysPannel.setVisibility(View.GONE);
+                            }
+                        }));
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -574,18 +545,14 @@ public class SetAppointmentFragment extends CommonFragment
             MSFDialog.alertDialog(getActivity(), 0,
                     getResources().getString(motilal_oswal),
                     (createMode) ? SET_APPOINTMENTS : UPDATE_APPOINTMENTS,
-                    "OK", true, new MSFDialog.DialogListener() {
-                        @Override
-                        public void alertDialogAction(
-                                MSFDialog.Action action, Object... data) {
-                            if (action == MSFDialog.Action.OK) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(LEAD_ID,
-                                        Objects.requireNonNull(getArguments()).getString(LEAD_ID));
-                                bundle.putString(UCID,
-                                        getArguments().getString(UCID));
-                                navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
-                            }
+                    "OK", true, (action, data1) -> {
+                        if (action == MSFDialog.Action.OK) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(LEAD_ID,
+                                    Objects.requireNonNull(getArguments()).getString(LEAD_ID));
+                            bundle.putString(UCID,
+                                    getArguments().getString(UCID));
+                            navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
                         }
                     });
         }
@@ -881,13 +848,11 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectProduct.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectProduct = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectProduct);
-            arrAdapSelectProduct.setDropDownViewResource(
-                    R.layout.mdropdown);
+
+            ArrayAdapter<RowData> arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSelectProduct.setAdapter(arrAdapSelectProduct);
-            spSelectProduct.setOnItemSelectedListener(
-                    selectProductListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectProduct, spSelectProduct, arrSelectProduct);
+
             arrAdapSelectProduct.notifyDataSetChanged();
             arrAdapSelectProduct.setNotifyOnChange(true);
 
@@ -896,6 +861,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spSelectProduct.setSelection(productData.getPosition());
             }
+            setProductSpinnerSelection();
         }
     }
 
@@ -1248,19 +1214,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectWeekDay.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectWeekDay = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectWeekDay);
-            arrAdapSelectWeekDay.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectWeekDay = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
-            spSelectWeekDay.setOnItemSelectedListener(
-                    selectWeekDayListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectWeekDay, spSelectWeekDay, arrSelectWeekDay);
+
             arrAdapSelectWeekDay.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapSelectWeekDay);
             if (productData != null) {
                 spSelectWeekDay.setSelection(productData.getPosition());
             }
+            setWeekDaySpinnerSelection();
         }
     }
 
@@ -1342,19 +1306,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrActivityType.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapActivityType = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrActivityType);
-            arrAdapActivityType.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActivityType.setAdapter(arrAdapActivityType);
-            spActivityType.setOnItemSelectedListener(
-                    selectActivityTypeListener);
+            AdapterUtils.setSpinnerData(arrAdapActivityType, spActivityType, arrActivityType);
+
             arrAdapActivityType.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapActivityType);
             if (productData != null) {
                 spActivityType.setSelection(productData.getPosition());
             }
+            setActivityTypeSpinnerSelection();
         }
     }
 
@@ -1362,7 +1324,7 @@ public class SetAppointmentFragment extends CommonFragment
     //@add by sanket on 30/03/2017
     // calls web service takes meeting id as parameter
     //@param  strMeetingId
-    private void getAppointmentDetailsFromServer(CharSequence strMeetingId) {
+    private void getAppointmentDetailsFromServer() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             MeetingByIdRequest request =
                     new MeetingByIdRequest(meetingId);
@@ -1534,19 +1496,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrRepeatMode.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapRepeteMode = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrRepeatMode);
-            arrAdapRepeteMode.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapRepeteMode = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spRepeateOn.setAdapter(arrAdapRepeteMode);
-            spRepeateOn.setOnItemSelectedListener(
-                    selectRepeteModeListener);
+            AdapterUtils.setSpinnerData(arrAdapRepeteMode, spRepeateOn, arrRepeatMode);
+
             arrAdapRepeteMode.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapRepeteMode);
             if (productData != null) {
                 spRepeateOn.setSelection(productData.getPosition());
             }
+            setRepeatOnSpinnerSelection();
         }
     }
 
@@ -1586,18 +1546,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectWeek.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectWeek = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectWeek);
-            arrAdapSelectWeek.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectWeek = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spRepeateWeek.setAdapter(arrAdapSelectWeek);
-            spRepeateWeek.setOnItemSelectedListener(selectWeekListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectWeek, spRepeateWeek, arrSelectWeek);
+
             arrAdapSelectWeek.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapSelectWeek);
             if (productData != null) {
                 spRepeateWeek.setSelection(productData.getPosition());
             }
+            setRepeatWeekSpinnerSelection();
         }
     }
 
@@ -1618,11 +1577,6 @@ public class SetAppointmentFragment extends CommonFragment
         public AttendeeAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
             this.context = context;
-        }
-
-        public void clearAll() {
-            resultList.clear();
-            notifyDataSetChanged();
         }
 
         @Override
@@ -1888,7 +1842,6 @@ public class SetAppointmentFragment extends CommonFragment
         private final LayoutInflater inflater;
         Context mContext;
         List<AddedAttendeeModel> attendeeModelList;
-        private ArrayList<EmployeeModel> arraylist;
 
         private AddedAttendeeAdapter(Context c, List<AddedAttendeeModel> attendeeModelList) {
             inflater = LayoutInflater.from(c);
@@ -1913,8 +1866,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         @SuppressLint("ViewHolder")
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View view = convertView;
+        public View getView(final int position, View view, ViewGroup parent) {
             AddedAttendeeAdapter.Holder holder = new AddedAttendeeAdapter.Holder();
             view = inflater.inflate(R.layout.item_list_added_attendee, parent, false);
 
@@ -1971,8 +1923,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         @SuppressLint("ViewHolder")
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View view = convertView;
+        public View getView(final int position, View view, ViewGroup parent) {
             AddedSplAttendeeAdapter.Holder holder = new AddedSplAttendeeAdapter.Holder();
             view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false);
 
@@ -1984,15 +1935,12 @@ public class SetAppointmentFragment extends CommonFragment
             holder.tvAttendeeName.setText(
                     String.format("%s-%s", attendeeModel.getAttendeeEmplyeeCode(),
                             attendeeModel.getAttendeeName()));
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    addedSplAttendeeCount--;
-                    tvSplAttendeeCount.setText(
-                            String.format("(%s)", valueOf(addedSplAttendeeCount)));
-                    attendeeModelList.remove(position);
-                    notifyDataSetChanged();
-                }
+            holder.ivDelete.setOnClickListener(view1 -> {
+                addedSplAttendeeCount--;
+                tvSplAttendeeCount.setText(
+                        String.format("(%s)", valueOf(addedSplAttendeeCount)));
+                attendeeModelList.remove(position);
+                notifyDataSetChanged();
             });
 
             return view;
