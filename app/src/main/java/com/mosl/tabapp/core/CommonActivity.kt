@@ -47,7 +47,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.service.location.DataSyncWorker
 import com.mosl.tabapp.service.location.LocationWorker
-import com.mosl.tabapp.splash.SplashActivityNew
+import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
@@ -375,7 +375,7 @@ class CommonActivity : BaseActivity(),
         dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
 
         shortcutHelper.setLogoutUserShortcuts()
-        val login = Intent(this, SplashActivityNew::class.java)
+        val login = Intent(this, SplashActivity::class.java)
         startActivity(login)
         finish()
     }

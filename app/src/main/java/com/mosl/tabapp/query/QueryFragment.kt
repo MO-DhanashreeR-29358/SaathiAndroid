@@ -20,7 +20,7 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class QueryFragmentNew : CommonFragment(), QueryView {
+class QueryFragment : CommonFragment(), QueryView {
   lateinit var binding: FragmentQueryNewBinding
 
   @Inject

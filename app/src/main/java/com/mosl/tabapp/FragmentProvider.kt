@@ -18,7 +18,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
-import com.mosl.tabapp.query.QueryFragmentNew
+import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.ReportFragment
@@ -55,7 +55,7 @@ abstract class FragmentProvider {
   abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
 
   @ContributesAndroidInjector(modules = [QueryModule::class])
-  abstract fun provideQueryFragmentFactory(): QueryFragmentNew
+  abstract fun provideQueryFragmentFactory(): QueryFragment
 
   @ContributesAndroidInjector
   abstract fun provideWebviewFragmentFactory(): WebViewFragment

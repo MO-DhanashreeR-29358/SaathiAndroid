@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import com.mosl.tabapp.R;
-import com.mosl.tabapp.splash.SplashActivityNew;
+import com.mosl.tabapp.splash.SplashActivity;
+
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.tabapp.common.CRMAppUtil.getPrefs;
@@ -37,7 +40,7 @@ public class ImageSliderActivity extends FragmentActivity {
 		String password = getPrefs(this).getString("PASSWORD", null);
 
 		if (empCode != null && password != null) {
-			Intent intent = new Intent(ImageSliderActivity.this, SplashActivityNew.class);
+			Intent intent = new Intent(ImageSliderActivity.this, SplashActivity.class);
 			startActivity(intent);
 			finish();
 		}
@@ -91,7 +94,7 @@ public class ImageSliderActivity extends FragmentActivity {
 	}
 
 	private void launchHomeScreen() {
-		Intent intent = new Intent(ImageSliderActivity.this, SplashActivityNew.class);
+		Intent intent = new Intent(ImageSliderActivity.this, SplashActivity.class);
 		startActivity(intent);
 		finish();
 	}

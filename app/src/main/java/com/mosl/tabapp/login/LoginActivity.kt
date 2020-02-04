@@ -32,7 +32,7 @@ import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class LoginActivityNew : BaseActivity(), Navigator, LoginView {
+class LoginActivity : BaseActivity(), Navigator, LoginView {
 
   lateinit var binding: ActivityLoginNewBinding
   @Inject

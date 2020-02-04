@@ -7,12 +7,15 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
+
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.core.CommonActivity;
-import com.mosl.tabapp.login.LoginActivityNew;
+import com.mosl.tabapp.login.LoginActivity;
 import com.mosl.tabapp.navigation.NavigationConstants;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.N_MR1) public class ShortcutHelperImpl implements ShortcutHelper {
@@ -57,7 +60,7 @@ import timber.log.Timber;
 		shortcutInfos.add(new ShortcutInfo.Builder(context, "login").setShortLabel("Login")
 			.setLongLabel("Login")
 			.setIcon(Icon.createWithResource(context, R.drawable.ic_login))
-			.setIntent(new Intent(Intent.ACTION_VIEW, null, context, LoginActivityNew.class))
+				.setIntent(new Intent(Intent.ACTION_VIEW, null, context, LoginActivity.class))
 			.build());
 
 		return shortcutInfos;

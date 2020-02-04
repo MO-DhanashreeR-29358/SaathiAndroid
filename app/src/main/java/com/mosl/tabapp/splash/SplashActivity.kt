@@ -23,14 +23,14 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
-import com.mosl.tabapp.login.LoginActivityNew
+import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class SplashActivityNew : LeanBaseActivity() {
+class SplashActivity : LeanBaseActivity() {
     lateinit var disposables: CompositeDisposable
     lateinit var binding: ActivitySplashBinding
     @Inject
@@ -124,7 +124,8 @@ class SplashActivityNew : LeanBaseActivity() {
 
             val msg = it.msg;
             when (it.statusCode) {
-                0 -> MSFDialog.alertDialog(this@SplashActivityNew, 0,
+                0 -> MSFDialog.alertDialog(
+                    this@SplashActivity, 0,
                     resources.getString(R.string.MOSL), msg,
                     UPDATE, false, object : MSFDialog.DialogListener {
                         override fun alertDialogAction(
@@ -141,7 +142,8 @@ class SplashActivityNew : LeanBaseActivity() {
                             }
                         }
                     })
-                3 -> MSFDialog.alertDialog(this@SplashActivityNew, 0,
+                3 -> MSFDialog.alertDialog(
+                    this@SplashActivity, 0,
                     resources.getString(R.string.MOSL), msg,
                     UPDATE, CONTINUE, false, object : MSFDialog.DialogListener {
                         override fun alertDialogAction(
@@ -161,7 +163,7 @@ class SplashActivityNew : LeanBaseActivity() {
                         }
                     })
                 2 -> MSFDialog.alertDialog(
-                    this@SplashActivityNew, 0,
+                    this@SplashActivity, 0,
                     resources.getString(R.string.MOSL), msg,
                     "Ok", false
                 ) { action, _ ->
@@ -280,13 +282,13 @@ class SplashActivityNew : LeanBaseActivity() {
     }
 
     fun openLogin() {
-        val login = Intent(this@SplashActivityNew, LoginActivityNew::class.java)
+        val login = Intent(this@SplashActivity, LoginActivity::class.java)
         startActivityForResult(login, 1001)
 //    finish()
     }
 
     private fun openCommonActivity() {
-        val intent = Intent(this@SplashActivityNew, CommonActivity::class.java)
+        val intent = Intent(this@SplashActivity, CommonActivity::class.java)
         startActivity(intent)
         finish()
     }
@@ -297,7 +299,7 @@ class SplashActivityNew : LeanBaseActivity() {
         data: Intent?
     ) {
         if (resultCode == 1002) {
-            val intent = Intent(this@SplashActivityNew, CommonActivity::class.java)
+            val intent = Intent(this@SplashActivity, CommonActivity::class.java)
             intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
             startActivity(intent)
         }

@@ -7,10 +7,10 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor(
-  view: LoginView,
-  val navigator: LoginNavigator,
-  val context: LoginActivityNew,
-  val loginRepository: LoginRepository
+    view: LoginView,
+    val navigator: LoginNavigator,
+    val context: LoginActivity,
+    val loginRepository: LoginRepository
 ) : BasePresenter<LoginView>(view) {
 
   override fun start() {
