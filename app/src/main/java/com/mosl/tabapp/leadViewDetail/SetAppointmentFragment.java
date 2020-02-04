@@ -304,7 +304,7 @@ public class SetAppointmentFragment extends CommonFragment
         }
     }
 
-    private void setProductSpinnerSelection() {
+    private void setProductListener() {
         disposable.add(
                 itemSelections(spSelectProduct)
                         .filter(InvalidSelectionPredicate)
@@ -315,7 +315,7 @@ public class SetAppointmentFragment extends CommonFragment
                         }));
     }
 
-    private void setWeekDaySpinnerSelection() {
+    private void setWeekDayListener() {
         disposable.add(
                 itemSelections(spSelectWeekDay)
                         .filter(InvalidSelectionPredicate)
@@ -326,7 +326,7 @@ public class SetAppointmentFragment extends CommonFragment
                         }));
     }
 
-    private void setActivityTypeSpinnerSelection() {
+    private void setActivityTypeListener() {
         disposable.add(
                 itemSelections(spActivityType)
                         .filter(InvalidSelectionPredicate)
@@ -337,7 +337,7 @@ public class SetAppointmentFragment extends CommonFragment
                         }));
     }
 
-    private void setRepeatWeekSpinnerSelection() {
+    private void setRepeatWeekListener() {
         disposable.add(
                 itemSelections(spRepeateWeek)
                         .filter(InvalidSelectionPredicate)
@@ -348,7 +348,7 @@ public class SetAppointmentFragment extends CommonFragment
                         }));
     }
 
-    private void setRepeatOnSpinnerSelection() {
+    private void setRepeatOnListener() {
         disposable.add(
                 itemSelections(spRepeateOn)
                         .filter(InvalidSelectionPredicate)
@@ -861,7 +861,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spSelectProduct.setSelection(productData.getPosition());
             }
-            setProductSpinnerSelection();
+            setProductListener();
         }
     }
 
@@ -1224,7 +1224,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spSelectWeekDay.setSelection(productData.getPosition());
             }
-            setWeekDaySpinnerSelection();
+            setWeekDayListener();
         }
     }
 
@@ -1316,7 +1316,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spActivityType.setSelection(productData.getPosition());
             }
-            setActivityTypeSpinnerSelection();
+            setActivityTypeListener();
         }
     }
 
@@ -1506,7 +1506,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spRepeateOn.setSelection(productData.getPosition());
             }
-            setRepeatOnSpinnerSelection();
+            setRepeatOnListener();
         }
     }
 
@@ -1556,7 +1556,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spRepeateWeek.setSelection(productData.getPosition());
             }
-            setRepeatWeekSpinnerSelection();
+            setRepeatWeekListener();
         }
     }
 

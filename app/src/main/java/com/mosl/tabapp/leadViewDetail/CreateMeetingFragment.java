@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -47,6 +46,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -76,6 +76,7 @@ import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -96,7 +97,9 @@ import okhttp3.RequestBody;
 import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
@@ -219,266 +222,7 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayList<CreateMeetingTravellingModel> travellingList;
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
-    private AdapterView.OnItemSelectedListener selectMeetingLocation =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        if (!((RowData) spMeetingLocation.getSelectedItem()).getKey()
-                                .equalsIgnoreCase("-1")
-                                && !((RowData) spMeetingLocation.getSelectedItem()).getValue()
-                                .equalsIgnoreCase("other")) {
-                            GetAddressByLeadId(
-                                    ((RowData) spMeetingLocation.getSelectedItem()).getKey());
-                        }
-                        etLocation.setText("");
-                        tvMeetingLocationError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectSubCategoryListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        subCategoryCodestr = ((RowData) spSubCategory.getSelectedItem()).getKey();
-                        tvSubCategoryError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectCategoryListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
-                        tvCategoryError.setVisibility(View.GONE);
-                        subCategory();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectProductListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        String productCodeStr = ((RowData) spProduct.getSelectedItem()).getKey();
-                        String productNameStr = ((RowData) spProduct.getSelectedItem()).getValue();
-                        if (!productCodeStr.equalsIgnoreCase("-1")) {
-                            productAdapter.addProduct(
-                                    new CreateMeetingProductModel(productCodeStr, productNameStr));
-                        }
-                        tvProductError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectTravellingMode =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-
-                        if (!((RowData) spTravellingMode.getSelectedItem()).getKey()
-                                .equalsIgnoreCase("-1")) {
-                            travellingAdapter.addTravellingMode(new CreateMeetingTravellingModel(
-                                    ((RowData) spTravellingMode.getSelectedItem()).getKey(),
-                                    ((RowData) spTravellingMode.getSelectedItem()).getValue()));
-                        }
-
-                        tvTravellingModeError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectMeetingDurationListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        meetingDurationCodeStr =
-                                ((RowData) spMeetingDuration.getSelectedItem()).getKey();
-                        tvMeetingDurationError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectMeetingReasonListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        meetingReasonCodeStr = ((RowData) spMeetingReason.getSelectedItem()).getKey();
-                        String meetingReasonNameStr =
-                                ((RowData) spMeetingReason.getSelectedItem()).getValue();
-                        tvMeetingReasonError.setVisibility(View.GONE);
-                        if (meetingReasonNameStr.equalsIgnoreCase("Customer Service Related")) {
-                            llActionables.setVisibility(View.VISIBLE);
-                        } else {
-                            llActionables.setVisibility(View.GONE);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectActionablesListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        actionablesCodeStr = ((RowData) spActionables.getSelectedItem()).getKey();
-                        tvActionablesError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectBAClientListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        baClientCodeStr = ((RowData) spBAClient.getSelectedItem()).getKey();
-                        tvBAClientError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectOutStationListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        outStaitionCodeStr = ((RowData) spOutStaition.getSelectedItem()).getKey();
-                        tvOutStaitionError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectActivityTypeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                        tvActivityTypeError.setVisibility(View.GONE);
-                        if (!spActivityType.getSelectedItem()
-                                .toString()
-                                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-                            arrMeetingReason.clear();
-                            arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                            meetingReason();
-                            if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email")
-                                    || spActivityType.getSelectedItem()
-                                    .toString()
-                                    .equalsIgnoreCase("Phone")) {
-                                enableLocationGroup = false;
-                                disableField(llLocationGroup);
-                                disableReset();
-                            } else {
-                                enableLocationGroup = true;
-                                enableField(llLocationGroup);
-                            }
-                        } else {
-                            arrMeetingReason.clear();
-                            arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                            arrAdapMeetingReason =
-                                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                                            arrMeetingReason);
-                            arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
-                            spMeetingReason.setAdapter(arrAdapMeetingReason);
-                            spMeetingReason.setOnItemSelectedListener(selectMeetingReasonListener);
-                            arrAdapMeetingReason.notifyDataSetChanged();
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectMeetingObjective =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        meetingObjectiveIdStr = ((RowData) parent.getSelectedItem()).getKey();
-                        tvMeetingObjectiveError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
 
     @Override
     protected int getLayout() {
@@ -782,6 +526,194 @@ public class CreateMeetingFragment extends CommonFragment
                 }
             }
         });
+    }
+
+
+    private void setMeetingLocationListener() {
+        disposable.add(
+                itemSelections(spMeetingLocation)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            if (!((RowData) spMeetingLocation.getSelectedItem()).getKey()
+                                    .equalsIgnoreCase("-1")
+                                    && !((RowData) spMeetingLocation.getSelectedItem()).getValue()
+                                    .equalsIgnoreCase("other")) {
+                                GetAddressByLeadId(
+                                        ((RowData) spMeetingLocation.getSelectedItem()).getKey());
+                            }
+                            etLocation.setText("");
+                            tvMeetingLocationError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setSubCategoryListener() {
+        disposable.add(
+                itemSelections(spSubCategory)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            subCategoryCodestr = ((RowData) spSubCategory.getSelectedItem()).getKey();
+                            tvSubCategoryError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setCategoryListener() {
+        disposable.add(
+                itemSelections(spCategory)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            categoryCodeStr = ((RowData) spCategory.getSelectedItem()).getKey();
+                            tvCategoryError.setVisibility(View.GONE);
+                            subCategory();
+                        }));
+    }
+
+    private void setProductListener() {
+        disposable.add(
+                itemSelections(spProduct)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            String productCodeStr = ((RowData) spProduct.getSelectedItem()).getKey();
+                            String productNameStr = ((RowData) spProduct.getSelectedItem()).getValue();
+                            if (!productCodeStr.equalsIgnoreCase("-1")) {
+                                productAdapter.addProduct(
+                                        new CreateMeetingProductModel(productCodeStr, productNameStr));
+                            }
+                            tvProductError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setTravellingModeListener() {
+        disposable.add(
+                itemSelections(spTravellingMode)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            if (!((RowData) spTravellingMode.getSelectedItem()).getKey()
+                                    .equalsIgnoreCase("-1")) {
+                                travellingAdapter.addTravellingMode(new CreateMeetingTravellingModel(
+                                        ((RowData) spTravellingMode.getSelectedItem()).getKey(),
+                                        ((RowData) spTravellingMode.getSelectedItem()).getValue()));
+                            }
+
+                            tvTravellingModeError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setMeetingDurationListener() {
+        disposable.add(
+                itemSelections(spMeetingDuration)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            meetingDurationCodeStr =
+                                    ((RowData) spMeetingDuration.getSelectedItem()).getKey();
+                            tvMeetingDurationError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setMeetingReasonListener() {
+        disposable.add(
+                itemSelections(spMeetingReason)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            meetingReasonCodeStr = ((RowData) spMeetingReason.getSelectedItem()).getKey();
+                            String meetingReasonNameStr =
+                                    ((RowData) spMeetingReason.getSelectedItem()).getValue();
+                            tvMeetingReasonError.setVisibility(View.GONE);
+                            if (meetingReasonNameStr.equalsIgnoreCase("Customer Service Related")) {
+                                llActionables.setVisibility(View.VISIBLE);
+                            } else {
+                                llActionables.setVisibility(View.GONE);
+                            }
+                        }));
+    }
+
+    private void setActionablesListener() {
+        disposable.add(
+                itemSelections(spActionables)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            actionablesCodeStr = ((RowData) spActionables.getSelectedItem()).getKey();
+                            tvActionablesError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setBAClientListener() {
+        disposable.add(
+                itemSelections(spBAClient)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            baClientCodeStr = ((RowData) spBAClient.getSelectedItem()).getKey();
+                            tvBAClientError.setVisibility(View.GONE);
+                        }));
+    }
+
+
+    private void setOutStationListener() {
+        disposable.add(
+                itemSelections(spOutStaition)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            outStaitionCodeStr = ((RowData) spOutStaition.getSelectedItem()).getKey();
+                            tvOutStaitionError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setActivityTypeListener() {
+        disposable.add(
+                itemSelections(spActivityType)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
+                            tvActivityTypeError.setVisibility(View.GONE);
+                            if (!spActivityType.getSelectedItem()
+                                    .toString()
+                                    .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
+                                arrMeetingReason.clear();
+                                arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
+                                meetingReason();
+                                if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email")
+                                        || spActivityType.getSelectedItem()
+                                        .toString()
+                                        .equalsIgnoreCase("Phone")) {
+                                    enableLocationGroup = false;
+                                    disableField(llLocationGroup);
+                                    disableReset();
+                                } else {
+                                    enableLocationGroup = true;
+                                    enableField(llLocationGroup);
+                                }
+                            } else {
+                                arrMeetingReason.clear();
+                                arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
+                                arrAdapMeetingReason =
+                                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
+                                                arrMeetingReason);
+                                arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
+                                spMeetingReason.setAdapter(arrAdapMeetingReason);
+                                arrAdapMeetingReason.notifyDataSetChanged();
+                            }
+                        }));
+    }
+
+    private void setMeetingObjectiveListener() {
+        disposable.add(
+                itemSelections(spMeetingObjective)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            meetingObjectiveIdStr = ((RowData) spMeetingObjective.getSelectedItem()).getKey();
+                            tvMeetingObjectiveError.setVisibility(View.GONE);
+                        }));
     }
 
     @Override
@@ -1299,13 +1231,12 @@ public class CreateMeetingFragment extends CommonFragment
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrCategory.add(new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapCategory = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrCategory);
-            arrAdapCategory.setDropDownViewResource(R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapCategory = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spCategory.setAdapter(arrAdapCategory);
-            spCategory.setOnItemSelectedListener(
-                    selectCategoryListener);
+            AdapterUtils.setSpinnerData(arrAdapCategory, spCategory, arrCategory);
             arrAdapCategory.notifyDataSetChanged();
+
+            setCategoryListener();
         }
     }
 
@@ -1344,14 +1275,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingObjective.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingsObjective = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrMeetingObjective);
-            arrAdapMeetingsObjective.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapMeetingsObjective = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingObjective.setAdapter(arrAdapMeetingsObjective);
-            spMeetingObjective.setOnItemSelectedListener(
-                    selectMeetingObjective);
+            AdapterUtils.setSpinnerData(arrAdapMeetingsObjective, spMeetingObjective, arrMeetingObjective);
             arrAdapMeetingsObjective.notifyDataSetChanged();
+
+            setMeetingObjectiveListener();
         }
     }
 
@@ -1398,14 +1327,11 @@ public class CreateMeetingFragment extends CommonFragment
                 arrSubCategory.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSubCategory = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSubCategory);
-            arrAdapSubCategory.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSubCategory = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSubCategory.setAdapter(arrAdapSubCategory);
-            spSubCategory.setOnItemSelectedListener(
-                    selectSubCategoryListener);
+            AdapterUtils.setSpinnerData(arrAdapSubCategory, spSubCategory, arrSubCategory);
             arrAdapSubCategory.notifyDataSetChanged();
+            setSubCategoryListener();
         }
     }
 
@@ -1444,13 +1370,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrSelectProduct.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectProduct = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectProduct);
-            arrAdapSelectProduct.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spProduct.setAdapter(arrAdapSelectProduct);
-            spProduct.setOnItemSelectedListener(selectProductListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectProduct, spProduct, arrSelectProduct);
             arrAdapSelectProduct.notifyDataSetChanged();
+
+            setProductListener();
         }
     }
 
@@ -1489,14 +1414,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingDuration.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingDuration = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrMeetingDuration);
-            arrAdapMeetingDuration.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapMeetingDuration = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingDuration.setAdapter(arrAdapMeetingDuration);
-            spMeetingDuration.setOnItemSelectedListener(
-                    selectMeetingDurationListener);
+            AdapterUtils.setSpinnerData(arrAdapMeetingDuration, spMeetingDuration, arrMeetingDuration);
             arrAdapMeetingDuration.notifyDataSetChanged();
+
+            setMeetingDurationListener();
         }
     }
 
@@ -1535,14 +1458,13 @@ public class CreateMeetingFragment extends CommonFragment
                 arrActivityType.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapActivityType = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrActivityType);
-            arrAdapActivityType.setDropDownViewResource(
-                    R.layout.mdropdown);
+
+            ArrayAdapter<RowData> arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActivityType.setAdapter(arrAdapActivityType);
-            spActivityType.setOnItemSelectedListener(
-                    selectActivityTypeListener);
+            AdapterUtils.setSpinnerData(arrAdapActivityType, spActivityType, arrActivityType);
             arrAdapActivityType.notifyDataSetChanged();
+
+            setActivityTypeListener();
         }
     }
 
@@ -1582,14 +1504,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingReason.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            arrAdapMeetingReason = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrMeetingReason);
-            arrAdapMeetingReason.setDropDownViewResource(
-                    R.layout.mdropdown);
+            arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingReason.setAdapter(arrAdapMeetingReason);
-            spMeetingReason.setOnItemSelectedListener(
-                    selectMeetingReasonListener);
+            AdapterUtils.setSpinnerData(arrAdapMeetingReason, spMeetingReason, arrMeetingReason);
             arrAdapMeetingReason.notifyDataSetChanged();
+
+            setMeetingReasonListener();
         }
     }
 
@@ -1629,13 +1549,11 @@ public class CreateMeetingFragment extends CommonFragment
                 arrBAClient.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapBAClient = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrBAClient);
-            arrAdapBAClient.setDropDownViewResource(R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapBAClient = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spBAClient.setAdapter(arrAdapBAClient);
-            spBAClient.setOnItemSelectedListener(
-                    selectBAClientListener);
+            AdapterUtils.setSpinnerData(arrAdapBAClient, spBAClient, arrBAClient);
             arrAdapBAClient.notifyDataSetChanged();
+            setBAClientListener();
         }
     }
 
@@ -1673,14 +1591,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrOutStation.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapOutStation = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrOutStation);
-            arrAdapOutStation.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapOutStation = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spOutStaition.setAdapter(arrAdapOutStation);
-            spOutStaition.setOnItemSelectedListener(
-                    selectOutStationListener);
+            AdapterUtils.setSpinnerData(arrAdapOutStation, spOutStaition, arrOutStation);
             arrAdapOutStation.notifyDataSetChanged();
+
+            setOutStationListener();
         }
     }
 
@@ -1717,14 +1633,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrActionables.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapActionables = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrActionables);
-            arrAdapActionables.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapActionables = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActionables.setAdapter(arrAdapActionables);
-            spActionables.setOnItemSelectedListener(
-                    selectActionablesListener);
+            AdapterUtils.setSpinnerData(arrAdapActionables, spActionables, arrActionables);
             arrAdapActionables.notifyDataSetChanged();
+
+            setActionablesListener();
         }
     }
 
@@ -1760,14 +1674,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingLocation.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingLocation = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrMeetingLocation);
-            arrAdapMeetingLocation.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapMeetingLocation = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingLocation.setAdapter(arrAdapMeetingLocation);
-            spMeetingLocation.setOnItemSelectedListener(
-                    selectMeetingLocation);
+            AdapterUtils.setSpinnerData(arrAdapMeetingLocation, spMeetingLocation, arrMeetingLocation);
             arrAdapMeetingLocation.notifyDataSetChanged();
+
+            setMeetingLocationListener();
         }
     }
 
@@ -1829,14 +1741,12 @@ public class CreateMeetingFragment extends CommonFragment
                 arrTravellingMode.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapTravellingMode = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrTravellingMode);
-            arrAdapTravellingMode.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapTravellingMode = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spTravellingMode.setAdapter(arrAdapTravellingMode);
-            spTravellingMode.setOnItemSelectedListener(
-                    selectTravellingMode);
+            AdapterUtils.setSpinnerData(arrAdapTravellingMode, spTravellingMode, arrTravellingMode);
             arrAdapTravellingMode.notifyDataSetChanged();
+
+            setTravellingModeListener();
         }
     }
 
@@ -2115,19 +2025,17 @@ public class CreateMeetingFragment extends CommonFragment
     private void startLocationUpdates() {
         Handler mainHandler = new Handler(requireContext().getMainLooper());
 
-        Runnable myRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (permissionCheckHelper.locationPermission()) {
-                    getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
-                            getmLocationRequest(), new LocationCallback() {
-                                @Override
-                                public void onLocationResult(LocationResult locationResult) {
-                                    mCurrentLocation = locationResult.getLastLocation();
-                                }
-                            }, Looper.myLooper());
-                }
-            } // This is your code
+        // This is your code
+        Runnable myRunnable = () -> {
+            if (permissionCheckHelper.locationPermission()) {
+                getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
+                        getmLocationRequest(), new LocationCallback() {
+                            @Override
+                            public void onLocationResult(LocationResult locationResult) {
+                                mCurrentLocation = locationResult.getLastLocation();
+                            }
+                        }, Looper.myLooper());
+            }
         };
         mainHandler.post(myRunnable);
     }
@@ -2156,11 +2064,6 @@ public class CreateMeetingFragment extends CommonFragment
         public AttendeeAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
             this.context = context;
-        }
-
-        public void clearAll() {
-            resultList.clear();
-            notifyDataSetChanged();
         }
 
         @Override
