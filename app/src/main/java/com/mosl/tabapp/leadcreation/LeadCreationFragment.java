@@ -1144,13 +1144,6 @@ public class LeadCreationFragment extends CommonFragment
                         .skip(1)
                         .subscribe(xyz -> {
                             stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
-                            arrCity.clear();
-                            arrCity.add(new RowData(0, "-1", "Select"));
-                            arrAdapCity =
-                                    new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                                            arrCity);
-                            arrAdapCity.setDropDownViewResource(R.layout.mdropdown);
-                            spCity.setAdapter(arrAdapCity);
                             if (!stateCodeStr.equalsIgnoreCase("-1")) {
                                 getCity(stateCodeStr, RESIDENCE, null);
                             }
@@ -1429,7 +1422,6 @@ public class LeadCreationFragment extends CommonFragment
             ArrayAdapter<RowData> arrAdapInterested = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spInterestIn.setAdapter(arrAdapInterested);
             AdapterUtils.setSpinnerData(arrAdapInterested, spInterestIn, arrInterested);
-
             getSourceList();
         }
     }
