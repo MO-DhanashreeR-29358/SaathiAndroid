@@ -14,6 +14,7 @@ import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
@@ -25,10 +26,10 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragSetAppiontmentBinding
 import com.mosl.tabapp.databinding.ItemListAddedAttendeeBinding
 import com.mosl.tabapp.databinding.ItemListAddedSplAttendeeBinding
-import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.SplAttendeeModel
 import java.net.URLEncoder
 import java.util.ArrayList
@@ -296,23 +297,16 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
                 try {
                   val dataList = saathiApi.getAutoCompleteSplAttendee(request)
                       .blockingFirst()
-                  for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
-                    val employeeName = stringOrEmpty(employeeName1)
-                    val employeeCode = stringOrEmpty(employeeCode1)
-                    val BranchCode = stringOrEmpty(branchCode)
-                    modelList.add(
-                        SplAttendeeModel(
-                            employeeName, employeeCode,
-                            BranchCode
-                        )
-                    )
+                  for (item in dataList) {
+                    val employeeName = stringOrEmpty(item.employeeName)
+                    val employeeCode = stringOrEmpty(item.employeeCode)
+                    val BranchCode = stringOrEmpty(item.branchCode)
+                    modelList.add(SplAttendeeModel(employeeName, employeeCode, BranchCode))
                     filterResults.values = modelList
                     filterResults.count = modelList.size
                   }
                 } catch (e: Exception) {
-                  modelList.add(
-                      SplAttendeeModel.getNoData(getErrorOnFailureNew(e))
-                  )
+                  modelList.add(SplAttendeeModel.getNoData(getErrorOnFailureNew(e)))
                   filterResults.values = modelList
                   filterResults.count = modelList.size
                   return filterResults
@@ -352,16 +346,157 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       position: Int,
       convertView: View
     ) {
-      if (position % 2 == 1) {
-        convertView.setBackgroundColor(Color.parseColor("#F5F5F5"))
-      } else {
-        convertView.setBackgroundColor(Color.parseColor("#FFFFFF"))
-      }
+      convertView.setBackgroundColor(
+          if (position % 2 == 1) {
+            Color.parseColor("#F5F5F5")
+          } else {
+            Color.parseColor("#FFFFFF")
+          }
+      )
     }
 
     internal inner class HolderView internal constructor(parent: View) {
       var tvAttendeeName: TextView = parent.findViewById(R.id.tvAttendeeName)
 
+    }
+  }
+
+  inner class AttendeeAdapter(internal var context: Context) : BaseAdapter(), Filterable {
+    private var inflater: LayoutInflater? = null
+    private var resultList: List<EmployeeModel> = ArrayList()
+
+    init {
+      this.inflater = LayoutInflater.from(context)
+    }
+
+    override fun getCount(): Int {
+      return resultList.size
+    }
+
+    override fun getItem(index: Int): EmployeeModel {
+      return resultList[index]
+    }
+
+    override fun getItemId(position: Int): Long {
+      return position.toLong()
+    }
+
+    override fun getView(
+      position: Int,
+      convertView1: View?,
+      parent: ViewGroup
+    ): View {
+      var convertView = convertView1
+      val holderView: HolderView
+      val clientModel = resultList[position]
+      if (convertView == null) {
+        inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
+        holderView = HolderView(convertView!!)
+        convertView!!.tag = holderView
+      } else {
+        holderView = convertView.tag as HolderView
+      }
+
+      viewColor(position, convertView)
+      holderView.tvAttendeeName.text = if (clientModel.isNoData) {
+        holderView.linaerLayout.setOnClickListener(null)
+        clientModel.attendeeName
+      } else {
+        String.format(
+            "%s-%s-%s", clientModel.attendeeCode, clientModel.attendeeName, clientModel.branchcode
+        )
+      }
+      return convertView
+    }
+
+    override fun getFilter(): Filter {
+      return object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+          val filterResults = FilterResults()
+          val modelList = ArrayList<EmployeeModel>()
+          try {
+            if (constraint != null) {
+              if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                val request = AutoCompleteAttendeeRequest(
+                    URLEncoder.encode(constraint.toString(), "utf-8"),
+                    URLEncoder.encode(constraint.toString(), "utf-8")
+                )
+                try {
+                  val dataList = saathiApi.getAutoCompleteAttendee(request)
+                      .blockingFirst()
+                  for (item in dataList) {
+                    val employeeName = stringOrEmpty(item.employeeName)
+                    val employeeCode = stringOrEmpty(item.employeeCode)
+                    val BranchCode = stringOrEmpty(item.branchCode)
+                    if (employeeCode.equals(
+                            userManager.getUser()!!.employeeCode, ignoreCase = true
+                        )
+                    ) {
+                      continue
+                    }
+                    modelList.add(
+                        EmployeeModel(
+                            employeeName, employeeCode,
+                            BranchCode, false
+                        )
+                    )
+                    filterResults.values = modelList
+                    filterResults.count = modelList.size
+                  }
+                } catch (e: Exception) {
+                  modelList.add(EmployeeModel.getNoData(getErrorOnFailureNew(e)))
+                  filterResults.values = modelList
+                  filterResults.count = modelList.size
+                  return filterResults
+                }
+
+              } else {
+                noInternetConnectionDialog()
+              }
+            }
+          } catch (ex: Exception) {
+            ex.printStackTrace()
+          }
+
+          if (filterResults.count == 0) {
+            modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
+            filterResults.values = modelList
+            filterResults.count = modelList.size
+          }
+          return filterResults
+        }
+
+        override fun publishResults(
+          constraint: CharSequence,
+          results: FilterResults?
+        ) {
+          if (results != null && results.count > 0) {
+            resultList = results.values as List<EmployeeModel>
+            notifyDataSetChanged()
+          } else {
+            notifyDataSetInvalidated()
+          }
+        }
+      }
+    }
+
+    private fun viewColor(
+      position: Int,
+      convertView: View
+    ) {
+      convertView.setBackgroundColor(
+          if (position % 2 == 1) {
+            Color.parseColor("#F5F5F5")
+          } else {
+            Color.parseColor("#FFFFFF")
+          }
+      )
+    }
+
+    internal inner class HolderView internal constructor(parent: View) {
+      var tvAttendeeName: TextView = parent.findViewById(R.id.tvAttendeeName)
+      var linaerLayout: LinearLayout = parent.findViewById(R.id.linaerLayout)
     }
   }
 
