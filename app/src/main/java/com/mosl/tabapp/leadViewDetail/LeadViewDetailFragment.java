@@ -199,8 +199,8 @@ public class LeadViewDetailFragment extends CommonFragment
     private String newStageCodeStr;
     private String newStageNameStr;
     private String countryCodeStr;
-    private String stateCodeStr;
-    private String cityCodeStr;
+    private String stateCodeStr, offStateCodeStr;
+    private String cityCodeStr, offCityCodeStr;
     private String offCountryCodeStr;
     private String professionCodeStr = "";
     private String profileCodeStr;
@@ -417,7 +417,7 @@ public class LeadViewDetailFragment extends CommonFragment
                 itemSelections(spOffState)
                         .filter(InvalidSelectionPredicate)
                         .subscribe(xyz -> {
-                            String offStateCodeStr = ((RowData) spOffState.getSelectedItem()).getKey();
+                            offStateCodeStr = ((RowData) spOffState.getSelectedItem()).getKey();
                             if (!offStateCodeStr.equalsIgnoreCase("-1") && !cbSameAs.isChecked()) {
                                 getCity(offStateCodeStr, OFFICE, offCityStr);
                             }
@@ -439,6 +439,14 @@ public class LeadViewDetailFragment extends CommonFragment
                                     spOffCity.setSelection(dataCity.getPosition());
                                 }
                             }
+                        }));
+
+        disposable.add(
+                itemSelections(spOffCity)
+                        .filter(InvalidSelectionPredicate)
+                        .subscribe(xyz -> {
+                            offCityCodeStr = ((RowData) spOffCity.getSelectedItem()).getKey();
+
                         }));
     }
 
@@ -2836,8 +2844,8 @@ public class LeadViewDetailFragment extends CommonFragment
                 getJsonSafeString(etOffAdd1.getText().toString().trim()),
                 getJsonSafeString(etOffAdd2.getText().toString().trim()),
                 getJsonSafeString(etOffAdd3.getText().toString().trim()), offCountryCodeStr,
-                stateCodeStr,
-                cityCodeStr,
+                offStateCodeStr,
+                offCityCodeStr,
                 etOffPincode.getText().toString().trim(), cbOffPrimaryAddress.isChecked(),
                 userManager.getUser().currentBusinessProfile.businessUnitId));
 
