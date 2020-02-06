@@ -1,5 +1,7 @@
 package com.mosl.tabapp
 
+import com.mosl.mobile.pdf.OTPFragment
+import com.mosl.mobile.pdf.OTPModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
@@ -152,5 +154,8 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
+
+    @ContributesAndroidInjector(modules = [OTPModule::class])
+    abstract fun provideOTPFactory(): OTPFragment
 
 }

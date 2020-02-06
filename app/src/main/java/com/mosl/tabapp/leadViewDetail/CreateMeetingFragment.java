@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,6 +49,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.pdf.OTPFragment;
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
@@ -71,6 +73,7 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FusedLocation;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.leadViewDetail.createmeeting.OTPEvent;
 import com.mosl.tabapp.model.AddedAttendeeModel;
 import com.mosl.tabapp.model.AddedSplAttendeeModel;
 import com.mosl.tabapp.model.ClientDetail;
@@ -93,6 +96,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import timber.log.Timber;
@@ -226,6 +230,8 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
     private Button btnSendOtp;
+    private PublishSubject<OTPEvent> otpEvent =
+            PublishSubject.create();
 
     @Override
     protected int getLayout() {
@@ -770,6 +776,11 @@ public class CreateMeetingFragment extends CommonFragment
         }
         String data = uiModel.data;
         if (data != null) {
+            FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+
+            OTPFragment.newInstance(otpEvent)
+                    .show(ft, "");
+
 
         }
     }

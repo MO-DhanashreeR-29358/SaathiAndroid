@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_text"
+        android:padding="@dimen/padding_small"
+        tools:ignore="HardcodedText">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_cancel" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ilMobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:hintTextAppearance="@style/InputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_cancel">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_otp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_label_enter_otp"
+                android:inputType="number"
+                android:maxLength="6"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textCursorDrawable="@null" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_resend_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:text="@string/txt_label_resend_otp"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ilMobile" />
+
+        <Button
+            android:id="@+id/btn_submit_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_small"
+            android:background="@drawable/button_highlight"
+            android:text="@string/btn_label_submit_otp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_resend_otp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
