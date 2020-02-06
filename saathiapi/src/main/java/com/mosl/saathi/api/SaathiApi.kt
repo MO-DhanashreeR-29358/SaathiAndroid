@@ -50,6 +50,7 @@ import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenResponse
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem
+import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
@@ -123,6 +124,11 @@ interface SaathiApi {
   fun getAllLookup(
     @Body request: LookupRequest
   ): Observable<List<LookupItem>>
+
+    @POST("Meeting/StartMeeting")
+    fun getStartMeeting(
+        @Body request: SendOTPRequest
+    ): Observable<String>
 
   @POST("LeadStatus/GetStatusList")
   fun getStatusList(

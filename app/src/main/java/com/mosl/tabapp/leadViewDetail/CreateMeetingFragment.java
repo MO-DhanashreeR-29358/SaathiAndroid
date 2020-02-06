@@ -62,11 +62,13 @@ import com.mosl.saathi.api.model.lead.LeadViewItem;
 import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
+import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest;
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
 import com.mosl.tabapp.Permisssion.PermissionCheckHelperFragment;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.common.FusedLocation;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AddedAttendeeModel;
@@ -156,7 +158,7 @@ import static java.lang.String.format;
  */
 
 public class CreateMeetingFragment extends CommonFragment
-        implements View.OnClickListener, TextView.OnEditorActionListener {
+        implements View.OnClickListener, TextView.OnEditorActionListener, FusedLocation.LatLongDispatcher {
     final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
@@ -172,6 +174,8 @@ public class CreateMeetingFragment extends CommonFragment
     private final ArrayList<RowData> arrTravellingMode = new ArrayList<>();
     @Inject
     PermissionCheckHelperFragment permissionCheckHelper;
+    @Inject
+    FusedLocation fusedLocation;
     private ImageView ivLead;
     private EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory,
             etClientCode,
@@ -221,7 +225,7 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayList<CreateMeetingTravellingModel> travellingList;
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
-
+    private Button btnSendOtp;
 
     @Override
     protected int getLayout() {
@@ -234,6 +238,7 @@ public class CreateMeetingFragment extends CommonFragment
         container.post(() -> setAppTitle("Create Meeting"));
         setUpView(createMeetingView);
         startLocationUpdates();
+
         try {
             leadId = this.getArguments().getString(LEAD_ID, "0");
             mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0"
@@ -250,8 +255,18 @@ public class CreateMeetingFragment extends CommonFragment
         selectProduct();
         meetingObjective();
         meetingLocation();
+        setOTP();
         return createMeetingView;
     }
+
+    private void setOTP() {
+
+        if (userManager.getUser().isRM()) {
+            btnSendOtp.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View createMeetingView) {
@@ -315,6 +330,7 @@ public class CreateMeetingFragment extends CommonFragment
         setIcon(llActionables, tvActionables);
         tvActionables.setOnClickListener(this);
         Button btnSave = createMeetingView.findViewById(R.id.btnSave);
+        btnSendOtp = createMeetingView.findViewById(R.id.btnSendOtp);
         Button btnReset = createMeetingView.findViewById(R.id.btnReset);
         ImageButton ibSplAttendee = createMeetingView.findViewById(R.id.ibSplAttendee);
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
@@ -362,6 +378,7 @@ public class CreateMeetingFragment extends CommonFragment
         ibSplAttendee.setOnClickListener(this);
         tvAttendeeCount.setOnClickListener(this);
         tvSplAttendeeCount.setOnClickListener(this);
+        btnSendOtp.setOnClickListener(this);
 
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
@@ -715,6 +732,48 @@ public class CreateMeetingFragment extends CommonFragment
                         }));
     }
 
+    private void sendOTPRequest() {
+
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+
+            String geoArea = "";
+
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+                        mCurrentLocation.getLongitude(), 1);
+                geoArea = addressList.get(0).getAddressLine(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            SendOTPRequest request =
+                    new SendOTPRequest(leadId, mUCID, geoArea,
+                            mCurrentLocation.getLongitude() + "",
+                            mCurrentLocation.getLatitude() + "", "2", 0, userManager.getUser().employeeCode);
+            Disposable disposable = getSaathiApi().getStartMeeting(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSendOTP);
+        } else {
+            noInternetConnectionDialog();
+        }
+
+    }
+
+    private void renderSendOTP(UiModel<String> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrTravellingMode.clear();
+            showOnFailurePopup(error);
+        }
+        String data = uiModel.data;
+        if (data != null) {
+
+        }
+    }
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -731,6 +790,14 @@ public class CreateMeetingFragment extends CommonFragment
                 selectDate();
             } else if (id == R.id.tvActionables) {
                 toggleSectionExpansion(llActionables, tvActionables);
+            } else if (id == R.id.btnSendOtp) {
+
+                if (checkPermission()) {
+                    if (mCurrentLocation != null) {
+                        sendOTPRequest();
+                    }
+                }
+
             } else if (id == R.id.btnReset) {
                 resetData();
             } else if (id == R.id.btnSave) {
@@ -793,6 +860,22 @@ public class CreateMeetingFragment extends CommonFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean checkPermission() {
+        if (!permissionCheckHelper.locationPermission()) {
+            permissionCheckHelper.requestLocation();
+            return false;
+
+        } else if (!((LocationManager) requireContext().getSystemService(
+                Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
+                && hasGPSDevice(requireContext())) {
+
+            fusedLocation.initDispatcher(this);
+            return false;
+
+        }
+        return true;
     }
 
     private void isMockLocation(MeetingApptModel meetingApptModel) {
@@ -1074,7 +1157,21 @@ public class CreateMeetingFragment extends CommonFragment
             enableLocationSetting(requireActivity());
 
             return false;
+        } else if (userManager.getUser().isRM()
+                && !permissionCheckHelper.locationPermission()) {
+            permissionCheckHelper.requestLocation();
+
+            return false;
+        } else if (userManager.getUser().isRM()
+                && !((LocationManager) requireContext().getSystemService(
+                Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
+                && hasGPSDevice(requireContext())) {
+
+            enableLocationSetting(requireActivity());
+
+            return false;
         }
+
         return true;
     }
 
@@ -1712,6 +1809,7 @@ public class CreateMeetingFragment extends CommonFragment
         }
     }
 
+
     private void renderTravellingMode(UiModel<List<LookupItem>> uiModel) {
         toggleProgress(uiModel.inProgress);
 
@@ -2014,21 +2112,11 @@ public class CreateMeetingFragment extends CommonFragment
     }
 
     private void startLocationUpdates() {
-        Handler mainHandler = new Handler(requireContext().getMainLooper());
 
-        // This is your code
-        Runnable myRunnable = () -> {
-            if (permissionCheckHelper.locationPermission()) {
-                getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
-                        getmLocationRequest(), new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                mCurrentLocation = locationResult.getLastLocation();
-                            }
-                        }, Looper.myLooper());
-            }
-        };
-        mainHandler.post(myRunnable);
+        if (permissionCheckHelper.locationPermission()) {
+            fusedLocation.initDispatcher(this);
+        }
+
     }
 
     private void setCount(int cnt) {
@@ -2045,6 +2133,11 @@ public class CreateMeetingFragment extends CommonFragment
         } else {
             tvSplAttendeeCount.setText(format("(%s)", String.valueOf(cnt)));
         }
+    }
+
+    @Override
+    public void onLatLongChanged(Location location) {
+        mCurrentLocation = location;
     }
 
     public class AttendeeAdapter extends BaseAdapter implements Filterable {
