@@ -400,6 +400,7 @@ public class LeadViewDetailFragment extends CommonFragment
         disposable.add(
                 itemSelections(spState)
                         .filter(InvalidSelectionPredicate)
+                        .skip(1)
                         .subscribe(xyz -> {
                             stateCodeStr = ((RowData) spState.getSelectedItem()).getKey();
                             if (!stateCodeStr.equalsIgnoreCase("-1")) {
@@ -416,6 +417,7 @@ public class LeadViewDetailFragment extends CommonFragment
         disposable.add(
                 itemSelections(spOffState)
                         .filter(InvalidSelectionPredicate)
+                        .skip(1)
                         .subscribe(xyz -> {
                             offStateCodeStr = ((RowData) spOffState.getSelectedItem()).getKey();
                             if (!offStateCodeStr.equalsIgnoreCase("-1") && !cbSameAs.isChecked()) {

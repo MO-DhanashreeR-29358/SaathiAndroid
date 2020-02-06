@@ -1167,7 +1167,7 @@ public class CreateMeetingFragment extends CommonFragment
                 Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
                 && hasGPSDevice(requireContext())) {
 
-            enableLocationSetting(requireActivity());
+            fusedLocation.initDispatcher(this);
 
             return false;
         }
