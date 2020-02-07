@@ -76,7 +76,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
       btnSubmitOtp.setOnClickListener {
         submitOtp()
       }
-      tvResendOtp.setOnClickListener {
+      btnResendOtp.setOnClickListener {
         resendOTPRequest()
       }
     }
