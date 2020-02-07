@@ -65,21 +65,20 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentOtpBinding.bind(view)
-
+    dialog?.apply {
+      setCanceledOnTouchOutside(false)
+    }
+    isCancelable = false
     binding.apply {
-
       imgCancel.setOnClickListener {
         dismiss()
       }
-
-      binding.btnSubmitOtp.setOnClickListener {
+      btnSubmitOtp.setOnClickListener {
         submitOtp()
       }
-
-      binding.tvResendOtp.setOnClickListener {
+      tvResendOtp.setOnClickListener {
         resendOTPRequest()
       }
-
     }
 
   }
