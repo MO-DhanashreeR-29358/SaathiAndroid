@@ -803,8 +803,15 @@ public class CreateMeetingFragment extends CommonFragment
             } else if (id == R.id.btnReset) {
                 resetData();
             } else if (id == R.id.btnSave) {
-                if (userManager.getUser().isRM() && isSendOtpSuccessful) {
-                    saveMeeting();
+                if (userManager.getUser().isRM()) {
+
+                    if (isSendOtpSuccessful) {
+                        saveMeeting();
+                    } else {
+                        alert("OTP verifying needed");
+                    }
+
+
                 } else {
                     saveMeeting();
                 }

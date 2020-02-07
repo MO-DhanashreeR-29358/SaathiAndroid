@@ -124,10 +124,8 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
           oTP = binding.etOtp.text.toString()
       )
       val disposable: Disposable = saathiApi.postOtpForMeeting(request)
-          .compose(applyUiModel<String>())
-          .subscribe { uiModel: UiModel<String> ->
-            renderOTPSubmit(uiModel)
-          }
+          .compose(applyUiModel())
+          .subscribe(::renderOTPSubmit)
     } else {
       noInternetConnectionDialog()
     }
