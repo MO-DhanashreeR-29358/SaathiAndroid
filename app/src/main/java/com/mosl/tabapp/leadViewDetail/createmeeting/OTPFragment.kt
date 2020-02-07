@@ -134,13 +134,13 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
   override fun renderOTPSubmit(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
+    uiModel.error?.let {
       CreateMeetingFragment.isSendOtpSuccessful = false
-      showOnFailurePopup(error)
+      showOnFailurePopup(it)
     }
 
-    if (uiModel.data != null) {
+
+    uiModel.data?.let {
       CreateMeetingFragment.isSendOtpSuccessful = true
       dialog?.dismiss()
     }
