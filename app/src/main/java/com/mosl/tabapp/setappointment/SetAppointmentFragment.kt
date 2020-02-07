@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -22,21 +23,31 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.SpinnerAdapter
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import android.widget.TimePicker
 import android.widget.Toast
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
+import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
+import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.RowData.getSpinnerRowDataById
 import com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE
 import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
 import com.mosl.tabapp.constants.MOSLConstants.ATTENDEE_ALREADY_ADDED
@@ -59,6 +70,8 @@ import com.mosl.tabapp.constants.MOSLConstants.START_TIME_ERROR
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.constants.MOSLConstants.UPDATE_APPOINTMENTS
 import com.mosl.tabapp.constants.MOSLConstants.WEEKS
+import com.mosl.tabapp.constants.MOSLConstants.mFormatWithDash
+import com.mosl.tabapp.constants.MOSLConstants.mFormatWithSpace
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragSetAppiontmentBinding
 import com.mosl.tabapp.databinding.ItemListAddedAttendeeBinding
@@ -66,13 +79,16 @@ import com.mosl.tabapp.databinding.ItemListAddedSplAttendeeBinding
 import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.ClientDetail
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.SplAttendeeModel
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
 import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateOn
 import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateWeek
+import kotlinx.android.synthetic.main.frag_set_appiontment.spSelectProduct
 import kotlinx.android.synthetic.main.frag_set_appiontment.spSelectWeekDay
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvAPPDateError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvApppointmentDateTime
@@ -85,6 +101,7 @@ import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatWeekdayError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTime
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTimeDisplay
+import kotlinx.android.synthetic.main.lms_top_section_update.ivLead
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import timber.log.Timber
@@ -157,8 +174,115 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     binding = FragSetAppiontmentBinding.bind(view)
     setAppTitle("Set Appointment")
     setUpFromArguments()
+    setUpView()
+    if (!mUCID.equals("0", ignoreCase = true)) {
+      getClientDetail(mUCID)
+      setProfileImage(mUCID)
+    } else {
+      getLeadByIdFromServer(str_LeadID)
+    }
 
   }
+
+  private fun setProfileImage(ucid: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = ClientImageRequest(ucid)
+      val subscribe = saathiApi.getClientImage(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderClientImage(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderClientImage(uiModel: UiModel<SaathiCommonResponse<String>>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      val response = it.response
+      val byt = Base64.decode(response, Base64.DEFAULT)
+      if (byt != null) {
+        CRMAppUtil.setImage(byt, ivLead, requireContext())
+      } else {
+        CRMAppUtil.setImage(
+            ByteArray(0), ivLead,
+            requireContext()
+        )
+      }
+    }
+  }
+
+  private fun getClientDetail(ucid: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = ClientDetailRequest(Integer.valueOf(ucid))
+      val subscribe = saathiApi.getClientDetail(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderClientDetails(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderClientDetails(uiModel: UiModel<ClientDetailItem>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      ClientDetail(it)
+      binding.includeLmsTopSectionUpdate.tvLeadId.text = ClientDetail.getLeadId()
+      binding.includeLmsTopSectionUpdate.tvCurrentStage.text = ClientDetail.getCurrentStage()
+      if (!ClientDetail.getCurrentStageSince().isEmpty()) {
+        binding.includeLmsTopSectionUpdate.tvCurrentStageSince.text =
+          "${ClientDetail.getCurrentStageSince()} Days"
+      }
+      binding.includeLmsTopSectionUpdate.tvName.text = ClientDetail.getName()
+      binding.includeLmsTopSectionUpdate.tvClientCode.text = ClientDetail.getClientCode()
+      binding.includeLmsTopSectionUpdate.tvBranchCode.text = ClientDetail.getBranchCode()
+    }
+  }
+
+  private fun setUpView() {
+    binding.scrollView.apply {
+      descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+      isFocusable = true
+      isFocusableInTouchMode = true
+      setOnTouchListener { v, _ ->
+        v.requestFocusFromTouch()
+        false
+      }
+    }
+
+    binding.apply {
+      ibAttendee.setOnClickListener(this@SetAppointmentFragment)
+      ibSplAttendee.setOnClickListener(this@SetAppointmentFragment)
+      tvAttendeeCount.setOnClickListener(this@SetAppointmentFragment)
+      tvSplAttendeeCount.setOnClickListener(this@SetAppointmentFragment)
+      tvApppointmentDateTime.setOnClickListener(this@SetAppointmentFragment)
+      tvApppointmentDateTimeDisplay.setOnClickListener(this@SetAppointmentFragment)
+      rlDate.setOnClickListener(this@SetAppointmentFragment)
+      tvStartDateTime.setOnClickListener(this@SetAppointmentFragment)
+      tvStartDateTimeDisplay.setOnClickListener(this@SetAppointmentFragment)
+      tvEndDateTime.setOnClickListener(this@SetAppointmentFragment)
+      tvEndDateTimeDisplay.setOnClickListener(this@SetAppointmentFragment)
+      btnSave.setOnClickListener(this@SetAppointmentFragment)
+      btnReset.setOnClickListener(this@SetAppointmentFragment)
+      setCallenderDate()
+      AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()!!.employeeCode)
+      if (!createMode) {
+        tvNewAppointment.text = getString(R.string.txt_label_reschedule_appointment)
+      }
+    }
+  }
+
 
   private fun setUpFromArguments() {
     try {
@@ -213,6 +337,104 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     }
   }
 
+  private fun renderProduct(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      arrSelectProduct.clear()
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      arrSelectProduct.clear()
+      arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
+      for (i in it.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrSelectProduct.add(RowData(i + 1, lookUpId, lookUpName))
+      }
+
+      val arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spSelectProduct.adapter = arrAdapSelectProduct
+      arrAdapSelectProduct.setSpinnerData(binding.spSelectProduct, arrSelectProduct)
+
+      arrAdapSelectProduct.notifyDataSetChanged()
+      arrAdapSelectProduct.setNotifyOnChange(true)
+
+      val productData = getSpinnerRowDataById(id, arrAdapSelectProduct)
+      if (productData != null) {
+        binding.spSelectProduct.setSelection(productData.position)
+      }
+      setProductListener()
+    }
+  }
+
+  private fun setProductListener() {
+    disposable.add(
+        spSelectProduct.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { xyz ->
+              binding.tvselectproducterror.setVisibility(View.GONE)
+              productCodeStr = (spSelectProduct.selectedItem as RowData).key
+            })
+  }
+
+  private fun renderWeekDay(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      arrSelectWeekDay.clear()
+      showOnFailurePopup(it)
+    }
+
+    val data = uiModel.data
+    data?.let {
+      arrSelectWeekDay.clear()
+      arrSelectWeekDay.add(RowData(0, "-1", SELECT_WEEK_DAYS))
+      for (i in it.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrSelectWeekDay.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapSelectWeekDay = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spSelectWeekDay.adapter = arrAdapSelectWeekDay
+      arrAdapSelectWeekDay.setSpinnerData(binding.spSelectWeekDay, arrSelectWeekDay)
+
+      arrAdapSelectWeekDay.notifyDataSetChanged()
+      val productData = getSpinnerRowDataById(id, arrAdapSelectWeekDay)
+      if (productData != null) {
+        spSelectWeekDay.setSelection(productData!!.getPosition())
+      }
+      setWeekDayListener()
+    }
+
+  }
+
+  private fun setWeekDayListener() {
+    disposable.add(
+        spSelectWeekDay.itemSelections<SpinnerAdapter>()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              tvRepeatWeekdayError.visibility = View.GONE
+              weekDayCodeStr = (spSelectWeekDay.selectedItem as RowData).key
+            }
+    )
+  }
+
   private fun activityType(id: String) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = LookupRequest(
@@ -224,6 +446,53 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     } else {
       noInternetConnectionDialog()
     }
+  }
+
+  private fun renderActivityType(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      arrActivityType.clear()
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      arrActivityType.clear()
+      arrActivityType.add(RowData(0, "-1", SELECT_ACTIVITY_TYPE))
+      for (i in it.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrActivityType.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spActivityType.adapter = arrAdapActivityType
+      arrAdapActivityType.setSpinnerData(binding.spActivityType, arrActivityType)
+      arrAdapActivityType.notifyDataSetChanged()
+      val productData = getSpinnerRowDataById(id, arrAdapActivityType)
+      if (productData != null) {
+        binding.spActivityType.setSelection(productData.position)
+      }
+      setActivityTypeListener()
+    }
+  }
+
+  private fun setActivityTypeListener() {
+    disposable.add(
+        binding.spActivityType.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              activityTypeCodeStr = (binding.spActivityType.selectedItem as RowData).key
+              binding.tvActivityTypeError.visibility = View.GONE
+            }
+    )
   }
 
   private fun getRepeatMode(id: String) {
@@ -239,6 +508,56 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     }
   }
 
+  private fun renderRepeatMode(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      arrRepeatMode.clear()
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      arrRepeatMode.clear()
+      arrRepeatMode.add(RowData(0, "-1", "Repeat On"))
+      for (i in it.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrRepeatMode.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapRepeteMode = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spRepeateOn.adapter = arrAdapRepeteMode
+      arrAdapRepeteMode.setSpinnerData(binding.spRepeateOn, arrRepeatMode)
+
+      arrAdapRepeteMode.notifyDataSetChanged()
+      val productData = getSpinnerRowDataById(id, arrAdapRepeteMode)
+      if (productData != null) {
+        spRepeateOn.setSelection(productData.position)
+      }
+      setRepeatOnListener()
+    }
+  }
+
+  private fun setRepeatOnListener() {
+    disposable.add(
+        spRepeateOn.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { position ->
+              binding.llRepeteView.visibility = if (position > 0) {
+                View.VISIBLE
+              } else {
+                View.GONE
+              }
+            })
+  }
+
   private fun selectWeek(id: String) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = LookupRequest(
@@ -251,6 +570,53 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     } else {
       noInternetConnectionDialog()
     }
+  }
+
+  private fun renderWeek(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    error?.let {
+      arrSelectWeek.clear()
+      showOnFailurePopup(it)
+    }
+    val data = uiModel.data
+    data?.let {
+      arrSelectWeek.clear()
+      arrSelectWeek.add(RowData(0, "-1", SELECT_WEEK))
+      for (i in it.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrSelectWeek.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapSelectWeek = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spRepeateWeek.adapter = arrAdapSelectWeek
+      arrAdapSelectWeek.setSpinnerData(binding.spRepeateWeek, arrSelectWeek)
+
+      arrAdapSelectWeek.notifyDataSetChanged()
+      val productData = getSpinnerRowDataById(id, arrAdapSelectWeek)
+      if (productData != null) {
+        spRepeateWeek.setSelection(productData.position)
+      }
+      setRepeatWeekListener()
+    }
+  }
+
+  private fun setRepeatWeekListener() {
+    disposable.add(
+        spRepeateWeek.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { xyz ->
+              tvRepeatTypeSpError.visibility = View.GONE
+              weekCodeStr = (spRepeateWeek.selectedItem as RowData).key
+            })
   }
 
   private fun getAppointmentDetailsFromServer() {
@@ -268,8 +634,8 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     toggleProgress(uiModel.inProgress)
 
     val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    error?.let {
+      showOnFailurePopup(it)
     }
     val data = uiModel.data
     if (data != null) {
@@ -281,6 +647,109 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       selectWeek(mModel.getRepeatEveryWeekCode())
       selectWeekDay(mModel.getRepeatEveryDayCode())
     }
+  }
+
+  private fun setCallenderDateFrom(mModel: MeetingApptModel) {
+
+    var mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.meetingDate)
+    binding.tvApppointmentDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+    binding.tvApppointmentDateTimeDisplay.text =
+      CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+    val cal = Calendar.getInstance()
+    cal.time = mMeetingDate
+    currentYear = cal.get(Calendar.YEAR)
+    month = cal.get(Calendar.MONTH) + 1//Adding one onth
+    day = cal.get(Calendar.DAY_OF_MONTH)
+    minute = cal.get(Calendar.MINUTE)
+    hour = cal.get(Calendar.HOUR_OF_DAY)
+    mainFromDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+
+    //Start date
+    mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentStartTime)
+    binding.tvStartDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+    binding.tvStartDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+
+    cal.time = mMeetingDate
+    currentYearStartDate = cal.get(Calendar.YEAR)
+    monthStartDate = cal.get(Calendar.MONTH) + 1//Adding one onth
+    dayStartDate = cal.get(Calendar.DAY_OF_MONTH)
+    minuteStartDate = cal.get(Calendar.MINUTE)
+    hourStartDate = cal.get(Calendar.HOUR_OF_DAY)
+    mainFromDateStartDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+    //end Date
+    mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentEndTime)
+    binding.tvEndDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+    binding.tvEndDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+
+    cal.time = mMeetingDate
+    currentYearEndDate = cal.get(Calendar.YEAR)
+    monthEndDate = cal.get(Calendar.MONTH) + 1//Adding one onth
+    dayEndDate = cal.get(Calendar.DAY_OF_MONTH)
+    minuteEndDate = cal.get(Calendar.MINUTE)
+    hourEndDate = cal.get(Calendar.HOUR_OF_DAY)
+    mainFromDateEndDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+  }
+
+  private fun getAppointmentDet(response: MeetingByIdItem): MeetingApptModel {
+    val mModel = MeetingApptModel()
+    //        response.get(MEETING_ID);
+
+    mModel.meetingType = stringOrEmpty(response.meetingType)
+    mModel.displayType = "A"
+    mModel.meetingID = stringOrEmpty(response.meetingID)
+    mModel.leadId = response.leadId.toString()
+    //TODO LEAD ID IS DIFFRENT
+    mModel.meetingDate = stringOrEmpty(response.meetingDate)
+    mModel.activityTypeID = stringOrEmpty(response.activityTypeID)
+    mModel.product = stringOrEmpty(response.productTypeID)
+    mModel.appointmentStartTime = stringOrEmpty(response.repeatationStartOn)
+    mModel.appointmentEndTime = stringOrEmpty(response.repeatationEndsOn)
+
+    mModel.repeatEveryWeekCode = stringOrEmpty(response.repeatEveryWeekCode)
+    mModel.repeatEveryDayCode = stringOrEmpty(response.repeatEveryDayCode)
+    mModel.repeatOnCode = stringOrEmpty(response.repeatOnCode)
+
+    val meetingAttendee = response.meetingAttendee
+    for (meetingAttendee_i in meetingAttendee.indices) {
+      val meetingAttendee_obj = meetingAttendee[meetingAttendee_i]
+      val str_AttendeeType = meetingAttendee_obj?.attendeeType
+
+      val str_AttendeeEmpcode = meetingAttendee_obj?.attendeeEmpcode
+
+      val str_AttendeeEmpName = meetingAttendee_obj?.attendeeEmpName
+      val str_meetingAttendeeCode = meetingAttendee_obj?.meetingAttendeeID
+
+      val attended = meetingAttendee_obj?.attended
+
+      val defaultAttendee = meetingAttendee_obj?.defaultAttendee
+      val status = meetingAttendee_obj?.status
+      if (status == 1) {
+        if (!defaultAttendee!!) {
+          //TODO ignore self object
+          if (str_AttendeeType!!.trim { it <= ' ' }.equals("R", ignoreCase = true)) {
+            val attendTmp = AddedAttendeeModel(
+                str_AttendeeType, attended!!, str_AttendeeEmpName,
+                str_AttendeeEmpcode, str_meetingAttendeeCode
+            )
+            addedAttendeeModelList.add(attendTmp)
+            addedAttendeeCount++
+          } else {
+            val tempSpAttendee = AddedSplAttendeeModel(
+                str_AttendeeType, attended!!,
+                str_AttendeeEmpName, str_AttendeeEmpcode
+            )
+            addedSplAttendeeModelList.add(tempSpAttendee)
+            addedSplAttendeeCount++
+          }
+        }
+      }
+    }
+    binding.tvSplAttendeeCount.text = String.format("(%s)", addedSplAttendeeCount.toString())
+    setCount(addedAttendeeCount)
+    mModel.meetingAttendee = addedAttendeeModelList
+    mModel.splMeetingAttendee = addedSplAttendeeModelList
+
+    return mModel
   }
 
   override fun onClick(v: View) {
@@ -422,7 +891,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     toggleProgress(uiModel.inProgress)
     val error = uiModel.error
     error?.let {
-      showOnFailurePopup(error)
+      showOnFailurePopup(it)
     }
     val data = uiModel.data
     data?.let {

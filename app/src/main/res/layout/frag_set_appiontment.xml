@@ -13,7 +13,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/lms_top_section_update" />
+            <include
+                android:id="@+id/include_lms_top_section_update"
+                layout="@layout/lms_top_section_update" />
 
             <TextView
                 android:id="@+id/tvNewAppointment"
