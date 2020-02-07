@@ -156,7 +156,6 @@ import static java.lang.String.format;
 
 public class CreateMeetingFragment extends CommonFragment
     implements View.OnClickListener, TextView.OnEditorActionListener,
-    OTPFragment.OtpSuccessfulListener,
     FusedLocation.LatLongDispatcher {
     final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
@@ -544,10 +543,6 @@ public class CreateMeetingFragment extends CommonFragment
         });
     }
 
-    @Override public void onOtpSuccess(boolean isSuccess) {
-        isSendOtpSuccessful = isSuccess;
-    }
-
     private void setMeetingLocationListener() {
         disposable.add(
             itemSelections(spMeetingLocation)
@@ -776,7 +771,7 @@ public class CreateMeetingFragment extends CommonFragment
             FragmentTransaction ft =
                 requireActivity().getSupportFragmentManager().beginTransaction();
 
-            OTPFragment dialogFragment = OTPFragment.newInstance(otpEvent, leadId, mUCID);
+            OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
             dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
             dialogFragment.show(ft, "");
         }
