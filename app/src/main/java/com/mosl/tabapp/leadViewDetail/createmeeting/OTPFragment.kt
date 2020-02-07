@@ -133,6 +133,34 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     }
   }
 
+  override fun renderOTPSubmit(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) showOnFailurePopup(error)
+
+    if (uiModel.data != null) {
+      dialog?.dismiss()
+    }
+  }
+
+  fun showOnFailurePopup(t: Throwable) {
+    val onFailure = getErrorOnFailure(t)
+    showMessagePopup(onFailure)
+  }
+
+  fun showMessagePopup(error: ErrorModel) {
+    alert(message = error.getResolvedMessage(requireContext()))
+  }
+
+  fun alert(message: String) {
+    AlertDialog.Builder(requireContext())
+        .setTitle(R.string.alert_dialog_title)
+        .setMessage(message)
+        .setPositiveButton(R.string.button_label_ok, null)
+        .show()
+  }
+
   fun noInternetConnectionDialog() {
     MSFDialog.alertDialog(
         requireContext(), 0,
@@ -160,34 +188,6 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
   override fun onAttach(context: Context) {
     this.navigator = context as Navigator
     super.onAttach(context)
-  }
-
-  override fun renderOTPSubmit(uiModel: UiModel<String>) {
-    toggleProgress(uiModel.inProgress)
-
-    val error = uiModel.error
-    if (error != null) showOnFailurePopup(error)
-
-    if (uiModel.data != null) {
-      dismiss()
-    }
-  }
-
-  fun showOnFailurePopup(t: Throwable) {
-    val onFailure = getErrorOnFailure(t)
-    showMessagePopup(onFailure)
-  }
-
-  fun showMessagePopup(error: ErrorModel) {
-    alert(message = error.getResolvedMessage(requireContext()))
-  }
-
-  fun alert(message: String) {
-    AlertDialog.Builder(requireContext())
-        .setTitle(R.string.alert_dialog_title)
-        .setMessage(message)
-        .setPositiveButton(R.string.button_label_ok, null)
-        .show()
   }
 
   fun getErrorOnFailure(throwable: Throwable): ErrorModel {
