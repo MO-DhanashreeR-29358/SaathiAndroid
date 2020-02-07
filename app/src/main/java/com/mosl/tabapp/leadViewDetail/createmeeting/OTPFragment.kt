@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.getErrorOnFailure
@@ -15,6 +16,7 @@ import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.navigator.Navigator
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
@@ -67,30 +69,69 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     binding.apply {
 
       imgCancel.setOnClickListener {
-        dialog?.dismiss()
+        dismiss()
       }
 
       binding.btnSubmitOtp.setOnClickListener {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+        submitOtp()
+      }
 
-          val request = PostOTPForMeetingRequest(
-              employeeCode = userManager.getUser()!!.employeeCode.toInt(),
-              leadId = leadId,
-              uCID = mUCID,
-              oTP = binding.etOtp.text.toString()
-          )
-          val disposable: Disposable = saathiApi.postOtpForMeeting(request)
-              .compose(applyUiModel<String>())
-              .subscribe { uiModel: UiModel<String> ->
-                renderOTPSubmit(uiModel)
-              }
-        } else {
-          noInternetConnectionDialog()
-        }
+      binding.tvResendOtp.setOnClickListener {
+        resendOTPRequest()
       }
 
     }
 
+  }
+
+  private fun resendOTPRequest() {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val resendOtpFlag = 1
+      val request = SendOTPRequest(
+          leadId, mUCID, "",
+          "",
+          "", "2", resendOtpFlag, userManager.getUser()!!.employeeCode
+      )
+      val disposable = saathiApi.getStartMeeting(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderResendOTP(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+
+  }
+
+  private fun renderResendOTP(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      Toast.makeText(requireContext(), "Resend OTP Successfully", Toast.LENGTH_SHORT)
+          .show()
+    }
+  }
+
+  private fun submitOtp() {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+
+      val request = PostOTPForMeetingRequest(
+          employeeCode = userManager.getUser()!!.employeeCode.toInt(),
+          leadId = leadId,
+          uCID = mUCID,
+          oTP = binding.etOtp.text.toString()
+      )
+      val disposable: Disposable = saathiApi.postOtpForMeeting(request)
+          .compose(applyUiModel<String>())
+          .subscribe { uiModel: UiModel<String> ->
+            renderOTPSubmit(uiModel)
+          }
+    } else {
+      noInternetConnectionDialog()
+    }
   }
 
   fun noInternetConnectionDialog() {
@@ -125,12 +166,10 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
   override fun renderOTPSubmit(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
 
-    uiModel.error?.let {
-      showOnFailurePopup(it)
-    }
+    val error = uiModel.error
+    if (error != null) showOnFailurePopup(error)
 
-    uiModel.data?.let {
-
+    if (uiModel.data != null) {
       dismiss()
     }
   }
