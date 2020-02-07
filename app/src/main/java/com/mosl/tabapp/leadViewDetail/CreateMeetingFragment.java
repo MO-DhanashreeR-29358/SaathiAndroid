@@ -71,7 +71,6 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FusedLocation;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.leadViewDetail.createmeeting.OTPEvent;
 import com.mosl.tabapp.model.AddedAttendeeModel;
 import com.mosl.tabapp.model.AddedSplAttendeeModel;
 import com.mosl.tabapp.model.ClientDetail;
@@ -157,6 +156,7 @@ import static java.lang.String.format;
 
 public class CreateMeetingFragment extends CommonFragment
     implements View.OnClickListener, TextView.OnEditorActionListener,
+    OTPFragment.OtpSuccessfulListener,
     FusedLocation.LatLongDispatcher {
     final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
@@ -225,15 +225,14 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
     private Button btnSendOtp;
-    private PublishSubject<OTPEvent> otpEvent =
-        PublishSubject.create();
+    public static Boolean isSendOtpSuccessful = false;
 
     @Override
     protected int getLayout() {
         return R.layout.frag_create_meeting;
     }
 
-    private Boolean isSendOtpSuccessful = false;
+    private PublishSubject<Boolean> otpEvent = PublishSubject.create();
 
     private void setOTP() {
 
@@ -545,6 +544,10 @@ public class CreateMeetingFragment extends CommonFragment
         });
     }
 
+    @Override public void onOtpSuccess(boolean isSuccess) {
+        isSendOtpSuccessful = isSuccess;
+    }
+
     private void setMeetingLocationListener() {
         disposable.add(
             itemSelections(spMeetingLocation)
@@ -773,8 +776,9 @@ public class CreateMeetingFragment extends CommonFragment
             FragmentTransaction ft =
                 requireActivity().getSupportFragmentManager().beginTransaction();
 
-            OTPFragment.newInstance(otpEvent, leadId, mUCID)
-                .show(ft, "");
+            OTPFragment dialogFragment = OTPFragment.newInstance(otpEvent, leadId, mUCID);
+            dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+            dialogFragment.show(ft, "");
         }
     }
 

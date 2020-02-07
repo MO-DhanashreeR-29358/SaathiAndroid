@@ -1,5 +1,6 @@
 package com.mosl.mobile.pdf
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -21,8 +22,8 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.FragmentOtpBinding
+import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.OTPContract
-import com.mosl.tabapp.leadViewDetail.createmeeting.OTPEvent
 import com.mosl.tabapp.ui.MSFDialog
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -43,11 +44,23 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
   private lateinit var navigator: Navigator
 
+  private lateinit var listener: OtpSuccessfulListener
+
   var leadId = "0"
   var mUCID = "0"
 
   override fun getLayout(): Int {
     return R.layout.fragment_otp
+  }
+
+  override fun onAttachFragment(childFragment: Fragment) {
+    super.onAttachFragment(childFragment)
+    listener = targetFragment as OtpSuccessfulListener
+  }
+
+  override fun onAttach(activity: Activity) {
+    super.onAttach(activity)
+    listener = targetFragment as OtpSuccessfulListener
   }
 
   override fun extractArguments(bundle: Bundle) {
@@ -137,9 +150,15 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     toggleProgress(uiModel.inProgress)
 
     val error = uiModel.error
-    if (error != null) showOnFailurePopup(error)
+    if (error != null) {
+      CreateMeetingFragment.isSendOtpSuccessful = false
+      listener.onOtpSuccess(false)
+      showOnFailurePopup(error)
+    }
 
     if (uiModel.data != null) {
+      CreateMeetingFragment.isSendOtpSuccessful = true
+      listener.onOtpSuccess(true)
       dialog?.dismiss()
     }
   }
@@ -206,7 +225,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     const val PDF_LINK = "pdf_link"
     @JvmStatic
     fun newInstance(
-      publishSubject: PublishSubject<OTPEvent>,
+      publishSubject: PublishSubject<Boolean>,
       leadId: String,
       ucid: String
     ): OTPFragment {
@@ -221,4 +240,10 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
       }
     }
   }
+
+  interface OtpSuccessfulListener {
+    fun onOtpSuccess(isSuccess: Boolean)
+  }
+
+
 }
