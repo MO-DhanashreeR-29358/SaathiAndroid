@@ -808,7 +808,7 @@ public class CreateMeetingFragment extends CommonFragment
                     if (isSendOtpSuccessful) {
                         saveMeeting();
                     } else {
-                        alert("OTP verifying needed");
+                        alert("Please verify OTP");
                     }
 
 
