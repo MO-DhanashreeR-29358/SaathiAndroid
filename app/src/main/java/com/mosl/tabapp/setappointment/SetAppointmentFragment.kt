@@ -1650,7 +1650,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     @SuppressLint("ViewHolder")
     override fun getView(
       position: Int,
-      view1: View,
+      view1: View?,
       parent: ViewGroup
     ): View {
       var view = view1
@@ -1703,7 +1703,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     @SuppressLint("ViewHolder")
     override fun getView(
       position: Int,
-      view1: View,
+      view1: View?,
       parent: ViewGroup
     ): View {
       var view = view1
@@ -1839,7 +1839,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
         }
 
         override fun publishResults(
-          constraint: CharSequence,
+          constraint: CharSequence?,
           results: FilterResults?
         ) {
           when {
@@ -1978,7 +1978,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
         }
 
         override fun publishResults(
-          constraint: CharSequence,
+          constraint: CharSequence?,
           results: FilterResults?
         ) {
           when {
