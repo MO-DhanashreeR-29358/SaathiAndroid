@@ -21,6 +21,32 @@
 
             <include layout="@layout/lms_top_section_update" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Activity Type*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spActivityType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></Spinner>
+
+            <TextView
+                android:id="@+id/tvActivityTypeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone" />
+
 
             <Button
                 android:id="@+id/btnSendOtp"
@@ -156,31 +182,6 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Activity Type*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
-
-            <Spinner
-                android:id="@+id/spActivityType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Spinner>
-
-            <TextView
-                android:id="@+id/tvActivityTypeError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"

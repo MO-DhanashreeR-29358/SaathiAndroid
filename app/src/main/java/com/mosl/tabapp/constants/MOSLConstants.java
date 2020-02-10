@@ -394,6 +394,7 @@ public interface MOSLConstants extends LabelConfig {
 
     String STRING_MAP = "map";
     String STRING_TITLE = "title";
-
+    String SEND_OTP_LABLE = "Send OTP";
+    String VERIFY_OTP_LABLE = "Verify OTP";
 }
 

@@ -146,10 +146,12 @@ import static com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT;
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_SUB_CATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_TRAVELLING_MODE;
+import static com.mosl.tabapp.constants.MOSLConstants.SEND_OTP_LABLE;
 import static com.mosl.tabapp.constants.MOSLConstants.SPL_ATTENDEE_ALREADY_ADDED;
 import static com.mosl.tabapp.constants.MOSLConstants.SUBCATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.TRAVELLINGMODEID;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
+import static com.mosl.tabapp.constants.MOSLConstants.VERIFY_OTP_LABLE;
 import static com.mosl.tabapp.constants.MOSLConstants.YES;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
@@ -245,7 +247,6 @@ public class CreateMeetingFragment extends CommonFragment
         setUpView(createMeetingView);
         isSendOtpSuccessful = false;
         startLocationUpdates();
-
         try {
             leadId = this.getArguments().getString(LEAD_ID, "0");
             mUCID = this.getArguments().getString(UCID, "0").equalsIgnoreCase("") ? "0"
@@ -262,15 +263,16 @@ public class CreateMeetingFragment extends CommonFragment
         selectProduct();
         meetingObjective();
         meetingLocation();
-        setOTP();
         return createMeetingView;
     }
 
-    private void setOTP() {
-
-        if (userManager.getUser().isRM()) {
+    private void setVisibilityOTP(Boolean status) {
+        if (status) {
             btnSendOtp.setVisibility(View.VISIBLE);
+        } else {
+            btnSendOtp.setVisibility(View.GONE);
         }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -547,6 +549,10 @@ public class CreateMeetingFragment extends CommonFragment
                 }
             }
         });
+
+        arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+        spMeetingReason.setAdapter(arrAdapMeetingReason);
+
     }
 
     private void setMeetingLocationListener() {
@@ -697,28 +703,22 @@ public class CreateMeetingFragment extends CommonFragment
                             if (!spActivityType.getSelectedItem()
                                     .toString()
                                     .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-                                arrMeetingReason.clear();
-                                arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
                                 meetingReason();
-                                if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email")
-                                        || spActivityType.getSelectedItem()
-                                        .toString()
-                                        .equalsIgnoreCase("Phone")) {
+                                if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")) {
+                                    enableLocationGroup = true;
+                                    enableField(llLocationGroup);
+                                    setVisibilityOTP(true);
+                                } else {
                                     enableLocationGroup = false;
                                     disableField(llLocationGroup);
                                     disableReset();
-                                } else {
-                                    enableLocationGroup = true;
-                                    enableField(llLocationGroup);
+                                    setVisibilityOTP(false);
                                 }
                             } else {
+                                setVisibilityOTP(false);
                                 arrMeetingReason.clear();
                                 arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                                arrAdapMeetingReason =
-                                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                                                arrMeetingReason);
-                                arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
-                                spMeetingReason.setAdapter(arrAdapMeetingReason);
+                                AdapterUtils.setSpinnerData(arrAdapMeetingReason, spMeetingReason, arrMeetingReason);
                                 arrAdapMeetingReason.notifyDataSetChanged();
                             }
                         }));
@@ -774,12 +774,7 @@ public class CreateMeetingFragment extends CommonFragment
         }
         String data = uiModel.data;
         if (data != null) {
-            FragmentTransaction ft =
-                    requireActivity().getSupportFragmentManager().beginTransaction();
-
-            OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
-            dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
-            dialogFragment.show(ft, "");
+            btnSendOtp.setText(R.string.btn_label_verify_otp);
         }
     }
 
@@ -800,12 +795,21 @@ public class CreateMeetingFragment extends CommonFragment
             } else if (id == R.id.tvActionables) {
                 toggleSectionExpansion(llActionables, tvActionables);
             } else if (id == R.id.btnSendOtp) {
-                if (checkPermission()) {
-                    if (mCurrentLocation != null) {
-                        sendOTPRequest();
-                    } else {
-                        fusedLocation.LocationUpdates();
+                if (btnSendOtp.getText().equals(SEND_OTP_LABLE)) {
+                    if (checkPermission()) {
+                        if (mCurrentLocation != null) {
+                            sendOTPRequest();
+                        } else {
+                            fusedLocation.LocationUpdates();
+                        }
                     }
+                } else if (btnSendOtp.getText().equals(VERIFY_OTP_LABLE)) {
+                    FragmentTransaction ft =
+                            requireActivity().getSupportFragmentManager().beginTransaction();
+
+                    OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
+                    dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+                    dialogFragment.show(ft, "");
                 }
             } else if (id == R.id.btnReset) {
                 resetData();
@@ -1017,11 +1021,19 @@ public class CreateMeetingFragment extends CommonFragment
      */
 
     private boolean validateForm() {
-        if (userManager.getUser().isRM() && !isSendOtpSuccessful) {
+        if (userManager.getUser().isRM() && !isSendOtpSuccessful &&
+                spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")) {
 
             alert("Please verify OTP to create meeting");
             return false;
 
+        } else if (spActivityType.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
+            tvActivityTypeError.setVisibility(View.VISIBLE);
+            tvActivityTypeError.setText(SELECT_ACTIVITY_TYPE);
+            tvActivityTypeError.requestFocus();
+            return false;
         } else if (spProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT)
                 && productAdapter.getListProduct().size() == 0) {
             tvProductError.setVisibility(View.VISIBLE);
@@ -1046,13 +1058,6 @@ public class CreateMeetingFragment extends CommonFragment
             tvMeetingObjectiveError.setVisibility(View.VISIBLE);
             tvMeetingObjectiveError.setText(SELECT_MEETING_OBJECTIVE);
             tvMeetingObjectiveError.requestFocus();
-            return false;
-        } else if (spActivityType.getSelectedItem()
-                .toString()
-                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-            tvActivityTypeError.setVisibility(View.VISIBLE);
-            tvActivityTypeError.setText(SELECT_ACTIVITY_TYPE);
-            tvActivityTypeError.requestFocus();
             return false;
         } else if (spMeetingReason.getSelectedItem()
                 .toString()
@@ -1166,19 +1171,6 @@ public class CreateMeetingFragment extends CommonFragment
 
             return false;
         } else if (enableLocationGroup
-                && !((LocationManager) requireContext().getSystemService(
-                Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
-                && hasGPSDevice(requireContext())) {
-
-            fusedLocation.initDispatcher(this);
-
-            return false;
-        } else if (userManager.getUser().isRM()
-                && !permissionCheckHelper.locationPermission()) {
-            permissionCheckHelper.requestLocation();
-
-            return false;
-        } else if (userManager.getUser().isRM()
                 && !((LocationManager) requireContext().getSystemService(
                 Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
                 && hasGPSDevice(requireContext())) {
@@ -1617,11 +1609,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingReason.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
-            spMeetingReason.setAdapter(arrAdapMeetingReason);
             AdapterUtils.setSpinnerData(arrAdapMeetingReason, spMeetingReason, arrMeetingReason);
             arrAdapMeetingReason.notifyDataSetChanged();
-
             setMeetingReasonListener();
         }
     }
