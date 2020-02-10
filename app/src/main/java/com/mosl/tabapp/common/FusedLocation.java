@@ -126,6 +126,11 @@ import timber.log.Timber;
                 });
     }
 
+    public void LocationUpdates() {
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback,
+                Looper.myLooper());
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             // Check for the integer request code originally supplied to startResolutionForResult().
