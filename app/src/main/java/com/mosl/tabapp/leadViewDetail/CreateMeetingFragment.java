@@ -1014,6 +1014,8 @@ public class CreateMeetingFragment extends CommonFragment
         travellingList.clear();
         productAdapter.deleteAllProduct();
         travellingAdapter.deleteAllProduct();
+        setVisibilityOTP(false);
+        btnSendOtp.setText(R.string.btn_label_send_otp);
     }
 
     /**
@@ -1869,17 +1871,23 @@ public class CreateMeetingFragment extends CommonFragment
                 .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         DatePicker dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
+        LinearLayout linearLayoutOfFromDate = dialog.findViewById(R.id.linearLayoutOfFromDate);
         dpFromDate.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
         ImageView close = dialog.findViewById(R.id.ibtnClose);
         Button btnSubmit = dialog.findViewById(R.id.btnSubmit);
         final TimePicker timePicker = dialog.findViewById(R.id.timePicker);
         timePicker.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
 
+
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1);
-        dpFromDate.setMinDate(cal.getTimeInMillis());
+        if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")
+                && userManager.getUser().isRM()) {
+            dpFromDate.setMinDate(System.currentTimeMillis() - 1000);
+        } else {
+            dpFromDate.setMinDate(cal.getTimeInMillis());
+        }
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
-
         if (mainFromDate != null) {
             try {
                 String[] dateSplit = mainFromDate.split("-");

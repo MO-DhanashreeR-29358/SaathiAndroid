@@ -199,6 +199,5 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     }
 
     override fun onLatLongChanged(location: Location?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

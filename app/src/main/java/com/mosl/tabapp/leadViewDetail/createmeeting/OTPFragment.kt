@@ -12,6 +12,8 @@ import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.dialog.BaseDialogFragment
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.navigator.Navigator
 import com.mosl.saathi.api.SaathiApi
@@ -109,15 +111,14 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     private fun renderResendOTP(uiModel: UiModel<String>) {
         toggleProgress(uiModel.inProgress)
 
-        val error = uiModel.error
-        if (error != null) {
-            showOnFailurePopup(error)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
         }
-        val data = uiModel.data
-        if (data != null) {
+        uiModel.onSuccess {
             Toast.makeText(requireContext(), "Resend OTP Successfully", Toast.LENGTH_SHORT)
                 .show()
         }
+
     }
 
     private fun submitOtp() {
@@ -140,14 +141,15 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     override fun renderOTPSubmit(uiModel: UiModel<String>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.error?.let {
+        uiModel.onFailure {
             CreateMeetingFragment.isSendOtpSuccessful = false
             showOnFailurePopup(it)
         }
 
-
-        uiModel.data?.let {
+        uiModel.onSuccess {
             CreateMeetingFragment.isSendOtpSuccessful = true
+            Toast.makeText(requireContext(), "Verify OTP Successfully", Toast.LENGTH_SHORT)
+                .show()
             dialog?.dismiss()
         }
     }
