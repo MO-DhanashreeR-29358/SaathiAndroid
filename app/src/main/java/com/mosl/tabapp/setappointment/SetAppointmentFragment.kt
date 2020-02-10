@@ -40,6 +40,8 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
+import com.mosl.saathi.api.model.lead.LeadViewItem
+import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
@@ -184,6 +186,51 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
   }
 
+  private fun getLeadByIdFromServer(strLeadId: CharSequence) {
+    CRMAppUtil.setImage(ByteArray(0), ivLead, requireContext())
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = LeadViewRequest(strLeadId.toString())
+      val subscribe = saathiApi.getLeadView(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderLeadView(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderLeadView(uiModel: UiModel<LeadViewItem>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      val leadId = stringOrEmpty(data.leadID.toString())
+      val branchCode = stringOrEmpty(data.branchcode)
+      val contact = data.contact
+      val name = stringOrEmpty(contact!!.name)
+
+      val leadProductMapping = data.leadProductMapping
+      for (i in leadProductMapping!!.indices) {
+        val (_, _, _, _, _, _, _, _, pendingDays1, _, _, _, _, _, _, _, _, isDefault1, _, stageName1, _, _, _, _, _, _, _, _, _, _, _, _, clientCode1) = leadProductMapping[i]
+        val clientCode = stringOrEmpty(clientCode1)
+        val stageName = stringOrEmpty(stageName1)
+        val isDefault = stringOrEmpty(isDefault1.toString())
+        val pendingDays = stringOrEmpty(pendingDays1.toString())
+        if (isDefault.equals("true", ignoreCase = true)) {
+          binding.includeLmsTopSectionUpdate.tvClientCode.text = clientCode
+          binding.includeLmsTopSectionUpdate.tvCurrentStage.text = stageName
+          binding.includeLmsTopSectionUpdate.tvCurrentStageSince.text = "$pendingDays Days"
+        }
+        binding.includeLmsTopSectionUpdate.tvName.text = name
+        binding.includeLmsTopSectionUpdate.tvLeadId.text = leadId
+        binding.includeLmsTopSectionUpdate.tvBranchCode.text = branchCode
+      }
+    }
+  }
+
   private fun setProfileImage(ucid: String) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = ClientImageRequest(ucid)
@@ -282,7 +329,6 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       }
     }
   }
-
 
   private fun setUpFromArguments() {
     try {
