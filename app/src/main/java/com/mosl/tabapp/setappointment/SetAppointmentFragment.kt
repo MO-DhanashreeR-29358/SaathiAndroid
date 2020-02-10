@@ -1344,18 +1344,18 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     etSearchAttendee.setLoadingIndicator(
         dialogAttendeeList.findViewById(R.id.pbLoadingIndicator)
     )
-    etSearchAttendee.setOnItemClickListener { parent, view, position, id ->
+    etSearchAttendee.setOnItemClickListener { _, _, position, id ->
 
-      val clientModel = if (attendeeAdapter!!.count > position)
-        attendeeAdapter!!.getItem(position)
-      else
-        EmployeeModel("", false)
+      val clientModel = when {
+        attendeeAdapter!!.count > position -> attendeeAdapter!!.getItem(position)
+        else -> EmployeeModel("", false)
+      }
       val has = listHasAttende(
           addedAttendeeModelList, addedSplAttendeeModelList,
           clientModel.attendeeCode
       )
-      if (!has) {
-        if (!clientModel.isNoData) {
+      when {
+        !has -> if (!clientModel.isNoData) {
           val attendeeType = "R" //todo //R=Regular  & S=special
           addedAttendeeModelList.add(
               AddedAttendeeModel(
@@ -1367,11 +1367,11 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           setCount(addedAttendeeCount)
           dialogAttendeeList.dismiss()
         }
-
-      } else {
-        Toast.makeText(requireContext(), ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
-            .show()
-        etSearchAttendee.setText("")
+        else -> {
+          Toast.makeText(requireContext(), ATTENDEE_ALREADY_ADDED, Toast.LENGTH_SHORT)
+              .show()
+          etSearchAttendee.setText("")
+        }
       }
     }
 
@@ -1405,8 +1405,8 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           clientModel.attendeeCode
       )
 
-      if (!has) {
-        if (!clientModel.isNoData) {
+      when {
+        !has -> if (!clientModel.isNoData) {
           val attendeeType = "S" //todo //R=Regular  & S=special
           addedSplAttendeeModelList.add(
               AddedSplAttendeeModel(
@@ -1418,14 +1418,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           binding.tvSplAttendeeCount.text = "($addedSplAttendeeCount)"
           dialogSplAttendeeList.dismiss()
         }
-
-      } else {
-        Toast.makeText(
-            requireContext(), SPL_ATTENDEE_ALREADY_ADDED,
-            Toast.LENGTH_SHORT
-        )
-            .show()
-        etSearchAttendee.setText("")
+        else -> {
+          Toast.makeText(
+              requireContext(), SPL_ATTENDEE_ALREADY_ADDED,
+              Toast.LENGTH_SHORT
+          )
+              .show()
+          etSearchAttendee.setText("")
+        }
       }
     }
 
@@ -1493,7 +1493,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
         dpFromDate.init(
             Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
             Integer.parseInt(dateSplit[2])
-        ) { view, year, monthOfYear, dayOfMonth ->
+        ) { _, year, monthOfYear, dayOfMonth ->
           mainFromDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
           currentYear = year
           month = monthOfYear + 1
@@ -1528,7 +1528,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       timePicker.currentHour = hour
       timePicker.currentMinute = minute
     }
-    timePicker.setOnTimeChangedListener { arg0, arg1, arg2 ->
+    timePicker.setOnTimeChangedListener { _, arg1, arg2 ->
       hour = arg1
       minute = arg2
     }
@@ -1760,10 +1760,10 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
     override fun getView(
       position: Int,
-      convertView: View?,
+      convertView1: View?,
       parent: ViewGroup
     ): View {
-      var convertView = convertView
+      var convertView = convertView1
       var holderView: HolderView? = null
       val clientModel = attendeeModelList[position]
       if (convertView == null) {
@@ -1797,32 +1797,33 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           val filterResults = FilterResults()
           val modelList = ArrayList<SplAttendeeModel>()
           try {
-            if (constraint != null) {
-              if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-                val request = AutoCompleteAttendeeRequest(
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    URLEncoder.encode(constraint.toString(), "utf-8")
-                )
-                try {
-                  val dataList = saathiApi.getAutoCompleteSplAttendee(request)
-                      .blockingFirst()
-                  for (item in dataList) {
-                    val employeeName = stringOrEmpty(item.employeeName)
-                    val employeeCode = stringOrEmpty(item.employeeCode)
-                    val BranchCode = stringOrEmpty(item.branchCode)
-                    modelList.add(SplAttendeeModel(employeeName, employeeCode, BranchCode))
+            constraint?.let {
+              when {
+                CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+                  val request = AutoCompleteAttendeeRequest(
+                      URLEncoder.encode(it.toString(), "utf-8"),
+                      URLEncoder.encode(it.toString(), "utf-8")
+                  )
+                  try {
+                    val dataList = saathiApi.getAutoCompleteSplAttendee(request)
+                        .blockingFirst()
+                    for (item in dataList) {
+                      val employeeName = stringOrEmpty(item.employeeName)
+                      val employeeCode = stringOrEmpty(item.employeeCode)
+                      val branchCode = stringOrEmpty(item.branchCode)
+                      modelList.add(SplAttendeeModel(employeeName, employeeCode, branchCode))
+                      filterResults.values = modelList
+                      filterResults.count = modelList.size
+                    }
+                  } catch (e: Exception) {
+                    modelList.add(SplAttendeeModel.getNoData(getErrorOnFailureNew(e)))
                     filterResults.values = modelList
                     filterResults.count = modelList.size
+                    return filterResults
                   }
-                } catch (e: Exception) {
-                  modelList.add(SplAttendeeModel.getNoData(getErrorOnFailureNew(e)))
-                  filterResults.values = modelList
-                  filterResults.count = modelList.size
-                  return filterResults
-                }
 
-              } else {
-                noInternetConnectionDialog()
+                }
+                else -> noInternetConnectionDialog()
               }
             }
           } catch (ex: Exception) {
@@ -1841,11 +1842,12 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           constraint: CharSequence,
           results: FilterResults?
         ) {
-          if (results != null && results.count > 0) {
-            attendeeModelList = results.values as List<SplAttendeeModel>
-            notifyDataSetChanged()
-          } else {
-            notifyDataSetInvalidated()
+          when {
+            results != null && results.count > 0 -> {
+              attendeeModelList = results.values as List<SplAttendeeModel>
+              notifyDataSetChanged()
+            }
+            else -> notifyDataSetInvalidated()
           }
         }
       }
@@ -1856,10 +1858,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       convertView: View
     ) {
       convertView.setBackgroundColor(
-          if (position % 2 == 1) {
-            Color.parseColor("#F5F5F5")
-          } else {
-            Color.parseColor("#FFFFFF")
+          when {
+            position % 2 == 1 -> Color.parseColor("#F5F5F5")
+            else -> Color.parseColor("#FFFFFF")
           }
       )
     }
@@ -1900,9 +1901,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       val clientModel = resultList[position]
       if (convertView == null) {
         inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
+        convertView = inflater?.inflate(R.layout.item_list_attendee, parent, false)
         holderView = HolderView(convertView!!)
-        convertView!!.tag = holderView
+        convertView.tag = holderView
       } else {
         holderView = convertView.tag as HolderView
       }
@@ -1925,11 +1926,11 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           val filterResults = FilterResults()
           val modelList = ArrayList<EmployeeModel>()
           try {
-            if (constraint != null) {
+            constraint?.let {
               if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 val request = AutoCompleteAttendeeRequest(
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    URLEncoder.encode(constraint.toString(), "utf-8")
+                    URLEncoder.encode(it.toString(), "utf-8"),
+                    URLEncoder.encode(it.toString(), "utf-8")
                 )
                 try {
                   val dataList = saathiApi.getAutoCompleteAttendee(request)
@@ -1937,7 +1938,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
                   for (item in dataList) {
                     val employeeName = stringOrEmpty(item.employeeName)
                     val employeeCode = stringOrEmpty(item.employeeCode)
-                    val BranchCode = stringOrEmpty(item.branchCode)
+                    val branchCode = stringOrEmpty(item.branchCode)
                     if (employeeCode.equals(
                             userManager.getUser()!!.employeeCode, ignoreCase = true
                         )
@@ -1947,7 +1948,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
                     modelList.add(
                         EmployeeModel(
                             employeeName, employeeCode,
-                            BranchCode, false
+                            branchCode, false
                         )
                     )
                     filterResults.values = modelList
@@ -1980,11 +1981,12 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           constraint: CharSequence,
           results: FilterResults?
         ) {
-          if (results != null && results.count > 0) {
-            resultList = results.values as List<EmployeeModel>
-            notifyDataSetChanged()
-          } else {
-            notifyDataSetInvalidated()
+          when {
+            results != null && results.count > 0 -> {
+              resultList = results.values as List<EmployeeModel>
+              notifyDataSetChanged()
+            }
+            else -> notifyDataSetInvalidated()
           }
         }
       }
@@ -1995,10 +1997,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       convertView: View
     ) {
       convertView.setBackgroundColor(
-          if (position % 2 == 1) {
-            Color.parseColor("#F5F5F5")
-          } else {
-            Color.parseColor("#FFFFFF")
+          when {
+            position % 2 == 1 -> Color.parseColor("#F5F5F5")
+            else -> Color.parseColor("#FFFFFF")
           }
       )
     }
