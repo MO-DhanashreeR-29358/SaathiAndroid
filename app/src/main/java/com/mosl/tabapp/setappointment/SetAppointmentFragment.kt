@@ -614,16 +614,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       arrSelectWeek.clear()
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let { data ->
       arrSelectWeek.clear()
       arrSelectWeek.add(RowData(0, "-1", SELECT_WEEK))
-      for (i in it.indices) {
+      for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
@@ -668,13 +666,11 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
   private fun renderMeetingById(uiModel: UiModel<MeetingByIdItem>) {
     toggleProgress(uiModel.inProgress)
-
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+
+    uiModel.data?.let { data ->
       val mModel = getAppointmentDet(data)
       setCallenderDateFrom(mModel)
       selectProduct(mModel.getProduct())
@@ -925,12 +921,10 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
   private fun renderAddUpdate(uiModel: UiModel<SetAppointmentResponse>) {
     toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let {
       MSFDialog.alertDialog(
           activity, 0,
           resources.getString(R.string.motilal_oswal),
@@ -1898,7 +1892,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
       viewColor(position, convertView)
       holderView.tvAttendeeName.text = if (clientModel.isNoData) {
-        holderView.linaerLayout.setOnClickListener(null)
+        holderView.linearLayout.setOnClickListener(null)
         clientModel.attendeeName
       } else {
         String.format(
@@ -1994,7 +1988,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
     internal inner class HolderView internal constructor(parent: View) {
       var tvAttendeeName: TextView = parent.findViewById(R.id.tvAttendeeName)
-      var linaerLayout: LinearLayout = parent.findViewById(R.id.linaerLayout)
+      var linearLayout: LinearLayout = parent.findViewById(R.id.linaerLayout)
     }
   }
 
