@@ -102,7 +102,6 @@ import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatTypeSpError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatWeekdayError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTime
-import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTimeDisplay
 import kotlinx.android.synthetic.main.lms_top_section_update.ivLead
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -177,24 +176,26 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     setAppTitle("Set Appointment")
     setUpFromArguments()
     setUpView()
-    if (!mUCID.equals("0", ignoreCase = true)) {
-      getClientDetail(mUCID)
-      setProfileImage(mUCID)
-    } else {
-      getLeadByIdFromServer(str_LeadID)
+    when {
+      !mUCID.equals("0", ignoreCase = true) -> {
+        getClientDetail(mUCID)
+        setProfileImage(mUCID)
+      }
+      else -> getLeadByIdFromServer(str_LeadID)
     }
 
   }
 
   private fun getLeadByIdFromServer(strLeadId: CharSequence) {
     CRMAppUtil.setImage(ByteArray(0), ivLead, requireContext())
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LeadViewRequest(strLeadId.toString())
-      val subscribe = saathiApi.getLeadView(request)
-          .compose(applyUiModel())
-          .subscribe { this.renderLeadView(it) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LeadViewRequest(strLeadId.toString())
+        val subscribe = saathiApi.getLeadView(request)
+            .compose(applyUiModel())
+            .subscribe { this.renderLeadView(it) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -232,13 +233,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun setProfileImage(ucid: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = ClientImageRequest(ucid)
-      val subscribe = saathiApi.getClientImage(request)
-          .compose(applyUiModel())
-          .subscribe { this.renderClientImage(it) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = ClientImageRequest(ucid)
+        val subscribe = saathiApi.getClientImage(request)
+            .compose(applyUiModel())
+            .subscribe { this.renderClientImage(it) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -252,10 +254,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     uiModel.data?.let {
       val response = it.response
       val byt = Base64.decode(response, Base64.DEFAULT)
-      if (byt != null) {
-        CRMAppUtil.setImage(byt, ivLead, requireContext())
-      } else {
-        CRMAppUtil.setImage(
+      when {
+        byt != null -> CRMAppUtil.setImage(byt, ivLead, requireContext())
+        else -> CRMAppUtil.setImage(
             ByteArray(0), ivLead,
             requireContext()
         )
@@ -282,16 +283,19 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     }
 
     uiModel.data?.let {
-      ClientDetail(it)
-      binding.includeLmsTopSectionUpdate.tvLeadId.text = ClientDetail.getLeadId()
-      binding.includeLmsTopSectionUpdate.tvCurrentStage.text = ClientDetail.getCurrentStage()
-      if (!ClientDetail.getCurrentStageSince().isEmpty()) {
-        binding.includeLmsTopSectionUpdate.tvCurrentStageSince.text =
-          "${ClientDetail.getCurrentStageSince()} Days"
+      binding.includeLmsTopSectionUpdate.apply {
+        ClientDetail(it)
+        tvLeadId.text = ClientDetail.getLeadId()
+        tvCurrentStage.text = ClientDetail.getCurrentStage()
+        if (!ClientDetail.getCurrentStageSince().isEmpty()) {
+          tvCurrentStageSince.text =
+            "${ClientDetail.getCurrentStageSince()} Days"
+        }
+        tvName.text = ClientDetail.getName()
+        tvClientCode.text = ClientDetail.getClientCode()
+        tvBranchCode.text = ClientDetail.getBranchCode()
       }
-      binding.includeLmsTopSectionUpdate.tvName.text = ClientDetail.getName()
-      binding.includeLmsTopSectionUpdate.tvClientCode.text = ClientDetail.getClientCode()
-      binding.includeLmsTopSectionUpdate.tvBranchCode.text = ClientDetail.getBranchCode()
+
     }
   }
 
@@ -320,7 +324,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       tvEndDateTimeDisplay.setOnClickListener(this@SetAppointmentFragment)
       btnSave.setOnClickListener(this@SetAppointmentFragment)
       btnReset.setOnClickListener(this@SetAppointmentFragment)
-      setCallenderDate()
+      setCalenderDate()
       AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()!!.employeeCode)
       if (!createMode) {
         tvNewAppointment.text = getString(R.string.txt_label_reschedule_appointment)
@@ -330,23 +334,26 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
   private fun setUpFromArguments() {
     try {
-      mUCID = if (this.arguments!!.getString(UCID, "0").equals("", ignoreCase = true))
-        "0"
-      else
-        this.arguments!!.getString(UCID, "0")
-      str_LeadID = this.arguments!!.getString(LEAD_ID, "0")
-      meetingId = this.arguments!!.getString(MEETING_ID, "0")
-      if (meetingId != null && !meetingId.equals("0", ignoreCase = true)) {
-        //Editt mode
-        createMode = false
-        getAppointmentDetailsFromServer()
-      } else {
-        //Create mode
-        selectProduct("")
-        activityType("")
-        getRepeatMode("")
-        selectWeek("")
-        selectWeekDay("")
+      mUCID = when {
+        this.arguments!!.getString(UCID, "0").equals("", ignoreCase = true) -> "0"
+        else -> this.arguments?.getString(UCID, "0") ?: "0"
+      }
+      str_LeadID = this.arguments?.getString(LEAD_ID, "0") ?: "0"
+      meetingId = this.arguments?.getString(MEETING_ID, "0") ?: "0"
+      when {
+        meetingId != null && !meetingId.equals("0", ignoreCase = true) -> {
+          //Editt mode
+          createMode = false
+          getAppointmentDetailsFromServer()
+        }
+        else -> {
+          //Create mode
+          selectProduct("")
+          activityType("")
+          getRepeatMode("")
+          selectWeek("")
+          selectWeekDay("")
+        }
       }
     } catch (e: Exception) {
       e.printStackTrace()
@@ -355,29 +362,32 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun selectProduct(id: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, INTERESTEDIN, null, null
-      )
-      val disposable = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel -> renderProduct(uiModel, id) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LookupRequest(
+            userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, INTERESTEDIN, null,
+            null
+        )
+        val disposable = saathiApi.getAllLookup(request)
+            .compose(applyUiModel())
+            .subscribe { uiModel -> renderProduct(uiModel, id) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
   private fun selectWeekDay(id: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, DAYS,
-          null, null
-      )
-      val disposable = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel -> renderWeekDay(uiModel, id) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LookupRequest(
+            userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, DAYS,
+            null, null
+        )
+        val disposable = saathiApi.getAllLookup(request)
+            .compose(applyUiModel())
+            .subscribe { uiModel -> renderWeekDay(uiModel, id) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -455,8 +465,8 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
       arrAdapSelectWeekDay.notifyDataSetChanged()
       val productData = getSpinnerRowDataById(id, arrAdapSelectWeekDay)
-      if (productData != null) {
-        spSelectWeekDay.setSelection(productData!!.getPosition())
+      when {
+        productData != null -> spSelectWeekDay.setSelection(productData.position)
       }
       setWeekDayListener()
     }
@@ -476,15 +486,17 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun activityType(id: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, ACTIVITYTYPE, null, null
-      )
-      val disposable = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel -> renderActivityType(uiModel, id) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LookupRequest(
+            userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, ACTIVITYTYPE, null,
+            null
+        )
+        val disposable = saathiApi.getAllLookup(request)
+            .compose(applyUiModel())
+            .subscribe { uiModel -> renderActivityType(uiModel, id) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -514,8 +526,8 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       arrAdapActivityType.setSpinnerData(binding.spActivityType, arrActivityType)
       arrAdapActivityType.notifyDataSetChanged()
       val productData = getSpinnerRowDataById(id, arrAdapActivityType)
-      if (productData != null) {
-        binding.spActivityType.setSelection(productData.position)
+      when {
+        productData != null -> binding.spActivityType.setSelection(productData.position)
       }
       setActivityTypeListener()
     }
@@ -534,15 +546,16 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun getRepeatMode(id: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, REPEATMODE, null, null
-      )
-      val disposable = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel -> renderRepeatMode(uiModel, id) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LookupRequest(
+            userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, REPEATMODE, null, null
+        )
+        val disposable = saathiApi.getAllLookup(request)
+            .compose(applyUiModel())
+            .subscribe { uiModel -> renderRepeatMode(uiModel, id) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -595,16 +608,17 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun selectWeek(id: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, WEEKS,
-          null, null
-      )
-      val disposable = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel -> renderWeek(uiModel, id) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = LookupRequest(
+            userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, WEEKS,
+            null, null
+        )
+        val disposable = saathiApi.getAllLookup(request)
+            .compose(applyUiModel())
+            .subscribe { uiModel -> renderWeek(uiModel, id) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -672,74 +686,74 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
     uiModel.data?.let { data ->
       val mModel = getAppointmentDet(data)
-      setCallenderDateFrom(mModel)
-      selectProduct(mModel.getProduct())
-      activityType(mModel.getActivityTypeID())
-      getRepeatMode(mModel.getRepeatOnCode())
-      selectWeek(mModel.getRepeatEveryWeekCode())
-      selectWeekDay(mModel.getRepeatEveryDayCode())
+      setCalenderDateFrom(mModel)
+      selectProduct(mModel.product)
+      activityType(mModel.activityTypeID)
+      getRepeatMode(mModel.repeatOnCode)
+      selectWeek(mModel.repeatEveryWeekCode)
+      selectWeekDay(mModel.repeatEveryDayCode)
     }
   }
 
-  private fun setCallenderDateFrom(mModel: MeetingApptModel) {
+  private fun setCalenderDateFrom(mModel: MeetingApptModel) {
 
-    var mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.meetingDate)
-    binding.tvApppointmentDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
-    binding.tvApppointmentDateTimeDisplay.text =
-      CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
-    val cal = Calendar.getInstance()
-    cal.time = mMeetingDate
-    currentYear = cal.get(Calendar.YEAR)
-    month = cal.get(Calendar.MONTH) + 1//Adding one onth
-    day = cal.get(Calendar.DAY_OF_MONTH)
-    minute = cal.get(Calendar.MINUTE)
-    hour = cal.get(Calendar.HOUR_OF_DAY)
-    mainFromDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+    binding.apply {
+      var mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.meetingDate)
+      tvApppointmentDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+      tvApppointmentDateTimeDisplay.text =
+        CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+      val cal = Calendar.getInstance()
+      cal.time = mMeetingDate
+      currentYear = cal.get(Calendar.YEAR)
+      month = cal.get(Calendar.MONTH) + 1//Adding one onth
+      day = cal.get(Calendar.DAY_OF_MONTH)
+      minute = cal.get(Calendar.MINUTE)
+      hour = cal.get(Calendar.HOUR_OF_DAY)
+      mainFromDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
 
-    //Start date
-    mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentStartTime)
-    binding.tvStartDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
-    binding.tvStartDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+      //Start date
+      mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentStartTime)
+      tvStartDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+      tvStartDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
 
-    cal.time = mMeetingDate
-    currentYearStartDate = cal.get(Calendar.YEAR)
-    monthStartDate = cal.get(Calendar.MONTH) + 1//Adding one onth
-    dayStartDate = cal.get(Calendar.DAY_OF_MONTH)
-    minuteStartDate = cal.get(Calendar.MINUTE)
-    hourStartDate = cal.get(Calendar.HOUR_OF_DAY)
-    mainFromDateStartDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
-    //end Date
-    mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentEndTime)
-    binding.tvEndDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
-    binding.tvEndDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
+      cal.time = mMeetingDate
+      currentYearStartDate = cal.get(Calendar.YEAR)
+      monthStartDate = cal.get(Calendar.MONTH) + 1//Adding one onth
+      dayStartDate = cal.get(Calendar.DAY_OF_MONTH)
+      minuteStartDate = cal.get(Calendar.MINUTE)
+      hourStartDate = cal.get(Calendar.HOUR_OF_DAY)
+      mainFromDateStartDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+      //end Date
+      mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.appointmentEndTime)
+      tvEndDateTime.text = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithSpace)
+      tvEndDateTimeDisplay.text = CRMAppUtil.getDBDate(mMeetingDate, DATE_FORMAT_TO_DISPLAY)
 
-    cal.time = mMeetingDate
-    currentYearEndDate = cal.get(Calendar.YEAR)
-    monthEndDate = cal.get(Calendar.MONTH) + 1//Adding one onth
-    dayEndDate = cal.get(Calendar.DAY_OF_MONTH)
-    minuteEndDate = cal.get(Calendar.MINUTE)
-    hourEndDate = cal.get(Calendar.HOUR_OF_DAY)
-    mainFromDateEndDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+      cal.time = mMeetingDate
+      currentYearEndDate = cal.get(Calendar.YEAR)
+      monthEndDate = cal.get(Calendar.MONTH) + 1//Adding one onth
+      dayEndDate = cal.get(Calendar.DAY_OF_MONTH)
+      minuteEndDate = cal.get(Calendar.MINUTE)
+      hourEndDate = cal.get(Calendar.HOUR_OF_DAY)
+      mainFromDateEndDate = CRMAppUtil.getDBDate(mMeetingDate, mFormatWithDash)
+    }
+
   }
 
   private fun getAppointmentDet(response: MeetingByIdItem): MeetingApptModel {
-    val mModel = MeetingApptModel()
-    //        response.get(MEETING_ID);
-
-    mModel.meetingType = stringOrEmpty(response.meetingType)
-    mModel.displayType = "A"
-    mModel.meetingID = stringOrEmpty(response.meetingID)
-    mModel.leadId = response.leadId.toString()
-    //TODO LEAD ID IS DIFFRENT
-    mModel.meetingDate = stringOrEmpty(response.meetingDate)
-    mModel.activityTypeID = stringOrEmpty(response.activityTypeID)
-    mModel.product = stringOrEmpty(response.productTypeID)
-    mModel.appointmentStartTime = stringOrEmpty(response.repeatationStartOn)
-    mModel.appointmentEndTime = stringOrEmpty(response.repeatationEndsOn)
-
-    mModel.repeatEveryWeekCode = stringOrEmpty(response.repeatEveryWeekCode)
-    mModel.repeatEveryDayCode = stringOrEmpty(response.repeatEveryDayCode)
-    mModel.repeatOnCode = stringOrEmpty(response.repeatOnCode)
+    val mModel = MeetingApptModel().apply {
+      meetingType = stringOrEmpty(response.meetingType)
+      displayType = "A"
+      meetingID = stringOrEmpty(response.meetingID)
+      leadId = response.leadId.toString()
+      meetingDate = stringOrEmpty(response.meetingDate)
+      activityTypeID = stringOrEmpty(response.activityTypeID)
+      product = stringOrEmpty(response.productTypeID)
+      appointmentStartTime = stringOrEmpty(response.repeatationStartOn)
+      appointmentEndTime = stringOrEmpty(response.repeatationEndsOn)
+      repeatEveryWeekCode = stringOrEmpty(response.repeatEveryWeekCode)
+      repeatEveryDayCode = stringOrEmpty(response.repeatEveryDayCode)
+      repeatOnCode = stringOrEmpty(response.repeatOnCode)
+    }
 
     val meetingAttendee = response.meetingAttendee
     for (meetingAttendee_i in meetingAttendee.indices) {
@@ -755,23 +769,26 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
       val defaultAttendee = meetingAttendee_obj?.defaultAttendee
       val status = meetingAttendee_obj?.status
-      if (status == 1) {
-        if (!defaultAttendee!!) {
+      when (status) {
+        1 -> if (!defaultAttendee!!) {
           //TODO ignore self object
-          if (str_AttendeeType!!.trim { it <= ' ' }.equals("R", ignoreCase = true)) {
-            val attendTmp = AddedAttendeeModel(
-                str_AttendeeType, attended!!, str_AttendeeEmpName,
-                str_AttendeeEmpcode, str_meetingAttendeeCode
-            )
-            addedAttendeeModelList.add(attendTmp)
-            addedAttendeeCount++
-          } else {
-            val tempSpAttendee = AddedSplAttendeeModel(
-                str_AttendeeType, attended!!,
-                str_AttendeeEmpName, str_AttendeeEmpcode
-            )
-            addedSplAttendeeModelList.add(tempSpAttendee)
-            addedSplAttendeeCount++
+          when {
+            str_AttendeeType!!.trim { it <= ' ' }.equals("R", ignoreCase = true) -> {
+              val attendTmp = AddedAttendeeModel(
+                  str_AttendeeType, attended!!, str_AttendeeEmpName,
+                  str_AttendeeEmpcode, str_meetingAttendeeCode
+              )
+              addedAttendeeModelList.add(attendTmp)
+              addedAttendeeCount++
+            }
+            else -> {
+              val tempSpAttendee = AddedSplAttendeeModel(
+                  str_AttendeeType, attended!!,
+                  str_AttendeeEmpName, str_AttendeeEmpcode
+              )
+              addedSplAttendeeModelList.add(tempSpAttendee)
+              addedSplAttendeeCount++
+            }
           }
         }
       }
@@ -786,77 +803,65 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
   override fun onClick(v: View) {
     val id = v.id
-    if (id == R.id.ibAttendee) {
-      dialogAttendee()
+    when (id) {
+      R.id.ibAttendee -> dialogAttendee()
+      R.id.ibSplAttendee -> dialogSplAttendee()
+      R.id.tvAttendeeCount -> dialogAddedAttendee()
+      R.id.tvSplAttendeeCount -> dialogAddedSplAttendee()
+      R.id.tvApppointmentDateTime,
+      R.id.tvApppointmentDateTimeDisplay,
+      R.id.rlDate -> selectDateAppointment()
+      R.id.tvStartDateTime,
+      R.id.tvStartDateTimeDisplay -> selectDateAppointmentStartTime()
+      R.id.tvEndDateTime,
+      R.id.tvEndDateTimeDisplay -> selectDateAppointmentEndTime()
+      R.id.btnSave -> validateAndCreateAppointment()
+      R.id.btnReset -> resetForm()
     }
-    if (id == R.id.ibSplAttendee) {
-      dialogSplAttendee()
-    }
-    if (id == R.id.tvAttendeeCount) {
-      dialogAddedAttendee()
-    }
-    if (id == R.id.tvSplAttendeeCount) {
-      dialogAddedSplAttendee()
-    }
-    if (id == R.id.tvApppointmentDateTime) {
-      selectDateAppointment()
-    } else if (id == R.id.tvApppointmentDateTimeDisplay) {
-      selectDateAppointment()
-    }
-    if (id == R.id.rlDate) {
-      selectDateAppointment()
-    }
-    //tvStartDateTime
-    if (id == R.id.tvStartDateTime) {
-      selectDateAppointmentStartTime()
-    } else if (id == R.id.tvStartDateTimeDisplay) {
-      selectDateAppointmentStartTime()
-    }
-    //tvEndDateTime
-    if (id == R.id.tvEndDateTime || id == R.id.tvEndDateTimeDisplay) {
-      selectDateAppointmentEndTime()
-    } else if (id == R.id.btnSave) {
+  }
 
-      if (validateForm()) {
-        val meetingApptModel = MeetingApptModel()
-        meetingApptModel.meetingType = "A"
-        meetingApptModel.displayType = "A"
-        meetingApptModel.leadId = str_LeadID
-        meetingApptModel.ucid = mUCID
-        meetingApptModel.meetingDate = CRMAppUtil.getDBDate(currentYear, month, day, hour, minute)
-        meetingApptModel.appointmentStartTime =
-          CRMAppUtil.getDBDate(
-              currentYearStartDate, monthStartDate, dayStartDate,
-              hourStartDate, minuteStartDate
-          )
-        meetingApptModel.appointmentEndTime =
-          CRMAppUtil.getDBDate(
-              currentYearEndDate, monthEndDate, dayEndDate, hourEndDate,
-              minuteEndDate
-          )
-        meetingApptModel.meetingAttendee = addedAttendeeModelList
-        meetingApptModel.splMeetingAttendee = addedSplAttendeeModelList
-        meetingApptModel.product = productCodeStr
-        //TODO SwitchRepeateOn check
-        if (spRepeateOn.selectedItemPosition > 0) {
+  private fun validateAndCreateAppointment() {
+    if (validateForm()) {
+      val meetingApptModel = MeetingApptModel().apply {
+        meetingType = "A"
+        displayType = "A"
+        leadId = str_LeadID
+        ucid = mUCID
+        meetingDate = CRMAppUtil.getDBDate(currentYear, month, day, hour, minute)
+        appointmentStartTime = CRMAppUtil.getDBDate(
+            currentYearStartDate, monthStartDate, dayStartDate,
+            hourStartDate, minuteStartDate
+        )
+        appointmentEndTime = CRMAppUtil.getDBDate(
+            currentYearEndDate, monthEndDate, dayEndDate, hourEndDate,
+            minuteEndDate
+        )
+        meetingAttendee = addedAttendeeModelList
+        splMeetingAttendee = addedSplAttendeeModelList
+        product = productCodeStr
+      }
+
+      //TODO SwitchRepeateOn check
+      when {
+        spRepeateOn.selectedItemPosition > 0 -> {
           val tmp = spRepeateOn.selectedItem
-          if (tmp is RowData) {
-            val a = tmp
-            meetingApptModel.repeatOnCode = a.key
+          when (tmp) {
+            is RowData -> {
+              val a = tmp
+              meetingApptModel.repeatOnCode = a.key
+            }
           }
         }
-
-        meetingApptModel.repeatEveryWeekCode = weekCodeStr
-        meetingApptModel.repeatEveryDayCode = weekDayCodeStr
-        meetingApptModel.activityTypeID = activityTypeCodeStr
-        if (!createMode) {
-          meetingApptModel.meetingID = meetingId
-        }
-        createAppointmentSave(meetingApptModel)
       }
-    } else if (id == R.id.btnReset) {
-      resetForm()
-    }//btnReset
+
+      meetingApptModel.repeatEveryWeekCode = weekCodeStr
+      meetingApptModel.repeatEveryDayCode = weekDayCodeStr
+      meetingApptModel.activityTypeID = activityTypeCodeStr
+      when {
+        !createMode -> meetingApptModel.meetingID = meetingId
+      }
+      createAppointmentSave(meetingApptModel)
+    }
   }
 
   private fun resetForm() {
@@ -868,12 +873,12 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       spRepeateWeek.setSelection(0, true)
       addedAttendeeModelList.clear()
       tvAttendeeCount.setText("")
-      setCallenderDate()
+      setCalenderDate()
     }
 
   }
 
-  private fun setCallenderDate() {
+  private fun setCalenderDate() {
     mainFromDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
     try {
       val dateArray = mainFromDate!!.split("-".toRegex())
@@ -909,13 +914,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   private fun createAppointmentSave(meetingApptModel: MeetingApptModel) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.json)
-      val subscribe = saathiApi.setAppointmentMeeting(request)
-          .compose(applyUiModel<SetAppointmentResponse>())
-          .subscribe { this.renderAddUpdate(it) }
-    } else {
-      noInternetConnectionDialog()
+    when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.json)
+        val subscribe = saathiApi.setAppointmentMeeting(request)
+            .compose(applyUiModel<SetAppointmentResponse>())
+            .subscribe { this.renderAddUpdate(it) }
+      }
+      else -> noInternetConnectionDialog()
     }
   }
 
@@ -931,17 +937,19 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           if (createMode) SET_APPOINTMENTS else UPDATE_APPOINTMENTS,
           "OK", true
       ) { action, data1 ->
-        if (action == MSFDialog.Action.OK) {
-          val bundle = Bundle()
-          bundle.putString(
-              LEAD_ID,
-              arguments!!.getString(LEAD_ID)
-          )
-          bundle.putString(
-              UCID,
-              arguments!!.getString(UCID)
-          )
-          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+        when (action) {
+          MSFDialog.Action.OK -> {
+            val bundle = Bundle()
+            bundle.putString(
+                LEAD_ID,
+                arguments!!.getString(LEAD_ID)
+            )
+            bundle.putString(
+                UCID,
+                arguments!!.getString(UCID)
+            )
+            navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+          }
         }
       }
     }
@@ -971,7 +979,6 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           minuteStartDate
       )
 
-      //For e
       val startDateEQ = CRMAppUtil.getDBDateObj(
           Integer.parseInt(newstartDate[0]),
           Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), 0, 0
@@ -983,29 +990,36 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
 
       binding.apply {
-        if (spActivityType.selectedItem.toString().equals(SELECT_ACTIVITY_TYPE, ignoreCase = true)
-        ) {
-          tvActivityTypeError.visibility = View.VISIBLE
-          tvActivityTypeError.text = SELECT_ACTIVITY_TYPE
-          tvActivityTypeError.requestFocus()
-          return false
-        } else if (meetingDate.before(Date())) {
-          tvAPPDateError.visibility = View.VISIBLE
-          tvAPPDateError.text = SELECT_APPT_DATE_TYPE
-          tvAPPDateError.requestFocus()
-          return false
-        } else if (spSelectProduct.selectedItem.toString().equals(SELECT_PRODUCT, ignoreCase = true)
-        ) {
-          tvselectproducterror.visibility = View.VISIBLE
-          tvselectproducterror.text = SELECT_PRODUCT
-          tvselectproducterror.requestFocus()
-          return false
+        when {
+          spActivityType.selectedItem.toString().equals(
+              SELECT_ACTIVITY_TYPE, ignoreCase = true
+          ) -> {
+            tvActivityTypeError.visibility = View.VISIBLE
+            tvActivityTypeError.text = SELECT_ACTIVITY_TYPE
+            tvActivityTypeError.requestFocus()
+            return false
+          }
+          meetingDate.before(Date()) -> {
+            tvAPPDateError.visibility = View.VISIBLE
+            tvAPPDateError.text = SELECT_APPT_DATE_TYPE
+            tvAPPDateError.requestFocus()
+            return false
+          }
+          spSelectProduct.selectedItem.toString().equals(SELECT_PRODUCT, ignoreCase = true) -> {
+            tvselectproducterror.visibility = View.VISIBLE
+            tvselectproducterror.text = SELECT_PRODUCT
+            tvselectproducterror.requestFocus()
+            return false
+          }
         }
       }
 
       //Do this only if you select repete <code></code>
-      if (spRepeateOn.selectedItemPosition > 0) {
-        if (spRepeateWeek.selectedItem.toString().equals(SELECT_WEEK, ignoreCase = true)) {
+      when {
+        spRepeateOn.selectedItemPosition > 0 -> if (spRepeateWeek.selectedItem.toString().equals(
+                SELECT_WEEK, ignoreCase = true
+            )
+        ) {
           tvRepeatTypeSpError.visibility = View.VISIBLE
           tvRepeatTypeSpError.text = SELECT_WEEK
           tvRepeatTypeSpError.requestFocus()
@@ -1049,9 +1063,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     today = Calendar.getInstance()
     dialogDateTime = Dialog(requireContext()).apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
-      window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(R.layout.date_picker)
-      window!!.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     val dpFromDateStartTime = dialogDateTime?.findViewById<DatePicker>(R.id.datePickerFromDate)
@@ -1095,18 +1109,21 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
 
     val timePicker = dialogDateTime!!.findViewById<TimePicker>(R.id.timePicker)
         .apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            hour = hourStartDate
-            minute = minuteStartDate
-          } else {
-            currentHour = hourStartDate
-            currentMinute = minuteStartDate
+          when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+              hour = hourStartDate
+              minute = minuteStartDate
+            }
+            else -> {
+              currentHour = hourStartDate
+              currentMinute = minuteStartDate
+            }
           }
         }
     timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
 
     //Thisgives api level warning
-    timePicker.setOnTimeChangedListener { arg0, arg1, arg2 ->
+    timePicker.setOnTimeChangedListener { _, arg1, arg2 ->
       hourStartDate = arg1
       minuteStartDate = arg2
     }
@@ -1114,33 +1131,31 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
     close?.setOnClickListener { _ -> dialogDateTime!!.dismiss() }
 
     btnSubmit?.setOnClickListener { _ ->
-      if (mainFromDateStartDate != null) {
-        fromDat = CRMAppUtil.getDate(mainFromDateStartDate, "yyyy-MM-dd")
-        fromPostingDateStartDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd")
-        tvStartDateTime.setText(
-            String.format(
-                "%s-%d:%d:00", fromPostingDateStartDate, hourStartDate,
-                minuteStartDate
-            )
-        )
+      when {
+        mainFromDateStartDate != null -> {
+          fromDat = CRMAppUtil.getDate(mainFromDateStartDate, "yyyy-MM-dd")
+          fromPostingDateStartDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd")
+          binding.tvStartDateTime.text = String.format(
+              "%s-%d:%d:00", fromPostingDateStartDate, hourStartDate,
+              minuteStartDate
+          )
+        }
       }
-      val splitstartDate = stringArray(tvStartDateTime.getText().toString())
+      val splitStartDate = stringArray(binding.tvStartDateTime.text.toString())
       try {
-        val newstartDate = splitstartDate.split("-".toRegex())
+        val newStartDate = splitStartDate.split("-".toRegex())
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()
-        val splitEndDate = stringArray(tvEndDateTime.getText().toString())
+        val splitEndDate = stringArray(binding.tvEndDateTime.text.toString())
         val newEndDate = splitEndDate.split("-".toRegex())
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()
-        tvStartDateTimeDisplay.setText(
-            CRMAppUtil.getDBDate(
-                CRMAppUtil.getDBDateObj(
-                    Integer.parseInt(newstartDate[0]),
-                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                    hourStartDate, minuteStartDate
-                ), DATE_FORMAT_TO_DISPLAY
-            )
+        binding.tvStartDateTimeDisplay.text = CRMAppUtil.getDBDate(
+            CRMAppUtil.getDBDateObj(
+                Integer.parseInt(newStartDate[0]),
+                Integer.parseInt(newStartDate[1]), Integer.parseInt(newStartDate[2]),
+                hourStartDate, minuteStartDate
+            ), DATE_FORMAT_TO_DISPLAY
         )
 
         val meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute)
@@ -1150,24 +1165,26 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
             minuteEndDate
         )
         val startDate = CRMAppUtil.getDBDateObj(
-            Integer.parseInt(newstartDate[0]),
-            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+            Integer.parseInt(newStartDate[0]),
+            Integer.parseInt(newStartDate[1]), Integer.parseInt(newStartDate[2]),
             hourStartDate, minuteStartDate
         )
-        if (startDate.before(endDate)) {
-          tvEndDateError.setVisibility(View.GONE)
+        when {
+          startDate.before(endDate) -> binding.tvEndDateError.visibility = View.GONE
         }
 
-        if (meetingDate.time > startDate.time) {
-          Toast.makeText(activity, START_TIME_ERROR, Toast.LENGTH_SHORT)
-              .show()
-        } else {
-          dialogDateTime!!.dismiss()
-          tvStartDateError.visibility = View.GONE
-          dialogDateTime!!.dismiss()
+        when {
+          meetingDate.time > startDate.time -> Toast.makeText(
+              activity, START_TIME_ERROR, Toast.LENGTH_SHORT
+          ).show()
+          else -> {
+            dialogDateTime!!.dismiss()
+            binding.tvStartDateError.visibility = View.GONE
+            dialogDateTime!!.dismiss()
+          }
         }
       } catch (e: Exception) {
-        Timber.d(e, TAG)
+        Timber.d(e)
       }
     }
 
@@ -1200,7 +1217,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
         dpFromDateEndTime.init(
             Integer.parseInt(dateSplit[0]),
             Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2])
-        ) { view, year, monthOfYear, dayOfMonth ->
+        ) { _, year, monthOfYear, dayOfMonth ->
           mainFromDateEndDate =
             year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
           currentYearEndDate = year
@@ -1212,18 +1229,17 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       }
     }
 
-    if (mainFromDateEndDate == null) {
-      dpFromDateEndTime.init(
+    when (mainFromDateEndDate) {
+      null -> dpFromDateEndTime.init(
           today!!.get(Calendar.YEAR), today!!.get(Calendar.MONTH),
           today!!.get(Calendar.DATE)
-      ) { view, year, monthOfYear, dayOfMonth ->
+      ) { _, year, monthOfYear, dayOfMonth ->
         mainFromDateEndDate =
           year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
         currentYearEndDate = year
         monthEndDate = monthOfYear + 1
         dayEndDate = dayOfMonth
       }
-
     }
 
     val timePicker = dialogDateTime!!.findViewById<TimePicker>(R.id.timePicker)
@@ -1254,9 +1270,9 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
             minuteEndDate
         )
       }
-      val splitstartDate = stringArray(tvStartDateTime.text.toString())
+      val splitStartDate = stringArray(tvStartDateTime.text.toString())
       try {
-        val newstartDate = splitstartDate.split("-".toRegex())
+        val newStartDate = splitStartDate.split("-".toRegex())
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()
         val splitEndDate = stringArray(tvEndDateTime.text.toString())
@@ -1279,19 +1295,20 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
             minuteEndDate
         )
         val startDate = CRMAppUtil.getDBDateObj(
-            Integer.parseInt(newstartDate[0]),
-            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+            Integer.parseInt(newStartDate[0]),
+            Integer.parseInt(newStartDate[1]), Integer.parseInt(newStartDate[2]),
             hourStartDate, minuteStartDate
         )
-        if (startDate.after(endDate)) {
-          Toast.makeText(activity, END_TIME_ERROR, Toast.LENGTH_SHORT)
+        when {
+          startDate.after(endDate) -> Toast.makeText(activity, END_TIME_ERROR, Toast.LENGTH_SHORT)
               .show()
-        } else {
-          dialogDateTime?.dismiss()
-          tvEndDateError.visibility = View.GONE
+          else -> {
+            dialogDateTime?.dismiss()
+            tvEndDateError.visibility = View.GONE
+          }
         }
-        if (endDate.time > startDate.time) {
-          tvEndDateError.visibility = View.GONE
+        when {
+          endDate.time > startDate.time -> tvEndDateError.visibility = View.GONE
         }
       } catch (e: Exception) {
         Timber.d(TAG)
@@ -1303,7 +1320,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   }
 
   fun prefix(input: Int): String {
-    return if (Integer.toString(input).length == 1) {
+    return if (input.toString().length == 1) {
       "0$input"
     } else input.toString() + ""
   }
