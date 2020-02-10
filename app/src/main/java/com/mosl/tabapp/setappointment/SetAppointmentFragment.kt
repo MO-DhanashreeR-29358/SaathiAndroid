@@ -201,12 +201,12 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   private fun renderLeadView(uiModel: UiModel<LeadViewItem>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    uiModel.error?.let {
+      showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+
+
+    uiModel.data?.let { data ->
       val leadId = stringOrEmpty(data.leadID.toString())
       val branchCode = stringOrEmpty(data.branchcode)
       val contact = data.contact
@@ -245,12 +245,11 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   private fun renderClientImage(uiModel: UiModel<SaathiCommonResponse<String>>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+
+    uiModel.data?.let {
       val response = it.response
       val byt = Base64.decode(response, Base64.DEFAULT)
       if (byt != null) {
@@ -278,12 +277,11 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   private fun renderClientDetails(uiModel: UiModel<ClientDetailItem>) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+
+    uiModel.data?.let {
       ClientDetail(it)
       binding.includeLmsTopSectionUpdate.tvLeadId.text = ClientDetail.getLeadId()
       binding.includeLmsTopSectionUpdate.tvCurrentStage.text = ClientDetail.getCurrentStage()
@@ -389,16 +387,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       arrSelectProduct.clear()
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let { data ->
       arrSelectProduct.clear()
       arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
-      for (i in it.indices) {
+      for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
@@ -437,17 +433,15 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       arrSelectWeekDay.clear()
       showOnFailurePopup(it)
     }
 
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let { data ->
       arrSelectWeekDay.clear()
       arrSelectWeekDay.add(RowData(0, "-1", SELECT_WEEK_DAYS))
-      for (i in it.indices) {
+      for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
@@ -500,16 +494,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       arrActivityType.clear()
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let { data ->
       arrActivityType.clear()
       arrActivityType.add(RowData(0, "-1", SELECT_ACTIVITY_TYPE))
-      for (i in it.indices) {
+      for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
@@ -560,16 +552,14 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    error?.let {
+    uiModel.error?.let {
       arrRepeatMode.clear()
       showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    data?.let {
+    uiModel.data?.let { data ->
       arrRepeatMode.clear()
       arrRepeatMode.add(RowData(0, "-1", "Repeat On"))
-      for (i in it.indices) {
+      for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
         val lookUpId = stringOrEmpty(lookUpid.toString())
         val lookUpName = stringOrEmpty(lookUpName1)
