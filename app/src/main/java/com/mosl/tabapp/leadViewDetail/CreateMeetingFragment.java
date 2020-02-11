@@ -163,7 +163,7 @@ import static java.lang.String.format;
 
 public class CreateMeetingFragment extends CommonFragment
         implements View.OnClickListener, TextView.OnEditorActionListener,
-        FusedLocation.LatLongDispatcher {
+        FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
     final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
@@ -231,7 +231,7 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
     private Button btnSendOtp;
-    public static Boolean isSendOtpSuccessful = false;
+    private Boolean isSendOtpSuccessful = false;
 
     @Override
     protected int getLayout() {
@@ -245,7 +245,6 @@ public class CreateMeetingFragment extends CommonFragment
         View createMeetingView = super.onCreateView(inflater, container, savedInstanceState);
         container.post(() -> setAppTitle("Create Meeting"));
         setUpView(createMeetingView);
-        isSendOtpSuccessful = false;
         startLocationUpdates();
         try {
             leadId = this.getArguments().getString(LEAD_ID, "0");
@@ -267,12 +266,13 @@ public class CreateMeetingFragment extends CommonFragment
     }
 
     private void setVisibilityOTP(Boolean status) {
-        if (status) {
-            btnSendOtp.setVisibility(View.VISIBLE);
-        } else {
-            btnSendOtp.setVisibility(View.GONE);
+        if (userManager.getUser().isRM()) {
+            if (status) {
+                btnSendOtp.setVisibility(View.VISIBLE);
+            } else {
+                btnSendOtp.setVisibility(View.GONE);
+            }
         }
-
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -774,6 +774,8 @@ public class CreateMeetingFragment extends CommonFragment
         }
         String data = uiModel.data;
         if (data != null) {
+            Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
+                    .show();
             btnSendOtp.setText(R.string.btn_label_verify_otp);
         }
     }
@@ -795,21 +797,26 @@ public class CreateMeetingFragment extends CommonFragment
             } else if (id == R.id.tvActionables) {
                 toggleSectionExpansion(llActionables, tvActionables);
             } else if (id == R.id.btnSendOtp) {
-                if (btnSendOtp.getText().equals(SEND_OTP_LABLE)) {
-                    if (checkPermission()) {
-                        if (mCurrentLocation != null) {
-                            sendOTPRequest();
-                        } else {
-                            fusedLocation.LocationUpdates();
+                if (isSendOtpSuccessful) {
+                    Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG).show();
+                } else {
+                    if (btnSendOtp.getText().equals(SEND_OTP_LABLE)) {
+                        if (checkPermission()) {
+                            if (mCurrentLocation != null) {
+                                sendOTPRequest();
+                            } else {
+                                fusedLocation.LocationUpdates();
+                            }
                         }
-                    }
-                } else if (btnSendOtp.getText().equals(VERIFY_OTP_LABLE)) {
-                    FragmentTransaction ft =
-                            requireActivity().getSupportFragmentManager().beginTransaction();
+                    } else if (btnSendOtp.getText().equals(VERIFY_OTP_LABLE)) {
+                        FragmentTransaction ft =
+                                requireActivity().getSupportFragmentManager().beginTransaction();
 
-                    OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
-                    dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
-                    dialogFragment.show(ft, "");
+                        OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
+                        dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+                        dialogFragment.setListener(this);
+                        dialogFragment.show(ft, "");
+                    }
                 }
             } else if (id == R.id.btnReset) {
                 resetData();
@@ -2164,6 +2171,11 @@ public class CreateMeetingFragment extends CommonFragment
     @Override
     public void onLatLongChanged(Location location) {
         mCurrentLocation = location;
+    }
+
+    @Override
+    public void onSuccessResult(boolean status) {
+        isSendOtpSuccessful = status;
     }
 
     public class AttendeeAdapter extends BaseAdapter implements Filterable {

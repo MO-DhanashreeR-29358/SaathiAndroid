@@ -23,7 +23,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.FragmentOtpBinding
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.OTPContract
 import com.mosl.tabapp.ui.MSFDialog
 import io.reactivex.disposables.Disposable
@@ -45,7 +44,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
     lateinit var saathiApi: SaathiApi
 
     private lateinit var navigator: Navigator
-
+    private lateinit var callBack: OTPDialogListener;
 
     var leadId = "0"
     var mUCID = "0"
@@ -115,7 +114,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
-            Toast.makeText(requireContext(), "Resend OTP Successfully", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "Resend OTP successfully", Toast.LENGTH_SHORT)
                 .show()
         }
 
@@ -138,18 +137,22 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         }
     }
 
+    fun setListener(callBack: OTPDialogListener) {
+        this.callBack = callBack
+    }
+
     override fun renderOTPSubmit(uiModel: UiModel<String>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
-            CreateMeetingFragment.isSendOtpSuccessful = false
+            callBack.onSuccessResult(false)
             showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
-            CreateMeetingFragment.isSendOtpSuccessful = true
-            Toast.makeText(requireContext(), "Verify OTP Successfully", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "Verify OTP successfully", Toast.LENGTH_SHORT)
                 .show()
+            callBack.onSuccessResult(true)
             dialog?.dismiss()
         }
     }
@@ -231,6 +234,10 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
                 arguments = args
             }
         }
+    }
+
+    interface OTPDialogListener {
+        fun onSuccessResult(status: Boolean)
     }
 
 }
