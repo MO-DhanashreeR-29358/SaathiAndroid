@@ -2,29 +2,36 @@ package com.mosl.tabapp.leadViewDetail.activity
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnClickListener
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mosl.app.core.rx.applyUiModel
-import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
+import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.tabapp.R
-import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.FragLeadActivitiesBinding
+import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
 import com.mosl.tabapp.model.LeadActivitiesAppointModel
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.ViewHolder
 import java.util.ArrayList
+import javax.inject.Inject
 
-class LeadViewActivitiesFragment : CommonFragment(), OnClickListener {
+class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
 
-  private lateinit var binding: FragLeadActivitiesBinding
+  private lateinit var binding: FragmentLeadActivitiesBinding
+
+  @Inject
+  internal lateinit var presenter: LeadViewActivitiesPresenter
+
+  private lateinit var appointmentSection: DataManagerSection
+  private lateinit var meetingSection: DataManagerSection
 
   private val appointmentList = ArrayList<LeadActivitiesAppointModel>()
   private val meetingList = ArrayList<LeadActivitiesMeetingModel>()
 
   override fun getLayout(): Int {
-    return R.layout.frag_lead_activities
+    return R.layout.fragment_lead_activities
   }
 
   override fun onViewCreated(
@@ -32,31 +39,16 @@ class LeadViewActivitiesFragment : CommonFragment(), OnClickListener {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragLeadActivitiesBinding.bind(view)
+    binding = FragmentLeadActivitiesBinding.bind(view)
+    setUpRecyclerView()
   }
 
-  override fun onClick(v: View) {
-    when (view?.id) {
-      R.id.tvAppointment -> toggleSectionExpansion(binding.llAppointment, binding.tvAppointment)
-      R.id.tvMeeting -> toggleSectionExpansion(binding.llMeeting, binding.tvMeeting)
+  private fun setUpRecyclerView() {
+    appointmentSection = DataManagerSection(onRetryClick)
+    val groupAdapter = GroupAdapter<ViewHolder>().apply {
+      add(appointmentSection)
     }
 
-  }
-
-  private fun deleteAppintments(
-    meetingId: String,
-    url: String
-  ) {
-    //login parameters
-    when {
-      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
-        val request = DeleteAppointmentRequest(meetingId)
-        compositeDisposable.add(saathiApi.deleteAppointments(url, request)
-            .compose(applyUiModel<String>())
-            .subscribe { uiModel -> renderDeleteAppointments(uiModel, meetingId) })
-      }
-      else -> noInternetConnectionDialog()
-    }
   }
 
   companion object {
@@ -86,9 +78,35 @@ class LeadViewActivitiesFragment : CommonFragment(), OnClickListener {
 
   private class AppointmentAdapter(
     val appointmentList: List<LeadActivitiesAppointModel>
-  ) : RecyclerView.Adapter<AppointmentAdapter.> {
+  ) : RecyclerView.Adapter<AppointmentAdapter.MyViewHolder1>() {
 
-    class MyViewHolder() : RecyclerView.ViewHolder() {
+    override fun onCreateViewHolder(
+      parent: ViewGroup,
+      viewType: Int
+    ): MyViewHolder1 {
+      TODO(
+          "not implemented"
+      ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getItemCount(): Int {
+      TODO(
+          "not implemented"
+      ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onBindViewHolder(
+      holder: MyViewHolder1,
+      position: Int
+    ) {
+      TODO(
+          "not implemented"
+      ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    class MyViewHolder1(
+      val view: View
+    ) : RecyclerView.ViewHolder(view) {
 
     }
 

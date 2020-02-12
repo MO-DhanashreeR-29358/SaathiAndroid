@@ -30,11 +30,11 @@ import com.mosl.tabapp.leadViewDetail.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
+import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -49,7 +49,7 @@ import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-@Module
+@Module(includes = [LeadViewDetailFragmentProvider::class])
 abstract class FragmentProvider {
 
   @ContributesAndroidInjector
@@ -86,13 +86,13 @@ abstract class FragmentProvider {
   abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
 
   @ContributesAndroidInjector(modules = [AuLeadsModule::class])
-    abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
+  abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
 
-    @ContributesAndroidInjector(modules = [BannerModule::class])
-    abstract fun provideBannerFragmentFactory(): BannerFragment
+  @ContributesAndroidInjector(modules = [BannerModule::class])
+  abstract fun provideBannerFragmentFactory(): BannerFragment
 
-    @ContributesAndroidInjector(modules = [AuTargetModule::class])
-    abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetFragment
+  @ContributesAndroidInjector(modules = [AuTargetModule::class])
+  abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetFragment
 
   @ContributesAndroidInjector
   abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
@@ -144,9 +144,6 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
-
-  @ContributesAndroidInjector
-  abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
 
   @ContributesAndroidInjector
   abstract fun provideLeadProfilingFactory(): LeadProfilingFragment

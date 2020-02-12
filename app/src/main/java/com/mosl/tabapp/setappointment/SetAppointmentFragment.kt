@@ -32,6 +32,7 @@ import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
@@ -202,7 +203,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   private fun renderLeadView(uiModel: UiModel<LeadViewItem>) {
     toggleProgress(uiModel.inProgress)
 
-    uiModel.error?.let {
+    uiModel.onFailure {
       showOnFailurePopup(it)
     }
 
