@@ -2,16 +2,20 @@ package com.mosl.tabapp.leadViewDetail.activity
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
+import com.mosl.commons.data.UiModel
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
+import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
+import com.mosl.tabapp.leadViewDetail.activity.item.SingleTextItem
 import com.mosl.tabapp.model.LeadActivitiesAppointModel
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel
+import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.util.ArrayList
@@ -23,6 +27,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
 
   @Inject
   internal lateinit var presenter: LeadViewActivitiesPresenter
+
+  private var pager: ViewPager? = null
 
   private lateinit var appointmentSection: DataManagerSection
   private lateinit var meetingSection: DataManagerSection
@@ -43,11 +49,38 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     setUpRecyclerView()
   }
 
+  override fun render(uiModel: UiModel<String>) {
+
+  }
+
+  fun setViewPager(viewPager: ViewPager) {
+    pager = viewPager
+  }
+
   private fun setUpRecyclerView() {
     appointmentSection = DataManagerSection(onRetryClick)
     val groupAdapter = GroupAdapter<ViewHolder>().apply {
       add(appointmentSection)
+      add(meetingSection)
     }
+
+    binding.rvActivities.apply {
+      layoutManager = LinearLayoutManager(requireContext())
+      adapter = groupAdapter
+      setHasFixedSize(true)
+    }
+
+    appointmentSection.update(listOf(
+        ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
+          add(SingleTextItem("No Appointment data"))
+        }
+    ))
+
+    meetingSection.update(listOf(
+        ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
+          add(SingleTextItem("No Meeting data"))
+        }
+    ))
 
   }
 
@@ -74,42 +107,6 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
         arguments = args
       }
     }
-  }
-
-  private class AppointmentAdapter(
-    val appointmentList: List<LeadActivitiesAppointModel>
-  ) : RecyclerView.Adapter<AppointmentAdapter.MyViewHolder1>() {
-
-    override fun onCreateViewHolder(
-      parent: ViewGroup,
-      viewType: Int
-    ): MyViewHolder1 {
-      TODO(
-          "not implemented"
-      ) //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getItemCount(): Int {
-      TODO(
-          "not implemented"
-      ) //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onBindViewHolder(
-      holder: MyViewHolder1,
-      position: Int
-    ) {
-      TODO(
-          "not implemented"
-      ) //To change body of created functions use File | Settings | File Templates.
-    }
-
-    class MyViewHolder1(
-      val view: View
-    ) : RecyclerView.ViewHolder(view) {
-
-    }
-
   }
 
 }

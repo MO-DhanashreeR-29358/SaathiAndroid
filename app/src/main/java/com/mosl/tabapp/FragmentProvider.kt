@@ -28,7 +28,6 @@ import com.mosl.tabapp.dashboard.ausfb.target.AuTargetModule
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
@@ -141,9 +140,6 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
-
-  @ContributesAndroidInjector
-  abstract fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
 
   @ContributesAndroidInjector
   abstract fun provideLeadProfilingFactory(): LeadProfilingFragment
