@@ -107,7 +107,7 @@
                             android:layout_width="@dimen/_1sdp"
                             android:layout_height="@dimen/_15sdp"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:background="@color/calendar_gray"></View>
+                            android:background="@color/calendar_gray" />
 
                         <TextView
                             android:id="@+id/tvAttFirstName"
@@ -152,7 +152,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
-            android:background="#e4e4e4"></View>
+            android:background="#e4e4e4" />
 
 
     </LinearLayout>
