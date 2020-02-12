@@ -45,8 +45,7 @@ data class User(
 
     fun isRM(): Boolean {
         currentBusinessProfile.businessProfileName.apply {
-            return this.equals("Sales") || this.equals("PCG Advisor") || this.equals("PCG Sales")
-                    || this.equals("Retail Advisor")
+            return this.equals("Sales") || this.equals("Retail Advisor")
         }
     }
 

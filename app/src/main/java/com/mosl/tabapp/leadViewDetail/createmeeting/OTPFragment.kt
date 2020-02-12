@@ -17,6 +17,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.navigator.Navigator
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.lead.SubmitOTPResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.tabapp.R
@@ -28,6 +29,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 /**
@@ -48,6 +50,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     var leadId = "0"
     var mUCID = "0"
+    var randomInt = 0
     private val otpEvent = PublishSubject.create<Boolean>()
     override fun getLayout(): Int {
         return R.layout.fragment_otp
@@ -122,12 +125,13 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     private fun submitOtp() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-
+            randomInt = Random.nextInt()
             val request = PostOTPForMeetingRequest(
                 employeeCode = userManager.getUser()!!.employeeCode.toInt(),
                 leadId = leadId,
                 uCID = mUCID,
-                oTP = binding.etOtp.text.toString()
+                oTP = binding.etOtp.text.toString(),
+                payLoad = randomInt
             )
             val disposable: Disposable = saathiApi.postOtpForMeeting(request)
                 .compose(applyUiModel())
@@ -141,7 +145,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         this.callBack = callBack
     }
 
-    override fun renderOTPSubmit(uiModel: UiModel<String>) {
+    override fun renderOTPSubmit(uiModel: UiModel<SubmitOTPResponse>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
@@ -150,10 +154,17 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         }
 
         uiModel.onSuccess {
-            Toast.makeText(requireContext(), "Verify OTP successfully", Toast.LENGTH_SHORT)
-                .show()
-            callBack.onSuccessResult(true)
-            dialog?.dismiss()
+            if (it.payLoad.toInt() == randomInt) {
+                Toast.makeText(requireContext(), "Verify OTP successfully", Toast.LENGTH_SHORT)
+                    .show()
+                callBack.onSuccessResult(true)
+                dialog?.dismiss()
+            } else {
+                Toast.makeText(requireContext(), "OTP is invalid", Toast.LENGTH_SHORT)
+                    .show()
+                callBack.onSuccessResult(false)
+                dialog?.dismiss()
+            }
         }
     }
 
