@@ -58,6 +58,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
 
   private fun setUpRecyclerView() {
     appointmentSection = DataManagerSection(onRetryClick)
+    meetingSection = DataManagerSection(onRetryClick)
     val groupAdapter = GroupAdapter<ViewHolder>().apply {
       add(appointmentSection)
       add(meetingSection)
