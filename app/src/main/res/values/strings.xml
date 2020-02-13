@@ -129,7 +129,7 @@
     <string name="str_assing">Assign To</string>
     <string name="str_search">Search</string>
     <string name="str_prod_spl">Product specialist</string>
-    <string name="text_hint_label_enter_meeting_description">Enter Meeting Description (Max Character 1000)</string>
+    <string name="text_hint_label_enter_meeting_description">Enter Meeting Description (Max Character 1000)*</string>
     <string name="text_label_meeting_date">Meeting Date*</string>
     <string name="text_label_meeting_type">Meeting Type*</string>
     <string name="text_label_meeting_duration">Meeting Duration*</string>

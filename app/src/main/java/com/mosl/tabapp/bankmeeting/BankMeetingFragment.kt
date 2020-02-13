@@ -7,7 +7,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable.Factory
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.databinding.DataBindingUtil
@@ -246,10 +249,10 @@ class BankMeetingFragment : CommonFragment() {
     }
 
     private fun searchDialog() {
-        activity!!.window
-            .setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-            )
+//        activity!!.window
+//            .setSoftInputMode(
+//                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+//            )
         val searchList = CustomListPickerDialog(requireContext())
         searchList.threshold = MOSLConstants.SEARCH_LENTH
         searchList.show()

@@ -30,14 +30,13 @@
                 android:paddingLeft="5dp" />-->
             <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
                 android:id="@+id/etSearchAttendee"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:autoText="false"
                 android:background="@android:color/transparent"
                 android:hint="@string/ATTENDEE_SEARCH_HINT_TXT"
                 android:inputType="textAutoComplete|textAutoCorrect"
-                android:paddingLeft="5dp" />
+                android:paddingStart="5dp" />
 
             <ProgressBar
                 android:id="@+id/pbLoadingIndicator"
@@ -45,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:visibility="gone" />
 
             <ImageButton
@@ -53,8 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/search" />
 
