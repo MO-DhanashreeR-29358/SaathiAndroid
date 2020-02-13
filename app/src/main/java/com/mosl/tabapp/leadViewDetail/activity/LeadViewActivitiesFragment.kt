@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.tabapp.R
@@ -46,6 +47,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentLeadActivitiesBinding.bind(view)
     setUpRecyclerView()
+    presenter.start()
+    dataActionSubject.onNext(Fetch)
   }
 
   override fun render(uiModel: UiModel<String>) {
