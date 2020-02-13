@@ -6,7 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
+import com.mosl.mobile.domain.leadviewdetail.activities.ActivityData
+import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
@@ -51,7 +55,24 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     dataActionSubject.onNext(Fetch)
   }
 
-  override fun render(uiModel: UiModel<String>) {
+  override fun getActivityRequest(): ActivityRequest {
+    return ActivityRequest(
+        leadId = leadId,
+        ucid = mUcid
+    )
+  }
+
+  override fun render(uiModel: UiModel<ActivityData>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+
+    }
+
 
   }
 

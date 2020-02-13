@@ -1,7 +1,5 @@
 package com.mosl.mobile.domain.leadviewdetail.activities
 
-import java.util.Date
-
 data class ActivityData(
   @JvmField val listOfAppointment: List<Appointment>,
   @JvmField val listOfMeeting: List<Meeting>
@@ -24,7 +22,7 @@ data class Appointment(
   @JvmField val activityType: String,
   @JvmField val time: String,
   @JvmField val statusName: String,
-  @JvmField val date: Date,
+  @JvmField val date: String,
   @JvmField val leadId: String,
   @JvmField val repeatOnCode: String,
   @JvmField val ucid: String
@@ -52,7 +50,7 @@ data class Meeting(
   @JvmField val activityType: String,
   @JvmField val time: String,
   @JvmField val statusName: String,
-  @JvmField val date: Date,
+  @JvmField val date: String,
   @JvmField val leadId: String,
   @JvmField val meetingDuration: String,
   @JvmField val pincode: String,

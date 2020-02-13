@@ -1,13 +1,13 @@
 package com.mosl.tabapp.leadViewDetail.activity.item
 
+import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ListMeetingsBinding
-import com.mosl.tabapp.model.LeadActivitiesMeetingModel
 import com.xwray.groupie.databinding.BindableItem
 import timber.log.Timber
 
 class LeadViewActivitiesMeetingChildItem(
-  private val data: LeadActivitiesMeetingModel
+  private val data: Meeting
 ) : BindableItem<ListMeetingsBinding>() {
 
   override fun getLayout(): Int {
@@ -29,7 +29,7 @@ class LeadViewActivitiesMeetingChildItem(
       }
 
       tvTimeRange.text = data.time
-      tvAttFirstName.text = data.attendeeEmp
+      tvAttFirstName.text = data.attendeeEmployee
       tvAppointmentType.text = data.meetingReason
 
     }
