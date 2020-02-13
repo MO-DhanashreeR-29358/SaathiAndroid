@@ -14,9 +14,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.google.android.material.tabs.TabLayout;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -35,18 +33,15 @@ import com.mosl.tabapp.common.LockedViewPager;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.core.EkycModule;
 import com.mosl.tabapp.ekyc.EkycNavigator;
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITIES;
@@ -150,7 +145,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         }
         String[] headingClient = new String[5];
         LeadViewDetailFragment leadViewDetailFragment;
-        LeadViewActivitiesFragment leadViewActivitieFragment;
+        LeadViewActivitiesFragment leadViewActivitiesFragment;
         LeadViewHistoryFragment leadViewHistoryFragment;
         LeadViewInteractionFragment leadViewInteractionFragment;
         pageListLeadView = new ArrayList<>();
@@ -161,19 +156,19 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             headingClient[3] = MAPPING_INTERACTION;
             leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
                     this.getArguments().getString(LEAD_ID), mUCID);
-            leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
-                    this.getArguments().getString(LEAD_ID), mUCID);
+            leadViewActivitiesFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
+                getArguments().getString(LEAD_ID, "0"), mUCID);
             leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(2, MAPPING_HISTORY,
                     this.getArguments().getString(LEAD_ID), mUCID);
             leadViewInteractionFragment =
                     LeadViewInteractionFragment.newInstance(3, MAPPING_INTERACTION,
                             this.getArguments().getString(LEAD_ID), mUCID);
             leadViewDetailFragment.setViewPager(vpLeadView);
-            leadViewActivitieFragment.setViewPager(vpLeadView);
+            leadViewActivitiesFragment.setViewPager(vpLeadView);
             leadViewHistoryFragment.setViewPager(vpLeadView);
             leadViewInteractionFragment.setViewPager(vpLeadView);
             pageListLeadView.add(leadViewDetailFragment);
-            pageListLeadView.add(leadViewActivitieFragment);
+            pageListLeadView.add(leadViewActivitiesFragment);
             pageListLeadView.add(leadViewHistoryFragment);
             pageListLeadView.add(leadViewInteractionFragment);
             indicatorLeadView.setTabMode(TabLayout.MODE_FIXED);
@@ -184,7 +179,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             headingClient[3] = MAPPING_HISTORY;
             headingClient[4] = MAPPING_INTERACTION;
             leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS, leadId, mUCID);
-            leadViewActivitieFragment =
+            leadViewActivitiesFragment =
                     LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
             LeadProfilingFragment leadViewProfilingFragment =
                     LeadProfilingFragment.newInstance(2, PROFILING, leadId);
@@ -193,12 +188,12 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             leadViewInteractionFragment =
                     LeadViewInteractionFragment.newInstance(4, MAPPING_INTERACTION, leadId, mUCID);
             leadViewDetailFragment.setViewPager(vpLeadView);
-            leadViewActivitieFragment.setViewPager(vpLeadView);
+            leadViewActivitiesFragment.setViewPager(vpLeadView);
             leadViewProfilingFragment.setViewPager(vpLeadView);
             leadViewHistoryFragment.setViewPager(vpLeadView);
             leadViewInteractionFragment.setViewPager(vpLeadView);
             pageListLeadView.add(leadViewDetailFragment);
-            pageListLeadView.add(leadViewActivitieFragment);
+            pageListLeadView.add(leadViewActivitiesFragment);
             pageListLeadView.add(leadViewProfilingFragment);
             pageListLeadView.add(leadViewHistoryFragment);
             pageListLeadView.add(leadViewInteractionFragment);

@@ -10,7 +10,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
 import com.mosl.tabapp.leadViewDetail.activity.item.SingleTextItem
 import com.mosl.tabapp.model.LeadActivitiesAppointModel
@@ -88,7 +87,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     var leadId = "0"
     var mUcid = "0"
 
-    fun newInstance(
+    @JvmStatic
+    public fun newInstance(
       position: Int,
       type: String,
       leadID: String,
