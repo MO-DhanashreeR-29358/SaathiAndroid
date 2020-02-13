@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.leadviewdetail.activities
 
+import com.mosl.app.core.data.util.safeMap
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
 import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
@@ -47,9 +48,65 @@ fun ActivityRequest.mapToMeetingRequest(): MeetingRequest {
 }
 
 fun List<AppointmentResponse>.mapToListOfAppointment(): List<Appointment> {
+  return safeMap {
+    it.mapToAppointment()
+  }
 
 }
 
 fun List<MeetingResponse>.mapToListOfMeeting(): List<Meeting> {
+  return safeMap {
+    it.mapToMeeting()
+  }
+}
 
+private fun AppointmentResponse.mapToAppointment(): Appointment {
+  return Appointment(
+      mobileNumber = mOBNO,
+      product = product,
+      email = eMAIL,
+      name = name,
+      attendeeEmployee = attendeeEmp,
+      meetingId = meetingID,
+      status = status,
+      createdBy = createdBy,
+      activityType = activityType,
+      time = tIME,
+      statusName = statusName,
+      date = dATE,
+      leadId = leadID,
+      repeatOnCode = repeatOnCode,
+      ucid = ucid
+  )
+}
+
+private fun MeetingResponse.mapToMeeting(): Meeting {
+  return Meeting(
+      mobileNumber = mOBNO,
+      category = category,
+      actionable = actionable,
+      product = product,
+      email = eMAIL,
+      name = name,
+      attendeeEmployee = attendeeEmp,
+      travellingMode = travellingMode,
+      meetingAddress = meetingAddress,
+      meetingId = meetingID,
+      stage = stage,
+      meetingAddressType = meetingAddressType,
+      customerServiceRemark = customerServiceRemark,
+      meetingReason = meetingReason,
+      status = status,
+      queryDescription = queryDesc,
+      comment = comments,
+      amount = amount,
+      activityType = activityType,
+      time = tIME,
+      statusName = statusName,
+      date = dATE,
+      leadId = leadID,
+      meetingDuration = meetingDuration,
+      pincode = pincode,
+      location = location
+  )
 }
