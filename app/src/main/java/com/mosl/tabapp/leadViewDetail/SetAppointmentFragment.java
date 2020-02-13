@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -31,6 +30,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -60,6 +60,7 @@ import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,13 +69,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import timber.log.Timber;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.R.string.motilal_oswal;
 import static com.mosl.tabapp.R.string.txt_label_reschedule_appointment;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -153,99 +156,7 @@ public class SetAppointmentFragment extends CommonFragment
     private String mUCID = "0";
     private TextView tvStartDateError, tvEndDateError;
     private TextView tvAPPDateError;
-    private AdapterView.OnItemSelectedListener selectProductListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvProductTypeSpError.setVisibility(View.GONE);
 
-                        productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    //weekDayCodeStr,weekDayNameStr
-    private AdapterView.OnItemSelectedListener selectWeekDayListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvRepeatWeekdayError.setVisibility(View.GONE);
-                        weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectActivityTypeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
-                        tvActivityTypeError.setVisibility(View.GONE);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    //endregion
-    //region DropDown listner
-    private AdapterView.OnItemSelectedListener selectWeekListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        tvRepeatTypeSpError.setVisibility(View.GONE);
-                        weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
-    private AdapterView.OnItemSelectedListener selectRepeteModeListener =
-            new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-
-                        if (position > 0) {
-                            llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
-                        } else {
-                            llRepeteOnDaysPannel.setVisibility(View.GONE);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            };
 
     //endregion
     //deos dedup on list
@@ -282,7 +193,7 @@ public class SetAppointmentFragment extends CommonFragment
         View setAppointmentView = super.onCreateView(inflater, container, savedInstanceState);
         container.post(() -> setAppTitle("Set Appointment"));
         try {
-            mUCID = Objects.requireNonNull(this.getArguments())
+            mUCID = this.getArguments()
                     .getString(UCID, "0")
                     .equalsIgnoreCase("") ? "0"
                     : this.getArguments().getString(UCID, "0");
@@ -291,7 +202,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (meetingId != null && !meetingId.equalsIgnoreCase("0")) {
                 //Editt mode
                 createMode = false;
-                getAppointmentDetailsFromServer(meetingId);
+                getAppointmentDetailsFromServer();
             } else {
                 //Create mode
                 selectProduct("");
@@ -303,7 +214,7 @@ public class SetAppointmentFragment extends CommonFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setUpView(Objects.requireNonNull(setAppointmentView));
+        setUpView(setAppointmentView);
         if (!mUCID.equalsIgnoreCase("0")) {
             getClientDetail(mUCID);
             setProfileImage(mUCID);
@@ -313,6 +224,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         return setAppointmentView;
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void setUpView(View setAppointmentView) {
@@ -390,6 +302,65 @@ public class SetAppointmentFragment extends CommonFragment
             tvNewAppointment.setText(getString(txt_label_reschedule_appointment));
         }
     }
+
+    private void setProductListener() {
+        disposable.add(
+                itemSelections(spSelectProduct)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvProductTypeSpError.setVisibility(View.GONE);
+                            productCodeStr = ((RowData) spSelectProduct.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setWeekDayListener() {
+        disposable.add(
+                itemSelections(spSelectWeekDay)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvRepeatWeekdayError.setVisibility(View.GONE);
+                            weekDayCodeStr = ((RowData) spSelectWeekDay.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setActivityTypeListener() {
+        disposable.add(
+                itemSelections(spActivityType)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            activityTypeCodeStr = ((RowData) spActivityType.getSelectedItem()).getKey();
+                            tvActivityTypeError.setVisibility(View.GONE);
+                        }));
+    }
+
+    private void setRepeatWeekListener() {
+        disposable.add(
+                itemSelections(spRepeateWeek)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(xyz -> {
+                            tvRepeatTypeSpError.setVisibility(View.GONE);
+                            weekCodeStr = ((RowData) spRepeateWeek.getSelectedItem()).getKey();
+                        }));
+    }
+
+    private void setRepeatOnListener() {
+        disposable.add(
+                itemSelections(spRepeateOn)
+                        .filter(InvalidSelectionPredicate)
+                        .skip(1)
+                        .subscribe(position -> {
+                            if (position > 0) {
+                                llRepeteOnDaysPannel.setVisibility(View.VISIBLE);
+                            } else {
+                                llRepeteOnDaysPannel.setVisibility(View.GONE);
+                            }
+                        }));
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -573,18 +544,14 @@ public class SetAppointmentFragment extends CommonFragment
             MSFDialog.alertDialog(getActivity(), 0,
                     getResources().getString(motilal_oswal),
                     (createMode) ? SET_APPOINTMENTS : UPDATE_APPOINTMENTS,
-                    "OK", true, new MSFDialog.DialogListener() {
-                        @Override
-                        public void alertDialogAction(
-                                MSFDialog.Action action, Object... data) {
-                            if (action == MSFDialog.Action.OK) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(LEAD_ID,
-                                        Objects.requireNonNull(getArguments()).getString(LEAD_ID));
-                                bundle.putString(UCID,
-                                        getArguments().getString(UCID));
-                                navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
-                            }
+                    "OK", true, (action, data1) -> {
+                        if (action == MSFDialog.Action.OK) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(LEAD_ID,
+                                    getArguments().getString(LEAD_ID));
+                            bundle.putString(UCID,
+                                    getArguments().getString(UCID));
+                            navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
                         }
                     });
         }
@@ -593,7 +560,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAddedSplAttendee() {
         final Dialog dialogAddedSplAttendee = new Dialog(requireContext());
         dialogAddedSplAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(Objects.requireNonNull(dialogAddedSplAttendee.getWindow()))
+        dialogAddedSplAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedSplAttendee.setContentView(R.layout.dialog_addedd_spl_attendee_list);
         dialogAddedSplAttendee.getWindow()
@@ -610,7 +577,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAddedAttendee() {
         final Dialog dialogAddedAttendee = new Dialog(requireContext());
         dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAddedAttendee.getWindow())
+        dialogAddedAttendee.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAddedAttendee.setContentView(R.layout.dialog_addedd_attendee_list);
         TextView tvEmpty = dialogAddedAttendee.findViewById(R.id.tvEmpty);
@@ -629,7 +596,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogAttendee() {
         final Dialog dialogAttendeeList = new Dialog(requireContext());
         dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogAttendeeList.getWindow())
+        dialogAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogAttendeeList.getWindow()
@@ -675,7 +642,7 @@ public class SetAppointmentFragment extends CommonFragment
     private void dialogSplAttendee() {
         final Dialog dialogSplAttendeeList = new Dialog(requireContext());
         dialogSplAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogSplAttendeeList.getWindow())
+        dialogSplAttendeeList.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogSplAttendeeList.setContentView(R.layout.dialog_attendee_list);
         dialogSplAttendeeList.getWindow()
@@ -825,10 +792,10 @@ public class SetAppointmentFragment extends CommonFragment
             String leadId = stringOrEmpty(valueOf(data.leadID));
             String branchCode = stringOrEmpty(data.branchcode);
             Contact contact = data.contact;
-            String name = stringOrEmpty(Objects.requireNonNull(contact).name);
+            String name = stringOrEmpty(contact.name);
 
             List<LeadProductMappingItem> leadProductMapping = data.leadProductMapping;
-            for (int i = 0; i < Objects.requireNonNull(leadProductMapping).size(); i++) {
+            for (int i = 0; i < leadProductMapping.size(); i++) {
                 LeadProductMappingItem item = leadProductMapping.get(i);
                 String clientCode = stringOrEmpty(item.clientCode);
                 String stageName = stringOrEmpty(item.stageName);
@@ -849,9 +816,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectProduct(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), INTERESTEDIN,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, INTERESTEDIN,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -880,13 +846,11 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectProduct.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectProduct = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectProduct);
-            arrAdapSelectProduct.setDropDownViewResource(
-                    R.layout.mdropdown);
+
+            ArrayAdapter<RowData> arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSelectProduct.setAdapter(arrAdapSelectProduct);
-            spSelectProduct.setOnItemSelectedListener(
-                    selectProductListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectProduct, spSelectProduct, arrSelectProduct);
+
             arrAdapSelectProduct.notifyDataSetChanged();
             arrAdapSelectProduct.setNotifyOnChange(true);
 
@@ -895,6 +859,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (productData != null) {
                 spSelectProduct.setSelection(productData.getPosition());
             }
+            setProductListener();
         }
     }
 
@@ -908,7 +873,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialogDateTime.setContentView(R.layout.date_picker);
@@ -923,15 +888,20 @@ public class SetAppointmentFragment extends CommonFragment
         btnSubmit = dialogDateTime.findViewById(R.id.btnSubmit);
         dpFromDate.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDate != null) {
-            String[] dateSplit = mainFromDate.split("-");
-            dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                    Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYear = year;
-                        month = monthOfYear + 1;
-                        day = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDate.split("-");
+                dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                        Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYear = year;
+                            month = monthOfYear + 1;
+                            day = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -972,11 +942,16 @@ public class SetAppointmentFragment extends CommonFragment
                 tvAPPDateError.setVisibility(View.GONE);
             }
             String meetingDate = stringArray(tvApppointmentDateTime.getText().toString());
-            String[] newstartDate = meetingDate.split("-");
-            tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
-                            minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+            try {
+                String[] newstartDate = meetingDate.split("-");
+                tvApppointmentDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
+                                minute), DATE_FORMAT_TO_DISPLAY));//Replaced with  T>> -
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
 
             dialogDateTime.dismiss();
             tvStartDateError.setVisibility(View.GONE);
@@ -990,7 +965,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
         dialogDateTime.getWindow()
@@ -1005,16 +980,20 @@ public class SetAppointmentFragment extends CommonFragment
 
         dpFromDateStartTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateStartDate != null) {
-            String[] dateSplit = mainFromDateStartDate.split("-");
-            dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]),
-                    Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDateStartDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYearStartDate = year;
-                        monthStartDate = monthOfYear + 1;
-                        dayStartDate = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDateStartDate.split("-");
+                dpFromDateStartTime.init(Integer.parseInt(dateSplit[0]),
+                        Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDateStartDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYearStartDate = year;
+                            monthStartDate = monthOfYear + 1;
+                            dayStartDate = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
         } else {
             dpFromDateStartTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -1053,31 +1032,35 @@ public class SetAppointmentFragment extends CommonFragment
                                 minuteStartDate));
             }
             String splitstartDate = stringArray(tvStartDateTime.getText().toString());
-            String[] newstartDate = splitstartDate.split("-");
-            String splitEndDate = stringArray(tvEndDateTime.getText().toString());
-            String[] newEndDate = splitEndDate.split("-");
-            tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                            Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                            hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
+            try {
+                String[] newstartDate = splitstartDate.split("-");
+                String splitEndDate = stringArray(tvEndDateTime.getText().toString());
+                String[] newEndDate = splitEndDate.split("-");
+                tvStartDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                                Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                                hourStartDate, minuteStartDate), DATE_FORMAT_TO_DISPLAY));
 
-            Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
-            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
-                    minuteEndDate);
-            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                    hourStartDate, minuteStartDate);
-            if (startDate.before(endDate)) {
-                tvEndDateError.setVisibility(View.GONE);
-            }
+                Date meetingDate = CRMAppUtil.getDBDateObj(currentYear, month, day, hour, minute);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                        Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                        minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                        hourStartDate, minuteStartDate);
+                if (startDate.before(endDate)) {
+                    tvEndDateError.setVisibility(View.GONE);
+                }
 
-            if (meetingDate.getTime() > startDate.getTime()) {
-                Toast.makeText(getActivity(), START_TIME_ERROR, Toast.LENGTH_SHORT).show();
-            } else {
-                dialogDateTime.dismiss();
-                tvStartDateError.setVisibility(View.GONE);
-                dialogDateTime.dismiss();
+                if (meetingDate.getTime() > startDate.getTime()) {
+                    Toast.makeText(getActivity(), START_TIME_ERROR, Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogDateTime.dismiss();
+                    tvStartDateError.setVisibility(View.GONE);
+                    dialogDateTime.dismiss();
+                }
+            } catch (Exception e) {
+                Timber.d(e, TAG);
             }
         });
 
@@ -1089,7 +1072,7 @@ public class SetAppointmentFragment extends CommonFragment
         today = Calendar.getInstance();
         dialogDateTime = new Dialog(requireContext());
         dialogDateTime.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Objects.requireNonNull(dialogDateTime.getWindow())
+        dialogDateTime.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialogDateTime.setContentView(R.layout.date_picker);
         dialogDateTime.getWindow()
@@ -1104,16 +1087,21 @@ public class SetAppointmentFragment extends CommonFragment
 
         dpFromDateEndTime.setMinDate(System.currentTimeMillis() - 1000);
         if (mainFromDateEndDate != null) {
-            String[] dateSplit = mainFromDateEndDate.split("-");
-            dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]),
-                    Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
-                    (view, year, monthOfYear, dayOfMonth) -> {
-                        mainFromDateEndDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
-                        currentYearEndDate = year;
-                        monthEndDate = monthOfYear + 1;
-                        dayEndDate = dayOfMonth;
-                    });
+            try {
+                String[] dateSplit = mainFromDateEndDate.split("-");
+                dpFromDateEndTime.init(Integer.parseInt(dateSplit[0]),
+                        Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[2]),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            mainFromDateEndDate =
+                                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth);
+                            currentYearEndDate = year;
+                            monthEndDate = monthOfYear + 1;
+                            dayEndDate = dayOfMonth;
+                        });
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
+
         } else {
             dpFromDateEndTime.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -1152,30 +1140,35 @@ public class SetAppointmentFragment extends CommonFragment
                                 minuteEndDate));
             }
             String splitstartDate = stringArray(tvStartDateTime.getText().toString());
-            String[] newstartDate = splitstartDate.split("-");
-            String splitEndDate = stringArray(tvEndDateTime.getText().toString());
-            String[] newEndDate = splitEndDate.split("-");
-            tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(
-                    CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                            Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]),
-                            hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
+            try {
+                String[] newstartDate = splitstartDate.split("-");
+                String splitEndDate = stringArray(tvEndDateTime.getText().toString());
+                String[] newEndDate = splitEndDate.split("-");
+                tvEndDateTimeDisplay.setText(CRMAppUtil.getDBDate(
+                        CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                                Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]),
+                                hourEndDate, minuteEndDate), DATE_FORMAT_TO_DISPLAY));
 
-            Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                    Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
-                    minuteEndDate);
-            Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
-                    Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
-                    hourStartDate, minuteStartDate);
+                Date endDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                        Integer.parseInt(newEndDate[1]), Integer.parseInt(newEndDate[2]), hourEndDate,
+                        minuteEndDate);
+                Date startDate = CRMAppUtil.getDBDateObj(Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]),
+                        hourStartDate, minuteStartDate);
+                if (startDate.after(endDate)) {
+                    Toast.makeText(getActivity(), END_TIME_ERROR, Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogDateTime.dismiss();
+                    tvEndDateError.setVisibility(View.GONE);
+                }
+                if (endDate.getTime() > startDate.getTime()) {
+                    tvEndDateError.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                Timber.d(e, TAG);
+            }
 
-            if (startDate.after(endDate)) {
-                Toast.makeText(getActivity(), END_TIME_ERROR, Toast.LENGTH_SHORT).show();
-            } else {
-                dialogDateTime.dismiss();
-                tvEndDateError.setVisibility(View.GONE);
-            }
-            if (endDate.getTime() > startDate.getTime()) {
-                tvEndDateError.setVisibility(View.GONE);
-            }
+
         });
 
         dialogDateTime.show();
@@ -1187,9 +1180,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectWeekDay(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), DAYS, null,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, DAYS, null,
                             null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1219,19 +1211,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectWeekDay.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectWeekDay = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectWeekDay);
-            arrAdapSelectWeekDay.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectWeekDay = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSelectWeekDay.setAdapter(arrAdapSelectWeekDay);
-            spSelectWeekDay.setOnItemSelectedListener(
-                    selectWeekDayListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectWeekDay, spSelectWeekDay, arrSelectWeekDay);
+
             arrAdapSelectWeekDay.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapSelectWeekDay);
             if (productData != null) {
                 spSelectWeekDay.setSelection(productData.getPosition());
             }
+            setWeekDayListener();
         }
     }
 
@@ -1248,14 +1238,16 @@ public class SetAppointmentFragment extends CommonFragment
 
     private void setCallenderDate() {
         mainFromDate = CRMAppUtil.getDate(new Date(), "yyyy-MM-dd");
-
-        String[] dateArray = Objects.requireNonNull(mainFromDate).split("-");
-        currentYear = ((Integer.parseInt(dateArray[0])));
-
-        currentYearStartDate = currentYear;
-        currentYearEndDate = currentYear;
-        month = ((Integer.parseInt(dateArray[1])));
-        day = ((Integer.parseInt(dateArray[2])));
+        try {
+            String[] dateArray = mainFromDate.split("-");
+            currentYear = ((Integer.parseInt(dateArray[0])));
+            currentYearStartDate = currentYear;
+            currentYearEndDate = currentYear;
+            month = ((Integer.parseInt(dateArray[1])));
+            day = ((Integer.parseInt(dateArray[2])));
+        } catch (Exception e) {
+            Timber.d(e, TAG);
+        }
 
         mainFromDateEndDate = mainFromDate;
         mainFromDateStartDate = mainFromDate;
@@ -1279,9 +1271,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void activityType(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), ACTIVITYTYPE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, ACTIVITYTYPE,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1311,19 +1302,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrActivityType.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapActivityType = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrActivityType);
-            arrAdapActivityType.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActivityType.setAdapter(arrAdapActivityType);
-            spActivityType.setOnItemSelectedListener(
-                    selectActivityTypeListener);
+            AdapterUtils.setSpinnerData(arrAdapActivityType, spActivityType, arrActivityType);
+
             arrAdapActivityType.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapActivityType);
             if (productData != null) {
                 spActivityType.setSelection(productData.getPosition());
             }
+            setActivityTypeListener();
         }
     }
 
@@ -1331,7 +1320,7 @@ public class SetAppointmentFragment extends CommonFragment
     //@add by sanket on 30/03/2017
     // calls web service takes meeting id as parameter
     //@param  strMeetingId
-    private void getAppointmentDetailsFromServer(CharSequence strMeetingId) {
+    private void getAppointmentDetailsFromServer() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             MeetingByIdRequest request =
                     new MeetingByIdRequest(meetingId);
@@ -1402,7 +1391,7 @@ public class SetAppointmentFragment extends CommonFragment
             if (status == 1) {
                 if (!defaultAttendee) {
                     //TODO ignore self object
-                    if (Objects.requireNonNull(str_AttendeeType).trim().equalsIgnoreCase("R")) {
+                    if (str_AttendeeType.trim().equalsIgnoreCase("R")) {
                         AddedAttendeeModel attendTmp =
                                 new AddedAttendeeModel(str_AttendeeType, attended, str_AttendeeEmpName,
                                         str_AttendeeEmpcode, str_meetingAttendeeCode);
@@ -1472,9 +1461,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void getRepeatMode(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), REPEATMODE,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, REPEATMODE,
                             null, null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1503,19 +1491,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrRepeatMode.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapRepeteMode = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrRepeatMode);
-            arrAdapRepeteMode.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapRepeteMode = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spRepeateOn.setAdapter(arrAdapRepeteMode);
-            spRepeateOn.setOnItemSelectedListener(
-                    selectRepeteModeListener);
+            AdapterUtils.setSpinnerData(arrAdapRepeteMode, spRepeateOn, arrRepeatMode);
+
             arrAdapRepeteMode.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapRepeteMode);
             if (productData != null) {
                 spRepeateOn.setSelection(productData.getPosition());
             }
+            setRepeatOnListener();
         }
     }
 
@@ -1524,9 +1510,8 @@ public class SetAppointmentFragment extends CommonFragment
     private void selectWeek(final String id) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LookupRequest request =
-                    new LookupRequest(Objects.requireNonNull(
-                            Objects.requireNonNull(
-                                    userManager.getUser()).currentBusinessProfile.businessUnitId), WEEKS, null,
+                    new LookupRequest(
+                            userManager.getUser().currentBusinessProfile.businessUnitId, WEEKS, null,
                             null);
             Disposable disposable = getSaathiApi().getAllLookup(request)
                     .compose(applyUiModel())
@@ -1555,18 +1540,17 @@ public class SetAppointmentFragment extends CommonFragment
                 arrSelectWeek.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectWeek = new ArrayAdapter<>(requireContext(),
-                    R.layout.simple_spinner_item, arrSelectWeek);
-            arrAdapSelectWeek.setDropDownViewResource(
-                    R.layout.mdropdown);
+            ArrayAdapter<RowData> arrAdapSelectWeek = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spRepeateWeek.setAdapter(arrAdapSelectWeek);
-            spRepeateWeek.setOnItemSelectedListener(selectWeekListener);
+            AdapterUtils.setSpinnerData(arrAdapSelectWeek, spRepeateWeek, arrSelectWeek);
+
             arrAdapSelectWeek.notifyDataSetChanged();
             RowData productData =
                     getSpinnerRowDataById(id, arrAdapSelectWeek);
             if (productData != null) {
                 spRepeateWeek.setSelection(productData.getPosition());
             }
+            setRepeatWeekListener();
         }
     }
 
@@ -1587,11 +1571,6 @@ public class SetAppointmentFragment extends CommonFragment
         public AttendeeAdapter(Context context) {
             this.inflater = LayoutInflater.from(context);
             this.context = context;
-        }
-
-        public void clearAll() {
-            resultList.clear();
-            notifyDataSetChanged();
         }
 
         @Override
@@ -1857,7 +1836,6 @@ public class SetAppointmentFragment extends CommonFragment
         private final LayoutInflater inflater;
         Context mContext;
         List<AddedAttendeeModel> attendeeModelList;
-        private ArrayList<EmployeeModel> arraylist;
 
         private AddedAttendeeAdapter(Context c, List<AddedAttendeeModel> attendeeModelList) {
             inflater = LayoutInflater.from(c);
@@ -1882,8 +1860,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         @SuppressLint("ViewHolder")
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View view = convertView;
+        public View getView(final int position, View view, ViewGroup parent) {
             AddedAttendeeAdapter.Holder holder = new AddedAttendeeAdapter.Holder();
             view = inflater.inflate(R.layout.item_list_added_attendee, parent, false);
 
@@ -1940,8 +1917,7 @@ public class SetAppointmentFragment extends CommonFragment
 
         @SuppressLint("ViewHolder")
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
-            View view = convertView;
+        public View getView(final int position, View view, ViewGroup parent) {
             AddedSplAttendeeAdapter.Holder holder = new AddedSplAttendeeAdapter.Holder();
             view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false);
 
@@ -1953,15 +1929,12 @@ public class SetAppointmentFragment extends CommonFragment
             holder.tvAttendeeName.setText(
                     String.format("%s-%s", attendeeModel.getAttendeeEmplyeeCode(),
                             attendeeModel.getAttendeeName()));
-            holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    addedSplAttendeeCount--;
-                    tvSplAttendeeCount.setText(
-                            String.format("(%s)", valueOf(addedSplAttendeeCount)));
-                    attendeeModelList.remove(position);
-                    notifyDataSetChanged();
-                }
+            holder.ivDelete.setOnClickListener(view1 -> {
+                addedSplAttendeeCount--;
+                tvSplAttendeeCount.setText(
+                        String.format("(%s)", valueOf(addedSplAttendeeCount)));
+                attendeeModelList.remove(position);
+                notifyDataSetChanged();
             });
 
             return view;

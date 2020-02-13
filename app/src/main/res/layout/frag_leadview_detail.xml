@@ -4,22 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/_6sdp"
-            >
+            android:padding="@dimen/_6sdp">
 
             <LinearLayout
                 android:id="@+id/llClient"
@@ -27,8 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvClientDetail"
@@ -42,14 +38,12 @@
                     android:singleLine="true"
                     android:text="Client Detail"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/_14sdp"
-                    />
+                    android:textSize="@dimen/_14sdp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/calendar_gray"
-                    />
+                    android:background="@color/calendar_gray" />
 
                 <LinearLayout
                     android:id="@+id/llClientDetail"
@@ -58,14 +52,12 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -73,8 +65,7 @@
                             android:layout_weight=".4"
                             android:text="Client Code"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvClientCode"
@@ -83,15 +74,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -99,8 +88,7 @@
                             android:layout_weight=".4"
                             android:text="Client Name"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvClientName"
@@ -109,15 +97,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -125,8 +111,7 @@
                             android:layout_weight=".4"
                             android:text="Client Address"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvClientAddress"
@@ -135,15 +120,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -151,8 +134,7 @@
                             android:layout_weight=".4"
                             android:text="Channel"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvChannel"
@@ -161,15 +143,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -177,8 +157,7 @@
                             android:layout_weight=".4"
                             android:text="Default Bank"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvDefaultBank"
@@ -187,15 +166,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -203,8 +180,7 @@
                             android:layout_weight=".4"
                             android:text="Pan Card"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvPanCard"
@@ -213,15 +189,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -229,8 +203,7 @@
                             android:layout_weight=".4"
                             android:text="Account Type"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvAccountType"
@@ -239,15 +212,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -255,8 +226,7 @@
                             android:layout_weight=".4"
                             android:text="UCID"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvUCID"
@@ -265,15 +235,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -281,8 +249,7 @@
                             android:layout_weight=".4"
                             android:text="Family UCID"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvFamilyUCID"
@@ -291,15 +258,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -307,8 +272,7 @@
                             android:layout_weight=".4"
                             android:text="Branch Code"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvBranchCode"
@@ -317,15 +281,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -333,8 +295,7 @@
                             android:layout_weight=".4"
                             android:text="Advisory Type"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvAdvisoryType"
@@ -343,15 +304,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -359,8 +318,7 @@
                             android:layout_weight=".4"
                             android:text="Account Number"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvAccountNumber"
@@ -369,15 +327,13 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -385,8 +341,7 @@
                             android:layout_weight=".4"
                             android:text="Aadhar Card"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvAadharCard"
@@ -395,8 +350,7 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -404,8 +358,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/lead_creation_txt_border_select"
-                        android:padding="@dimen/_3sdp"
-                        >
+                        android:padding="@dimen/_3sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -414,8 +367,7 @@
                             android:layout_weight=".4"
                             android:text="Profile"
                             android:textColor="@color/tv_color"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
 
                         <TextView
                             android:id="@+id/tvProfile"
@@ -425,8 +377,7 @@
                             android:layout_weight=".6"
                             android:text=""
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/txt_size"
-                            />
+                            android:textSize="@dimen/txt_size" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -436,8 +387,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@color/list_background"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvLeadDetail"
@@ -451,14 +401,12 @@
                     android:singleLine="true"
                     android:text="Lead Detail"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/_14sdp"
-                    />
+                    android:textSize="@dimen/_14sdp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/calendar_gray"
-                    />
+                    android:background="@color/calendar_gray" />
 
                 <LinearLayout
                     android:id="@+id/llLeadDetail"
@@ -467,21 +415,18 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
-                    android:visibility="visible"
-                    >
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
-                        >
+                        android:gravity="right">
 
                         <LinearLayout
                             android:id="@+id/llEditLeadDetail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            >
+                            android:orientation="horizontal">
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -489,16 +434,14 @@
                                 android:layout_marginLeft="@dimen/_3sdp"
                                 android:layout_toLeftOf="@+id/tvAddProduct"
                                 android:padding="@dimen/_2sdp"
-                                android:src="@drawable/ic_edit"
-                                />
+                                android:src="@drawable/ic_edit" />
 
                             <TextView
                                 android:id="@+id/tvEditLeadDetail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:padding="@dimen/_3sdp"
-                                android:text="Edit"
-                                />
+                                android:text="Edit" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -507,20 +450,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadID"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Lead Id"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -528,20 +469,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadCategory"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Lead Category"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -550,18 +489,16 @@
                         android:layout_height="wrap_content"
                         android:text="Profession"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        />
+                        android:textSize="@dimen/_11sdp" />
 
 
                     <Spinner
                         android:id="@+id/spProfession"
+                        style="@style/CRMSpinnerSelector_leadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select"
-                        style="@style/CRMSpinnerSelector_leadView"
-                        />
+                        android:entries="@array/Select" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -569,21 +506,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLeadName"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                             android:enabled="false"
                             android:hint="Lead Name"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -596,20 +532,19 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilDob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
 
                         <org.droidparts.widget.ClearableEditText
                             android:id="@+id/etDob"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/ic_close_text"
@@ -619,9 +554,7 @@
                             android:inputType="date"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -634,20 +567,19 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAnniversary"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
 
                         <org.droidparts.widget.ClearableEditText
                             android:id="@+id/etAnniversary"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/ic_close_text"
@@ -657,9 +589,7 @@
                             android:inputType="date"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -667,20 +597,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreationDate"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Creation Date"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -688,20 +616,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreatedBy"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Created By"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -709,40 +635,36 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLastModifiedDate"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Last Modified Date"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLastModifiedBy"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Modified By"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -750,20 +672,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etSource"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Source"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -771,20 +691,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSource"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Prospect Source"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -792,11 +710,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectSourceDetail"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -804,9 +722,7 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
-                            android:visibility="visible"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:visibility="visible" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -815,20 +731,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etCreatedThrough"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="Created Through"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -836,18 +750,16 @@
                         android:layout_height="wrap_content"
                         android:text="@string/LEAD_HAVING_THE_POTENTIAL_OF_PMS_PRODUCT"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        />
+                        android:textSize="@dimen/_11sdp" />
 
 
                     <Spinner
                         android:id="@+id/spPmsProduct"
+                        style="@style/CRMSpinnerSelector_leadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/selectPmsProduct"
-                        style="@style/CRMSpinnerSelector_leadView"
-                        />
+                        android:entries="@array/selectPmsProduct" />
 
 
                     <TextView
@@ -855,18 +767,16 @@
                         android:layout_height="wrap_content"
                         android:text="Profile"
                         android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        />
+                        android:textSize="@dimen/_11sdp" />
 
 
                     <Spinner
                         android:id="@+id/spProfile"
+                        style="@style/CRMSpinnerSelector_leadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select"
-                        style="@style/CRMSpinnerSelector_leadView"
-                        />
+                        android:entries="@array/Select" />
 
                     <TextView
                         android:id="@+id/tvProfileError"
@@ -878,8 +788,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -887,22 +796,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etContactPerson"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                             android:enabled="false"
                             android:hint="Contact Person"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
-                            android:visibility="gone"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:visibility="gone" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -915,19 +823,18 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobileNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -936,9 +843,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -946,11 +851,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -959,9 +864,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -974,19 +877,18 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEkycMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -994,9 +896,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -1005,11 +905,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etLandlineNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1018,9 +918,7 @@
                             android:maxLength="11"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1033,8 +931,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1042,11 +939,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etEmail"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1055,9 +952,7 @@
                             android:maxLength="100"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1070,19 +965,18 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAlternateEmail"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1091,9 +985,7 @@
                             android:maxLength="100"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1106,18 +998,17 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etPanNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1126,9 +1017,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1141,18 +1030,17 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etAadharNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1161,9 +1049,7 @@
                             android:maxLength="12"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -1177,88 +1063,81 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeCode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeCode"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                                 android:enabled="false"
                                 android:hint="Referee Code"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeCode"
+                            style="?android:attr/progressBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
                             android:layout_marginTop="@dimen/_22sdp"
+                            android:layout_marginRight="5dp"
                             android:paddingLeft="@dimen/_15sdp"
-                            android:visibility="gone"
-                            style="?android:attr/progressBarStyleSmall"
-                            />
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etRefereeName"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                                 android:enabled="false"
                                 android:hint="Referee Name"
                                 android:inputType="textNoSuggestions"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
                             android:id="@+id/pbLoadingIndicatorRefreeName"
+                            style="?android:attr/progressBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
                             android:layout_marginTop="@dimen/_22sdp"
+                            android:layout_marginRight="5dp"
                             android:paddingLeft="@dimen/_15sdp"
-                            android:visibility="gone"
-                            style="?android:attr/progressBarStyleSmall"
-                            />
+                            android:visibility="gone" />
                     </RelativeLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1266,11 +1145,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeEmail"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1278,9 +1157,7 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1288,11 +1165,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etRefereeNumber"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
@@ -1301,32 +1178,29 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereeName"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                             android:hint="@string/PROSPECT_REFEREE_NAME_HINT_TXT"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-
-                            />
+                            android:textCursorDrawable="@null" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <TextView
                         android:id="@+id/tvProspectRefereeNameError"
                         android:layout_width="wrap_content"
@@ -1337,18 +1211,17 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerMobile"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/PROSPECT_REFEREE_MOBILE_HINT_TXT"
@@ -1356,9 +1229,7 @@
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1371,19 +1242,18 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etProspectRefereerEmail"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/PROSPECT_REFEREE_EMAIL_HINT_TXT"
@@ -1391,9 +1261,7 @@
                             android:maxLength="100"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -1406,16 +1274,14 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@drawable/textview_border"
-                        android:padding="@dimen/_5sdp"
-                        >
+                        android:padding="@dimen/_5sdp">
 
                         <TextView
                             android:id="@+id/tvResidenceAddress"
@@ -1426,8 +1292,7 @@
                             android:paddingLeft="@dimen/_5sdp"
                             android:text="Residence Address"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_12sdp"
-                            />
+                            android:textSize="@dimen/_12sdp" />
 
                         <CheckBox
                             android:id="@+id/cbPrimaryAddress"
@@ -1436,36 +1301,33 @@
                             android:layout_weight="1"
                             android:text=" Primary Address"
                             android:textColor="@color/secondaryTextColor"
-                            android:textSize="@dimen/_12sdp"
-                            />
+                            android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llResAdd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd1"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 1"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1478,28 +1340,26 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd2"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 2"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1512,8 +1372,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1521,20 +1380,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etAdd3"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 3"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1543,17 +1401,15 @@
                             android:layout_height="wrap_content"
                             android:text="Country"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <Spinner
                             android:id="@+id/spCountry"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvCountryError"
@@ -1565,8 +1421,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvState"
@@ -1574,18 +1429,16 @@
                             android:layout_height="wrap_content"
                             android:text="State"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spState"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:entries="@array/Select" />
 
                         <TextView
                             android:id="@+id/tvStateError"
@@ -1597,8 +1450,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvCity"
@@ -1606,17 +1458,16 @@
                             android:layout_height="wrap_content"
                             android:text="City"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spCity"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:entries="@array/Select" />
 
                         <TextView
                             android:id="@+id/tvCityError"
@@ -1628,19 +1479,18 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etPincode"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:enabled="false"
@@ -1649,9 +1499,7 @@
                                 android:maxLength="6"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1664,8 +1512,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                     </LinearLayout>
 
@@ -1674,8 +1521,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:background="@drawable/textview_border"
-                        android:padding="@dimen/_5sdp"
-                        >
+                        android:padding="@dimen/_5sdp">
 
                         <TextView
                             android:id="@+id/tvOffAddress"
@@ -1686,8 +1532,7 @@
                             android:paddingLeft="@dimen/_5sdp"
                             android:text="Office Address"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_12sdp"
-                            />
+                            android:textSize="@dimen/_12sdp" />
 
                         <CheckBox
                             android:id="@+id/cbSameAs"
@@ -1698,8 +1543,7 @@
                             android:text=" Same as Above"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <CheckBox
                             android:id="@+id/cbOffPrimaryAddress"
@@ -1708,36 +1552,33 @@
                             android:layout_weight="1"
                             android:text=" Primary Address"
                             android:textColor="@color/secondaryTextColor"
-                            android:textSize="@dimen/_12sdp"
-                            />
+                            android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llOffAdd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd1"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 1"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1745,20 +1586,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd2"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 2"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1766,20 +1606,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffAdd3"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                                 android:enabled="false"
                                 android:hint="Address 3"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1788,17 +1627,15 @@
                             android:layout_height="wrap_content"
                             android:text="Country"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <Spinner
                             android:id="@+id/spOffCountry"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvOffCountryError"
@@ -1810,8 +1647,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
 
                         <TextView
@@ -1820,17 +1656,15 @@
                             android:layout_height="wrap_content"
                             android:text="State"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spOffState"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvOffStateError"
@@ -1842,8 +1676,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/tvOffCity"
@@ -1851,18 +1684,16 @@
                             android:layout_height="wrap_content"
                             android:text="City"
                             android:textColor="@color/text_color_personal"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:textSize="@dimen/_11sdp" />
 
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spOffCity"
+                            style="@style/CRMSpinnerSelector_leadView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select"
-                            style="@style/CRMSpinnerSelector_leadView"
-                            />
+                            android:entries="@array/Select" />
 
                         <TextView
                             android:id="@+id/tvOffCityError"
@@ -1874,19 +1705,18 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffPincode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
-                            app:hintTextAppearance="@style/InputLayout"
-                            >
+                            app:hintTextAppearance="@style/InputLayout">
 
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/etOffPincode"
+                                style="@style/CRMEdittextLeadSelector"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:enabled="false"
@@ -1895,9 +1725,7 @@
                                 android:maxLength="6"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
-                                style="@style/CRMEdittextLeadSelector"
-                                />
+                                android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1910,8 +1738,7 @@
                             android:focusableInTouchMode="true"
                             android:textColor="@color/error_red"
                             android:textSize="@dimen/_10sdp"
-                            android:visibility="gone"
-                            />
+                            android:visibility="gone" />
 
                     </LinearLayout>
 
@@ -1919,32 +1746,30 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        >
+                        app:hintTextAppearance="@style/InputLayout">
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/etComments"
+                            style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                             android:enabled="false"
                             android:hint="Enter Comments"
                             android:inputType="textMultiLine"
                             android:lines="4"
                             android:maxLines="4"
                             android:minLines="1"
-                            android:textCursorDrawable="@null"
-                            style="@style/CRMEdittextLeadSelector"
-                            />
+                            android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
                         android:background="@drawable/lead_detail_add_product_background"
-                        android:padding="@dimen/_5sdp"
-                        >
+                        android:padding="@dimen/_5sdp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -1952,23 +1777,20 @@
                             android:layout_weight=".4"
                             android:text="Interested Products"
                             android:textColor="@color/light_black"
-                            android:textSize="@dimen/_12sdp"
-                            />
+                            android:textSize="@dimen/_12sdp" />
 
                         <RelativeLayout
                             android:id="@+id/rlAddProduct"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight=".6"
-                            >
+                            android:layout_weight=".6">
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_toLeftOf="@+id/tvAddProduct"
                                 android:padding="@dimen/_1sdp"
-                                android:src="@drawable/ic_plus"
-                                />
+                                android:src="@drawable/ic_plus" />
 
                             <TextView
                                 android:id="@+id/tvAddProduct"
@@ -1978,8 +1800,7 @@
                                 android:layout_centerInParent="true"
                                 android:text="Add Products"
                                 android:textColor="@color/tv_color"
-                                android:textSize="@dimen/_12sdp"
-                                />
+                                android:textSize="@dimen/_12sdp" />
                         </RelativeLayout>
                     </LinearLayout>
 
@@ -1987,16 +1808,14 @@
                         android:id="@+id/llAddProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
 
                         <ListView
                             android:id="@+id/lvAddProduct"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:divider="@null"
-                            tools:listitem="@layout/item_list_add_product"
-                            />
+                            tools:listitem="@layout/item_list_add_product" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -2005,16 +1824,14 @@
                 android:id="@+id/newDataLinearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                />
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@color/list_background"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvDocuments"
@@ -2028,8 +1845,7 @@
                     android:singleLine="true"
                     android:text="Documents"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/_14sdp"
-                    />
+                    android:textSize="@dimen/_14sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -2039,8 +1855,7 @@
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvClientPortfolioDetails"
@@ -2054,14 +1869,12 @@
                     android:singleLine="true"
                     android:text="Client Portfolio Detail"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/_14sdp"
-                    />
+                    android:textSize="@dimen/_14sdp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/calendar_gray"
-                    />
+                    android:background="@color/calendar_gray" />
 
                 <LinearLayout
                     android:id="@+id/llClientPortfolio"
@@ -2069,8 +1882,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
 
                     <include layout="@layout/frag_client_portfolio"></include>
                 </LinearLayout>
@@ -2081,8 +1893,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="center"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btnSubmit"
@@ -2090,8 +1901,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:text="Update"
-                    android:textColor="@color/white"
-                    />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
         </LinearLayout>

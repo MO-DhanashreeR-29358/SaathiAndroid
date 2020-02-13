@@ -161,7 +161,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
         }
 
-        widgetModelList = Objects.requireNonNull(dashboardModel)
+        widgetModelList = dashboardModel
             .getGroupModel(DashboardSystemModel.getTargetAchivementSystemName())
             .widgetList
         if (widgetModelList.size < 3) {

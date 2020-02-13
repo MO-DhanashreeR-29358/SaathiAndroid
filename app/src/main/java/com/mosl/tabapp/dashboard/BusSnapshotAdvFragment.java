@@ -1,12 +1,12 @@
 package com.mosl.tabapp.dashboard;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem;
@@ -19,12 +19,16 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS_SNAPSHOT_TITLE;
@@ -42,33 +46,24 @@ import static com.mosl.tabapp.constants.MOSLConstants.YTD_CNT;
 
 public class BusSnapshotAdvFragment extends CommonFragment {
 
-    static Context mContext;
-    private View clientsView;
     private DashboardModel dashboardModel;
     private String widgetSystemName;
     private Map addtionalParameterMap = new HashMap<>();
-    private ArrayList<HashMap<String, String>> arrayListClient = new ArrayList<HashMap<String, String>>();
+    private ArrayList<HashMap<String, String>> arrayListClient = new ArrayList<>();
     private TableLayout tableLayout;
-    private Integer familyCount = 0;
     private View pBar;
     private TextView tvNochart;
 
-    public static BusSnapshotAdvFragment newInstance(Context context) {
-        BusSnapshotAdvFragment fragment = new BusSnapshotAdvFragment();
-        mContext = context;
-        return fragment;
-    }
-
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        clientsView = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View clientsView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(clientsView);
         hideAppTitle();
-        setUserVisibleHint(true);
         return clientsView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_bus_snapshot_adv;
     }
 
@@ -103,7 +98,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
         return addtionalParameterMap;
     }
 
-    public void renderSnapshot(UiModel<SnapshotItem> uiModel) {
+    private void renderSnapshot(UiModel<SnapshotItem> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -121,7 +116,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
             List<SnapshotTableItem> tables = data.table;
             if (tables != null && tables.size() != 0) {
                 for (int i = 0; i < tables.size(); i++) {
-                    HashMap<String, String> fieldData = new HashMap<String, String>();
+                    HashMap<String, String> fieldData = new HashMap<>();
                     SnapshotTableItem item = tables.get(i);
                     String familyStatus = stringOrEmpty(item.parameter);
                     String mtdCount = stringOrEmpty(item.mTDCNT);
@@ -140,16 +135,16 @@ public class BusSnapshotAdvFragment extends CommonFragment {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                getAddtionalParameterMap(),
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    getAddtionalParameterMap(),
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
 
             Disposable subscribe = getSaathiApi().getSnapshot(request)
-                .compose(applyUiModel())
-                .subscribe(this::renderSnapshot);
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSnapshot);
         } else {
             noInternetConnectionDialog();
         }
@@ -160,7 +155,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
     private void incentiveDynamicView() {
         tableLayout.removeAllViews();
         try {
-            LayoutInflater inFla = getActivity().getLayoutInflater();
+            LayoutInflater inFla = requireActivity().getLayoutInflater();
             View tableRowH = inFla.inflate(R.layout.frag_business_snapshot_top, null);
             tableLayout.addView(tableRowH);
             if (arrayListClient.size() > 0) {
@@ -177,44 +172,38 @@ public class BusSnapshotAdvFragment extends CommonFragment {
                     tvParameters.setText(parameters);
                     tvMetMTD.setText(mtdCount);
                     tvMetYTD.setText(ytdCount);
-                    tvMetMTD.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addtionalParameterMap.clear();
-                            addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            addtionalParameterMap.put(COL_FILTER, MTD_CNT);
-                            addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
-                            addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
-                            Bundle args = new Bundle();
-                            args.putString(SYSTEM_NAME, widgetSystemName);
-                            args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
-                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            if (!tvMetMTD.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigator.openPage(
+                    tvMetMTD.setOnClickListener(view -> {
+                        addtionalParameterMap.clear();
+                        addtionalParameterMap.putAll(getAddtionalParameterMap());
+                        addtionalParameterMap.put(COL_FILTER, MTD_CNT);
+                        addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
+                        addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
+                        Bundle args = new Bundle();
+                        args.putString(SYSTEM_NAME, widgetSystemName);
+                        args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
+                        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                        if (!tvMetMTD.getText().toString().trim().equalsIgnoreCase("0")) {
+                            navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
                                     true, false);
-                            }
                         }
                     });
-                    tvMetYTD.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            addtionalParameterMap.clear();
-                            addtionalParameterMap.putAll(getAddtionalParameterMap());
-                            addtionalParameterMap.put(COL_FILTER, YTD_CNT);
-                            addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
-                            addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
-                            Bundle args = new Bundle();
-                            args.putString(SYSTEM_NAME, widgetSystemName);
-                            args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
-                            args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-                            if (!tvMetYTD.getText().toString().trim().equalsIgnoreCase("0")) {
-                                navigator.openPage(
+                    tvMetYTD.setOnClickListener(view -> {
+                        addtionalParameterMap.clear();
+                        addtionalParameterMap.putAll(getAddtionalParameterMap());
+                        addtionalParameterMap.put(COL_FILTER, YTD_CNT);
+                        addtionalParameterMap.put(ROW_FILTER, tvParameters.getText().toString());
+                        addtionalParameterMap.put(WIDGETTYPE, tvParameters.getText().toString());
+                        Bundle args = new Bundle();
+                        args.putString(SYSTEM_NAME, widgetSystemName);
+                        args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
+                        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+                        if (!tvMetYTD.getText().toString().trim().equalsIgnoreCase("0")) {
+                            navigator.openPage(
                                     NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
                                     true, false);
-                            }
-
                         }
+
                     });
                     //  }
                     tableLayout.addView(tableRow);
@@ -227,21 +216,6 @@ public class BusSnapshotAdvFragment extends CommonFragment {
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        try {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser && clientsView != null) {
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void clientShowProgress() {
-        pBar.setVisibility(View.VISIBLE);
-    }
 
     private void clientHideProgress() {
         pBar.setVisibility(View.GONE);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -19,7 +20,9 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -27,8 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -270,8 +273,8 @@ public class DashboardHierarchyFragment extends CommonFragment {
 		hierarchyMap = (Map) args.getSerializable(HIERARCHY_MAP);
 		addtionalParameterMap = (Map) args.getSerializable(ADDITIONAL_MAP);
 		webServiceCall();
-		if (Objects.requireNonNull(args).containsKey(LABEL)) {
-			txtLables.setText(Objects.requireNonNull(this.getArguments()).getString(LABEL));
+		if (args.containsKey(LABEL)) {
+			txtLables.setText(this.getArguments().getString(LABEL));
 		}
 	}
 

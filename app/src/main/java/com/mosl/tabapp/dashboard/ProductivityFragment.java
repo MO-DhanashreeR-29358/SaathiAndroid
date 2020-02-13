@@ -1,6 +1,5 @@
 package com.mosl.tabapp.dashboard;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -23,7 +23,9 @@ import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -47,33 +51,23 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 public class ProductivityFragment extends CommonFragment implements View.OnClickListener {
 
-    ArrayList<HashMap<String, String>> hierarchyMapList;
-    private View productivityView;
     private DashboardModel dashboardModel;
     private String widgetSystemName;
     private TableFixHeaders table;
-    private SecondClickTableAdapter secondClickTableAdapter;
-    private TextView tvNochart, tvShowMore;
+    private TextView tvNochart;
     private Map addtionalParameterMap = new HashMap<>();
-    private LinkedHashMap lMap;
     private LinearLayout llShowMore;
 
-    public static ProductivityFragment newInstance(Context context) {
-        ProductivityFragment fragment = new ProductivityFragment();
-
-        return fragment;
-    }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        productivityView = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View productivityView = super.onCreateView(inflater, container, savedInstanceState);
         hideAppTitle();
         setUpView(productivityView);
-        setUserVisibleHint(true);
         return productivityView;
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_productivity;
     }
 
@@ -82,14 +76,15 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         dashboardModel = (DashboardModel) this.getArguments().getSerializable(DASHBOARD_MODEL);
         table = productivityView.findViewById(R.id.table);
         tvNochart = productivityView.findViewById(R.id.tvNochart);
-        tvShowMore = productivityView.findViewById(R.id.tvShowMore);
         llShowMore.setOnClickListener(this);
 
         if (dashboardModel != null) {
             DashboardGroupModel groupModel = dashboardModel.getGroupModel(DashboardSystemModel.getProductivitySystemName());
             WidgetModel model = null;
             List<WidgetModel> widgetList = groupModel.getWidgetList();
-            model = widgetList.get(2);
+            if (widgetList.size() >= 2) {
+                model = widgetList.get(2);
+            }
             widgetSystemName = model.getSystemName();
             webServiceCall();
 
@@ -112,15 +107,14 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
     private void renderTable(Map<String, Object> responseJsonObj) {
 
-        hierarchyMapList = new ArrayList<HashMap<String, String>>();
-        secondClickTableAdapter =
-            new SecondClickTableAdapter(getActivity(), new ArrayList<HashMap<String, String>>());
+        ArrayList<HashMap<String, String>> hierarchyMapList = new ArrayList<>();
+        SecondClickTableAdapter secondClickTableAdapter = new SecondClickTableAdapter(new ArrayList<>());
         table.setAdapter(secondClickTableAdapter);
         List<Map<String, Object>> arrayDetail =
-            (List<Map<String, Object>>) responseJsonObj.get(
-                "Table");
-        ArrayList<String> columns = new ArrayList<String>();
-        ArrayList<String> columnsHeader = new ArrayList<String>();
+                (List<Map<String, Object>>) responseJsonObj.get(
+                        "Table");
+        ArrayList<String> columns = new ArrayList<>();
+        ArrayList<String> columnsHeader = new ArrayList<>();
 
         if (arrayDetail.size() != 0) {
             for (int y = 0; y < arrayDetail.size(); y++) {
@@ -129,8 +123,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                     for (Object columnName : objDetail.keySet()) {
                         if (!columnName.toString().equalsIgnoreCase("DisplayOrder")) {
                             columns.add(columnName.toString());
-                            if (columnName.toString().equalsIgnoreCase("flg_empcode")) {
-                            } else {
+                            if (!columnName.toString().equalsIgnoreCase("flg_empcode")) {
                                 columnsHeader.add(getRefreshColumnName(columnName.toString()));
                             }
                         }
@@ -142,23 +135,23 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                 HashMap map = new HashMap();
                 LinkedHashMap<String, String> hm = new LinkedHashMap<>();
                 for (String column : columns) {
-                    if (column.toString().equalsIgnoreCase("flg_empcode")) {
-                        map.put("flg_empcode", objDetail.get("flg_empcode").toString());
+                    if (column.equalsIgnoreCase("flg_empcode")) {
+                        map.put("flg_empcode", objDetail.get("flg_empcode"));
                     } else {
                         String columnData = (objDetail.get(column) == null
-                            || objDetail.get(column).toString() == null) ? ""
-                            : objDetail.get(column).toString();
+                                || objDetail.get(column).toString() == null) ? ""
+                                : objDetail.get(column).toString();
 
                         if (objDetail.get(column) instanceof Number) {
                             String strValue = objDetail.get(column).toString().trim();
                             if (strValue.indexOf(".") > -1
-                                && !strValue.endsWith(".0")
-                                && !strValue.endsWith(".00")) {
+                                    && !strValue.endsWith(".0")
+                                    && !strValue.endsWith(".00")) {
                                 columnData = String.format("%.2f",
-                                    Double.parseDouble(objDetail.get(column).toString()));
+                                        Double.parseDouble(objDetail.get(column).toString()));
                             } else {
                                 columnData = String.format("%.0f",
-                                    Double.parseDouble(objDetail.get(column).toString()));
+                                        Double.parseDouble(objDetail.get(column).toString()));
                             }
                         }
 
@@ -201,7 +194,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                 renderTable(data);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
@@ -210,31 +203,31 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                getAddtionalParameterMap(),
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    getAddtionalParameterMap(),
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
 
             Disposable subscribe = getSaathiApi().getDashboardData(request)
-                .map(responseS -> {
-                    Gson mGson = new Gson();
-                    Type type = new TypeToken<HashMap<String, Object>>() {
-                    }.getType();
-                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                    Map<String, Object> responseJsonObj =
-                        (Map<String, Object>) response.get("Response");
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return responseJsonObj;
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderProductivity);
+                    .map(responseS -> {
+                        Gson mGson = new Gson();
+                        Type type = new TypeToken<HashMap<String, Object>>() {
+                        }.getType();
+                        HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                        Map<String, Object> responseJsonObj =
+                                (Map<String, Object>) response.get("Response");
+                        String status = response.get(STATUS).toString();
+                        if (status.equalsIgnoreCase("true")) {
+                            return responseJsonObj;
+                        } else {
+                            String message = response.get(MESSAGE).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::renderProductivity);
         } else {
             noInternetConnectionDialog();
         }
@@ -256,7 +249,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         args.putString(LABEL, BUSINESS_SNAPSHOT_TITLE);
         args.putSerializable(MAP, (Serializable) addtionalParameterMap);
         navigator.openPage(NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-			true, false);
+                true, false);
 
     }
 
@@ -267,7 +260,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
         CommonHeader(String name) {
             this.name = name;
-            list = new ArrayList<Item>();
+            list = new ArrayList<>();
         }
 
         public int size() {
@@ -288,18 +281,14 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
     }
 
     public class SecondClickTableAdapter extends BaseTableAdapter {
-        private final CommonHeader commonHeaders[];
-        private final float density;
-        HashMap hashMap;
+        private final CommonHeader[] commonHeaders;
         ArrayList<HashMap<String, String>> hashArray;
-        private String headers[] = {};
+        private String[] headers = {};
         private LayoutInflater inflater = null;
 
-        public SecondClickTableAdapter(Context context, ArrayList<HashMap<String, String>> hashArray) {
+        SecondClickTableAdapter(ArrayList<HashMap<String, String>> hashArray) {
             commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
             this.hashArray = hashArray;
-            density = context.getResources().getDisplayMetrics().density;
-
 
         }
 
@@ -320,10 +309,10 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         public void add(HashMap<String, String> row) {
             hashArray.add(row);
 
-            String rowData[] = new String[headers.length];
+            String[] rowData = new String[headers.length];
             int ctr = 0;
             for (String columnName : headers) {
-                String value = row.get(columnName).toString();
+                String value = row.get(columnName);
                 rowData[ctr] = value;
                 ctr++;
             }
@@ -343,29 +332,17 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
             switch (getItemViewType(row, column)) {
                 case 0:
-                    view = getFirstHeader(row, column, convertView, parent);
+                    view = getFirstHeader(convertView, parent);
                     break;
                 case 1:
-                    view = getHeader(row, column, convertView, parent);
+                    view = getHeader(column, convertView, parent);
                     break;
                 case 2:
                     view = getFirstBody(row, column, convertView, parent);
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });
-
 
                     break;
                 case 3:
                     view = getBody(row, column, convertView, parent);
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                        }
-                    });
                     break;
                 case 4:
                     view = getFamilyView(row, column, convertView, parent);
@@ -378,7 +355,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
 
         //click on symbol header
-        private View getFirstHeader(final int row, int column, View convertView, ViewGroup parent) {
+        private View getFirstHeader(View convertView, ViewGroup parent) {
             inflater = LayoutInflater.from(getActivity());
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
@@ -398,7 +375,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
         }
 
 
-        private View getHeader(int row, int column, View convertView, ViewGroup parent) {
+        private View getHeader(int column, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.item_table_header, parent, false);
             }
@@ -462,8 +439,6 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
             final int height;
             if (row == -1) {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
-            } else if (isFamily(row)) {
-                height = 0;
             } else {
                 height = getResources().getDimensionPixelSize(R.dimen._40sdp);
             }
@@ -477,27 +452,12 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
                 itemViewType = 0;
             } else if (row == -1) {
                 itemViewType = 1;
-            } else if (isFamily(row)) {
-                itemViewType = 4;
             } else if (column == -1) {
                 itemViewType = 2;
             } else {
                 itemViewType = 3;
             }
             return itemViewType;
-        }
-
-        private boolean isFamily(int row) {
-
-            if (row == -1 || row == 0) {
-                int family = 0;
-                while (row > 0) {
-                    row -= commonHeaders[family].size();
-                    family++;
-                }
-                return row == 1;
-            }
-            return row == 0;
         }
 
         private CommonHeader getFamily(int row) {

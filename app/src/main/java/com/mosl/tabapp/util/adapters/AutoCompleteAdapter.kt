@@ -11,7 +11,6 @@ import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchResultModel
@@ -70,9 +69,9 @@ class AutoCompleteAdapter(
       } else {
         holderView.llExpand.setOnClickListener({
           val bundle = Bundle()
-          bundle.putString(MOSLConstants.PROFILE_ID, resultModel.businessProfileId)
-          bundle.putString(MOSLConstants.PRODUCT_ID, resultModel.productId)
-          bundle.putString(MOSLConstants.EMPLOYEE_CODE, resultModel.empCode)
+          bundle.putString(PROFILE_ID, resultModel.businessProfileId)
+          bundle.putString(PRODUCT_ID, resultModel.productId)
+          bundle.putString(EMPLOYEE_CODE, resultModel.empCode)
           openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, bundle)
         })
         holderView.ivDropDownArrow.visibility = View.GONE

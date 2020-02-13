@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -54,6 +53,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.mosl.app.core.exception.ServiceFailureException;
+import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
@@ -87,6 +87,7 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -116,7 +117,9 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 
+import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
+import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_CREATION;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
@@ -165,6 +168,7 @@ public class DashboardFragment extends CommonFragment
             tvCurrentQuaterStatusThreeHeading, tvCurrentQuaterStatusFourHeading,
             tvCurrentQuaterStatusFirstHeading, tvCurrentQuaterStatusSecondHeading;
     private Spinner spQuarter;
+
     //Adviosory Performance
     private BarChart mChartAdv;
     private ArrayList<String> yDataGraphArrAdv = new ArrayList<>();
@@ -364,26 +368,11 @@ public class DashboardFragment extends CommonFragment
         tableCurrentQuaterStatusFour =
                 dashAdvisoryView.findViewById(R.id.tableCurrentQuaterStatusFour);
         tableAdvPerformance = dashAdvisoryView.findViewById(R.id.tableAdvPerformance);
-        spQuarter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
-                                       int position,
-                                       long id) {
-
-                incentiveView(spQuarter.getSelectedItem().toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
-        });
         String[] quarterArray = requireActivity().getResources().getStringArray(R.array.SelectQuarter);
         ArrayList<String> arrEventType = new ArrayList<>(Arrays.asList(quarterArray));
-        ArrayAdapter<String> arrAdapEventType =
-                new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item, arrEventType);
-        arrAdapEventType.setDropDownViewResource(R.layout.mdropdown);
-        spQuarter.setAdapter(arrAdapEventType);
+        ArrayAdapter<String> periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+        spQuarter.setAdapter(periodAdapter);
+        AdapterUtils.setSpinnerData(periodAdapter, spQuarter, arrEventType);
         tvIncentives = dashAdvisoryView.findViewById(R.id.tvIncentives);
         tvPerformance = dashAdvisoryView.findViewById(R.id.tvPerformance);
         tvCurrentQuaterStatusFirstHeading =
@@ -440,6 +429,16 @@ public class DashboardFragment extends CommonFragment
             rlClientLeads.setVisibility(View.GONE);
             btnLeads.setText(DASHBOARD);
         }
+
+        getSpinnerSelection();
+    }
+
+    private void getSpinnerSelection() {
+        disposable.add(
+                itemSelections(spQuarter).
+                        filter(InvalidSelectionPredicate)
+                        .subscribe(xyz -> incentiveView(spQuarter.getSelectedItem().toString())));
+
     }
 
     private void generateAxisLabel(ChartDataModel data) {
@@ -669,19 +668,18 @@ public class DashboardFragment extends CommonFragment
             } else if (id == R.id.rlFreshRegistration) {
                 Map<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, requireNonNull(userManager.getUser()).employeeCode);
+                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
                 map.put(COMMANDTYPE, "NEW");
                 map.put(APPLICATIONTYPE, "CRM");
                 map.put(OSTYPE, "ANDROID");
                 map.put(APPLOGINID, userManager.getUser().employeeCode);
                 map.put(TOKENKEY, userManager.getUser().token);
                 map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
-                //gotoNewEkyc(getInputBody(map));
                 ekycNavigator.openNewEkycApp(false, "");
             } else if (id == R.id.rlExisting) {
                 HashMap<String, String> map = new HashMap();
                 map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, requireNonNull(userManager.getUser()).employeeCode);
+                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
                 map.put(COMMANDTYPE, "RESUME");
                 map.put(APPLICATIONTYPE, "CRM");
                 map.put(OSTYPE, "ANDROID");
@@ -728,7 +726,7 @@ public class DashboardFragment extends CommonFragment
     private void loadLead() {
         Bundle args = new Bundle();
         setTabActivre(btnLeads);
-        ClientsLeadsFragment leadsFragment = ClientsLeadsFragment.newInstance(getContext());
+        ClientsLeadsFragment leadsFragment = new ClientsLeadsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -753,7 +751,7 @@ public class DashboardFragment extends CommonFragment
     private void loadProductivity() {
         Bundle args = new Bundle();
         setTabActivre(btnProductivity);
-        ProductivityFragment productivityFragment = ProductivityFragment.newInstance(getContext());
+        ProductivityFragment productivityFragment = new ProductivityFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         productivityFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -765,7 +763,7 @@ public class DashboardFragment extends CommonFragment
     private void loadBusinessSnapShotAdvisor() {
         setTabActivre(btnBusinessSnapshotAdvisor);
         Bundle args = new Bundle();
-        BusSnapshotAdvFragment leadsFragment = BusSnapshotAdvFragment.newInstance(getContext());
+        BusSnapshotAdvFragment leadsFragment = new BusSnapshotAdvFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -791,7 +789,7 @@ public class DashboardFragment extends CommonFragment
     private void loadLeadBusinessSnapShot() {
         setTabActivre(btnBusinessSnapshot);
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
+        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -802,7 +800,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadClients() {
         setTabActivre(btnClient);
-        ClientsFragment clientsFragment = ClientsFragment.newInstance(getContext());
+        ClientsFragment clientsFragment = new ClientsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -857,7 +855,7 @@ public class DashboardFragment extends CommonFragment
     private void loadTeamTargetAchievement() {
         Bundle args = new Bundle();
         TargetAchievementTeamFragment leadsFragment =
-                TargetAchievementTeamFragment.newInstance(getContext());
+                new TargetAchievementTeamFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -868,7 +866,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadMonthTrends() {
         Bundle args = new Bundle();
-        TrendsTabFragment leadsFragment = TrendsTabFragment.newInstance(getContext());
+        TrendsTabFragment leadsFragment = new TrendsTabFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -879,7 +877,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadBusinessSnapShot() {
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = BusinessSnapshotFragment.newInstance(getContext());
+        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -2323,7 +2321,7 @@ public class DashboardFragment extends CommonFragment
 
             final Map<String, String> addtionalParameterMap = new HashMap<>();
             addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-            Glide.with(getContext())
+            Glide.with(mContext)
                     .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
                     //remove Chache
                     .asBitmap()
@@ -2335,7 +2333,7 @@ public class DashboardFragment extends CommonFragment
                         @Override
                         protected void setResource(Bitmap resource) {
                             RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(requireContext().getResources(),
+                                    RoundedBitmapDrawableFactory.create(mContext.getResources(),
                                             resource);
                             holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
                         }

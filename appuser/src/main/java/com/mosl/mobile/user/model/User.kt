@@ -43,4 +43,10 @@ data class User(
         return currentBusinessProfile.businessUnitId?.equals("4") ?: false
     }
 
+    fun isRM(): Boolean {
+        currentBusinessProfile.businessProfileName.apply {
+            return this.equals("Sales") || this.equals("Retail Advisor")
+        }
+    }
+
 }

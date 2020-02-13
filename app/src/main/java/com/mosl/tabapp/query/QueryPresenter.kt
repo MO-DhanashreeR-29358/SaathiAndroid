@@ -2,8 +2,8 @@ package com.mosl.tabapp.query
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.query.QueryRepository
-import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_1
-import com.mosl.tabapp.query.QueryFragmentNew.Companion.TELE_PHONE_2
+import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_1
+import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_2
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject

@@ -24,7 +24,6 @@ import com.mosl.tabapp.ws.CRMWebServiceHandler;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BankEmployeeAdapter extends BaseAdapter implements Filterable {
     private final SaathiApi saathiApi = CRMWebServiceHandler.getSaathiApi();
@@ -100,12 +99,12 @@ public class BankEmployeeAdapter extends BaseAdapter implements Filterable {
                             BankEmployeeRequest request =
                                     new BankEmployeeRequest(
                                             URLEncoder.encode(
-                                                    Objects.requireNonNull(userManager.getUser()).employeeCode,
+                                                    userManager.getUser().employeeCode,
                                                     "utf-8"),
                                             URLEncoder.encode(constraint.toString(), "utf-8"),
-                                            URLEncoder.encode(Objects.requireNonNull(
-                                                    Objects.requireNonNull(
-                                                            userManager.getUser()).currentBusinessProfile.businessUnitId),
+                                            URLEncoder.encode(
+
+                                                    userManager.getUser().currentBusinessProfile.businessUnitId,
                                                     "utf-8"),
                                             URLEncoder.encode(
                                                     userManager.getUser().currentBusinessProfile.businessUnitId,

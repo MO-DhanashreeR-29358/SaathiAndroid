@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
 import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -24,14 +26,16 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Task;
 import com.mosl.tabapp.constants.MOSLConstants;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Created by raju on 3/23/2017.
@@ -106,7 +110,6 @@ public class CRMMOSLCommon {
 
 		SettingsClient client = LocationServices.getSettingsClient(activity);
 		Task<LocationSettingsResponse> result = client.checkLocationSettings(builder.build());
-
 		result.addOnCompleteListener(task -> {
 			try {
 				LocationSettingsResponse response = task.getResult(ApiException.class);

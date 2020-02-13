@@ -1,6 +1,7 @@
 package com.mosl.tabapp.urls;
 
 import androidx.annotation.NonNull;
+
 import org.jetbrains.annotations.Contract;
 public class ServiceUrlsImpl {
 
@@ -22,7 +23,7 @@ public class ServiceUrlsImpl {
     @Contract(pure = true)
     public static String CRM_COLLATERAL_URL()  {
         return
-            "http://web20.motilaloswal.com:8000/Brochure/index.html";
+                "http://onlinetrade.motilaloswal.com/emailers/TGS/2015/Landing_page/TGS_landing_page.html";
     }
 
     @NonNull

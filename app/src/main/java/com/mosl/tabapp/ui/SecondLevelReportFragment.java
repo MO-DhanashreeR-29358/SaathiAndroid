@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -18,15 +19,17 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -50,10 +53,10 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 	@Override public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View reportView = super.onCreateView(inflater, container, savedInstanceState);
-		mMap = (Map<String, String>) Objects.requireNonNull(getArguments())
+		mMap = (Map<String, String>) this.getArguments()
 			.getSerializable(STRING_MAP);
 		widgetSystemName = getArguments().getString(STRING_TITLE);
-		setUpView(Objects.requireNonNull(reportView));
+		setUpView(reportView);
 		if (mMap != null) {
 			hideAppTitle();
 			setUserVisibleHint(true);
@@ -82,23 +85,22 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			LeadReportRequest
 				request =
-				new LeadReportRequest(0, Objects.requireNonNull(mMap.get("Period_From")), false,
-					Objects.requireNonNull(mMap.get("EmployeeCode")),
-					Objects.requireNonNull(mMap.get("PageSize")), 0, 0, 0,
-					Objects.requireNonNull(mMap.get("ReportTypeSystemName")), "-1",
-					Objects.requireNonNull(mMap.get("Period_To")),
-					Objects.requireNonNull(mMap.get("BranchCode")));
+					new LeadReportRequest(0, mMap.get("Period_From"), false,
+							mMap.get("EmployeeCode"),
+							mMap.get("PageSize"), 0, 0, 0,
+							mMap.get("ReportTypeSystemName"), "-1", mMap.get("Period_To"),
+							mMap.get("BranchCode"));
 			Disposable subscribe = getSaathiApi().postLeadReport(request)
 				.map(responseS -> {
 					Gson mGson = new Gson();
 					Type type = new TypeToken<HashMap<String, Object>>() {
 					}.getType();
 					HashMap<String, Object> response = mGson.fromJson(responseS, type);
-					String status = Objects.requireNonNull(response.get(STATUS)).toString();
+					String status = response.get(STATUS).toString();
 					if (status.equalsIgnoreCase("true")) {
 						return response;
 					} else {
-						String message = Objects.requireNonNull(response.get(MESSAGE)).toString();
+						String message = response.get(MESSAGE).toString();
 						throw new ServiceFailureException(message, message);
 					}
 				})
@@ -135,7 +137,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 		ArrayList<String> columns = new ArrayList<String>();
 		ArrayList<String> columnsHeader = new ArrayList<String>();
 
-		if (Objects.requireNonNull(arrayDetail).size() != 0) {
+		if (arrayDetail.size() != 0) {
 			for (int y = 0; y < arrayDetail.size(); y++) {
 				Map<String, Object> objDetail = arrayDetail.get(y);
 
@@ -157,22 +159,22 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 				for (String column : columns) {
 					String columnData =
 						objDetail.get(column) == null
-							? "" : Objects.requireNonNull(objDetail.get(column)).toString();
+								? "" : objDetail.get(column).toString();
 
 					if (objDetail.get(column) instanceof Number) {
 						String strValue =
-							Objects.requireNonNull(objDetail.get(column)).toString().trim();
+								objDetail.get(column).toString().trim();
 
 						if (strValue.contains(".")
 							&& !strValue.endsWith(".0")
 							&& !strValue.endsWith(".00")) {
 							columnData = String.format("%.2f",
 								Double.parseDouble(
-									Objects.requireNonNull(objDetail.get(column)).toString()));
+										objDetail.get(column).toString()));
 						} else {
 							columnData = String.format("%.0f",
 								Double.parseDouble(
-									Objects.requireNonNull(objDetail.get(column)).toString()));
+										objDetail.get(column).toString()));
 						}
 					}
 					if (column.equalsIgnoreCase("lead_id")) {

@@ -201,4 +201,11 @@
     <string name="txt_label_performance">Performance</string>
     <string name="txt_label_team_snapshot">Team Snapshot</string>
     <string name="txt_label_total">Total</string>
+    <string name="saathi_init">saathi_init</string>
+    <string name="txt_lable_title">Title</string>
+    <string name="btn_label_send_otp">Send OTP</string>
+    <string name="btn_label_verify_otp">Verify OTP</string>
+    <string name="hint_label_enter_otp">Enter OTP*</string>
+    <string name="txt_label_resend_otp">Resend OTP</string>
+    <string name="btn_label_submit_otp">Submit OTP</string>
 </resources>

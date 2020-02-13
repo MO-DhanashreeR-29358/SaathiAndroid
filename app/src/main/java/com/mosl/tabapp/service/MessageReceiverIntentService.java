@@ -11,7 +11,9 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+
 import androidx.core.app.NotificationCompat;
+
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -19,11 +21,13 @@ import com.mosl.annotations.FcmToken;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonActivity;
-import dagger.android.AndroidInjection;
+
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
+
 import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
 import static com.mosl.tabapp.core.ActivityNavigationHelper.ARG_NOTIFICATION_CATEGORY;
@@ -62,10 +66,10 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 			Random random = new Random();
 			int m = random.nextInt(9999 - 1000) + 1000;
 			if (data.get("category") != null) {
-				category = Objects.requireNonNull(data.get("category")).toString();
+				category = data.get("category").toString();
 			}
-			String title = Objects.requireNonNull(data.get("title")).toString();
-			String message = Objects.requireNonNull(data.get("message")).toString();
+			String title = data.get("title").toString();
+			String message = data.get("message").toString();
 			Intent notificationIntent = new Intent(this, CommonActivity.class);
 			notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			notificationIntent.setAction("Mosl_" + m);
@@ -116,13 +120,13 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 				channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 				channel.setDescription(description);
 
-				Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
+				notificationManager.createNotificationChannel(channel);
 			}
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 				notificationBuilder.setChannelId(CHANNEL_ID); // Channel ID
 			}
 			//endregion
-			Objects.requireNonNull(notificationManager)
+			notificationManager
 				.notify(m /* ID of notification */, notificationBuilder.build());
 		}
 	}

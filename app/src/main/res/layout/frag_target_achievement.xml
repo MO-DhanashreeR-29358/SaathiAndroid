@@ -24,11 +24,11 @@
 
 
         <Spinner
-            android:id="@+id/spTargetVsAchivementFilter"
+            android:id="@+id/spPeriod"
             style="@style/DashbordSpinnerSelector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_weight="1" />
 

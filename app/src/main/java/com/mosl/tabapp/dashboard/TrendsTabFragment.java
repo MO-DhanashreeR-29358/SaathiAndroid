@@ -48,8 +48,8 @@ import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-import com.mosl.tabapp.model.dashboard.WidgetType;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,49 +75,28 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  */
 
 public class TrendsTabFragment extends CommonFragment {
-    private String CHART_TYPE_LINE = "SpLine";
-    private String CHART_TYPE_COLUMN = "Coloumn";
     private String[] mMonths;
 
-    View trendsView;
-    private List<WidgetType> widgetTypeList = new ArrayList<>();
     private DashboardModel dashboardModel;
     private List<DashboardGroupModel> subWidgetModelList;
-    static Context mContext;
-    private RecyclerView horizontalRecyclerView;
-    private HorizontalAdapter horizontalAdapter;
-    private int[] VORDIPLOM_COLORS = {
-            Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
-            Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46), Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
-            Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
-            Color.rgb(254, 46, 46)
-    };
     private List<WidgetModel> widgetModelListNew;
-    public final static String[] ignoreList = new String[]{"MonthOnMonthTrend", "ChartType"};
     private TableLayout tableLayout;
 
+    private YAxis rightAxis;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        trendsView = super.onCreateView(inflater, container, savedInstanceState);
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View trendsView = super.onCreateView(inflater, container, savedInstanceState);
         hideAppTitle();
         setUpView(trendsView);
-        setUserVisibleHint(true);
         return trendsView;
 
     }
 
-    @Override protected int getLayout() {
+    @Override
+    protected int getLayout() {
         return R.layout.frag_trends;
     }
-
-    public static TrendsTabFragment newInstance(Context context) {
-        TrendsTabFragment fragment = new TrendsTabFragment();
-
-        return fragment;
-    }
-
 
     private void setUpView(View trendsView) {
         widgetModelListNew = new ArrayList<>();
@@ -136,27 +115,23 @@ public class TrendsTabFragment extends CommonFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        horizontalRecyclerView = (RecyclerView) trendsView.findViewById(R.id.horizontalRecyclerView);
-        horizontalAdapter = new HorizontalAdapter(subWidgetModelList);
+        RecyclerView horizontalRecyclerView = trendsView.findViewById(R.id.horizontalRecyclerView);
+        HorizontalAdapter horizontalAdapter = new HorizontalAdapter(subWidgetModelList);
         LinearLayoutManager horizontalLayoutManagaer =
-            new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+                new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         horizontalRecyclerView.setLayoutManager(horizontalLayoutManagaer);
         horizontalRecyclerView.setAdapter(horizontalAdapter);
         horizontalAdapter.notifyDataSetChanged();
-        tableLayout = (TableLayout) trendsView.findViewById(R.id.tableMData);
+        tableLayout = trendsView.findViewById(R.id.tableMData);
 
     }
 
-
-    YAxis rightAxis;
-    CombinedChart mChart;
-
     private void setChartData(List<List<ChartDataModel>> arrayLists) {
         try {
-            LayoutInflater inFla = getActivity().getLayoutInflater();
+            LayoutInflater inFla = requireActivity().getLayoutInflater();
             for (int i = 0; i < arrayLists.size(); i++) {
                 View tableRow = inFla.inflate(R.layout.combined_chartlayout, null);
-                mChart = (CombinedChart) tableRow.findViewById(R.id.mChart);
+                CombinedChart mChart = tableRow.findViewById(R.id.mChart);
 
                 mChart.getDescription().setEnabled(false);
                 mChart.setBackgroundColor(Color.WHITE);
@@ -215,18 +190,6 @@ public class TrendsTabFragment extends CommonFragment {
 
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        try {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser && trendsView != null) {
-                //webServiceCall();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void generateAxisLabel(ChartDataModel data, XAxis xAxis) {
         if (data != null) {
             LinkedHashMap map = data.getMonthData();
@@ -237,32 +200,28 @@ public class TrendsTabFragment extends CommonFragment {
             }
         }
 
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                try {
-                    if (value < 0) {
-                        return "";
-                    } else {
-                        return mMonths[(int) value % mMonths.length];
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        xAxis.setValueFormatter((value, axis) -> {
+            try {
+                if (value < 0) {
+                    return "";
+                } else {
+                    return mMonths[(int) value % mMonths.length];
                 }
-                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            return null;
         });
     }
 
     private boolean dataFoundFlag;
 
     private LineData generateLineData(XAxis xAxis, List<ChartDataModel> arrayList) {
-        List<ChartDataModel> dataList = arrayList;
-        List<ChartDataModel> barDataList = new ArrayList<>();
 
         ChartDataModel lineData = null;
-        for (ChartDataModel model : dataList) {
+        for (ChartDataModel model : arrayList) {
 
+            String CHART_TYPE_LINE = "SpLine";
             if (model.getChartType().equals(CHART_TYPE_LINE)) {
                 lineData = model;
             }
@@ -274,7 +233,7 @@ public class TrendsTabFragment extends CommonFragment {
 
         LineData d = new LineData();
 
-        ArrayList<Entry> entries = new ArrayList<Entry>();
+        ArrayList<Entry> entries = new ArrayList<>();
         int index;
         LineDataSet set = null;
         for (index = 0; index < itemcount; index++) {
@@ -323,11 +282,11 @@ public class TrendsTabFragment extends CommonFragment {
     }
 
     private BarData generateBarData(XAxis xAxis, List<ChartDataModel> arrayList) {
-        List<ChartDataModel> dataList = arrayList;
         List<ChartDataModel> barDataList = new ArrayList<>();
 
-        for (ChartDataModel model : dataList) {
+        for (ChartDataModel model : arrayList) {
 
+            String CHART_TYPE_COLUMN = "Coloumn";
             if (model.getChartType().equals(CHART_TYPE_COLUMN)) {
                 generateAxisLabel(model, xAxis);
                 barDataList.add(model);
@@ -341,7 +300,8 @@ public class TrendsTabFragment extends CommonFragment {
         List<ArrayList<BarEntry>> entryList = new ArrayList<>();
 
         for (int x = 0; x < barDataList.size(); x++) {
-            ArrayList<BarEntry> entry = new ArrayList<BarEntry>();
+            ArrayList<BarEntry> entry = new ArrayList<
+                    >();
             entryList.add(entry);
         }
         BarDataSet set1 = null;
@@ -377,69 +337,36 @@ public class TrendsTabFragment extends CommonFragment {
         if (barDataList.size() > 1) {
             d.groupBars(0, groupSpace, barSpace); // start at x = 0
 
-        } else {
-
         }
 
         return d;
-    }
-
-
-    private class ChartDataModel {
-        private String legendText;
-        private String chartType;
-        private LinkedHashMap<String, Float> monthData = new LinkedHashMap<>();
-
-        public String getLegendText() {
-            return legendText;
-        }
-
-        public void setLegendText(String legendText) {
-            this.legendText = legendText;
-        }
-
-        public String getChartType() {
-            return chartType;
-        }
-
-        public void setChartType(String chartType) {
-            this.chartType = chartType;
-        }
-
-        public LinkedHashMap<String, Float> getMonthData() {
-            return monthData;
-        }
-
-        public void setMonthData(LinkedHashMap<String, Float> monthData) {
-            this.monthData = monthData;
-        }
     }
 
     private void webServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             ClientRequest request = new ClientRequest(
-                businessProfileId,
-                null,
-                widgetSystemName,
-                dashboardModel.getProductId(),
-                dashboardModel.getEmployeeCode()
+                    businessProfileId,
+                    null,
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
             );
 
             Disposable subscribe = getSaathiApi().getDashboardData(request)
-                .map(responseS -> {
+                    .map(responseS -> {
 
-                    JSONObject response = new JSONObject(responseS);
-                    String status = response.get(STATUS).toString();
-                    if (status.equalsIgnoreCase("true")) {
-                        return response.getJSONObject(RESPONSE).getJSONArray("Table");
-                    } else {
-                        String message = response.get(MESSAGE).toString();
-                        throw new ServiceFailureException(message, message);
-                    }
-                })
-                .compose(applyUiModel())
-                .subscribe(this::renderTrends);
+                        JSONObject response = new JSONObject(responseS);
+                        String status = response.get(STATUS).toString();
+                        if (status.equalsIgnoreCase("true")) {
+                            return response.getJSONObject(RESPONSE).getJSONArray("Table");
+                        } else {
+                            String message = response.get(MESSAGE).toString();
+                            throw new ServiceFailureException(message, message);
+                        }
+                    })
+                    .compose(applyUiModel())
+                    .subscribe(this::renderTrends);
         } else {
             noInternetConnectionDialog();
         }
@@ -459,15 +386,14 @@ public class TrendsTabFragment extends CommonFragment {
                 renderGraph(jsonArray);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void renderGraph(JSONArray jsonArray) throws JSONException {
-        int j = 0;
         List<List<ChartDataModel>> dynamicList = new ArrayList<>();
-        List<ChartDataModel> dataList = new ArrayList<ChartDataModel>();
+        List<ChartDataModel> dataList = new ArrayList<>();
         String paramValue;
         if (jsonArray.length() > 0) {
             dataList.clear();
@@ -485,8 +411,7 @@ public class TrendsTabFragment extends CommonFragment {
                         paramValue = object.getString(paramName);
                         model.setChartType(paramValue);
                     } else {
-                        if (paramName.equalsIgnoreCase("WidgetType")) {
-                        } else {
+                        if (!paramName.equalsIgnoreCase("WidgetType")) {
                             paramValue = object.getString(paramName);
                             float monthData = Float.parseFloat(paramValue);
                             model.getMonthData().put(paramName, monthData);
@@ -502,40 +427,51 @@ public class TrendsTabFragment extends CommonFragment {
         setChartData(dynamicList);
     }
 
+    private class ChartDataModel {
+        private String legendText;
+        private String chartType;
+        private LinkedHashMap<String, Float> monthData = new LinkedHashMap<>();
+
+        String getLegendText() {
+            return legendText;
+        }
+
+        void setLegendText(String legendText) {
+            this.legendText = legendText;
+        }
+
+        String getChartType() {
+            return chartType;
+        }
+
+        void setChartType(String chartType) {
+            this.chartType = chartType;
+        }
+
+        LinkedHashMap<String, Float> getMonthData() {
+            return monthData;
+        }
+
+    }
+
     public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
 
         private List<DashboardGroupModel> widgetModelList;
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView tvWidgetName;
-            public ImageView imageView;
-            public RelativeLayout llWidgetList;
-            public CardView card_view;
-
-            public MyViewHolder(View view) {
-                super(view);
-                tvWidgetName = (TextView) view.findViewById(R.id.tvWidgetName);
-                imageView = (ImageView) view.findViewById(R.id.imageView);
-                llWidgetList = (RelativeLayout) view.findViewById(R.id.llWidgetList);
-                card_view = (CardView) view.findViewById(R.id.card_view);
-            }
-        }
-
-
-        public HorizontalAdapter(List<DashboardGroupModel> widgetModelList) {
+        private Context context;
+        HorizontalAdapter(List<DashboardGroupModel> widgetModelList) {
             this.widgetModelList = widgetModelList;
         }
 
-
+        @NotNull
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_target_achievement_list, parent, false);
-
+            context = parent.getContext();
             return new MyViewHolder(itemView);
         }
 
-        public void selectCategory(String name) {
+        void selectCategory(String name) {
             for (DashboardGroupModel model : widgetModelList) {
                 if (name.equals(model.getSystemName())) {
                     model.setSelected(true);
@@ -547,7 +483,7 @@ public class TrendsTabFragment extends CommonFragment {
         }
 
         @Override
-        public void onBindViewHolder(final MyViewHolder holder, int position) {
+        public void onBindViewHolder(@NotNull final MyViewHolder holder, int position) {
             final DashboardGroupModel widgetModel = widgetModelList.get(position);
             if (widgetModel.isSelected()) {
 
@@ -575,33 +511,44 @@ public class TrendsTabFragment extends CommonFragment {
                 setImage(widgetModelListNew.get(0).getIconUrl1().replaceAll(" ", "%20"), holder.imageView);
 
             }
-            holder.llWidgetList.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!widgetModel.getDisplayName().isEmpty()) {
-                        selectCategory(widgetModel.getSystemName());
-                        holder.imageView.setImageResource(R.drawable.mhovertrend);
-                        notifyDataSetChanged();
-                    }
+            holder.llWidgetList.setOnClickListener(v -> {
+                if (!widgetModel.getDisplayName().isEmpty()) {
+                    selectCategory(widgetModel.getSystemName());
+                    holder.imageView.setImageResource(R.drawable.mhovertrend);
+                    notifyDataSetChanged();
                 }
             });
 
         }
 
         void setImage(String imageUrl, final ImageView imageView) {
-            Glide.with(requireContext())
-                .load(imageUrl)
+            Glide.with(context)
+                    .load(imageUrl)
                     //remove Chache
                     .asBitmap().placeholder(R.drawable.ic_white).centerCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {
                     RoundedBitmapDrawable circularBitmapDrawable =
-                            RoundedBitmapDrawableFactory.create(requireContext().getResources(),
-                            resource);
-                    //circularBitmapDrawable.setCircular(true);
+                            RoundedBitmapDrawableFactory.create(context.getResources(),
+                                    resource);
                     imageView.setImageDrawable(circularBitmapDrawable);
                 }
             });
+        }
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            TextView tvWidgetName;
+            public ImageView imageView;
+            RelativeLayout llWidgetList;
+            CardView card_view;
+
+            MyViewHolder(View view) {
+                super(view);
+                tvWidgetName = view.findViewById(R.id.tvWidgetName);
+                imageView = view.findViewById(R.id.imageView);
+                llWidgetList = view.findViewById(R.id.llWidgetList);
+                card_view = view.findViewById(R.id.card_view);
+            }
         }
 
         @Override
@@ -614,7 +561,7 @@ public class TrendsTabFragment extends CommonFragment {
 
         private DecimalFormat mFormat;
 
-        public CRMIAxisValueFormatter() {
+        CRMIAxisValueFormatter() {
             mFormat = new DecimalFormat("########0.00");
         }
 

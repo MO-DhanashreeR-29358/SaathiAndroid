@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
@@ -16,11 +18,13 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.PendingApprovalModel;
 import com.mosl.tabapp.ui.MSFDialog;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.R.id;
@@ -89,8 +93,7 @@ public class PendingApprovalFragment extends CommonFragment {
 	private void getAprovalCoutSummary() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
-				new PendingApprovalRequest(
-					Objects.requireNonNull(userManager.getUser()).employeeCode);
+                    new PendingApprovalRequest(userManager.getUser().employeeCode);
             Disposable subscribe = getSaathiApi().postApprovalSummaryCount(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryCount);
@@ -135,7 +138,7 @@ public class PendingApprovalFragment extends CommonFragment {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             PendingApprovalRequest request =
 				new PendingApprovalRequest(
-					Objects.requireNonNull(userManager.getUser()).employeeCode);
+                        userManager.getUser().employeeCode);
             Disposable subscribe = getSaathiApi().postApprovalSummaryByEmployee(request)
                 .compose(applyUiModel())
                 .subscribe(this::renderApprovalSummaryByCount);

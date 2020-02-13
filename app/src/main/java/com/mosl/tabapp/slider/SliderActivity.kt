@@ -9,7 +9,7 @@ import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ActivitySliderBinding
-import com.mosl.tabapp.splash.SplashActivityNew
+import com.mosl.tabapp.splash.SplashActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -81,7 +81,7 @@ class SliderActivity : LeanBaseActivity() {
   }
 
   private fun launchSplash() {
-    val intent = Intent(this@SliderActivity, SplashActivityNew::class.java)
+    val intent = Intent(this@SliderActivity, SplashActivity::class.java)
     startActivity(intent)
     finish()
   }

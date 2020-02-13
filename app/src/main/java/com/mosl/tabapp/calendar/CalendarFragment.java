@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.calender.CalenderItem;
 import com.mosl.saathi.api.model.calender.CalenderRequest;
@@ -22,15 +24,17 @@ import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import io.reactivex.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE;
@@ -111,7 +115,7 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 		@Nullable CalendarDay date, boolean selected) {
 		selectionDate = getSelectedDatesString();
 		appointments(selectionDate);
-		oneDayDecorator.setDate(Objects.requireNonNull(date).getDate());
+		oneDayDecorator.setDate(date.getDate());
 		materialCalendarView.invalidateDecorators();
 	}
 
@@ -212,8 +216,8 @@ public class CalendarFragment extends CommonFragment implements OnDateSelectedLi
 		tvDay.setText(CRMAppUtil.getDBDate(tDate, "E MMMM d"));
 		if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 			CalenderRequest request =
-				new CalenderRequest(selectionDate, "A", Objects.requireNonNull(
-					userManager.getUser()).employeeCode);
+					new CalenderRequest(selectionDate, "A",
+							userManager.getUser().employeeCode);
 			Disposable subscribe = getSaathiApi().postCalenderByDate(request)
 				.compose(applyUiModel())
 				.subscribe(this::renderCalender);

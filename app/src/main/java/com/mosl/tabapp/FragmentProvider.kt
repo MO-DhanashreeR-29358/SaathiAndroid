@@ -1,7 +1,11 @@
 package com.mosl.tabapp
 
+import com.mosl.mobile.pdf.OTPFragment
+import com.mosl.mobile.pdf.OTPModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
+import com.mosl.tabapp.banner.BannerFragment
+import com.mosl.tabapp.banner.BannerModule
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
@@ -16,7 +20,7 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
-import com.mosl.tabapp.query.QueryFragmentNew
+import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.ReportFragment
@@ -53,7 +57,7 @@ abstract class FragmentProvider {
   abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
 
   @ContributesAndroidInjector(modules = [QueryModule::class])
-  abstract fun provideQueryFragmentFactory(): QueryFragmentNew
+  abstract fun provideQueryFragmentFactory(): QueryFragment
 
   @ContributesAndroidInjector
   abstract fun provideWebviewFragmentFactory(): WebViewFragment
@@ -63,6 +67,9 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector(modules = [AuLeadsModule::class])
     abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
+
+    @ContributesAndroidInjector(modules = [BannerModule::class])
+    abstract fun provideBannerFragmentFactory(): BannerFragment
 
     @ContributesAndroidInjector(modules = [AuTargetModule::class])
     abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetFragment
@@ -147,5 +154,8 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
+
+    @ContributesAndroidInjector(modules = [OTPModule::class])
+    abstract fun provideOTPFactory(): OTPFragment
 
 }

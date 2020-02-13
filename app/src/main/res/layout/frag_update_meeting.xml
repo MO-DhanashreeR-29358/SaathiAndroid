@@ -240,7 +240,8 @@
                 android:hint="Enter Meeting Description*"
                 android:inputType="textMultiLine"
                 android:maxLength="500"
-                android:textCursorDrawable="@null" />
+              android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+              android:textCursorDrawable="@null" />
       </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -485,7 +486,8 @@
                 android:layout_height="@dimen/_80sdp"
                 android:hint="Enter Customer Comment"
                 android:inputType="textMultiLine"
-                android:textCursorDrawable="@null" />
+              android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+              android:textCursorDrawable="@null" />
       </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:id="@+id/llActionables"
@@ -566,7 +568,8 @@
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
-                    android:textCursorDrawable="@null" />
+                  android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                  android:textCursorDrawable="@null" />
           </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -631,7 +634,8 @@
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textCursorDrawable="@null" />
+                      android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                      android:textCursorDrawable="@null" />
               </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView

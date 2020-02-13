@@ -13,9 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
@@ -32,12 +34,15 @@ import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
 import com.mosl.tabapp.ui.CustomDialog;
 import com.mosl.tabapp.ui.MSFDialog;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
+
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.APPT_CANCELLED;
@@ -72,7 +77,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	private ArrayList<LeadActivitiesMeetingModel> meetingList = new ArrayList<>();
 	private AppointmentAdapter appointmentAdapter;
 	private ViewPager viewPager;
-
+	private final static String TAG = LeadViewActivitiesFragment.class.getSimpleName();
 	public static LeadViewActivitiesFragment newInstance(int position, String type, String leadID,
 		String ucid) {
 		LeadViewActivitiesFragment fragment = new LeadViewActivitiesFragment();
@@ -95,8 +100,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		activitiesView = super.onCreateView(inflater, container, savedInstanceState);
-		//attachLayout(R.layout.frag_lead_activities);
-		setUpView(Objects.requireNonNull(activitiesView));
+		setUpView(activitiesView);
 		setUserVisibleHint(true);
 		return activitiesView;
 	}
@@ -305,7 +309,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	private void leadViewDialog(final LeadActivitiesAppointModel appointmentModel) {
 		final Dialog dialog = new Dialog(requireContext());
 		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		Objects.requireNonNull(dialog.getWindow())
+		dialog.getWindow()
 			.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.setContentView(R.layout.dialog_appointments);
@@ -322,7 +326,7 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 		String timeStr = appointmentModel.getTime(); //4:05PM
 		Date apptDate = CRMAppUtil.getDate(dateStr + " " + timeStr, "dd MMM yyyy h:mma");
 
-		if (CRMAppUtil.isBeforeDate(Objects.requireNonNull(apptDate))) {
+		if (CRMAppUtil.isBeforeDate(apptDate)) {
 			ivUpdateMeeting.setVisibility(
 				View.VISIBLE);//updaet meeting allowed only when appointment date is less than current date
 		} else {
@@ -461,16 +465,20 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 		@Override
 		public void onBindViewHolder(MyViewHolder1 holder, int position) {
 			final LeadActivitiesAppointModel appointmentModel = appointmentList.get(position);
-			String[] metadataArray = appointmentModel.getDate().toString().split(" ");
-			holder.tvMonthName.setText(metadataArray[1]);
-			holder.tvMonthDate.setText(metadataArray[0]);
-			holder.tvMonthYear.setText(metadataArray[2]);
+			try {
+				String[] metadataArray = appointmentModel.getDate().split(" ");
+				holder.tvMonthName.setText(metadataArray[1]);
+				holder.tvMonthDate.setText(metadataArray[0]);
+				holder.tvMonthYear.setText(metadataArray[2]);
+			} catch (Exception e) {
+				Timber.d(e, TAG);
+			}
 			holder.tvTimeRange.setText(appointmentModel.getTime());
 			holder.tvAttFirstName.setText(appointmentModel.getAttendeeEmp());
 			holder.tvAppointmentType.setText(
 				String.format("Appointment for %s", appointmentModel.getProduct()));
 			holder.relativeLayout.setOnClickListener(view -> {
-				if (Objects.requireNonNull(userManager.getUser()).employeeCode
+				if (userManager.getUser().employeeCode
 					.equalsIgnoreCase(appointmentModel.getCreatedBy())) {
 					leadViewDialog(appointmentModel);
 				}
@@ -537,10 +545,15 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 		@Override
 		public void onBindViewHolder(MyViewHolder1 holder, int position) {
 			final LeadActivitiesMeetingModel meetingModel = meetingList.get(position);
-			String[] metadataArray = meetingModel.getDate().toString().split(" ");
-			holder.tvMonthName.setText(metadataArray[1]);
-			holder.tvMonthDate.setText(metadataArray[0]);
-			holder.tvMonthYear.setText(metadataArray[2]);
+			try {
+				String[] metadataArray = meetingModel.getDate().split(" ");
+				holder.tvMonthName.setText(metadataArray[1]);
+				holder.tvMonthDate.setText(metadataArray[0]);
+				holder.tvMonthYear.setText(metadataArray[2]);
+			} catch (Exception e) {
+				Timber.d(e, TAG);
+			}
+
 			holder.tvAppointmentType.setText(meetingModel.getMeetingReason());
 			holder.tvTimeRange.setText(meetingModel.getTime());
 			holder.tvAttFirstName.setText(meetingModel.getAttendeeEmp());

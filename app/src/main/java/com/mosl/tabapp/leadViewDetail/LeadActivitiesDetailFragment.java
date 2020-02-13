@@ -5,10 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import java.util.Objects;
+
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.tabapp.constants.MOSLConstants.EMAIL;
@@ -29,9 +30,8 @@ public class LeadActivitiesDetailFragment extends CommonFragment {
 	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
 		Bundle savedInstanceState) {
 		View detailView = super.onCreateView(inflater, container, savedInstanceState);
-		container.post(() -> setAppTitle(Objects.requireNonNull(
-			Objects.requireNonNull(this.getArguments()).getString("MeetingReason"))));
-		setUpView(Objects.requireNonNull(detailView));
+		container.post(() -> setAppTitle(this.getArguments().getString("MeetingReason")));
+		setUpView(detailView);
 		return detailView;
 	}
 
@@ -62,14 +62,14 @@ public class LeadActivitiesDetailFragment extends CommonFragment {
 
 		try {
 			tvMonthDate.setText(
-				Objects.requireNonNull(this.getArguments()).getString(MOSLConstants.DATE));
+					this.getArguments().getString(MOSLConstants.DATE));
 			tvTime.setText(this.getArguments().getString(TIME));
 			tvMobile.setText(this.getArguments().getString(MOBNO));
 			tvEmail.setText(this.getArguments().getString(EMAIL));
-			if (Objects.requireNonNull(this.getArguments().getString(STATUS))
+			if (this.getArguments().getString(STATUS)
 				.equalsIgnoreCase("1")) {
 				tvStatus.setText(getString(R.string.txt_label_active));
-			} else if (Objects.requireNonNull(this.getArguments().getString(STATUS))
+			} else if (this.getArguments().getString(STATUS)
 				.equalsIgnoreCase("0")) {
 				tvStatus.setText(getString(R.string.txt_label_inactive));
 			}
@@ -88,10 +88,10 @@ public class LeadActivitiesDetailFragment extends CommonFragment {
 			tvTravellingMode.setText(this.getArguments().getString("TravellingMode"));
 			tvAmount.setText(this.getArguments().getString("Amount"));
 			tvGeoMeetingLocation.setText(this.getArguments().getString("GeoMeetingLocation"));
-			if (!Objects.requireNonNull(this.getArguments().getString("AttendeeEmp")).isEmpty()) {
+			if (!this.getArguments().getString("AttendeeEmp").isEmpty()) {
 				try {
 					String[] attendingArray =
-						Objects.requireNonNull(this.getArguments().getString("AttendeeEmp"))
+							this.getArguments().getString("AttendeeEmp")
 							.split(",");
 					tvAttendeeFirst.setText(attendingArray[0]);
 					tvAttendeeSecond.setText(attendingArray[1]);

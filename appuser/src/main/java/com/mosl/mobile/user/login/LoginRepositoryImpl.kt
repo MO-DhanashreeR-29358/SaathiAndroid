@@ -1,12 +1,7 @@
 package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.LogoutInfo
-import com.mosl.mobile.user.model.LoginInfo
-import com.mosl.mobile.user.model.LoginResponse
-import com.mosl.mobile.user.model.ReportType
-import com.mosl.mobile.user.model.User
-import com.mosl.mobile.user.model.VersionInfo
-import com.mosl.mobile.user.model.VersionResponse
+import com.mosl.mobile.user.model.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -39,9 +34,14 @@ class LoginRepositoryImpl @Inject constructor(
     return userRepository.fetchReportTypes()
   }
 
-  override fun logout(logoutInfo: LogoutInfo): Completable {
+  override fun logout(): Completable {
     return Completable.fromAction {
       if (userManager.isLoggedIn()) {
+        val user = userManager.user
+        val logoutInfo = LogoutInfo(
+          userId = user.userId, token = user.token,
+          businessUnitId = user.currentBusinessProfile.businessUnitId ?: "0"
+        )
         val loggedOut = userRepository.logout(logoutInfo)
             .onErrorReturnItem(false)
             .blockingFirst()
