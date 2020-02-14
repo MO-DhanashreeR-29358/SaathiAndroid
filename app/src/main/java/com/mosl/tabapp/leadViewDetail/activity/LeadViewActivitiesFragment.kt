@@ -15,14 +15,13 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
+import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesAppointmentChildItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
+import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem
 import com.mosl.tabapp.leadViewDetail.activity.item.SingleTextItem
-import com.mosl.tabapp.model.LeadActivitiesAppointModel
-import com.mosl.tabapp.model.LeadActivitiesMeetingModel
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
-import java.util.ArrayList
 import javax.inject.Inject
 
 class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
@@ -37,8 +36,6 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
   private lateinit var appointmentSection: DataManagerSection
   private lateinit var meetingSection: DataManagerSection
 
-  private val appointmentList = ArrayList<LeadActivitiesAppointModel>()
-  private val meetingList = ArrayList<LeadActivitiesMeetingModel>()
 
   override fun getLayout(): Int {
     return R.layout.fragment_lead_activities
@@ -53,27 +50,6 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     setUpRecyclerView()
     presenter.start()
     dataActionSubject.onNext(Fetch)
-  }
-
-  override fun getActivityRequest(): ActivityRequest {
-    return ActivityRequest(
-        leadId = leadId,
-        ucid = mUcid
-    )
-  }
-
-  override fun render(uiModel: UiModel<ActivityData>) {
-    toggleProgressBar(uiModel.inProgress)
-
-    uiModel.onFailure {
-      showOnFailurePopup(it)
-    }
-
-    uiModel.onSuccess {
-
-    }
-
-
   }
 
   fun setViewPager(viewPager: ViewPager) {
@@ -107,6 +83,70 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     ))
 
   }
+
+  override fun getActivityRequest(): ActivityRequest {
+    return ActivityRequest(
+        leadId = leadId,
+        ucid = mUcid
+    )
+  }
+
+  override fun render(uiModel: UiModel<ActivityData>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess { data ->
+
+      when {
+        data.listOfAppointment.isEmpty() -> {
+          appointmentSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
+                add(SingleTextItem("No Appointment data"))
+              }
+          ))
+        }
+        else -> {
+          appointmentSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
+                addAll(data.listOfAppointment.map { appointment ->
+                  LeadViewActivitiesAppointmentChildItem(appointment)
+                })
+              }
+          ))
+        }
+      }
+
+
+
+      when {
+        data.listOfMeeting.isEmpty() -> {
+          meetingSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
+                add(SingleTextItem("No Meeting data"))
+              }
+          ))
+        }
+
+        else -> {
+          meetingSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
+                addAll(data.listOfMeeting.map { meeting ->
+                  LeadViewActivitiesMeetingChildItem(meeting)
+                })
+              }
+          ))
+        }
+      }
+
+
+    }
+
+
+  }
+
 
   companion object {
     var leadId = "0"

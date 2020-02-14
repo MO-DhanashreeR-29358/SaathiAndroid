@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 import javax.inject.Inject
 
 class LeadViewActivitiesPresenter @Inject constructor(
@@ -18,7 +19,7 @@ class LeadViewActivitiesPresenter @Inject constructor(
           repository.getActivityData(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::render)
+        .subscribe(view::render, Timber::d)
         .addTo(disposable)
   }
 }
