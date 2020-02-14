@@ -49,7 +49,6 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    //activity?.window?.setFlags(LayoutParams.FLAG_SECURE,LayoutParams.FLAG_SECURE)
     binding = FragmentLeadActivitiesBinding.bind(view)
     setUpRecyclerView()
     presenter.start()
