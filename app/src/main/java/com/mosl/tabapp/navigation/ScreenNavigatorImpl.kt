@@ -7,15 +7,32 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.mosl.annotations.ActivityScoped
 import com.mosl.app.core.utils.toast
+import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.mobile.user.login.UserManager
-import com.mosl.navigator.*
+import com.mosl.navigator.ActivityNavigationEntry
+import com.mosl.navigator.BaseNavigator
+import com.mosl.navigator.FragmentNavigationEntry
+import com.mosl.navigator.NavigationEntry
+import com.mosl.navigator.NavigationHelper
+import com.mosl.navigator.NavigationRequest
+import com.mosl.navigator.Navigator
+import com.mosl.navigator.asFragmentEntry
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
 import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.ekyc.*
+import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
+import com.mosl.tabapp.ekyc.EkycNavigator
+import com.mosl.tabapp.ekyc.NEW
+import com.mosl.tabapp.ekyc.OUTPUT
+import com.mosl.tabapp.ekyc.PLAY_STORE_URL
+import com.mosl.tabapp.ekyc.RESUME
+import com.mosl.tabapp.ekyc.getDataForEkyc
+import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesNavigator
+import com.mosl.tabapp.leadViewDetail.activity.mapToMeetingParcel
+import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment.Companion.ARG_MEETING_DETAILS
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
 import javax.inject.Inject
 
@@ -25,7 +42,7 @@ class ScreenNavigatorImpl @Inject constructor(
     protected val navigationHelper: NavigationHelper,
     val userManager: UserManager,
     val navigator: Navigator
-) : BaseNavigator, EkycNavigator, BannerNavigator {
+) : BaseNavigator, EkycNavigator, BannerNavigator, LeadViewActivitiesNavigator {
 
     override fun openPage(
         pageId: Int,
@@ -186,5 +203,13 @@ class ScreenNavigatorImpl @Inject constructor(
         TODO(
             "not implemented"
         ) //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openLeadViewActivitiesDetailScreen(data: Meeting) {
+        val meetingParcel = data.mapToMeetingParcel()
+        val args = Bundle().apply {
+            putParcelable(ARG_MEETING_DETAILS, meetingParcel)
+        }
+        openPage(NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true)
     }
 }

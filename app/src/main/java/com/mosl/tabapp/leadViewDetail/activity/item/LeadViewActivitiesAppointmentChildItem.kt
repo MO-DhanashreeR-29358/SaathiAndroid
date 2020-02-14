@@ -7,7 +7,7 @@ import com.xwray.groupie.databinding.BindableItem
 import timber.log.Timber
 
 class LeadViewActivitiesAppointmentChildItem(
-  private val data: Appointment
+  internal val data: Appointment
 ) : BindableItem<ListMeetingsBinding>() {
 
   override fun getLayout(): Int {

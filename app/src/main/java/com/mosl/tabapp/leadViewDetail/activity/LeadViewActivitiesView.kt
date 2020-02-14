@@ -4,10 +4,15 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityData
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.AppointmentEvent
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.MeetingEvent
+import io.reactivex.Observable
 
 interface LeadViewActivitiesView : BaseView {
 
   fun getActivityRequest(): ActivityRequest
-
   fun render(uiModel: UiModel<ActivityData>)
+
+  fun onAppointmentEventFired(): Observable<AppointmentEvent>
+  fun onMeetingEventFired(): Observable<MeetingEvent>
 }
