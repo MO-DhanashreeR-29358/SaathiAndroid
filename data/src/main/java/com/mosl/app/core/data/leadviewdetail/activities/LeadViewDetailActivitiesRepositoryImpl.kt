@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -48,4 +49,12 @@ class LeadViewDetailActivitiesRepositoryImpl @Inject constructor(
         }
   }
 
+  override fun deleteAppointment(
+    meetingId: String,
+    url: String
+  ): Observable<String> {
+    val request = DeleteAppointmentRequest(meetingId)
+    return saathiApi.deleteAppointments(url, request)
+
+  }
 }

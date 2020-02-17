@@ -9,4 +9,8 @@ sealed class LeadViewActivitiesUiEvent {
 
   data class RescheduleEvent(val data: Appointment) : LeadViewActivitiesUiEvent()
   data class UpdateEvent(val data: Appointment) : LeadViewActivitiesUiEvent()
+  data class DeleteEvent(
+    val meetingId: String,
+    val url: String
+  ) : LeadViewActivitiesUiEvent()
 }

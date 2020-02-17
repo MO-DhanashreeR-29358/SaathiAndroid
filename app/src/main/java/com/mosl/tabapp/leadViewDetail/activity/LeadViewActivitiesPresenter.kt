@@ -48,5 +48,19 @@ class LeadViewActivitiesPresenter @Inject constructor(
         .subscribe { navigator.openUpdateMeetingScreen(it) }
         .addTo(disposable)
 
+    var meetingId = ""
+
+    view.onDeleteEventFired()
+        .map {
+          meetingId = it.meetingId
+          it.meetingId to it.url
+        }
+        .switchMap {
+          repository.deleteAppointment(it.first, it.second)
+              .compose(applyUiModel())
+        }
+        .subscribe { view.renderDeleteAppointment(it, meetingId) }
+        .addTo(disposable)
+
   }
 }

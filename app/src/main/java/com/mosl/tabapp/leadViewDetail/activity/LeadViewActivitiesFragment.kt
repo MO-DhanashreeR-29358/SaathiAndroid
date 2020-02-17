@@ -20,11 +20,15 @@ import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants.APPT_CANCELLED
+import com.mosl.tabapp.constants.MOSLConstants.NO
 import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.YES
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogAppointmentsBinding
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.AppointmentEvent
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.DeleteEvent
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.MeetingEvent
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.RescheduleEvent
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.UpdateEvent
@@ -32,6 +36,9 @@ import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesAppointmen
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem
 import com.mosl.tabapp.leadViewDetail.activity.item.SingleTextItem
+import com.mosl.tabapp.ui.CustomDialog
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -102,6 +109,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
   override fun onMeetingEventFired(): Observable<MeetingEvent> = subject.ofType()
   override fun onRescheduleEventFired(): Observable<RescheduleEvent> = subject.ofType()
   override fun onUpdateEventFired(): Observable<UpdateEvent> = subject.ofType()
+  override fun onDeleteEventFired(): Observable<DeleteEvent> = subject.ofType()
 
   private fun DataManagerSection.addEmptyItemInExpandable(
     expandableTitle: String,
@@ -167,6 +175,26 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     }
   }
 
+  override fun renderDeleteAppointment(
+    uiModel: UiModel<String>,
+    meetingId: String
+  ) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      //appointmentSection.remove()
+      alertDialog(
+          activity, 0,
+          resources.getString(R.string.motilal_oswal),
+          APPT_CANCELLED, "OK", true
+      ) { _, _ -> }
+    }
+  }
+
   private fun openLeadViewDialog(appointment: Appointment) {
     val viewBinding: DialogAppointmentsBinding =
       DialogAppointmentsBinding.bind(layoutInflater.inflate(R.layout.dialog_appointments, null))
@@ -206,6 +234,56 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
           )
       )
 
+    }
+
+    viewBinding.ivCancelMeeting.setOnClickListener {
+      dialog.dismiss()
+      when {
+        CRMAppUtil.isBlank(appointment.repeatOnCode) -> {
+
+          val customDialog = CustomDialog(
+              requireContext(),
+              "Are you sure you want to cancel this appointment ?",
+              true,
+              true,
+              true,
+              "Cancel Appointment",
+              YES,
+              NO
+          ) { action: MSFDialog.Action, _ ->
+            if (action == MSFDialog.Action.OK) {
+
+              subject.onNext(DeleteEvent(appointment.meetingId, "DeactivateMeeting"))
+            }
+
+          }
+          customDialog.show()
+        }
+        else -> {
+          val customDialog = CustomDialog(
+              requireContext(),
+              "Are you sure you want to cancel this appointment ?",
+              true,
+              true,
+              true,
+              "Cancel Appointment",
+              "Current",
+              "All"
+          ) { action: MSFDialog.Action, _ ->
+            when (action) {
+              MSFDialog.Action.OK -> subject.onNext(
+                  DeleteEvent(appointment.meetingId, "DeactivateMeeting")
+              )
+              MSFDialog.Action.CANCEL -> subject.onNext(
+                  DeleteEvent(appointment.meetingId, "DeactivateALLMeeting")
+              )
+            }
+
+          }
+          customDialog.show()
+
+        }
+      }
     }
 
     viewBinding.ivClose.setOnClickListener {
