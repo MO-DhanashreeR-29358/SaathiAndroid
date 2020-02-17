@@ -185,6 +185,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     }
 
     viewBinding.ivRescheduleMeeting.setOnClickListener {
+      dialog.dismiss()
       subject.onNext(
           RescheduleEvent(
               data = appointment.copy(
@@ -192,7 +193,19 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
               )
           )
       )
+
+    }
+
+    viewBinding.ivUpdateMeeting.setOnClickListener {
       dialog.dismiss()
+      subject.onNext(
+          UpdateEvent(
+              data = appointment.copy(
+                  ucid = mUcid
+              )
+          )
+      )
+
     }
 
     viewBinding.ivClose.setOnClickListener {

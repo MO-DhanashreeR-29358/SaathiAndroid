@@ -209,6 +209,9 @@ public interface MOSLConstants extends LabelConfig {
     //  String MEETING_ID = "Meeting Id";
     String MEETING_ID = "MeetingID";
     String MOBNO = "MOBNO";
+    String ACTIVITY_TYPE = "ActivityType";
+    String STATUS_NAME = "StatusName";
+    String ATTENDEE_EMP = "AttendeeEmp";
     String UPDATED_MEETING = "Meeting updated successfully";
     String SET_APPOINTMENTS = "Appointment created successfully";
     String UPDATE_APPOINTMENTS = "Appointment updated successfully";
