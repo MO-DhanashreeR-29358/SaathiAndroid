@@ -30,5 +30,17 @@ class LeadViewActivitiesPresenter @Inject constructor(
           navigator.openLeadViewActivitiesDetailScreen(it)
         }
         .addTo(disposable)
+
+    view.onAppointmentEventFired()
+        .map { it.data }
+        .subscribe(view::renderAppointmentClicked)
+        .addTo(disposable)
+
+    view.onRescheduleEventFired()
+        .map { it.data }
+        .subscribe {
+          navigator.openSetAppointmentScreen(it)
+        }
+        .addTo(disposable)
   }
 }

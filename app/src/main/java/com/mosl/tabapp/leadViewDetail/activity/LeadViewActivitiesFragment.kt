@@ -1,7 +1,12 @@
 package com.mosl.tabapp.leadViewDetail.activity
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.mosl.app.core.events.DataAction.Fetch
@@ -11,12 +16,18 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityData
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
+import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.DialogAppointmentsBinding
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.AppointmentEvent
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.MeetingEvent
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.RescheduleEvent
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.UpdateEvent
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesAppointmentChildItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem
@@ -89,6 +100,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
 
   override fun onAppointmentEventFired(): Observable<AppointmentEvent> = subject.ofType()
   override fun onMeetingEventFired(): Observable<MeetingEvent> = subject.ofType()
+  override fun onRescheduleEventFired(): Observable<RescheduleEvent> = subject.ofType()
+  override fun onUpdateEventFired(): Observable<UpdateEvent> = subject.ofType()
 
   private fun DataManagerSection.addEmptyItemInExpandable(
     expandableTitle: String,
@@ -145,6 +158,48 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
       }
 
     }
+
+  }
+
+  override fun renderAppointmentClicked(data: Appointment) {
+    if (userManager.user.employeeCode == data.createdBy) {
+      openLeadViewDialog(data)
+    }
+  }
+
+  private fun openLeadViewDialog(appointment: Appointment) {
+    val viewBinding: DialogAppointmentsBinding =
+      DialogAppointmentsBinding.bind(layoutInflater.inflate(R.layout.dialog_appointments, null))
+
+    val dialog = Dialog(requireContext()).apply {
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setCanceledOnTouchOutside(false)
+      setContentView(viewBinding.root)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    }
+    val date = CRMAppUtil.getDate("${appointment.date} ${appointment.time}", "MM/dd/yyyy hh:mma")
+    viewBinding.ivUpdateMeeting.visibility = when {
+      CRMAppUtil.isBeforeDate(date) -> View.VISIBLE
+      else -> View.GONE
+    }
+
+    viewBinding.ivRescheduleMeeting.setOnClickListener {
+      subject.onNext(
+          RescheduleEvent(
+              data = appointment.copy(
+                  ucid = mUcid
+              )
+          )
+      )
+      dialog.dismiss()
+    }
+
+    viewBinding.ivClose.setOnClickListener {
+      dialog.dismiss()
+    }
+
+    dialog.show()
 
   }
 

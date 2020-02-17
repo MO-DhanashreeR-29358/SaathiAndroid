@@ -1312,7 +1312,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           endDate.time > startDate.time -> tvEndDateError.visibility = View.GONE
         }
       } catch (e: Exception) {
-        Timber.d(TAG)
+        Timber.d(e)
       }
 
     }
