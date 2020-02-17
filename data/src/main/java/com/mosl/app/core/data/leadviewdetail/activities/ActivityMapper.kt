@@ -62,9 +62,9 @@ fun List<MeetingResponse>.mapToListOfMeeting(): List<Meeting> {
 
 private fun AppointmentResponse.mapToAppointment(): Appointment {
   return Appointment(
-      mobileNumber = mOBNO,
+      mobileNumber = mOBNO ?: "",
       product = product,
-      email = eMAIL,
+      email = eMAIL ?: "",
       name = name,
       attendeeEmployee = attendeeEmp,
       meetingId = meetingID,
@@ -72,11 +72,11 @@ private fun AppointmentResponse.mapToAppointment(): Appointment {
       createdBy = createdBy,
       activityType = activityType,
       time = tIME,
-      statusName = statusName,
+      statusName = statusName ?: "",
       date = dATE,
       leadId = leadID,
       repeatOnCode = repeatOnCode,
-      ucid = ucid
+      ucid = ucid ?: ""
   )
 }
 

@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class AppointmentResponse(
 
-  @JvmField @SerializedName("MOBNO") val mOBNO: String,
+  @JvmField @SerializedName("MOBNO") val mOBNO: String?,
 
   @JvmField @SerializedName("Product") val product: String,
 
-  @JvmField @SerializedName("EMAIL") val eMAIL: String,
+  @JvmField @SerializedName("EMAIL") val eMAIL: String?,
 
   @JvmField @SerializedName("Name") val name: String,
 
@@ -30,7 +30,7 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("TIME") val tIME: String,
 
-  @JvmField @SerializedName("StatusName") val statusName: String,
+  @JvmField @SerializedName("StatusName") val statusName: String?,
 
   @JvmField @SerializedName("ATTENDEE_4") val aTTENDEE4: Any?,
 
@@ -54,5 +54,5 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean,
 
-  @JvmField @SerializedName("UCID") val ucid: String
+  @JvmField @SerializedName("UCID") val ucid: String?
 )
