@@ -34,6 +34,7 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.core.EkycModule;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment;
+import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
@@ -182,7 +183,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             leadViewActivitiesFragment =
                     LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
             LeadProfilingFragment leadViewProfilingFragment =
-                    LeadProfilingFragment.newInstance(2, PROFILING, leadId);
+                LeadProfilingFragment.newInstance(leadId);
             leadViewHistoryFragment =
                     LeadViewHistoryFragment.newInstance(3, MAPPING_HISTORY, leadId, mUCID);
             leadViewInteractionFragment =

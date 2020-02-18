@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadViewDetail
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesModule
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -14,5 +15,8 @@ abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector
   abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
+
+  @ContributesAndroidInjector
+  abstract fun provideLeadProfilingFactory(): LeadProfilingFragment
 
 }

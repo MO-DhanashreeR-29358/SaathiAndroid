@@ -941,15 +941,12 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     // json tags
     private const val Head = "_Head"
 
+    @JvmStatic
     fun newInstance(
-      position: Int,
-      type: String,
       leadId: String
     ): LeadProfilingFragment {
       val fragment = LeadProfilingFragment()
       val args = Bundle()
-      args.putInt("Position", position)
-      args.putString("Type", type)
       args.putString(MOSLConstants.LEAD_ID, leadId)
       fragment.arguments = args
       return fragment
