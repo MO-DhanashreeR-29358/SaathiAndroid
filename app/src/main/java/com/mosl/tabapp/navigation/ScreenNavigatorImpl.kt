@@ -45,8 +45,8 @@ import com.mosl.tabapp.ekyc.OUTPUT
 import com.mosl.tabapp.ekyc.PLAY_STORE_URL
 import com.mosl.tabapp.ekyc.RESUME
 import com.mosl.tabapp.ekyc.getDataForEkyc
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesNavigator
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment.Companion.mUcid
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesNavigator
 import com.mosl.tabapp.leadViewDetail.activity.mapToMeetingParcel
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment.Companion.ARG_MEETING_DETAILS
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
@@ -60,7 +60,8 @@ class ScreenNavigatorImpl @Inject constructor(
   protected val navigationHelper: NavigationHelper,
   val userManager: UserManager,
   val navigator: Navigator
-) : BaseNavigator, EkycNavigator, BannerNavigator, LeadViewActivitiesNavigator {
+) : BaseNavigator, EkycNavigator, BannerNavigator,
+    LeadViewActivitiesNavigator {
 
   override fun openPage(
     pageId: Int,

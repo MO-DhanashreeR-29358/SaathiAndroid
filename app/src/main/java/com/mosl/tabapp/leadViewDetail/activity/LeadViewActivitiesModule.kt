@@ -2,7 +2,6 @@ package com.mosl.tabapp.leadViewDetail.activity
 
 import com.mosl.app.core.data.leadviewdetail.activities.LeadViewDetailActivitiesRepositoryImpl
 import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesNavigator
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import dagger.Binds
 import dagger.Module

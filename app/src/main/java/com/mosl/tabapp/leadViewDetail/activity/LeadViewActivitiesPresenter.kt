@@ -2,7 +2,6 @@ package com.mosl.tabapp.leadViewDetail.activity
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesNavigator
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber

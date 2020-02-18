@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadViewDetail
+package com.mosl.tabapp.leadViewDetail.activity
 
 import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
