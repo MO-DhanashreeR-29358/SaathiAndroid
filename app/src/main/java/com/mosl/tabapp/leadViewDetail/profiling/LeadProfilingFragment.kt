@@ -2,12 +2,10 @@ package com.mosl.tabapp.leadViewDetail.profiling
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -15,6 +13,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.mosl.app.core.rx.applyUiModel
@@ -31,6 +30,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY
 import com.mosl.tabapp.constants.MOSLConstants.SOME_SEELECTION_METHOD
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.FragLeadProfilingBinding
 import com.mosl.tabapp.model.profile.ProfileModel
 import com.mosl.tabapp.model.profile.ProfileOption
 import com.mosl.tabapp.model.profile.ProfileQuestion
@@ -43,14 +43,30 @@ import java.util.HashMap
 
 class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
   private var leadId = ""
-  private var leadProfilingView: View? = null
-  private var mainProfileFormView: View? = null
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
-  private var mainProfileLinearLayout: LinearLayout? = null
   private var formElementList: MutableList<View>? = null
   //This list is added just to have reffrence of each question so if we can findthem in on click event of their siblings child
   private var questionList: MutableMap<String, View>? = null
+  private lateinit var binding: FragLeadProfilingBinding
+
+  override fun getLayout(): Int = layout.frag_lead_profiling
+
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?
+  ) {
+    super.onViewCreated(view, savedInstanceState)
+    binding = FragLeadProfilingBinding.bind(view)
+    try {
+      leadId = this.arguments!!.getString(MOSLConstants.LEAD_ID, "0")
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+    setUpView()
+    userVisibleHint = true
+    getProfileQuestionAnswerFromServer()
+  }
 
   /**
    * This method will a json string of all option selected on the form
@@ -59,25 +75,25 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     get() {
       val saveLeadProfileRequestList = ArrayList<SaveLeadProfileRequest>()
       for (entry in formElementList!!) {
-        if (entry is EditText) {
-          val mTag = entry.getTag()
-              .toString()
-              .trim { it <= ' ' }
-          try {
-            val aarStr = mTag.split("_".toRegex())
-                .dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-            val valueStr = entry.text.toString()
+        when (entry) {
+          is EditText -> {
+            val mTag = entry.getTag()
+                .toString()
                 .trim { it <= ' ' }
-            saveLeadProfileRequestList.add(
-                SaveLeadProfileRequest(aarStr[0], aarStr[1], leadId, valueStr)
-            )
-          } catch (e: Exception) {
-            Timber.d(e)
+            try {
+              val aarStr = mTag.split("_".toRegex())
+                  .dropLastWhile { it.isEmpty() }
+                  .toTypedArray()
+              val valueStr = entry.text.toString()
+                  .trim { it <= ' ' }
+              saveLeadProfileRequestList += SaveLeadProfileRequest(
+                  aarStr[0], aarStr[1], leadId, valueStr
+              )
+            } catch (e: Exception) {
+              Timber.d(e)
+            }
           }
-
-        } else if (entry is RadioGroup) {
-          for (i in 0 until entry.childCount) {
+          is RadioGroup -> for (i in 0 until entry.childCount) {
             val rbTemp = entry.getChildAt(i) as RadioButton
             val profileOption = rbTemp.tag as ProfileOption
             if (profileOption != null && rbTemp.isChecked) {
@@ -100,122 +116,92 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
               )
             }
           }
-        } else if (entry is CheckBox) {
-          val profileOption = entry.getTag() as ProfileOption
-          if (entry.isChecked) {
-            var valueString = ""
-            if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
-                    "Y", ignoreCase = true
-                )
-            ) {
-              valueString = getExtraView(profileOption)
+          is CheckBox -> {
+            val profileOption = entry.getTag() as ProfileOption
+            if (entry.isChecked) {
+              var valueString = ""
+              if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
+                      "Y", ignoreCase = true
+                  )
+              ) {
+                valueString = getExtraView(profileOption)
+              }
+              saveLeadProfileRequestList.add(
+                  SaveLeadProfileRequest(
+                      profileOption.profileParameterID!!.toString(),
+                      profileOption.profileSubParameterID!!.toString(), leadId,
+                      valueString
+                  )
+              )
             }
+          }
+          is Spinner -> {
+            val opTion = entry.selectedItem as ProfileOption
+            var valueString = ""
+
+            if (!CRMAppUtil.isBlank(opTion.extraInfo) && opTion.extraInfo
+                    .equals("Y", ignoreCase = true)
+            ) {
+              valueString = getExtraView(opTion)
+            }
+
             saveLeadProfileRequestList.add(
                 SaveLeadProfileRequest(
-                    profileOption.profileParameterID!!.toString(),
-                    profileOption.profileSubParameterID!!.toString(), leadId,
+                    opTion.profileParameterID!!.toString(),
+                    opTion.profileSubParameterID!!.toString(),
+                    leadId,
                     valueString
                 )
             )
           }
-        } else if (entry is Spinner) {
-          val opTion = entry.selectedItem as ProfileOption
-          var valueString = ""
-
-          if (!CRMAppUtil.isBlank(opTion.extraInfo) && opTion.extraInfo
-                  .equals("Y", ignoreCase = true)
-          ) {
-            valueString = getExtraView(opTion)
-          }
-
-          saveLeadProfileRequestList.add(
-              SaveLeadProfileRequest(
-                  opTion.profileParameterID!!.toString(),
-                  opTion.profileSubParameterID!!.toString(),
-                  leadId,
-                  valueString
-              )
-          )
         }
       }
 
       return saveLeadProfileRequestList
     }
 
-  override fun getLayout(): Int {
-    return R.layout.frag_lead_profiling
-  }
-
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    leadProfilingView = super.onCreateView(inflater, container, savedInstanceState)
-    //attachLayout(R.layout.frag_lead_profiling);
-    try {
-
-      leadId = this.arguments!!.getString(MOSLConstants.LEAD_ID, "0")
-    } catch (e: Exception) {
-      e.printStackTrace()
-    }
-
-    setUpView(leadProfilingView!!)
-
-    userVisibleHint = true
-    return leadProfilingView
-  }
-
   fun setViewPager(viewPager: ViewPager) {
     this.viewPager = viewPager
   }
 
-  private fun setUpView(leadProfilingView: View) {
-    mainProfileLinearLayout = leadProfilingView.findViewById(R.id.mainProfileLayouttarget)
-    val btnCancel = leadProfilingView.findViewById<Button>(R.id.btnCancel)
-    val btnSubmit = leadProfilingView.findViewById<Button>(R.id.btnSubmit)
-    mainProfileFormView = leadProfilingView.findViewById(R.id.mainProfileForm)
-    btnCancel.setOnClickListener(this)
-    btnSubmit.setOnClickListener(this)
+  private fun setUpView() {
+    binding.btnCancel.setOnClickListener(this)
+    binding.btnSubmit.setOnClickListener(this)
   }
 
+/*
   override fun setUserVisibleHint(isVisibleToUser: Boolean) {
     try {
       super.setUserVisibleHint(isVisibleToUser)
-      if (isVisibleToUser && leadProfilingView != null && viewPager!!.currentItem == 2) {
-        getProfileQuestionAnswerFromServer()
+      when {
+        isVisibleToUser && leadProfilingView != null && viewPager!!.currentItem == 2 -> getProfileQuestionAnswerFromServer()
       }
     } catch (e: Exception) {
       e.printStackTrace()
     }
 
   }
+*/
 
   override fun onClick(view: View) {
+    //Goto first tab
     when (view.id) {
 
       R.id.btnSubmit -> {
         val request = selectedAnswersJson
-        if (request.size > 0) {
-          saveLeadProfileParameter(request)
-        } else {
-          MSFDialog.alertDialog(
-              requireContext(), 0,
-              resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
-              resources.getString(android.R.string.ok), true, null
-          )
-          return
+        when {
+          request.isNotEmpty() -> saveLeadProfileParameter(request)
+          else -> {
+            alertDialog(
+                requireContext(), 0,
+                resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
+                resources.getString(android.R.string.ok), true, null
+            )
+          }
         }
       }
 
-      R.id.btnCancel -> {
-        //Goto first tab
-        viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
-      }
-
-      // add other button click
-      else -> {
-      }
+      R.id.btnCancel -> viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
     }
   }
 
@@ -224,84 +210,75 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     profileModel = ProfileModel()
     val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
     for (responseI in leadProfileItems.indices) {
-      val tempProfileQuestionGroup = ProfileQuestionGroup()
       val (groupName1, _, inApproval, _, ProfileParameterGroupID, BusinessUnitId, _, IsAdminMode, parameterList, _, profileParameterId) = leadProfileItems[responseI]
-
       val groupName = stringOrEmpty(groupName1)
-      tempProfileQuestionGroup.groupName = groupName
-
-      val aris = stringOrEmpty(profileParameterId)
-      tempProfileQuestionGroup.profileParameterID = aris
-
-      tempProfileQuestionGroup.inApproval = inApproval
-
-      tempProfileQuestionGroup.profileParameterGroupID = ProfileParameterGroupID
-
-      tempProfileQuestionGroup.businessUnitId = BusinessUnitId
-
-      tempProfileQuestionGroup.isAdminMode = IsAdminMode
+      val profileId = stringOrEmpty(profileParameterId)
+      val tempProfileQuestionGroup = ProfileQuestionGroup().apply {
+        this.groupName = groupName
+        this.profileParameterID = profileId
+        this.inApproval = inApproval
+        this.profileParameterGroupID = ProfileParameterGroupID
+        this.businessUnitId = BusinessUnitId
+        this.isAdminMode = IsAdminMode
+      }
 
       val mProfileQuestionList = ArrayList<ProfileQuestion>()
       if (parameterList != null) {
         for (profileParameterListI in parameterList.indices) {
-          val (_, questionType, selectedProfileSubParameterID, _, _, subParameterList, isDefaultHidden, ProfileParameterListProfileParameterGroupID, _, _, _, isAdminMode, controlType, _, questionText, profileParameterID) = parameterList[profileParameterListI]
+          val (_, questionType1, selectedProfileSubParameterID1, _, _, subParameterList, isDefaultHidden, ProfileParameterListProfileParameterGroupID, _, _, _, isAdminMode, controlType, _, questionText1, profileParameterID) = parameterList[profileParameterListI]
           val tmpProfileQuestion = ProfileQuestion()
 
           tmpProfileQuestion.controlType = controlType
           tmpProfileQuestion.inApproval = inApproval
-
           tmpProfileQuestion.profileParameterGroupID = ProfileParameterListProfileParameterGroupID
+          val questionType = questionType1!!
+          tmpProfileQuestion.questionType = questionType
+          val selectedProfileSubParameterID = selectedProfileSubParameterID1!!
+          tmpProfileQuestion.questionType = selectedProfileSubParameterID
+          val profileParameterListIsAdminMode = isAdminMode!!
+          tmpProfileQuestion.isAdminMode = profileParameterListIsAdminMode
+          val questionText = stringOrEmpty(questionText1)
+          tmpProfileQuestion.questionText = questionText
 
-          val QuestionType = questionType!!
-          tmpProfileQuestion.questionType = QuestionType
-          val SelectedProfileSubParameterID = selectedProfileSubParameterID!!
-          tmpProfileQuestion.questionType = SelectedProfileSubParameterID
+          val yNStatus = when (isDefaultHidden) {
+            null, "" -> "N"
+            else -> isDefaultHidden
+          }
+          tmpProfileQuestion.isDefaultHidden = yNStatus
 
-          val ProfileParameterListIsAdminMode = isAdminMode!!
-          tmpProfileQuestion.isAdminMode = ProfileParameterListIsAdminMode
-
-          val QuestionText = stringOrEmpty(questionText)
-          tmpProfileQuestion.questionText = QuestionText
-
-          val YNStatus = if (isDefaultHidden == null || isDefaultHidden == "")
-            "N"
-          else
-            isDefaultHidden
-          tmpProfileQuestion.isDefaultHidden = YNStatus
-
-          val ProfileParameterListProfileParameterID = profileParameterID!!
-          tmpProfileQuestion.profileParameterID = ProfileParameterListProfileParameterID
+          val profileParameterListProfileParameterID = profileParameterID!!
+          tmpProfileQuestion.profileParameterID = profileParameterListProfileParameterID
 
           val mProfileOptionList = ArrayList<ProfileOption>()
           if (subParameterList != null) {
             for (profileSubParameterListI in subParameterList.indices) {
-              val (_, isHide, _, questionSubText, isSelected, extraInfo, _, extraInfoFieldName, extraInfoRowCount, inApproval1, profileSubParameterID, _, value1, hideDepedentQuestion, _, isAdminMode1) = subParameterList[profileSubParameterListI]
+              val (_, isHide, _, questionSubText, isSelected, extraInfo, _, extraInfoFieldName, extraInfoRowCount, inApproval1, profileSubParameterID1, _, value1, hideDepedentQuestion, _, isAdminMode1) = subParameterList[profileSubParameterListI]
               val tempProfileOption = ProfileOption()
 
               tempProfileOption.profileParameterID = tmpProfileQuestion.profileParameterID
 
-              val ProfileSubParameterListInApproval = inApproval1!!
-              tempProfileOption.inApproval = ProfileSubParameterListInApproval
+              val profileSubParameterListInApproval = inApproval1!!
+              tempProfileOption.inApproval = profileSubParameterListInApproval
 
               val value = stringOrEmpty(value1)
               tempProfileOption.value = value
               tempProfileOption.isSelected = isSelected!!
 
-              val ProfileSubParameterID = profileSubParameterID!!
-              tempProfileOption.profileSubParameterID = ProfileSubParameterID
+              val profileSubParameterID = profileSubParameterID1!!
+              tempProfileOption.profileSubParameterID = profileSubParameterID
               tempProfileOption.hideDepedentQuestion = stringOrEmpty(hideDepedentQuestion)
-              val NoStr = stringOrEmpty(isHide)
-              tempProfileOption.setIsHide(NoStr)
+              val noStr = stringOrEmpty(isHide)
+              tempProfileOption.setIsHide(noStr)
 
-              val str_QuestionSubText = stringOrEmpty(questionSubText)
-              tempProfileOption.questionSubText = str_QuestionSubText
+              val strQuestionsubtext = stringOrEmpty(questionSubText)
+              tempProfileOption.questionSubText = strQuestionsubtext
 
-              val ProfileSubParameterListIsAdminMode = isAdminMode1!!
-              tempProfileOption.isAdminMode = ProfileSubParameterListIsAdminMode
+              val profileSubParameterListIsAdminMode = isAdminMode1!!
+              tempProfileOption.isAdminMode = profileSubParameterListIsAdminMode
 
               tempProfileOption.extraInfo = stringOrEmpty(extraInfo)
-              if (extraInfoRowCount != null) {
-                tempProfileOption.extraInfoRowCount = extraInfoRowCount
+              when {
+                extraInfoRowCount != null -> tempProfileOption.extraInfoRowCount = extraInfoRowCount
               }
               tempProfileOption.extraInfoFieldName = stringOrEmpty(extraInfoFieldName)
 
@@ -464,7 +441,7 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     questionList = HashMap()
     val previousActionMap = HashMap<String, String>()
 
-    mainProfileLinearLayout!!.removeAllViews()
+    binding.mainProfileLayouttarget.removeAllViews()
     // this is just a flag to Set Open first group
     var mCoutFlagFirstGroup = false
     for (group in profileModel!!.profileQuestionGroup) {
@@ -491,21 +468,21 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
       // group
       var questionNo = 1
       for (question in group.profileQuestionList) {
-        val tvQuestion = TextView(activity)
-        tvQuestion.text = question.questionText
-        tvQuestion.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        tvQuestion.setTextColor(resources.getColor(R.color.light_black))
         val padding = resources.getDimension(R.dimen._15sdp)
             .toInt()
-        tvQuestion.setPadding(padding, padding, padding, padding)
-        tvQuestion.text = String.format("Q %d.%s", questionNo, question.questionText)
-        questionNo++
-        // tvQuestion.setTextSize(getResources().getDimension(R.dimen._10sdp));
-        tvQuestion.textSize = resources.getDimension(R.dimen.txt_size_profile)
-        tvQuestion.setBackgroundResource(R.drawable.profiling_question_background_text)
+        val tvQuestion = TextView(activity).apply {
+          text = question.questionText
+          layoutParams = LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+          )
+          setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
+          setPadding(padding, padding, padding, padding)
+          text = String.format("Q %d.%s", questionNo, question.questionText)
+          questionNo++
+          textSize = resources.getDimension(R.dimen.txt_size_profile)
+          setBackgroundResource(R.drawable.profiling_question_background_text)
+        }
+
 
         llBasicProfileQuestionLayoutInner.addView(tvQuestion)
         questionList!![question.profileParameterID!!.toString() + Head] = tvQuestion
@@ -824,11 +801,11 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
 
       //question section end
 
-      mainProfileLinearLayout!!.addView(groupLayout)
+      binding.mainProfileLayouttarget.addView(groupLayout)
       val v = View(activity)
 
       v.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 5)
-      mainProfileLinearLayout!!.addView(v)
+      binding.mainProfileLayouttarget.addView(v)
 
       if (mCoutFlagFirstGroup) {
         //collapse others
@@ -927,7 +904,7 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     uiModel.onSuccess { dataList ->
       if (dataList.isNotEmpty()) {
         try {
-          mainProfileFormView!!.visibility = View.VISIBLE
+          binding.mainProfileForm.visibility = View.VISIBLE
           fillProfileModal(dataList)
           renderForm()
         } catch (e: Exception) {
