@@ -41,7 +41,7 @@ import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
 
-class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
+class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickListener {
   private var leadId = ""
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
@@ -938,18 +938,18 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
     private const val CHECK_BOX = 3
     private const val ANS_SEPERATER = "#"
     private const val ANS_GROUP_SEPERATER = "|"
-    // json tags
     private const val Head = "_Head"
 
     @JvmStatic
     fun newInstance(
       leadId: String
     ): LeadProfilingFragment {
-      val fragment = LeadProfilingFragment()
-      val args = Bundle()
-      args.putString(MOSLConstants.LEAD_ID, leadId)
-      fragment.arguments = args
-      return fragment
+      val args = Bundle().apply {
+        putString(MOSLConstants.LEAD_ID, leadId)
+      }
+      return LeadProfilingFragment().apply {
+        arguments = args
+      }
     }
   }
 }
