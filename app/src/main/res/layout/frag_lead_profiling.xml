@@ -1,63 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:isScrollContainer="true">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <FrameLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/dashbord_background"
-        android:padding="@dimen/_6sdp">
+        android:layout_height="match_parent"
+        android:isScrollContainer="true">
 
-        <TextView
-            android:id="@+id/tvPlaceholder"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:gravity="center|fill_vertical"
-            android:textAppearance="?android:textAppearanceLarge" />
+            android:background="@color/dashbord_background"
+            android:padding="@dimen/_6sdp">
 
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/mainProfileForm"
-            android:visibility="gone"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/mainProfileLayouttarget"
+            <TextView
+                android:id="@+id/tvPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginTop="90dp"
+                android:gravity="center|fill_vertical"
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <LinearLayout
+
+                android:id="@+id/mainProfileForm"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-              <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSubmit"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/mainProfileLayouttarget"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/button_highlight"
-                    android:text="Submit"
-                    android:layout_weight="0.5"
-                    android:textColor="@color/white" />
+                    android:orientation="vertical" />
 
-              <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCancel"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal">
 
-                    android:background="@drawable/button_highlight"
-                    android:text="Cancel"
-                    android:textColor="@color/white" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSubmit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:background="@drawable/button_highlight"
+                        android:text="Submit"
+                        android:textColor="@color/white" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnCancel"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_weight="0.5"
+
+                        android:background="@drawable/button_highlight"
+                        android:text="Cancel"
+                        android:textColor="@color/white" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </FrameLayout>
-</androidx.core.widget.NestedScrollView>
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
