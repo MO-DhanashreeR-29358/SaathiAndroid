@@ -17,6 +17,7 @@ import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityData
 import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
 import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
+import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
@@ -56,6 +57,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
 
   private var pager: ViewPager? = null
   private val subject = PublishSubject.create<LeadViewActivitiesUiEvent>()
+  private var listOfAppointment: List<Appointment> = emptyList()
+  private var listOfMeeting: List<Meeting> = emptyList()
 
   private lateinit var appointmentSection: DataManagerSection
   private lateinit var meetingSection: DataManagerSection
@@ -140,13 +143,16 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
         data.listOfAppointment.isEmpty() -> appointmentSection.addEmptyItemInExpandable(
             "Appointment", "No Appointment data"
         )
-        else -> appointmentSection.update(listOf(
-            ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
-              addAll(data.listOfAppointment.map { appointment ->
-                LeadViewActivitiesAppointmentChildItem(appointment)
-              })
-            }
-        ))
+        else -> {
+          listOfAppointment = data.listOfAppointment
+          appointmentSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
+                addAll(data.listOfAppointment.map { appointment ->
+                  LeadViewActivitiesAppointmentChildItem(appointment)
+                })
+              }
+          ))
+        }
       }
 
 
@@ -156,13 +162,16 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
             "Meeting", "No Meeting data"
         )
 
-        else -> meetingSection.update(listOf(
-            ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
-              addAll(data.listOfMeeting.map { meeting ->
-                LeadViewActivitiesMeetingChildItem(meeting)
-              })
-            }
-        ))
+        else -> {
+          listOfMeeting = data.listOfMeeting
+          meetingSection.update(listOf(
+              ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
+                addAll(data.listOfMeeting.map { meeting ->
+                  LeadViewActivitiesMeetingChildItem(meeting)
+                })
+              }
+          ))
+        }
       }
 
     }
@@ -186,12 +195,26 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     }
 
     uiModel.onSuccess {
-      //appointmentSection.remove()
       alertDialog(
           activity, 0,
           resources.getString(R.string.motilal_oswal),
           APPT_CANCELLED, "OK", true
       ) { _, _ -> }
+
+      val list = listOfAppointment.filter { it.meetingId == meetingId }
+      listOfAppointment = list
+      when {
+        listOfAppointment.isNotEmpty() -> appointmentSection.update(listOf(
+            ExpandableGroup(LeadViewActivitiesItem("Appointment")).apply {
+              addAll(listOfAppointment.map { appointment ->
+                LeadViewActivitiesAppointmentChildItem(appointment)
+              })
+            }
+        ))
+        else -> appointmentSection.addEmptyItemInExpandable(
+            "Appointment", "No Appointment data"
+        )
+      }
     }
   }
 
