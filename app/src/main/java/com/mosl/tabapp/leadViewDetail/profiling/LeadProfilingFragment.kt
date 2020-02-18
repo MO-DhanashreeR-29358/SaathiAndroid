@@ -647,9 +647,9 @@ class LeadProfilingFragment : CommonFragment(), View.OnClickListener {
                           val grp = hideView as RadioGroup?
                           val cnt = grp!!.childCount
                           for (i in 0 until cnt) {
-                            val Child = grp.getChildAt(i)
-                            if (Child is RadioButton) {
-                              Child.isChecked = false
+                            val child = grp.getChildAt(i)
+                            if (child is RadioButton) {
+                              child.isChecked = false
                             }
                           }
                         }
