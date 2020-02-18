@@ -201,7 +201,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
           APPT_CANCELLED, "OK", true
       ) { _, _ -> }
 
-      val list = listOfAppointment.filter { it.meetingId == meetingId }
+      val list = listOfAppointment.filter { it.meetingId != meetingId }
       listOfAppointment = list
       when {
         listOfAppointment.isNotEmpty() -> appointmentSection.update(listOf(
