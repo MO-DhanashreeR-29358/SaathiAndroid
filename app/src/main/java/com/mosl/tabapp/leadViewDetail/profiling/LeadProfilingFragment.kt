@@ -184,8 +184,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
   }
 
   override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
-  override fun renderCancelButtonClicked() =
-    viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
+  override fun renderCancelButtonClicked() {
+    viewPager?.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
+  }
 
   private fun fillProfileModal(leadProfileItems: List<LeadProfile>) {
 
@@ -825,7 +826,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           MOSLConstants.SET_USER_PROFILE, "OK", true
       ) { action, data1 ->
         if (action == MSFDialog.Action.OK) {
-          viewPager!!.setCurrentItem(
+          viewPager?.setCurrentItem(
               MOSLConstants.LEAD_DETAIL, false
           )
         }
