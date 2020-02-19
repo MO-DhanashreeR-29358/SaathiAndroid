@@ -18,12 +18,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
-import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.common.CRMAppUtil
@@ -32,6 +31,7 @@ import com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY
 import com.mosl.tabapp.constants.MOSLConstants.SOME_SEELECTION_METHOD
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadProfilingBinding
+import com.mosl.tabapp.leadViewDetail.profiling.LeadProfileUiEvent.SubmitProfileEvent
 import com.mosl.tabapp.model.profile.ProfileModel
 import com.mosl.tabapp.model.profile.ProfileOption
 import com.mosl.tabapp.model.profile.ProfileQuestion
@@ -39,19 +39,22 @@ import com.mosl.tabapp.model.profile.ProfileQuestionGroup
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
 import javax.inject.Inject
 
 class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
-  private var leadId = ""
+  private var leadId = "0"
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
   private var formElementList: MutableList<View>? = null
   //This list is added just to have reffrence of each question so if we can findthem in on click event of their siblings child
-  private var questionList: MutableMap<String, View>? = null
+  private var questionMap: MutableMap<String, View> = emptyMap<String, View>().toMutableMap()
   private lateinit var binding: FragLeadProfilingBinding
+  private val subject = PublishSubject.create<LeadProfileUiEvent>()
 
   @Inject
   internal lateinit var presenter: LeadProfilingPresenter
@@ -64,18 +67,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadProfilingBinding.bind(view)
-    //userVisibleHint = true
     presenter.start()
-    //getProfileQuestionAnswerFromServer()
     dataActionSubject.onNext(Fetch)
   }
 
   /**
    * This method will a json string of all option selected on the form
    */
-  private val selectedAnswersJson: List<SaveLeadProfileRequest>
-    get() {
-      val saveLeadProfileRequestList = ArrayList<SaveLeadProfileRequest>()
+  private val selectedAnswersJson by lazy {
+    val profileRequestList = ArrayList<ProfileRequestData>()
       for (entry in formElementList!!) {
         when (entry) {
           is EditText -> {
@@ -83,13 +83,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 .toString()
                 .trim { it <= ' ' }
             try {
-              val aarStr = mTag.split("_".toRegex())
+              val tagArray = mTag.split("_".toRegex())
                   .dropLastWhile { it.isEmpty() }
                   .toTypedArray()
-              val valueStr = entry.text.toString()
+              val textInEditText = entry.text.toString()
                   .trim { it <= ' ' }
-              saveLeadProfileRequestList += SaveLeadProfileRequest(
-                  aarStr[0], aarStr[1], leadId, valueStr
+              profileRequestList += ProfileRequestData(
+                  tagArray[0], tagArray[1], leadId, textInEditText
               )
             } catch (e: Exception) {
               Timber.d(e)
@@ -109,8 +109,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 )
               }
 
-              saveLeadProfileRequestList.add(
-                  SaveLeadProfileRequest(
+              profileRequestList.add(
+                  ProfileRequestData(
                       profileOption.profileParameterID!!.toString(),
                       profileOption.profileSubParameterID!!.toString(), leadId,
                       valueString
@@ -128,8 +128,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               ) {
                 valueString = getExtraView(profileOption)
               }
-              saveLeadProfileRequestList.add(
-                  SaveLeadProfileRequest(
+              profileRequestList.add(
+                  ProfileRequestData(
                       profileOption.profileParameterID!!.toString(),
                       profileOption.profileSubParameterID!!.toString(), leadId,
                       valueString
@@ -147,8 +147,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               valueString = getExtraView(opTion)
             }
 
-            saveLeadProfileRequestList.add(
-                SaveLeadProfileRequest(
+            profileRequestList.add(
+                ProfileRequestData(
                     opTion.profileParameterID!!.toString(),
                     opTion.profileSubParameterID!!.toString(),
                     leadId,
@@ -159,18 +159,20 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         }
       }
 
-      return saveLeadProfileRequestList
+    profileRequestList
     }
 
   fun setViewPager(viewPager: ViewPager) {
     this.viewPager = viewPager
   }
 
+  override fun getProfileRequestDataList(): List<ProfileRequestData> = selectedAnswersJson
+  override fun onSubmitProfileEventFired(): Observable<SubmitProfileEvent> = subject.ofType()
   override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
   override fun renderSubmitButtonClicked() {
     val request = selectedAnswersJson
     when {
-      request.isNotEmpty() -> saveLeadProfileParameter(request)
+      request.isNotEmpty() -> subject.onNext(SubmitProfileEvent)
       else -> {
         alertDialog(
             requireContext(), 0,
@@ -418,7 +420,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       return
     }
     formElementList = ArrayList()
-    questionList = HashMap()
+    questionMap = HashMap()
     val previousActionMap = HashMap<String, String>()
 
     binding.mainProfileLayouttarget.removeAllViews()
@@ -465,7 +467,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
 
         llBasicProfileQuestionLayoutInner.addView(tvQuestion)
-        questionList!![question.profileParameterID!!.toString() + Head] = tvQuestion
+        questionMap[question.profileParameterID!!.toString() + Head] = tvQuestion
         if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
           tvQuestion.visibility = View.GONE
         }
@@ -526,7 +528,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               llBasicProfileQuestionLayoutInner.addView(
                   llBasicProfileQuestionLayoutGroup
               )
-              questionList!![question.profileParameterID!!.toString()] =
+              questionMap[question.profileParameterID!!.toString()] =
                 llBasicProfileQuestionLayoutGroup
             }
             RADIO_BUTTON// question type is radio button
@@ -587,13 +589,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                           mOptions.hideDepedentQuestion
                       )
                   ) {
-                    if (questionList!!.containsKey(
+                    if (questionMap.containsKey(
                             mOptions.hideDepedentQuestion
                         )
                     ) {
-                      //questionList
-                      val hideView = questionList!![mOptions.hideDepedentQuestion]
-                      val hideViewHead = questionList!![mOptions.hideDepedentQuestion + Head]
+                      //questionMap
+                      val hideView = questionMap[mOptions.hideDepedentQuestion]
+                      val hideViewHead = questionMap[mOptions.hideDepedentQuestion + Head]
                       if (mOptions.isHide.equals("N", ignoreCase = true)) {
                         hideView!!.visibility = View.VISIBLE
                         hideViewHead!!.visibility = View.VISIBLE
@@ -634,7 +636,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
               //Adding to form List
               formElementList!!.add(rbGroup)
-              questionList!![question.profileParameterID!!.toString()] = rbGroup
+              questionMap[question.profileParameterID!!.toString()] = rbGroup
               if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
                 rbGroup.visibility = View.GONE
               }
@@ -797,8 +799,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     }
     //perform proper opioin
     for (StringAction in previousActionMap.keys) {
-      val hideView = questionList!![StringAction]
-      val hideViewHead = questionList!![StringAction + Head]
+      val hideView = questionMap[StringAction]
+      val hideViewHead = questionMap[StringAction + Head]
       if (previousActionMap[StringAction]!!.equals("N", ignoreCase = true)) {
         hideView!!.visibility = View.VISIBLE
         hideViewHead!!.visibility = View.VISIBLE
@@ -809,36 +811,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     }
   }
 
-  /**
-   * is any value added to map
-   */
-  /* private boolean isFormModified() {
-        return (mapProfileData == null || mapProfileData.isEmpty()) ? false : true;
-    }*/
-
-  /**
-   * this method will return a json string for selected answer of a single field
-   */
-  fun getSelectedAnswerJsonObjectForAField(
-    getProfileParameterID: String,
-    getProfileSubParameterID: String,
-    getLeadID: String,
-    value: String?
-  ): String {
-    var json = "{"
-    json += "\"ProfileParameterID\":$getProfileParameterID"
-    json += ",\"ProfileSubParameterID\":$getProfileSubParameterID"
-    json += ",\"LeadID\":$getLeadID"
-    if (value != null) {
-      json += ",\"Value\":\"$value\""
-    } else {
-      json += ",\"Value\":" + value!!
-    }
-    json += "}"
-    return json
-  }
-
-  private fun renderSubmitProfile(uiModel: UiModel<String>) {
+  override fun renderSubmitProfile(uiModel: UiModel<String>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
@@ -860,17 +833,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     }
   }
 
-  /**
-   * Send selected answers to server
-   */
-  private fun saveLeadProfileParameter(request: List<SaveLeadProfileRequest>) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val subscribe = saathiApi.postLeadProfile(request)
-          .compose<UiModel<String>>(applyUiModel<String>())
-          .subscribe { renderSubmitProfile(it) }
-    } else {
-      noInternetConnectionDialog()
-    }
+  override fun render(leadId: String) {
+    this.leadId = leadId
   }
 
   override fun renderProfileParameters(uiModel: UiModel<List<LeadProfile>>) {
