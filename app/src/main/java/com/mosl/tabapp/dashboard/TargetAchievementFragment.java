@@ -422,7 +422,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                         TableItem item = tableItems.get(i);
                         String displayText = stringOrEmpty(item.displayText);
                         String value = stringOrZero(item.value);
-                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        int ord = item.ord;
                         if (ord == 1) {
                             leftStr = displayText;
                             if (!displayText.equalsIgnoreCase("Target")) {
@@ -453,7 +453,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                         TableItem item = tableItems.get(i);
                         String displayText = stringOrEmpty(item.displayText);
                         String value = stringOrEmpty(item.value);
-                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        int ord = item.ord;
                         if (ord == 1) {
                             leftStr = displayText;
                             if (!displayText.equalsIgnoreCase("Target")) {
@@ -480,7 +480,7 @@ public class TargetAchievementFragment extends CommonFragment implements View.On
                         TableItem item = tableItems.get(i);
                         String displayText = stringOrEmpty(item.displayText);
                         String value = stringOrEmpty(item.value);
-                        int ord = Integer.valueOf(stringOrZero(item.ord));
+                        int ord = item.ord;
                         if (ord == 1) {
                             leftStr = displayText;
                             if (!displayText.equalsIgnoreCase("Target")) {

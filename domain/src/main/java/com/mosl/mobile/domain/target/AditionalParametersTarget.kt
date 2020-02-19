@@ -1,6 +1,6 @@
-package com.mosl.mobile.domain.autarget
+package com.mosl.mobile.domain.target
 
-data class APTargetInput(
+data class AditionalParametersTarget(
     @JvmField val fltBankName: String?,
     @JvmField val fltBankSubBrokerCode: String?,
     @JvmField val fltBankBranchCode: String?,

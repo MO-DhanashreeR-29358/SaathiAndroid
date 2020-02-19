@@ -16,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
 
 class TargetWidgetItem(
     val widgetModel: WidgetModel,
-    private val publishSubject: PublishSubject<AuWidgetUiEvent>,
+    private val publishSubject: PublishSubject<WidgetUiEvent>,
     val context: Context
 ) : BindableItem<TargetAchievementWidgetItemBinding>() {
 
@@ -49,7 +49,7 @@ class TargetWidgetItem(
             cardView.setOnClickListener {
                 if (widgetModel.name.isNotEmpty()) {
                     publishSubject.onNext(
-                        AuWidgetUiEvent.ItemClick(
+                        WidgetUiEvent.ItemClick(
                             widgetModel, position
                         )
                     )

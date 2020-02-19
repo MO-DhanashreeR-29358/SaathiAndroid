@@ -3,11 +3,13 @@ package com.mosl.tabapp.dashboard.ausfb.target
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.mobile.domain.autarget.APTargetInput
-import com.mosl.mobile.domain.autarget.AuTargetInput
-import com.mosl.mobile.domain.autarget.AuTargetRepository
-import com.mosl.mobile.domain.autarget.TableItemModel
 import com.mosl.mobile.domain.bank.BankRepository
+import com.mosl.mobile.domain.target.AditionalParametersTarget
+import com.mosl.mobile.domain.target.TableItemModel
+import com.mosl.mobile.domain.target.TargetRepository
+import com.mosl.mobile.domain.target.TargetRequest
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -18,20 +20,22 @@ import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
 
-class AuTargetPresenter @Inject constructor(
-    view: AuTargetView, val bankRepository: BankRepository,
-    val repository: AuTargetRepository,
+class TargetPresenter @Inject constructor(
+    view: TargetView, val bankRepository: BankRepository,
+    val repository: TargetRepository,
     val dashboardModel: DashboardModel,
-    val navigator: ScreenNavigatorImpl
+    val navigator: ScreenNavigatorImpl,
+    val userManager: UserManager
 ) :
-    BasePresenter<AuTargetView>(view) {
+    BasePresenter<TargetView>(view) {
     override fun start() {
-        onFetchCalled().switchMap {
-            bankRepository.getBankFilter()
-                .compose(applyUiModel())
+        if (userManager.user.isAuBankSalesSupport()) {
+            onFetchCalled().switchMap {
+                bankRepository.getBankFilter()
+                    .compose(applyUiModel())
+            }
+                .subscribe(view::renderBankFilter).addTo(disposable)
         }
-            .subscribe(view::renderBankFilter).addTo(disposable)
-
         val bankChangeObsc = view.onBankChange().share()
         val branchChangeObsc = view.onBranchChange().share()
 
@@ -108,13 +112,13 @@ class AuTargetPresenter @Inject constructor(
         )
     }
 
-    private fun getWidgetRequest(): AuTargetInput {
-        return AuTargetInput(
+    private fun getWidgetRequest(): TargetRequest {
+        return TargetRequest(
             businessProfileId = dashboardModel.businessProfileIdForDashboard,
             widgetSystemName = view.getWidgetModel()?.systemName,
             productId = dashboardModel.productId,
             employeeCode = dashboardModel.employeeCode,
-            addtionalParameters = APTargetInput(
+            addtionalParameters = AditionalParametersTarget(
                 fltBankName = view.getBank()?.bankId.toString(),
                 fltBankBranchCode = view.getBranch()?.branchId.toString(),
                 fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),

@@ -1,4 +1,4 @@
-package com.mosl.saathi.api.model.dashboard.autarget
+package com.mosl.saathi.api.model.dashboard.targetnew
 
 import com.google.gson.annotations.SerializedName
 

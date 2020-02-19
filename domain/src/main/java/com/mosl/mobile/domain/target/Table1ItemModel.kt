@@ -1,4 +1,4 @@
-package com.mosl.mobile.domain.autarget
+package com.mosl.mobile.domain.target
 
 
 data class Table1ItemModel(

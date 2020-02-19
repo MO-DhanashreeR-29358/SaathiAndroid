@@ -1,9 +1,9 @@
-package com.mosl.mobile.domain.autarget
+package com.mosl.mobile.domain.target
 
 
-data class AuTargetInput(
+data class TargetRequest(
     @JvmField val businessProfileId: String?,
-    @JvmField val addtionalParameters: APTargetInput?,
+    @JvmField val addtionalParameters: AditionalParametersTarget?,
     @JvmField val widgetSystemName: String?,
     @JvmField val productId: String?,
     @JvmField val employeeCode: String?

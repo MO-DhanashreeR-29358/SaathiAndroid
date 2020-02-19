@@ -22,10 +22,11 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.autarget.Table1ItemModel
-import com.mosl.mobile.domain.autarget.TableItemModel
-import com.mosl.mobile.domain.autarget.TargetItemModel
 import com.mosl.mobile.domain.bank.*
+import com.mosl.mobile.domain.target.Table1ItemModel
+import com.mosl.mobile.domain.target.TableItemModel
+import com.mosl.mobile.domain.target.TargetItemModel
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -43,7 +44,7 @@ import io.reactivex.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
-class AuTargetFragment : CommonFragment(), AuTargetView {
+class TargetFragment : CommonFragment(), TargetView {
 
     lateinit var binding: FragmentAuTargetVsAchievementBinding
 
@@ -52,20 +53,20 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
     @Inject
-    lateinit var presenter: AuTargetPresenter
+    lateinit var presenter: TargetPresenter
 
     @Inject
     lateinit var dashboardModel: DashboardModel
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
     private val widgetUiEvent =
-        PublishSubject.create<AuWidgetUiEvent>()
+        PublishSubject.create<WidgetUiEvent>()
 
     private val pieChartEvent =
-        PublishSubject.create<AuWidgetUiEvent>()
+        PublishSubject.create<WidgetUiEvent>()
 
     private val summaryCountUiEvent =
-        PublishSubject.create<AuWidgetUiEvent>()
+        PublishSubject.create<WidgetUiEvent>()
 
     private var previousPosition: Int = 0
     private var itemList = mutableListOf<TargetWidgetItem>()
@@ -110,7 +111,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         dataActionSubject.onNext(DataAction.Fetch)
         if (itemList.size > 0) {
             widgetUiEvent.onNext(
-                AuWidgetUiEvent.ItemClick(
+                WidgetUiEvent.ItemClick(
                     itemList.get(0).widgetModel,
                     0
                 )
@@ -186,7 +187,11 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
 
         subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterSubBranch.adapter = subBranchAdapter
-
+        if (userManager.user.isAuBankSalesSupport()) {
+            binding.spFilterBank.visibility = View.VISIBLE
+            binding.spFilterBranch.visibility = View.VISIBLE
+            binding.spFilterSubBranch.visibility = View.VISIBLE
+        }
 
     }
 
@@ -248,11 +253,11 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         return binding.spFilterSubBranch.itemSelections()
     }
 
-    override fun onSummaryCountClick(): Observable<AuWidgetUiEvent.SummaryCountItemClick> {
+    override fun onSummaryCountClick(): Observable<WidgetUiEvent.SummaryCountItemClick> {
         return summaryCountUiEvent.ofType()
     }
 
-    override fun onPieChartClick(): Observable<AuWidgetUiEvent.PieChartClick> {
+    override fun onPieChartClick(): Observable<WidgetUiEvent.PieChartClick> {
         return pieChartEvent.ofType()
     }
 
@@ -260,7 +265,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
         return VORDIPLOM_COLORS
     }
 
-    override fun onWidgetItemClick(): Observable<AuWidgetUiEvent.ItemClick> {
+    override fun onWidgetItemClick(): Observable<WidgetUiEvent.ItemClick> {
         return widgetUiEvent.ofType()
     }
 
@@ -414,7 +419,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
                 h: Highlight
             ) {
 
-                pieChartEvent.onNext(AuWidgetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
+                pieChartEvent.onNext(WidgetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
 
             }
 
@@ -457,7 +462,7 @@ class AuTargetFragment : CommonFragment(), AuTargetView {
             summaryCountItemList.add(
                 TargetSummaryCountItem(
                     tableItemModel, summaryCountUiEvent, requireContext(),
-                    this@AuTargetFragment
+                    this@TargetFragment
                 )
             )
         }

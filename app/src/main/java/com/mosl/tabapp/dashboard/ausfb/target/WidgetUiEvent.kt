@@ -1,16 +1,16 @@
 package com.mosl.tabapp.dashboard.ausfb.target
 
-import com.mosl.mobile.domain.autarget.TableItemModel
+import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 
-sealed class AuWidgetUiEvent {
+sealed class WidgetUiEvent {
     data class ItemClick(@JvmField val widgetItemInfo: WidgetModel, @JvmField val currentPosition: Int) :
-        AuWidgetUiEvent()
+        WidgetUiEvent()
 
     data class SummaryCountItemClick(@JvmField val tabelItemInfo: TableItemModel) :
-        AuWidgetUiEvent()
+        WidgetUiEvent()
 
     data class PieChartClick(@JvmField val label: String?) :
-        AuWidgetUiEvent()
+        WidgetUiEvent()
 
 }

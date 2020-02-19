@@ -2,7 +2,7 @@ package com.mosl.tabapp.dashboard.ausfb.target
 
 import android.content.Context
 import android.view.View
-import com.mosl.mobile.domain.autarget.TableItemModel
+import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.TargetSummaryCountItemBinding
 import com.xwray.groupie.databinding.BindableItem
@@ -10,9 +10,9 @@ import io.reactivex.subjects.PublishSubject
 
 class TargetSummaryCountItem(
     val itemModel: TableItemModel,
-    private val publishSubject: PublishSubject<AuWidgetUiEvent>,
+    private val publishSubject: PublishSubject<WidgetUiEvent>,
     val context: Context,
-    val view: AuTargetView
+    val view: TargetView
 ) : BindableItem<TargetSummaryCountItemBinding>() {
 
     override fun getLayout(): Int {
@@ -36,7 +36,7 @@ class TargetSummaryCountItem(
                 if (!itemModel.displayText.equals(TARGET) &&
                     itemModel.value!!.toDouble() != 0.0
                 ) {
-                    publishSubject.onNext(AuWidgetUiEvent.SummaryCountItemClick(itemModel))
+                    publishSubject.onNext(WidgetUiEvent.SummaryCountItemClick(itemModel))
                 }
 
             }

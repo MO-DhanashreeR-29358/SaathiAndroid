@@ -1,7 +1,7 @@
 package com.mosl.tabapp.dashboard.ausfb.target
 
 import android.content.Context
-import com.mosl.mobile.domain.autarget.Table1ItemModel
+import com.mosl.mobile.domain.target.Table1ItemModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.TargetLableItemBinding
 import com.xwray.groupie.databinding.BindableItem
@@ -9,7 +9,7 @@ import com.xwray.groupie.databinding.BindableItem
 class TargetLableItem(
     val itemModel: Table1ItemModel,
     val context: Context,
-    val auTargetView: AuTargetView
+    val auTargetView: TargetView
 ) : BindableItem<TargetLableItemBinding>() {
 
 

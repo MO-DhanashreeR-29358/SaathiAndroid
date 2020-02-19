@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 
 data class TableItem(
 
-  @JvmField @SerializedName("Ord")
-  val ord: String?,
+    @JvmField @SerializedName("Ord")
+    val ord: Int,
 
-  @JvmField @SerializedName("DisplayText")
+    @JvmField @SerializedName("DisplayText")
   val displayText: String?,
 
-  @JvmField @SerializedName("Value")
+    @JvmField @SerializedName("Value")
   val value: String?
 )

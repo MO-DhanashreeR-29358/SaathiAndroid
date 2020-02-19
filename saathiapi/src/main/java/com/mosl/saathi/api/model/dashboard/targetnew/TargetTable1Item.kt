@@ -2,7 +2,7 @@ package com.mosl.saathi.api.model.dashboard.target
 
 import com.google.gson.annotations.SerializedName
 
-data class AuTable1Item(
+data class TargetTable1Item(
 
     @JvmField @SerializedName("formatted")
     val formatted: String?,

@@ -1,13 +1,13 @@
 package com.mosl.app.core.data.autarget
 
-import com.mosl.mobile.domain.autarget.*
-import com.mosl.saathi.api.model.dashboard.autarget.APTargetRequest
-import com.mosl.saathi.api.model.dashboard.autarget.AuTargetRequest
-import com.mosl.saathi.api.model.dashboard.target.AuTable1Item
-import com.mosl.saathi.api.model.dashboard.target.AuTableItem
-import com.mosl.saathi.api.model.dashboard.target.AuTargetItem
+import com.mosl.mobile.domain.target.*
+import com.mosl.saathi.api.model.dashboard.target.TableItem
+import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
+import com.mosl.saathi.api.model.dashboard.target.TargetTable1Item
+import com.mosl.saathi.api.model.dashboard.targetnew.APTargetRequest
+import com.mosl.saathi.api.model.dashboard.targetnew.AuTargetRequest
 
-fun AuTargetInput.requestTransform(): AuTargetRequest {
+fun TargetRequest.requestTransform(): AuTargetRequest {
     return AuTargetRequest(
         businessProfileId = businessProfileId,
         addtionalParameters = addtionalParameters!!.apTransform(),
@@ -18,7 +18,7 @@ fun AuTargetInput.requestTransform(): AuTargetRequest {
     )
 }
 
-fun APTargetInput.apTransform(): APTargetRequest {
+fun AditionalParametersTarget.apTransform(): APTargetRequest {
     return APTargetRequest(
         fltBankName, fltBankSubBrokerCode, fltBankBranchCode,
         fltHierarchy, fltPeriod
@@ -26,7 +26,7 @@ fun APTargetInput.apTransform(): APTargetRequest {
 }
 
 
-fun AuTargetItem.responseTransform(): TargetItemModel {
+fun TargetItemResponse.responseTransform(): TargetItemModel {
     return TargetItemModel(
 
         table = table?.itemTransform(),
@@ -36,7 +36,7 @@ fun AuTargetItem.responseTransform(): TargetItemModel {
 }
 
 
-fun List<AuTableItem>.itemTransform(): List<TableItemModel> {
+fun List<TableItem>.itemTransform(): List<TableItemModel> {
     return map {
         TableItemModel(
             ord = it.ord,
@@ -49,7 +49,7 @@ fun List<AuTableItem>.itemTransform(): List<TableItemModel> {
 }
 
 
-fun List<AuTable1Item>.itemTransform1(): List<Table1ItemModel> {
+fun List<TargetTable1Item>.itemTransform1(): List<Table1ItemModel> {
     return map {
         Table1ItemModel(
 

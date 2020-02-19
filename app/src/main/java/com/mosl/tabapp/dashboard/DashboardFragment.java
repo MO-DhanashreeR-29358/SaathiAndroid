@@ -77,7 +77,7 @@ import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
-import com.mosl.tabapp.dashboard.ausfb.target.AuTargetFragment;
+import com.mosl.tabapp.dashboard.ausfb.target.TargetFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -823,8 +823,8 @@ public class DashboardFragment extends CommonFragment
 
     private void loadAusfbTargetAchievement() {
         Bundle args = new Bundle();
-        AuTargetFragment leadsFragment =
-                new AuTargetFragment();
+        TargetFragment leadsFragment =
+                new TargetFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -1422,7 +1422,7 @@ public class DashboardFragment extends CommonFragment
                 toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
             }
             llTarget.setVisibility(View.VISIBLE);
-            loadTargetAchievement();
+            loadAusfbTargetAchievement();
             DashboardSystemModel.setTargetAchivementSystemName(SELF_TARGET_ACHIEVEMNET);
         }
         if (currentDashboard.isGroupExists(AUSFB_TARGET_ACHIEVEMNET)) {

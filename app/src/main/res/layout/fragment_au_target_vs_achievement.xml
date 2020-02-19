@@ -21,7 +21,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="gone" />
 
 
             <Spinner
@@ -31,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="gone" />
 
 
         </LinearLayout>
@@ -50,7 +52,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="gone" />
 
             <Spinner
                 android:id="@+id/sp_filter_period"
@@ -59,7 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:visibility="visible" />
 
 
         </LinearLayout>

@@ -30,7 +30,6 @@ import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadRequest
 import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadResponse
-import com.mosl.saathi.api.model.dashboard.autarget.AuTargetRequest
 import com.mosl.saathi.api.model.dashboard.bank.*
 import com.mosl.saathi.api.model.dashboard.client.ClientItem
 import com.mosl.saathi.api.model.dashboard.client.ClientRequest
@@ -42,8 +41,9 @@ import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
-import com.mosl.saathi.api.model.dashboard.target.AuTargetItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
+import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
+import com.mosl.saathi.api.model.dashboard.targetnew.AuTargetRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.documents.*
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
@@ -400,7 +400,7 @@ interface SaathiApi {
     @POST("Dashboard/LoadWidgetAsync")
     fun getAuTargetWidgetData(
         @Body request: AuTargetRequest
-    ): Observable<AuTargetItem>
+    ): Observable<TargetItemResponse>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
