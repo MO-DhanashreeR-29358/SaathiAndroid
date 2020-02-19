@@ -666,27 +666,8 @@ public class DashboardFragment extends CommonFragment
                 toggleSectionExpansion(llPerformanceAndIncentivesHeader,
                         ivPerformanceAndIncentivesHeader);
             } else if (id == R.id.rlFreshRegistration) {
-                Map<String, String> map = new HashMap();
-                map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
-                map.put(COMMANDTYPE, "NEW");
-                map.put(APPLICATIONTYPE, "CRM");
-                map.put(OSTYPE, "ANDROID");
-                map.put(APPLOGINID, userManager.getUser().employeeCode);
-                map.put(TOKENKEY, userManager.getUser().token);
-                map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
                 ekycNavigator.openNewEkycApp(false, "");
             } else if (id == R.id.rlExisting) {
-                HashMap<String, String> map = new HashMap();
-                map.put(NEW_USERID, "");
-                map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
-                map.put(COMMANDTYPE, "RESUME");
-                map.put(APPLICATIONTYPE, "CRM");
-                map.put(OSTYPE, "ANDROID");
-                map.put(APPLOGINID, userManager.getUser().employeeCode);
-                map.put(TOKENKEY, userManager.getUser().token);
-                map.put(ISAUFSB, String.valueOf(userManager.getUser().isAufsb()));
-                //gotoNewEkyc(getInputBody(map));
                 ekycNavigator.openNewEkycApp(true, "");
             } else if (id == R.id.txtTelephoneNo1) {
                 MSFDialog.alertDialog(requireActivity(), 0,
