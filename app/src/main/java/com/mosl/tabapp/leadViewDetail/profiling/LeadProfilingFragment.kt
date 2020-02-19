@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
@@ -37,12 +38,13 @@ import com.mosl.tabapp.model.profile.ProfileQuestion
 import com.mosl.tabapp.model.profile.ProfileQuestionGroup
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
+import io.reactivex.Observable
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
 import javax.inject.Inject
 
-class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickListener {
+class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
   private var leadId = ""
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
@@ -62,7 +64,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadProfilingBinding.bind(view)
-    setUpView()
     //userVisibleHint = true
     presenter.start()
     //getProfileQuestionAnswerFromServer()
@@ -165,32 +166,24 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     this.viewPager = viewPager
   }
 
-  private fun setUpView() {
-    binding.btnCancel.setOnClickListener(this)
-    binding.btnSubmit.setOnClickListener(this)
-  }
-
-  override fun onClick(view: View) {
-    //Goto first tab
-    when (view.id) {
-
-      R.id.btnSubmit -> {
-        val request = selectedAnswersJson
-        when {
-          request.isNotEmpty() -> saveLeadProfileParameter(request)
-          else -> {
-            alertDialog(
-                requireContext(), 0,
-                resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
-                resources.getString(android.R.string.ok), true, null
-            )
-          }
-        }
+  override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
+  override fun renderSubmitButtonClicked() {
+    val request = selectedAnswersJson
+    when {
+      request.isNotEmpty() -> saveLeadProfileParameter(request)
+      else -> {
+        alertDialog(
+            requireContext(), 0,
+            resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
+            resources.getString(android.R.string.ok), true, null
+        )
       }
-
-      R.id.btnCancel -> viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
     }
   }
+
+  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
+  override fun renderCancelButtonClicked() =
+    viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
 
   private fun fillProfileModal(leadProfileItems: List<LeadProfile>) {
 
@@ -905,18 +898,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
 
   }
-
-  /*private fun getProfileQuestionAnswerFromServer() {
-    when {
-      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
-        val request = LeadProfileRequest(leadId)
-        val subscribe = saathiApi.getLeadProfile(request)
-            .compose<UiModel<List<LeadProfileItem>>>(applyUiModel<List<LeadProfileItem>>())
-            .subscribe { renderProfileParameters(it) }
-      }
-      else -> noInternetConnectionDialog()
-    }
-  }*/
 
   companion object {
     private const val TEXT_BOX = 1
