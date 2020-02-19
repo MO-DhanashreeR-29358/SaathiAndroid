@@ -169,19 +169,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     binding.btnSubmit.setOnClickListener(this)
   }
 
-/*
-  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-    try {
-      super.setUserVisibleHint(isVisibleToUser)
-      when {
-        isVisibleToUser && leadProfilingView != null && viewPager!!.currentItem == 2 -> getProfileQuestionAnswerFromServer()
-      }
-    } catch (e: Exception) {
-      e.printStackTrace()
-    }
 
-  }
-*/
 
   override fun onClick(view: View) {
     //Goto first tab
