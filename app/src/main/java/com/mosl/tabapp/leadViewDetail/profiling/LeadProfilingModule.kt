@@ -6,6 +6,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 
 @Module
 abstract class LeadProfilingModule {
@@ -16,8 +17,9 @@ abstract class LeadProfilingModule {
   @Binds
   abstract fun bindLeadViewProfilingRepository(repository: LeadViewProfilingRepositoryImpl): LeadViewProfilingRepository
 
+  @Module
   companion object {
-    @Provides
+    @Provides @JvmStatic @Named("leadId")
     fun getLeadId(fragment: LeadProfilingFragment): String {
       return fragment.arguments?.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
     }

@@ -5,17 +5,18 @@ import com.mosl.mobile.domain.leadviewdetail.profiling.LeadViewProfilingReposito
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
+import javax.inject.Named
 
 class LeadProfilingPresenter @Inject constructor(
   view: LeadProfilingView,
   val repository: LeadViewProfilingRepository,
-  val leadId: String
+  @Named("leadId") val data: String
 ) : BasePresenter<LeadProfilingView>(view) {
 
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
         .switchMap {
-          repository.getProfileQuestionAnswer(leadId)
+          repository.getProfileQuestionAnswer(data)
               .compose(applyUiModel())
         }
         .subscribe(view::renderProfileParameters)
