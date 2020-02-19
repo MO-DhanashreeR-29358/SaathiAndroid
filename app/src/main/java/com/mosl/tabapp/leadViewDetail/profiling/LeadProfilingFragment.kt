@@ -16,12 +16,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
-import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
+import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -40,6 +40,7 @@ import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
+import javax.inject.Inject
 
 class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickListener {
   private var leadId = ""
@@ -50,6 +51,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
   private var questionList: MutableMap<String, View>? = null
   private lateinit var binding: FragLeadProfilingBinding
 
+  @Inject
+  internal lateinit var presenter: LeadProfilingPresenter
+
   override fun getLayout(): Int = layout.frag_lead_profiling
 
   override fun onViewCreated(
@@ -58,14 +62,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadProfilingBinding.bind(view)
-    try {
-      leadId = this.arguments!!.getString(MOSLConstants.LEAD_ID, "0")
-    } catch (e: Exception) {
-      e.printStackTrace()
-    }
     setUpView()
-    userVisibleHint = true
-    getProfileQuestionAnswerFromServer()
+    //userVisibleHint = true
+    presenter.start()
+    //getProfileQuestionAnswerFromServer()
+    dataActionSubject.onNext(Fetch)
   }
 
   /**
@@ -169,8 +170,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     binding.btnSubmit.setOnClickListener(this)
   }
 
-
-
   override fun onClick(view: View) {
     //Goto first tab
     when (view.id) {
@@ -193,7 +192,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
   }
 
-  private fun fillProfileModal(leadProfileItems: List<LeadProfileItem>) {
+  private fun fillProfileModal(leadProfileItems: List<LeadProfile>) {
 
     profileModel = ProfileModel()
     val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
@@ -881,7 +880,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
   }
 
-  private fun renderProfileParameters(uiModel: UiModel<List<LeadProfileItem>>) {
+  override fun renderProfileParameters(uiModel: UiModel<List<LeadProfile>>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
@@ -907,7 +906,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
 
   }
 
-  private fun getProfileQuestionAnswerFromServer() {
+  /*private fun getProfileQuestionAnswerFromServer() {
     when {
       CRMAppUtil.isNetworkEnabled(requireContext()) -> {
         val request = LeadProfileRequest(leadId)
@@ -917,7 +916,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
       }
       else -> noInternetConnectionDialog()
     }
-  }
+  }*/
 
   companion object {
     private const val TEXT_BOX = 1

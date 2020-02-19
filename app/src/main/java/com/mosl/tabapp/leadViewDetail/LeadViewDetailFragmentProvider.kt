@@ -4,6 +4,7 @@ import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesModule
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
+import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -16,7 +17,7 @@ abstract class LeadViewDetailFragmentProvider {
   @ContributesAndroidInjector
   abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
 
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = [LeadProfilingModule::class])
   abstract fun provideLeadProfilingFactory(): LeadProfilingFragment
 
 }
