@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_small"
+        android:background="@color/title_black"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLeadViewArrow"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu_three_dot"
+            />
+
+        <ImageView
+            android:id="@+id/ivLead"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:layout_margin="@dimen/_4sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/txt_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivLead"
+            tools:text="Lead name"
+            />
+
+        <TextView
+            android:id="@+id/text_label_client_Code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="@string/text_label_client_code"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            />
+
+        <TextView
+            android:id="@+id/text_label_lead_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="@string/text_label_lead_id"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_label_client_Code"
+            />
+
+        <TextView
+            android:id="@+id/text_label_branch_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="@string/text_label_branch_code"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_label_lead_id"
+            />
+
+        <TextView
+            android:id="@+id/text_label_current_stage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="@string/text_label_current_stage"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_label_branch_code"
+            />
+
+        <TextView
+            android:id="@+id/text_label_current_stage_since"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:text="@string/text_label_current_stage_since"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_label_current_stage"
+            />
+
+        <TextView
+            android:id="@+id/tvClientCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="Data"
+            />
+
+        <TextView
+            android:id="@+id/tvLeadId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvClientCode"
+            tools:text="Data"
+            />
+
+        <TextView
+            android:id="@+id/tvBranchCode"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvLeadId"
+            tools:text="Data"
+            />
+
+        <TextView
+            android:id="@+id/tvCurrentStage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvBranchCode"
+            tools:text="Data"
+            />
+
+        <TextView
+            android:id="@+id/tvCurrentStageSince"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:gravity="end"
+            android:textColor="@color/white"
+            android:textSize="@dimen/txt_size_lms_top_section"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/tvCurrentStage"
+            tools:text="Data"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.4"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
