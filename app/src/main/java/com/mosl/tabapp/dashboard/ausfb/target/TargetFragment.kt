@@ -32,7 +32,7 @@ import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
-import com.mosl.tabapp.databinding.FragmentAuTargetVsAchievementBinding
+import com.mosl.tabapp.databinding.FragmentTargetBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -46,8 +46,7 @@ import javax.inject.Inject
 
 class TargetFragment : CommonFragment(), TargetView {
 
-    lateinit var binding: FragmentAuTargetVsAchievementBinding
-
+    lateinit var binding: FragmentTargetBinding
     private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
@@ -99,13 +98,13 @@ class TargetFragment : CommonFragment(), TargetView {
     )
 
     override fun getLayout(): Int {
-        return R.layout.fragment_au_target_vs_achievement
+        return R.layout.fragment_target
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentAuTargetVsAchievementBinding.bind(view)
+        binding = FragmentTargetBinding.bind(view)
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
@@ -130,7 +129,7 @@ class TargetFragment : CommonFragment(), TargetView {
             adapter = groupAdapter
         }
 
-        binding.rvSummaryCount.apply {
+        binding.includeTargetChart.rvSummaryCount.apply {
             layoutManager =
                 GridLayoutManager(
                     requireContext(),
@@ -141,7 +140,7 @@ class TargetFragment : CommonFragment(), TargetView {
             adapter = summaryCountGroupAdapter
         }
 
-        binding.rvLable.apply {
+        binding.includeTargetChart.rvLable.apply {
             layoutManager = GridLayoutManager(
                 requireContext(), 3,
                 GridLayoutManager.VERTICAL,
@@ -188,16 +187,16 @@ class TargetFragment : CommonFragment(), TargetView {
         subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterSubBranch.adapter = subBranchAdapter
         if (userManager.user.isAuBankSalesSupport()) {
-            binding.spFilterBank.visibility = View.VISIBLE
-            binding.spFilterBranch.visibility = View.VISIBLE
-            binding.spFilterSubBranch.visibility = View.VISIBLE
+            binding.group.visibility = View.VISIBLE
+        } else {
+            binding.group.visibility = View.GONE
         }
 
     }
 
     private fun makeChart() {
 
-        binding.chart.apply {
+        binding.includeTargetChart.chart.apply {
             description.isEnabled = false
             setRotationEnabled(false)
             setEntryLabelTextSize(resources.getDimension(R.dimen.chart_text_size))
@@ -369,8 +368,8 @@ class TargetFragment : CommonFragment(), TargetView {
 
 
     fun chartClear() {
-        binding.chart.clear()
-        binding.tvWidgetName.visibility = View.GONE
+        binding.includeTargetChart.chart.clear()
+        binding.includeTargetChart.tvWidgetName.visibility = View.GONE
     }
 
 
@@ -391,7 +390,7 @@ class TargetFragment : CommonFragment(), TargetView {
             }
             it.table1?.apply {
                 if (this.isEmpty()) {
-                    binding.chart.clear()
+                    binding.includeTargetChart.chart.clear()
                 } else {
                     setDataBroking(this)
                     LableView(this)
@@ -412,8 +411,9 @@ class TargetFragment : CommonFragment(), TargetView {
         data.setValueTextSize(11f)
         data.setValueTextColor(Color.WHITE)
         data.setValueTypeface(Typeface.DEFAULT)
-        binding.chart.setData(data)
-        binding.chart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+        binding.includeTargetChart.chart.setData(data)
+        binding.includeTargetChart.chart.setOnChartValueSelectedListener(object :
+            OnChartValueSelectedListener {
             override fun onValueSelected(
                 e: Entry,
                 h: Highlight
@@ -425,7 +425,7 @@ class TargetFragment : CommonFragment(), TargetView {
 
             override fun onNothingSelected() {}
         })
-        binding.chart.invalidate()
+        binding.includeTargetChart.chart.invalidate()
     }
 
 
@@ -454,7 +454,7 @@ class TargetFragment : CommonFragment(), TargetView {
 
     fun SummaryCountView(tableList: List<TableItemModel>) {
 
-        (binding.rvSummaryCount.getLayoutManager() as GridLayoutManager).spanCount =
+        (binding.includeTargetChart.rvSummaryCount.getLayoutManager() as GridLayoutManager).spanCount =
             gridSpanCount(tableList.size)
 
         val sortedList = tableList.sortedWith(compareBy { it.ord })
@@ -471,7 +471,7 @@ class TargetFragment : CommonFragment(), TargetView {
     }
 
     fun LableView(tableList: List<Table1ItemModel>) {
-        (binding.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
+        (binding.includeTargetChart.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
             gridSpanCount(tableList.size)
 
         tableList.mapIndexed { index, tableItemModel ->
@@ -489,7 +489,7 @@ class TargetFragment : CommonFragment(), TargetView {
             itemList.get(previousPosition).updateItem(false)
             previousPosition = currentPosition
         }
-        binding.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
+        binding.includeTargetChart.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
         this.widgetModel = widgetModel
     }
 
