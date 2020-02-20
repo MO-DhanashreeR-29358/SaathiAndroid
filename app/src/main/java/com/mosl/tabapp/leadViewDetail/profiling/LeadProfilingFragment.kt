@@ -188,82 +188,73 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     viewPager?.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
   }
 
-  private fun fillProfileModal(leadProfileItems: List<LeadProfile>) {
+  private fun fillProfileModal(leadProfileList: List<LeadProfile>) {
 
     profileModel = ProfileModel()
     val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
-    for (responseI in leadProfileItems.indices) {
-      val (groupName1, _, inApproval, _, ProfileParameterGroupID, BusinessUnitId, _, IsAdminMode, parameterList, _, profileParameterId) = leadProfileItems[responseI]
-      val groupName = stringOrEmpty(groupName1)
-      val profileId = stringOrEmpty(profileParameterId)
+    for (leadProfile in leadProfileList) {
+      val groupName = stringOrEmpty(leadProfile.groupName)
+      val profileId = stringOrEmpty(leadProfile.profileParameterId)
       val tempProfileQuestionGroup = ProfileQuestionGroup().apply {
         this.groupName = groupName
         this.profileParameterID = profileId
-        this.inApproval = inApproval
-        this.profileParameterGroupID = ProfileParameterGroupID
-        this.businessUnitId = BusinessUnitId
-        this.isAdminMode = IsAdminMode
+        this.inApproval = leadProfile.inApproval
+        this.profileParameterGroupID = leadProfile.profileParameterGroupID
+        this.businessUnitId = leadProfile.businessUnitId
+        this.isAdminMode = leadProfile.isAdminMode
       }
 
       val mProfileQuestionList = ArrayList<ProfileQuestion>()
-      if (parameterList != null) {
-        for (profileParameterListI in parameterList.indices) {
-          val (_, questionType1, selectedProfileSubParameterID1, _, _, subParameterList, isDefaultHidden, ProfileParameterListProfileParameterGroupID, _, _, _, isAdminMode, controlType, _, questionText1, profileParameterID) = parameterList[profileParameterListI]
+      leadProfile.profileParameterList?.let {
+        for (parameter in it) {
           val tmpProfileQuestion = ProfileQuestion()
 
-          tmpProfileQuestion.controlType = controlType
-          tmpProfileQuestion.inApproval = inApproval
-          tmpProfileQuestion.profileParameterGroupID = ProfileParameterListProfileParameterGroupID
-          val questionType = questionType1!!
-          tmpProfileQuestion.questionType = questionType
-          val selectedProfileSubParameterID = selectedProfileSubParameterID1!!
-          tmpProfileQuestion.questionType = selectedProfileSubParameterID
-          val profileParameterListIsAdminMode = isAdminMode!!
-          tmpProfileQuestion.isAdminMode = profileParameterListIsAdminMode
-          val questionText = stringOrEmpty(questionText1)
+          tmpProfileQuestion.controlType = parameter.controlType
+          tmpProfileQuestion.inApproval = parameter.inApproval
+          tmpProfileQuestion.profileParameterGroupID = parameter.profileParameterGroupID
+          tmpProfileQuestion.questionType = parameter.questionType!!
+          tmpProfileQuestion.questionType = parameter.selectedProfileSubParameterID!!
+          tmpProfileQuestion.isAdminMode = parameter.isAdminMode!!
+          val questionText = stringOrEmpty(parameter.questionText)
           tmpProfileQuestion.questionText = questionText
 
-          val yNStatus = when (isDefaultHidden) {
+          val yNStatus = when (parameter.isDefaultHidden) {
             null, "" -> "N"
-            else -> isDefaultHidden
+            else -> parameter.isDefaultHidden
           }
           tmpProfileQuestion.isDefaultHidden = yNStatus
-
-          val profileParameterListProfileParameterID = profileParameterID!!
-          tmpProfileQuestion.profileParameterID = profileParameterListProfileParameterID
+          tmpProfileQuestion.profileParameterID = parameter.profileParameterID!!
 
           val mProfileOptionList = ArrayList<ProfileOption>()
-          if (subParameterList != null) {
-            for (profileSubParameterListI in subParameterList.indices) {
-              val (_, isHide, _, questionSubText, isSelected, extraInfo, _, extraInfoFieldName, extraInfoRowCount, inApproval1, profileSubParameterID1, _, value1, hideDepedentQuestion, _, isAdminMode1) = subParameterList[profileSubParameterListI]
+          parameter.profileSubParameterList?.let { list ->
+            for (subParameter in list) {
               val tempProfileOption = ProfileOption()
 
               tempProfileOption.profileParameterID = tmpProfileQuestion.profileParameterID
 
-              val profileSubParameterListInApproval = inApproval1!!
+              val profileSubParameterListInApproval = subParameter.inApproval!!
               tempProfileOption.inApproval = profileSubParameterListInApproval
 
-              val value = stringOrEmpty(value1)
+              val value = stringOrEmpty(subParameter.value)
               tempProfileOption.value = value
-              tempProfileOption.isSelected = isSelected!!
+              tempProfileOption.isSelected = subParameter.isSelected!!
 
-              val profileSubParameterID = profileSubParameterID1!!
+              val profileSubParameterID = subParameter.profileSubParameterID!!
               tempProfileOption.profileSubParameterID = profileSubParameterID
-              tempProfileOption.hideDepedentQuestion = stringOrEmpty(hideDepedentQuestion)
-              val noStr = stringOrEmpty(isHide)
+              tempProfileOption.hideDepedentQuestion =
+                stringOrEmpty(subParameter.hideDependentQuestion)
+              val noStr = stringOrEmpty(subParameter.isHide)
               tempProfileOption.setIsHide(noStr)
 
-              val strQuestionsubtext = stringOrEmpty(questionSubText)
-              tempProfileOption.questionSubText = strQuestionsubtext
+              tempProfileOption.questionSubText = stringOrEmpty(subParameter.questionSubText)
+              tempProfileOption.isAdminMode = subParameter.isAdminMode!!
+              tempProfileOption.extraInfo = stringOrEmpty(subParameter.extraInfo)
 
-              val profileSubParameterListIsAdminMode = isAdminMode1!!
-              tempProfileOption.isAdminMode = profileSubParameterListIsAdminMode
-
-              tempProfileOption.extraInfo = stringOrEmpty(extraInfo)
-              when {
-                extraInfoRowCount != null -> tempProfileOption.extraInfoRowCount = extraInfoRowCount
+              subParameter.extraInfoRowCount?.let { rowCount ->
+                tempProfileOption.extraInfoRowCount = rowCount
               }
-              tempProfileOption.extraInfoFieldName = stringOrEmpty(extraInfoFieldName)
+
+              tempProfileOption.extraInfoFieldName = stringOrEmpty(subParameter.extraInfoFieldName)
 
               mProfileOptionList.add(tempProfileOption)
             }
@@ -272,6 +263,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           mProfileQuestionList.add(tmpProfileQuestion)
         }
       }
+
+
       tempProfileQuestionGroup.profileQuestionList = mProfileQuestionList
       profileQuestionGroupList.add(tempProfileQuestionGroup)
     }

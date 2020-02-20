@@ -22,15 +22,11 @@ private fun LeadProfileItem.mapToLeadProfile(): LeadProfile {
 
   return LeadProfile(
       groupName = groupName,
-      status = status,
       inApproval = inApproval,
-      active = active,
       profileParameterGroupID = profileParameterGroupID,
       businessUnitId = businessUnitId,
-      approvalFieldList = approvalFieldList,
       isAdminMode = isAdminMode,
       profileParameterList = profileParameterList,
-      sysname = sysname,
       profileParameterId = profileParameterId
   )
 }
@@ -43,26 +39,19 @@ private fun List<ProfileParameterListItem>.mapToProfileParameterList(): List<Pro
 
 private fun ProfileParameterListItem.mapToProfileParameter(): ProfileParameter {
   val profileSubParameterList =
-    profileSubParameterList?.mapToProfileSubParameterList() ?: emptyList<ProfileSubParameter>()
+    profileSubParameterList?.mapToProfileSubParameterList() ?: emptyList()
 
   return ProfileParameter(
-      status = status,
       questionType = questionType,
       selectedProfileSubParameterID = selectedProfileSubParameterID,
-      sequence = sequence,
       inApproval = inApproval,
       profileSubParameterList = profileSubParameterList,
       isDefaultHidden = isDefaultHidden,
       profileParameterGroupID = profileParameterGroupID,
-      approvalFieldList = approvalFieldList,
-      value = value,
-      permissions = permissions,
       isAdminMode = isAdminMode,
       controlType = controlType,
-      profileSubParameterValueModel = profileSubParameterValueModel,
       questionText = questionText,
-      profileParameterID = profileParameterID,
-      sysname = sysname
+      profileParameterID = profileParameterID
   )
 }
 
@@ -74,23 +63,17 @@ private fun List<ProfileSubParameterListItem>.mapToProfileSubParameterList(): Li
 
 private fun ProfileSubParameterListItem.mapToProfileSubParameter(): ProfileSubParameter {
   return ProfileSubParameter(
-      status = status,
       isHide = isHide,
-      leadProfileParameterID = leadProfileParameterID,
       questionSubText = questionSubText,
       isSelected = isSelected,
       extraInfo = extraInfo,
-      sequence = sequence,
       extraInfoFieldName = extraInfoFieldName,
       extraInfoRowCount = extraInfoRowCount,
       inApproval = inApproval,
       profileSubParameterID = profileSubParameterID,
-      approvalFieldList = approvalFieldList,
       value = value,
-      hideDepedentQuestion = hideDepedentQuestion,
-      permissions = permissions,
-      isAdminMode = isAdminMode,
-      profileParameterID = profileParameterID
+      hideDependentQuestion = hideDepedentQuestion,
+      isAdminMode = isAdminMode
   )
 }
 
