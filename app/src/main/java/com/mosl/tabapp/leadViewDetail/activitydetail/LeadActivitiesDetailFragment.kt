@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.View
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.FragLeadActDetailBinding
+import com.mosl.tabapp.databinding.FragLeadActDetailConstraintBinding
 import com.mosl.tabapp.leadViewDetail.activity.MeetingParcel
 
 class LeadActivitiesDetailFragment : CommonFragment() {
 
-  private lateinit var binding: FragLeadActDetailBinding
+  private lateinit var binding: FragLeadActDetailConstraintBinding
 
   override fun getLayout(): Int {
-    return R.layout.frag_lead_act_detail
+    return R.layout.frag_lead_act_detail_constraint
   }
 
   override fun onViewCreated(
@@ -20,7 +20,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragLeadActDetailBinding.bind(view)
+    binding = FragLeadActDetailConstraintBinding.bind(view)
     setAppTitle(arguments?.getString("MeetingReason") ?: "Activities Details")
     setUpView()
   }
@@ -48,7 +48,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvActionable.text = it.actionable
           tvCategory.text = it.category
           tvQueryDesc.text = it.queryDescription
-          tvCSR.text = it.customerServiceRemark
+          //tvCSR.text = it.customerServiceRemark
           tvComments.text = it.comment
           tvLocation.text = it.location
           tvMeetingAddress.text = it.meetingAddress
@@ -60,7 +60,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           when {
             it.attendeeEmployee.isNotEmpty() -> {
               val attendingArray = it.attendeeEmployee.trim()
-                  .split(",".toRegex())
+                .split(",".toRegex())
               tvAttendeeFirst.text = attendingArray[0]
               tvAttendeeSecond.text = attendingArray[1]
               tvAttendeeThird.text = attendingArray[2]

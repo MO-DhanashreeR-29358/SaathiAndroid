@@ -55,6 +55,47 @@
 
     <string name="hint_text_employee_code">Employee Code</string>
     <string name="hint_text_password">Password</string>
+    <string name="text_label_mobile">Mobile</string>
+    <string name="text_label_email">Email</string>
+    <string name="text_label_product">Product</string>
+    <string name="text_label_attendee1">Attendee1</string>
+    <string name="text_label_attendee2">Attendee2</string>
+    <string name="text_label_attendee3">Attendee3</string>
+    <string name="text_label_status">Status</string>
+    <string name="text_label_activity_type">Activity Type</string>
+    <string name="text_label_meeting_reason">Meeting Reason</string>
+    <string name="txt_label_meeting_duration">Meeting Duration</string>
+    <string name="text_label_actionable">Actionable</string>
+    <string name="text_label_category">Category</string>
+    <string name="text_label_location">Location</string>
+    <string name="text_label_meeting_address">Meeting Address</string>
+    <string name="text_label_pin_code">Pin Code</string>
+    <string name="text_label_geo_meeting_location">Geo Meeting Location</string>
+    <string name="text_label_travelling_mode">Travelling Mode</string>
+    <string name="text_label_amount">"Amount</string>
+    <string name="text_label_geo_tag_status">Geo Tag Status</string>
+    <string name="text_label_meeting_description">Meeting Description</string>
+    <string name="text_label_customer_service_remark">Customer Service Remark</string>
+    <string name="text_label_comments">Comments</string>
+    <string name="text_label_spinner_product">Product*</string>
+    <string name="text_label_spinner_meeting_duration">Meeting Duration*</string>
+    <string name="text_label_spinner_meeting_objective">Meeting Objective*</string>
+    <string name="text_label_spinner_activity_type">Activity Type*</string>
+    <string name="text_label_spinner_meeting_reason">Meeting Reason*</string>
+    <string name="hint_meeting_Description">Enter Meeting Description*</string>
+    <string name="text_label_spinner_ba_client_meeting">BA Client Meeting*</string>
+    <string name="text_label_spinner_out_station_meeting">Out Station Meeting*</string>
+    <string name="text_label_spinner_actionable">Actionables*</string>
+    <string name="text_label_spinner_category">Category*</string>
+    <string name="text_label_spinner_sub_category">Sub Category**</string>
+    <string name="hint_client_code">Client Code*</string>
+    <string name="hint_client_name">"Client Name*</string>
+    <string name="hint_customer_comment">"Enter Customer Comment</string>
+    <string name="hint_category_description">"Enter Category Description*</string>
+    <string name="text_label_attendee">Attendee</string>
+    <string name="text_label_spl_attendee">Spl Attendee</string>
+    <string name="text_button_reset">Reset"</string>
+    <string name="text_button_save">Save"</string>
 
     <!--franchise-lead & lead creation-->
 
@@ -65,7 +106,6 @@
         <item>Events &amp; Seminar Attended</item>
 
     </string-array>
-
 
 
     <string-array name="SelectQuarter">
