@@ -1,15 +1,24 @@
 package com.mosl.tabapp.leadViewDetail.updatemeeting
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.mobile.domain.leadviewdetail.updatemeeting.UpdateMeetingRepository
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 class UpdateMeetingPresenter @Inject constructor(
-  view: UpdateMeetingView
+  view: UpdateMeetingView,
+  val repository: UpdateMeetingRepository,
+  val data: UpdateMeetingScreenData
 ) : BasePresenter<UpdateMeetingView>(view) {
 
   override fun start() {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+    Observable.merge(onFetchCalled(), onRetryCalled())
+        .switchMap {
+          repository.getMeeting(data.meetingId)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderMeetingById)
+        .addTo(disposable)
   }
 }
