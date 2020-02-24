@@ -1,15 +1,15 @@
-package com.mosl.saathi.api.model.dashboard.ausfbLead
+package com.mosl.saathi.api.model.dashboard.lead
 
-import com.mosl.mobile.domain.aulead.AusfbLeadGroupItemModel
+import com.mosl.mobile.domain.lead.LeadGroupItemModel
 
 
-data class AusfbLeadModel(
+data class LeadModel(
 
-    @JvmField val table: List<AusfbLeadItemModel>?,
+    @JvmField val table: List<LeadItemModel>?,
 
-    @JvmField val table1: List<AusfbLeadItemModel>?,
+    @JvmField val table1: List<LeadItemModel>?,
 
-    @JvmField val table2: List<AusfbLeadGroupItemModel>?
+    @JvmField val table2: List<LeadGroupItemModel>?
 ) {
 
     fun getXAxisList(): MutableList<String> {
@@ -60,7 +60,7 @@ data class AusfbLeadModel(
     }
 
 
-    fun getList(itemModel: AusfbLeadItemModel): MutableList<String> {
+    fun getList(itemModel: LeadItemModel): MutableList<String> {
         val mutableList: MutableList<String> = mutableListOf()
 
         itemModel.C0?.let { mutableList.add(it) }

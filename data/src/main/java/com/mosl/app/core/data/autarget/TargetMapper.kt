@@ -5,10 +5,10 @@ import com.mosl.saathi.api.model.dashboard.target.TableItem
 import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
 import com.mosl.saathi.api.model.dashboard.target.TargetTable1Item
 import com.mosl.saathi.api.model.dashboard.targetnew.APTargetRequest
-import com.mosl.saathi.api.model.dashboard.targetnew.AuTargetRequest
+import com.mosl.saathi.api.model.dashboard.targetnew.TargetRequest
 
-fun TargetRequest.requestTransform(): AuTargetRequest {
-    return AuTargetRequest(
+fun TargetInput.requestTransform(): TargetRequest {
+    return TargetRequest(
         businessProfileId = businessProfileId,
         addtionalParameters = addtionalParameters!!.apTransform(),
         employeeCode = employeeCode,

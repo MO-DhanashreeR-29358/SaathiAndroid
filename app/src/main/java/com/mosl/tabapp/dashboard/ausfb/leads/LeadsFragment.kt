@@ -23,7 +23,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.bank.*
 import com.mosl.mobile.user.login.user
-import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
+import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
@@ -42,7 +42,7 @@ import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
 
-class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
+class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
     lateinit var binding: FragmentLeadsNewBinding
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
@@ -50,7 +50,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
 
     @Inject
-    lateinit var presenter: AuLeadsPresenter
+    lateinit var presenter: LeadsPresenter
 
     @Inject
     lateinit var dashboardModel: DashboardModel
@@ -58,7 +58,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
     private lateinit var model: WidgetModel
 
     private val barChartEvent =
-        PublishSubject.create<AuLeadUiEvent>()
+        PublishSubject.create<LeadUiEvent>()
 
     override fun getLayout(): Int {
         return R.layout.fragment_leads_new
@@ -201,7 +201,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         return binding.spSubBranch.itemSelections()
     }
 
-    override fun onBarChartClick(): Observable<AuLeadUiEvent.BarChartClick> {
+    override fun onBarChartClick(): Observable<LeadUiEvent.BarChartClick> {
 
         return barChartEvent.ofType()
     }
@@ -283,7 +283,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         binding.includeChart.chart.clear()
     }
 
-    override fun renderData(uiModel: UiModel<AusfbLeadModel>) {
+    override fun renderData(uiModel: UiModel<LeadModel>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure { error ->
@@ -369,7 +369,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
                 if (!yAxisValue.get(h.stackIndex).get(e.x.toInt()).equals("0")) {
                     barChartEvent.onNext(
-                        AuLeadUiEvent.BarChartClick(
+                        LeadUiEvent.BarChartClick(
                             lableString[h.stackIndex],
                             xAxisValue.get(e.x.toInt())
                         )

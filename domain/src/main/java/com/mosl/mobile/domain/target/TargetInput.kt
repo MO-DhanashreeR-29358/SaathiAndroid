@@ -1,8 +1,9 @@
-package com.mosl.mobile.domain.aulead
+package com.mosl.mobile.domain.target
 
-data class AusfbLeadInput(
+
+data class TargetInput(
     @JvmField val businessProfileId: String?,
-    @JvmField val addtionalParameters: AdditionalParametersInput?,
+    @JvmField val addtionalParameters: AditionalParametersTarget?,
     @JvmField val widgetSystemName: String?,
     @JvmField val productId: String?,
     @JvmField val employeeCode: String?

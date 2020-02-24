@@ -31,8 +31,8 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.Companion.PERIOD_FILTER
+import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment
+import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment.Companion.PERIOD_FILTER
 import com.mosl.tabapp.databinding.FragmentTargetBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -353,12 +353,12 @@ class TargetFragment : CommonFragment(), TargetView {
 
             getPeriod()?.let { this[it.keyValue] = it.value }
 
-            getBank()?.let { this[AuLeadsFragment.FLT_BANKNAME] = it.bankId.toString() }
+            getBank()?.let { this[LeadsFragment.FLT_BANKNAME] = it.bankId.toString() }
 
-            getBranch()?.let { this[AuLeadsFragment.FLT_BANKBRANCHCODE] = it.branchId.toString() }
+            getBranch()?.let { this[LeadsFragment.FLT_BANKBRANCHCODE] = it.branchId.toString() }
 
             getSubBranch()?.let {
-                this[AuLeadsFragment.FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+                this[LeadsFragment.FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
             }
 
             this[MOSLConstants.SELF_KEY] = dashboardModel.dashboardFor

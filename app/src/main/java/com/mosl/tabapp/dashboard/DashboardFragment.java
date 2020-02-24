@@ -76,7 +76,7 @@ import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
+import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment;
 import com.mosl.tabapp.dashboard.ausfb.target.TargetFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
@@ -704,7 +704,7 @@ public class DashboardFragment extends CommonFragment
     private void loadLead() {
         Bundle args = new Bundle();
         setTabActivre(btnLeads);
-        AuLeadsFragment leadsFragment = new AuLeadsFragment();
+        LeadsFragment leadsFragment = new LeadsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()

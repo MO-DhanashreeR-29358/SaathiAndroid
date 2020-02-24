@@ -5,11 +5,11 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SubBranchCodeModel
-import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
+import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.common.FilterRowData
 import io.reactivex.Observable
 
-interface AuLeadsView : BaseView {
+interface LeadsView : BaseView {
 
     fun onPeriodChange(): Observable<Int>
     fun onSourceChange(): Observable<Int>
@@ -27,9 +27,9 @@ interface AuLeadsView : BaseView {
     fun getSource(): FilterRowData?
     fun getProduct(): FilterRowData?
     fun getWidgetSystemsName(): String?
-    fun renderData(uiModel: UiModel<AusfbLeadModel>)
+    fun renderData(uiModel: UiModel<LeadModel>)
     fun getAddtionalParameterMap(): Map<String, String>
-    fun onBarChartClick(): Observable<AuLeadUiEvent.BarChartClick>
+    fun onBarChartClick(): Observable<LeadUiEvent.BarChartClick>
 
 }
 

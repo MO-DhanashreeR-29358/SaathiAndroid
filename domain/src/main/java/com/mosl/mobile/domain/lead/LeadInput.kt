@@ -1,9 +1,8 @@
-package com.mosl.mobile.domain.target
+package com.mosl.mobile.domain.lead
 
-
-data class TargetRequest(
+data class LeadInput(
     @JvmField val businessProfileId: String?,
-    @JvmField val addtionalParameters: AditionalParametersTarget?,
+    @JvmField val addtionalParameters: AdditionalParametersInput?,
     @JvmField val widgetSystemName: String?,
     @JvmField val productId: String?,
     @JvmField val employeeCode: String?

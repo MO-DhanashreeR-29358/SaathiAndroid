@@ -1,12 +1,12 @@
-package com.mosl.app.core.data.aulead
+package com.mosl.app.core.data.lead
 
-import com.mosl.mobile.domain.aulead.AdditionalParametersInput
-import com.mosl.mobile.domain.aulead.AusfbLeadGroupItemModel
-import com.mosl.mobile.domain.aulead.AusfbLeadInput
-import com.mosl.saathi.api.model.dashboard.ausfbLead.*
+import com.mosl.mobile.domain.lead.AdditionalParametersInput
+import com.mosl.mobile.domain.lead.LeadGroupItemModel
+import com.mosl.mobile.domain.lead.LeadInput
+import com.mosl.saathi.api.model.dashboard.lead.*
 
-fun AusfbLeadInput.requestTransform(): AusfbLeadRequest {
-    return AusfbLeadRequest(
+fun LeadInput.requestTransform(): LeadRequest {
+    return LeadRequest(
         businessProfileId = businessProfileId,
         addtionalParameters = addtionalParameters!!.additionalParametersTransform(),
         employeeCode = employeeCode,
@@ -24,8 +24,8 @@ fun AdditionalParametersInput.additionalParametersTransform(): AdditionalParamet
 }
 
 
-fun AusfbLeadResponse.responseTransform(): AusfbLeadModel {
-    return AusfbLeadModel(
+fun LeadResponse.responseTransform(): LeadModel {
+    return LeadModel(
 
         table = table?.itemTransform(),
         table1 = table1?.itemTransform(),
@@ -34,9 +34,9 @@ fun AusfbLeadResponse.responseTransform(): AusfbLeadModel {
     )
 }
 
-fun List<AusfbLeadItem>.itemTransform(): List<AusfbLeadItemModel> {
+fun List<LeadItem>.itemTransform(): List<LeadItemModel> {
     return map {
-        AusfbLeadItemModel(
+        LeadItemModel(
             id = it.id,
             stage = it.stage,
             C0 = it.C0,
@@ -52,9 +52,9 @@ fun List<AusfbLeadItem>.itemTransform(): List<AusfbLeadItemModel> {
     }
 }
 
-fun List<AusfbLeadGroupItem>.groupItemTransform(): List<AusfbLeadGroupItemModel> {
+fun List<LeadGroupItem>.groupItemTransform(): List<LeadGroupItemModel> {
     return map {
-        AusfbLeadGroupItemModel(
+        LeadGroupItemModel(
             groupId = it.groupId,
             childId = it.childId,
             rowFilter = it.rowFilter

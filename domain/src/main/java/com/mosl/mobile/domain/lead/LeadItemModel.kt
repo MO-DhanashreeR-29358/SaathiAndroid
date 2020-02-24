@@ -1,7 +1,7 @@
-package com.mosl.saathi.api.model.dashboard.ausfbLead
+package com.mosl.saathi.api.model.dashboard.lead
 
 
-data class AusfbLeadItemModel(
+data class LeadItemModel(
 
     @JvmField val id: String,
     @JvmField val stage: String,

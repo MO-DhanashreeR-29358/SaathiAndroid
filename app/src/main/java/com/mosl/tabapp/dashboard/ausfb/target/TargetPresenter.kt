@@ -6,8 +6,8 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.target.AditionalParametersTarget
 import com.mosl.mobile.domain.target.TableItemModel
+import com.mosl.mobile.domain.target.TargetInput
 import com.mosl.mobile.domain.target.TargetRepository
-import com.mosl.mobile.domain.target.TargetRequest
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.constants.MOSLConstants.*
@@ -81,7 +81,7 @@ class TargetPresenter @Inject constructor(
         ).filter { view.getWidgetModel() != null }
             .map { getWidgetRequest() }
             .switchMap {
-                repository.getAuTargetWidget(it)
+                repository.getTargetWidget(it)
                     .compose(applyUiModel())
             }.subscribe(view::renderData)
             .addTo(disposable)
@@ -112,8 +112,8 @@ class TargetPresenter @Inject constructor(
         )
     }
 
-    private fun getWidgetRequest(): TargetRequest {
-        return TargetRequest(
+    private fun getWidgetRequest(): TargetInput {
+        return TargetInput(
             businessProfileId = dashboardModel.businessProfileIdForDashboard,
             widgetSystemName = view.getWidgetModel()?.systemName,
             productId = dashboardModel.productId,

@@ -1,4 +1,4 @@
-package com.mosl.mobile.domain.aulead
+package com.mosl.mobile.domain.lead
 
 data class AdditionalParametersInput(
     @JvmField val fltBankName: String?,

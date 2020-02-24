@@ -8,16 +8,16 @@ import dagger.Provides
 
 
 @Module
-class AuLeadsModule {
+class LeadsModule {
 
     @Provides
-    internal fun provideAuLeadView(fragment: AuLeadsFragment): AuLeadsView {
+    internal fun provideAuLeadView(fragment: LeadsFragment): LeadsView {
         return fragment
     }
 
 
     @Provides
-    internal fun provideDashBoardModel(fragment: AuLeadsFragment): DashboardModel {
+    internal fun provideDashBoardModel(fragment: LeadsFragment): DashboardModel {
         val args: Bundle? = fragment.getArguments()
         val dashboardModel: DashboardModel =
             args?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel

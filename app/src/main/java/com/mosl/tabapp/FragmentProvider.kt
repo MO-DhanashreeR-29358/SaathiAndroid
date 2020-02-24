@@ -11,8 +11,8 @@ import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.*
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsModule
+import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment
+import com.mosl.tabapp.dashboard.ausfb.leads.LeadsModule
 import com.mosl.tabapp.dashboard.ausfb.target.TargetFragment
 import com.mosl.tabapp.dashboard.ausfb.target.TargetModule
 import com.mosl.tabapp.leadViewDetail.*
@@ -65,8 +65,8 @@ abstract class FragmentProvider {
   @ContributesAndroidInjector
   abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
 
-  @ContributesAndroidInjector(modules = [AuLeadsModule::class])
-    abstract fun provideAuLeadsFragmentFactory(): AuLeadsFragment
+    @ContributesAndroidInjector(modules = [LeadsModule::class])
+    abstract fun provideAuLeadsFragmentFactory(): LeadsFragment
 
     @ContributesAndroidInjector(modules = [BannerModule::class])
     abstract fun provideBannerFragmentFactory(): BannerFragment

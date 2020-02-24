@@ -1,7 +1,7 @@
-package com.mosl.mobile.domain.aulead
+package com.mosl.mobile.domain.lead
 
 
-data class AusfbLeadGroupItemModel(
+data class LeadGroupItemModel(
 
     @JvmField val groupId: String,
     @JvmField val childId: String,

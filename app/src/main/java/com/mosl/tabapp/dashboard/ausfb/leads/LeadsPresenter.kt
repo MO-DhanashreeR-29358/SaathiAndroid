@@ -3,10 +3,10 @@ package com.mosl.tabapp.dashboard.ausfb.leads
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.mobile.domain.aulead.AdditionalParametersInput
-import com.mosl.mobile.domain.aulead.AusfbLeadInput
-import com.mosl.mobile.domain.aulead.AusfbLeadRepository
 import com.mosl.mobile.domain.bank.BankRepository
+import com.mosl.mobile.domain.lead.AdditionalParametersInput
+import com.mosl.mobile.domain.lead.LeadInput
+import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.constants.MOSLConstants
@@ -19,14 +19,14 @@ import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
 
-class AuLeadsPresenter @Inject constructor(
-    view: AuLeadsView, val bankRepository: BankRepository,
-    val ausfbLeadRepository: AusfbLeadRepository,
+class LeadsPresenter @Inject constructor(
+    view: LeadsView, val bankRepository: BankRepository,
+    val leadRepository: LeadRepository,
     val dashboardModel: DashboardModel,
     val navigator: ScreenNavigatorImpl,
     val userManager: UserManager
 ) :
-    BasePresenter<AuLeadsView>(view) {
+    BasePresenter<LeadsView>(view) {
     override fun start() {
         if (userManager.user.isAuBankSalesSupport()) {
             onFetchCalled().switchMap {
@@ -63,7 +63,7 @@ class AuLeadsPresenter @Inject constructor(
         ).filter(InvalidSelectionPredicate)
             .map { getWidgetRequest() }
             .switchMap {
-                ausfbLeadRepository.getAusfbLeadWidget(it)
+                leadRepository.getLeadWidget(it)
                     .compose(applyUiModel())
             }.subscribe(view::renderData).addTo(disposable)
 
@@ -86,8 +86,8 @@ class AuLeadsPresenter @Inject constructor(
         )
     }
 
-    private fun getWidgetRequest(): AusfbLeadInput {
-        return AusfbLeadInput(
+    private fun getWidgetRequest(): LeadInput {
+        return LeadInput(
             businessProfileId = dashboardModel.businessProfileIdForDashboard,
             widgetSystemName = view.getWidgetSystemsName(),
             productId = dashboardModel.productId,

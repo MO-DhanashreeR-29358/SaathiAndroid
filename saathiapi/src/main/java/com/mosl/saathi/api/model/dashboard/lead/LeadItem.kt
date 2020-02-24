@@ -1,8 +1,8 @@
-package com.mosl.saathi.api.model.dashboard.ausfbLead
+package com.mosl.saathi.api.model.dashboard.lead
 
 import com.google.gson.annotations.SerializedName
 
-data class AusfbLeadItem(
+data class LeadItem(
 
     @JvmField @SerializedName("id") val id: String,
     @JvmField @SerializedName("stage") val stage: String,

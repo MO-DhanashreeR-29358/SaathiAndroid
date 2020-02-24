@@ -4,6 +4,6 @@ import io.reactivex.Observable
 
 interface TargetRepository {
 
-    fun getAuTargetWidget(request: TargetRequest): Observable<TargetItemModel>
+    fun getTargetWidget(request: TargetInput): Observable<TargetItemModel>
 
 }
