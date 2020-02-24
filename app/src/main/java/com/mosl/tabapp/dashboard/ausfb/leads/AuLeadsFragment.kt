@@ -458,6 +458,12 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                     MAP,
                     getAddtionalParameterMap() as Serializable
                 )
+                args.putInt(PERIOD_FILTER, binding.spPeriod.selectedItemPosition)
+                args.putInt(PRODUCT_FILTER, binding.spProduct.selectedItemPosition)
+                args.putInt(SOURCE_FILTER, binding.spSource.selectedItemPosition)
+                args.putInt(FLT_BANKNAME, binding.spBank.selectedItemPosition)
+                args.putInt(FLT_BANKBRANCHCODE, binding.spBranch.selectedItemPosition)
+                args.putInt(FLT_BANKSUBBROKERCODE, binding.spSubBranch.selectedItemPosition)
                 args.putString(SYSTEM_NAME, getWidgetSystemsName())
                 args.putString(TYPESOFLEAD, AUSFB_LEAD)
                 clientsFragment.arguments = args
