@@ -26,11 +26,12 @@ import com.mosl.saathi.api.model.createmeeting.*
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
+import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.bank.*
-import com.mosl.saathi.api.model.dashboard.client.ClientItem
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest
+import com.mosl.saathi.api.model.dashboard.client.ClientItemResponse
+import com.mosl.saathi.api.model.dashboard.client.ClientsRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
@@ -382,13 +383,13 @@ interface SaathiApi {
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClients(
-    @Body request: ClientRequest
-  ): Observable<ClientItem>
+      @Body request: CommonRequest
+  ): Observable<ClientItemResponse>
 
   @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
   fun getDashboardData(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<String>
 
 
@@ -398,28 +399,33 @@ interface SaathiApi {
     ): Observable<LeadResponse>
 
     @POST("Dashboard/LoadWidgetAsync")
+    fun getClientsWidgetData(
+        @Body request: ClientsRequest
+    ): Observable<ClientItemResponse>
+
+    @POST("Dashboard/LoadWidgetAsync")
     fun getTargetWidgetData(
       @Body request: TargetRequest
     ): Observable<TargetItemResponse>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<SnapshotItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getTargetAchievement(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<TargetAchievementItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getTargetAchievementTeam(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<TargetAchievementTeamItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClientsTradedYesterday(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<ClientTradedYesterdayItem>
 
   @ExcludeWrapper
@@ -451,7 +457,7 @@ interface SaathiApi {
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getIncentive(
-    @Body request: ClientRequest
+      @Body request: CommonRequest
   ): Observable<IncentiveItem>
 
   //================== Calender ========================

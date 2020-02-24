@@ -55,11 +55,11 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item;
 import com.mosl.saathi.api.model.dashboard.actionablecount.TableItem;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableFilterItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem;
@@ -76,6 +76,7 @@ import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
 import com.mosl.tabapp.dashboard.target.TargetFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
@@ -765,7 +766,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadClients() {
         setTabActivre(btnClient);
-        ClientsFragment clientsFragment = new ClientsFragment();
+        ClientsFragmentNew clientsFragment = new ClientsFragmentNew();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         clientsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -1553,7 +1554,7 @@ public class DashboardFragment extends CommonFragment
 
     private void incentiveWebServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileIdForDashboard,
                     getAddtionalParameterMap(),
                     widgetSystemName,
@@ -1589,7 +1590,7 @@ public class DashboardFragment extends CommonFragment
 
     private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileIdForDashboard,
                     getAddtionalParameterMap(),
                     widgetSystemName,

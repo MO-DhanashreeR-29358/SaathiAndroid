@@ -8,7 +8,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem;
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotTableItem;
 import com.mosl.tabapp.R;
@@ -134,7 +134,7 @@ public class BusSnapshotAdvFragment extends CommonFragment {
     private void webServiceCall() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     getAddtionalParameterMap(),
                     widgetSystemName,

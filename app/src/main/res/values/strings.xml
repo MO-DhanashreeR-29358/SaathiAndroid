@@ -208,4 +208,5 @@
     <string name="hint_label_enter_otp">Enter OTP*</string>
     <string name="txt_label_resend_otp">Resend OTP</string>
     <string name="btn_label_submit_otp">Submit OTP</string>
+    <string name="error_lable_no_records_found">No records found</string>
 </resources>

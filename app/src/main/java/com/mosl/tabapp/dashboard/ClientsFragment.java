@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientItem;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
+import com.mosl.saathi.api.model.dashboard.client.ClientItemResponse;
 import com.mosl.saathi.api.model.dashboard.client.Table1Item;
 import com.mosl.saathi.api.model.dashboard.client.TableItem;
 import com.mosl.tabapp.R;
@@ -139,7 +139,28 @@ public class ClientsFragment extends CommonFragment {
         return addtionalParameterMap;
     }
 
-    private void renderClients(UiModel<ClientItem> uiModel) {
+    private void webServiceCall() {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+
+            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
+            Map<String, String> additionalMap = getAddtionalParameterMap();
+
+            CommonRequest request = new CommonRequest(
+                    businessProfileId,
+                    additionalMap,
+                    widgetSystemName,
+                    dashboardModel.getProductId(),
+                    dashboardModel.getEmployeeCode()
+            );
+            Disposable subscribe = getSaathiApi().getClients(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderClients);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderClients(UiModel<ClientItemResponse> uiModel) {
         toggleProgress(uiModel.inProgress);
 
         Throwable error = uiModel.error;
@@ -150,7 +171,7 @@ public class ClientsFragment extends CommonFragment {
             showOnFailurePopup(error);
         }
 
-        ClientItem data = uiModel.data;
+        ClientItemResponse data = uiModel.data;
         if (data != null) {
             clientHideProgress();
             arrayListClient.clear();
@@ -182,26 +203,7 @@ public class ClientsFragment extends CommonFragment {
         }
     }
 
-    private void webServiceCall() {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
 
-            String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            Map<String, String> additionalMap = getAddtionalParameterMap();
-
-            ClientRequest request = new ClientRequest(
-                    businessProfileId,
-                    additionalMap,
-                    widgetSystemName,
-                    dashboardModel.getProductId(),
-                    dashboardModel.getEmployeeCode()
-            );
-            Disposable subscribe = getSaathiApi().getClients(request)
-                    .compose(applyUiModel())
-                    .subscribe(this::renderClients);
-        } else {
-            noInternetConnectionDialog();
-        }
-    }
 
     private String getTableHead(String text) {
         try {

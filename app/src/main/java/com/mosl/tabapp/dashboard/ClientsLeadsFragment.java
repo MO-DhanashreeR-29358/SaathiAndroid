@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMValueFormatter;
@@ -362,7 +362,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             Map<String, String> additionalMap = getAddtionalParameterMap();
 
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     additionalMap,
                     widgetSystemName,

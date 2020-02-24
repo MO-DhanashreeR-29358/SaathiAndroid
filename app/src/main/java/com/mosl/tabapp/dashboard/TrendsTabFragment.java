@@ -38,7 +38,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
@@ -345,7 +345,7 @@ public class TrendsTabFragment extends CommonFragment {
     private void webServiceCall(final String widgetSystemName) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     null,
                     widgetSystemName,

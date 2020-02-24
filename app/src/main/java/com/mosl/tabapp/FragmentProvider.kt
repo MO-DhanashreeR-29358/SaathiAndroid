@@ -11,6 +11,8 @@ import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.*
+import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew
+import com.mosl.tabapp.dashboard.clients.ClientsModule
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsModule
 import com.mosl.tabapp.dashboard.target.TargetFragment
@@ -30,132 +32,135 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
-abstract class FragmentProvider {
+interface FragmentProvider {
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadCreationFactory(): LeadCreationFragment
+    @ContributesAndroidInjector
+    fun provideLeadCreationFactory(): LeadCreationFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadViewMainFactory(): LeadViewMainFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewMainFactory(): LeadViewMainFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadViewDetailFactory(): LeadViewDetailFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewDetailFactory(): LeadViewDetailFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideDocumentFactory(): DocumentFragment
+    @ContributesAndroidInjector
+    fun provideDocumentFactory(): DocumentFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideDashboardFragmentFactory(): DashboardFragment
+    @ContributesAndroidInjector
+    fun provideDashboardFragmentFactory(): DashboardFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideCalendarFragmentFactory(): CalendarFragment
+    @ContributesAndroidInjector
+    fun provideCalendarFragmentFactory(): CalendarFragment
 
-  @ContributesAndroidInjector
-  abstract fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
+    @ContributesAndroidInjector
+    fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
+    @ContributesAndroidInjector
+    fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
 
-  @ContributesAndroidInjector(modules = [QueryModule::class])
-  abstract fun provideQueryFragmentFactory(): QueryFragment
+    @ContributesAndroidInjector(modules = [QueryModule::class])
+    fun provideQueryFragmentFactory(): QueryFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideWebviewFragmentFactory(): WebViewFragment
+    @ContributesAndroidInjector
+    fun provideWebviewFragmentFactory(): WebViewFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideClientLeadsFactory(): ClientsLeadsFragment
+    @ContributesAndroidInjector
+    fun provideClientLeadsFactory(): ClientsLeadsFragment
 
     @ContributesAndroidInjector(modules = [LeadsModule::class])
-    abstract fun provideAuLeadsFragmentFactory(): LeadsFragment
+    fun provideLeadsFragmentFactory(): LeadsFragment
+
+    @ContributesAndroidInjector(modules = [ClientsModule::class])
+    fun provideClientFragmentFactory(): ClientsFragmentNew
 
     @ContributesAndroidInjector(modules = [BannerModule::class])
-    abstract fun provideBannerFragmentFactory(): BannerFragment
+    fun provideBannerFragmentFactory(): BannerFragment
 
     @ContributesAndroidInjector(modules = [TargetModule::class])
-    abstract fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
+    fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
+    @ContributesAndroidInjector
+    fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
+    @ContributesAndroidInjector
+    fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
+    @ContributesAndroidInjector
+    fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
+    @ContributesAndroidInjector
+    fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBusinessSnapFragmentFactory(): BusinessSnapshotFragment
+    @ContributesAndroidInjector
+    fun provideBusinessSnapFragmentFactory(): BusinessSnapshotFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBusinessSnapAdvFragmentFactory(): BusSnapshotAdvFragment
+    @ContributesAndroidInjector
+    fun provideBusinessSnapAdvFragmentFactory(): BusSnapshotAdvFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideClientsFragmentFactory(): ClientsFragment
+    @ContributesAndroidInjector
+    fun provideClientsFragmentFactory(): ClientsFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideClientLeadFragmentFactory(): ClientsLeadShowFragment
+    @ContributesAndroidInjector
+    fun provideClientLeadFragmentFactory(): ClientsLeadShowFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragment
+    @ContributesAndroidInjector
+    fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideProductivityFragmentFactory(): ProductivityFragment
+    @ContributesAndroidInjector
+    fun provideProductivityFragmentFactory(): ProductivityFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideTargetAchievementTeamFragmentFactory(): TargetAchievementTeamFragment
+    @ContributesAndroidInjector
+    fun provideTargetAchievementTeamFragmentFactory(): TargetAchievementTeamFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideTrendsFragmentFactory(): TrendsTabFragment
+    @ContributesAndroidInjector
+    fun provideTrendsFragmentFactory(): TrendsTabFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideNotificationFragmentFactory(): NotificationFragment
+    @ContributesAndroidInjector
+    fun provideNotificationFragmentFactory(): NotificationFragment
 
-  @ContributesAndroidInjector
-  abstract fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
+    @ContributesAndroidInjector
+    fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideReportFragmentFactory(): ReportFragment
+    @ContributesAndroidInjector
+    fun provideReportFragmentFactory(): ReportFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
+    @ContributesAndroidInjector
+    fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
+    @ContributesAndroidInjector
+    fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadProfilingFactory(): LeadProfilingFragment
+    @ContributesAndroidInjector
+    fun provideLeadProfilingFactory(): LeadProfilingFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
 
-  @ContributesAndroidInjector
-  abstract fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
+    @ContributesAndroidInjector
+    fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
+    @ContributesAndroidInjector
+    fun provideSetAppointmentFactory(): SetAppointmentFragment
 
-  @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
-  abstract fun provideCreateMeetingFactory(): CreateMeetingFragment
+    @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
+    fun provideCreateMeetingFactory(): CreateMeetingFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideSMTFragmentFactory(): SMTFragment
+    @ContributesAndroidInjector
+    fun provideSMTFragmentFactory(): SMTFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
+    @ContributesAndroidInjector
+    fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBankMeetingFactory(): BankMeetingFragment
+    @ContributesAndroidInjector
+    fun provideBankMeetingFactory(): BankMeetingFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
+    @ContributesAndroidInjector
+    fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
 
     @ContributesAndroidInjector(modules = [OTPModule::class])
-    abstract fun provideOTPFactory(): OTPFragment
+    fun provideOTPFactory(): OTPFragment
 
 }

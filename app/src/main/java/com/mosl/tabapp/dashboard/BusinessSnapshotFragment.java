@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.FilterRowData;
@@ -194,7 +194,7 @@ public class BusinessSnapshotFragment extends CommonFragment {
         ////////////////////////////////////////////
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     getAddtionalParameterMap(),
                     widgetSystemName,
