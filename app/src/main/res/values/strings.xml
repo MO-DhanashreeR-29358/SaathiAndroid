@@ -55,6 +55,34 @@
 
     <string name="hint_text_employee_code">Employee Code</string>
     <string name="hint_text_password">Password</string>
+    <string name="text_label_client_Detail">Client Detail</string>
+    <string name="text_label_client_code">Client Code</string>
+    <string name="text_label_client_name">Client Name</string>
+    <string name="text_label_client_address">Client Address</string>
+    <string name="text_label_channel">Channel</string>
+    <string name="text_label_default_bank">Default Bank</string>
+    <string name="text_label_pan_card">Pan Card</string>
+    <string name="text_label_account_type">Account Type</string>
+    <string name="text_label_UCID">UCID</string>
+    <string name="text_label_family_UCID">Family UCID</string>
+    <string name="text_label_advisory_type">Advisory Type</string>
+    <string name="text_label_account_number">Account Number</string>
+    <string name="text_label_aadhar_card">Aadhar Card</string>
+    <string name="text_label_profile">Profile</string>
+    <string name="text_label_lead_detail">Lead Detail</string>
+    <string name="text_label_lead_edit">Edit</string>
+    <string name="hint_text_lead_id">Lead Id</string>
+    <string name="hint_text_lead_category">Lead Category</string>
+    <string name="text_label_profession">Profession</string>
+    <string name="hint_text_lead_name">Lead Name</string>
+    <string name="hint_text_dob">Date of Birth</string>
+    <string name="hint_text_anniversary">Anniversary</string>
+    <string name="hint_text_creation_date">Creation Date</string>
+    <string name="hint_text_creation_by">Created By</string>
+    <string name="hint_text_last_modified_date">Last Modified Date</string>
+    <string name="hint_text_modified_by">Modified By</string>
+    <string name="hint_text_source">Source</string>
+
 
     <!--franchise-lead & lead creation-->
 
@@ -65,7 +93,6 @@
         <item>Events &amp; Seminar Attended</item>
 
     </string-array>
-
 
 
     <string-array name="SelectQuarter">
