@@ -485,12 +485,15 @@ class TargetFragment : CommonFragment(), TargetView {
     }
 
     override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
+        binding.includeTargetChart.tvWidgetName.setText("")
         if (currentPosition != previousPosition) {
             itemList.get(currentPosition).updateItem(true)
             itemList.get(previousPosition).updateItem(false)
             previousPosition = currentPosition
         }
-        binding.includeTargetChart.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
+        if (widgetModel.widgetTypeList.size > 0) {
+            binding.includeTargetChart.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
+        }
         this.widgetModel = widgetModel
     }
 
