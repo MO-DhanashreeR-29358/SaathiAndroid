@@ -298,9 +298,7 @@ public interface MOSLConstants extends LabelConfig {
     String WIDGETNAME = "Widget name";
     String LABEL = "Label";
     String KEY = "key";
-    String FILTERFIRST = "filterFirst";
-    String FILTERSECOND = "filterSecond";
-    String FILTERTHIRD = "filterThird";
+
     String TYPESOFLEAD = "types_of_lead";
     //profile type
     String RETAIL = "retail";

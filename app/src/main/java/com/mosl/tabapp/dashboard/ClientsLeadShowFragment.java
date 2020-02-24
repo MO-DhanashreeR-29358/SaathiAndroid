@@ -41,9 +41,6 @@ import io.reactivex.disposables.Disposable;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
 import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
 import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
 import static com.mosl.tabapp.constants.MOSLConstants.MAP;
@@ -56,6 +53,9 @@ import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
 import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKBRANCHCODE;
 import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKNAME;
 import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKSUBBROKERCODE;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.PERIOD_FILTER;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.PRODUCT_FILTER;
+import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.SOURCE_FILTER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -238,9 +238,9 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                 args.putInt(FLT_BANKSUBBROKERCODE, this.getArguments().getInt(FLT_BANKSUBBROKERCODE));
             }
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            args.putInt(FILTERFIRST, this.getArguments().getInt(FILTERFIRST));
-            args.putInt(FILTERSECOND, this.getArguments().getInt(FILTERSECOND));
-            args.putInt(FILTERTHIRD, this.getArguments().getInt(FILTERTHIRD));
+            args.putInt(PERIOD_FILTER, this.getArguments().getInt(PERIOD_FILTER));
+            args.putInt(PRODUCT_FILTER, this.getArguments().getInt(PRODUCT_FILTER));
+            args.putInt(SOURCE_FILTER, this.getArguments().getInt(SOURCE_FILTER));
             leadsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

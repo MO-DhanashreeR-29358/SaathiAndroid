@@ -19,7 +19,7 @@ fun AusfbLeadInput.requestTransform(): AusfbLeadRequest {
 fun AdditionalParametersInput.additionalParametersTransform(): AdditionalParametersRequest {
     return AdditionalParametersRequest(
         fltBankName, fltBankSubBrokerCode, fltBankBranchCode,
-        fltHierarchy, fltPeriod, fltProduct
+        fltHierarchy, fltPeriod, fltProduct, fltProspect
     )
 }
 

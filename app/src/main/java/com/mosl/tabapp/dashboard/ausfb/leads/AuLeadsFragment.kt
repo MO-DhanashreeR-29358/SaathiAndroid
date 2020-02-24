@@ -22,6 +22,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.bank.*
+import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
@@ -29,7 +30,7 @@ import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
-import com.mosl.tabapp.databinding.FragmentAuLeadsBinding
+import com.mosl.tabapp.databinding.FragmentLeadsNewBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -43,9 +44,7 @@ import javax.inject.Inject
 
 class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
-    lateinit var binding: FragmentAuLeadsBinding
-    private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
-    private lateinit var productAdapter: ArrayAdapter<FilterRowData>
+    lateinit var binding: FragmentLeadsNewBinding
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
@@ -62,17 +61,17 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         PublishSubject.create<AuLeadUiEvent>()
 
     override fun getLayout(): Int {
-        return R.layout.fragment_au_leads
+        return R.layout.fragment_leads_new
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentAuLeadsBinding.bind(view)
+        binding = FragmentLeadsNewBinding.bind(view)
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        binding.tvShowMore.setOnClickListener(this)
+        binding.includeChart.tvShowMore.setOnClickListener(this)
         makeChart()
         makeLegend()
 
@@ -92,66 +91,101 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
             widgetList[1]
         }
         val filterList = model.widgetFilterList
-        if (filterList.size == 2) {
+        lateinit var periodAdapter: ArrayAdapter<FilterRowData>
+        lateinit var productAdapter: ArrayAdapter<FilterRowData>
+        lateinit var sourceAdapter: ArrayAdapter<FilterRowData>
+        if (filterList.size == 3) {
             periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-            binding.spFilterPeriod.adapter = periodAdapter
-            periodAdapter.setSpinnerData(binding.spFilterPeriod, filterList[0].filterData)
-            arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(FILTERFIRST)) }
+            binding.spPeriod.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spPeriod, filterList[0].filterData)
+            arguments?.let { binding.spPeriod.setSelection(it.getInt(PERIOD_FILTER)) }
 
             productAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-            binding.spFilterProduct.adapter = productAdapter
-            productAdapter.setSpinnerData(binding.spFilterProduct, filterList[1].filterData)
-            binding.spFilterProduct.visibility = View.VISIBLE
-            arguments?.let { binding.spFilterProduct.setSelection(it.getInt(FILTERSECOND)) }
+            binding.spProduct.adapter = productAdapter
+            productAdapter.setSpinnerData(binding.spProduct, filterList[1].filterData)
+            binding.spProduct.visibility = View.VISIBLE
+            arguments?.let { binding.spProduct.setSelection(it.getInt(PRODUCT_FILTER)) }
+
+            sourceAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spSource.adapter = sourceAdapter
+            sourceAdapter.setSpinnerData(binding.spSource, filterList[2].filterData)
+            binding.spSource.visibility = View.VISIBLE
+            arguments?.let { binding.spSource.setSelection(it.getInt(SOURCE_FILTER)) }
+
+        }
+        if (filterList.size == 2) {
+            periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spPeriod.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spPeriod, filterList[0].filterData)
+            arguments?.let { binding.spPeriod.setSelection(it.getInt(PERIOD_FILTER)) }
+
+            productAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
+            binding.spProduct.adapter = productAdapter
+            productAdapter.setSpinnerData(binding.spProduct, filterList[1].filterData)
+            binding.spProduct.visibility = View.VISIBLE
+            arguments?.let { binding.spProduct.setSelection(it.getInt(PRODUCT_FILTER)) }
 
         } else if (filterList.size == 1) {
             periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-            binding.spFilterPeriod.adapter = periodAdapter
-            periodAdapter.setSpinnerData(binding.spFilterPeriod, filterList[0].filterData)
-            arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(FILTERFIRST)) }
+            binding.spPeriod.adapter = periodAdapter
+            periodAdapter.setSpinnerData(binding.spPeriod, filterList[0].filterData)
+            arguments?.let { binding.spPeriod.setSelection(it.getInt(PERIOD_FILTER)) }
 
         }
         bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-        binding.spFilterBank.adapter = bankAdapter
+        binding.spBank.adapter = bankAdapter
 
         branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-        binding.spFilterBranch.adapter = branchAdapter
+        binding.spBranch.adapter = branchAdapter
 
         subBranchAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
-        binding.spFilterSubBranch.adapter = subBranchAdapter
+        binding.spSubBranch.adapter = subBranchAdapter
 
+        if (userManager.user.isAuBankSalesSupport()) {
+            binding.bankGroup.visibility = View.VISIBLE
+        } else {
+            binding.bankGroup.visibility = View.GONE
+        }
     }
 
     override fun onPeriodChange(): Observable<Int> {
-        return binding.spFilterPeriod.itemSelections()
+        return binding.spPeriod.itemSelections()
+    }
+
+    override fun onSourceChange(): Observable<Int> {
+        return binding.spSource.itemSelections()
     }
 
     override fun onProductChange(): Observable<Int> {
-        return binding.spFilterProduct.itemSelections()
+        return binding.spProduct.itemSelections()
     }
 
     override fun onBankChange(): Observable<Int> {
-        return binding.spFilterBank.itemSelections()
+        return binding.spBank.itemSelections()
     }
 
     override fun getBank(): BankCodeModel? {
-        return binding.spFilterBank.selectedItem as? BankCodeModel
+        return binding.spBank.selectedItem as? BankCodeModel
     }
 
     override fun getBranch(): BranchCodeModel? {
-        return binding.spFilterBranch.selectedItem as? BranchCodeModel
+        return binding.spBranch.selectedItem as? BranchCodeModel
     }
 
     override fun getSubBranch(): SubBranchCodeModel? {
-        return binding.spFilterSubBranch.selectedItem as? SubBranchCodeModel
+        return binding.spSubBranch.selectedItem as? SubBranchCodeModel
     }
 
     override fun getPeriod(): FilterRowData? {
-        return binding.spFilterPeriod.selectedItem as? FilterRowData
+        return binding.spPeriod.selectedItem as? FilterRowData
+    }
+
+    override fun getSource(): FilterRowData? {
+        return binding.spSource.selectedItem as? FilterRowData
     }
 
     override fun getProduct(): FilterRowData? {
-        return binding.spFilterProduct.selectedItem as? FilterRowData
+        return binding.spProduct.selectedItem as? FilterRowData
     }
 
     override fun getWidgetSystemsName(): String {
@@ -160,11 +194,11 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
 
     override fun onBranchChange(): Observable<Int> {
-        return binding.spFilterBranch.itemSelections()
+        return binding.spBranch.itemSelections()
     }
 
     override fun onSubBranchChange(): Observable<Int> {
-        return binding.spFilterSubBranch.itemSelections()
+        return binding.spSubBranch.itemSelections()
     }
 
     override fun onBarChartClick(): Observable<AuLeadUiEvent.BarChartClick> {
@@ -182,7 +216,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         }
 
         uiModel.onSuccess {
-            bankAdapter.setSpinnerData(binding.spFilterBank, it)
+            bankAdapter.setSpinnerData(binding.spBank, it)
 
         }
     }
@@ -196,7 +230,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         }
 
         uiModel.onSuccess {
-            branchAdapter.setSpinnerData(binding.spFilterBranch, it)
+            branchAdapter.setSpinnerData(binding.spBranch, it)
         }
     }
 
@@ -213,7 +247,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         }
 
         uiModel.onSuccess {
-            subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, it)
+            subBranchAdapter.setSpinnerData(binding.spSubBranch, it)
         }
     }
 
@@ -226,28 +260,27 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         selectSubBranch.add(0, SelectSubBranch)
         when (dropdownTypes) {
             1 -> {
-                bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
-                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+                bankAdapter.setSpinnerData(binding.spBank, selectBank)
+                branchAdapter.setSpinnerData(binding.spBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spSubBranch, selectSubBranch)
             }
             2 -> {
-                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+                branchAdapter.setSpinnerData(binding.spBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spSubBranch, selectSubBranch)
             }
             3 -> {
-                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+                subBranchAdapter.setSpinnerData(binding.spSubBranch, selectSubBranch)
             }
             else -> {
-                bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
-                branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-                subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+                bankAdapter.setSpinnerData(binding.spBank, selectBank)
+                branchAdapter.setSpinnerData(binding.spBranch, selectBranch)
+                subBranchAdapter.setSpinnerData(binding.spSubBranch, selectSubBranch)
             }
         }
     }
 
     fun chartClear() {
-        binding.chart.clear()
-        binding.relativeLayout.visibility = View.GONE
+        binding.includeChart.chart.clear()
     }
 
     override fun renderData(uiModel: UiModel<AusfbLeadModel>) {
@@ -259,8 +292,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         }
 
         uiModel.onSuccess {
-            binding.relativeLayout.visibility = View.VISIBLE
-            binding.tvTotal.text = it.getTotal()
+            binding.includeChart.tvTotal.text = it.getTotal()
             stackedBarData(it.getXAxisList(), it.getYAxisList(), it.getLabelString())
 
         }
@@ -278,6 +310,9 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                 this[it.keyValue] = it.value
             }
 
+            getSource()?.let {
+                this[it.keyValue] = it.value
+            }
             getBank()?.let {
                 this[FLT_BANKNAME] = it.bankId.toString()
             }
@@ -301,7 +336,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         yAxisValue: MutableList<MutableList<String>>,
         lableString: Array<String>
     ) {
-        val mChart = binding.chart
+        val mChart = binding.includeChart.chart
         Collections.reverse(xAxisValue)
         Collections.reverse(yAxisValue.get(0))
         Collections.reverse(yAxisValue.get(1))
@@ -382,7 +417,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
     }
 
     private fun makeChart() {
-        binding.chart.apply {
+        binding.includeChart.chart.apply {
             description.isEnabled = false
             setBackgroundColor(Color.WHITE)
             setDrawGridBackground(false)
@@ -399,7 +434,7 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
 
     private fun makeLegend(
     ) {
-        val legend = binding.chart.legend
+        val legend = binding.includeChart.chart.legend
         legend.form = Legend.LegendForm.CIRCLE
         legend.textSize = resources.getDimension(R.dimen.chart_text_size)
         legend.isWordWrapEnabled = true
@@ -424,11 +459,6 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
                     getAddtionalParameterMap() as Serializable
                 )
                 args.putString(SYSTEM_NAME, getWidgetSystemsName())
-                args.putInt(FILTERFIRST, binding.spFilterPeriod.selectedItemPosition)
-                args.putInt(FILTERSECOND, binding.spFilterProduct.selectedItemPosition)
-                args.putInt(FLT_BANKNAME, binding.spFilterBank.selectedItemPosition)
-                args.putInt(FLT_BANKBRANCHCODE, binding.spFilterBranch.selectedItemPosition)
-                args.putInt(FLT_BANKSUBBROKERCODE, binding.spFilterSubBranch.selectedItemPosition)
                 args.putString(TYPESOFLEAD, AUSFB_LEAD)
                 clientsFragment.arguments = args
                 requireActivity().supportFragmentManager
@@ -443,7 +473,9 @@ class AuLeadsFragment : CommonFragment(), AuLeadsView, View.OnClickListener {
         const val FLT_BANKNAME = "flt_bankname"
         const val FLT_BANKBRANCHCODE = "flt_bankbranchcode"
         const val FLT_BANKSUBBROKERCODE = "flt_banksubbrokercode"
-        const val ASSIGNED = "Assigned"
+        const val PERIOD_FILTER = "period filter"
+        const val PRODUCT_FILTER = "product filter"
+        const val SOURCE_FILTER = "source filter"
     }
 
 }

@@ -7,6 +7,8 @@ import com.mosl.mobile.domain.aulead.AdditionalParametersInput
 import com.mosl.mobile.domain.aulead.AusfbLeadInput
 import com.mosl.mobile.domain.aulead.AusfbLeadRepository
 import com.mosl.mobile.domain.bank.BankRepository
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -21,15 +23,18 @@ class AuLeadsPresenter @Inject constructor(
     view: AuLeadsView, val bankRepository: BankRepository,
     val ausfbLeadRepository: AusfbLeadRepository,
     val dashboardModel: DashboardModel,
-    val navigator: ScreenNavigatorImpl
+    val navigator: ScreenNavigatorImpl,
+    val userManager: UserManager
 ) :
     BasePresenter<AuLeadsView>(view) {
     override fun start() {
-        onFetchCalled().switchMap {
-            bankRepository.getBankFilter()
-                .compose(applyUiModel())
+        if (userManager.user.isAuBankSalesSupport()) {
+            onFetchCalled().switchMap {
+                bankRepository.getBankFilter()
+                    .compose(applyUiModel())
+            }
+                .subscribe(view::renderBankFilter).addTo(disposable)
         }
-            .subscribe(view::renderBankFilter).addTo(disposable)
         val bankChangeObsc = view.onBankChange().share()
         val branchChangeObsc = view.onBranchChange().share()
 
@@ -53,7 +58,7 @@ class AuLeadsPresenter @Inject constructor(
         ).share()
 
         Observable.merge(
-            view.onPeriodChange(), view.onProductChange(),
+            view.onPeriodChange(), view.onProductChange(), view.onSourceChange(),
             bankChange
         ).filter(InvalidSelectionPredicate)
             .map { getWidgetRequest() }
@@ -93,6 +98,7 @@ class AuLeadsPresenter @Inject constructor(
                 fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
                 fltPeriod = view.getPeriod()?.value.toString(),
                 fltProduct = view.getProduct()?.value.toString(),
+                fltProspect = view.getSource()?.value.toString(),
                 fltHierarchy = dashboardModel.dashboardFor
             )
         )

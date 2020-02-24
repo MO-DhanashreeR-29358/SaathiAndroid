@@ -12,6 +12,7 @@ import io.reactivex.Observable
 interface AuLeadsView : BaseView {
 
     fun onPeriodChange(): Observable<Int>
+    fun onSourceChange(): Observable<Int>
     fun onProductChange(): Observable<Int>
     fun onBankChange(): Observable<Int>
     fun onBranchChange(): Observable<Int>
@@ -23,6 +24,7 @@ interface AuLeadsView : BaseView {
     fun getBranch(): BranchCodeModel?
     fun getSubBranch(): SubBranchCodeModel?
     fun getPeriod(): FilterRowData?
+    fun getSource(): FilterRowData?
     fun getProduct(): FilterRowData?
     fun getWidgetSystemsName(): String?
     fun renderData(uiModel: UiModel<AusfbLeadModel>)

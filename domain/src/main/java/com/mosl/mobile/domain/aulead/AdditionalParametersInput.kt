@@ -6,5 +6,6 @@ data class AdditionalParametersInput(
     @JvmField val fltBankBranchCode: String?,
     @JvmField val fltHierarchy: String?,
     @JvmField val fltPeriod: String?,
-    @JvmField val fltProduct: String?
+    @JvmField val fltProduct: String?,
+    @JvmField val fltProspect: String?
 )

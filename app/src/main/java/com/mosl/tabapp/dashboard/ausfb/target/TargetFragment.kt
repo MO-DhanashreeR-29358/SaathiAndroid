@@ -32,6 +32,7 @@ import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
+import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.Companion.PERIOD_FILTER
 import com.mosl.tabapp.databinding.FragmentTargetBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -47,7 +48,6 @@ import javax.inject.Inject
 class TargetFragment : CommonFragment(), TargetView {
 
     lateinit var binding: FragmentTargetBinding
-    private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
@@ -153,11 +153,12 @@ class TargetFragment : CommonFragment(), TargetView {
             DashboardSystemModel.getTargetAchivementSystemName()
         )
         val filterList = groupModel.groupFilterList
+        lateinit var periodAdapter: ArrayAdapter<FilterRowData>
         if (filterList.size == 1) {
             periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
             binding.spFilterPeriod.adapter = periodAdapter
             periodAdapter.setSpinnerData(binding.spFilterPeriod, filterList[0].filterData)
-            arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(MOSLConstants.FILTERFIRST)) }
+            arguments?.let { binding.spFilterPeriod.setSelection(it.getInt(PERIOD_FILTER)) }
 
         }
 

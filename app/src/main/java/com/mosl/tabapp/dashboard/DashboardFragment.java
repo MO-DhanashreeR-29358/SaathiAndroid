@@ -631,11 +631,7 @@ public class DashboardFragment extends CommonFragment
                 loadLeadBusinessSnapShot();
             } else if (id == R.id.btnLeads) {
                 hideKeyboard(view);
-                if (userManager.getUser().isAuBankSalesSupport()) {
-                    loadAusfbLead();
-                } else {
-                    loadLead();
-                }
+                loadLead();
             } else if (id == R.id.btnProductivity) {
                 hideKeyboard(view);
                 loadProductivity();
@@ -704,20 +700,8 @@ public class DashboardFragment extends CommonFragment
         }
     }
 
+
     private void loadLead() {
-        Bundle args = new Bundle();
-        setTabActivre(btnLeads);
-        ClientsLeadsFragment leadsFragment = new ClientsLeadsFragment();
-        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-        leadsFragment.setArguments(args);
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.llReplaceClientFragment, leadsFragment)
-                .commit();
-    }
-
-
-    private void loadAusfbLead() {
         Bundle args = new Bundle();
         setTabActivre(btnLeads);
         AuLeadsFragment leadsFragment = new AuLeadsFragment();
@@ -809,19 +793,8 @@ public class DashboardFragment extends CommonFragment
         button.setTextColor(getResources().getColor(R.color.white));
     }
 
-    private void loadTargetAchievement() {
-        Bundle args = new Bundle();
-        TargetAchievementFragment leadsFragment =
-                new TargetAchievementFragment();
-        args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-        leadsFragment.setArguments(args);
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.llTargetAchievementADV, leadsFragment)
-                .commit();
-    }
 
-    private void loadAusfbTargetAchievement() {
+    private void loadTargetAchievement() {
         Bundle args = new Bundle();
         TargetFragment leadsFragment =
                 new TargetFragment();
@@ -1325,7 +1298,7 @@ public class DashboardFragment extends CommonFragment
                 toggleSectionExpansion(llClientsLeads, ivClientLeads);
             }
             setClientLayoutVisibility(MY_LEAD_AU_SUPPORT);
-            loadAusfbLead();
+            loadLead();
             DashboardSystemModel.setLeadSystemName(MY_LEAD_AU_SUPPORT);
         } else if (currentDashboard.isGroupExists(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
             llClient.setVisibility(View.VISIBLE);
@@ -1422,7 +1395,7 @@ public class DashboardFragment extends CommonFragment
                 toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
             }
             llTarget.setVisibility(View.VISIBLE);
-            loadAusfbTargetAchievement();
+            loadTargetAchievement();
             DashboardSystemModel.setTargetAchivementSystemName(SELF_TARGET_ACHIEVEMNET);
         }
         if (currentDashboard.isGroupExists(AUSFB_TARGET_ACHIEVEMNET)) {
@@ -1433,7 +1406,7 @@ public class DashboardFragment extends CommonFragment
                 toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
             }
             llTarget.setVisibility(View.VISIBLE);
-            loadAusfbTargetAchievement();
+            loadTargetAchievement();
             DashboardSystemModel.setTargetAchivementSystemName(AUSFB_TARGET_ACHIEVEMNET);
         }
 
