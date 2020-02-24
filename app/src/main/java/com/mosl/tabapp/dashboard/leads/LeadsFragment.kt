@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.leads
+package com.mosl.tabapp.dashboard.leads
 
 import android.graphics.Color
 import android.os.Bundle
@@ -30,7 +30,7 @@ import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
-import com.mosl.tabapp.databinding.FragmentLeadsNewBinding
+import com.mosl.tabapp.databinding.FragmentLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
-    lateinit var binding: FragmentLeadsNewBinding
+    lateinit var binding: FragmentLeadsBinding
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
     private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
@@ -61,13 +61,13 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
         PublishSubject.create<LeadUiEvent>()
 
     override fun getLayout(): Int {
-        return R.layout.fragment_leads_new
+        return R.layout.fragment_leads
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = FragmentLeadsNewBinding.bind(view)
+        binding = FragmentLeadsBinding.bind(view)
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)

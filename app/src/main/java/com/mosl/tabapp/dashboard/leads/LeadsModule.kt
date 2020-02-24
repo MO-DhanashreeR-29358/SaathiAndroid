@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.leads
+package com.mosl.tabapp.dashboard.leads
 
 import android.os.Bundle
 import com.mosl.tabapp.constants.MOSLConstants

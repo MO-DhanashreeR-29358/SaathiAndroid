@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.leads
+package com.mosl.tabapp.dashboard.leads
 
 
 sealed class LeadUiEvent {

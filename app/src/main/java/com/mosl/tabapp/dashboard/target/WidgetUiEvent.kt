@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.target
+package com.mosl.tabapp.dashboard.target
 
 import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel

@@ -11,10 +11,10 @@ import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.*
-import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.LeadsModule
-import com.mosl.tabapp.dashboard.ausfb.target.TargetFragment
-import com.mosl.tabapp.dashboard.ausfb.target.TargetModule
+import com.mosl.tabapp.dashboard.leads.LeadsFragment
+import com.mosl.tabapp.dashboard.leads.LeadsModule
+import com.mosl.tabapp.dashboard.target.TargetFragment
+import com.mosl.tabapp.dashboard.target.TargetModule
 import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment

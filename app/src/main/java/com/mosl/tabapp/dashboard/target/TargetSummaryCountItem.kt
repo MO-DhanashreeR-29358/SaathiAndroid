@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.target
+package com.mosl.tabapp.dashboard.target
 
 import android.content.Context
 import android.view.View

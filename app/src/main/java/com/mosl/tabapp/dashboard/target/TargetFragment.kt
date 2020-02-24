@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.ausfb.target
+package com.mosl.tabapp.dashboard.target
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -31,8 +31,8 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.LeadsFragment.Companion.PERIOD_FILTER
+import com.mosl.tabapp.dashboard.leads.LeadsFragment
+import com.mosl.tabapp.dashboard.leads.LeadsFragment.Companion.PERIOD_FILTER
 import com.mosl.tabapp.databinding.FragmentTargetBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
