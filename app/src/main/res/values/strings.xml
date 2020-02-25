@@ -209,4 +209,5 @@
     <string name="txt_label_resend_otp">Resend OTP</string>
     <string name="btn_label_submit_otp">Submit OTP</string>
     <string name="error_lable_no_records_found">No records found</string>
+    <string name="txt_lable_families_mapped">Families Mapped</string>
 </resources>

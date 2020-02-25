@@ -222,8 +222,8 @@ public class ClientsFragment extends CommonFragment {
         try {
             LayoutInflater inFla = requireActivity().getLayoutInflater();
             View tableRowH = inFla.inflate(R.layout.frag_client_top, null);
-            TextView tvMTDCOUNT = tableRowH.findViewById(R.id.tvMTDCOUNT);
-            TextView tvFamilyCount = tableRowH.findViewById(R.id.tvFamiMappedCount);
+            TextView tvMTDCOUNT = tableRowH.findViewById(R.id.tvMtdCount);
+            TextView tvFamilyCount = tableRowH.findViewById(R.id.tvFamilyCount);
             LinearLayout llFamiMappedCount = tableRowH.findViewById(R.id.llFamiMappedCount);
             tvFamilyCount.setText(familyCount.toString());
             llFamiMappedCount.setOnClickListener(view -> {

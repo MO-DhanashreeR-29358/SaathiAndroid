@@ -9,11 +9,14 @@ import java.util.*
 
 interface CliendsView : BaseView {
     fun onPeriodChange(): Observable<Int>
-    fun getPeriod(): FilterRowData?
+    fun onDataEvent(): Observable<Boolean>
+    fun getPeriod(): FilterRowData
     fun getWidgetSystemsName(): String?
     fun getAddtionalParameterMap(): Map<String, String>
     fun renderData(uiModel: UiModel<ClientItemResponseModel>)
     fun getClientList(): MutableList<HashMap<String, String>>
     fun getFamilyCount(): Int
+    fun renderUI(text: String, value: String)
+    fun onNaviagteEvent(): Observable<MutableMap<String, String>>
 
 }
