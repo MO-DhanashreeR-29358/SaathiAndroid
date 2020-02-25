@@ -125,11 +125,11 @@ android {
 }
 
 dependencies {
-  implementation project (':appuser')
-  implementation project (':data')
-  implementation project (':saathiapi')
-  implementation project (':shared')
-  implementation project (':domain')
+  implementation project(':appuser')
+  implementation project(':data')
+  implementation project(':saathiapi')
+  implementation project(':shared')
+  implementation project(':domain')
   implementation(deps.crashlytics) {
     transitive = true
   }
@@ -141,6 +141,7 @@ dependencies {
   implementation deps.androidx.fragment
   implementation deps.androidx.recylerview
   implementation deps.androidx.vectordrawable
+  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
   debugImplementation deps.androidx.multidex
   implementation deps.pagerslidingtabstrip
   implementation deps.sdpAndroid
@@ -168,7 +169,7 @@ dependencies {
   // Room
   implementation deps.room.runtime
   kapt deps.room.compiler
-//  kapt deps.dataBindCompiler
+  //  kapt deps.dataBindCompiler
   implementation deps.kotlin
   implementation deps.location
   //workmanager
@@ -184,7 +185,7 @@ dependencies {
   implementation deps.rx.kotlin
   implementation deps.rxBinding.core
   implementation deps.rx.preferences
-//  implementation deps.rxBinding.V4
+  //  implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson
