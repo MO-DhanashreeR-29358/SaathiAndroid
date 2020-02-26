@@ -2,20 +2,39 @@ package com.mosl.tabapp.leadViewDetail.updatemeeting
 
 import android.os.Bundle
 import android.view.View
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.RowData.getSpinnerRowDataById
+import com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES
+import com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE
+import com.mosl.tabapp.constants.MOSLConstants.BACLIENTMEETING
+import com.mosl.tabapp.constants.MOSLConstants.CATEGORY
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
+import com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN
+import com.mosl.tabapp.constants.MOSLConstants.MEETINGDURATION
+import com.mosl.tabapp.constants.MOSLConstants.MEETINGREASON
+import com.mosl.tabapp.constants.MOSLConstants.OUTSTATIONMEETING
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_DURATION
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragUpdateMeetingBinding
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import timber.log.Timber
 import java.util.ArrayList
 import javax.inject.Inject
@@ -26,6 +45,47 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   internal lateinit var presenter: UpdateMeetingPresenter
 
   lateinit var binding: FragUpdateMeetingBinding
+
+  private var meetingDate: String? = null
+  private var activityTypeId: String? = null
+
+  private var meetingReasonID: String? = null
+  private var actionableID: String? = null
+  private var categoryID: String? = null
+  private var subCategoryID: String? = null
+
+  private val addedAttendeeModelList = ArrayList<AddedAttendeeModel>()
+  private val addedSplAttendeeModelList = ArrayList<AddedSplAttendeeModel>()
+
+  private val arrOutStation = ArrayList<RowData>()
+  private val arrSelectProduct = ArrayList<RowData>()
+  private val arrMeetingDuration = ArrayList<RowData>()
+  private val arrMeetingObjective = ArrayList<RowData>()
+  private val arrActivityType = ArrayList<RowData>()
+  private val arrMeetingReason = ArrayList<RowData>()
+  private val arrCategory = ArrayList<RowData>()
+  private val arrSubCategory = ArrayList<RowData>()
+  private val arrBAClient = ArrayList<RowData>()
+  private val arrActionables = ArrayList<RowData>()
+  private var productCodeStr: String? = null
+  private var meetingDurationCodeStr: String? = null
+  private var activityTypeCodeStr: String? = null
+  private var meetingReasonCodeStr: String? = null
+  private var actionablesCodeStr: String? = null
+  private var categoryCodeStr: String? = null
+  private var subCategoryCodestr: String? = null
+  private var outStaitionCodeStr: String? = null
+  private var baClientCodeStr: String? = null
+  private var addedAttendeeCount: Int = 0
+  private var addedSplAttendeeCount: Int = 0
+  private var currentYear: Int = 0
+  private var month: Int = 0
+  private var day: Int = 0
+  private var hour: Int = 0
+  private var minute: Int = 0
+
+  private var leadId: String? = null
+  private var meetingId: String? = null
 
   override fun getLayout(): Int {
     return R.layout.frag_update_meeting
@@ -41,24 +101,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     presenter.start()
     dataActionSubject.onNext(Fetch)
   }
-
-  private var meetingDate: String? = null
-  private var activityTypeId: String? = null
-
-  private var meetingReasonID: String? = null
-  private var actionableID: String? = null
-  private var categoryID: String? = null
-  private var subCategoryID: String? = null
-
-  private val addedAttendeeModelList = ArrayList<AddedAttendeeModel>()
-  private val addedSplAttendeeModelList = ArrayList<AddedSplAttendeeModel>()
-  private var addedAttendeeCount: Int = 0
-  private var addedSplAttendeeCount: Int = 0
-  private var currentYear: Int = 0
-  private var month: Int = 0
-  private var day: Int = 0
-  private var hour: Int = 0
-  private var minute: Int = 0
 
   override fun renderMeetingById(uiModel: UiModel<Meeting>) {
     toggleProgressBar(uiModel.inProgress)
@@ -169,13 +211,309 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
 
   private fun selectProduct(id: String) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      meetingDuration(meetingId)
+      meetingDuration(meetingId!!)
       val request = LookupRequest(
           userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, INTERESTEDIN, null, null
       )
       val subscribe = saathiApi.getAllLookup(request)
           .compose<UiModel<List<LookupItem>>>(applyUiModel<List<LookupItem>>())
           .subscribe { uiModelList -> renderProduct(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun meetingDuration(id: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      activityType(activityTypeId!!)
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+          MEETINGDURATION, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderMeetingDuration(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderMeetingDuration(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrMeetingDuration.clear()
+      arrMeetingDuration.add(
+          RowData(0, "-1", SELECT_MEETING_DURATION)
+      )
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrMeetingDuration.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapMeetingDuration =
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spMeetingDuration.setAdapter(arrAdapMeetingDuration)
+      arrAdapMeetingDuration.setSpinnerData<RowData>(binding.spMeetingDuration, arrMeetingDuration)
+      arrAdapMeetingDuration.notifyDataSetChanged()
+      val meetingDurationData = getSpinnerRowDataById(id, arrAdapMeetingDuration)
+      if (meetingDurationData != null) {
+        binding.spMeetingDuration.setSelection(
+            meetingDurationData.position
+        )
+      }
+
+      setMeetingDuartionListener()
+    }
+  }
+
+  private fun setMeetingDuartionListener() {
+    disposable.add(
+        binding.spMeetingDuration.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { xyz ->
+              meetingDurationCodeStr = (binding.spMeetingDuration.selectedItem as RowData).key
+              binding.tvMeetingDurationError.visibility = View.GONE
+            }
+    )
+  }
+
+  private fun renderProduct(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrSelectProduct.clear()
+      arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrSelectProduct.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spProduct.adapter = arrAdapSelectProduct
+      arrAdapSelectProduct.setSpinnerData<RowData>(binding.spProduct, arrSelectProduct)
+      arrAdapSelectProduct.notifyDataSetChanged()
+      val productData = getSpinnerRowDataById(id, arrAdapSelectProduct)
+      if (productData != null) {
+        binding.spProduct.setSelection(productData!!.getPosition())
+      }
+
+      setProductListener()
+    }
+  }
+
+  private fun setProductListener() {
+    disposable.add(
+        binding.spProduct.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { xyz ->
+              productCodeStr = (binding.spProduct.selectedItem as RowData).key
+              binding.tvProductError.visibility = View.GONE
+            }
+    )
+  }
+
+  private fun activityType(id: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      actionables(actionableID!!)
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, ACTIVITYTYPE, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderActivityType(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderActivityType(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrActivityType.clear()
+      arrActivityType.add(RowData(0, "-1", SELECT_ACTIVITY_TYPE))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrActivityType.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spActivityType.setAdapter(arrAdapActivityType)
+      arrAdapActivityType.setSpinnerData<RowData>(binding.spActivityType, arrActivityType)
+      arrAdapActivityType.notifyDataSetChanged()
+      val activityTypeData = getSpinnerRowDataById(id, arrAdapActivityType)
+      if (activityTypeData != null) {
+        binding.spActivityType.setSelection(
+            activityTypeData.position
+        )
+      }
+      setActivityTypeListener()
+    }
+  }
+
+  private fun setActivityTypeListener() {
+    disposable.add(
+        binding.spActivityType.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              activityTypeCodeStr = (binding.spActivityType.getSelectedItem() as RowData).key
+              binding.tvActivityTypeError.setVisibility(View.GONE)
+              if (!binding.spActivityType.getSelectedItem()
+                      .toString()
+                      .equals(SELECT_ACTIVITY_TYPE, ignoreCase = true)
+              ) {
+                meetingReason(meetingReasonID)
+              }
+            }
+    )
+  }
+
+  private fun meetingReason(id: String) {
+
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      baClient()
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+          MEETINGREASON,
+          activityTypeCodeStr, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderMeetingReason(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun baClient() {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      outStation()
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+          BACLIENTMEETING, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe(Consumer<UiModel<List<LookupItem>>> { this.renderBaClient(it) })
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun outStation() {
+
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+          OUTSTATIONMEETING, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe(Consumer<UiModel<List<LookupItem>>> { this.renderOutStation(it) })
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderOutStation(uiModel: UiModel<List<LookupItem>>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrOutStation.clear()
+      arrOutStation.add(RowData(0, "-1", SELECT_OUT_STATION_MEETING))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrOutStation.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapOutStation = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spOutStaition.setAdapter(arrAdapOutStation)
+      arrAdapOutStation.setSpinnerData<RowData>(binding.spOutStaition, arrOutStation)
+
+      arrAdapOutStation.notifyDataSetChanged()
+      setOutStationListener()
+    }
+  }
+
+  private fun setOutStationListener() {
+    disposable.add(
+        binding.spOutStaition.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              outStaitionCodeStr = (binding.spOutStaition.getSelectedItem() as RowData).key
+              binding.tvOutStaitionError.visibility = View.GONE
+            }
+    )
+  }
+
+  private fun actionables(id: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      category(categoryID!!)
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, ACTIONABLES, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderActionables(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun category(id: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, CATEGORY, null, null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderCategory(uiModelList, id) }
     } else {
       noInternetConnectionDialog()
     }
