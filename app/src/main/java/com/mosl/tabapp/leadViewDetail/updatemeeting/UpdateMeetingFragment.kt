@@ -34,6 +34,14 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     dataActionSubject.onNext(Fetch)
   }
 
+  private var meetingDate: String? = null
+  private var activityTypeId: String? = null
+
+  private var meetingReasonID: String? = null
+  private var actionableID: String? = null
+  private var categoryID: String? = null
+  private var subCategoryID: String? = null
+
   override fun renderMeetingById(uiModel: UiModel<Meeting>) {
     toggleProgressBar(uiModel.inProgress)
 
@@ -41,8 +49,26 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
       showOnFailurePopup(it)
     }
 
-    uiModel.onSuccess {
+    uiModel.onSuccess { data ->
+      meetingDate = stringOrEmpty(data.meetingDate)
+      activityTypeId = stringOrEmpty(data.activityTypeID)
+      val productTypeID = stringOrEmpty(data.productTypeID)
+
+      meetingReasonID = stringOrEmpty(data.meetingReasonID)
+      val meetingDescription = stringOrEmpty(data.meetingDescription)
+      val customerRemark = stringOrEmpty(data.customerRemark)
+      actionableID = stringOrEmpty(data.actionableID)
+      categoryID = stringOrEmpty(data.categoryID)
+      val categoryDescription = stringOrEmpty(data.categoryDescription)
+      subCategoryID = stringOrEmpty(data.subCategoryID)
+      val subCategoryDescription = stringOrEmpty(data.subCategoryDescription)
+      val meetingAttendee = data.meetingAttendeeList
 
     }
+  }
+
+  override fun onDestroyView() {
+    presenter.stop()
+    super.onDestroyView()
   }
 }
