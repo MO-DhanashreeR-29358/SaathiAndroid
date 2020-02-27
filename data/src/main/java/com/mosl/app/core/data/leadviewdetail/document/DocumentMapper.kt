@@ -5,12 +5,16 @@ import com.mosl.mobile.domain.leadviewdetail.document.FilterRequestInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
+import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
+import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
 
 import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.FilterRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
 import com.mosl.saathi.api.model.documents.LeadDocumentsRequest
 import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
+import com.mosl.saathi.api.model.documents.UploadDocumentItem
+import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 
 fun DocumentInput.requestTransform(): DocumentsRequest {
   return DocumentsRequest(
@@ -25,6 +29,15 @@ fun UpdateDocumentsInput.requestUpdateTransform(): UpdateDocumentsRequest {
   return UpdateDocumentsRequest(
     id = id,
     documentName = documentName
+  )
+}
+
+fun UploadDocumentsInput.requestUploadDocumentTransform(): UploadDocumentsRequest {
+  return UploadDocumentsRequest(
+    leadID = leadID,
+    ucid = ucid,
+    documentName = documentName,
+    file = file
   )
 }
 

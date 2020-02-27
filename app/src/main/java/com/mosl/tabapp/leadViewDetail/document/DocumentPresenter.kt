@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentRepository
 import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
+import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -42,6 +43,27 @@ class DocumentPresenter @Inject constructor(
       }
       .subscribe {
         view.renderUpdateDocuments(it, documentId, documentName)
+      }
+      .addTo(disposable)
+
+    view.onAddDocumentClick()
+      .subscribe {
+        view.renderShowAddDocumentDialog()
+      }.addTo(disposable)
+
+    view.uploadImage()
+      .map {
+        UploadDocumentsInput(
+          it.leadId, it.ucid, it.fileName, it.strData
+        )
+
+      }
+      .switchMap {
+        repository.uploadDocument(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderUploadDocument(it)
       }
       .addTo(disposable)
 

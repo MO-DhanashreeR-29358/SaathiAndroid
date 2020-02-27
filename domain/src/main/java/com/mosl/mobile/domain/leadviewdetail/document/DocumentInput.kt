@@ -63,3 +63,23 @@ data class UpdateDocumentsInput(
   val documentName: String
 )
 
+data class UploadDocumentsInput(
+  val leadID: String,
+  val ucid: String,
+  val documentName: String,
+  val file: String
+)
+
+data class UploadDocumentData(
+  val status: Int,
+  val creationDate: String,
+  val createdBy: Any,
+  val documentType: String,
+  val documentPath: String,
+  val documentFullPath: String,
+  val leadID: Int,
+  val iD: String,
+  val uCID: Int,
+  val documentName: String,
+  val base64FileString: Any
+)

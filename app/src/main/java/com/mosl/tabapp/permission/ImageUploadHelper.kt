@@ -1,0 +1,171 @@
+package com.mosl.tabapp.permission
+
+import android.app.Activity.RESULT_OK
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
+import com.mosl.tabapp.R
+import timber.log.Timber
+import java.io.File
+import java.io.IOException
+
+class ImageUploadHelper(
+  private val context: AppCompatActivity,
+  private val fragment: Fragment
+) {
+  var callback: ImageUploadCallback? = null
+  private val REQUEST_CAMERA_PHOTO = 0
+  private val REQUEST_GALLERY_PHOTO = 1
+  private var selectedImageUri: Uri? = null
+  private var absolutePath: String? = null
+
+  fun setImageCallback(callback: ImageUploadCallback) {
+    this.callback = callback
+  }
+
+  fun showDialog() {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.window!!
+      .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.setContentView(R.layout.dialog_add_document)
+    dialog.window!!
+      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    dialog.setCanceledOnTouchOutside(true)
+    val tvTakePhoto = dialog.findViewById<TextView>(R.id.tvTakePhoto)
+    val tvCancel = dialog.findViewById<TextView>(R.id.tvCancel)
+    val tvAddFromDevice = dialog.findViewById<TextView>(R.id.tvAddFromDevice)
+
+    tvCancel.text = context.getString(R.string.text_label_cancel)
+    tvTakePhoto.text = context.getString(R.string.text_label_take_photo)
+    tvAddFromDevice.text = context.getString(R.string.text_label_add_from_device)
+    tvTakePhoto.setOnClickListener { _ ->
+      dialog.dismiss()
+      cameraIntent()
+    }
+    tvAddFromDevice.setOnClickListener { _ ->
+      dialog.dismiss()
+      galleryIntent()
+    }
+    tvCancel.setOnClickListener { _ -> dialog.dismiss() }
+    dialog.show()
+  }
+
+  private fun galleryIntent() {
+    val intent = Intent()
+    intent.type = "image/*"
+    intent.action = Intent.ACTION_GET_CONTENT
+    if (intent.resolveActivity(context.packageManager) != null) {
+      fragment.startActivityForResult(
+        Intent.createChooser(intent, "Select Picture"),
+        REQUEST_GALLERY_PHOTO
+      )
+    }
+  }
+
+  private fun cameraIntent() {
+    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+    if (intent.resolveActivity(context.packageManager) != null) {
+      var photoFile: File? = null
+      try {
+        photoFile = createImageFile()
+      } catch (ex: IOException) {
+        Timber.e(ex)
+      }
+
+      if (photoFile != null) {
+        //val authority = context.applicationContext.packageName + ".provider"
+        val authority = "com.mosl.tabapp.provider"
+        val photoURI = FileProvider.getUriForFile(context, authority, photoFile)
+
+        Timber.d("photoFile.absolutePath : %s %s ", photoFile.absolutePath, photoFile.length())
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+        selectedImageUri = photoURI
+        absolutePath = photoFile.absolutePath
+        fragment.startActivityForResult(intent, REQUEST_CAMERA_PHOTO)
+      }
+    }
+  }
+
+  fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    val actualImage: File
+    var imageUri: Uri
+    Timber.d("Received Data %s %s", data?.dataString, data?.data)
+    if (requestCode == REQUEST_CAMERA_PHOTO) {
+      if (resultCode == RESULT_OK) {
+        if (selectedImageUri != null)
+          selectedImageUri = data?.data
+        // val selectedImage = selectedImageUri!!
+        context.contentResolver.notifyChange(selectedImageUri, null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+          imageUri = Uri.parse(absolutePath)
+          actualImage = File(imageUri.path!!)
+        } else {
+          actualImage = File(selectedImageUri?.path)
+        }
+        imageUri = Uri.fromFile(actualImage)
+        addUri(imageUri, actualImage)
+
+      }
+
+    } else if (requestCode == REQUEST_GALLERY_PHOTO) {
+      if (resultCode == RESULT_OK) {
+        selectedImageUri = data?.data
+        actualImage = File(selectedImageUri?.path!!)
+        addUri(selectedImageUri, actualImage)
+      }
+    }
+  }
+
+  /*private fun startCrop() {
+    CropImage.activity(selectedImageUri)
+      .setGuidelines(CropImageView.Guidelines.ON)
+      .setCropMenuCropButtonTitle("OK")
+      .start(fragment.requireContext(), fragment)
+  }*/
+
+  private fun addUri(imageUri: Uri?, file: File?) {
+    if (imageUri != null && file != null) {
+      callback?.onImageCaptured(imageUri, file)
+    } else {
+      Toast.makeText(context, "Image already selected", Toast.LENGTH_SHORT).show()
+    }
+  }
+
+  private fun createImageFile(): File {
+    // Create an image file name
+    val imageFileName = "POST_IMAGE"
+    val storageDir = File(
+      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+      "Camera"
+    )
+    val image = File.createTempFile(
+      imageFileName, /* prefix */
+      ".jpg", /* suffix */
+      storageDir      /* directory */
+    )
+    // Save a file: path for use with ACTION_VIEW intents
+    absolutePath = "file:" + image.absolutePath
+    return image
+  }
+
+  interface ImageUploadCallback {
+    fun onImageCaptured(uri: Uri, file: File)
+  }
+}

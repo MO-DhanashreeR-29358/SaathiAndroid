@@ -22,7 +22,7 @@ import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
-import com.mosl.tabapp.Permisssion.PermissionCheckHelper
+import com.mosl.tabapp.permission.PermissionCheckHelper
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMMOSLCommon.enableLocationSetting
 import com.mosl.tabapp.core.CommonActivity

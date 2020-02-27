@@ -23,7 +23,7 @@ import com.xwray.groupie.databinding.BindableItem
 import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.subjects.PublishSubject
 
-class ItemDocumentFragment(
+class ItemDocumentFragment (
   private val data: LeadDocumentsItemData,
   private val context: Context,
   private val subject: PublishSubject<DocumentUiEvent>

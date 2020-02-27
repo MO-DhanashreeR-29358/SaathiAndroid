@@ -801,15 +801,17 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     }
 
     uiModel.onSuccess {
-      alertDialog(
-          activity, 0,
+      activity?.let { it1 ->
+        alertDialog(
+          it1, 0,
           resources.getString(R.string.motilal_oswal),
           MOSLConstants.SET_USER_PROFILE, "OK", true
-      ) { action, data1 ->
-        if (action == MSFDialog.Action.OK) {
-          viewPager?.setCurrentItem(
+        ) { action, data1 ->
+          if (action == MSFDialog.Action.OK) {
+            viewPager?.setCurrentItem(
               MOSLConstants.LEAD_DETAIL, false
-          )
+            )
+          }
         }
       }
     }
