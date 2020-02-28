@@ -26,10 +26,16 @@ import com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGDURATION
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGREASON
 import com.mosl.tabapp.constants.MOSLConstants.OUTSTATIONMEETING
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIONABLES
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_BA_CLIENT_MEETING
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_CATEGORY
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_DURATION
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_REASON
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_SUB_CATEGORY
+import com.mosl.tabapp.constants.MOSLConstants.SUBCATEGORY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragUpdateMeetingBinding
 import com.mosl.tabapp.model.AddedAttendeeModel
@@ -86,6 +92,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
 
   private var leadId: String? = null
   private var meetingId: String? = null
+
+  private var mandatory = true
 
   override fun getLayout(): Int {
     return R.layout.frag_update_meeting
@@ -399,7 +407,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
                       .toString()
                       .equals(SELECT_ACTIVITY_TYPE, ignoreCase = true)
               ) {
-                meetingReason(meetingReasonID)
+                meetingReason(meetingReasonID!!)
               }
             }
     )
@@ -422,6 +430,63 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     }
   }
 
+  private fun renderMeetingReason(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrMeetingReason.clear()
+      arrMeetingReason.add(
+          RowData(0, "-1", SELECT_MEETING_REASON)
+      )
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrMeetingReason.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spMeetingReason.setAdapter(arrAdapMeetingReason)
+      arrAdapMeetingReason.setSpinnerData<RowData>(binding.spMeetingReason, arrMeetingReason)
+      arrAdapMeetingReason.notifyDataSetChanged()
+      val meetingReasonData = getSpinnerRowDataById(id, arrAdapMeetingReason)
+      if (meetingReasonData != null) {
+        binding.spMeetingReason.setSelection(
+            meetingReasonData.position
+        )
+      }
+      setMeetingReasonListener()
+    }
+  }
+
+  private fun setMeetingReasonListener() {
+    disposable.add(
+        binding.spMeetingReason.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              meetingReasonCodeStr = (binding.spMeetingReason.getSelectedItem() as RowData).key
+              val meetingReasonNameStr =
+                (binding.spMeetingReason.selectedItem as RowData).value
+              binding.tvMeetingReasonError.visibility = View.GONE
+              if (meetingReasonNameStr.equals("Customer Service Related", ignoreCase = true)) {
+                binding.llActionables.visibility = View.VISIBLE
+              } else {
+                binding.llActionables.visibility = View.GONE
+              }
+            }
+    )
+  }
+
   private fun baClient() {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       outStation()
@@ -435,6 +500,45 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     } else {
       noInternetConnectionDialog()
     }
+  }
+
+  private fun renderBaClient(uiModel: UiModel<List<LookupItem>>) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrBAClient.clear()
+      arrBAClient.add(RowData(0, "-1", SELECT_BA_CLIENT_MEETING))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrBAClient.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapBAClient = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spBAClient.adapter = arrAdapBAClient
+      arrAdapBAClient.setSpinnerData<RowData>(binding.spBAClient, arrBAClient)
+      arrAdapBAClient.notifyDataSetChanged()
+      setBAClientListener()
+    }
+  }
+
+  private fun setBAClientListener() {
+    disposable.add(
+        binding.spBAClient.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              baClientCodeStr = (binding.spBAClient.selectedItem as RowData).key
+              binding.tvBAClientError.visibility = View.GONE
+            }
+    )
   }
 
   private fun outStation() {
@@ -506,6 +610,55 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     }
   }
 
+  private fun renderActionables(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrActionables.clear()
+      arrActionables.add(RowData(0, "-1", SELECT_ACTIONABLES))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrActionables.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+
+      val arrAdapActionables = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spActionables.setAdapter(arrAdapActionables)
+      arrAdapActionables.setSpinnerData<RowData>(binding.spActionables, arrActionables)
+      arrAdapActionables.notifyDataSetChanged()
+      val actionablesData = getSpinnerRowDataById(id, arrAdapActionables)
+      if (actionablesData != null) {
+        binding.spActionables.setSelection(
+            actionablesData.position
+        )
+      }
+      setActionablesListener()
+    }
+  }
+
+  private fun setActionablesListener() {
+    disposable.add(
+        binding.spActionables.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              actionablesCodeStr = (binding.spActionables.getSelectedItem() as RowData).key
+              binding.tvActionablesError.visibility = View.GONE
+            }
+    )
+  }
+
   private fun category(id: String) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       val request = LookupRequest(
@@ -517,6 +670,123 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     } else {
       noInternetConnectionDialog()
     }
+  }
+
+  private fun renderCategory(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrCategory.clear()
+      arrCategory.add(RowData(0, "-1", SELECT_CATEGORY))
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrCategory.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapCategory = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spCategory.adapter = arrAdapCategory
+      arrAdapCategory.setSpinnerData<RowData>(binding.spCategory, arrCategory)
+      arrAdapCategory.notifyDataSetChanged()
+      val categoryData = getSpinnerRowDataById(id, arrAdapCategory)
+      if (categoryData != null) {
+        binding.spCategory.setSelection(categoryData.position)
+      }
+      setCategoryListener()
+    }
+  }
+
+  private fun setCategoryListener() {
+    disposable.add(
+        binding.spCategory.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe { xyz ->
+              categoryCodeStr = (binding.spCategory.selectedItem as RowData).key
+              binding.tvCategoryError.visibility = View.GONE
+              subCategory(subCategoryID)
+            }
+    )
+  }
+
+  private fun subCategory(id: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = LookupRequest(
+          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!, SUBCATEGORY,
+          categoryCodeStr,
+          null
+      )
+      val subscribe = saathiApi.getAllLookup(request)
+          .compose(applyUiModel())
+          .subscribe { uiModelList -> renderSubcategory(uiModelList, id) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderSubcategory(
+    uiModel: UiModel<List<LookupItem>>,
+    id: String
+  ) {
+    toggleProgress(uiModel.inProgress)
+
+    val error = uiModel.error
+    if (error != null) {
+      showOnFailurePopup(error)
+    }
+    val data = uiModel.data
+    if (data != null) {
+      arrSubCategory.clear()
+      arrSubCategory.add(RowData(0, "-1", SELECT_SUB_CATEGORY))
+      mandatory = data.size > 1
+      if (mandatory) {
+        binding.llSubcategory.setVisibility(View.VISIBLE)
+      } else {
+        binding.etSubCategory.setText("")
+        binding.llSubcategory.setVisibility(View.GONE)
+      }
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrSubCategory.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapSubCategory = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spSubCategory.setAdapter(arrAdapSubCategory)
+      arrAdapSubCategory.setSpinnerData<RowData>(binding.spSubCategory, arrSubCategory)
+      arrAdapSubCategory.notifyDataSetChanged()
+      val subCategoryData = getSpinnerRowDataById(id, arrAdapSubCategory)
+      if (subCategoryData != null) {
+        binding.spSubCategory.setSelection(
+            subCategoryData.position
+        )
+      }
+      setSubCategoryListener()
+    }
+  }
+
+  private fun setSubCategoryListener() {
+    disposable.add(
+        binding.spSubCategory.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              subCategoryCodestr = (binding.spSubCategory.selectedItem as RowData).key
+              binding.tvSubCategoryError.visibility = View.GONE
+            }
+    )
   }
 
   override fun onDestroyView() {
