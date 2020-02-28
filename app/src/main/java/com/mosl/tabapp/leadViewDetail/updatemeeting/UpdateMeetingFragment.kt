@@ -496,7 +496,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
       )
       val subscribe = saathiApi.getAllLookup(request)
           .compose(applyUiModel())
-          .subscribe(Consumer<UiModel<List<LookupItem>>> { this.renderBaClient(it) })
+          .subscribe { this.renderBaClient(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -550,7 +550,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
       )
       val subscribe = saathiApi.getAllLookup(request)
           .compose(applyUiModel())
-          .subscribe(Consumer<UiModel<List<LookupItem>>> { this.renderOutStation(it) })
+          .subscribe { this.renderOutStation(it) }
     } else {
       noInternetConnectionDialog()
     }
@@ -714,7 +714,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
             .subscribe { xyz ->
               categoryCodeStr = (binding.spCategory.selectedItem as RowData).key
               binding.tvCategoryError.visibility = View.GONE
-              subCategory(subCategoryID)
+              subCategory(subCategoryID!!)
             }
     )
   }
