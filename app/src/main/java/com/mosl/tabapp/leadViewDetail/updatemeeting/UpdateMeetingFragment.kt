@@ -167,13 +167,13 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
 
       try {
         val metadataArray = meetingDate!!.split("T".toRegex())
-            .dropLastWhile({ it.isEmpty() })
+            .dropLastWhile { it.isEmpty() }
             .toTypedArray()
         val dateArray = metadataArray[0].split("-".toRegex())
-            .dropLastWhile({ it.isEmpty() })
+            .dropLastWhile { it.isEmpty() }
             .toTypedArray()
         val timeArray = metadataArray[1].split(":".toRegex())
-            .dropLastWhile({ it.isEmpty() })
+            .dropLastWhile { it.isEmpty() }
             .toTypedArray()
         currentYear = Integer.parseInt(dateArray[0])
         month = Integer.parseInt(dateArray[1])
@@ -326,7 +326,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
       arrAdapSelectProduct.notifyDataSetChanged()
       val productData = getSpinnerRowDataById(id, arrAdapSelectProduct)
       if (productData != null) {
-        binding.spProduct.setSelection(productData!!.getPosition())
+        binding.spProduct.setSelection(productData!!.position)
       }
 
       setProductListener()
@@ -401,9 +401,9 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .subscribe {
-              activityTypeCodeStr = (binding.spActivityType.getSelectedItem() as RowData).key
-              binding.tvActivityTypeError.setVisibility(View.GONE)
-              if (!binding.spActivityType.getSelectedItem()
+              activityTypeCodeStr = (binding.spActivityType.selectedItem as RowData).key
+              binding.tvActivityTypeError.visibility = View.GONE
+              if (!binding.spActivityType.selectedItem
                       .toString()
                       .equals(SELECT_ACTIVITY_TYPE, ignoreCase = true)
               ) {
@@ -455,7 +455,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
         )
       }
       val arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spMeetingReason.setAdapter(arrAdapMeetingReason)
+      binding.spMeetingReason.adapter = arrAdapMeetingReason
       arrAdapMeetingReason.setSpinnerData<RowData>(binding.spMeetingReason, arrMeetingReason)
       arrAdapMeetingReason.notifyDataSetChanged()
       val meetingReasonData = getSpinnerRowDataById(id, arrAdapMeetingReason)
@@ -576,7 +576,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
         )
       }
       val arrAdapOutStation = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spOutStaition.setAdapter(arrAdapOutStation)
+      binding.spOutStaition.adapter = arrAdapOutStation
       arrAdapOutStation.setSpinnerData<RowData>(binding.spOutStaition, arrOutStation)
 
       arrAdapOutStation.notifyDataSetChanged()
