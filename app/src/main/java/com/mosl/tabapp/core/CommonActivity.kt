@@ -135,8 +135,11 @@ class CommonActivity : BaseActivity(),
         locationWorkManager = WorkManager.getInstance()
         dataSyncWorkManager = WorkManager.getInstance()
 
-        if (!userManager.user.isAufsb()) {
-            startWorkManager()
+
+        userManager.getUser()?.apply {
+            if (!this.isAufsb()) {
+                startWorkManager()
+            }
         }
         setupObservables()
         setBanner()
@@ -350,22 +353,22 @@ class CommonActivity : BaseActivity(),
         notificationManager.cancelAll()
         disposable.add(
             loginRepository.logout()
-            .toSingleDefault(true).toObservable()
-            .compose(applyUiModel())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { uiModel ->
-                toggleProgressBar(uiModel.inProgress)
+                .toSingleDefault(true).toObservable()
+                .compose(applyUiModel())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { uiModel ->
+                    toggleProgressBar(uiModel.inProgress)
 
-                uiModel.onSuccess {
-                    Timber.d("Logout Successfully")
+                    uiModel.onSuccess {
+                        Timber.d("Logout Successfully")
 
-                    openLogin()
-                }
+                        openLogin()
+                    }
 
-                uiModel.onFailure {
-                    showOnFailurePopup(it)
-                }
-            })
+                    uiModel.onFailure {
+                        showOnFailurePopup(it)
+                    }
+                })
     }
 
     fun openLogin() {
