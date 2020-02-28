@@ -5,7 +5,6 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
-import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.UploadImage
@@ -21,5 +20,6 @@ interface DocumentView : BaseView {
   fun uploadImage(): Observable<UploadImage>
   fun renderShowAddDocumentDialog()
   fun renderUploadDocument(uiModel: UiModel<UploadDocumentData>)
+  fun renderDeleteDocument(uiModel: UiModel<String>, id: String)
 
 }

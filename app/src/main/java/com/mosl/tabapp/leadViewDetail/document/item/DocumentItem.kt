@@ -13,40 +13,42 @@ import android.widget.EditText
 import android.widget.ImageView
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.tabapp.R
-import com.mosl.tabapp.databinding.ListUploadDocumentConstraintBinding
+import com.mosl.tabapp.databinding.ItemDocumentListBinding
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
+import com.mosl.tabapp.util.downloadDocument
 import com.xwray.groupie.databinding.BindableItem
 import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.subjects.PublishSubject
 
-class ItemDocumentFragment (
+class DocumentItem(
   private val data: LeadDocumentsItemData,
-  private val context: Context,
   private val subject: PublishSubject<DocumentUiEvent>
-) : BindableItem<ListUploadDocumentConstraintBinding>(), OnClickListener {
+) : BindableItem<ItemDocumentListBinding>(), OnClickListener {
+
+  var context: Context? = null
 
   override fun getLayout(): Int {
-    return R.layout.list_upload_document_constraint
+    return R.layout.item_document_list
   }
 
-  override fun bind(viewBinding: ListUploadDocumentConstraintBinding, position: Int) {
+  override fun bind(viewBinding: ItemDocumentListBinding, position: Int) {
     viewBinding.apply {
+      context = root.context
       tvDocumentName.text = data.documentName
       tvDate.text = data.creationDate
-
-      ivScan.setOnClickListener(this@ItemDocumentFragment)
-      ivDeleteDoc.setOnClickListener(this@ItemDocumentFragment)
-      ivUploadDoc.setOnClickListener(this@ItemDocumentFragment)
+      ivScan.setOnClickListener(this@DocumentItem)
+      ivDeleteDoc.setOnClickListener(this@DocumentItem)
+      ivUploadDoc.setOnClickListener(this@DocumentItem)
     }
 
   }
 
   override fun onClick(view: View) {
-    val dialog = Dialog(context)
+    val dialog = Dialog(context!!)
     when (view.id) {
       R.id.ivScan -> {
         dialog.setTitle("Rename")
@@ -77,7 +79,7 @@ class ItemDocumentFragment (
           } else {
             alertDialog(
               context, 0,
-              context.resources.getString(R.string.motilal_oswal),
+              context?.resources?.getString(R.string.motilal_oswal),
               "File name cannot be blank.", "OK", true, null
             )
             dialog.dismiss()
@@ -95,7 +97,7 @@ class ItemDocumentFragment (
       R.id.ivDeleteDoc -> {
         alertDialog(
           context, 0,
-          context.resources.getString(R.string.motilal_oswal),
+          context?.resources?.getString(R.string.motilal_oswal),
           "Are you sure you want to delete:" + data.documentName + " ?",
           "Yes", "No", true
         ) { action, _ ->
@@ -105,10 +107,25 @@ class ItemDocumentFragment (
         }
       }
       R.id.ivUploadDoc -> {
-
+        context?.downloadDocument(data.documentFullPath!!)
       }
 
     }
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as DocumentItem
+
+    if (data != other.data) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    return data.hashCode()
   }
 
 }

@@ -46,7 +46,7 @@ data class LeadDocumentsItemData(
 
   @JvmField val id: String?,
 
-  @JvmField val documentName: String?,
+  @JvmField var documentName: String?,
 
   @JvmField val documentType: String?,
 

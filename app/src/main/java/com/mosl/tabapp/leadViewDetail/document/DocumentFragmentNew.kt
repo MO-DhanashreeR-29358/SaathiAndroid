@@ -2,6 +2,7 @@ package com.mosl.tabapp.leadViewDetail.document
 
 import android.Manifest
 import android.app.Dialog
+import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
@@ -30,6 +32,8 @@ import com.mosl.tabapp.permission.ImageUploadHelper
 import com.mosl.tabapp.permission.ImageUploadHelper.ImageUploadCallback
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_DELETED
+import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_RENAME
 import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_UPLOADED
 import com.mosl.tabapp.constants.MOSLConstants.FILE_LARGE_MESSAGE
 import com.mosl.tabapp.constants.MOSLConstants.FILE_NOT_ALLOWED_MESSAGE
@@ -42,7 +46,7 @@ import com.mosl.tabapp.databinding.FragmentDocumentNewBinding
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.UploadImage
-import com.mosl.tabapp.leadViewDetail.document.item.ItemDocumentFragment
+import com.mosl.tabapp.leadViewDetail.document.item.DocumentItem
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -103,9 +107,9 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
     binding = FragmentDocumentNewBinding.bind(view)
     imageUploadHelper.setImageCallback(this)
     setUpView()
+    presenter.start()
     leadId = arguments?.getString(LEAD_ID) ?: ""
     ucid = arguments?.getString(UCID) ?: ""
-    presenter.start()
     dataActionSubject.onNext(Fetch)
 
   }
@@ -124,15 +128,16 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
   private fun setUpView() {
     setAppTitle("Documents")
     documentList = ArrayList()
-    val groupAdapter = GroupAdapter<ViewHolder>()
     section = DataManagerSection(onRetryClick)
-    section.retrySubject = dataActionSubject
-    groupAdapter.add(section)
+    val groupAdapter = GroupAdapter<ViewHolder>()
     binding.rvDocumentList.apply {
       layoutManager = LinearLayoutManager(requireContext())
-      setHasFixedSize(true)
+      setHasFixedSize(false)
       adapter = groupAdapter
+      (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+      isNestedScrollingEnabled = false
     }
+    groupAdapter.add(section)
 
   }
 
@@ -222,16 +227,17 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
     }
 
     uiModel.onSuccess { dataList ->
+      val documentItems = dataList.map {
+        DocumentItem(it, subject)
+      }
+
+      section.setContent(documentItems)
       dataList.map {
         documentList.add(it)
+        showHideAddHeader()
       }
-      showHideAddHeader()
-      section.setContent(dataList.map {
-        ItemDocumentFragment(it, requireContext(), subject)
-      })
-      section.notifyChanged()
-
     }
+
   }
 
   override fun renameLeadDocuments(): Observable<RenameLeadDocuments> {
@@ -242,14 +248,61 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
     return subject.ofType()
   }
 
+  override fun renderDeleteDocument(uiModel: UiModel<String>, id: String) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      deleteDocument(id)
+      alertDialog(
+        requireContext(), 0,
+        resources.getString(R.string.motilal_oswal),
+        DOCUMENT_DELETED, "OK", true
+      ) { _, _ -> }
+    }
+  }
+
   override fun renderUpdateDocuments(uiModel: UiModel<String>, id: String, documentName: String) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
     uiModel.onSuccess {
-
+      renameDocumentName(id, documentName)
+      alertDialog(
+        requireContext(), 0,
+        resources.getString(R.string.motilal_oswal),
+        DOCUMENT_RENAME, "OK", true, null
+      )
     }
+  }
+
+  private fun renameDocumentName(id: String, newName: String) {
+    for (model in documentList) {
+      if (model.id == id) {
+        model.documentName = newName
+        break
+      }
+    }
+    section.notifyChanged()
+  }
+
+  private fun deleteDocument(id: String) {
+    val item = getDocumentById(id)
+    documentList.remove(item)
+    section.notifyChanged()
+    showHideAddHeader()
+  }
+
+  private fun getDocumentById(id: String): LeadDocumentsItemData? {
+    for (itemData in documentList) {
+      if (itemData.id == id) {
+        return itemData
+      }
+    }
+    return null
   }
 
   private fun uploadFile(fileUri: Uri, fileToUpload: File) {
@@ -336,21 +389,12 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
     } catch (e: Exception) {
 
     } finally {
-      if (fileInputStream != null) {
-        try {
-          fileInputStream.close()
-        } catch (e: IOException) {
-          e.printStackTrace()
-        }
-      }
-      if (output64 != null) {
-        try {
-          output64.close()
-          output.close()
-        } catch (e: IOException) {
-          e.printStackTrace()
-        }
-
+      try {
+        fileInputStream.close()
+        output64.close()
+        output.close()
+      } catch (e: IOException) {
+        e.printStackTrace()
       }
     }
     return ""
@@ -358,6 +402,7 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
+    Timber.d("image data--->${data?.data}")
     imageUploadHelper.onActivityResult(requestCode, resultCode, data)
   }
 

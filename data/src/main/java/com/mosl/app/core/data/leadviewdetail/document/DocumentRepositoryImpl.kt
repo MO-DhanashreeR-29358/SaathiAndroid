@@ -7,6 +7,7 @@ import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -23,6 +24,10 @@ class DocumentRepositoryImpl @Inject constructor(
   override fun postUpdateDocuments(request: UpdateDocumentsInput): Observable<String> {
     val updateDocumentRequest = request.requestUpdateTransform()
     return api.postUpdateDocuments(updateDocumentRequest)
+  }
+
+  override fun deleteDocuments(id: String): Observable<String> {
+    return api.postDeleteDocuments(DeleteDocumentRequest(id = id))
   }
 
   override fun uploadDocument(request: UploadDocumentsInput): Observable<UploadDocumentData> {

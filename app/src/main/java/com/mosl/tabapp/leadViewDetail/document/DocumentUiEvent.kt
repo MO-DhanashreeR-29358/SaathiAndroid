@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadViewDetail.document
 
-import android.net.Uri
-import java.io.File
+
 
 sealed class DocumentUiEvent {
   data class RenameLeadDocuments(
