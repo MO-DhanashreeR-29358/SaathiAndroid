@@ -2,6 +2,8 @@ package com.mosl.tabapp.leadViewDetail.updatemeeting
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.core.rx.applyUiModel
@@ -43,8 +45,10 @@ import com.mosl.tabapp.databinding.FragUpdateMeetingBinding
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import io.reactivex.Observable
 import timber.log.Timber
 import java.util.ArrayList
+import java.util.Calendar
 import javax.inject.Inject
 
 class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
@@ -91,10 +95,12 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   private var day: Int = 0
   private var hour: Int = 0
   private var minute: Int = 0
+  private var profileType: Boolean = false
   private var meetingObjectiveIdStr = "0"
 
   private var leadId: String? = null
   private var meetingId: String? = null
+  private var mUCID = "0"
 
   private var mandatory = true
 
@@ -109,8 +115,77 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     super.onViewCreated(view, savedInstanceState)
     setAppTitle("Update Meeting")
     binding = FragUpdateMeetingBinding.bind(view)
+    setupView()
+    setupMember()
     presenter.start()
     dataActionSubject.onNext(Fetch)
+  }
+
+  private fun setupMember() {
+    try {
+      val screenData =
+        arguments?.getParcelable<UpdateMeetingScreenData>(UpdateMeetingView.ARG_UPDATE_MEETING)!!
+      meetingId = screenData.meetingId
+      leadId = screenData.leadId
+      binding.tvProduct.text = "Appointments-${screenData.product}"
+      binding.tvMeetingDate.text = screenData.date
+      binding.tvMeetingTime.text = "Time-${screenData.time}"
+      mUCID = screenData.ucid
+      val calendar = Calendar.getInstance()
+      hour = calendar.get(Calendar.HOUR_OF_DAY)
+      minute = calendar.get(Calendar.MINUTE)
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+
+  }
+
+  private fun setupView() {
+    binding.scrollView.apply {
+      descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+      isFocusable = true
+      isFocusableInTouchMode = true
+      setOnTouchListener { v, _ ->
+        v.requestFocusFromTouch()
+        false
+      }
+    }
+    userManager.getUser()
+        ?.let {
+          AddedAttendeeModel.setAttendeeUserEmplyeeCode(it.employeeCode)
+          if (it.isFranchise() || it.isIFA()) {
+            binding.linaerLayoutNew.visibility = View.VISIBLE
+            profileType = true
+          }
+        }
+  }
+
+  override fun onDateLayoutClicked(): Observable<Unit> {
+    return binding.rlDate.clicks()
+  }
+
+  override fun onSaveButtonClicked(): Observable<Unit> {
+    return binding.btnSave.clicks()
+  }
+
+  override fun onResetButtonClicked(): Observable<Unit> {
+    return binding.btnReset.clicks()
+  }
+
+  override fun onAttendeeImageButtonClicked(): Observable<Unit> {
+    return binding.ibAttendee.clicks()
+  }
+
+  override fun onSplAttendeeImageButtonClicked(): Observable<Unit> {
+    return binding.ibSplAttendee.clicks()
+  }
+
+  override fun onAttendeeCountClicked(): Observable<Unit> {
+    return binding.tvAttendeeCount.clicks()
+  }
+
+  override fun onSplAttendeeCountClicked(): Observable<Unit> {
+    return binding.tvSplAttendeeCount.clicks()
   }
 
   override fun renderMeetingObjective(uiModel: UiModel<List<Lookup>>) {
