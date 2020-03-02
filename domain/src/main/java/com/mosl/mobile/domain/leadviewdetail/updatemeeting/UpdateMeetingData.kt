@@ -70,3 +70,17 @@ data class MeetingAttendee(
   @JvmField val attended: Boolean,
   @JvmField val defaultAttendee: Boolean
 )
+
+data class Lookup(
+  val parentId: Int,
+  val status: Int,
+  val sysName: String?,
+  val active: Boolean,
+  val lookupType: Int,
+  val lookupId: Int,
+  val lookUpName: String?,
+  val businessUnitId: Int,
+  val sequence: Int,
+  val ignoreBusinessUnit: Boolean,
+  val lookupTypeId: Int
+)

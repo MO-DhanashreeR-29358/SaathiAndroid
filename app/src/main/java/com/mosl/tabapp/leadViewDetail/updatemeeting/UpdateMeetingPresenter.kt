@@ -13,12 +13,24 @@ class UpdateMeetingPresenter @Inject constructor(
 ) : BasePresenter<UpdateMeetingView>(view) {
 
   override fun start() {
-    Observable.merge(onFetchCalled(), onRetryCalled())
+
+    val onFetchOrOnRetryObs = Observable.merge(onFetchCalled(), onRetryCalled())
+        .share()
+
+    onFetchOrOnRetryObs
         .switchMap {
           repository.getMeeting(data.meetingId)
               .compose(applyUiModel())
         }
         .subscribe(view::renderMeetingById)
         .addTo(disposable)
+
+
+    onFetchOrOnRetryObs.subscribe {
+      repository.getMeetingObjective()
+          .compose(applyUiModel())
+    }
+        .addTo(disposable)
+
   }
 }

@@ -10,6 +10,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
@@ -31,6 +32,7 @@ import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_BA_CLIENT_MEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_CATEGORY
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_DURATION
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_REASON
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT
@@ -89,6 +91,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   private var day: Int = 0
   private var hour: Int = 0
   private var minute: Int = 0
+  private var meetingObjectiveIdStr = "0"
 
   private var leadId: String? = null
   private var meetingId: String? = null
@@ -108,6 +111,51 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
     binding = FragUpdateMeetingBinding.bind(view)
     presenter.start()
     dataActionSubject.onNext(Fetch)
+  }
+
+  override fun renderMeetingObjective(uiModel: UiModel<List<Lookup>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+
+    uiModel.onSuccess { data ->
+      arrMeetingObjective.clear()
+      arrMeetingObjective.add(
+          RowData(0, "-1", SELECT_MEETING_OBJECTIVE)
+      )
+      for (i in data.indices) {
+        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+        val lookUpId = stringOrEmpty(lookUpid.toString())
+        val lookUpName = stringOrEmpty(lookUpName1)
+        arrMeetingObjective.add(
+            RowData(i + 1, lookUpId, lookUpName)
+        )
+      }
+      val arrAdapMeetingsObjective =
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+      binding.spMeetingObjective.adapter = arrAdapMeetingsObjective
+      arrAdapMeetingsObjective.setSpinnerData<RowData>(
+          binding.spMeetingObjective, arrMeetingObjective
+      )
+      arrAdapMeetingsObjective.notifyDataSetChanged()
+      setMeetingObjectiveListener()
+    }
+
+  }
+
+  private fun setMeetingObjectiveListener() {
+    disposable.add(
+        binding.spMeetingObjective.itemSelections()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .subscribe {
+              meetingObjectiveIdStr = (binding.spMeetingObjective.selectedItem as RowData).key
+              binding.tvMeetingObjectiveError.visibility = View.GONE
+            }
+    )
   }
 
   override fun renderMeetingById(uiModel: UiModel<Meeting>) {
@@ -750,10 +798,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
       arrSubCategory.add(RowData(0, "-1", SELECT_SUB_CATEGORY))
       mandatory = data.size > 1
       if (mandatory) {
-        binding.llSubcategory.setVisibility(View.VISIBLE)
+        binding.llSubcategory.visibility = View.VISIBLE
       } else {
         binding.etSubCategory.setText("")
-        binding.llSubcategory.setVisibility(View.GONE)
+        binding.llSubcategory.visibility = View.GONE
       }
       for (i in data.indices) {
         val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
@@ -764,7 +812,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
         )
       }
       val arrAdapSubCategory = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spSubCategory.setAdapter(arrAdapSubCategory)
+      binding.spSubCategory.adapter = arrAdapSubCategory
       arrAdapSubCategory.setSpinnerData<RowData>(binding.spSubCategory, arrSubCategory)
       arrAdapSubCategory.notifyDataSetChanged()
       val subCategoryData = getSpinnerRowDataById(id, arrAdapSubCategory)
