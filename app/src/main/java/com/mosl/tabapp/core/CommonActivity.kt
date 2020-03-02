@@ -33,7 +33,6 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
-import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
@@ -163,8 +162,10 @@ class CommonActivity : BaseActivity(),
                         remoteConfigModel =
                             gson.fromJson(saathiInit, RemoteConfigModel::class.java)
 
-                        if (remoteConfigModel.isConfigured && !userManager.user.isAufsb() && !userManager.user.isAuBankSalesSupport()) {
-                            openBanner(remoteConfigModel)
+                        userManager.getUser()?.apply {
+                            if (remoteConfigModel.isConfigured && !this.isAufsb() && !this.isAuBankSalesSupport()) {
+                                openBanner(remoteConfigModel)
+                            }
                         }
                         remoteCongigData.set(saathiInit)
 
@@ -200,10 +201,11 @@ class CommonActivity : BaseActivity(),
         val quickAction = QuickAction(this, QuickAction.VERTICAL)
         quickAction.addActionItem(acLead)
         quickAction.addActionItem(acCleint)
-        if (!userManager.user.isAufsb()) {
-            quickAction.addActionItem(acDadhBoard)
+        userManager.getUser()?.apply {
+            if (!this.isAufsb()) {
+                quickAction.addActionItem(acDadhBoard)
+            }
         }
-
         quickAction.setOnActionItemClickListener(this)
         quickAction.show(v)
     }
