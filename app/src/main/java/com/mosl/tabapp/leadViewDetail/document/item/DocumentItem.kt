@@ -19,10 +19,10 @@ import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocumen
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
-import com.mosl.tabapp.util.downloadDocument
 import com.xwray.groupie.databinding.BindableItem
 import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.subjects.PublishSubject
+import com.mosl.tabapp.util.downloadDocument
 
 class DocumentItem(
   private val data: LeadDocumentsItemData,
@@ -108,8 +108,8 @@ class DocumentItem(
       }
       R.id.ivUploadDoc -> {
         context?.downloadDocument(data.documentFullPath!!)
+        //downloadImage(data.documentFullPath!!)
       }
-
     }
   }
 

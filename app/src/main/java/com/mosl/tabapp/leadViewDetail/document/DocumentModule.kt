@@ -1,6 +1,5 @@
 package com.mosl.tabapp.leadViewDetail.document
 
-import androidx.appcompat.app.AppCompatActivity
 import com.mosl.app.core.data.leadviewdetail.document.DocumentRepositoryImpl
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentRepository
 import com.mosl.tabapp.permission.ImageUploadHelper
@@ -20,10 +19,9 @@ abstract class DocumentModule {
   companion object {
     @Provides @JvmStatic
     fun provideImageUploadHelper(
-      context: AppCompatActivity,
       fragment: DocumentFragmentNew
     ): ImageUploadHelper {
-      return ImageUploadHelper(context, fragment)
+      return ImageUploadHelper(fragment)
     }
   }
 

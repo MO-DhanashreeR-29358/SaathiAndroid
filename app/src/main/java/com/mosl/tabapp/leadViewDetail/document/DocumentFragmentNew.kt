@@ -2,7 +2,6 @@ package com.mosl.tabapp.leadViewDetail.document
 
 import android.Manifest
 import android.app.Dialog
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -417,7 +416,7 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
         if (grantResults.isNotEmpty() && hasAllPermission(requireContext(), *permissionsArr)) {
           imageUploadHelper.showDialog()
         } else {
-          Timber.tag("Document fragment").d("Permission not granted")
+          Timber.d("Permission not granted")
         }
         return
       }
@@ -427,5 +426,6 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
 
   override fun onImageCaptured(uri: Uri, file: File) {
     uploadFile(uri, file)
+
   }
 }

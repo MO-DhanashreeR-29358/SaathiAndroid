@@ -25,15 +25,15 @@ import java.util.Date
 import java.util.Locale
 
 class ImageUploadHelper(
-  private val context: AppCompatActivity,
   private val fragment: Fragment
 ) {
+  val context = fragment.requireContext()
   var callback: ImageUploadCallback? = null
   private val REQUEST_CAMERA_PHOTO = 0
   private val REQUEST_GALLERY_PHOTO = 1
   private var selectedImageUri: Uri? = null
   private var absolutePath: String? = null
-
+  private var mCurrentPhotoPath: String? = null
   fun setImageCallback(callback: ImageUploadCallback) {
     this.callback = callback
   }
@@ -82,18 +82,16 @@ class ImageUploadHelper(
     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
     if (intent.resolveActivity(context.packageManager) != null) {
       val photoFile: File? = try {
-        createImageFile()
+        createFile()
       } catch (ex: IOException) {
         Timber.e(ex)
         null
       }
       photoFile?.also {
         //val authority = context.applicationContext.packageName + ".provider"
-         val authority = "com.mosl.tabapp.debug.provider"
+        val authority = "com.mosl.tabapp.debug.provider"
         val photoURI: Uri = FileProvider.getUriForFile(context, authority, it)
-        //Timber.d("photoFile.absolutePath : %s %s ", photoFile.absolutePath, photoFile.length())
         selectedImageUri = photoURI
-        Timber.d("cameraIntent selectedImageUri--->$selectedImageUri")
         absolutePath = photoFile.absolutePath
         intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
         fragment.startActivityForResult(intent, REQUEST_CAMERA_PHOTO)
@@ -111,7 +109,7 @@ class ImageUploadHelper(
     when (requestCode) {
       REQUEST_CAMERA_PHOTO -> {
         if (resultCode == RESULT_OK) {
-          //selectedImageUri = data?.data
+          selectedImageUri = data?.data
           Timber.d("onActivityResult selectedImageUri--->$selectedImageUri")
           Timber.d("data found--->${data?.data}")
           selectedImageUri?.let {
@@ -149,8 +147,7 @@ class ImageUploadHelper(
   }
 
   @Throws(IOException::class)
-  private fun createImageFile(): File {
-
+  private fun createFile(): File {
     // Create an image file name
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Date())
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -160,23 +157,8 @@ class ImageUploadHelper(
       storageDir /* directory */
     ).apply {
       // Save a file: path for use with ACTION_VIEW intents
-      this@ImageUploadHelper.absolutePath = absolutePath
+      mCurrentPhotoPath = absolutePath
     }
-
-    /*// Create an image file name
-    val imageFileName = "POST_IMAGE"
-    val storageDir = File(
-      Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-      "Camera"
-    )
-    val image = File.createTempFile(
-      imageFileName, *//* prefix *//*
-      ".jpg", *//* suffix *//*
-      storageDir      *//* directory *//*
-    )
-    // Save a file: path for use with ACTION_VIEW intents
-    absolutePath = "file:" + image.absolutePath
-    return image*/
   }
 
   interface ImageUploadCallback {
