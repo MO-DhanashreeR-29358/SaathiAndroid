@@ -112,9 +112,11 @@ import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
 
-class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorActionListener {
+class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickListener,
+  OnEditorActionListener {
 
   private lateinit var binding: FragmentSetAppiontmentBinding
+  private lateinit var presenter: SetAppointmentPresenter
 
   private val arrSelectProduct = ArrayList<RowData>()
   private val arrSelectWeek = ArrayList<RowData>()
@@ -336,7 +338,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
   private fun setUpFromArguments() {
     try {
       mUCID = when {
-        this.arguments!!.getString(UCID, "0").equals("", ignoreCase = true) -> "0"
+        this.arguments?.getString(UCID, "0").equals("", ignoreCase = true) -> "0"
         else -> this.arguments?.getString(UCID, "0") ?: "0"
       }
       str_LeadID = this.arguments?.getString(LEAD_ID, "0") ?: "0"
@@ -873,7 +875,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
       spSelectWeekDay.setSelection(0, true)
       spRepeateWeek.setSelection(0, true)
       addedAttendeeModelList.clear()
-      tvAttendeeCount.setText("")
+      tvAttendeeCount.text = ""
       setCalenderDate()
     }
 
