@@ -84,3 +84,5 @@ data class Lookup(
   val ignoreBusinessUnit: Boolean,
   val lookupTypeId: Int
 )
+
+

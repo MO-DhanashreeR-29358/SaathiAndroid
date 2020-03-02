@@ -1,9 +1,27 @@
 package com.mosl.tabapp.leadViewDetail.updatemeeting
 
+import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.inputmethod.EditorInfo
+import android.widget.BaseAdapter
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.TextView.OnEditorActionListener
+import android.widget.Toast
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.core.rx.applyUiModel
@@ -14,44 +32,64 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
+import com.mosl.mobile.domain.leadviewdetail.updatemeeting.UpdateMeetingSaveRequest
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
+import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.common.RowData.getSpinnerRowDataById
 import com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES
 import com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE
-import com.mosl.tabapp.constants.MOSLConstants.BACLIENTMEETING
+import com.mosl.tabapp.constants.MOSLConstants.ATLEAST_TEN_CHARACTERS
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEE_ALREADY_ADDED
 import com.mosl.tabapp.constants.MOSLConstants.CATEGORY
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN
+import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGDURATION
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGREASON
-import com.mosl.tabapp.constants.MOSLConstants.OUTSTATIONMEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIONABLES
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
-import com.mosl.tabapp.constants.MOSLConstants.SELECT_BA_CLIENT_MEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_CATEGORY
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_DURATION
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_MEETING_REASON
-import com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_SUB_CATEGORY
+import com.mosl.tabapp.constants.MOSLConstants.SPL_ATTENDEE_ALREADY_ADDED
 import com.mosl.tabapp.constants.MOSLConstants.SUBCATEGORY
+import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.UPDATED_MEETING
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.DialogAddeddAttendeeListBinding
+import com.mosl.tabapp.databinding.DialogAddeddSplAttendeeListBinding
+import com.mosl.tabapp.databinding.DialogAttendeeListBinding
 import com.mosl.tabapp.databinding.FragUpdateMeetingBinding
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.model.MeetingApptModel
+import com.mosl.tabapp.model.SplAttendeeModel
+import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+import com.mosl.tabapp.setappointment.SetAppointmentFragment.Companion.listHasAttende
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import timber.log.Timber
+import java.net.URLEncoder
 import java.util.ArrayList
 import java.util.Calendar
 import javax.inject.Inject
 
-class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
+class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActionListener {
 
   @Inject
   internal lateinit var presenter: UpdateMeetingPresenter
@@ -97,6 +135,9 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   private var minute: Int = 0
   private var profileType: Boolean = false
   private var meetingObjectiveIdStr = "0"
+
+  private var attendeeAdapter: AttendeeAdapter? = null
+  private var splAttendeeAdapter: SplAttendeeAdapter? = null
 
   private var leadId: String? = null
   private var meetingId: String? = null
@@ -150,18 +191,28 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
         false
       }
     }
-    userManager.getUser()
-        ?.let {
-          AddedAttendeeModel.setAttendeeUserEmplyeeCode(it.employeeCode)
-          if (it.isFranchise() || it.isIFA()) {
-            binding.linaerLayoutNew.visibility = View.VISIBLE
-            profileType = true
-          }
-        }
   }
 
-  override fun onDateLayoutClicked(): Observable<Unit> {
-    return binding.rlDate.clicks()
+  override fun onEditorAction(
+    view: TextView,
+    actionId: Int,
+    event: KeyEvent
+  ): Boolean {
+    if (view is DelayAutoCompleteTextView) {
+      hideKeyboard(view)
+      return false
+    }
+    when (view.id) {
+      R.id.etMeetingDescription -> binding.etCustomerComment.requestFocus()
+      R.id.etCustomerComment -> {
+        if (binding.llActionables.visibility == View.VISIBLE)
+          binding.etCategory.requestFocus()
+      }
+
+      R.id.etCategory -> binding.etSubCategory.requestFocus()
+
+    }
+    return false
   }
 
   override fun onSaveButtonClicked(): Observable<Unit> {
@@ -186,6 +237,321 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
 
   override fun onSplAttendeeCountClicked(): Observable<Unit> {
     return binding.tvSplAttendeeCount.clicks()
+  }
+
+  override fun onCategoryTextChanged(): Observable<String> {
+    return binding.etCategory.afterTextChangeEvents()
+        .map {
+          it.editable?.toString()
+        }
+  }
+
+  override fun onSubCategoryTextChanged(): Observable<String> {
+    return binding.etSubCategory.afterTextChangeEvents()
+        .map {
+          it.editable?.toString()
+        }
+  }
+
+  override fun onMeetingDescriptionTextChanged(): Observable<String> {
+    return binding.etMeetingDescription.afterTextChangeEvents()
+        .map {
+          it.editable?.toString()
+        }
+  }
+
+  override fun renderCategoryTextChanged(text: String) {
+    when {
+      binding.etCategory.text.toString().isNotBlank() &&
+          (binding.etCategory.text.toString().length < 10) -> binding.etCategory.error =
+        ATLEAST_TEN_CHARACTERS
+
+    }
+  }
+
+  override fun renderSubCategoryTextChanged(text: String) {
+    when {
+      binding.etSubCategory.text.toString().isNotBlank() &&
+          (binding.etSubCategory.text.toString().length < 10) -> binding.etSubCategory.error =
+        ATLEAST_TEN_CHARACTERS
+
+    }
+  }
+
+  override fun renderMeetingDescriptionTextChanged(text: String) {
+    when {
+      binding.etMeetingDescription.text.toString().isNotBlank() &&
+          (binding.etMeetingDescription.text.toString().length < 10) -> binding.etMeetingDescription.error =
+        ATLEAST_TEN_CHARACTERS
+
+    }
+  }
+
+  override fun renderAttendeeImageButtonClick() {
+    attendeeDialog()
+  }
+
+  private fun attendeeDialog() {
+    val dialog = Dialog(requireContext()).apply {
+      val viewBinding =
+        DialogAttendeeListBinding.bind(layoutInflater.inflate(R.layout.dialog_attendee_list, null))
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setContentView(viewBinding.root)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setCanceledOnTouchOutside(true)
+      viewBinding.etSearchAttendee.apply {
+        imeOptions = EditorInfo.IME_ACTION_DONE
+        setOnEditorActionListener(this@UpdateMeetingFragment)
+        threshold = 3
+        attendeeAdapter = AttendeeAdapter(requireContext())
+        setAdapter(attendeeAdapter)
+        setLoadingIndicator(viewBinding.pbLoadingIndicator)
+        setOnItemClickListener { parent, view, position, id ->
+
+          val adapter = attendeeAdapter
+
+          val clientModel =
+            if (adapter!!.count > position) adapter!!.getItem(position) else EmployeeModel(
+                "", false
+            )
+          val has = listHasAttende(
+              addedAttendeeModelList, addedSplAttendeeModelList, clientModel.attendeeCode
+          )
+
+          if (!has) {
+            if (!clientModel.isNoData) {
+
+              val attendeeType = "R" //todo //R=Regular  & S=special
+              addedAttendeeModelList.add(
+                  AddedAttendeeModel(
+                      attendeeType, true, clientModel.attendeeName,
+                      clientModel.attendeeCode
+                  )
+              )
+              addedAttendeeCount++
+              binding.tvAttendeeCount.text = if (addedAttendeeCount <= 0) "" else
+                String.format("(%s)", addedSplAttendeeModelList.size.toString())
+              dismiss()
+            }
+          } else {
+            Toast.makeText(
+                requireContext(), ATTENDEE_ALREADY_ADDED,
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            viewBinding.etSearchAttendee.setText("")
+          }
+
+        }
+
+      }
+
+    }
+    dialog.show()
+  }
+
+  override fun renderSplAttendeeImageButtonClick() {
+    splAttendeeDialog()
+  }
+
+  private fun splAttendeeDialog() {
+    val dialog = Dialog(requireContext()).apply {
+
+      val viewBinding =
+        DialogAttendeeListBinding.bind(layoutInflater.inflate(R.layout.dialog_attendee_list, null))
+
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setContentView(viewBinding.root)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setCanceledOnTouchOutside(true)
+      viewBinding.etSearchAttendee.imeOptions = EditorInfo.IME_ACTION_DONE
+      viewBinding.etSearchAttendee.setOnEditorActionListener(this@UpdateMeetingFragment)
+      viewBinding.etSearchAttendee.threshold = 3
+      splAttendeeAdapter = SplAttendeeAdapter(requireContext())
+      viewBinding.etSearchAttendee.setAdapter(splAttendeeAdapter)
+      viewBinding.etSearchAttendee.setLoadingIndicator(
+          viewBinding.pbLoadingIndicator
+      )
+      viewBinding.etSearchAttendee.setOnItemClickListener { parent, view, position, id ->
+
+        val splAdapter = splAttendeeAdapter
+
+        val clientModel =
+          if (splAdapter!!.count > position) splAdapter.getItem(position) else SplAttendeeModel("")
+        val has = listHasAttende(
+            addedAttendeeModelList, addedSplAttendeeModelList,
+            clientModel.attendeeCode
+        )
+
+        if (!has) {
+          if (!clientModel.isNoData) {
+            val attendeeType = "S" //todo //R=Regular  & S=special
+            addedSplAttendeeModelList.add(
+                AddedSplAttendeeModel(
+                    attendeeType, true, clientModel.attendeeName,
+                    clientModel.attendeeCode
+                )
+            )
+            addedSplAttendeeCount++
+            binding.tvSplAttendeeCount.text =
+              String.format("(%s)", addedSplAttendeeModelList.size.toString())
+            dismiss()
+          }
+        } else {
+          Toast.makeText(
+              requireContext(), SPL_ATTENDEE_ALREADY_ADDED,
+              Toast.LENGTH_SHORT
+          )
+              .show()
+          viewBinding.etSearchAttendee.setText("")
+        }
+      }
+    }
+    dialog.show()
+  }
+
+  override fun renderAttendeeCountClick() {
+    addedAttendeeDialog()
+  }
+
+  private fun addedAttendeeDialog() {
+    val dialogAddedAttendee = Dialog(requireContext()).apply {
+      val viewBinding = DialogAddeddAttendeeListBinding.bind(
+          layoutInflater.inflate(R.layout.dialog_addedd_attendee_list, null)
+      )
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setContentView(viewBinding.root)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setCanceledOnTouchOutside(true)
+      viewBinding.lvAttendee.emptyView = viewBinding.tvEmpty
+      val addedAttendeeAdapter = AddedAttendeeAdapter(requireContext(), addedAttendeeModelList)
+      viewBinding.lvAttendee.adapter = addedAttendeeAdapter
+      addedAttendeeAdapter.notifyDataSetChanged()
+    }
+
+    dialogAddedAttendee.show()
+  }
+
+  override fun renderSplAttendeeCountClick() {
+    addedSplAttendeeDialog()
+  }
+
+  private fun addedSplAttendeeDialog() {
+    val dialogAddedSplAttendee = Dialog(requireContext()).apply {
+
+      val viewBinding = DialogAddeddSplAttendeeListBinding.bind(
+          layoutInflater.inflate(R.layout.dialog_addedd_spl_attendee_list, null)
+      )
+
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setContentView(viewBinding.root)
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setCanceledOnTouchOutside(true)
+      viewBinding.lvAttendee.emptyView = viewBinding.tvEmpty
+      val addedSplAttendeeAdapter =
+        AddedSplAttendeeAdapter(requireContext(), addedSplAttendeeModelList)
+      viewBinding.lvAttendee.adapter = addedSplAttendeeAdapter
+      addedSplAttendeeAdapter.notifyDataSetChanged()
+    }
+
+    dialogAddedSplAttendee.show()
+  }
+
+  override fun renderResetButtonClick() {
+    addedAttendeeModelList.clear()
+    addedSplAttendeeModelList.clear()
+    binding.apply {
+      tvAttendeeCount.text = ""
+      tvSplAttendeeCount.text = ""
+      tvDate.text = meetingDate
+      spProduct.setSelection(0)
+      spMeetingDuration.setSelection(0)
+      spActivityType.setSelection(0)
+      spMeetingReason.setSelection(0)
+      etMeetingDescription.setText("")
+      etCustomerComment.setText("")
+      spActionables.setSelection(0)
+      spCategory.setSelection(0)
+      etCategory.setText("")
+      spSubCategory.setSelection(0)
+      etSubCategory.setText("")
+    }
+
+  }
+
+  override fun renderSaveButtonClick() {
+    if (validateForm()) {
+      val meetingApptModel = MeetingApptModel().apply {
+        meetingType = "M"
+        displayType = "U"
+        leadId = leadId ?: "0"
+        ucid = mUCID
+        meetingID = meetingId ?: "0"
+        meetingDate = CRMAppUtil.getDBDate(currentYear, month, day, hour, minute)
+        product = productCodeStr
+        meetingDuration = meetingDurationCodeStr
+        meetingObjectiveID = meetingObjectiveIdStr
+        activityTypeID = activityTypeCodeStr
+        meetingReason = meetingReasonCodeStr
+        meetingDes =
+          getJsonSafeString(binding.etMeetingDescription.getText().toString().trim { it <= ' ' })
+        meetingAttendee = addedAttendeeModelList
+        splMeetingAttendee = addedSplAttendeeModelList
+        customerComment =
+          getJsonSafeString(binding.etCustomerComment.getText().toString().trim { it <= ' ' })
+        actionables = actionablesCodeStr
+        category = categoryCodeStr
+        etCategory = binding.etCategory.text.toString()
+            .trim { it <= ' ' }
+        subCategory = subCategoryCodestr
+        etSubCategory = binding.etSubCategory.text.toString()
+            .trim { it <= ' ' }
+      }
+      updateMeetingSave(meetingApptModel)
+    }
+  }
+
+  private fun updateMeetingSave(meetingApptModel: MeetingApptModel) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.json)
+      val subscribe = saathiApi.saveUpdateMeeting(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderUpdateMeetingSave(it) }
+    } else {
+      noInternetConnectionDialog()
+    }
+  }
+
+  private fun renderUpdateMeetingSave(uiModel: UiModel<Any>) {
+    toggleProgress(uiModel.inProgress)
+    val error = uiModel.error
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      alertDialog(
+          activity, 0,
+          resources.getString(R.string.motilal_oswal),
+          UPDATED_MEETING, "OK", true
+      ) { action, _ ->
+        if (action == MSFDialog.Action.OK) {
+          val bundle = Bundle()
+          bundle.putString(
+              LEAD_ID,
+              arguments!!.getString(LEAD_ID)
+          )
+          bundle.putString(
+              UCID,
+              arguments!!.getString(UCID)
+          )
+          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+        }
+      }
+    }
   }
 
   override fun renderMeetingObjective(uiModel: UiModel<List<Lookup>>) {
@@ -537,9 +903,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   }
 
   private fun meetingReason(id: String) {
-
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      baClient()
       val request = LookupRequest(
           userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
           MEETINGREASON,
@@ -606,115 +970,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
               } else {
                 binding.llActionables.visibility = View.GONE
               }
-            }
-    )
-  }
-
-  private fun baClient() {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      outStation()
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
-          BACLIENTMEETING, null, null
-      )
-      val subscribe = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { this.renderBaClient(it) }
-    } else {
-      noInternetConnectionDialog()
-    }
-  }
-
-  private fun renderBaClient(uiModel: UiModel<List<LookupItem>>) {
-    toggleProgress(uiModel.inProgress)
-
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
-    }
-    val data = uiModel.data
-    if (data != null) {
-      arrBAClient.clear()
-      arrBAClient.add(RowData(0, "-1", SELECT_BA_CLIENT_MEETING))
-      for (i in data.indices) {
-        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
-        val lookUpId = stringOrEmpty(lookUpid.toString())
-        val lookUpName = stringOrEmpty(lookUpName1)
-        arrBAClient.add(
-            RowData(i + 1, lookUpId, lookUpName)
-        )
-      }
-      val arrAdapBAClient = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spBAClient.adapter = arrAdapBAClient
-      arrAdapBAClient.setSpinnerData<RowData>(binding.spBAClient, arrBAClient)
-      arrAdapBAClient.notifyDataSetChanged()
-      setBAClientListener()
-    }
-  }
-
-  private fun setBAClientListener() {
-    disposable.add(
-        binding.spBAClient.itemSelections()
-            .filter(InvalidSelectionPredicate)
-            .skip(1)
-            .subscribe {
-              baClientCodeStr = (binding.spBAClient.selectedItem as RowData).key
-              binding.tvBAClientError.visibility = View.GONE
-            }
-    )
-  }
-
-  private fun outStation() {
-
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = LookupRequest(
-          userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
-          OUTSTATIONMEETING, null, null
-      )
-      val subscribe = saathiApi.getAllLookup(request)
-          .compose(applyUiModel())
-          .subscribe { this.renderOutStation(it) }
-    } else {
-      noInternetConnectionDialog()
-    }
-  }
-
-  private fun renderOutStation(uiModel: UiModel<List<LookupItem>>) {
-    toggleProgress(uiModel.inProgress)
-
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
-    }
-    val data = uiModel.data
-    if (data != null) {
-      arrOutStation.clear()
-      arrOutStation.add(RowData(0, "-1", SELECT_OUT_STATION_MEETING))
-      for (i in data.indices) {
-        val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
-        val lookUpId = stringOrEmpty(lookUpid.toString())
-        val lookUpName = stringOrEmpty(lookUpName1)
-        arrOutStation.add(
-            RowData(i + 1, lookUpId, lookUpName)
-        )
-      }
-      val arrAdapOutStation = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spOutStaition.adapter = arrAdapOutStation
-      arrAdapOutStation.setSpinnerData<RowData>(binding.spOutStaition, arrOutStation)
-
-      arrAdapOutStation.notifyDataSetChanged()
-      setOutStationListener()
-    }
-  }
-
-  private fun setOutStationListener() {
-    disposable.add(
-        binding.spOutStaition.itemSelections()
-            .filter(InvalidSelectionPredicate)
-            .skip(1)
-            .subscribe {
-              outStaitionCodeStr = (binding.spOutStaition.getSelectedItem() as RowData).key
-              binding.tvOutStaitionError.visibility = View.GONE
             }
     )
   }
@@ -915,5 +1170,410 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView {
   override fun onDestroyView() {
     presenter.stop()
     super.onDestroyView()
+  }
+
+  inner class AttendeeAdapter(internal var context: Context) : BaseAdapter(), Filterable {
+    private var inflater: LayoutInflater? = null
+    private var resultList: List<EmployeeModel> = ArrayList()
+
+    init {
+      this.inflater = LayoutInflater.from(context)
+    }
+
+    override fun getCount(): Int {
+      return resultList.size
+    }
+
+    override fun getItem(index: Int): EmployeeModel {
+      return resultList[index]
+    }
+
+    override fun getItemId(position: Int): Long {
+      return position.toLong()
+    }
+
+    override fun getView(
+      position: Int,
+      convertView: View?,
+      parent: ViewGroup
+    ): View {
+      var convertView = convertView
+      val holderView: AttendeeAdapter.HolderView
+      val clientModel = resultList[position]
+      if (convertView == null) {
+        inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
+        holderView = AttendeeAdapter.HolderView(convertView!!)
+        convertView!!.tag = holderView
+      } else {
+        holderView = convertView.tag as AttendeeAdapter.HolderView
+      }
+      viewColor(position, convertView)
+      if (clientModel.isNoData) {
+        holderView.tvAttendeeName.text = clientModel.attendeeName
+        holderView.linaerLayout.setOnClickListener(null)
+      } else {
+        holderView.tvAttendeeName.text = String.format(
+            "%s-%s-%s", clientModel.attendeeCode,
+            clientModel.attendeeName, clientModel.branchcode
+        )
+      }
+      return convertView
+    }
+
+    override fun getFilter(): Filter {
+      return object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+          val filterResults = Filter.FilterResults()
+          val modelList = ArrayList<EmployeeModel>()
+          try {
+            if (constraint != null) {
+              if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                val request = AutoCompleteAttendeeRequest(
+                    URLEncoder.encode(constraint.toString(), "utf-8"),
+                    URLEncoder.encode(constraint.toString(), "utf-8")
+                )
+                try {
+                  val dataList = saathiApi.getAutoCompleteAttendee(request)
+                      .blockingFirst()
+                  for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
+                    val employeeName = stringOrEmpty(employeeName1)
+                    val employeeCode = stringOrEmpty(employeeCode1)
+                    val BranchCode = stringOrEmpty(branchCode)
+                    if (employeeCode.equals(
+                            userManager.getUser()!!.employeeCode, ignoreCase = true
+                        )
+                    ) {
+                      continue
+                    }
+                    modelList.add(
+                        EmployeeModel(
+                            employeeName, employeeCode,
+                            BranchCode, false
+                        )
+                    )
+                    filterResults.values = modelList
+                    filterResults.count = modelList.size
+                  }
+                } catch (e: Exception) {
+                  modelList.add(EmployeeModel.getNoData(getErrorOnFailureNew(e)))
+                  filterResults.values = modelList
+                  filterResults.count = modelList.size
+                  return filterResults
+                }
+
+              } else {
+                noInternetConnectionDialog()
+              }
+            }
+          } catch (ex: Exception) {
+            ex.printStackTrace()
+          }
+
+          if (filterResults.count == 0) {
+            modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
+            filterResults.values = modelList
+            filterResults.count = modelList.size
+          }
+          return filterResults
+        }
+
+        override fun publishResults(
+          constraint: CharSequence,
+          results: Filter.FilterResults?
+        ) {
+          if (results != null && results.count > 0) {
+            resultList = results.values as List<EmployeeModel>
+            notifyDataSetChanged()
+          } else {
+            notifyDataSetInvalidated()
+          }
+        }
+      }
+    }
+
+    private fun viewColor(
+      position: Int,
+      convertView: View
+    ) {
+      if (position % 2 == 1) {
+        convertView.setBackgroundColor(Color.parseColor("#F5F5F5"))
+      } else {
+        convertView.setBackgroundColor(Color.parseColor("#FFFFFF"))
+      }
+    }
+
+    private inner class HolderView private constructor(parent: View) {
+      internal var tvAttendeeName: TextView
+      internal var linaerLayout: LinearLayout
+
+      init {
+        tvAttendeeName = parent.findViewById(R.id.tvAttendeeName)
+        linaerLayout = parent.findViewById(R.id.linaerLayout)
+      }
+    }
+  }
+
+  inner class SplAttendeeAdapter constructor(internal var mContext: Context) : BaseAdapter(),
+      Filterable {
+    private var inflater: LayoutInflater? = null
+    private var attendeeModelList: List<SplAttendeeModel> = ArrayList()
+
+    init {
+      inflater = LayoutInflater.from(mContext)
+    }
+
+    override fun getCount(): Int {
+      return attendeeModelList.size
+    }
+
+    override fun getItem(position: Int): SplAttendeeModel {
+      return attendeeModelList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+      return position.toLong()
+    }
+
+    override fun getView(
+      position: Int,
+      convertView: View?,
+      parent: ViewGroup
+    ): View {
+      var convertView = convertView
+      val holderView: SplAttendeeAdapter.HolderView
+      val clientModel = attendeeModelList[position]
+      if (convertView == null) {
+        inflater = requireContext().getSystemService(
+            Context.LAYOUT_INFLATER_SERVICE
+        ) as LayoutInflater
+        convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
+        holderView = SplAttendeeAdapter.HolderView(convertView!!)
+        convertView!!.tag = holderView
+      } else {
+        holderView = convertView.tag as SplAttendeeAdapter.HolderView
+      }
+      viewColor(position, convertView)
+      if (clientModel.isNoData) {
+        holderView.tvAttendeeName.text = clientModel.attendeeName
+        holderView.linaerLayout.setOnClickListener(null)
+      } else {
+        holderView.tvAttendeeName.text = String.format(
+            "%s-%s-%s", clientModel.attendeeCode,
+            clientModel.attendeeName, clientModel.branchCode
+        )
+      }
+
+      return convertView
+    }
+
+    override fun getFilter(): Filter {
+      return object : Filter() {
+        internal val filterResults = Filter.FilterResults()
+
+        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+
+          val modelList = ArrayList<SplAttendeeModel>()
+          try {
+            if (constraint != null) {
+              if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+                val request = AutoCompleteAttendeeRequest(
+                    URLEncoder.encode(constraint.toString(), "utf-8"),
+                    URLEncoder.encode(constraint.toString(), "utf-8")
+                )
+                try {
+                  val dataList = saathiApi.getAutoCompleteSplAttendee(request)
+                      .blockingFirst()
+                  for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
+                    val employeeName = stringOrEmpty(employeeName1)
+                    val employeeCode = stringOrEmpty(employeeCode1)
+                    val BranchCode = stringOrEmpty(branchCode)
+                    modelList.add(
+                        SplAttendeeModel(
+                            employeeName, employeeCode,
+                            BranchCode
+                        )
+                    )
+                    filterResults.values = modelList
+                    filterResults.count = modelList.size
+                  }
+                } catch (e: Exception) {
+                  modelList.add(
+                      SplAttendeeModel.getNoData(getErrorOnFailureNew(e))
+                  )
+                  filterResults.values = modelList
+                  filterResults.count = modelList.size
+                }
+
+              } else {
+                noInternetConnectionDialog()
+              }
+            }
+          } catch (ex: Exception) {
+            ex.printStackTrace()
+          }
+
+          if (filterResults.count == 0) {
+            modelList.add(SplAttendeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
+            filterResults.values = modelList
+            filterResults.count = modelList.size
+          }
+          return filterResults
+        }
+
+        override fun publishResults(
+          constraint: CharSequence,
+          results: Filter.FilterResults?
+        ) {
+          if (results != null && results.count > 0) {
+            attendeeModelList = results.values as List<SplAttendeeModel>
+            notifyDataSetChanged()
+          } else {
+            notifyDataSetInvalidated()
+          }
+        }
+      }
+    }
+
+    private fun viewColor(
+      position: Int,
+      convertView: View
+    ) {
+      if (position % 2 == 1) {
+        convertView.setBackgroundColor(Color.parseColor("#F5F5F5"))
+      } else {
+        convertView.setBackgroundColor(Color.parseColor("#FFFFFF"))
+      }
+    }
+
+    internal inner class HolderView private constructor(parent: View) {
+      var tvAttendeeName: TextView
+      var linaerLayout: LinearLayout
+
+      init {
+        tvAttendeeName = parent.findViewById(R.id.tvAttendeeName)
+        linaerLayout = parent.findViewById(R.id.linaerLayout)
+      }
+    }
+  }
+
+  inner class AddedAttendeeAdapter constructor(
+    internal var mContext: Context,
+    internal var attendeeModelList: MutableList<AddedAttendeeModel>
+  ) :
+      BaseAdapter() {
+    private val inflater: LayoutInflater
+
+    init {
+      inflater = LayoutInflater.from(mContext)
+    }
+
+    override fun getCount(): Int {
+      return attendeeModelList.size
+    }
+
+    override fun getItem(position: Int): Any {
+      return attendeeModelList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+      return position.toLong()
+    }
+
+    @SuppressLint("ViewHolder")
+    override fun getView(
+      position: Int,
+      view: View,
+      parent: ViewGroup
+    ): View {
+      var view = view
+      val holder = AddedAttendeeAdapter.Holder()
+      view = inflater.inflate(R.layout.item_list_added_attendee, parent, false)
+
+      val attendeeModel = attendeeModelList[position]
+
+      holder.tvAttendeeName = view.findViewById<TextView>(R.id.tvAttendeeName)
+      holder.ivDelete = view.findViewById<ImageView>(R.id.ivDelete)
+
+      holder.tvAttendeeName!!.setText(
+          String.format(
+              "%s-%s", attendeeModel.attendeeEmplyeeCode,
+              attendeeModel.attendeeName
+          )
+      )
+      holder.ivDelete!!.setOnClickListener({ v ->
+        addedAttendeeCount--
+        setCount(addedAttendeeCount)
+        attendeeModelList.removeAt(position)
+        notifyDataSetChanged()
+      })
+
+      return view
+    }
+
+    internal inner class Holder {
+      var tvAttendeeName: TextView? = null
+      var ivDelete: ImageView? = null
+    }
+  }
+
+  inner class AddedSplAttendeeAdapter constructor(
+    internal var mContext: Context,
+    internal var attendeeModelList: MutableList<AddedSplAttendeeModel>
+  ) :
+      BaseAdapter() {
+    private val inflater: LayoutInflater
+
+    init {
+      inflater = LayoutInflater.from(mContext)
+    }
+
+    override fun getCount(): Int {
+      return attendeeModelList.size
+    }
+
+    override fun getItem(position: Int): Any {
+      return attendeeModelList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+      return position.toLong()
+    }
+
+    @SuppressLint("ViewHolder")
+    override fun getView(
+      position: Int,
+      view: View,
+      parent: ViewGroup
+    ): View {
+      var view = view
+      val holder = AddedSplAttendeeAdapter.Holder()
+      view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false)
+
+      val attendeeModel = attendeeModelList[position]
+
+      holder.tvAttendeeName = view.findViewById<TextView>(R.id.tvAttendeeName)
+      holder.ivDelete = view.findViewById<ImageView>(R.id.ivDelete)
+
+      holder.tvAttendeeName!!.setText(
+          String.format(
+              "%s-%s", attendeeModel.attendeeEmplyeeCode,
+              attendeeModel.attendeeName
+          )
+      )
+      holder.ivDelete!!.setOnClickListener({ v ->
+        addedSplAttendeeCount--
+        setCountForSpecial(addedSplAttendeeCount)
+        attendeeModelList.removeAt(position)
+        notifyDataSetChanged()
+      })
+
+      return view
+    }
+
+    internal inner class Holder {
+      var tvAttendeeName: TextView? = null
+      var ivDelete: ImageView? = null
+    }
   }
 }
