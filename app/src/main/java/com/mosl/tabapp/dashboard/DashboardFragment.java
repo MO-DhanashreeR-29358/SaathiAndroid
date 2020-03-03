@@ -79,6 +79,7 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
 import com.mosl.tabapp.dashboard.target.TargetFragment;
+import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -821,7 +822,7 @@ public class DashboardFragment extends CommonFragment
 
     private void loadMonthTrends() {
         Bundle args = new Bundle();
-        TrendsTabFragment leadsFragment = new TrendsTabFragment();
+        MonthOnMonthTrendsFragment leadsFragment = new MonthOnMonthTrendsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()

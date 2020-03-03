@@ -17,6 +17,8 @@ import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsModule
 import com.mosl.tabapp.dashboard.target.TargetFragment
 import com.mosl.tabapp.dashboard.target.TargetModule
+import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
+import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
 import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
@@ -78,6 +80,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [TargetModule::class])
     fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
+
+    @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
+    fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
 
     @ContributesAndroidInjector
     fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment

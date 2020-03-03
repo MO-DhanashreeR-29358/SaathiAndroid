@@ -68,7 +68,7 @@ class TargetFragment : CommonFragment(), TargetView {
         PublishSubject.create<WidgetUiEvent>()
 
     private var previousPosition: Int = 0
-    private var itemList = mutableListOf<TargetWidgetItem>()
+    private var itemList = mutableListOf<HorinzatalTargetWidgetItem>()
     private var summaryCountItemList = mutableListOf<TargetSummaryCountItem>()
     private var lableItemList = mutableListOf<TargetLableItem>()
 
@@ -119,7 +119,6 @@ class TargetFragment : CommonFragment(), TargetView {
         makeChart()
 
     }
-
     private fun setUpView() {
         val groupAdapter = GroupAdapter<ViewHolder>()
         binding.horizontalRecyclerView.apply {
@@ -174,7 +173,7 @@ class TargetFragment : CommonFragment(), TargetView {
 
         widgetModelList.mapIndexed { position: Int, model: WidgetModel ->
 
-            itemList.add(TargetWidgetItem(model, widgetUiEvent, requireContext()))
+            itemList.add(HorinzatalTargetWidgetItem(model, widgetUiEvent, requireContext()))
         }
 
         groupAdapter.addAll(itemList)
