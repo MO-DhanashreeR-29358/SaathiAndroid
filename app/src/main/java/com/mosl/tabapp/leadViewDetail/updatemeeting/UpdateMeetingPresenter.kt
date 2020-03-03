@@ -17,6 +17,9 @@ class UpdateMeetingPresenter @Inject constructor(
     val onFetchOrOnRetryObs = Observable.merge(onFetchCalled(), onRetryCalled())
         .share()
 
+    onFetchOrOnRetryObs.subscribe { view.renderScreen(data) }
+        .addTo(disposable)
+
     onFetchOrOnRetryObs
         .switchMap {
           repository.getMeeting(data.meetingId)

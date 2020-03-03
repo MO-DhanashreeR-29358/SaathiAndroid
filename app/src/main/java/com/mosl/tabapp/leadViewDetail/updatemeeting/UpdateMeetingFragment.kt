@@ -139,6 +139,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private var attendeeAdapter: AttendeeAdapter? = null
   private var splAttendeeAdapter: SplAttendeeAdapter? = null
 
+  private var argumentData: UpdateMeetingScreenData? = null
+
   private var leadId: String? = "0"
   private var meetingId: String? = null
   private var mUCID = "0"
@@ -630,8 +632,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       ) { action, _ ->
         if (action == MSFDialog.Action.OK) {
           val bundle = Bundle().apply {
-            putString(LEAD_ID, arguments!!.getString(LEAD_ID))
-            putString(UCID, arguments!!.getString(UCID))
+            putString(LEAD_ID, argumentData!!.leadId)
+            putString(UCID, argumentData!!.ucid)
           }
 
           navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
@@ -683,6 +685,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
               binding.tvMeetingObjectiveError.visibility = View.GONE
             }
     )
+  }
+
+  override fun renderScreen(data: UpdateMeetingScreenData) {
+    argumentData = data
   }
 
   override fun renderMeetingById(uiModel: UiModel<Meeting>) {

@@ -8,6 +8,8 @@ import io.reactivex.Observable
 
 interface UpdateMeetingView : BaseView {
 
+  fun renderScreen(data: UpdateMeetingScreenData)
+
   fun renderMeetingById(uiModel: UiModel<Meeting>)
   fun renderMeetingObjective(uiModel: UiModel<List<Lookup>>)
 

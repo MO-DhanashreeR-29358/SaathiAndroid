@@ -14,7 +14,7 @@ data class MeetingResponse(
   @JvmField @SerializedName("AttendeeEmp") val attendeeEmp: String,
   @JvmField @SerializedName("SATTENDEE_1") val sATTENDEE1: String?,
   @JvmField @SerializedName("TravellingMode") val travellingMode: String?,
-  @JvmField @SerializedName("MeetingAddress") val meetingAddress: String,
+  @JvmField @SerializedName("MeetingAddress") val meetingAddress: String?,
   @JvmField @SerializedName("MeetingID") val meetingID: String,
   @JvmField @SerializedName("Permissions") val permissions: Any?,
   @JvmField @SerializedName("Stage") val stage: String,
@@ -45,6 +45,6 @@ data class MeetingResponse(
   @JvmField @SerializedName("LeadID") val leadID: String,
   @JvmField @SerializedName("FinalAction") val finalAction: String?,
   @JvmField @SerializedName("MeetingDuration") val meetingDuration: String,
-  @JvmField @SerializedName("Pincode") val pincode: String,
-  @JvmField @SerializedName("Location") val location: String
+  @JvmField @SerializedName("Pincode") val pincode: String?,
+  @JvmField @SerializedName("Location") val location: String?
 )
