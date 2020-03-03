@@ -488,7 +488,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       val meetingApptModel = MeetingApptModel().apply {
         meetingType = "M"
         displayType = "U"
-        leadId = leadId ?: "0"
+        leadId = this@UpdateMeetingFragment.leadId ?: "0"
         ucid = mUCID
         meetingID = meetingId ?: "0"
         meetingDate = CRMAppUtil.getDBDate(currentYear, month, day, hour, minute)
@@ -629,15 +629,11 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
           UPDATED_MEETING, "OK", true
       ) { action, _ ->
         if (action == MSFDialog.Action.OK) {
-          val bundle = Bundle()
-          bundle.putString(
-              LEAD_ID,
-              arguments!!.getString(LEAD_ID)
-          )
-          bundle.putString(
-              UCID,
-              arguments!!.getString(UCID)
-          )
+          val bundle = Bundle().apply {
+            putString(LEAD_ID, arguments!!.getString(LEAD_ID))
+            putString(UCID, arguments!!.getString(UCID))
+          }
+
           navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
         }
       }
