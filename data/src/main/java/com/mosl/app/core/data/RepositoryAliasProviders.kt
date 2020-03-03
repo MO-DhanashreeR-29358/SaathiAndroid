@@ -1,13 +1,14 @@
 package com.mosl.app.core.data
 
-
 import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
+import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
+import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
 import dagger.Binds
 import dagger.Module
@@ -15,15 +16,18 @@ import dagger.Module
 @Module
 interface RepositoryAliasProviders {
 
-    @Binds
-    fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
+  @Binds
+  fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
 
-    @Binds
-    fun provideAusfbLeadRepository(repository: LeadRepositoryImpl): LeadRepository
+  @Binds
+  fun provideAusfbLeadRepository(repository: LeadRepositoryImpl): LeadRepository
 
-    @Binds
-    fun provideClientsRepositoryRepository(repository: ClientsRepositoryImpl): ClientsRepository
+  @Binds
+  fun provideClientsRepositoryRepository(repository: ClientsRepositoryImpl): ClientsRepository
 
-    @Binds
-    fun provideAuTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
+  @Binds
+  fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
+
+  @Binds
+  fun provideAuTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
 }
