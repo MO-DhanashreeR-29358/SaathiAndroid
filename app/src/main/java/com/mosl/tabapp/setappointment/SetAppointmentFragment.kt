@@ -29,14 +29,21 @@ import android.widget.TextView.OnEditorActionListener
 import android.widget.TimePicker
 import android.widget.Toast
 import com.jakewharton.rxbinding3.widget.itemSelections
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
+import com.mosl.mobile.domain.setappointment.clientdetail.ProductsItemResponse
+import com.mosl.mobile.domain.setappointment.lead.LeadFieldValueDataResponse
+import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.clientdetail.ProductsItem
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
@@ -87,8 +94,14 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.SplAttendeeModel
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.GetClientDetail
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.LeadView
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ProfileImage
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateOn
 import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateWeek
 import kotlinx.android.synthetic.main.frag_set_appiontment.spSelectProduct
@@ -111,13 +124,15 @@ import java.net.URLEncoder
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
+import javax.inject.Inject
 
 class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickListener,
   OnEditorActionListener {
 
   private lateinit var binding: FragmentSetAppiontmentBinding
-  private lateinit var presenter: SetAppointmentPresenter
-
+  @Inject
+  internal lateinit var presenter: SetAppointmentPresenter
+  private val subject = PublishSubject.create<SetAppointmentUiEvent>()
   private val arrSelectProduct = ArrayList<RowData>()
   private val arrSelectWeek = ArrayList<RowData>()
   private val arrSelectWeekDay = ArrayList<RowData>()
@@ -179,12 +194,21 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     setAppTitle("Set Appointment")
     setUpFromArguments()
     setUpView()
+
+    presenter.start()
     when {
       !mUCID.equals("0", ignoreCase = true) -> {
-        getClientDetail(mUCID)
-        setProfileImage(mUCID)
+        //getClientDetail(mUCID)
+        //setProfileImage(mUCID)
+        subject.onNext(GetClientDetail(mUCID))
+        subject.onNext(ProfileImage(mUCID))
       }
-      else -> getLeadByIdFromServer(str_LeadID)
+      else -> {
+        //getLeadByIdFromServer(str_LeadID)
+        subject.onNext(LeadView(str_LeadID))
+
+      }
+
     }
 
   }
@@ -248,23 +272,23 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   }
 
   private fun renderClientImage(uiModel: UiModel<SaathiCommonResponse<String>>) {
-    toggleProgress(uiModel.inProgress)
+    /* toggleProgress(uiModel.inProgress)
 
-    uiModel.error?.let {
-      showOnFailurePopup(it)
-    }
+     uiModel.error?.let {
+       showOnFailurePopup(it)
+     }
 
-    uiModel.data?.let {
-      val response = it.response
-      val byt = Base64.decode(response, Base64.DEFAULT)
-      when {
-        byt != null -> CRMAppUtil.setImage(byt, ivLead, requireContext())
-        else -> CRMAppUtil.setImage(
-          ByteArray(0), ivLead,
-          requireContext()
-        )
-      }
-    }
+     uiModel.data?.let {
+       val response = it.response
+       val byt = Base64.decode(response, Base64.DEFAULT)
+       when {
+         byt != null -> CRMAppUtil.setImage(byt, ivLead, requireContext())
+         else -> CRMAppUtil.setImage(
+           ByteArray(0), ivLead,
+           requireContext()
+         )
+       }
+     }*/
   }
 
   private fun getClientDetail(ucid: String) {
@@ -279,27 +303,27 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   }
 
   private fun renderClientDetails(uiModel: UiModel<ClientDetailItem>) {
-    toggleProgress(uiModel.inProgress)
+    /* toggleProgress(uiModel.inProgress)
 
-    uiModel.error?.let {
-      showOnFailurePopup(it)
-    }
+     uiModel.error?.let {
+       showOnFailurePopup(it)
+     }
 
-    uiModel.data?.let {
-      binding.includeLmsTopSectionUpdate.apply {
-        ClientDetail(it)
-        tvLeadId.text = ClientDetail.getLeadId()
-        tvCurrentStage.text = ClientDetail.getCurrentStage()
-        if (!ClientDetail.getCurrentStageSince().isEmpty()) {
-          tvCurrentStageSince.text =
-            "${ClientDetail.getCurrentStageSince()} Days"
-        }
-        tvName.text = ClientDetail.getName()
-        tvClientCode.text = ClientDetail.getClientCode()
-        tvBranchCode.text = ClientDetail.getBranchCode()
-      }
+     uiModel.data?.let {
+       binding.includeLmsTopSectionUpdate.apply {
+         ClientDetail(it)
+         tvLeadId.text = ClientDetail.getLeadId()
+         tvCurrentStage.text = ClientDetail.getCurrentStage()
+         if (!ClientDetail.getCurrentStageSince().isEmpty()) {
+           tvCurrentStageSince.text =
+             "${ClientDetail.getCurrentStageSince()} Days"
+         }
+         tvName.text = ClientDetail.getName()
+         tvClientCode.text = ClientDetail.getClientCode()
+         tvBranchCode.text = ClientDetail.getBranchCode()
+       }
 
-    }
+     }*/
   }
 
   private fun setUpView() {
@@ -1593,6 +1617,92 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     binding.tvAttendeeCount.text = when {
       cnt <= 0 -> ""
       else -> String.format("(%s)", cnt.toString())
+    }
+  }
+
+  override fun getClientDetail(): Observable<GetClientDetail> {
+    return subject.ofType()
+  }
+
+  override fun getProfileImage(): Observable<ProfileImage> {
+    return subject.ofType()
+  }
+
+  override fun renderClientDetail(uiModel: UiModel<ClientDetailIResponseData>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      Timber.d("renderClientDetail Success")
+      binding.includeLmsTopSectionUpdate.apply {
+        tvLeadId.text = it.leadID.toString()
+        tvCurrentStage.text = it.stageName
+        tvCurrentStageSince.text = "${it.pendingDays} Days"
+        tvName.text = it.clientName
+
+        val products = it.products
+        for (item in products?.indices!!) {
+          val productsItem: ProductsItemResponse = products[item]
+          tvBranchCode.text = productsItem.branchCode
+          tvClientCode.text = productsItem.holdingNumber
+        }
+      }
+
+    }
+
+  }
+
+  override fun renderProfileImage(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      val byt = Base64.decode(it, Base64.DEFAULT)
+      when {
+        byt != null -> CRMAppUtil.setImage(byt, ivLead, requireContext())
+        else -> CRMAppUtil.setImage(
+          ByteArray(0), ivLead,
+          requireContext()
+        )
+      }
+
+    }
+  }
+
+  override fun getLeadViews(): Observable<LeadView> {
+    return subject.ofType()
+  }
+
+  override fun renderLeadViews(uiModel: UiModel<LeadViewItemResponse>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+
+      val leadProductMapping = it.leadProductMapping
+      for (i in leadProductMapping!!.indices) {
+        val item = leadProductMapping[i]
+        if (item.isDefault.equals("true")) {
+          binding.apply {
+            includeLmsTopSectionUpdate.tvClientCode.text = item.clientCode
+            includeLmsTopSectionUpdate.tvCurrentStage.text = item.stageName
+            includeLmsTopSectionUpdate.tvCurrentStageSince.text = "${item.pendingDays} Days"
+          }
+        }
+        binding.apply {
+          includeLmsTopSectionUpdate.tvName.text = it.contact?.name
+          includeLmsTopSectionUpdate.tvLeadId.text = it.leadID.toString()
+          includeLmsTopSectionUpdate.tvBranchCode.text = it.branchcode
+        }
+      }
     }
   }
 

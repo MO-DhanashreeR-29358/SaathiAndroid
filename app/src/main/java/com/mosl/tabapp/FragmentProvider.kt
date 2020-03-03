@@ -40,6 +40,7 @@ import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
+import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.ReportFragment
 import com.mosl.tabapp.ui.SecondLevelReportFragment
@@ -146,7 +147,7 @@ abstract class FragmentProvider {
   @ContributesAndroidInjector
   abstract fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
 
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = [SetAppointmentModule::class])
   abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
 
   @ContributesAndroidInjector(modules = [CreateMeetingModule::class])

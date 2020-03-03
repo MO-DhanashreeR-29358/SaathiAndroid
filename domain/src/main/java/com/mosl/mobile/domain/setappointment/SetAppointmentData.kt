@@ -1,16 +1,7 @@
 package com.mosl.mobile.domain.setappointment
 
-data class MeetingByIdInput(
-  @JvmField val id: String
-)
 
-data class ClientDetailRequestInput(
-  @JvmField val uCID: Int
-)
 
-data class LeadViewRequestInput(
-  @JvmField val id: String
-)
 
 data class AutoCompleteAttendeeRequestInput(
   @JvmField val employeeCode: String,

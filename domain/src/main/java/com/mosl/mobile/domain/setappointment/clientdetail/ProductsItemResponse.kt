@@ -1,0 +1,33 @@
+package com.mosl.mobile.domain.setappointment.clientdetail
+
+data class ProductsItemResponse(
+  @JvmField val creationDate: String?,
+  @JvmField val lastModifiedBy: String?,
+  @JvmField val processtype: Int,
+  @JvmField val advisoryType: String?,
+  @JvmField val product: ProductResponse,
+  @JvmField val productId: Int,
+  @JvmField val uCID: Int,
+  @JvmField val clientProductMappingID: Int,
+  @JvmField val isAdminMode: Boolean,
+  @JvmField val subBrokerCode: String?,
+  @JvmField val unsuccessfullRecords: Int,
+  @JvmField val status: Int,
+  @JvmField val createdBy: String?,
+  @JvmField val advisoryTypeBranchCode: String?,
+  @JvmField val productCode: String?,
+  @JvmField val batchNumber: Int,
+  @JvmField val channel: String?,
+  @JvmField val advisors: List<AdvisorsItemResponse>?,
+  @JvmField val customerId: Int,
+  @JvmField val inApproval: Boolean,
+  @JvmField val holdingNumber: String?,
+  @JvmField val customerClassification: String?,
+  @JvmField val advisoryTypeProcessType: String?,
+  @JvmField val parentProductID: Int,
+  @JvmField val productcategory: String?,
+  @JvmField val familyCode: String?,
+  @JvmField val approvalFieldList: String?,
+  @JvmField val lastModificationDate: String?,
+  @JvmField val branchCode: String
+)
