@@ -331,7 +331,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
               )
               addedAttendeeCount++
               binding.tvAttendeeCount.text = if (addedAttendeeCount <= 0) "" else
-                String.format("(%s)", addedSplAttendeeModelList.size.toString())
+                String.format("(%s)", addedAttendeeModelList.size.toString())
               dismiss()
             }
           } else {
