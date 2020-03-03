@@ -107,7 +107,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private val addedAttendeeModelList = ArrayList<AddedAttendeeModel>()
   private val addedSplAttendeeModelList = ArrayList<AddedSplAttendeeModel>()
 
-  private val arrOutStation = ArrayList<RowData>()
   private val arrSelectProduct = ArrayList<RowData>()
   private val arrMeetingDuration = ArrayList<RowData>()
   private val arrMeetingObjective = ArrayList<RowData>()
@@ -115,7 +114,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private val arrMeetingReason = ArrayList<RowData>()
   private val arrCategory = ArrayList<RowData>()
   private val arrSubCategory = ArrayList<RowData>()
-  private val arrBAClient = ArrayList<RowData>()
   private val arrActionables = ArrayList<RowData>()
   private var productCodeStr: String? = null
   private var meetingDurationCodeStr: String? = null
@@ -124,8 +122,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private var actionablesCodeStr: String? = null
   private var categoryCodeStr: String? = null
   private var subCategoryCodestr: String? = null
-  private var outStaitionCodeStr: String? = null
-  private var baClientCodeStr: String? = null
   private var addedAttendeeCount: Int = 0
   private var addedSplAttendeeCount: Int = 0
   private var currentYear: Int = 0
@@ -133,7 +129,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private var day: Int = 0
   private var hour: Int = 0
   private var minute: Int = 0
-  private var profileType: Boolean = false
   private var meetingObjectiveIdStr = "0"
 
   private var attendeeAdapter: AttendeeAdapter? = null
@@ -500,11 +495,11 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         activityTypeID = activityTypeCodeStr
         meetingReason = meetingReasonCodeStr
         meetingDes =
-          getJsonSafeString(binding.etMeetingDescription.getText().toString().trim { it <= ' ' })
+          getJsonSafeString(binding.etMeetingDescription.text.toString().trim { it <= ' ' })
         meetingAttendee = addedAttendeeModelList
         splMeetingAttendee = addedSplAttendeeModelList
         customerComment =
-          getJsonSafeString(binding.etCustomerComment.getText().toString().trim { it <= ' ' })
+          getJsonSafeString(binding.etCustomerComment.text.toString().trim { it <= ' ' })
         actionables = actionablesCodeStr
         category = categoryCodeStr
         etCategory = binding.etCategory.text.toString()
@@ -555,7 +550,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         tvMeetingReasonError.text = SELECT_MEETING_REASON
         tvMeetingReasonError.requestFocus()
         return false
-      } else if (etMeetingDescription.text.toString().trim({ it <= ' ' }).isEmpty()) {
+      } else if (etMeetingDescription.text.toString().trim { it <= ' ' }.isEmpty()) {
         tvMeetingDescriptionError.visibility = View.VISIBLE
         tvMeetingDescriptionError.text = MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
         tvMeetingDescriptionError.requestFocus()
@@ -597,8 +592,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
           && llActionables.visibility == View.VISIBLE
           && etSubCategory.text!!.length <= 10
       ) {
-        tvSubCategoryCommentsError.setVisibility(View.VISIBLE)
-        tvSubCategoryCommentsError.setText(ATLEAST_TEN_CHARACTERS)
+        tvSubCategoryCommentsError.visibility = View.VISIBLE
+        tvSubCategoryCommentsError.text = ATLEAST_TEN_CHARACTERS
         tvSubCategoryCommentsError.requestFocus()
         return false
       }
@@ -620,7 +615,6 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
   private fun renderUpdateMeetingSave(uiModel: UiModel<Any>) {
     toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
@@ -666,7 +660,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       val arrAdapMeetingsObjective =
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spMeetingObjective.adapter = arrAdapMeetingsObjective
-      arrAdapMeetingsObjective.setSpinnerData<RowData>(
+      arrAdapMeetingsObjective.setSpinnerData(
           binding.spMeetingObjective, arrMeetingObjective
       )
       arrAdapMeetingsObjective.notifyDataSetChanged()
@@ -765,37 +759,29 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         Timber.d(e)
       }
 
-      binding.etMeetingDescription.setText(meetingDescription)
-      binding.etCustomerComment.setText(customerRemark)
-      binding.etCategory.setText(categoryDescription)
-      binding.etSubCategory.setText(subCategoryDescription)
+      binding.apply {
+        etMeetingDescription.setText(meetingDescription)
+        etCustomerComment.setText(customerRemark)
+        etCategory.setText(categoryDescription)
+        etSubCategory.setText(subCategoryDescription)
+        tvDate.text = CRMAppUtil.getDBDate(
+            CRMAppUtil.getDBDateObj(
+                currentYear, month, day, hour,
+                minute
+            ), DATE_FORMAT_TO_DISPLAY
+        )
+      }
       meetingDate = meetingDate!!.replace("T", " ")
-      binding.tvDate.setText(
-          CRMAppUtil.getDBDate(
-              CRMAppUtil.getDBDateObj(
-                  currentYear, month, day, hour,
-                  minute
-              ), DATE_FORMAT_TO_DISPLAY
-          )
-      )
 
     }
   }
 
   private fun setCountForSpecial(cnt: Int) {
-    binding.tvSplAttendeeCount.text = if (cnt <= 0) {
-      ""
-    } else {
-      String.format("(%s)", cnt.toString())
-    }
+    binding.tvSplAttendeeCount.text = (if (cnt <= 0) "" else String.format("(%s)", cnt.toString()))
   }
 
   private fun setCount(cnt: Int) {
-    binding.tvAttendeeCount.text = if (cnt <= 0) {
-      ""
-    } else {
-      String.format("(%s)", cnt.toString())
-    }
+    binding.tvAttendeeCount.text = (if (cnt <= 0) "" else String.format("(%s)", cnt.toString()))
   }
 
   private fun selectProduct(id: String) {
@@ -872,7 +858,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         binding.spMeetingDuration.itemSelections()
             .filter(InvalidSelectionPredicate)
             .skip(1)
-            .subscribe { xyz ->
+            .subscribe {
               meetingDurationCodeStr = (binding.spMeetingDuration.selectedItem as RowData).key
               binding.tvMeetingDurationError.visibility = View.GONE
             }
@@ -885,12 +871,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrSelectProduct.clear()
       arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
       for (i in data.indices) {
@@ -903,7 +887,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
       val arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spProduct.adapter = arrAdapSelectProduct
-      arrAdapSelectProduct.setSpinnerData<RowData>(binding.spProduct, arrSelectProduct)
+      arrAdapSelectProduct.setSpinnerData(binding.spProduct, arrSelectProduct)
       arrAdapSelectProduct.notifyDataSetChanged()
       val productData = getSpinnerRowDataById(id, arrAdapSelectProduct)
       if (productData != null) {
@@ -919,7 +903,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         binding.spProduct.itemSelections()
             .filter(InvalidSelectionPredicate)
             .skip(1)
-            .subscribe { xyz ->
+            .subscribe {
               productCodeStr = (binding.spProduct.selectedItem as RowData).key
               binding.tvProductError.visibility = View.GONE
             }
@@ -963,8 +947,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         )
       }
       val arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spActivityType.setAdapter(arrAdapActivityType)
-      arrAdapActivityType.setSpinnerData<RowData>(binding.spActivityType, arrActivityType)
+      binding.spActivityType.adapter = arrAdapActivityType
+      arrAdapActivityType.setSpinnerData(binding.spActivityType, arrActivityType)
       arrAdapActivityType.notifyDataSetChanged()
       val activityTypeData = getSpinnerRowDataById(id, arrAdapActivityType)
       if (activityTypeData != null) {
@@ -1015,12 +999,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrMeetingReason.clear()
       arrMeetingReason.add(
           RowData(0, "-1", SELECT_MEETING_REASON)
@@ -1035,7 +1017,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
       val arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spMeetingReason.adapter = arrAdapMeetingReason
-      arrAdapMeetingReason.setSpinnerData<RowData>(binding.spMeetingReason, arrMeetingReason)
+      arrAdapMeetingReason.setSpinnerData(binding.spMeetingReason, arrMeetingReason)
       arrAdapMeetingReason.notifyDataSetChanged()
       val meetingReasonData = getSpinnerRowDataById(id, arrAdapMeetingReason)
       if (meetingReasonData != null) {
@@ -1104,8 +1086,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
 
       val arrAdapActionables = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-      binding.spActionables.setAdapter(arrAdapActionables)
-      arrAdapActionables.setSpinnerData<RowData>(binding.spActionables, arrActionables)
+      binding.spActionables.adapter = arrAdapActionables
+      arrAdapActionables.setSpinnerData(binding.spActionables, arrActionables)
       arrAdapActionables.notifyDataSetChanged()
       val actionablesData = getSpinnerRowDataById(id, arrAdapActionables)
       if (actionablesData != null) {
@@ -1123,7 +1105,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .subscribe {
-              actionablesCodeStr = (binding.spActionables.getSelectedItem() as RowData).key
+              actionablesCodeStr = (binding.spActionables.selectedItem as RowData).key
               binding.tvActionablesError.visibility = View.GONE
             }
     )
@@ -1148,12 +1130,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrCategory.clear()
       arrCategory.add(RowData(0, "-1", SELECT_CATEGORY))
       for (i in data.indices) {
@@ -1166,7 +1146,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
       val arrAdapCategory = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spCategory.adapter = arrAdapCategory
-      arrAdapCategory.setSpinnerData<RowData>(binding.spCategory, arrCategory)
+      arrAdapCategory.setSpinnerData(binding.spCategory, arrCategory)
       arrAdapCategory.notifyDataSetChanged()
       val categoryData = getSpinnerRowDataById(id, arrAdapCategory)
       if (categoryData != null) {
@@ -1181,7 +1161,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         binding.spCategory.itemSelections()
             .filter(InvalidSelectionPredicate)
             .skip(1)
-            .subscribe { xyz ->
+            .subscribe {
               categoryCodeStr = (binding.spCategory.selectedItem as RowData).key
               binding.tvCategoryError.visibility = View.GONE
               subCategory(subCategoryID!!)
@@ -1210,12 +1190,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   ) {
     toggleProgress(uiModel.inProgress)
 
-    val error = uiModel.error
-    if (error != null) {
-      showOnFailurePopup(error)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
     }
-    val data = uiModel.data
-    if (data != null) {
+    uiModel.onSuccess { data ->
       arrSubCategory.clear()
       arrSubCategory.add(RowData(0, "-1", SELECT_SUB_CATEGORY))
       mandatory = data.size > 1
@@ -1315,8 +1293,8 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
     override fun getFilter(): Filter {
       return object : Filter() {
-        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
-          val filterResults = Filter.FilterResults()
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+          val filterResults = FilterResults()
           val modelList = ArrayList<EmployeeModel>()
           try {
             constraint?.let {
@@ -1328,10 +1306,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
                 try {
                   val dataList = saathiApi.getAutoCompleteAttendee(request)
                       .blockingFirst()
-                  for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
-                    val employeeName = stringOrEmpty(employeeName1)
-                    val employeeCode = stringOrEmpty(employeeCode1)
-                    val branchCode1 = stringOrEmpty(branchCode)
+                  for (data in dataList) {
+                    val employeeName = stringOrEmpty(data.employeeName)
+                    val employeeCode = stringOrEmpty(data.employeeCode)
+                    val branchCode1 = stringOrEmpty(data.branchCode)
                     if (employeeCode.equals(
                             userManager.getUser()!!.employeeCode, ignoreCase = true
                         )
@@ -1372,7 +1350,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
         override fun publishResults(
           constraint: CharSequence?,
-          results: Filter.FilterResults?
+          results: FilterResults?
         ) {
           if (results != null && results.count > 0) {
             resultList = results.values as List<EmployeeModel>
@@ -1388,11 +1366,15 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       position: Int,
       convertView: View
     ) {
-      if (position % 2 == 1) {
-        convertView.setBackgroundColor(Color.parseColor("#F5F5F5"))
-      } else {
-        convertView.setBackgroundColor(Color.parseColor("#FFFFFF"))
-      }
+      convertView.setBackgroundColor(
+          Color.parseColor(
+              if (position % 2 == 1) {
+                "#F5F5F5"
+              } else {
+                "#FFFFFF"
+              }
+          )
+      )
     }
 
     inner class HolderView constructor(parent: View) {
@@ -1461,9 +1443,9 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
     override fun getFilter(): Filter {
       return object : Filter() {
-        internal val filterResults = Filter.FilterResults()
+        internal val filterResults = FilterResults()
 
-        override fun performFiltering(constraint: CharSequence?): Filter.FilterResults {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
 
           val modelList = ArrayList<SplAttendeeModel>()
           try {
@@ -1515,7 +1497,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
         override fun publishResults(
           constraint: CharSequence?,
-          results: Filter.FilterResults?
+          results: FilterResults?
         ) {
           if (results != null && results.count > 0) {
             attendeeModelList = results.values as List<SplAttendeeModel>
