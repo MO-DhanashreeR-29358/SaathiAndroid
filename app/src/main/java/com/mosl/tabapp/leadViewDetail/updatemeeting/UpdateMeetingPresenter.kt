@@ -33,5 +33,30 @@ class UpdateMeetingPresenter @Inject constructor(
         .subscribe(view::renderMeetingObjective)
         .addTo(disposable)
 
+
+    view.onAttendeeImageButtonClicked()
+        .subscribe { view.renderAttendeeImageButtonClick() }
+        .addTo(disposable)
+
+    view.onSplAttendeeImageButtonClicked()
+        .subscribe { view.renderSplAttendeeImageButtonClick() }
+        .addTo(disposable)
+
+    view.onAttendeeCountClicked()
+        .subscribe { view.renderAttendeeCountClick() }
+        .addTo(disposable)
+
+    view.onSplAttendeeCountClicked()
+        .subscribe { view.renderSplAttendeeCountClick() }
+        .addTo(disposable)
+
+    view.onSaveButtonClicked()
+        .subscribe { view.renderSaveButtonClick() }
+        .addTo(disposable)
+
+    view.onResetButtonClicked()
+        .subscribe { view.renderResetButtonClick() }
+        .addTo(disposable)
+
   }
 }

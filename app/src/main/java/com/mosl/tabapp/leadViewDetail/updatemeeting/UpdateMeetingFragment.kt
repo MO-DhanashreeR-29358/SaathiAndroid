@@ -139,7 +139,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   private var attendeeAdapter: AttendeeAdapter? = null
   private var splAttendeeAdapter: SplAttendeeAdapter? = null
 
-  private var leadId: String? = null
+  private var leadId: String? = "0"
   private var meetingId: String? = null
   private var mUCID = "0"
 
@@ -307,7 +307,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         attendeeAdapter = AttendeeAdapter(requireContext())
         setAdapter(attendeeAdapter)
         setLoadingIndicator(viewBinding.pbLoadingIndicator)
-        setOnItemClickListener { parent, view, position, id ->
+        setOnItemClickListener { _, _, position, _ ->
 
           val adapter = attendeeAdapter
 
@@ -1284,10 +1284,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
     override fun getView(
       position: Int,
-      convertView: View?,
+      convertView1: View?,
       parent: ViewGroup
     ): View {
-      var convertView = convertView
+      var convertView = convertView1
       val holderView: HolderView
       val clientModel = resultList[position]
       if (convertView == null) {
@@ -1317,11 +1317,11 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
           val filterResults = Filter.FilterResults()
           val modelList = ArrayList<EmployeeModel>()
           try {
-            if (constraint != null) {
+            constraint?.let {
               if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 val request = AutoCompleteAttendeeRequest(
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    URLEncoder.encode(constraint.toString(), "utf-8")
+                    URLEncoder.encode(it.toString(), "utf-8"),
+                    URLEncoder.encode(it.toString(), "utf-8")
                 )
                 try {
                   val dataList = saathiApi.getAutoCompleteAttendee(request)
@@ -1329,7 +1329,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
                   for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
                     val employeeName = stringOrEmpty(employeeName1)
                     val employeeCode = stringOrEmpty(employeeCode1)
-                    val BranchCode = stringOrEmpty(branchCode)
+                    val branchCode1 = stringOrEmpty(branchCode)
                     if (employeeCode.equals(
                             userManager.getUser()!!.employeeCode, ignoreCase = true
                         )
@@ -1339,7 +1339,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
                     modelList.add(
                         EmployeeModel(
                             employeeName, employeeCode,
-                            BranchCode, false
+                            branchCode1, false
                         )
                     )
                     filterResults.values = modelList
@@ -1369,7 +1369,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         }
 
         override fun publishResults(
-          constraint: CharSequence,
+          constraint: CharSequence?,
           results: Filter.FilterResults?
         ) {
           if (results != null && results.count > 0) {
@@ -1427,10 +1427,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
     override fun getView(
       position: Int,
-      convertView: View?,
+      convertView1: View?,
       parent: ViewGroup
     ): View {
-      var convertView = convertView
+      var convertView = convertView1
       val holderView: HolderView
       val clientModel = attendeeModelList[position]
       if (convertView == null) {
@@ -1465,11 +1465,11 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
           val modelList = ArrayList<SplAttendeeModel>()
           try {
-            if (constraint != null) {
+            constraint?.let {
               if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 val request = AutoCompleteAttendeeRequest(
-                    URLEncoder.encode(constraint.toString(), "utf-8"),
-                    URLEncoder.encode(constraint.toString(), "utf-8")
+                    URLEncoder.encode(it.toString(), "utf-8"),
+                    URLEncoder.encode(it.toString(), "utf-8")
                 )
                 try {
                   val dataList = saathiApi.getAutoCompleteSplAttendee(request)
@@ -1477,11 +1477,11 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
                   for ((_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, employeeCode1, _, _, _, _, _, _, _, _, _, _, employeeName1, _, branchCode) in dataList) {
                     val employeeName = stringOrEmpty(employeeName1)
                     val employeeCode = stringOrEmpty(employeeCode1)
-                    val BranchCode = stringOrEmpty(branchCode)
+                    val branchCode1 = stringOrEmpty(branchCode)
                     modelList.add(
                         SplAttendeeModel(
                             employeeName, employeeCode,
-                            BranchCode
+                            branchCode1
                         )
                     )
                     filterResults.values = modelList
@@ -1512,7 +1512,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
         }
 
         override fun publishResults(
-          constraint: CharSequence,
+          constraint: CharSequence?,
           results: Filter.FilterResults?
         ) {
           if (results != null && results.count > 0) {
@@ -1573,10 +1573,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
     @SuppressLint("ViewHolder")
     override fun getView(
       position: Int,
-      view: View,
+      view1: View?,
       parent: ViewGroup
     ): View {
-      var view = view
+      var view = view1
       val holder = Holder()
       view = inflater.inflate(R.layout.item_list_added_attendee, parent, false)
 
@@ -1629,10 +1629,10 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
     @SuppressLint("ViewHolder")
     override fun getView(
       position: Int,
-      view: View,
+      view1: View?,
       parent: ViewGroup
     ): View {
-      var view = view
+      var view = view1
       val holder = Holder()
       view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false)
 
@@ -1647,12 +1647,12 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
               attendeeModel.attendeeName
           )
       )
-      holder.ivDelete!!.setOnClickListener({ v ->
+      holder.ivDelete!!.setOnClickListener {
         addedSplAttendeeCount--
         setCountForSpecial(addedSplAttendeeCount)
         attendeeModelList.removeAt(position)
         notifyDataSetChanged()
-      })
+      }
 
       return view
     }
