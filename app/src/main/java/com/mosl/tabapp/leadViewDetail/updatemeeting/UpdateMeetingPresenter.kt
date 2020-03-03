@@ -26,10 +26,11 @@ class UpdateMeetingPresenter @Inject constructor(
         .addTo(disposable)
 
 
-    onFetchOrOnRetryObs.subscribe {
+    onFetchOrOnRetryObs.switchMap {
       repository.getMeetingObjective()
           .compose(applyUiModel())
     }
+        .subscribe(view::renderMeetingObjective)
         .addTo(disposable)
 
   }

@@ -32,7 +32,6 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
-import com.mosl.mobile.domain.leadviewdetail.updatemeeting.UpdateMeetingSaveRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
@@ -53,6 +52,7 @@ import com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN
 import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGDURATION
 import com.mosl.tabapp.constants.MOSLConstants.MEETINGREASON
+import com.mosl.tabapp.constants.MOSLConstants.MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIONABLES
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
 import com.mosl.tabapp.constants.MOSLConstants.SELECT_CATEGORY
@@ -513,6 +513,96 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
       updateMeetingSave(meetingApptModel)
     }
+  }
+
+  private fun validateForm(): Boolean {
+    binding.apply {
+      if (spProduct.selectedItem.toString().equals(SELECT_PRODUCT, ignoreCase = true)) {
+        tvProductError.text = SELECT_PRODUCT
+        tvProductError.requestFocus()
+        return false
+      } else if (spMeetingDuration.selectedItem
+              .toString()
+              .equals(SELECT_MEETING_DURATION, ignoreCase = true)
+      ) {
+        tvMeetingDurationError.visibility = View.VISIBLE
+        tvMeetingDurationError.text = SELECT_MEETING_DURATION
+        tvMeetingDurationError.requestFocus()
+        return false
+      } else if (spMeetingObjective.selectedItem
+              .toString()
+              .equals(SELECT_MEETING_OBJECTIVE, ignoreCase = true)
+      ) {
+        tvMeetingObjectiveError.visibility = View.VISIBLE
+        tvMeetingObjectiveError.text = SELECT_MEETING_OBJECTIVE
+        tvMeetingObjectiveError.requestFocus()
+        return false
+      } else if (spActivityType.selectedItem
+              .toString()
+              .equals(SELECT_ACTIVITY_TYPE, ignoreCase = true)
+      ) {
+        tvActivityTypeError.visibility = View.VISIBLE
+        tvActivityTypeError.text = SELECT_ACTIVITY_TYPE
+        tvActivityTypeError.requestFocus()
+        return false
+      } else if (spMeetingReason.selectedItem
+              .toString()
+              .equals(SELECT_MEETING_REASON, ignoreCase = true)
+      ) {
+        tvMeetingReasonError.visibility = View.VISIBLE
+        tvMeetingReasonError.text = SELECT_MEETING_REASON
+        tvMeetingReasonError.requestFocus()
+        return false
+      } else if (etMeetingDescription.text.toString().trim({ it <= ' ' }).isEmpty()) {
+        tvMeetingDescriptionError.visibility = View.VISIBLE
+        tvMeetingDescriptionError.text = MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
+        tvMeetingDescriptionError.requestFocus()
+        return false
+      } else if (etMeetingDescription.text!!.length <= 10) {
+        tvMeetingDescriptionError.visibility = View.VISIBLE
+        tvMeetingDescriptionError.text = ATLEAST_TEN_CHARACTERS
+        tvMeetingDescriptionError.requestFocus()
+        return false
+      } else if (llActionables.visibility == View.VISIBLE && spActionables.selectedItem.toString().equals(
+              SELECT_ACTIONABLES, ignoreCase = true
+          )
+      ) {
+        tvActionablesError.visibility = View.VISIBLE
+        tvActionablesError.text = SELECT_ACTIONABLES
+        tvActionablesError.requestFocus()
+        return false
+      } else if (llActionables.visibility == View.VISIBLE && spCategory.selectedItem.toString().equals(
+              SELECT_CATEGORY, ignoreCase = true
+          )
+      ) {
+        tvCategoryError.visibility = View.VISIBLE
+        tvCategoryError.text = SELECT_CATEGORY
+        tvCategoryError.requestFocus()
+        return false
+      } else if (llActionables.visibility == View.VISIBLE && etCategory.text!!.length <= 10) {
+        tvCategoryCommentsError.visibility = View.VISIBLE
+        tvCategoryCommentsError.text = ATLEAST_TEN_CHARACTERS
+        tvCategoryCommentsError.requestFocus()
+        return false
+      } else if (mandatory && llActionables.getVisibility() == View.VISIBLE &&
+          spSubCategory.selectedItem.toString().equals(SELECT_SUB_CATEGORY, ignoreCase = true)
+      ) {
+        tvSubCategoryError.visibility = View.VISIBLE
+        tvSubCategoryError.text = SELECT_SUB_CATEGORY
+        tvSubCategoryError.requestFocus()
+        return false
+      } else if (mandatory
+          && llActionables.visibility == View.VISIBLE
+          && etSubCategory.text!!.length <= 10
+      ) {
+        tvSubCategoryCommentsError.setVisibility(View.VISIBLE)
+        tvSubCategoryCommentsError.setText(ATLEAST_TEN_CHARACTERS)
+        tvSubCategoryCommentsError.requestFocus()
+        return false
+      }
+
+    }
+    return true
   }
 
   private fun updateMeetingSave(meetingApptModel: MeetingApptModel) {
@@ -1198,15 +1288,15 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       parent: ViewGroup
     ): View {
       var convertView = convertView
-      val holderView: AttendeeAdapter.HolderView
+      val holderView: HolderView
       val clientModel = resultList[position]
       if (convertView == null) {
         inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
-        holderView = AttendeeAdapter.HolderView(convertView!!)
+        holderView = HolderView(convertView!!)
         convertView!!.tag = holderView
       } else {
-        holderView = convertView.tag as AttendeeAdapter.HolderView
+        holderView = convertView.tag as HolderView
       }
       viewColor(position, convertView)
       if (clientModel.isNoData) {
@@ -1303,7 +1393,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
     }
 
-    private inner class HolderView private constructor(parent: View) {
+    inner class HolderView constructor(parent: View) {
       internal var tvAttendeeName: TextView
       internal var linaerLayout: LinearLayout
 
@@ -1341,17 +1431,17 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       parent: ViewGroup
     ): View {
       var convertView = convertView
-      val holderView: SplAttendeeAdapter.HolderView
+      val holderView: HolderView
       val clientModel = attendeeModelList[position]
       if (convertView == null) {
         inflater = requireContext().getSystemService(
             Context.LAYOUT_INFLATER_SERVICE
         ) as LayoutInflater
         convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
-        holderView = SplAttendeeAdapter.HolderView(convertView!!)
+        holderView = HolderView(convertView!!)
         convertView!!.tag = holderView
       } else {
-        holderView = convertView.tag as SplAttendeeAdapter.HolderView
+        holderView = convertView.tag as HolderView
       }
       viewColor(position, convertView)
       if (clientModel.isNoData) {
@@ -1446,7 +1536,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       }
     }
 
-    internal inner class HolderView private constructor(parent: View) {
+    internal inner class HolderView constructor(parent: View) {
       var tvAttendeeName: TextView
       var linaerLayout: LinearLayout
 
@@ -1487,7 +1577,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       parent: ViewGroup
     ): View {
       var view = view
-      val holder = AddedAttendeeAdapter.Holder()
+      val holder = Holder()
       view = inflater.inflate(R.layout.item_list_added_attendee, parent, false)
 
       val attendeeModel = attendeeModelList[position]
@@ -1501,12 +1591,12 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
               attendeeModel.attendeeName
           )
       )
-      holder.ivDelete!!.setOnClickListener({ v ->
+      holder.ivDelete!!.setOnClickListener {
         addedAttendeeCount--
         setCount(addedAttendeeCount)
         attendeeModelList.removeAt(position)
         notifyDataSetChanged()
-      })
+      }
 
       return view
     }
@@ -1522,11 +1612,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
     internal var attendeeModelList: MutableList<AddedSplAttendeeModel>
   ) :
       BaseAdapter() {
-    private val inflater: LayoutInflater
-
-    init {
-      inflater = LayoutInflater.from(mContext)
-    }
+    private val inflater: LayoutInflater = LayoutInflater.from(mContext)
 
     override fun getCount(): Int {
       return attendeeModelList.size
@@ -1547,7 +1633,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       parent: ViewGroup
     ): View {
       var view = view
-      val holder = AddedSplAttendeeAdapter.Holder()
+      val holder = Holder()
       view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false)
 
       val attendeeModel = attendeeModelList[position]
@@ -1571,7 +1657,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       return view
     }
 
-    internal inner class Holder {
+    inner class Holder {
       var tvAttendeeName: TextView? = null
       var ivDelete: ImageView? = null
     }

@@ -1,7 +1,6 @@
 package com.mosl.app.core.data.leadviewdetail.updatemeeting
 
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
-import com.mosl.mobile.domain.leadviewdetail.updatemeeting.LookupInput
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.UpdateMeetingRepository
 import com.mosl.mobile.user.login.UserManagerImpl
@@ -23,7 +22,7 @@ class UpdateMeetingRepositoryImpl @Inject constructor(
         }
   }
 
-  override fun getMeetingObjective(input: LookupInput): Observable<List<Lookup>> {
+  override fun getMeetingObjective(): Observable<List<Lookup>> {
     val request = LookupRequest(
         businessUnitId = userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: "",
         lookupTypeId = MEETING_OBJECTIVE,
