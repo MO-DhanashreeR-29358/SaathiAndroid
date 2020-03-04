@@ -12,7 +12,7 @@ fun UserManager.getDataForEkyc(
       NEW_USERID to userId, BRANCHEMPCODE to user.employeeCode, COMMANDTYPE to commandType,
       APPLICATIONTYPE to CRM,
       OSTYPE to ANDROID, APPLOGINID to user.employeeCode, TOKENKEY to user.token,
-      ISAUFSB to user.isAufsb()
+    ISAUFSB to user.isAufsb(), AUSALESSUPPORT to user.isAuBankSalesSupport()
   )
   Timber.d("input data %s", formatInputData(map))
   return formatInputData(map)
