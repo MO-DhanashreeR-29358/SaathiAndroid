@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Base64OutputStream
 import android.view.View
-import android.webkit.MimeTypeMap
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -27,8 +26,6 @@ import com.mosl.mobile.domain.leadviewdetail.document.FilterRequestInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
-import com.mosl.tabapp.permission.ImageUploadHelper
-import com.mosl.tabapp.permission.ImageUploadHelper.ImageUploadCallback
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_DELETED
@@ -46,6 +43,8 @@ import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocumen
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.UploadImage
 import com.mosl.tabapp.leadViewDetail.document.item.DocumentItem
+import com.mosl.tabapp.permission.ImageUploadHelper
+import com.mosl.tabapp.permission.ImageUploadHelper.ImageUploadCallback
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -322,11 +321,11 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
       return
     }
     var fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
-    val mimeType = requireActivity().contentResolver.getType(fileUri)
-    if (mimeType != null) {
-      val extention = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+    if (!fileName.contains(".jpg")) {
+      fileName = CRMAppUtil.getFilenameWithoutExtension(fileName) + "." + "jpg"
+    }
 
-      fileName = CRMAppUtil.getFilenameWithoutExtension(fileName) + "." + extention
+
       try {
         val tokens =
           fileName.split("\\.(?=[^\\.]+$)".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
@@ -358,7 +357,7 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
         return
       }
       subject.onNext(UploadImage(leadId, ucid, fileName.replace(":", "a"), strData))
-    }
+    //}
   }
 
   private fun isFileAllowed(extension: String, extList: Array<String>): Boolean {

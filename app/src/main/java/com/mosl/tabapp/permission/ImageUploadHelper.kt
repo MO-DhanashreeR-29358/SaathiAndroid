@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.R
@@ -89,7 +88,7 @@ class ImageUploadHelper(
       }
       photoFile?.also {
         //val authority = context.applicationContext.packageName + ".provider"
-        val authority = "com.mosl.tabapp.debug.provider"
+        val authority = context.getString(R.string.file_provider_authority)
         val photoURI: Uri = FileProvider.getUriForFile(context, authority, it)
         selectedImageUri = photoURI
         absolutePath = photoFile.absolutePath
@@ -109,17 +108,15 @@ class ImageUploadHelper(
     when (requestCode) {
       REQUEST_CAMERA_PHOTO -> {
         if (resultCode == RESULT_OK) {
-          selectedImageUri = data?.data
           Timber.d("onActivityResult selectedImageUri--->$selectedImageUri")
-          Timber.d("data found--->${data?.data}")
           selectedImageUri?.let {
             val selectedImage = it
             context.contentResolver.notifyChange(selectedImage, null)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            actualImage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
               imageUri = Uri.parse(absolutePath)
-              actualImage = File(imageUri.path!!)
+              File(imageUri.path!!)
             } else {
-              actualImage = File(it.path)
+              File(it.path)
             }
             imageUri = Uri.fromFile(actualImage)
             addUri(imageUri, actualImage)
