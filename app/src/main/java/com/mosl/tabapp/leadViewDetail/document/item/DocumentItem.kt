@@ -11,6 +11,7 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ItemDocumentListBinding
@@ -19,10 +20,10 @@ import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocumen
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
+import com.mosl.tabapp.util.downloadImage
 import com.xwray.groupie.databinding.BindableItem
 import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
 import io.reactivex.subjects.PublishSubject
-import com.mosl.tabapp.util.downloadDocument
 
 class DocumentItem(
   private val data: LeadDocumentsItemData,
@@ -107,7 +108,9 @@ class DocumentItem(
         }
       }
       R.id.ivUploadDoc -> {
-        context?.downloadDocument(data.documentFullPath!!)
+        context?.downloadImage(data.documentFullPath!!)
+        Toast.makeText(context, "Downloading ${data.documentName}...", Toast.LENGTH_SHORT)
+            .show()
         //downloadImage(data.documentFullPath!!)
       }
     }
