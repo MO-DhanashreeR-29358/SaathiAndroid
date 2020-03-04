@@ -194,6 +194,10 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
           documentPath, creationDate, documentFullPath
         )
       )
+      val documentItems = documentList.map { data ->
+        DocumentItem(data, subject)
+      }
+      section.setContent(documentItems)
       showHideAddHeader()
     }
   }
