@@ -226,14 +226,12 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
 
     uiModel.onSuccess { dataList ->
       val documentItems = dataList.map {
+        documentList.add(it)
         DocumentItem(it, subject)
       }
-
       section.setContent(documentItems)
-      dataList.map {
-        documentList.add(it)
-        showHideAddHeader()
-      }
+      showHideAddHeader()
+
     }
 
   }
@@ -290,7 +288,11 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
   private fun deleteDocument(id: String) {
     val item = getDocumentById(id)
     documentList.remove(item)
-    section.notifyChanged()
+    val documentItems = documentList.map {
+      DocumentItem(it, subject)
+    }
+
+    section.setContent(documentItems)
     showHideAddHeader()
   }
 
