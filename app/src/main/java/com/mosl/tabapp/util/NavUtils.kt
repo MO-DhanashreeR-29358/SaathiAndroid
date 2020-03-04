@@ -24,7 +24,7 @@ fun Context.downloadDocument(url: String) {
   request.setDescription("Downloading...")
   request.allowScanningByMediaScanner()
   request.setNotificationVisibility(
-      DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+    DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
   )
 
   val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager

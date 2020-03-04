@@ -1,6 +1,6 @@
-package com.mosl.mobile.domain.setappointment
+package com.mosl.mobile.domain.createmeeting
 
-data class MeetingAttendeeItemData(
+data class MeetingAttendeeItemResponse(
 
   @JvmField val attendeeType: String?,
 

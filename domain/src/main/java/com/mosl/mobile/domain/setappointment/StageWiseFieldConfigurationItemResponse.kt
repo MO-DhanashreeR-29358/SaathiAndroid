@@ -8,7 +8,7 @@ data class StageWiseFieldConfigurationItemResponse(
 
   @JvmField val creationDate: String,
 
-  @JvmField val lastModifiedBy: Any,
+  @JvmField val lastModifiedBy: Any?,
 
   @JvmField val createdBy: String,
 
@@ -32,7 +32,7 @@ data class StageWiseFieldConfigurationItemResponse(
 
   @JvmField val fieldDisplayName: String,
 
-  @JvmField val approvalFieldList: Any,
+  @JvmField val approvalFieldList: Any?,
 
   @JvmField val lastModificationDate: String,
 

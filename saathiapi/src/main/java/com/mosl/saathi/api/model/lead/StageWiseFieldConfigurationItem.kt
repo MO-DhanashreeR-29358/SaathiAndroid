@@ -14,7 +14,7 @@ data class StageWiseFieldConfigurationItem(
   @JvmField val creationDate: String,
 
   @SerializedName("LastModifiedBy")
-  @JvmField val lastModifiedBy: Any,
+  @JvmField val lastModifiedBy: Any?,
 
   @SerializedName("CreatedBy")
   @JvmField val createdBy: String,
@@ -50,7 +50,7 @@ data class StageWiseFieldConfigurationItem(
   @JvmField val fieldDisplayName: String,
 
   @SerializedName("ApprovalFieldList")
-  @JvmField val approvalFieldList: Any,
+  @JvmField val approvalFieldList: Any?,
 
   @SerializedName("LastModificationDate")
   @JvmField val lastModificationDate: String,

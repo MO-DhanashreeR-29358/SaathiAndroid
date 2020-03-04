@@ -36,7 +36,7 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("CreatedBy") val createdBy: String,
 
-  @JvmField @SerializedName("meetingAttendee") val meetingAttendee: List<MeetingAttendeeItem?>,
+  @JvmField @SerializedName("meetingAttendee") val meetingAttendee: List<MeetingAttendeeItem>,
 
   @JvmField @SerializedName("GeoLatitude") val geoLatitude: Any,
 

@@ -46,8 +46,87 @@ class SetAppointmentPresenter @Inject constructor(
           .compose(applyUiModel())
       }
       .subscribe {
-        view.renderLeadViews(it)
+        view.renderLeadView(it)
       }.addTo(disposable)
+
+    view.getMeetingById()
+      .map {
+        it.meetingId
+      }
+      .switchMap {
+        repository.getMeetingById(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderMeetingByID(it)
+      }
+      .addTo(disposable)
+
+
+    view.getProduct()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.getAllLookUp(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderProduct(it)
+      }
+      .addTo(disposable)
+
+    view.getActivityType()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.getAllLookUp(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderActivityType(it)
+      }
+      .addTo(disposable)
+
+    view.getRepeatMode()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.getAllLookUp(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderRepeatMode(it)
+      }
+      .addTo(disposable)
+
+    view.getWeekDays()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.getAllLookUp(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderWeekDays(it)
+      }
+      .addTo(disposable)
+
+    view.getWeeks()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.getAllLookUp(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderWeeks(it)
+      }
+      .addTo(disposable)
 
   }
 }

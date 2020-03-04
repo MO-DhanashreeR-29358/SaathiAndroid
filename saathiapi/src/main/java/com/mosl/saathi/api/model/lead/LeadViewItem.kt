@@ -19,7 +19,7 @@ data class LeadViewItem(
     @JvmField @SerializedName("IsPotentialPMSProductText") val isPotentialPMSProductText: String?,
     @JvmField @SerializedName(
         "StageWiseFieldConfiguration"
-    ) val stageWiseFieldConfiguration: List<StageWiseFieldConfigurationItem?>,
+    ) val stageWiseFieldConfiguration: List<StageWiseFieldConfigurationItem>,
     @JvmField @SerializedName("LastReCycleTransferDate") val lastReCycleTransferDate: String?,
     @JvmField @SerializedName("Status") val status: Int,
     @JvmField @SerializedName("CreatedBy") val createdBy: String?,
