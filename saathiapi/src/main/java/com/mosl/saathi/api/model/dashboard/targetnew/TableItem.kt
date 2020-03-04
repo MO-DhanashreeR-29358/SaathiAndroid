@@ -13,3 +13,4 @@ data class TableItem(
     @JvmField @SerializedName("Value")
   val value: String?
 )
+

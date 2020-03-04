@@ -33,11 +33,9 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -90,12 +88,7 @@ import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -114,10 +107,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-
 import javax.inject.Inject;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -822,12 +816,12 @@ public class DashboardFragment extends CommonFragment
 
     private void loadMonthTrends() {
         Bundle args = new Bundle();
-        MonthOnMonthTrendsFragment leadsFragment = new MonthOnMonthTrendsFragment();
+      MonthOnMonthTrendsFragment monthOnMonthTrendsFragment = new MonthOnMonthTrendsFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-        leadsFragment.setArguments(args);
+      monthOnMonthTrendsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.llMonthvsTrends, leadsFragment)
+            .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
                 .commit();
     }
 

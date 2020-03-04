@@ -1,11 +1,14 @@
 package com.mosl.tabapp.dashboard.trends
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.events.DataAction
+import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.saathi.api.model.dashboard.trends.TrendsTableItemModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentTrendsBinding
@@ -19,102 +22,91 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
-    lateinit var binding: FragmentTrendsBinding
+  lateinit var binding: FragmentTrendsBinding
 
-    @Inject
-    lateinit var dashboardModel: DashboardModel
-    private var widgetModelList: MutableList<DashboardGroupModel> = mutableListOf()
-    private val VORDIPLOM_COLORS = intArrayOf(
-        Color.rgb(255, 21, 0),
-        Color.rgb(38, 127, 183),
-        Color.rgb(0, 177, 207),
-        Color.rgb(22, 225, 143),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46),
-        Color.rgb(255, 21, 0),
-        Color.rgb(38, 127, 183),
-        Color.rgb(0, 177, 207),
-        Color.rgb(22, 225, 143),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46)
-    )
-    private var itemList = mutableListOf<HorinzatalTrendsWidgetItem>()
-    private val widgetUiEvent =
-        PublishSubject.create<TrendsWidgetUiEvent>()
-    @Inject
-    lateinit var presenter: TrendsPresenter
-    private var previousPosition: Int = 0
-    private var widgetModel: DashboardGroupModel? = null
+  @Inject
+  lateinit var dashboardModel: DashboardModel
+  private var widgetModelList: MutableList<DashboardGroupModel> = mutableListOf()
+  private var itemList = mutableListOf<HorinzatalTrendsWidgetItem>()
+  private val widgetUiEvent =
+    PublishSubject.create<TrendsWidgetUiEvent>()
+  @Inject
+  lateinit var presenter: TrendsPresenter
+  private var previousPosition: Int = 0
+  private var dashboardGroupModel: DashboardGroupModel? = null
 
-    override fun getLayout(): Int {
-        return R.layout.fragment_trends
+  override fun getLayout(): Int {
+    return R.layout.fragment_trends
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding = FragmentTrendsBinding.bind(view)
+    setUpView()
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+    if (itemList.size > 0) {
+      widgetUiEvent.onNext(
+        TrendsWidgetUiEvent.ItemClick(
+          itemList.get(0).dashboardGroupModel,
+          0
+        )
+      )
+    }
+  }
+
+  private fun setUpView() {
+    val groupAdapter = GroupAdapter<ViewHolder>()
+    binding.recyclerView.apply {
+      layoutManager =
+        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+      setHasFixedSize(true)
+      adapter = groupAdapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding = FragmentTrendsBinding.bind(view)
-        setUpView()
-        presenter.start()
-        dataActionSubject.onNext(DataAction.Fetch)
-        if (itemList.size > 0) {
-            widgetUiEvent.onNext(
-                TrendsWidgetUiEvent.ItemClick(
-                    itemList.get(0).dashboardGroupModel,
-                    0
-                )
-            )
-        }
+    widgetModelList = dashboardModel
+      .getGroupModel(DashboardSystemModel.getMonthTrends())
+      .subGroupList
+    if (widgetModelList.size < 3) {
+      widgetModelList.add(DashboardGroupModel())
+      widgetModelList.add(DashboardGroupModel())
+    } else if (widgetModelList.size < 4) {
+      widgetModelList.add(DashboardGroupModel())
     }
 
-    private fun setUpView() {
-        val groupAdapter = GroupAdapter<ViewHolder>()
-        binding.recyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            adapter = groupAdapter
-        }
+    widgetModelList.mapIndexed { position: Int, model: DashboardGroupModel ->
+      itemList.add(HorinzatalTrendsWidgetItem(model, widgetUiEvent, requireContext()))
+    }
+    groupAdapter.addAll(itemList)
 
-        widgetModelList = dashboardModel
-            .getGroupModel(DashboardSystemModel.getMonthTrends())
-            .subGroupList
-        if (widgetModelList.size < 3) {
-            widgetModelList.add(DashboardGroupModel())
-            widgetModelList.add(DashboardGroupModel())
-        } else if (widgetModelList.size < 4) {
-            widgetModelList.add(DashboardGroupModel())
-        }
+  }
 
-        widgetModelList.mapIndexed { position: Int, model: DashboardGroupModel ->
+  override fun onWidgetItemClick(): Observable<TrendsWidgetUiEvent.ItemClick> {
+    return widgetUiEvent.ofType()
+  }
 
-            itemList.add(
-                HorinzatalTrendsWidgetItem(
-                    model,
-                    widgetUiEvent,
-                    requireContext()
-                )
-            )
-        }
+  override fun renderWidgetData(dashboardGroupModel: DashboardGroupModel, currentPosition: Int) {
+    if (currentPosition != previousPosition) {
+      itemList.get(currentPosition).updateItem(true)
+      itemList.get(previousPosition).updateItem(false)
+      previousPosition = currentPosition
+    }
+    this.dashboardGroupModel = dashboardGroupModel
+  }
 
-        groupAdapter.addAll(itemList)
+  override fun getDashboardGroupModel(): DashboardGroupModel? {
+    return dashboardGroupModel
+  }
+
+  override fun renderData(uiModel: UiModel<List<TrendsTableItemModel>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { error ->
+      showOnFailurePopup(error)
+//            chartClear()
+    }
+    uiModel.onSuccess {
 
     }
 
-    override fun onWidgetItemClick(): Observable<TrendsWidgetUiEvent.ItemClick> {
-        return widgetUiEvent.ofType()
-    }
-
-    override fun renderWidgetData(widgetModel: DashboardGroupModel, currentPosition: Int) {
-        if (currentPosition != previousPosition) {
-            itemList.get(currentPosition).updateItem(true)
-            itemList.get(previousPosition).updateItem(false)
-            previousPosition = currentPosition
-        }
-        this.widgetModel = widgetModel
-    }
+  }
 }

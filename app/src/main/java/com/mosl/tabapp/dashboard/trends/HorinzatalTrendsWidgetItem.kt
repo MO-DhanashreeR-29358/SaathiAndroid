@@ -19,7 +19,6 @@ class HorinzatalTrendsWidgetItem(
     private val publishSubject: PublishSubject<TrendsWidgetUiEvent>,
     val context: Context
 ) : BindableItem<HorinzontalWidgetItemBinding>() {
-    val widgetModel = dashboardGroupModel.widgetList.get(0)
     override fun getLayout(): Int {
         return R.layout.horinzontal_widget_item
     }
@@ -31,31 +30,32 @@ class HorinzatalTrendsWidgetItem(
 
     override fun bind(viewBinding: HorinzontalWidgetItemBinding, position: Int) {
         viewBinding.apply {
-            if (dashboardGroupModel.isSelected()) {
-                tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.white))
-                setImage(widgetModel.getIconUrl2().replace(" ", "%20"), imageView)
-                tvWidgetName.setText(dashboardGroupModel.displayName)
-                cardView.setCardBackgroundColor(
-                    ContextCompat.getColor(context, R.color.secondaryBackground)
+          val widgetModel = dashboardGroupModel.widgetList.get(0)
+          if (dashboardGroupModel.isSelected()) {
+            tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.white))
+            setImage(widgetModel.getIconUrl2().replace(" ", "%20"), imageView)
+            tvWidgetName.setText(dashboardGroupModel.displayName)
+            cardView.setCardBackgroundColor(
+              ContextCompat.getColor(context, R.color.secondaryBackground)
+            )
+
+          } else {
+            tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.txt_dselect))
+            setImage(widgetModel.getIconUrl1().replace(" ", "%20"), imageView)
+            tvWidgetName.setText(dashboardGroupModel.displayName)
+            cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
+          }
+
+          cardView.setOnClickListener {
+            if (dashboardGroupModel.displayName.isNotEmpty()) {
+              publishSubject.onNext(
+                TrendsWidgetUiEvent.ItemClick(
+                  dashboardGroupModel, position
                 )
-
-            } else {
-                tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.txt_dselect))
-                setImage(widgetModel.getIconUrl1().replace(" ", "%20"), imageView)
-                tvWidgetName.setText(dashboardGroupModel.displayName)
-                cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
+              )
             }
 
-            cardView.setOnClickListener {
-                if (dashboardGroupModel.displayName.isNotEmpty()) {
-                    publishSubject.onNext(
-                        TrendsWidgetUiEvent.ItemClick(
-                            dashboardGroupModel, position
-                        )
-                    )
-                }
-
-            }
+          }
         }
     }
 
