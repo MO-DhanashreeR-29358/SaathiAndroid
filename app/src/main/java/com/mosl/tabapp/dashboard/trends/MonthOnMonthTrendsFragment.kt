@@ -102,7 +102,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { error ->
       showOnFailurePopup(error)
-//            chartClear()
+      binding.includeChart.chart.clear()
     }
     uiModel.onSuccess {
 
