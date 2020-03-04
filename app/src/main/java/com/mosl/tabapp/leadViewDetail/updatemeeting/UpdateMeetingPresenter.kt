@@ -13,12 +13,53 @@ class UpdateMeetingPresenter @Inject constructor(
 ) : BasePresenter<UpdateMeetingView>(view) {
 
   override fun start() {
-    Observable.merge(onFetchCalled(), onRetryCalled())
+
+    val onFetchOrOnRetryObs = Observable.merge(onFetchCalled(), onRetryCalled())
+        .share()
+
+    onFetchOrOnRetryObs.subscribe { view.renderScreen(data) }
+        .addTo(disposable)
+
+    onFetchOrOnRetryObs
         .switchMap {
           repository.getMeeting(data.meetingId)
               .compose(applyUiModel())
         }
         .subscribe(view::renderMeetingById)
         .addTo(disposable)
+
+
+    onFetchOrOnRetryObs.switchMap {
+      repository.getMeetingObjective()
+          .compose(applyUiModel())
+    }
+        .subscribe(view::renderMeetingObjective)
+        .addTo(disposable)
+
+
+    view.onAttendeeImageButtonClicked()
+        .subscribe { view.renderAttendeeImageButtonClick() }
+        .addTo(disposable)
+
+    view.onSplAttendeeImageButtonClicked()
+        .subscribe { view.renderSplAttendeeImageButtonClick() }
+        .addTo(disposable)
+
+    view.onAttendeeCountClicked()
+        .subscribe { view.renderAttendeeCountClick() }
+        .addTo(disposable)
+
+    view.onSplAttendeeCountClicked()
+        .subscribe { view.renderSplAttendeeCountClick() }
+        .addTo(disposable)
+
+    view.onSaveButtonClicked()
+        .subscribe { view.renderSaveButtonClick() }
+        .addTo(disposable)
+
+    view.onResetButtonClicked()
+        .subscribe { view.renderResetButtonClick() }
+        .addTo(disposable)
+
   }
 }
