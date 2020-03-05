@@ -24,19 +24,8 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
 import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.ACTIVITY_TYPE
-import com.mosl.tabapp.constants.MOSLConstants.ATTENDEE_EMP
-import com.mosl.tabapp.constants.MOSLConstants.DATE
-import com.mosl.tabapp.constants.MOSLConstants.EMAIL
 import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
-import com.mosl.tabapp.constants.MOSLConstants.MEETING
 import com.mosl.tabapp.constants.MOSLConstants.MEETING_ID
-import com.mosl.tabapp.constants.MOSLConstants.MOBNO
-import com.mosl.tabapp.constants.MOSLConstants.NAME
-import com.mosl.tabapp.constants.MOSLConstants.PRODUCT
-import com.mosl.tabapp.constants.MOSLConstants.STATUS
-import com.mosl.tabapp.constants.MOSLConstants.STATUS_NAME
-import com.mosl.tabapp.constants.MOSLConstants.TIME
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
 import com.mosl.tabapp.ekyc.EkycNavigator
@@ -45,10 +34,11 @@ import com.mosl.tabapp.ekyc.OUTPUT
 import com.mosl.tabapp.ekyc.PLAY_STORE_URL
 import com.mosl.tabapp.ekyc.RESUME
 import com.mosl.tabapp.ekyc.getDataForEkyc
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment.Companion.mUcid
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesNavigator
 import com.mosl.tabapp.leadViewDetail.activity.mapToMeetingParcel
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment.Companion.ARG_MEETING_DETAILS
+import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingView.Companion.ARG_UPDATE_MEETING
+import com.mosl.tabapp.leadViewDetail.updatemeeting.mapToUpdateMeetingScreenData
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_UPDATE_MEETING
@@ -241,20 +231,17 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun openUpdateMeetingScreen(data: Appointment) {
+
+    val updateMeetingScreenData = data.mapToUpdateMeetingScreenData()
+
     val args = Bundle().apply {
-      putString(STATUS, data.status)
-      putString(MEETING, data.meetingId)
+      /*putString(MEETING, data.meetingId)
       putString(LEAD_ID, data.leadId)
-      putString(NAME, data.name)
-      putString(EMAIL, data.email)
-      putString(MOBNO, data.mobileNumber)
       putString(DATE, data.date)
       putString(TIME, data.time)
-      putString(ATTENDEE_EMP, data.attendeeEmployee)
       putString(PRODUCT, data.product)
-      putString(STATUS_NAME, data.statusName)
-      putString(ACTIVITY_TYPE, data.activityType)
-      putString(UCID, mUcid)
+      putString(UCID, data.ucid)*/
+      putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
     }
 
     openPage(NAVIGATE_TO_UPDATE_MEETING, args, true)

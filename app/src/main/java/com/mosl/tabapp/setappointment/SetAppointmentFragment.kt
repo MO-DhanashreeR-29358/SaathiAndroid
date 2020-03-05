@@ -1722,7 +1722,7 @@ class SetAppointmentFragment : CommonFragment(), OnClickListener, OnEditorAction
           "%s-%s", attendeeModel.attendeeEmplyeeCode,
           attendeeModel.attendeeName
       )
-      holder.ivDelete!!.setOnClickListener { _ ->
+      holder.ivDelete!!.setOnClickListener {
         addedAttendeeCount--
         setCount(addedAttendeeCount)
         attendeeModelList.removeAt(position)

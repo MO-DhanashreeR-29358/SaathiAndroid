@@ -96,6 +96,8 @@
     <string name="text_label_spl_attendee">Spl Attendee</string>
     <string name="text_button_reset">Reset"</string>
     <string name="text_button_save">Save"</string>
+    <string name="text_add_document">Add a Document</string>
+    <string name="text_dont_have_any_documents">You don\'t have any documents</string>
 
     <!--franchise-lead & lead creation-->
 
@@ -240,4 +242,7 @@
     <string name="txt_label_total">Total</string>
     <string name="saathi_init">saathi_init</string>
     <string name="txt_lable_title">Title</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
