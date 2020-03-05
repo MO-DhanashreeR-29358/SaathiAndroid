@@ -6,3 +6,40 @@ data class ProfileRequestData(
   @JvmField val leadID: String,
   @JvmField val value: String
 )
+
+data class LeadProfile(
+  @JvmField val groupName: String?,
+  @JvmField val inApproval: Boolean,
+  @JvmField val profileParameterGroupID: Int,
+  @JvmField val businessUnitId: Int,
+  @JvmField val isAdminMode: Boolean,
+  @JvmField val profileParameterList: List<ProfileParameter>?,
+  @JvmField val profileParameterId: String?
+)
+
+data class ProfileParameter(
+  @JvmField val questionType: Int?,
+  @JvmField val selectedProfileSubParameterID: Int?,
+  @JvmField val inApproval: Boolean?,
+  @JvmField val profileSubParameterList: List<ProfileSubParameter>?,
+  @JvmField val isDefaultHidden: String?,
+  @JvmField val profileParameterGroupID: Int,
+  @JvmField val isAdminMode: Boolean?,
+  @JvmField val controlType: Int,
+  @JvmField val questionText: String?,
+  @JvmField val profileParameterID: Int?
+)
+
+data class ProfileSubParameter(
+  @JvmField val isHide: String?,
+  @JvmField val questionSubText: String?,
+  @JvmField val isSelected: Boolean?,
+  @JvmField val extraInfo: String?,
+  @JvmField val extraInfoFieldName: String?,
+  @JvmField val extraInfoRowCount: Int?,
+  @JvmField val inApproval: Boolean?,
+  @JvmField val profileSubParameterID: Int?,
+  @JvmField val value: String?,
+  @JvmField val hideDependentQuestion: String?,
+  @JvmField val isAdminMode: Boolean?
+)

@@ -1,7 +1,7 @@
 package com.mosl.tabapp.createMeeting
 
-import com.mosl.tabapp.Permisssion.PermissionCheckHelperFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
+import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import dagger.Module
 import dagger.Provides
 

@@ -1,20 +1,26 @@
 package com.mosl.app.core.data.leadviewdetail.profiling
 
+import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadViewProfilingRepository
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import io.reactivex.Observable
 import javax.inject.Inject
 
 class LeadViewProfilingRepositoryImpl @Inject constructor(
   val saathiApi: SaathiApi
 ) : LeadViewProfilingRepository {
-  override fun getProfileQuestionAnswer(leadId: String) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+  override fun getProfileQuestionAnswer(leadId: String): Observable<List<LeadProfile>> {
+    return saathiApi.getLeadProfile(LeadProfileRequest(leadId))
+        .map {
+          it.transform()
+        }
   }
 
   override fun saveLeadProfileParameter(request: List<ProfileRequestData>): Observable<String> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    val saveLeadProfileRequest = request.mapToSaveLeadProfileRequestList()
+    return saathiApi.postLeadProfile(saveLeadProfileRequest)
   }
-
 }

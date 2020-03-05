@@ -32,7 +32,6 @@ import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
-import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -92,9 +91,6 @@ abstract class FragmentProvider {
 
   @ContributesAndroidInjector(modules = [AuTargetModule::class])
   abstract fun provideAuTargetVsAchievementFragmentFactory(): AuTargetFragment
-
-  @ContributesAndroidInjector
-  abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
 
   @ContributesAndroidInjector
   abstract fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment

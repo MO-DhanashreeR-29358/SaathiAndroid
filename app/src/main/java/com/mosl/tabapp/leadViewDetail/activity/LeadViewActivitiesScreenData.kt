@@ -44,7 +44,7 @@ fun Meeting.mapToMeetingParcel(): MeetingParcel {
       name = name,
       attendeeEmployee = attendeeEmployee,
       travellingMode = travellingMode,
-      meetingAddress = meetingAddress,
+      meetingAddress = meetingAddress ?: "",
       meetingId = meetingId,
       stage = stage,
       meetingAddressType = meetingAddressType,

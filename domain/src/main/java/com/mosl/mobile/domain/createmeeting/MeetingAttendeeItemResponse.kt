@@ -12,7 +12,7 @@ data class MeetingAttendeeItemResponse(
 
   @JvmField val attendeeEmpcode: String?,
 
-  @JvmField val approvalFieldList: Any,
+  @JvmField val approvalFieldList: Any?,
 
   @JvmField val meetingID: Int,
 

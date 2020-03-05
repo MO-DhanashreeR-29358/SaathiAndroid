@@ -16,13 +16,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
-import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
-import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
-import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
+import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.common.CRMAppUtil
@@ -31,24 +30,33 @@ import com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY
 import com.mosl.tabapp.constants.MOSLConstants.SOME_SEELECTION_METHOD
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadProfilingBinding
+import com.mosl.tabapp.leadViewDetail.profiling.LeadProfileUiEvent.SubmitProfileEvent
 import com.mosl.tabapp.model.profile.ProfileModel
 import com.mosl.tabapp.model.profile.ProfileOption
 import com.mosl.tabapp.model.profile.ProfileQuestion
 import com.mosl.tabapp.model.profile.ProfileQuestionGroup
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.ArrayList
 import java.util.HashMap
+import javax.inject.Inject
 
-class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickListener {
-  private var leadId = ""
+class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
+  private var leadId = "0"
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
-  private var formElementList: MutableList<View>? = null
+  private var formElementList: MutableList<View> = emptyList<View>().toMutableList()
   //This list is added just to have reffrence of each question so if we can findthem in on click event of their siblings child
-  private var questionList: MutableMap<String, View>? = null
+  private var questionMap: MutableMap<String, View> = emptyMap<String, View>().toMutableMap()
   private lateinit var binding: FragLeadProfilingBinding
+  private val subject = PublishSubject.create<LeadProfileUiEvent>()
+
+  @Inject
+  internal lateinit var presenter: LeadProfilingPresenter
 
   override fun getLayout(): Int = layout.frag_lead_profiling
 
@@ -58,229 +66,194 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadProfilingBinding.bind(view)
-    try {
-      leadId = this.arguments!!.getString(MOSLConstants.LEAD_ID, "0")
-    } catch (e: Exception) {
-      e.printStackTrace()
-    }
-    setUpView()
-    userVisibleHint = true
-    getProfileQuestionAnswerFromServer()
+    presenter.start()
+    dataActionSubject.onNext(Fetch)
   }
 
   /**
    * This method will a json string of all option selected on the form
    */
-  private val selectedAnswersJson: List<SaveLeadProfileRequest>
-    get() {
-      val saveLeadProfileRequestList = ArrayList<SaveLeadProfileRequest>()
-      for (entry in formElementList!!) {
-        when (entry) {
-          is EditText -> {
-            val mTag = entry.getTag()
-                .toString()
+  private val selectedAnswersJson by lazy {
+    val profileRequestList = ArrayList<ProfileRequestData>()
+    for (entry in formElementList) {
+      when (entry) {
+        is EditText -> {
+          val mTag = entry.getTag()
+              .toString()
+              .trim { it <= ' ' }
+          try {
+            val tagArray = mTag.split("_".toRegex())
+                .dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+            val textInEditText = entry.text.toString()
                 .trim { it <= ' ' }
-            try {
-              val aarStr = mTag.split("_".toRegex())
-                  .dropLastWhile { it.isEmpty() }
-                  .toTypedArray()
-              val valueStr = entry.text.toString()
-                  .trim { it <= ' ' }
-              saveLeadProfileRequestList += SaveLeadProfileRequest(
-                  aarStr[0], aarStr[1], leadId, valueStr
-              )
-            } catch (e: Exception) {
-              Timber.d(e)
-            }
+            profileRequestList += ProfileRequestData(
+                tagArray[0], tagArray[1], leadId, textInEditText
+            )
+          } catch (e: Exception) {
+            Timber.d(e)
           }
-          is RadioGroup -> for (i in 0 until entry.childCount) {
-            val rbTemp = entry.getChildAt(i) as RadioButton
-            val profileOption = rbTemp.tag as ProfileOption
-            if (profileOption != null && rbTemp.isChecked) {
-              var valueString = ""
-              if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
-                      "Y", ignoreCase = true
-                  )
-              ) {
-                valueString = getExtraView(
-                    profileOption
-                )
-              }
-
-              saveLeadProfileRequestList.add(
-                  SaveLeadProfileRequest(
-                      profileOption.profileParameterID!!.toString(),
-                      profileOption.profileSubParameterID!!.toString(), leadId,
-                      valueString
-                  )
-              )
-            }
-          }
-          is CheckBox -> {
-            val profileOption = entry.getTag() as ProfileOption
-            if (entry.isChecked) {
-              var valueString = ""
-              if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
-                      "Y", ignoreCase = true
-                  )
-              ) {
-                valueString = getExtraView(profileOption)
-              }
-              saveLeadProfileRequestList.add(
-                  SaveLeadProfileRequest(
-                      profileOption.profileParameterID!!.toString(),
-                      profileOption.profileSubParameterID!!.toString(), leadId,
-                      valueString
-                  )
-              )
-            }
-          }
-          is Spinner -> {
-            val opTion = entry.selectedItem as ProfileOption
+        }
+        is RadioGroup -> for (i in 0 until entry.childCount) {
+          val rbTemp = entry.getChildAt(i) as RadioButton
+          val profileOption = rbTemp.tag as ProfileOption
+          if (profileOption != null && rbTemp.isChecked) {
             var valueString = ""
-
-            if (!CRMAppUtil.isBlank(opTion.extraInfo) && opTion.extraInfo
-                    .equals("Y", ignoreCase = true)
+            if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
+                    "Y", ignoreCase = true
+                )
             ) {
-              valueString = getExtraView(opTion)
+              valueString = getExtraView(
+                  profileOption
+              )
             }
 
-            saveLeadProfileRequestList.add(
-                SaveLeadProfileRequest(
-                    opTion.profileParameterID!!.toString(),
-                    opTion.profileSubParameterID!!.toString(),
-                    leadId,
+            profileRequestList.add(
+                ProfileRequestData(
+                    profileOption.profileParameterID!!.toString(),
+                    profileOption.profileSubParameterID!!.toString(), leadId,
                     valueString
                 )
             )
           }
         }
-      }
+        is CheckBox -> {
+          val profileOption = entry.getTag() as ProfileOption
+          if (entry.isChecked) {
+            var valueString = ""
+            if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
+                    "Y", ignoreCase = true
+                )
+            ) {
+              valueString = getExtraView(profileOption)
+            }
+            profileRequestList.add(
+                ProfileRequestData(
+                    profileOption.profileParameterID!!.toString(),
+                    profileOption.profileSubParameterID!!.toString(), leadId,
+                    valueString
+                )
+            )
+          }
+        }
+        is Spinner -> {
+          val opTion = entry.selectedItem as ProfileOption
+          var valueString = ""
 
-      return saveLeadProfileRequestList
+          if (!CRMAppUtil.isBlank(opTion.extraInfo) && opTion.extraInfo
+                  .equals("Y", ignoreCase = true)
+          ) {
+            valueString = getExtraView(opTion)
+          }
+
+          profileRequestList.add(
+              ProfileRequestData(
+                  opTion.profileParameterID!!.toString(),
+                  opTion.profileSubParameterID!!.toString(),
+                  leadId,
+                  valueString
+              )
+          )
+        }
+      }
     }
+
+    profileRequestList
+  }
 
   fun setViewPager(viewPager: ViewPager) {
     this.viewPager = viewPager
   }
 
-  private fun setUpView() {
-    binding.btnCancel.setOnClickListener(this)
-    binding.btnSubmit.setOnClickListener(this)
-  }
-
-/*
-  override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-    try {
-      super.setUserVisibleHint(isVisibleToUser)
-      when {
-        isVisibleToUser && leadProfilingView != null && viewPager!!.currentItem == 2 -> getProfileQuestionAnswerFromServer()
+  override fun getProfileRequestDataList(): List<ProfileRequestData> = selectedAnswersJson
+  override fun onSubmitProfileEventFired(): Observable<SubmitProfileEvent> = subject.ofType()
+  override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
+  override fun renderSubmitButtonClicked() {
+    val request = selectedAnswersJson
+    when {
+      request.isNotEmpty() -> subject.onNext(SubmitProfileEvent)
+      else -> {
+        alertDialog(
+            requireContext(), 0,
+            resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
+            resources.getString(android.R.string.ok), true, null
+        )
       }
-    } catch (e: Exception) {
-      e.printStackTrace()
-    }
-
-  }
-*/
-
-  override fun onClick(view: View) {
-    //Goto first tab
-    when (view.id) {
-
-      R.id.btnSubmit -> {
-        val request = selectedAnswersJson
-        when {
-          request.isNotEmpty() -> saveLeadProfileParameter(request)
-          else -> {
-            alertDialog(
-                requireContext(), 0,
-                resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
-                resources.getString(android.R.string.ok), true, null
-            )
-          }
-        }
-      }
-
-      R.id.btnCancel -> viewPager!!.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
     }
   }
 
-  private fun fillProfileModal(leadProfileItems: List<LeadProfileItem>) {
+  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
+  override fun renderCancelButtonClicked() {
+    viewPager?.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
+  }
+
+  private fun fillProfileModal(leadProfileList: List<LeadProfile>) {
 
     profileModel = ProfileModel()
     val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
-    for (responseI in leadProfileItems.indices) {
-      val (groupName1, _, inApproval, _, ProfileParameterGroupID, BusinessUnitId, _, IsAdminMode, parameterList, _, profileParameterId) = leadProfileItems[responseI]
-      val groupName = stringOrEmpty(groupName1)
-      val profileId = stringOrEmpty(profileParameterId)
+    for (leadProfile in leadProfileList) {
+      val groupName = stringOrEmpty(leadProfile.groupName)
+      val profileId = stringOrEmpty(leadProfile.profileParameterId)
       val tempProfileQuestionGroup = ProfileQuestionGroup().apply {
         this.groupName = groupName
         this.profileParameterID = profileId
-        this.inApproval = inApproval
-        this.profileParameterGroupID = ProfileParameterGroupID
-        this.businessUnitId = BusinessUnitId
-        this.isAdminMode = IsAdminMode
+        this.inApproval = leadProfile.inApproval
+        this.profileParameterGroupID = leadProfile.profileParameterGroupID
+        this.businessUnitId = leadProfile.businessUnitId
+        this.isAdminMode = leadProfile.isAdminMode
       }
 
       val mProfileQuestionList = ArrayList<ProfileQuestion>()
-      if (parameterList != null) {
-        for (profileParameterListI in parameterList.indices) {
-          val (_, questionType1, selectedProfileSubParameterID1, _, _, subParameterList, isDefaultHidden, ProfileParameterListProfileParameterGroupID, _, _, _, isAdminMode, controlType, _, questionText1, profileParameterID) = parameterList[profileParameterListI]
+      leadProfile.profileParameterList?.let {
+        for (parameter in it) {
           val tmpProfileQuestion = ProfileQuestion()
 
-          tmpProfileQuestion.controlType = controlType
-          tmpProfileQuestion.inApproval = inApproval
-          tmpProfileQuestion.profileParameterGroupID = ProfileParameterListProfileParameterGroupID
-          val questionType = questionType1!!
-          tmpProfileQuestion.questionType = questionType
-          val selectedProfileSubParameterID = selectedProfileSubParameterID1!!
-          tmpProfileQuestion.questionType = selectedProfileSubParameterID
-          val profileParameterListIsAdminMode = isAdminMode!!
-          tmpProfileQuestion.isAdminMode = profileParameterListIsAdminMode
-          val questionText = stringOrEmpty(questionText1)
+          tmpProfileQuestion.controlType = parameter.controlType
+          tmpProfileQuestion.inApproval = parameter.inApproval
+          tmpProfileQuestion.profileParameterGroupID = parameter.profileParameterGroupID
+          tmpProfileQuestion.questionType = parameter.questionType!!
+          tmpProfileQuestion.questionType = parameter.selectedProfileSubParameterID!!
+          tmpProfileQuestion.isAdminMode = parameter.isAdminMode!!
+          val questionText = stringOrEmpty(parameter.questionText)
           tmpProfileQuestion.questionText = questionText
 
-          val yNStatus = when (isDefaultHidden) {
+          val yNStatus = when (parameter.isDefaultHidden) {
             null, "" -> "N"
-            else -> isDefaultHidden
+            else -> parameter.isDefaultHidden
           }
           tmpProfileQuestion.isDefaultHidden = yNStatus
-
-          val profileParameterListProfileParameterID = profileParameterID!!
-          tmpProfileQuestion.profileParameterID = profileParameterListProfileParameterID
+          tmpProfileQuestion.profileParameterID = parameter.profileParameterID!!
 
           val mProfileOptionList = ArrayList<ProfileOption>()
-          if (subParameterList != null) {
-            for (profileSubParameterListI in subParameterList.indices) {
-              val (_, isHide, _, questionSubText, isSelected, extraInfo, _, extraInfoFieldName, extraInfoRowCount, inApproval1, profileSubParameterID1, _, value1, hideDepedentQuestion, _, isAdminMode1) = subParameterList[profileSubParameterListI]
+          parameter.profileSubParameterList?.let { list ->
+            for (subParameter in list) {
               val tempProfileOption = ProfileOption()
 
               tempProfileOption.profileParameterID = tmpProfileQuestion.profileParameterID
 
-              val profileSubParameterListInApproval = inApproval1!!
+              val profileSubParameterListInApproval = subParameter.inApproval!!
               tempProfileOption.inApproval = profileSubParameterListInApproval
 
-              val value = stringOrEmpty(value1)
+              val value = stringOrEmpty(subParameter.value)
               tempProfileOption.value = value
-              tempProfileOption.isSelected = isSelected!!
+              tempProfileOption.isSelected = subParameter.isSelected!!
 
-              val profileSubParameterID = profileSubParameterID1!!
+              val profileSubParameterID = subParameter.profileSubParameterID!!
               tempProfileOption.profileSubParameterID = profileSubParameterID
-              tempProfileOption.hideDepedentQuestion = stringOrEmpty(hideDepedentQuestion)
-              val noStr = stringOrEmpty(isHide)
+              tempProfileOption.hideDepedentQuestion =
+                stringOrEmpty(subParameter.hideDependentQuestion)
+              val noStr = stringOrEmpty(subParameter.isHide)
               tempProfileOption.setIsHide(noStr)
 
-              val strQuestionsubtext = stringOrEmpty(questionSubText)
-              tempProfileOption.questionSubText = strQuestionsubtext
+              tempProfileOption.questionSubText = stringOrEmpty(subParameter.questionSubText)
+              tempProfileOption.isAdminMode = subParameter.isAdminMode!!
+              tempProfileOption.extraInfo = stringOrEmpty(subParameter.extraInfo)
 
-              val profileSubParameterListIsAdminMode = isAdminMode1!!
-              tempProfileOption.isAdminMode = profileSubParameterListIsAdminMode
-
-              tempProfileOption.extraInfo = stringOrEmpty(extraInfo)
-              when {
-                extraInfoRowCount != null -> tempProfileOption.extraInfoRowCount = extraInfoRowCount
+              subParameter.extraInfoRowCount?.let { rowCount ->
+                tempProfileOption.extraInfoRowCount = rowCount
               }
-              tempProfileOption.extraInfoFieldName = stringOrEmpty(extraInfoFieldName)
+
+              tempProfileOption.extraInfoFieldName = stringOrEmpty(subParameter.extraInfoFieldName)
 
               mProfileOptionList.add(tempProfileOption)
             }
@@ -289,11 +262,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
           mProfileQuestionList.add(tmpProfileQuestion)
         }
       }
+
+
       tempProfileQuestionGroup.profileQuestionList = mProfileQuestionList
       profileQuestionGroupList.add(tempProfileQuestionGroup)
     }
 
-    profileModel!!.profileQuestionGroup = profileQuestionGroupList
+    profileModel?.profileQuestionGroup = profileQuestionGroupList
   }
 
   private fun setExtraView(
@@ -396,49 +371,46 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
   private fun getExtraView(profileOption: ProfileOption): String {
     var valueString = StringBuilder()
     val extraViewList = profileOption.extraViewList
-    return if (extraViewList != null) {
+    return extraViewList?.let {
       try {
         for (vList in extraViewList) {
           for (mView in vList) {
             val mData = (mView as EditText).text.toString()
                 .trim { it <= ' ' }
-            if (mData.trim { it <= ' ' }.length < 1) {
+            if (mData.trim { it <= ' ' }.isEmpty()) {
               valueString.append(" $ANS_SEPERATER")
             } else {
               valueString.append(mData)
                   .append(ANS_SEPERATER)
             }
-          }//remove last ##
+          }
           valueString = StringBuilder(
               valueString.substring(0, valueString.length - ANS_SEPERATER.length)
           )
           valueString.append(ANS_GROUP_SEPERATER)
         }
-        //remove last | symbol
         valueString.substring(
             0,
             valueString.length - ANS_GROUP_SEPERATER.length
         )
       } catch (eie: StringIndexOutOfBoundsException) {
-        ""//return empty}
+        ""
       }
 
-    } else {
-      ""//return empty
-    }
+    } ?: ""
+
   }
 
   /**
    * this method will render/design the profile page with question filled in model
    */
 
-  @SuppressLint("DefaultLocale")
   private fun renderForm() {
     if (profileModel == null) {
       return
     }
     formElementList = ArrayList()
-    questionList = HashMap()
+    questionMap = HashMap()
     val previousActionMap = HashMap<String, String>()
 
     binding.mainProfileLayouttarget.removeAllViews()
@@ -485,7 +457,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
 
 
         llBasicProfileQuestionLayoutInner.addView(tvQuestion)
-        questionList!![question.profileParameterID!!.toString() + Head] = tvQuestion
+        questionMap[question.profileParameterID!!.toString() + Head] = tvQuestion
         if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
           tvQuestion.visibility = View.GONE
         }
@@ -495,128 +467,124 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
           when (question.controlType) {
             0 -> {
             }
-            TEXT_BOX// question type edit text
-            -> {
+            TEXT_BOX -> {
 
-              val llBasicProfileQuestionLayoutGroup = LinearLayout(activity)
-              llBasicProfileQuestionLayoutGroup.layoutParams = LinearLayout.LayoutParams(
-                  LinearLayout.LayoutParams.MATCH_PARENT,
-                  LinearLayout.LayoutParams.WRAP_CONTENT
-              )
-              llBasicProfileQuestionLayoutGroup.orientation = LinearLayout.VERTICAL
-              llBasicProfileQuestionLayoutGroup.setPadding(
-                  padding, padding, padding,
-                  padding
-              )
+              val llBasicProfileQuestionLayoutGroup = LinearLayout(activity).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                orientation = LinearLayout.VERTICAL
+                setPadding(padding, padding, padding, padding)
+              }
+
 
               for (mOptions in question.profileOptionList) {
-                val tvHead = TextView(activity)
-                tvHead.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                tvHead.setTextColor(resources.getColor(R.color.light_black))
-                tvHead.setPadding(padding, 4, padding, 4)
-                tvHead.text = mOptions.questionSubText
-                //  tvHead.setTextSize(getResources().getDimension(R.dimen.txt_size_profile));
-                tvHead.textSize = resources.getDimension(R.dimen.txt_size_profile)
-                val mEditTextOption = EditText(activity)
-                mEditTextOption.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                mEditTextOption.setBackgroundResource(R.drawable.textview_border)
-                mEditTextOption.tag = (question.profileParameterID.toString()
-                    + "_"
-                    + mOptions.profileSubParameterID
-                    + "_E")
-                mEditTextOption.animate()
-                mEditTextOption.filters = arrayOf(CRMAppUtil.filterOnlyAlphabetAndNumbers)
-                mEditTextOption.setText(mOptions.value)
-                mEditTextOption.hint = mOptions.questionSubText
+                val tvHead = TextView(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                      LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
+                  setPadding(padding, 4, padding, 4)
+                  text = mOptions.questionSubText
+                  textSize = resources.getDimension(R.dimen.txt_size_profile)
+                }
+
+                val mEditTextOption = EditText(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                      LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  setBackgroundResource(R.drawable.textview_border)
+                  tag = (question.profileParameterID.toString()
+                      + "_"
+                      + mOptions.profileSubParameterID
+                      + "_E")
+                  animate()
+                  filters = arrayOf(CRMAppUtil.filterOnlyAlphabetAndNumbers)
+                  setText(mOptions.value)
+                  hint = mOptions.questionSubText
+                }
+
                 tvHead.text = mOptions.questionSubText
                 llBasicProfileQuestionLayoutGroup.addView(tvHead)
                 llBasicProfileQuestionLayoutGroup.addView(mEditTextOption)
-                //Adding to form List
-                formElementList!!.add(mEditTextOption)
-              }//for for options end
+                formElementList.add(mEditTextOption)
+              }
               llBasicProfileQuestionLayoutGroup.setBackgroundResource(
                   R.drawable.profiling_question_background_group
               )
               llBasicProfileQuestionLayoutInner.addView(
                   llBasicProfileQuestionLayoutGroup
               )
-              questionList!![question.profileParameterID!!.toString()] =
+              questionMap[question.profileParameterID!!.toString()] =
                 llBasicProfileQuestionLayoutGroup
             }
-            RADIO_BUTTON// question type is radio button
-            -> {
-              //start radio group
-              val rbGroup = RadioGroup(activity)
-              llBasicProfileQuestionLayoutInner.addView(rbGroup)
-              rbGroup.layoutParams = LinearLayout.LayoutParams(
-                  LinearLayout.LayoutParams.MATCH_PARENT,
-                  LinearLayout.LayoutParams.WRAP_CONTENT
-              )
-              rbGroup.setPadding(padding, padding, padding, padding)
-              rbGroup.setBackgroundResource(
-                  R.drawable.profiling_question_background_group
-              )
-              rbGroup.orientation = RadioGroup.VERTICAL
-              var rbOptionSelected: RadioButton? = null
-              var previousAction = ProfileOption()
-              //Adding linarlayout for info for extra
-              val extraFieldLayout = LinearLayout(activity)
-              extraFieldLayout.layoutParams = LinearLayout.LayoutParams(
-                  LinearLayout.LayoutParams.MATCH_PARENT,
-                  LinearLayout.LayoutParams.WRAP_CONTENT
-              )
-              extraFieldLayout.orientation = LinearLayout.VERTICAL
-              extraFieldLayout.setPadding(padding, padding, padding, padding)
-              extraFieldLayout.visibility = View.GONE
-              //Adding linarlayout for info for extra end
-              llBasicProfileQuestionLayoutInner.addView(extraFieldLayout)
-              for (mOptions in question.profileOptionList) {
-                val rbOption = RadioButton(activity)
-                rbOption.layoutParams = LinearLayout.LayoutParams(
+            RADIO_BUTTON -> {
+              val rbGroup = RadioGroup(activity).apply {
+                layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
-                val mPadding = resources.getDimension(R.dimen._8sdp)
-                    .toInt()
-                rbOption.setPadding(padding, mPadding, padding, mPadding)
-                // rbOption.setTextSize(getResources().getDimension(R.dimen.txt_size_profile));
-                rbOption.textSize = resources.getDimension(R.dimen.txt_size_profile)
-                rbOption.text = mOptions.questionSubText
-                //rbOption.setTag(question.getProfileParameterID() + "_" + mOptions.getProfileSubParameterID() + "_"+m);
-                rbOption.tag = mOptions
+                setPadding(padding, padding, padding, padding)
+                setBackgroundResource(
+                    R.drawable.profiling_question_background_group
+                )
+                orientation = RadioGroup.VERTICAL
+              }
+
+
+              llBasicProfileQuestionLayoutInner.addView(rbGroup)
+              var rbOptionSelected: RadioButton? = null
+              var previousAction = ProfileOption()
+              val extraFieldLayout = LinearLayout(activity).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                orientation = LinearLayout.VERTICAL
+                setPadding(padding, padding, padding, padding)
+                visibility = View.GONE
+              }
+
+              //Adding linarlayout for info for extra end
+              llBasicProfileQuestionLayoutInner.addView(extraFieldLayout)
+              for (mOptions in question.profileOptionList) {
+                val rbOption = RadioButton(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                      LinearLayout.LayoutParams.MATCH_PARENT,
+                      LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  val mPadding = resources.getDimension(R.dimen._8sdp)
+                      .toInt()
+                  setPadding(padding, mPadding, padding, mPadding)
+                  textSize = resources.getDimension(R.dimen.txt_size_profile)
+                  text = mOptions.questionSubText
+                  tag = mOptions
+                }
+
                 rbOption.setOnClickListener {
                   extraFieldLayout.removeAllViews()
                   extraFieldLayout.removeAllViewsInLayout()
 
-                  if (!CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions
-                          .extraInfo
-                          .equals("Y", ignoreCase = true)
-                  ) {
-                    setExtraView(mOptions, extraFieldLayout)
-                  } else {
-                    extraFieldLayout.removeAllViews()
-                    extraFieldLayout.visibility = View.GONE
+                  when {
+                    !CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo.equals(
+                        "Y", ignoreCase = true
+                    ) -> setExtraView(mOptions, extraFieldLayout)
+                    else -> {
+                      extraFieldLayout.removeAllViews()
+                      extraFieldLayout.visibility = View.GONE
+                    }
                   }
-                  if (!CRMAppUtil.isBlank(
-                          mOptions.hideDepedentQuestion
-                      )
+                  if (!CRMAppUtil.isBlank(mOptions.hideDepedentQuestion)
                   ) {
-                    if (questionList!!.containsKey(
+                    if (questionMap.containsKey(
                             mOptions.hideDepedentQuestion
                         )
                     ) {
-                      //questionList
-                      val hideView = questionList!![mOptions.hideDepedentQuestion]
-                      val hideViewHead = questionList!![mOptions.hideDepedentQuestion + Head]
+                      //questionMap
+                      val hideView = questionMap[mOptions.hideDepedentQuestion]
+                      val hideViewHead = questionMap[mOptions.hideDepedentQuestion + Head]
                       if (mOptions.isHide.equals("N", ignoreCase = true)) {
-                        hideView!!.visibility = View.VISIBLE
-                        hideViewHead!!.visibility = View.VISIBLE
+                        hideView?.visibility = View.VISIBLE
+                        hideViewHead?.visibility = View.VISIBLE
                       } else if (mOptions.isHide
                               .equals("Y", ignoreCase = true)
                       ) {
@@ -630,8 +598,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
                             }
                           }
                         }
-                        hideView!!.visibility = View.GONE
-                        hideViewHead!!.visibility = View.GONE
+                        hideView?.visibility = View.GONE
+                        hideViewHead?.visibility = View.GONE
                       }
                     }
                   }
@@ -653,76 +621,71 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
               }
 
               //Adding to form List
-              formElementList!!.add(rbGroup)
-              questionList!![question.profileParameterID!!.toString()] = rbGroup
+              formElementList.add(rbGroup)
+              questionMap[question.profileParameterID!!.toString()] = rbGroup
               if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
                 rbGroup.visibility = View.GONE
               }
             }
-            CHECK_BOX// multiple choice
-            -> {
+            CHECK_BOX -> {
               for (mOptions in question.profileOptionList) {
-                val cbOption = CheckBox(activity)
+                val cbOption = CheckBox(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                      LinearLayout.LayoutParams.MATCH_PARENT,
+                      LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
 
-                cbOption.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+                  val mPadding = resources.getDimension(R.dimen._8sdp)
+                      .toInt()
+                  setPadding(mPadding, mPadding, mPadding, mPadding)
+                  text = mOptions.questionSubText
+                  textSize = resources.getDimension(R.dimen.txt_size_profile)
+                  tag = mOptions
+                  isChecked = mOptions.isSelected
+                }
 
-                val mPadding = resources.getDimension(R.dimen._8sdp)
-                    .toInt()
-                cbOption.setPadding(mPadding, mPadding, mPadding, mPadding)
-                cbOption.text = mOptions.questionSubText
-                cbOption.textSize = resources.getDimension(R.dimen.txt_size_profile)
+                formElementList.add(cbOption)
+                val extraFieldLayout = LinearLayout(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                      LinearLayout.LayoutParams.MATCH_PARENT,
+                      LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  orientation = LinearLayout.VERTICAL
+                  setPadding(padding, padding, padding, padding)
+                  visibility = View.GONE
+                }
 
-                cbOption.tag = mOptions
-                cbOption.isChecked = mOptions.isSelected
+                cbOption.setOnClickListener { view ->
+                  if (view is CheckBox) {
+                    when {
+                      view.isChecked -> {
+                        extraFieldLayout.removeAllViews()
+                        extraFieldLayout.removeAllViewsInLayout()
 
-                //Adding to form List
-                formElementList!!.add(cbOption)
-                //Adding linarlayout for info for extra
-                val extraFieldLayout = LinearLayout(activity)
-                extraFieldLayout.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                extraFieldLayout.orientation = LinearLayout.VERTICAL
-                extraFieldLayout.setPadding(padding, padding, padding, padding)
-                extraFieldLayout.visibility = View.GONE
-                //Adding linarlayout for info for extra end
-                //on click and setting data end
-                cbOption.setOnClickListener { v ->
-                  if (v is CheckBox) {
-                    if (v.isChecked) {
-                      extraFieldLayout.removeAllViews()
-                      extraFieldLayout.removeAllViewsInLayout()
-
-                      if (!CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo
-                              .equals("Y", ignoreCase = true)
-                      ) {
-                        setExtraView(mOptions, extraFieldLayout)
-                      } else {
+                        when {
+                          !CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo.equals(
+                              "Y", ignoreCase = true
+                          ) -> setExtraView(mOptions, extraFieldLayout)
+                          else -> {
+                            extraFieldLayout.removeAllViews()
+                            extraFieldLayout.visibility = View.GONE
+                          }
+                        }
+                      }
+                      else -> {
                         extraFieldLayout.removeAllViews()
                         extraFieldLayout.visibility = View.GONE
                       }
-                    } else {
-                      //Not Checked State
-                      extraFieldLayout.removeAllViews()
-                      extraFieldLayout.visibility = View.GONE
                     }
                   }
                 }
 
                 if (mOptions.isSelected) {
-
                   setExtraView(mOptions, extraFieldLayout)
                 }
-
-                //on click and setting data end
-
                 llBasicProfileQuestionLayoutInner.addView(cbOption)
                 llBasicProfileQuestionLayoutInner.addView(extraFieldLayout)
-              }//for for options end
+              }
             }
             DROP_DOWN -> {
               val childValue = activity!!.layoutInflater
@@ -731,7 +694,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
               val spSection = childValue.findViewById<View>(R.id.spSection) as Spinner
               tvHead.visibility = View.GONE
 
-              //   spSection.setTag(question.getProfileParameterID() + "_" + "+" + "_SP");
               spSection.tag = question.profileParameterID.toString() + "_" + "+" + "_SP"
               val arrAdap = ArrayAdapter(
                   requireContext(), layout.simple_spinner_item,
@@ -740,19 +702,20 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
               arrAdap.setDropDownViewResource(R.layout.mdropdown)
 
               spSection.adapter = arrAdap
-              formElementList!!.add(spSection)
+              formElementList.add(spSection)
               llBasicProfileQuestionLayoutInner.addView(childValue)
               val pos = question.dropdownValueArrPosition
 
-              //Adding linarlayout for info for extra
-              val extraFieldLayout = LinearLayout(activity)
-              extraFieldLayout.layoutParams = LinearLayout.LayoutParams(
-                  LinearLayout.LayoutParams.MATCH_PARENT,
-                  LinearLayout.LayoutParams.WRAP_CONTENT
-              )
-              extraFieldLayout.orientation = LinearLayout.VERTICAL
-              extraFieldLayout.setPadding(padding, padding, padding, padding)
-              extraFieldLayout.visibility = View.GONE
+              val extraFieldLayout = LinearLayout(activity).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                orientation = LinearLayout.VERTICAL
+                setPadding(padding, padding, padding, padding)
+                visibility = View.GONE
+              }
+
               //Adding linarlayout for info for extra end
               spSection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -795,7 +758,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
         val questionBar = View(activity)
         questionBar.layoutParams =
           LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 30)
-        questionBar.setBackgroundColor(resources.getColor(R.color.white))
+        questionBar.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
         llBasicProfileQuestionLayoutInner.addView(questionBar)
       }
 
@@ -817,8 +780,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
     //perform proper opioin
     for (StringAction in previousActionMap.keys) {
-      val hideView = questionList!![StringAction]
-      val hideViewHead = questionList!![StringAction + Head]
+      val hideView = questionMap[StringAction]
+      val hideViewHead = questionMap[StringAction + Head]
       if (previousActionMap[StringAction]!!.equals("N", ignoreCase = true)) {
         hideView!!.visibility = View.VISIBLE
         hideViewHead!!.visibility = View.VISIBLE
@@ -829,36 +792,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
   }
 
-  /**
-   * is any value added to map
-   */
-  /* private boolean isFormModified() {
-        return (mapProfileData == null || mapProfileData.isEmpty()) ? false : true;
-    }*/
-
-  /**
-   * this method will return a json string for selected answer of a single field
-   */
-  fun getSelectedAnswerJsonObjectForAField(
-    getProfileParameterID: String,
-    getProfileSubParameterID: String,
-    getLeadID: String,
-    value: String?
-  ): String {
-    var json = "{"
-    json += "\"ProfileParameterID\":$getProfileParameterID"
-    json += ",\"ProfileSubParameterID\":$getProfileSubParameterID"
-    json += ",\"LeadID\":$getLeadID"
-    if (value != null) {
-      json += ",\"Value\":\"$value\""
-    } else {
-      json += ",\"Value\":" + value!!
-    }
-    json += "}"
-    return json
-  }
-
-  private fun renderSubmitProfile(uiModel: UiModel<String>) {
+  override fun renderSubmitProfile(uiModel: UiModel<String>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
@@ -866,34 +800,27 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
     }
 
     uiModel.onSuccess {
-      alertDialog(
-          activity, 0,
+      activity?.let { it1 ->
+        alertDialog(
+            it1, 0,
           resources.getString(R.string.motilal_oswal),
           MOSLConstants.SET_USER_PROFILE, "OK", true
-      ) { action, data1 ->
-        if (action == MSFDialog.Action.OK) {
-          viewPager!!.setCurrentItem(
+        ) { action, data1 ->
+          if (action == MSFDialog.Action.OK) {
+            viewPager?.setCurrentItem(
               MOSLConstants.LEAD_DETAIL, false
-          )
+            )
+          }
         }
       }
     }
   }
 
-  /**
-   * Send selected answers to server
-   */
-  private fun saveLeadProfileParameter(request: List<SaveLeadProfileRequest>) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val subscribe = saathiApi.postLeadProfile(request)
-          .compose<UiModel<String>>(applyUiModel<String>())
-          .subscribe { renderSubmitProfile(it) }
-    } else {
-      noInternetConnectionDialog()
-    }
+  override fun render(leadId: String) {
+    this.leadId = leadId
   }
 
-  private fun renderProfileParameters(uiModel: UiModel<List<LeadProfileItem>>) {
+  override fun renderProfileParameters(uiModel: UiModel<List<LeadProfile>>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
@@ -917,18 +844,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView, View.OnClickL
 
     }
 
-  }
-
-  private fun getProfileQuestionAnswerFromServer() {
-    when {
-      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
-        val request = LeadProfileRequest(leadId)
-        val subscribe = saathiApi.getLeadProfile(request)
-            .compose<UiModel<List<LeadProfileItem>>>(applyUiModel<List<LeadProfileItem>>())
-            .subscribe { renderProfileParameters(it) }
-      }
-      else -> noInternetConnectionDialog()
-    }
   }
 
   companion object {

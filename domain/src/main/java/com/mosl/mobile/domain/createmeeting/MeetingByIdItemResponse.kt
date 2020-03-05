@@ -2,23 +2,23 @@ package com.mosl.mobile.domain.createmeeting
 
 data class MeetingByIdItemResponse(
 
-  @JvmField val parentID: Any,
+  @JvmField val parentID: Any?,
 
-  @JvmField val products: List<Any?>,
+  @JvmField val products: List<Any>?,
 
   @JvmField val meetingReasonID: String?,
 
-  @JvmField val geoLongitude: Any,
+  @JvmField val geoLongitude: Any?,
 
   @JvmField val subCategoryID: String?,
 
-  @JvmField val geoTagStatus: Any,
+  @JvmField val geoTagStatus: Any?,
 
   @JvmField val meetingObjectiveID: Int,
 
   @JvmField val uCID: Int,
 
-  @JvmField val name: Any,
+  @JvmField val name: Any?,
 
   @JvmField val isAdminMode: Boolean,
 
@@ -36,7 +36,7 @@ data class MeetingByIdItemResponse(
 
   @JvmField val meetingAttendee: List<MeetingAttendeeItemResponse>,
 
-  @JvmField val geoLatitude: Any,
+  @JvmField val geoLatitude: Any?,
 
   @JvmField val activityTypeID: String?,
 
@@ -50,9 +50,9 @@ data class MeetingByIdItemResponse(
 
   @JvmField val repeatationEndsOn: String?,
 
-  @JvmField val geoArea: Any,
+  @JvmField val geoArea: Any?,
 
-  @JvmField val deviceType: Any,
+  @JvmField val deviceType: Any?,
 
   @JvmField val meetingType: String?,
 
@@ -60,7 +60,7 @@ data class MeetingByIdItemResponse(
 
   @JvmField val finalAction: String,
 
-  @JvmField val pincode: Any,
+  @JvmField val pincode: Any?,
 
   @JvmField val repeatEveryWeekCode: String?,
 
@@ -74,11 +74,11 @@ data class MeetingByIdItemResponse(
 
   @JvmField val meetingDate: String?,
 
-  @JvmField val clientcode: Any,
+  @JvmField val clientcode: Any?,
 
   @JvmField val productCategoryID: Int,
 
-  @JvmField val meetingAddress: Any,
+  @JvmField val meetingAddress: Any?,
 
   @JvmField val meetingID: String?,
 
@@ -88,25 +88,25 @@ data class MeetingByIdItemResponse(
 
   @JvmField val meetingDescription: String?,
 
-  @JvmField val attendeeCode: Any,
+  @JvmField val attendeeCode: Any?,
 
   @JvmField val isSubcategoryData: Int,
 
-  @JvmField val clientname: Any,
+  @JvmField val clientname: Any?,
 
-  @JvmField val amount: Any,
+  @JvmField val amount: Any?,
 
-  @JvmField val travellingModeIds: Any,
+  @JvmField val travellingModeIds: Any?,
 
   @JvmField val meetingAddressTypeId: Int,
 
   @JvmField val inApproval: Boolean,
 
-  @JvmField val approvalFieldList: Any,
+  @JvmField val approvalFieldList: Any?,
 
   @JvmField val customerRemark: String?,
 
-  @JvmField val isPotentialPMSProduct: Any,
+  @JvmField val isPotentialPMSProduct: Any?,
 
   @JvmField val repeatOnCode: String?
 )

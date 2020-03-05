@@ -39,10 +39,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -63,7 +61,6 @@ import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
-import com.mosl.tabapp.Permisssion.PermissionCheckHelperFragment;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -75,11 +72,10 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
+import com.mosl.tabapp.permission.PermissionCheckHelperFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -87,12 +83,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;

@@ -106,7 +106,7 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       date = dATE,
       leadId = leadID,
       meetingDuration = meetingDuration,
-      pincode = pincode,
-      location = location
+      pincode = pincode ?: "",
+      location = location ?: ""
   )
 }
