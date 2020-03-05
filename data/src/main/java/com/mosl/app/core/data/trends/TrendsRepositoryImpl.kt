@@ -19,13 +19,13 @@ class TrendsRepositoryImpl @Inject constructor(
     val targetRequest = request.requestTransform()
     return api.getTrendsWidgetData(targetRequest)
       .map {
-        //        val userInfoStr = gson.fromJson(it, String::class.java)
-        val response = JSONObject(it)
-        val status: String = response.get(STATUS).toString()
-        if (status.equals("true", ignoreCase = true)) {
-          renderGraph(response.getJSONObject(RESPONSE).getJSONArray("Table"))
+        val jsonObject = JSONObject(it)
+        val status: Boolean = jsonObject.getBoolean(STATUS)
+        if (status) {
+          val response = jsonObject.getJSONObject(RESPONSE)
+          renderGraph(response.getJSONArray(TABLE))
         } else {
-          val message: String = response.get(MESSAGE).toString()
+          val message: String = jsonObject.getString(MESSAGE)
           throw ServiceFailureException(message, message)
         }
       }
@@ -36,22 +36,21 @@ class TrendsRepositoryImpl @Inject constructor(
     val dataList: MutableList<TrendsChartModel> = mutableListOf()
     var paramValue: String
     if (jsonArray.length() > 0) {
-      dataList.clear()
-      for (ctr in 0 until jsonArray.length()) {
+      for (array in 0 until jsonArray.length()) {
         val model = TrendsChartModel()
-        val `object` = jsonArray.getJSONObject(ctr)
-        val paramNameArr = `object`.names()
-        for (y in 0 until paramNameArr.length()) {
-          val paramName = paramNameArr.getString(y)
-          if (paramName == "Parameters") {
-            paramValue = `object`.getString(paramName)
+        val jsonObject = jsonArray.getJSONObject(array)
+        val paramNameArr = jsonObject.names()
+        for (param in 0 until paramNameArr.length()) {
+          val paramName = paramNameArr.getString(param)
+          if (paramName.equals(PARAMETERS, ignoreCase = true)) {
+            paramValue = jsonObject.getString(paramName)
             model.legendText = paramValue
-          } else if (paramName == "ChartType") {
-            paramValue = `object`.getString(paramName)
+          } else if (paramName.equals(CHARTTYPE, ignoreCase = true)) {
+            paramValue = jsonObject.getString(paramName)
             model.chartType = paramValue
           } else {
-            if (!paramName.equals("WidgetType", ignoreCase = true)) {
-              paramValue = `object`.getString(paramName)
+            if (!paramName.equals(WIDGETTYPE, ignoreCase = true)) {
+              paramValue = jsonObject.getString(paramName)
               val monthData = paramValue.toFloat()
               model.monthData.put(paramName, monthData)
             }
@@ -67,6 +66,10 @@ class TrendsRepositoryImpl @Inject constructor(
     const val STATUS = "Status"
     const val MESSAGE = "Message"
     const val RESPONSE = "Response"
+    const val PARAMETERS = "Parameters"
+    const val CHARTTYPE = "ChartType"
+    const val WIDGETTYPE = "WidgetType"
+    const val TABLE = "Table"
   }
 }
 
