@@ -56,6 +56,7 @@ import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeRequest
 import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeResponse
 import com.mosl.saathi.api.model.dashboard.client.ClientItemResponse
 import com.mosl.saathi.api.model.dashboard.client.ClientsRequest
+import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradeYesterdayRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
@@ -496,8 +497,13 @@ interface SaathiApi {
   ): Observable<TargetAchievementTeamItem>
 
   @POST("Dashboard/LoadWidgetAsync")
-  fun getClientsTradedYesterday(
+  fun getClientsTradedYesterdayOld(
     @Body request: CommonRequest
+  ): Observable<ClientTradedYesterdayItem>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClientsTradedYesterday(
+    @Body request: ClientTradeYesterdayRequest
   ): Observable<ClientTradedYesterdayItem>
 
   @ExcludeWrapper

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradedYesterdayItem;
@@ -20,16 +19,13 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -167,7 +163,7 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
                     dashboardModel.getProductId(),
                     dashboardModel.getEmployeeCode()
             );
-            Disposable subscribe = getSaathiApi().getClientsTradedYesterday(request)
+            Disposable subscribe = getSaathiApi().getClientsTradedYesterdayOld(request)
                     .compose(applyUiModel())
                     .subscribe(this::render);
         } else {
