@@ -26,7 +26,6 @@ import com.mosl.tabapp.model.dashboard.WidgetModel
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.item_table_row.view.tvParameters
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -120,26 +119,30 @@ class BusinessSnapshotAdvFragment : CommonFragment(), BusinessSnapshotAdvView {
             FragBusinessSnapshotBottomBinding.inflate(inflater)
           val tableRow = bottomBinding.root
           bottomBinding.apply {
-            tvParameters.text = arrayListClient[i][PARAMETER]
+            tvFamilyStatus.text = arrayListClient[i][PARAMETER]
             tvMetMTD.text = arrayListClient[i][MTD]
             tvMetYTD.text = arrayListClient[i][YTD_CNT]
             val additionalParameters: MutableMap<String, String> = HashMap()
             tvMetMTD.setOnClickListener {
-              additionalParameters.putAll(getAdditionalParameterMap())
-              additionalParameters[COL_FILTER] = MTD_CNT
-              additionalParameters[ROW_FILTER] = tvParameters.text.toString()
-              additionalParameters[WIDGETTYPE] = tvParameters.text.toString()
+              additionalParameters.apply {
+                putAll(getAdditionalParameterMap())
+                this[COL_FILTER] = MTD_CNT
+                this[ROW_FILTER] = tvFamilyStatus.text.toString()
+                this[WIDGETTYPE] = tvFamilyStatus.text.toString()
+              }
               if (tvMetMTD.text.toString() != "0") {
                 navigateEvent.onNext(additionalParameters)
               }
             }
 
             tvMetYTD.setOnClickListener {
-              additionalParameters.clear()
-              additionalParameters.putAll(getAdditionalParameterMap())
-              additionalParameters[COL_FILTER] = YTD_CNT
-              additionalParameters[ROW_FILTER] = tvParameters.text.toString()
-              additionalParameters[WIDGETTYPE] = tvParameters.text.toString()
+              additionalParameters.apply {
+                clear()
+                putAll(getAdditionalParameterMap())
+                this[COL_FILTER] = YTD_CNT
+                this[ROW_FILTER] = tvFamilyStatus.text.toString()
+                this[WIDGETTYPE] = tvFamilyStatus.text.toString()
+              }
               if (tvMetYTD.text.toString() != "0") {
                 navigateEvent.onNext(additionalParameters)
               }
