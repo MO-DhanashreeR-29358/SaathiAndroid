@@ -8,13 +8,11 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ItemDocumentListBinding
+import com.mosl.tabapp.databinding.ListEditPopupBinding
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
 import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
@@ -52,49 +50,46 @@ class DocumentItem(
 
     when (view.id) {
       R.id.ivScan -> {
-        val dialog = Dialog(context!!)
-        dialog.setTitle("Rename")
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window!!
-          .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.setContentView(R.layout.list_edit_popup)
-        dialog.window!!
-          .setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+        Dialog(context!!).apply {
+          val dialogBinding =
+            ListEditPopupBinding.bind(layoutInflater.inflate(R.layout.list_edit_popup, null))
+          setTitle("Rename")
+          requestWindowFeature(Window.FEATURE_NO_TITLE)
+          window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+          setContentView(dialogBinding.root)
+          window?.setLayout(
+              ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
           )
-        dialog.setCanceledOnTouchOutside(true)
-        val btnOK = dialog.findViewById<Button>(R.id.btnOK)
-        val btnCancel = dialog.findViewById<Button>(R.id.btnCancel)
+          setCanceledOnTouchOutside(true)
 
-        btnCancel.setOnClickListener { _ ->
-          dialog.dismiss()
-        }
-
-        val etDocumentName = dialog.findViewById<View>(R.id.etDocumentName) as EditText
-        etDocumentName.setText(data.documentName)
-        btnOK.setOnClickListener {
-          if (etDocumentName.text.isNotEmpty()) {
-            hideKeyboard(context, it)
-            subject.onNext(RenameLeadDocuments(data.id!!, etDocumentName.text.toString()))
-            dialog.dismiss()
-          } else {
-            alertDialog(
-              context, 0,
-              context?.resources?.getString(R.string.motilal_oswal),
-              "File name cannot be blank.", "OK", true, null
-            )
-            dialog.dismiss()
+          dialogBinding.btnCancel.setOnClickListener {
+            dismiss()
           }
 
-        }
+          dialogBinding.etDocumentName.setText(data.documentName)
+          dialogBinding.btnOK.setOnClickListener {
+            if (dialogBinding.etDocumentName.text.isNotEmpty()) {
+              hideKeyboard(context, it)
+              subject.onNext(
+                  RenameLeadDocuments(data.id!!, dialogBinding.etDocumentName.text.toString())
+              )
+              dismiss()
+            } else {
+              alertDialog(
+                  context, 0,
+                  context.resources?.getString(R.string.motilal_oswal),
+                  "File name cannot be blank.", "OK", true, null
+              )
+              dismiss()
+            }
 
-        val imgClose = dialog.findViewById<ImageView>(R.id.imgClose)
-        imgClose.setOnClickListener {
-          dialog.dismiss()
-        }
+          }
 
-        dialog.show()
+          dialogBinding.imgClose.setOnClickListener {
+            dismiss()
+          }
+        }
+            .show()
       }
       R.id.ivDeleteDoc -> {
         alertDialog(
@@ -112,7 +107,6 @@ class DocumentItem(
         context?.downloadImage(data.documentFullPath!!)
         Toast.makeText(context, "Downloading ${data.documentName}...", Toast.LENGTH_SHORT)
             .show()
-        //downloadImage(data.documentFullPath!!)
       }
     }
   }
