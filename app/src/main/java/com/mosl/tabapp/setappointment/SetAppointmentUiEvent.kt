@@ -12,4 +12,7 @@ sealed class SetAppointmentUiEvent {
   data class Weeks(val request: LookupRequestInput) : SetAppointmentUiEvent()
   data class WeekDays(val request: LookupRequestInput) : SetAppointmentUiEvent()
   data class RepeatMode(val request: LookupRequestInput) : SetAppointmentUiEvent()
+  data class SetAppointmentMeeting(val request: String) : SetAppointmentUiEvent()
+ /* data class AutoCompleteSplAttendee(val charSequence: CharSequence) : SetAppointmentUiEvent()
+  data class AutoCompleteAttendee(val charSequence: CharSequence) : SetAppointmentUiEvent()*/
 }

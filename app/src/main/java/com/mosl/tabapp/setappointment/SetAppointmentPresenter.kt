@@ -11,7 +11,7 @@ class SetAppointmentPresenter @Inject constructor(
 ) : BasePresenter<SetAppointmentView>(view) {
   override fun start() {
 
-    view.getClientDetail()
+    view.getClientDetailData()
       .map {
         it.Id
       }
@@ -128,5 +128,17 @@ class SetAppointmentPresenter @Inject constructor(
       }
       .addTo(disposable)
 
+    view.saveAppointmentMeeting()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.setAppointmentMeeting(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderAddUpdates(it)
+      }
+      .addTo(disposable)
   }
 }

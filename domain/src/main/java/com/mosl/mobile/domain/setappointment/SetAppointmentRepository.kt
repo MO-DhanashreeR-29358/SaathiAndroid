@@ -1,5 +1,7 @@
 package com.mosl.mobile.domain.setappointment
 
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
+import com.mosl.mobile.domain.createmeeting.AutoCompleteAttendeeItemResponse
 import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
@@ -12,8 +14,8 @@ interface SetAppointmentRepository {
   fun getClientImage(id: String): Observable<String>
   fun getLeadViewById(id: String): Observable<LeadViewItemResponse>
   fun getAllLookUp(request: LookupRequestInput): Observable<List<LookupItemResponse>>
-  fun setAppointmentMeeting()
-  fun getAutoCompleteSplAttendee(request: AutoCompleteAttendeeRequestInput)
-  fun getAutoCompleteAttendee(request: AutoCompleteAttendeeRequestInput)
+  fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData>
+  fun getAutoCompleteSplAttendee(charSequence: CharSequence): Observable<List<AutoCompleteAttendeeItemResponse>>
+  fun getAutoCompleteAttendee(charSequence: CharSequence): Observable<List<AutoCompleteAttendeeItemResponse>>
 
 }

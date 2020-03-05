@@ -4,15 +4,22 @@ import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.AutoCompleteAttendeeRequestInput
 import com.mosl.mobile.domain.setappointment.LookupRequestInput
 import com.mosl.mobile.domain.setappointment.SetAppointmentRepository
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
+import com.mosl.mobile.domain.createmeeting.AutoCompleteAttendeeItemResponse
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import org.json.JSONObject
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class SetAppointmentRepositoryImpl @Inject constructor(
@@ -45,20 +52,36 @@ class SetAppointmentRepositoryImpl @Inject constructor(
   override fun getAllLookUp(request: LookupRequestInput): Observable<List<LookupItemResponse>> {
     val lookupRequest = request.mapLookupRequestTransform()
     return saathiApi.getAllLookup(lookupRequest).map {
-     it.responseLookupItemTransform()
+      it.responseLookupItemTransform()
     }
   }
 
-  override fun setAppointmentMeeting() {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData> {
+    var json = JSONObject(meetingApptModel)
+    val request = RequestBody.create(MediaType.parse("text/plain"), json.toString())
+    return saathiApi.setAppointmentMeeting(request).map {
+      it.responseSetAppointmentTransform()
+    }
   }
 
-  override fun getAutoCompleteSplAttendee(request: AutoCompleteAttendeeRequestInput) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun getAutoCompleteSplAttendee(charSequence: CharSequence): Observable<List<AutoCompleteAttendeeItemResponse>> {
+    val request = AutoCompleteAttendeeRequest(
+      URLEncoder.encode(charSequence.toString(), "utf-8"),
+      URLEncoder.encode(charSequence.toString(), "utf-8")
+    )
+    return saathiApi.getAutoCompleteSplAttendee(request).map {
+      it.responseAutoCompleteAttendeeItemTransform()
+    }
   }
 
-  override fun getAutoCompleteAttendee(request: AutoCompleteAttendeeRequestInput) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun getAutoCompleteAttendee(charSequence: CharSequence): Observable<List<AutoCompleteAttendeeItemResponse>> {
+    val request = AutoCompleteAttendeeRequest(
+      URLEncoder.encode(charSequence.toString(), "utf-8"),
+      URLEncoder.encode(charSequence.toString(), "utf-8")
+    )
+    return saathiApi.getAutoCompleteAttendee(request).map {
+      it.responseAutoCompleteAttendeeItemTransform()
+    }
   }
 
 }

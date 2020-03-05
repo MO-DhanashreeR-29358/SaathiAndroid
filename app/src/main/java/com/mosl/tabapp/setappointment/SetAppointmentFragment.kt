@@ -30,12 +30,12 @@ import android.widget.TimePicker
 import android.widget.Toast
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.LookupRequestInput
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
@@ -93,6 +93,7 @@ import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.LeadView
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Product
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ProfileImage
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.RepeatMode
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.SetAppointmentMeeting
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.WeekDays
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Weeks
 import com.mosl.tabapp.ui.MSFDialog
@@ -115,8 +116,6 @@ import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatWeekdayError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateError
 import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTime
 import kotlinx.android.synthetic.main.lms_top_section_update.ivLead
-import okhttp3.MediaType
-import okhttp3.RequestBody
 import timber.log.Timber
 import java.net.URLEncoder
 import java.util.ArrayList
@@ -197,10 +196,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     setUpView()
     when {
       !mUCID.equals("0", ignoreCase = true) -> {
-        //getClientDetail(mUCID)
-        //setProfileImage(mUCID)
-
-        subject.onNext(ProfileImage(mUCID))
+        getClientDetail(mUCID)
+        setProfileImage(mUCID)
       }
       else -> {
         getLeadByIdFromServer(str_LeadID)
@@ -292,17 +289,18 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     }
   }
 
-  /* private fun setProfileImage(ucid: String) {
-     when {
-       CRMAppUtil.isNetworkEnabled(requireContext()) -> {
-         val request = ClientImageRequest(ucid)
-         val subscribe = saathiApi.getClientImage(request)
-           .compose(applyUiModel())
-           .subscribe { this.renderClientImage(it) }
-       }
-       else -> noInternetConnectionDialog()
-     }
-   }*/
+  private fun setProfileImage(ucid: String) {
+    subject.onNext(ProfileImage(ucid))
+    /*when {
+      CRMAppUtil.isNetworkEnabled(requireContext()) -> {
+        val request = ClientImageRequest(ucid)
+        val subscribe = saathiApi.getClientImage(request)
+          .compose(applyUiModel())
+          .subscribe { this.renderClientImage(it) }
+      }
+      else -> noInternetConnectionDialog()
+    }*/
+  }
 
   /* private fun renderClientImage(uiModel: UiModel<SaathiCommonResponse<String>>) {
       toggleProgress(uiModel.inProgress)
@@ -347,17 +345,19 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     }
   }
 
-  /*private fun getClientDetail(ucid: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = ClientDetailRequest(Integer.valueOf(ucid))
-      val subscribe = saathiApi.getClientDetail(request)
-        .compose(applyUiModel())
-        .subscribe { this.renderClientDetails(it) }
-    } else {
-      noInternetConnectionDialog()
-    }
-  }*/
-  override fun getClientDetail(): Observable<GetClientDetail> {
+  private fun  getClientDetail(ucid: String) {
+    subject.onNext(GetClientDetail(ucid))
+    /* if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+       val request = ClientDetailRequest(Integer.valueOf(ucid))
+       val subscribe = saathiApi.getClientDetailData(request)
+         .compose(applyUiModel())
+         .subscribe { this.renderClientDetails(it) }
+     } else {
+       noInternetConnectionDialog()
+     }*/
+  }
+
+  override fun getClientDetailData(): Observable<GetClientDetail> {
     return subject.ofType()
   }
 
@@ -1318,7 +1318,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   }
 
   private fun createAppointmentSave(meetingApptModel: MeetingApptModel) {
-    when {
+    subject.onNext(SetAppointmentMeeting(meetingApptModel.json))
+    /*when {
       CRMAppUtil.isNetworkEnabled(requireContext()) -> {
         val request = RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.json)
         val subscribe = saathiApi.setAppointmentMeeting(request)
@@ -1326,6 +1327,41 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
           .subscribe { this.renderAddUpdate(it) }
       }
       else -> noInternetConnectionDialog()
+    }*/
+  }
+
+  override fun saveAppointmentMeeting(): Observable<SetAppointmentMeeting> {
+    return subject.ofType()
+  }
+
+  override fun renderAddUpdates(uiModel: UiModel<SetAppointmentResponseData>) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      MSFDialog.alertDialog(
+        activity, 0,
+        resources.getString(R.string.motilal_oswal),
+        if (createMode) SET_APPOINTMENTS else UPDATE_APPOINTMENTS,
+        "OK", true
+      ) { action, _ ->
+        when (action) {
+          MSFDialog.Action.OK -> {
+            val bundle = Bundle()
+            bundle.putString(
+              LEAD_ID,
+              arguments!!.getString(LEAD_ID)
+            )
+            bundle.putString(
+              UCID,
+              arguments!!.getString(UCID)
+            )
+            navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+          }
+        }
+
+      }
     }
   }
 
@@ -2203,6 +2239,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
           val modelList = ArrayList<SplAttendeeModel>()
           try {
             constraint?.let {
+
               when {
                 CRMAppUtil.isNetworkEnabled(requireContext()) -> {
                   val request = AutoCompleteAttendeeRequest(
@@ -2210,6 +2247,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
                     URLEncoder.encode(it.toString(), "utf-8")
                   )
                   try {
+
+                    //subject.onNext(AutoCompleteSplAttendee(it))
                     val dataList = saathiApi.getAutoCompleteSplAttendee(request)
                       .blockingFirst()
                     for (item in dataList) {
@@ -2332,6 +2371,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
           val modelList = ArrayList<EmployeeModel>()
           try {
             constraint?.let {
+
               if (CRMAppUtil.isNetworkEnabled(requireContext())) {
                 val request = AutoCompleteAttendeeRequest(
                   URLEncoder.encode(it.toString(), "utf-8"),
@@ -2340,6 +2380,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
                 try {
                   val dataList = saathiApi.getAutoCompleteAttendee(request)
                     .blockingFirst()
+
+                  //subject.onNext(AutoCompleteAttendee(it))
                   for (item in dataList) {
                     val employeeName = stringOrEmpty(item.employeeName)
                     val employeeCode = stringOrEmpty(item.employeeCode)

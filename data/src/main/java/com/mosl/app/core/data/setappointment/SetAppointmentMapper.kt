@@ -1,6 +1,9 @@
 package com.mosl.app.core.data.setappointment
 
 import com.mosl.app.core.data.util.safeMap
+import com.mosl.mobile.domain.addupdatemeeting.AppointmentAttendeeItemResponse
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
+import com.mosl.mobile.domain.createmeeting.AutoCompleteAttendeeItemResponse
 import com.mosl.mobile.domain.createmeeting.MeetingAttendeeItemResponse
 import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.LookupRequestInput
@@ -19,11 +22,14 @@ import com.mosl.mobile.domain.setappointment.lead.LeadFieldValueDataResponse
 import com.mosl.mobile.domain.setappointment.lead.LeadProductMappingItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
+import com.mosl.saathi.api.model.addupdatemeeting.AppointmentAttendeeItem
+import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.clientdetail.AdvisorsItem
 import com.mosl.saathi.api.model.clientdetail.AdvisoryMappingTypesItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.clientdetail.Product
 import com.mosl.saathi.api.model.clientdetail.ProductsItem
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.lead.Contact
@@ -566,4 +572,73 @@ fun List<LookupItem>.responseLookupItemTransform(): List<LookupItemResponse> {
   }
 }
 
+fun SetAppointmentResponse.responseSetAppointmentTransform(): SetAppointmentResponseData {
+  return SetAppointmentResponseData(
+    repeatEveryWeekCode = repeatEveryWeekCode,
+    repeatEveryDayCode = repeatEveryDayCode,
+    repeatationStartOn = repeatationStartOn,
+    meetingAttendee = meetingAttendee.responseAppointmentAttendeeItemTransform(),
+    displayType = displayType,
+    activityTypeID = activityTypeID,
+    productTypeID = productTypeID,
+    uCID = uCID,
+    repeatationEndsOn = repeatationEndsOn,
+    meetingDate = meetingDate,
+    meetingType = meetingType,
+    leadId = leadId,
+    repeatOnCode = repeatOnCode
+  )
+
+}
+
+fun List<AppointmentAttendeeItem>.responseAppointmentAttendeeItemTransform(): List<AppointmentAttendeeItemResponse> {
+  return safeMap {
+    AppointmentAttendeeItemResponse(
+      attendeeType = it.attendeeType,
+      attendeeEmpcode = it.attendeeEmpcode,
+      meetingAttendeeID = it.meetingAttendeeID,
+      attended = it.attended,
+      defaultAttendee = it.defaultAttendee
+    )
+  }
+}
+
+fun List<AutoCompleteAttendeeItem>.responseAutoCompleteAttendeeItemTransform(): List<AutoCompleteAttendeeItemResponse> {
+  return safeMap {
+    AutoCompleteAttendeeItemResponse(
+      advisoryType = it.advisoryType,
+      businessProfileId = it.businessProfileId,
+      regionCode = it.regionCode,
+      productName = it.productName,
+      productId = it.productId,
+      equityTraderCode = it.equityTraderCode,
+      businessChannelId = it.businessChannelId,
+      employeeCodes = it.employeeCodes,
+      clientType = it.clientType,
+      lookUpName = it.lookUpName,
+      subBrokerCode = it.subBrokerCode,
+      businessUnitName = it.businessUnitName,
+      profileGroup = it.profileGroup,
+      status = it.status,
+      isDefault = it.isDefault,
+      employeeCode = it.employeeCode,
+      businessUnitId = it.businessUnitId,
+      traderCode = it.equityTraderCode,
+      numberofClientMapped = it.numberofClientMapped,
+      isPrimaryadvisor = it.isPrimaryadvisor,
+      channelName = it.channelName,
+      totalClientMapped = it.totalClientMapped,
+      userId = it.userId,
+      businessUnit = it.businessUnit,
+      areaCode = it.areaCode,
+      id = it.userId,
+      employeeName = it.employeeName,
+      userType = it.userType,
+      branchCode = it.branchCode,
+      commodityTraderCode = it.commodityTraderCode,
+      primaryRM = it.primaryRM,
+      businessProfileName = it.businessProfileName
+    )
+  }
+}
 
