@@ -3,12 +3,13 @@ package com.mosl.tabapp.dashboard.trends
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.components.YAxis
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.saathi.api.model.dashboard.trends.TrendsTableItemModel
+import com.mosl.mobile.domain.trends.TrendsChartModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentTrendsBinding
@@ -34,7 +35,9 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
   lateinit var presenter: TrendsPresenter
   private var previousPosition: Int = 0
   private var dashboardGroupModel: DashboardGroupModel? = null
-
+  private lateinit var rightAxis: YAxis
+  private lateinit var mMonths: Array<String>
+  private var dataFoundFlag = false
   override fun getLayout(): Int {
     return R.layout.fragment_trends
   }
@@ -98,15 +101,20 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     return dashboardGroupModel
   }
 
-  override fun renderData(uiModel: UiModel<List<TrendsTableItemModel>>) {
+  override fun renderData(uiModel: UiModel<List<TrendsChartModel>>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { error ->
       showOnFailurePopup(error)
       binding.includeChart.chart.clear()
     }
     uiModel.onSuccess {
-
+      if (it.size > 0) {
+//        setChartData(it)
+      } else {
+        binding.includeChart.chart.clear()
+      }
     }
 
   }
+
 }

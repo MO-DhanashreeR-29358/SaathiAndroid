@@ -1,26 +1,23 @@
 package com.mosl.app.core.data.util;
 
 import android.content.Context;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.rx.RxDispatchers;
 import com.mosl.commons.rx.Dispatchers;
-
-import java.io.File;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;
+import java.io.File;
+import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import timber.log.Timber;
 
 @Module
@@ -41,8 +38,10 @@ public abstract class BaseDataModule {
     @InternalAPIRetrofit
     static Retrofit.Builder provideNewRetrofitBuilder(OkHttpClient client,
                                                       MOSLResponseWrapper moslResponseWrapper, GsonConverterFactory gsonConverterFactory,
-                                                      RxJava2CallAdapterFactory rxJava2CallAdapterFactory) {
+        RxJava2CallAdapterFactory rxJava2CallAdapterFactory,
+        ScalarsConverterFactory scalarsConverterFactory) {
         return new Retrofit.Builder().client(client)
+            .addConverterFactory(scalarsConverterFactory)
                 .addConverterFactory(moslResponseWrapper)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJava2CallAdapterFactory);
@@ -84,6 +83,12 @@ public abstract class BaseDataModule {
     static GsonConverterFactory provideGsonConverterFactory(Gson gson) {
         return GsonConverterFactory.create(gson);
     }
+
+  @Provides
+  @Singleton
+  static ScalarsConverterFactory provideScalarConvertetFactory() {
+    return ScalarsConverterFactory.create();
+  }
 
     @Provides
     @Singleton

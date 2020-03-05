@@ -68,7 +68,6 @@ import com.mosl.saathi.api.model.dashboard.lead.LeadResponse
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
-import com.mosl.saathi.api.model.dashboard.target.TrendsResponse
 import com.mosl.saathi.api.model.dashboard.targetnew.TargetRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.dashboard.trends.TrendsRequest
@@ -196,10 +195,10 @@ interface SaathiApi {
     @Body request: LookupRequest
   ): Observable<List<LookupItem>>
 
-    @POST("Meeting/StartMeeting")
-    fun getStartMeeting(
-        @Body request: SendOTPRequest
-    ): Observable<String>
+  @POST("Meeting/StartMeeting")
+  fun getStartMeeting(
+    @Body request: SendOTPRequest
+  ): Observable<String>
 
   @POST("Meeting/StartMeetingOTP")
   fun postOtpForMeeting(
@@ -452,54 +451,54 @@ interface SaathiApi {
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClients(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<ClientItemResponse>
 
   @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
   fun getDashboardData(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<String>
 
-
-    @POST("Dashboard/LoadWidgetAsync")
-    fun getLeadWidgetData(
-      @Body request: LeadRequest
-    ): Observable<LeadResponse>
-
-    @POST("Dashboard/LoadWidgetAsync")
-    fun getClientsWidgetData(
-        @Body request: ClientsRequest
-    ): Observable<ClientItemResponse>
-
-    @POST("Dashboard/LoadWidgetAsync")
-    fun getTargetWidgetData(
-      @Body request: TargetRequest
-    ): Observable<TargetItemResponse>
-
+  @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
   fun getTrendsWidgetData(
     @Body request: TrendsRequest
-  ): Observable<TrendsResponse>
+  ): Observable<String>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getLeadWidgetData(
+    @Body request: LeadRequest
+  ): Observable<LeadResponse>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getClientsWidgetData(
+    @Body request: ClientsRequest
+  ): Observable<ClientItemResponse>
+
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getTargetWidgetData(
+    @Body request: TargetRequest
+  ): Observable<TargetItemResponse>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getSnapshot(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<SnapshotItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getTargetAchievement(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<TargetAchievementItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getTargetAchievementTeam(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<TargetAchievementTeamItem>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClientsTradedYesterday(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<ClientTradedYesterdayItem>
 
   @ExcludeWrapper
@@ -531,7 +530,7 @@ interface SaathiApi {
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getIncentive(
-      @Body request: CommonRequest
+    @Body request: CommonRequest
   ): Observable<IncentiveItem>
 
   //================== Calender ========================
@@ -687,7 +686,7 @@ interface SaathiApi {
   @ExtraDataWrapper
   fun appVersion(
     @Header(
-        "macaddress"
+      "macaddress"
     ) macAddress: String, @Body versionRequest: VersionRequest
   ): Observable<List<VersionResponse>>
 
