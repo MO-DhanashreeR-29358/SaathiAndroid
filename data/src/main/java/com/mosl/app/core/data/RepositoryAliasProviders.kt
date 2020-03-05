@@ -5,11 +5,13 @@ import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
+import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
+import com.mosl.mobile.domain.tradeyesterday.ClientTradeYesterdayRepository
 import dagger.Binds
 import dagger.Module
 
@@ -30,4 +32,7 @@ interface RepositoryAliasProviders {
 
   @Binds
   fun provideAuTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
+
+  @Binds
+  fun provideClientTradeYesterdayRepository(repository: ClientTradeYesterdayRepositoryImpl): ClientTradeYesterdayRepository
 }
