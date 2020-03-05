@@ -49,9 +49,10 @@ class DocumentItem(
   }
 
   override fun onClick(view: View) {
-    val dialog = Dialog(context!!)
+
     when (view.id) {
       R.id.ivScan -> {
+        val dialog = Dialog(context!!)
         dialog.setTitle("Rename")
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.window!!
