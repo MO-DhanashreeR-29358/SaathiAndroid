@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.snapshot
+package com.mosl.tabapp.dashboard.snapshot.advance
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter

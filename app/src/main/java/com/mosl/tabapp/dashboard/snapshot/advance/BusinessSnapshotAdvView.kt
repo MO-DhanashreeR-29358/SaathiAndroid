@@ -1,4 +1,4 @@
-package com.mosl.tabapp.dashboard.snapshot
+package com.mosl.tabapp.dashboard.snapshot.advance
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
