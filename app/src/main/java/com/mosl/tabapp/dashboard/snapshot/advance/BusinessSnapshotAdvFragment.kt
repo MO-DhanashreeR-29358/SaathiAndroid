@@ -167,4 +167,9 @@ class BusinessSnapshotAdvFragment : CommonFragment(), BusinessSnapshotAdvView {
   private fun clientHideProgress() {
     binding.progressBar.visibility = View.GONE
   }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    presenter.stop()
+  }
 }
