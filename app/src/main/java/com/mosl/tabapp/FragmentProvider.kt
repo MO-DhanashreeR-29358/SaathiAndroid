@@ -27,8 +27,8 @@ import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew
 import com.mosl.tabapp.dashboard.clients.ClientsModule
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsModule
-import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotAdvModule
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
+import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule
 import com.mosl.tabapp.dashboard.target.TargetFragment
 import com.mosl.tabapp.dashboard.target.TargetModule
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment

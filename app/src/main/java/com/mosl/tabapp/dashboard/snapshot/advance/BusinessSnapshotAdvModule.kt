@@ -1,9 +1,7 @@
-package com.mosl.tabapp.dashboard.snapshot
+package com.mosl.tabapp.dashboard.snapshot.advance
 
 import android.os.Bundle
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
-import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import dagger.Module
 import dagger.Provides
