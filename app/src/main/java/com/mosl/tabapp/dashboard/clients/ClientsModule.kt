@@ -10,18 +10,13 @@ import dagger.Provides
 class ClientsModule {
 
     @Provides
-    internal fun provideClientsView(fragment: ClientsFragmentNew): CliendsView {
+    internal fun provideClientsView(fragment: ClientsFragmentNew): ClientsView {
         return fragment
     }
 
-
     @Provides
     internal fun provideDashBoardModel(fragment: ClientsFragmentNew): DashboardModel {
-        val args: Bundle? = fragment.getArguments()
-        val dashboardModel: DashboardModel =
-            args?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
-
-        return dashboardModel
+        val args: Bundle? = fragment.arguments
+        return args?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
     }
-
 }

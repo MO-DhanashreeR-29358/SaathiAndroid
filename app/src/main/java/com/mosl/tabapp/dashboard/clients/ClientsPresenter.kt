@@ -15,61 +15,60 @@ import java.io.Serializable
 import javax.inject.Inject
 
 class ClientsPresenter @Inject constructor(
-    view: CliendsView,
-    val dashboardModel: DashboardModel,
-    val repository: ClientsRepository,
-    val navigator: ScreenNavigatorImpl
+  view: ClientsView,
+  val dashboardModel: DashboardModel,
+  val repository: ClientsRepository,
+  val navigator: ScreenNavigatorImpl
 
-) : BasePresenter<CliendsView>(view) {
-    override fun start() {
-        onFetchCalled().switchMap {
-            repository.getClientsWidget(getWidgetRequest())
-                .compose(applyUiModel())
-        }
-            .subscribe(view::renderData)
-            .addTo(disposable)
-
-        val dataEvent = Observable.merge(view.onDataEvent(), view.onPeriodChange()).share()
-
-        dataEvent.filter {
-            view.getClientList().size > 0
-        }.subscribe {
-            view.renderUI(view.getPeriod().text, view.getPeriod().value)
-        }.addTo(disposable)
-
-        view.onNaviagteEvent().subscribe {
-            toNavigate(it)
-        }.addTo(disposable)
-
+) : BasePresenter<ClientsView>(view) {
+  override fun start() {
+    onFetchCalled().switchMap {
+      repository.getClientsWidget(getWidgetRequest())
+        .compose(applyUiModel())
     }
+      .subscribe(view::renderData)
+      .addTo(disposable)
 
+    val dataEvent = Observable.merge(view.onDataEvent(), view.onPeriodChange()).share()
 
-    private fun getWidgetRequest(): ClientInput {
-        return ClientInput(
-            businessProfileId = dashboardModel.businessProfileIdForDashboard,
-            widgetSystemName = view.getWidgetSystemsName(),
-            productId = dashboardModel.productId,
-            employeeCode = dashboardModel.employeeCode,
-            addtionalParameters = APClientsInput(
-                fltPeriod = view.getPeriod()?.value.toString(),
-                fltHierarchy = dashboardModel.dashboardFor
-            )
-        )
-    }
+    dataEvent.filter {
+      view.getClientList().size > 0
+    }.subscribe {
+      view.renderUI(view.getPeriod().text, view.getPeriod().value)
+    }.addTo(disposable)
 
-    fun toNavigate(addtionalParameterMap: MutableMap<String, String>) {
-        val args = Bundle()
-        args.putString(MOSLConstants.SYSTEM_NAME, view.getWidgetSystemsName())
-        args.putString(MOSLConstants.LABEL, CLIENTS)
-        args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
-        navigator.openPage(
-            NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true,
-            false
-        )
-    }
+    view.onNaviagteEvent().subscribe {
+      toNavigate(it)
+    }.addTo(disposable)
 
-    companion object {
-        const val CLIENTS = "Clients"
-    }
+  }
 
+  private fun getWidgetRequest(): ClientInput {
+    return ClientInput(
+      businessProfileId = dashboardModel.businessProfileIdForDashboard,
+      widgetSystemName = view.getWidgetSystemsName(),
+      productId = dashboardModel.productId,
+      employeeCode = dashboardModel.employeeCode,
+      addtionalParameters = APClientsInput(
+        fltPeriod = view.getPeriod().value.toString(),
+        fltHierarchy = dashboardModel.dashboardFor
+      )
+    )
+  }
+
+  private fun toNavigate(addtionalParameterMap: MutableMap<String, String>) {
+    val args = Bundle()
+    args.putString(MOSLConstants.SYSTEM_NAME, view.getWidgetSystemsName())
+    args.putString(MOSLConstants.LABEL, CLIENTS)
+    args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
+    navigator.openPage(
+      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+      addToStack = false,
+      forceReload = false
+    )
+  }
+
+  companion object {
+    const val CLIENTS = "Clients"
+  }
 }
