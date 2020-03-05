@@ -1,19 +1,17 @@
 package com.mosl.app.core.data.leadviewdetail.document
 
+import com.mosl.app.core.data.util.safeMap
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentInput
 import com.mosl.mobile.domain.leadviewdetail.document.FilterRequestInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
-import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
-
 import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.FilterRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
 import com.mosl.saathi.api.model.documents.LeadDocumentsRequest
 import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
-import com.mosl.saathi.api.model.documents.UploadDocumentItem
 import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 
 fun DocumentInput.requestTransform(): DocumentsRequest {
@@ -65,7 +63,7 @@ fun FilterRequestInput.filterRequestTransform(): FilterRequest {
 }
 
 fun List<LeadDocumentsItem>.responseTransform(): List<LeadDocumentsItemData> {
-  return map {
+  return safeMap {
     LeadDocumentsItemData(
       id = it.id,
       documentName = it.documentName,

@@ -12,27 +12,29 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class DocumentRepositoryImpl @Inject constructor(
-  val api: SaathiApi
+  val saathiApi: SaathiApi
 ) : DocumentRepository {
   override fun getLeadDocuments(request: DocumentInput): Observable<List<LeadDocumentsItemData>> {
     val documentRequest = request.requestTransform()
-    return api.getLeadDocuments(documentRequest).map {
+    return saathiApi.getLeadDocuments(documentRequest)
+        .map {
       it.responseTransform()
     }
   }
 
   override fun postUpdateDocuments(request: UpdateDocumentsInput): Observable<String> {
     val updateDocumentRequest = request.requestUpdateTransform()
-    return api.postUpdateDocuments(updateDocumentRequest)
+    return saathiApi.postUpdateDocuments(updateDocumentRequest)
   }
 
   override fun deleteDocuments(id: String): Observable<String> {
-    return api.postDeleteDocuments(DeleteDocumentRequest(id = id))
+    return saathiApi.postDeleteDocuments(DeleteDocumentRequest(id = id))
   }
 
   override fun uploadDocument(request: UploadDocumentsInput): Observable<UploadDocumentData> {
     val uploadDocumentRequest = request.requestUploadDocumentTransform()
-    return api.postUploadDocuments(uploadDocumentRequest).map {
+    return saathiApi.postUploadDocuments(uploadDocumentRequest)
+        .map {
       UploadDocumentData(
         status = it.status,
         documentName = it.documentName ?: "",
