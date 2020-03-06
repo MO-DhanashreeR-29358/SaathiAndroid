@@ -99,6 +99,9 @@
     <string name="text_add_document">Add a Document</string>
     <string name="text_dont_have_any_documents">You don\'t have any documents</string>
 
+    <string name="text_button_label_belated">Belated</string>
+    <string name="text_button_label_today">Today</string>
+    <string name="text_button_label_upcoming">Upcoming</string>
     <!--franchise-lead & lead creation-->
 
 
