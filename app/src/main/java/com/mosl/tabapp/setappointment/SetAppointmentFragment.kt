@@ -37,11 +37,11 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
-import com.mosl.mobile.domain.setappointment.LookupRequestInput
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.clientdetail.ProductsItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
+import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem

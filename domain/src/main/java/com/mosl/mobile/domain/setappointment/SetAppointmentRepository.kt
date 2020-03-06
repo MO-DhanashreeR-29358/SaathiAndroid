@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
+import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import io.reactivex.Observable
 
 interface SetAppointmentRepository {

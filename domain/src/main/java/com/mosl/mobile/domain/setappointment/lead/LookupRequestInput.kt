@@ -1,10 +1,4 @@
-package com.mosl.mobile.domain.setappointment
-
-data class AutoCompleteAttendeeRequestInput(
-  @JvmField val employeeCode: String,
-
-  @JvmField val employeeName: String
-)
+package com.mosl.mobile.domain.setappointment.lead
 
 data class LookupRequestInput(
   @JvmField val businessUnitId: String,

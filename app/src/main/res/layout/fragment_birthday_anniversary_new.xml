@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/grid_background"
         >
 
@@ -29,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/spProfile"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@+id/spProfile"
+
             />
 
         <info.hoang8f.android.segmented.SegmentedGroup
@@ -85,7 +85,7 @@
             android:layout_marginBottom="@dimen/_3sdp"
             app:layout_constraintBottom_toTopOf="@+id/frameLayout"
             app:layout_constraintTop_toBottomOf="@+id/segmentedGroup"
-            tools:listitem="@layout/item_recycler_birthday_anniversary"
+            tools:listitem="@layout/item_recycler_birthday_anniversary_new"
             />
 
         <FrameLayout

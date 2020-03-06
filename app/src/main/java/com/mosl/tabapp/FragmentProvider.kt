@@ -4,7 +4,8 @@ import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerModule
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryModule
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
@@ -71,8 +72,8 @@ abstract class FragmentProvider {
   @ContributesAndroidInjector
   abstract fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
 
-  @ContributesAndroidInjector
-  abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
+  @ContributesAndroidInjector(modules = [BirthdayAnniversaryModule::class])
+  abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragmentNew
 
   @ContributesAndroidInjector(modules = [QueryModule::class])
   abstract fun provideQueryFragmentFactory(): QueryFragment

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_3sdp"
         android:background="@color/white"
         android:gravity="center"
         >
@@ -35,11 +36,11 @@
             android:id="@+id/tvEvent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text=""
             android:textColor="@color/black"
             android:textSize="13sp"
             android:textStyle="normal"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivBirthdayAnniversary"
@@ -61,8 +62,8 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:gravity="center"
+            android:text=""
             android:textColor="@color/secondaryBackground"
             android:textSize="13sp"
             android:textStyle="bold"
@@ -72,62 +73,61 @@
             tools:text="Date"
             />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+
+        <View
+            android:id="@+id/view_bottom"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/secondaryBackground"
-            android:paddingTop="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDate"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvClientName"
+            app:layout_constraintBottom_toBottomOf="@id/tvClientCode"
 
-            <TextView
-                android:id="@+id/tvClientName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="3"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="ClientName"
-                />
+            />
 
-            <View
-                android:id="@+id/viewClient1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_marginStart="@dimen/_30sdp"
-                android:layout_marginEnd="@dimen/_30sdp"
-                android:background="@color/white"
-                app:layout_constraintTop_toBottomOf="@+id/tvClientName"
-                />
-
-            <TextView
-                android:id="@+id/tvClientCode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="2"
-                android:text=""
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:textSize="13sp"
-                android:textStyle="normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewClient1"
-                tools:text="ClientCode"
-                />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.Guideline
+        <TextView
+            android:id="@+id/tvClientName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideline"
-            app:setGuidelinePercent="0.5"
-            android:orientation="horizontal"/>
+            android:gravity="center"
+            android:lines="3"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"
+            tools:text="ClientName"
+            />
+
+        <View
+            android:id="@+id/viewClient1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvClientName"
+            />
+
+        <TextView
+            android:id="@+id/tvClientCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lines="2"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewClient1"
+            tools:text="ClientCode"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

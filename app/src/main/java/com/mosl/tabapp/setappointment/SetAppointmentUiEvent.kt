@@ -1,6 +1,6 @@
 package com.mosl.tabapp.setappointment
 
-import com.mosl.mobile.domain.setappointment.LookupRequestInput
+import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 
 sealed class SetAppointmentUiEvent {
   data class GetClientDetail(val Id: String) : SetAppointmentUiEvent()
