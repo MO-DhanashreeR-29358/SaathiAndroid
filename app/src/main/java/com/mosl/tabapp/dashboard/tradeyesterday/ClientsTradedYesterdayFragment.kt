@@ -94,7 +94,7 @@ class ClientsTradedYesterdayFragment : CommonFragment(), ClientsTradedYesterdayV
           val fieldData = HashMap<String, String>()
           fieldData[REVENUE_TYPE] = stringOrEmpty(this[i].revenueType)
           fieldData[NO_OF_CLIENTS] = stringOrEmpty(this[i].noOfClients?.toString())
-          fieldData[REVENUE_GENERATED] = stringOrEmpty(this[i].revenueGenerated?.toString())
+          fieldData[REVENUE_GENERATED] = stringOrEmpty(this[i].revenueGenerated?.toDecimalsOrDash())
           arrayListClient.add(fieldData)
           dataEvent.onNext(true)
         }

@@ -736,8 +736,8 @@ public class DashboardFragment extends CommonFragment
     private void loadClientTraded() {
         Bundle args = new Bundle();
         setTabActivre(btnClientTraded);
-        ClientsTradedYesterdayFragment clientsFragment =
-                ClientsTradedYesterdayFragment.newInstance(getContext());
+        com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment clientsFragment =
+            new com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
 
         clientsFragment.setArguments(args);
