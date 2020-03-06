@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class TableItem(
 
   @JvmField @SerializedName("REVENUE_GENERATED")
-  val rEVENUEGENERATED: Int?,
+  val rEVENUEGENERATED: Double?,
 
   @JvmField @SerializedName("NO_OF_CLIENTS")
   val nOOFCLIENTS: Int?,
