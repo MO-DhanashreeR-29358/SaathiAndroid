@@ -10,16 +10,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dashbord_background"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:layout_marginBottom="@dimen/margin_medium"
-        >
+        android:layout_marginBottom="@dimen/margin_medium">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_layout_top"
@@ -27,8 +25,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/list_bacground"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tvProduct"
@@ -40,8 +37,7 @@
                 android:textSize="@dimen/_14sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:text="Product"
-                />
+                tool:text="Product" />
 
             <TextView
                 android:id="@+id/tvMeetingDate"
@@ -53,8 +49,7 @@
                 android:textSize="@dimen/txt_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvProduct"
-                tool:text="Date"
-                />
+                tool:text="Date" />
 
             <TextView
                 android:id="@+id/tvMeetingTime"
@@ -67,8 +62,7 @@
                 android:textSize="@dimen/txt_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvMeetingDate"
-                tool:text="Date"
-                />
+                tool:text="Date" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,8 +71,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/list_bacground"
-            app:layout_constraintTop_toBottomOf="@+id/constraint_layout_top"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/constraint_layout_top">
 
             <TextView
                 android:id="@+id/tv"
@@ -90,8 +83,7 @@
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -105,8 +97,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/ivDatePicker"
                 app:layout_constraintStart_toEndOf="@+id/tv"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:text="Date"
-                />
+                tool:text="Date" />
 
             <ImageView
                 android:id="@+id/ivDatePicker"
@@ -117,8 +108,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="ContentDescription"
-                />
+                tool:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -131,15 +121,13 @@
             android:text="@string/text_label_spinner_product"
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp"
-            app:layout_constraintTop_toBottomOf="@+id/rlDate"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/rlDate" />
 
         <Spinner
             android:id="@+id/spProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_product"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_product" />
 
         <TextView
             android:id="@+id/tvProductError"
@@ -155,8 +143,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spProduct"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <TextView
             android:id="@+id/text_label_spinner_meeting_duration"
@@ -168,16 +155,14 @@
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvProductError"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tvProductError" />
 
         <Spinner
             android:id="@+id/spMeetingDuration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_duration"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_duration" />
 
         <TextView
             android:id="@+id/tvMeetingDurationError"
@@ -193,8 +178,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spMeetingDuration"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <TextView
             android:id="@+id/text_label_spinner_meeting_objective"
@@ -206,16 +190,14 @@
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvMeetingDurationError"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tvMeetingDurationError" />
 
         <Spinner
             android:id="@+id/spMeetingObjective"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_objective"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_objective" />
 
         <TextView
             android:id="@+id/tvMeetingObjectiveError"
@@ -231,8 +213,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spMeetingObjective"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <TextView
             android:id="@+id/text_label_spinner_activity_type"
@@ -244,16 +225,14 @@
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvMeetingObjectiveError"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tvMeetingObjectiveError" />
 
         <Spinner
             android:id="@+id/spActivityType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_activity_type"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_activity_type" />
 
         <TextView
             android:id="@+id/tvActivityTypeError"
@@ -269,8 +248,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spActivityType"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <TextView
             android:id="@+id/text_label_spinner_meeting_reason"
@@ -282,16 +260,14 @@
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvActivityTypeError"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tvActivityTypeError" />
 
         <Spinner
             android:id="@+id/spMeetingReason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_reason"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_meeting_reason" />
 
         <TextView
             android:id="@+id/tvMeetingReasonError"
@@ -307,8 +283,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spMeetingReason"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_description"
@@ -316,8 +291,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
             app:hintTextAppearance="@style/InputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/tvMeetingReasonError"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/tvMeetingReasonError">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etMeetingDescription"
@@ -327,8 +301,7 @@
                 android:hint="@string/hint_meeting_Description"
                 android:inputType="textMultiLine"
                 android:maxLength="500"
-                android:textCursorDrawable="@null"
-                />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -345,8 +318,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_meeting_description"
             tool:text="error"
-            tool:visibility="visible"
-            />
+            tool:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linaerLayoutNew"
@@ -354,8 +326,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/tvMeetingDescriptionError"
-            tool:visibility="visible"
-            >
+            tool:visibility="visible">
 
             <TextView
                 android:id="@+id/text_label_spinner_ba_client_meeting"
@@ -367,16 +338,14 @@
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spBAClient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_ba_client_meeting"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_ba_client_meeting" />
 
             <TextView
                 android:id="@+id/tvBAClientError"
@@ -392,8 +361,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spBAClient"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
             <TextView
                 android:id="@+id/text_label_spinner_out_station_meeting"
@@ -405,16 +373,14 @@
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvBAClientError"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvBAClientError" />
 
             <Spinner
                 android:id="@+id/spOutStaition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_out_station_meeting"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_out_station_meeting" />
 
             <TextView
                 android:id="@+id/tvOutStaitionError"
@@ -430,8 +396,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spOutStaition"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilClientCode"
@@ -439,8 +404,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tvOutStaitionError"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tvOutStaitionError">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etClientCode"
@@ -449,8 +413,7 @@
                     android:hint="@string/hint_client_code"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -467,8 +430,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilClientCode"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilClientName"
@@ -476,8 +438,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tvClientCodeError"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tvClientCodeError">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etClientName"
@@ -486,8 +447,7 @@
                     android:hint="@string/hint_client_name"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -504,8 +464,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilClientName"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -515,8 +474,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/textview_border"
-            app:layout_constraintTop_toBottomOf="@+id/linaerLayoutNew"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/linaerLayoutNew">
 
             <TextView
                 android:id="@+id/tvAttendee"
@@ -530,8 +488,7 @@
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="RtlSymmetry"
-                />
+                tool:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/tvAttendeeCount"
@@ -547,8 +504,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/ibAttendee"
                 app:layout_constraintStart_toEndOf="@+id/tvAttendee"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="RtlSymmetry"
-                />
+                tool:ignore="RtlSymmetry" />
 
             <ImageButton
                 android:id="@+id/ibAttendee"
@@ -561,8 +517,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="ContentDescription"
-                />
+                tool:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -571,8 +526,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="@color/calendar_gray"
-            app:layout_constraintTop_toBottomOf="@+id/llAttendee"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/llAttendee" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llSplAttendee"
@@ -581,8 +535,7 @@
             android:background="@drawable/textview_border"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/view"
-            tool:visibility="visible"
-            >
+            tool:visibility="visible">
 
             <TextView
                 android:id="@+id/tvSplAttendee"
@@ -596,8 +549,7 @@
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="RtlSymmetry"
-                />
+                tool:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/tvSplAttendeeCount"
@@ -614,8 +566,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/ibSplAttendee"
                 app:layout_constraintStart_toEndOf="@+id/tvSplAttendee"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="RtlSymmetry"
-                />
+                tool:ignore="RtlSymmetry" />
 
             <ImageButton
                 android:id="@+id/ibSplAttendee"
@@ -628,8 +579,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tool:ignore="ContentDescription"
-                />
+                tool:ignore="ContentDescription" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -639,8 +589,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
             app:hintTextAppearance="@style/InputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/llSplAttendee"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/llSplAttendee">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/etCustomerComment"
@@ -649,8 +598,7 @@
                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                 android:hint="@string/hint_customer_comment"
                 android:inputType="textMultiLine"
-                android:textCursorDrawable="@null"
-                />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -660,8 +608,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/til_customer_comment"
-            tool:visibility="visible"
-            >
+            tool:visibility="visible">
 
             <TextView
                 android:id="@+id/text_label_spinner_actionable"
@@ -673,16 +620,14 @@
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spActionables"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_actionable"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_actionable" />
 
             <TextView
                 android:id="@+id/tvActionablesError"
@@ -698,8 +643,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spActionables"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
             <TextView
                 android:id="@+id/text_label_spinner_category"
@@ -711,16 +655,14 @@
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvActionablesError"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tvActionablesError" />
 
             <Spinner
                 android:id="@+id/spCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_category"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_category" />
 
             <TextView
                 android:id="@+id/tvCategoryError"
@@ -736,8 +678,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spCategory"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_category"
@@ -745,8 +686,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tvCategoryError"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tvCategoryError">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/etCategory"
@@ -759,8 +699,7 @@
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -777,8 +716,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/til_category"
                 tool:text="error"
-                tool:visibility="visible"
-                />
+                tool:visibility="visible" />
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -786,8 +724,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/tvCategoryCommentsError"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tvCategoryCommentsError">
 
                 <TextView
                     android:id="@+id/text_label_spinner_sub_category"
@@ -799,8 +736,7 @@
                     android:textColor="@color/text_color_personal"
                     android:textSize="@dimen/_11sdp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <Spinner
@@ -808,8 +744,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_sub_category"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/text_label_spinner_sub_category" />
 
                 <TextView
                     android:id="@+id/tvSubCategoryError"
@@ -825,8 +760,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/spSubCategory"
                     tool:text="error"
-                    tool:visibility="visible"
-                    />
+                    tool:visibility="visible" />
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -835,8 +769,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
                     app:hintTextAppearance="@style/InputLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSubCategoryError"
-                    >
+                    app:layout_constraintTop_toBottomOf="@+id/tvSubCategoryError">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/etSubCategory"
@@ -849,8 +782,7 @@
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textCursorDrawable="@null"
-                        />
+                        android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -867,8 +799,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/til_sub_category"
                     tool:text="error"
-                    tool:visibility="visible"
-                    />
+                    tool:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -884,8 +815,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintStart_toEndOf="@+id/guideline1"
-            app:layout_constraintTop_toBottomOf="@+id/llActionables"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/llActionables" />
 
         <Button
             android:id="@+id/btnReset"
@@ -900,8 +830,7 @@
             android:textSize="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnSave"
-            app:layout_constraintTop_toBottomOf="@+id/llActionables"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/llActionables" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline1"
@@ -909,8 +838,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintGuide_percent="0.3"
-            />
+            app:layout_constraintGuide_percent="0.3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

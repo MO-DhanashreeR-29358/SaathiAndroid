@@ -60,7 +60,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           when {
             it.attendeeEmployee.isNotEmpty() -> {
               val attendingArray = it.attendeeEmployee.trim()
-                .split(",".toRegex())
+                  .split(",".toRegex())
               tvAttendeeFirst.text = attendingArray[0]
               tvAttendeeSecond.text = attendingArray[1]
               tvAttendeeThird.text = attendingArray[2]

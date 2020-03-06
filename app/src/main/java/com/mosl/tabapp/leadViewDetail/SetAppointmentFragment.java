@@ -184,7 +184,7 @@ public class SetAppointmentFragment extends CommonFragment
 
     @Override
     protected int getLayout() {
-        return R.layout.frag_set_appiontment;
+        return R.layout.fragment_set_appiontment;
     }
 
     @Override

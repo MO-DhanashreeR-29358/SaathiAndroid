@@ -10,9 +10,9 @@ data class SetAppointmentResponse(
 
   @JvmField @SerializedName("repeatationStartOn") val repeatationStartOn: String,
 
-  @JvmField @SerializedName("meetingAttendee") val meetingAttendee: List<AppointmentAttendeeItem?>,
+  @JvmField @SerializedName("meetingAttendee") val meetingAttendee: List<AppointmentAttendeeItem>,
 
-  @JvmField @SerializedName("DisplayType") val displayType: String,
+  @JvmField @SerializedName("DisplayType") val displayType: String?,
 
   @JvmField @SerializedName("ActivityTypeID") val activityTypeID: Int,
 

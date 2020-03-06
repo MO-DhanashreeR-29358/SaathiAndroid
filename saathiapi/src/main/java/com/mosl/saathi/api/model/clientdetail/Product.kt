@@ -41,5 +41,5 @@ data class Product(
   @JvmField val effectiveFrom: Any,
 
   @SerializedName("AdvisoryMappingTypes")
-  @JvmField val advisoryMappingTypes: List<AdvisoryMappingTypesItem?>
+  @JvmField val advisoryMappingTypes: List<AdvisoryMappingTypesItem>
 )
