@@ -1,10 +1,12 @@
 package com.mosl.app.core.data.leadviewdetail.updatemeeting
 
 import com.mosl.app.core.data.util.safeMap
+import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.MeetingAttendee
 import com.mosl.saathi.api.model.createmeeting.MeetingAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.lead.LookupItem
 
 fun MeetingByIdItem.transform(): Meeting {
 
@@ -88,5 +90,27 @@ private fun MeetingAttendeeItem.mapToAttendee(): MeetingAttendee {
       attendeeEmpName = attendeeEmpName,
       attended = attended,
       defaultAttendee = defaultAttendee
+  )
+}
+
+fun List<LookupItem>.mapToLookupList(): List<Lookup> {
+  return safeMap {
+    it.mapToLookup()
+  }
+}
+
+private fun LookupItem.mapToLookup(): Lookup {
+  return Lookup(
+      parentId = parentId,
+      status = status,
+      sysName = sysName,
+      active = active,
+      lookupType = lookupType,
+      lookupId = lookUpid,
+      lookUpName = lookUpName,
+      businessUnitId = businessUnitId,
+      sequence = sequence,
+      ignoreBusinessUnit = ignoreBusinessUnit,
+      lookupTypeId = lookupTypeId
   )
 }

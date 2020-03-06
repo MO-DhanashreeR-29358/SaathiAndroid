@@ -12,10 +12,10 @@ import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.document.DocumentFragmentNew
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
@@ -58,7 +58,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
-      NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
+      NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragmentNew()
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> SMTFragment()
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()

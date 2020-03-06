@@ -37,7 +37,7 @@ data class Meeting(
   @JvmField val name: String,
   @JvmField val attendeeEmployee: String,
   @JvmField val travellingMode: String,
-  @JvmField val meetingAddress: String,
+  @JvmField val meetingAddress: String?,
   @JvmField val meetingId: String,
   @JvmField val stage: String,
   @JvmField val meetingAddressType: String,

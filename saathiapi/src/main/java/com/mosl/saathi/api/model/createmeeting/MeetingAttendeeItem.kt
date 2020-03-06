@@ -14,7 +14,7 @@ data class MeetingAttendeeItem(
 
   @JvmField @SerializedName("AttendeeEmpcode") val attendeeEmpcode: String?,
 
-  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any?,
 
   @JvmField @SerializedName("MeetingID") val meetingID: Int,
 

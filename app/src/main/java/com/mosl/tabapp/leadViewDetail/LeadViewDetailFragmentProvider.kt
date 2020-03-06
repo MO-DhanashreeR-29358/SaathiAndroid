@@ -3,6 +3,8 @@ package com.mosl.tabapp.leadViewDetail
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesModule
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.document.DocumentFragmentNew
+import com.mosl.tabapp.leadViewDetail.document.DocumentModule
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
@@ -24,5 +26,8 @@ abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector(modules = [UpdateMeetingModule::class])
   abstract fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
+
+  @ContributesAndroidInjector(modules = [DocumentModule::class])
+  abstract fun provideDocumentFragmentNewFactory(): DocumentFragmentNew
 
 }

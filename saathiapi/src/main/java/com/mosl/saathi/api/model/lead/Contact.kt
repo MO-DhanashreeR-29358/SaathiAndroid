@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Contact(
 
-  @JvmField @SerializedName("FDB") val fDB: Any,
+  @JvmField @SerializedName("FDB") val fDB: Any?,
 
-  @JvmField @SerializedName("EKYCMobileNo") val eKYCMobileNo: String,
+  @JvmField @SerializedName("EKYCMobileNo") val eKYCMobileNo: String?,
 
   @JvmField @SerializedName("AadharNumber") val aadharNumber: String,
 
@@ -14,15 +14,15 @@ data class Contact(
 
   @JvmField @SerializedName("AlternateMobileNo") val alternateMobileNo: String,
 
-  @JvmField @SerializedName("Salutation") val salutation: Any,
+  @JvmField @SerializedName("Salutation") val salutation: Any?,
 
-  @JvmField @SerializedName("AnnualCashFlow") val annualCashFlow: Any,
+  @JvmField @SerializedName("AnnualCashFlow") val annualCashFlow: Any?,
 
   @JvmField @SerializedName("UCID") val uCID: String? = "0",
 
   @JvmField @SerializedName("Name") val name: String? = "",
 
-  @JvmField @SerializedName("CompanyName") val companyName: Any,
+  @JvmField @SerializedName("CompanyName") val companyName: Any?,
 
   @JvmField @SerializedName("LandlineNo") val landlineNo: String,
 
@@ -30,15 +30,15 @@ data class Contact(
 
   @JvmField @SerializedName("DOA") val dOA: String,
 
-  @JvmField @SerializedName("PrefixCode") val prefixCode: Any,
+  @JvmField @SerializedName("PrefixCode") val prefixCode: Any?,
 
   @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
 
-  @JvmField @SerializedName("contactAddress") val contactAddress: List<ContactAddressItem?>,
+  @JvmField @SerializedName("contactAddress") val contactAddress: List<ContactAddressItem>,
 
   @JvmField @SerializedName("Status") val status: Int,
 
-  @JvmField @SerializedName("Designation") val designation: Any,
+  @JvmField @SerializedName("Designation") val designation: Any?,
 
   @JvmField @SerializedName("EmailId") val emailId: String?,
 
@@ -50,7 +50,7 @@ data class Contact(
 
   @JvmField @SerializedName("AlternateEmailId") val alternateEmailId: String,
 
-  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any?,
 
   @JvmField @SerializedName("PanNumber") val panNumber: String
 )

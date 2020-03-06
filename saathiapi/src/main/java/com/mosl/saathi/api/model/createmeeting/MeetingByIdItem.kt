@@ -4,23 +4,23 @@ import com.google.gson.annotations.SerializedName
 
 data class MeetingByIdItem(
 
-  @JvmField @SerializedName("ParentID") val parentID: Any,
+  @JvmField @SerializedName("ParentID") val parentID: Any?,
 
-  @JvmField @SerializedName("Products") val products: List<Any?>,
+  @JvmField @SerializedName("Products") val products: List<Any>?,
 
   @JvmField @SerializedName("MeetingReasonID") val meetingReasonID: String?,
 
-  @JvmField @SerializedName("GeoLongitude") val geoLongitude: Any,
+  @JvmField @SerializedName("GeoLongitude") val geoLongitude: Any?,
 
   @JvmField @SerializedName("SubCategoryID") val subCategoryID: String?,
 
-  @JvmField @SerializedName("GeoTagStatus") val geoTagStatus: Any,
+  @JvmField @SerializedName("GeoTagStatus") val geoTagStatus: Any?,
 
   @JvmField @SerializedName("MeetingObjectiveID") val meetingObjectiveID: Int,
 
   @JvmField @SerializedName("UCID") val uCID: Int,
 
-  @JvmField @SerializedName("Name") val name: Any,
+  @JvmField @SerializedName("Name") val name: Any?,
 
   @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
 
@@ -38,7 +38,7 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("meetingAttendee") val meetingAttendee: List<MeetingAttendeeItem>,
 
-  @JvmField @SerializedName("GeoLatitude") val geoLatitude: Any,
+  @JvmField @SerializedName("GeoLatitude") val geoLatitude: Any?,
 
   @JvmField @SerializedName("ActivityTypeID") val activityTypeID: String?,
 
@@ -52,9 +52,9 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("repeatationEndsOn") val repeatationEndsOn: String?,
 
-  @JvmField @SerializedName("GeoArea") val geoArea: Any,
+  @JvmField @SerializedName("GeoArea") val geoArea: Any?,
 
-  @JvmField @SerializedName("DeviceType") val deviceType: Any,
+  @JvmField @SerializedName("DeviceType") val deviceType: Any?,
 
   @JvmField @SerializedName("MeetingType") val meetingType: String?,
 
@@ -76,11 +76,11 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("MeetingDate") val meetingDate: String?,
 
-  @JvmField @SerializedName("Clientcode") val clientcode: Any,
+  @JvmField @SerializedName("Clientcode") val clientcode: Any?,
 
   @JvmField @SerializedName("ProductCategoryID") val productCategoryID: Int,
 
-  @JvmField @SerializedName("MeetingAddress") val meetingAddress: Any,
+  @JvmField @SerializedName("MeetingAddress") val meetingAddress: Any?,
 
   @JvmField @SerializedName("MeetingID") val meetingID: String?,
 
@@ -90,25 +90,25 @@ data class MeetingByIdItem(
 
   @JvmField @SerializedName("MeetingDescription") val meetingDescription: String?,
 
-  @JvmField @SerializedName("AttendeeCode") val attendeeCode: Any,
+  @JvmField @SerializedName("AttendeeCode") val attendeeCode: Any?,
 
   @JvmField @SerializedName("IsSubcategoryData") val isSubcategoryData: Int,
 
-  @JvmField @SerializedName("Clientname") val clientname: Any,
+  @JvmField @SerializedName("Clientname") val clientname: Any?,
 
-  @JvmField @SerializedName("Amount") val amount: Any,
+  @JvmField @SerializedName("Amount") val amount: Any?,
 
-  @JvmField @SerializedName("TravellingModeIds") val travellingModeIds: Any,
+  @JvmField @SerializedName("TravellingModeIds") val travellingModeIds: Any?,
 
   @JvmField @SerializedName("MeetingAddressTypeId") val meetingAddressTypeId: Int,
 
   @JvmField @SerializedName("InApproval") val inApproval: Boolean,
 
-  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any,
+  @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any?,
 
   @JvmField @SerializedName("CustomerRemark") val customerRemark: String?,
 
-  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: Any,
+  @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: Any?,
 
   @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String?
 )

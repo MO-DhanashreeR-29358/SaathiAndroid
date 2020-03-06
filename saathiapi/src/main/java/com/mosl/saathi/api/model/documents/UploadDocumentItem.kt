@@ -8,7 +8,7 @@ data class UploadDocumentItem(
 
   @JvmField @SerializedName("CreationDate") val creationDate: String?,
 
-  @JvmField @SerializedName("CreatedBy") val createdBy: Any,
+  @JvmField @SerializedName("CreatedBy") val createdBy: Any?,
 
   @JvmField @SerializedName("DocumentType") val documentType: String?,
 
@@ -16,13 +16,13 @@ data class UploadDocumentItem(
 
   @JvmField @SerializedName("DocumentFullPath") val documentFullPath: String?,
 
-  @JvmField @SerializedName("LeadID") val leadID: Int,
+  @JvmField @SerializedName("LeadID") val leadID: Int?,
 
   @JvmField @SerializedName("ID") val iD: String?,
 
-  @JvmField @SerializedName("UCID") val uCID: Int,
+  @JvmField @SerializedName("UCID") val uCID: Int?,
 
   @JvmField @SerializedName("DocumentName") val documentName: String?,
 
-  @JvmField @SerializedName("Base64FileString") val base64FileString: Any
+  @JvmField @SerializedName("Base64FileString") val base64FileString: Any?
 )

@@ -1,4 +1,4 @@
-package com.mosl.tabapp.Permisssion
+package com.mosl.tabapp.permission
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.CAMERA

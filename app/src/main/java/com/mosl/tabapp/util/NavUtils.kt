@@ -31,6 +31,17 @@ fun Context.downloadDocument(url: String) {
   dm.enqueue(request)
 }
 
+fun Context.downloadImage(url: String): Long {
+  val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+  val request = DownloadManager.Request(Uri.parse(url))
+      .setNotificationVisibility(
+          DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
+      )
+  val downloadReference = downloadManager.enqueue(request)
+  Timber.d("Download Requested for Reference Id %d", downloadReference)
+  return downloadReference
+}
+
 fun Context.initiateMessage(
   number: String,
   eventMessage: String? = null

@@ -1,73 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <LinearLayout
-        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp"
-        android:background="@color/white"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:background="@drawable/attendee_background"
-            android:layout_margin="@dimen/_10sdp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <!--<com.mosl.mobile.ekyc.ui.DelayAutoCompleteTextView
-                android:id="@+id/searchText"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:autoText="false"
-                android:background="@android:color/transparent"
-                android:hint="search"
-                android:inputType="textAutoComplete|textAutoCorrect"
-                android:paddingLeft="5dp" />-->
-            <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
-                android:id="@+id/etSearchAttendee"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:autoText="false"
-                android:background="@android:color/transparent"
-                android:hint="@string/ATTENDEE_SEARCH_HINT_TXT"
-                android:inputType="textAutoComplete|textAutoCorrect"
-                android:paddingLeft="5dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/attendee_background"
+                android:orientation="horizontal">
 
-            <ProgressBar
-                android:id="@+id/pbLoadingIndicator"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="5dp"
-                android:visibility="gone" />
+                <!--<com.mosl.mobile.ekyc.ui.DelayAutoCompleteTextView
+                    android:id="@+id/searchText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoText="false"
+                    android:background="@android:color/transparent"
+                    android:hint="search"
+                    android:inputType="textAutoComplete|textAutoCorrect"
+                    android:paddingLeft="5dp" />-->
+                <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+                    android:id="@+id/etSearchAttendee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoText="false"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/ATTENDEE_SEARCH_HINT_TXT"
+                    android:inputType="textAutoComplete|textAutoCorrect"
+                    android:paddingLeft="5dp" />
 
-            <ImageButton
-                android:id="@+id/srchImg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="@dimen/_5sdp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/search" />
+                <ProgressBar
+                    android:id="@+id/pbLoadingIndicator"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:visibility="gone" />
 
+                <ImageButton
+                    android:id="@+id/srchImg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/search" />
+
+
+            </LinearLayout>
+
+            <!--    <ListView
+                    android:id="@+id/lvAttendee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"></ListView>-->
 
         </LinearLayout>
 
-    <!--    <ListView
-            android:id="@+id/lvAttendee"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"></ListView>-->
-
     </LinearLayout>
-
-</LinearLayout>
+</layout>
