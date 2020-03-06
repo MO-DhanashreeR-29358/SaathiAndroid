@@ -289,6 +289,9 @@ public interface MOSLConstants extends LabelConfig {
     String MTD_CNT = "MTD_CNT";
     String MTD = "MTD";
     String YTD_CNT = "YTD_CNT";
+    String REVENUE_TYPE = "REVENUETYPE";
+    String NO_OF_CLIENTS = "NOOFCLIENTS";
+    String REVENUE_GENERATED = "REVENUEGENERATED";
 
     String ATTENDEEE_NOT_FOUND_MESSAGE = "Not found";
 
