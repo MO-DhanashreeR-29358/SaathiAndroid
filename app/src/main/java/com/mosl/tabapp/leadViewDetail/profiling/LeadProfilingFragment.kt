@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
