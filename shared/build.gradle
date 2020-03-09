@@ -34,4 +34,5 @@ dependencies {
   kapt deps.dagger.androidCompiler
   implementation deps.androidx.appcompat
   api deps.mofslArtifacts.appcore
+  api deps.mofslArtifacts.tableview
 }

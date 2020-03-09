@@ -91,6 +91,7 @@ ext.deps = [
         'appcore': "MofslArtifacts:appcore:1.1.0-alpha6",
         'navigator': "MofslArtifacts:navigator:1.0.10-alpha01",
         'appcoreui': "MofslArtifacts:appcoreui:1.1.0-alpha5",
+        'tableview'    : "MofslArtifacts:tableview:1.0.35",
         'groupie': "MofslArtifacts:groupie_extensions:1.0.8",
     ],
     'groupie': ['core': "com.xwray:groupie:${versions.groupie}",
