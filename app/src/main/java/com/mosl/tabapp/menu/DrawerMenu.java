@@ -44,7 +44,7 @@ public class DrawerMenu implements MOSLConstants {
 			groupList.add(new ScreenDetails(R.drawable.ic_my_reports,
 				context.getString(R.string.MOSL_MENU_MY_REPORTS_TXT), MOSL_MENU_MY_REPORTS_TXT,
 				true));
-			groupList.add(new ScreenDetails(R.drawable.ic_menu_calendar,
+      groupList.add(new ScreenDetails(R.drawable.ic_calendar,
 				context.getString(R.string.MOSL_MENU_CALENDAR_TXT), MOSL_MENU_CALENDAR_TXT, false));
 			groupList.add(new ScreenDetails(R.drawable.ic_my_pending_approvals,
 				context.getString(R.string.MOSL_MENU_PENDING_APPROVALS_TXT),
@@ -55,7 +55,7 @@ public class DrawerMenu implements MOSLConstants {
 			groupList.add(new ScreenDetails(R.drawable.ic_sales_stadium,
 				context.getString(R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT),
 				MOSL_MENU_SALES_STADIUM_PITCH_TXT, false));
-			groupList.add(new ScreenDetails(R.drawable.ic_menu_birthday_aniversary,
+      groupList.add(new ScreenDetails(R.drawable.ic_birthday_aniversary,
 				context.getString(R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT),
 				MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT, false));
 			if (AccountDetails.isSmtEnabled()) {

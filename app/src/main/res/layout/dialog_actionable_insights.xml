@@ -46,7 +46,8 @@
             android:layout_below="@+id/llActionableMain"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/_minus10sdp"
-            app:srcCompat="@drawable/ic_new_actionable_insight_close_image" />
+          app:srcCompat="@drawable/ic_black_close"
+          />
 
     </RelativeLayout>
   <!-- <androidx.appcompat.widget.AppCompatImageView

@@ -82,7 +82,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:src="@drawable/ic_calendar"
+                        app:srcCompat="@drawable/ic_calendar"
                         />
 
                 </RelativeLayout>
@@ -115,7 +115,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_10sdp"
-                        android:src="@drawable/ic_calendar"
+                        app:srcCompat="@drawable/ic_calendar"
                         />
                 </RelativeLayout>
             </LinearLayout>
