@@ -217,60 +217,57 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
   private fun generateLineData(
     arrayList: List<TrendsChartModel>
   ): LineData? {
-    var lineData: TrendsChartModel? = null
+    var trendsChartModel: TrendsChartModel? = null
     for (model in arrayList) {
-      val CHART_TYPE_LINE = "SpLine"
       if (model.chartType == CHART_TYPE_LINE) {
-        lineData = model
+        trendsChartModel = model
       }
     }
-    if (lineData == null) return null
-    generateAxisLabel(lineData)
-    val itemcount = lineData.monthData.size
-    val d = LineData()
-    val entries =
-      ArrayList<Entry>()
-    var index: Int
-    var set: LineDataSet? = null
-    index = 0
-    while (index < itemcount) {
-      entries.add(
-        Entry(
-          index + 0.05f,
-          lineData.monthData[mMonths.get(index)]!!
-        )
-      )
-      set = LineDataSet(entries, lineData.legendText)
-      set.color = Color.rgb(64, 0, 255)
-      set.lineWidth = 2.5f
-      set.setCircleColor(Color.rgb(240, 238, 70))
-      set.circleRadius = 5f
-      set.fillColor = Color.rgb(64, 0, 255)
-      set.mode = LineDataSet.Mode.CUBIC_BEZIER
-      set.setDrawValues(true)
-      set.valueTextSize = 10f
-      set.valueTextColor = Color.rgb(64, 0, 255)
-      if (lineData.monthData[mMonths.get(index)]!! < 1.00) {
-        rightAxis.setValueFormatter(CRMIAxisValueFormatter())
-        // if last value below 1
-        dataFoundFlag = true
-      } else {
-        if (dataFoundFlag) {
-          rightAxis.setValueFormatter(CRMIAxisValueFormatter())
-          dataFoundFlag = false
-        } else {
-          rightAxis.setValueFormatter(LargeValueFormatter())
+    val lineData = LineData()
+    trendsChartModel?.apply {
+      generateAxisLabel(trendsChartModel)
+      val itemcount = this.monthData.size
+      val entries = ArrayList<Entry>()
+      var index: Int
+      var lineDataSet: LineDataSet? = null
+      index = 0
+      while (index < itemcount) {
+        val yValue = this.monthData[mMonths.get(index)] ?: 0.0f
+        entries.add(Entry(index + 0.05f, yValue))
+        lineDataSet = LineDataSet(entries, this.legendText)
+        lineDataSet.apply {
+          color = Color.rgb(64, 0, 255)
+          lineWidth = 2.5f
+          setCircleColor(Color.rgb(240, 238, 70))
+          circleRadius = 5f
+          fillColor = Color.rgb(64, 0, 255)
+          mode = LineDataSet.Mode.CUBIC_BEZIER
+          setDrawValues(true)
+          valueTextSize = 10f
+          valueTextColor = Color.rgb(64, 0, 255)
+          valueFormatter = CRMDecimalValueFormater()
+          axisDependency = YAxis.AxisDependency.RIGHT
         }
+        if (yValue < 1.00) {
+          rightAxis.setValueFormatter(CRMIAxisValueFormatter())
+          // if last value below 1
+          dataFoundFlag = true
+        } else {
+          if (dataFoundFlag) {
+            rightAxis.setValueFormatter(CRMIAxisValueFormatter())
+            dataFoundFlag = false
+          } else {
+            rightAxis.setValueFormatter(LargeValueFormatter())
+          }
+        }
+        index++
       }
-      set.valueFormatter = CRMDecimalValueFormater()
-      set.axisDependency = YAxis.AxisDependency.RIGHT
-      index++
+      lineData.addDataSet(lineDataSet)
     }
-    d.addDataSet(set)
-    return d
+    return lineData
   }
 
-  private fun getColor(index: Int): Int {
+  private fun getBarColor(index: Int): Int {
     return when (index) {
       0 -> Color.rgb(60, 220, 78)
       1 -> Color.rgb(61, 165, 255)
@@ -281,55 +278,62 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
   private fun generateBarData(
     arrayList: List<TrendsChartModel>
   ): BarData? {
-    val barDataList: MutableList<TrendsChartModel> =
-      ArrayList()
+    val barDataList: MutableList<TrendsChartModel> = ArrayList()
     for (model in arrayList) {
-      val CHART_TYPE_COLUMN = "Coloumn"
       if (model.chartType == CHART_TYPE_COLUMN) {
         generateAxisLabel(model)
         barDataList.add(model)
       }
     }
-    if (barDataList.size == 0) return null
-    val d = BarData()
-    val entryList: MutableList<ArrayList<BarEntry>> =
-      ArrayList()
-    for (x in barDataList.indices) {
-      val entry = ArrayList<BarEntry>()
-      entryList.add(entry)
-    }
-    var set1: BarDataSet? = null
-    for (x in barDataList.indices) {
-      val model = barDataList[x]
-      val entries = entryList[x]
-      for (y in mMonths.indices) {
-        if (barDataList.size == 1) {
-          entries.add(BarEntry(y + 0.2f, model.monthData[mMonths.get(y)]!!))
-        } else {
-          entries.add(BarEntry(y + 0.0f, model.monthData[mMonths.get(y)]!!))
-        }
-        set1 = BarDataSet(entries, model.legendText)
-        set1.color = getColor(x)
-        set1.valueTextColor = getColor(x)
-        set1.valueTextSize = 10f
-        set1.axisDependency = YAxis.AxisDependency.LEFT
-        if (model.monthData[mMonths.get(y)]!! % 1 == 0f) {
-          set1.valueFormatter = CRMValueFormatter()
-        } else {
-          set1.valueFormatter = CRMDecimalValueFormater()
-        }
+    val barData = BarData()
+    if (barDataList.size > 0) {
+      val entryList: MutableList<ArrayList<BarEntry>> = ArrayList()
+      for (x in barDataList.indices) {
+        val entry = ArrayList<BarEntry>()
+        entryList.add(entry)
       }
-      d.addDataSet(set1)
+      var barDataSet: BarDataSet? = null
+      for (x in barDataList.indices) {
+        val model = barDataList[x]
+        val entries = entryList[x]
+        for (y in mMonths.indices) {
+          val yValue = model.monthData[mMonths.get(y)] ?: 0.0f
+          if (barDataList.size == 1) {
+            entries.add(BarEntry(y + 0.2f, yValue))
+          } else {
+            entries.add(BarEntry(y + 0.0f, yValue))
+          }
+          barDataSet = BarDataSet(entries, model.legendText)
+          barDataSet.apply {
+            color = getBarColor(x)
+            valueTextColor = getBarColor(x)
+            valueTextSize = 10f
+            axisDependency = YAxis.AxisDependency.LEFT
+            if (yValue % 1 == 0f) {
+              valueFormatter = CRMValueFormatter()
+            } else {
+              valueFormatter = CRMDecimalValueFormater()
+            }
+          }
+
+        }
+        barData.addDataSet(barDataSet)
+      }
+      val groupSpace = 0.1f
+      val barSpace = 0.025f // x2 dataset
+      val barWidth = 0.35f // x2 dataset
+      // make this BarData object grouped
+      barData.barWidth = barWidth
+      if (barDataList.size > 1) {
+        barData.groupBars(0f, groupSpace, barSpace) // start at x = 0
+      }
     }
-    val groupSpace = 0.1f
-    val barSpace = 0.025f // x2 dataset
-    val barWidth = 0.35f // x2 dataset
-    // make this BarData object grouped
-    d.barWidth = barWidth
-    if (barDataList.size > 1) {
-      d.groupBars(0f, groupSpace, barSpace) // start at x = 0
-    }
-    return d
+    return barData
+  }
+
+  companion object {
+    const val CHART_TYPE_COLUMN = "Coloumn"
+    const val CHART_TYPE_LINE = "SpLine"
   }
 
 }
