@@ -2,9 +2,11 @@ package com.mosl.tabapp.birthdayanniversary
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryItemResponse
 import com.mosl.mobile.domain.birthdayanniversary.ProfileSpinner
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.GetDataList
 import io.reactivex.Observable
 
 interface BirthdayAnniversaryView : BaseView {
@@ -14,4 +16,7 @@ interface BirthdayAnniversaryView : BaseView {
   fun onProfileSpinnerSelection(): Observable<Int>
   fun onEventTypeSpinnerSelection(): Observable<Int>
   fun renderProfileSpinner(uiModel: UiModel<List<LookupItemResponse>>)
+  fun getDataList(): Observable<GetDataList>
+  fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>)
+  fun renderGetData()
 }

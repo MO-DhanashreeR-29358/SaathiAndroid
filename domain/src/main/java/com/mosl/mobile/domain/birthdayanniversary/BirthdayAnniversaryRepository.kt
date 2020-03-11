@@ -6,4 +6,5 @@ import io.reactivex.Observable
 
 interface BirthdayAnniversaryRepository {
   fun getAllLookUp(request: LookupRequestInput): Observable<List<LookupItemResponse>>
+  fun postBirthdayAnniversary(request: BirthdayRequestInput): Observable<BirthdayAnniversaryItemResponse>
 }
