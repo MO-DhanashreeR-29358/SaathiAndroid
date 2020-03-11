@@ -63,10 +63,10 @@ public class DrawerMenu implements MOSLConstants {
 					context.getString(R.string.MOSL_MENU_SUGGEST_ME_TXT), MOSL_MENU_SUGGEST_ME_TXT,
 					false));
 			}
-			groupList.add(new ScreenDetails(R.drawable.ic_new_query,
+      groupList.add(new ScreenDetails(R.drawable.ic_query,
 				context.getString(R.string.MOSL_MENU_QUERY_TXT), MOSL_MENU_QUERY_TXT, false));
 		}
-		groupList.add(new ScreenDetails(R.drawable.ic_new_logout,
+    groupList.add(new ScreenDetails(R.drawable.ic_logout,
 			context.getString(R.string.MOSL_MENU_LOGOUT_TXT), MOSL_MENU_LOGOUT_TXT, false));
 
 		return groupList;

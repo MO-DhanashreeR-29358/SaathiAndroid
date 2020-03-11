@@ -195,7 +195,7 @@ class MenuDataSourceImpl @Inject constructor(
 
   internal fun getQuery(): BaseMenu {
     return BaseMenu(
-        icon = R.drawable.ic_new_query,
+      icon = R.drawable.ic_query,
         label = R.string.MOSL_MENU_QUERY_TXT,
         enabled = true,
         pageId = NavigationConstants.NAVIGATE_TO_QUERY
@@ -213,7 +213,7 @@ class MenuDataSourceImpl @Inject constructor(
 
   internal fun getLogout(): BaseMenu {
     return BaseMenu(
-        icon = R.drawable.ic_new_logout,
+      icon = R.drawable.ic_logout,
         label = R.string.MOSL_MENU_LOGOUT_TXT,
         enabled = true,
         pageId = NavigationConstants.NAVIGATE_TO_LOGOUT

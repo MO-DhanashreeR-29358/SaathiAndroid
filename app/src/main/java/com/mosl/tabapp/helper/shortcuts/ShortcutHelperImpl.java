@@ -28,7 +28,7 @@ import timber.log.Timber;
 		List<ShortcutInfo> shortcutInfos = new ArrayList<>(4);
 
 		shortcutInfos.add(getShortCutInfo(context, "query", "Query", "Query",
-			R.drawable.ic_new_query, NavigationConstants.NAVIGATE_TO_QUERY));
+        R.drawable.ic_query, NavigationConstants.NAVIGATE_TO_QUERY));
 		shortcutInfos.add(getShortCutInfo(context, "calender", "Calendar", "Calendar",
 			R.drawable.ic_new_calendar, NavigationConstants.NAVIGATE_TO_CALENDAR));
 		shortcutInfos.add(

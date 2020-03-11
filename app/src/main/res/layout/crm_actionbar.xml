@@ -104,7 +104,8 @@
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_new_notification_icon" />
+            app:srcCompat="@drawable/ic_notification_icon"
+            />
 
 
     </RelativeLayout>
