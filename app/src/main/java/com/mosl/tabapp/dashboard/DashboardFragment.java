@@ -76,6 +76,7 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
+import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment;
 import com.mosl.tabapp.dashboard.target.TargetFragment;
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
@@ -724,7 +725,7 @@ public class DashboardFragment extends CommonFragment
     private void loadBusinessSnapShotAdvisor() {
         setTabActivre(btnBusinessSnapshotAdvisor);
         Bundle args = new Bundle();
-        BusSnapshotAdvFragment leadsFragment = new BusSnapshotAdvFragment();
+        BusinessSnapshotAdvFragment leadsFragment = new BusinessSnapshotAdvFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -736,8 +737,8 @@ public class DashboardFragment extends CommonFragment
     private void loadClientTraded() {
         Bundle args = new Bundle();
         setTabActivre(btnClientTraded);
-        ClientsTradedYesterdayFragment clientsFragment =
-                ClientsTradedYesterdayFragment.newInstance(getContext());
+        com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment clientsFragment =
+            new com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
 
         clientsFragment.setArguments(args);
