@@ -30,7 +30,7 @@ import timber.log.Timber;
 		shortcutInfos.add(getShortCutInfo(context, "query", "Query", "Query",
         R.drawable.ic_query, NavigationConstants.NAVIGATE_TO_QUERY));
 		shortcutInfos.add(getShortCutInfo(context, "calender", "Calendar", "Calendar",
-			R.drawable.ic_new_calendar, NavigationConstants.NAVIGATE_TO_CALENDAR));
+        R.drawable.ic_calendar, NavigationConstants.NAVIGATE_TO_CALENDAR));
 		shortcutInfos.add(
 			getShortCutInfo(context, "birthdayAnniversary", "Birthdays & Anniversary",
 				"Birthdays & Anniversary",
