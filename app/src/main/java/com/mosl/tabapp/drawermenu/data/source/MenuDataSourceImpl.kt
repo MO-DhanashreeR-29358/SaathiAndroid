@@ -186,7 +186,7 @@ class MenuDataSourceImpl @Inject constructor(
 
   internal fun getBirthdayAnniversary(): BaseMenu {
     return BaseMenu(
-        icon = R.drawable.ic_birthday_aniversary,
+      icon = R.drawable.ic_menu_birthday_aniversary,
         label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
         enabled = true,
         pageId = NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY

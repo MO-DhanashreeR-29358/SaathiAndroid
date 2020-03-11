@@ -7,15 +7,12 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.os.Build;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.core.CommonActivity;
 import com.mosl.tabapp.login.LoginActivity;
 import com.mosl.tabapp.navigation.NavigationConstants;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import timber.log.Timber;
 
 @TargetApi(Build.VERSION_CODES.N_MR1) public class ShortcutHelperImpl implements ShortcutHelper {
@@ -37,7 +34,7 @@ import timber.log.Timber;
 		shortcutInfos.add(
 			getShortCutInfo(context, "birthdayAnniversary", "Birthdays & Anniversary",
 				"Birthdays & Anniversary",
-				R.drawable.ic_birthday_aniversary,
+          R.drawable.ic_menu_birthday_aniversary,
 				NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY));
 		shortcutInfos.add(getShortCutInfo(context, "createLead", "Create Lead", "Create Lead",
 			R.drawable.ic_create_lead, NavigationConstants.NAVIGATE_TO_LEAD_CREATION));
