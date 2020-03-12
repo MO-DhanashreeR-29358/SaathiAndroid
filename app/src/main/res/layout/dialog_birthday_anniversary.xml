@@ -54,6 +54,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="@dimen/_minus15sdp"
-            android:src="@drawable/ic_closed" />
+            app:srcCompat="@drawable/ic_new_closed"
+            />
     </RelativeLayout>
 </LinearLayout>
