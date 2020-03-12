@@ -59,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_create_meeting_white"
+        app:srcCompat="@drawable/ic_new_create_meeting_white"
         />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -152,6 +152,6 @@
       android:layout_height="@dimen/_30sdp"
       android:layout_gravity="end"
       android:layout_marginBottom="@dimen/_minus15sdp"
-      app:srcCompat="@drawable/ic_orange_close"
+      app:srcCompat="@drawable/ic_new_closed"
       />
 </FrameLayout>
