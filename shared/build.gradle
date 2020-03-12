@@ -35,4 +35,5 @@ dependencies {
   implementation deps.androidx.appcompat
   api deps.mofslArtifacts.appcore
   api deps.mofslArtifacts.tableview
+  api deps.mofslArtifacts.tableviewx
 }
