@@ -51,7 +51,7 @@ import java.util.ArrayList
 import java.util.HashMap
 import javax.inject.Inject
 
-class TeamTargetFragment : CommonFragment(), TeamTargetView {
+class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListener {
 
   lateinit var binding: FragmentTeamTargetBinding
   private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
@@ -83,6 +83,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
   private val summaryCountGroupAdapter = GroupAdapter<ViewHolder>()
   private val labelGroupAdapter = GroupAdapter<ViewHolder>()
 
+  private var tableListdata: List<List<TeamTableItemModel>> = mutableListOf()
+
   private val VORDIPLOM_COLORS = intArrayOf(
     Color.rgb(255, 21, 0),
     Color.rgb(38, 127, 183),
@@ -102,6 +104,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
     Color.rgb(255, 255, 0),
     Color.rgb(254, 46, 46)
   )
+
+  private var count = 0
 
   override fun getLayout(): Int {
     return R.layout.fragment_team_target
@@ -198,6 +202,9 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
     } else {
       binding.group.visibility = View.GONE
     }
+
+    binding.includeTargetChart.ivLeftArrow.setOnClickListener(this)
+    binding.includeTargetChart.ivRightArrow.setOnClickListener(this)
 
   }
 
@@ -373,7 +380,9 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
 
   fun chartClear() {
     binding.includeTargetChart.chart.clear()
-    binding.includeTargetChart.tvWidgetName.visibility = View.GONE
+    lableItemList.clear()
+    labelGroupAdapter.clear()
+    binding.includeTargetChart.tvWidgetName.text = ""
   }
 
   override fun renderData(uiModel: UiModel<TeamTargetItemModel>) {
@@ -388,21 +397,27 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
     }
 
     uiModel.onSuccess {
-      it.table3?.apply {
+      tableListdata = it.tableListData()
+      it.table3.apply {
         SummaryCountView(this)
       }
-      it.table1?.apply {
+      it.table.apply {
         if (this.isEmpty()) {
           binding.includeTargetChart.chart.clear()
+          chartClear()
         } else {
-          setDataBroking(this)
-          LableView(this)
+          this.renderUI()
         }
 
       }
 
     }
 
+  }
+
+  private fun List<TeamTableItemModel>.renderUI() {
+    setDataBroking(this)
+    LableView(this)
   }
 
   private fun setDataBroking(
@@ -474,6 +489,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
   }
 
   fun LableView(tableList: List<TeamTableItemModel>) {
+    labelGroupAdapter.clear()
+    lableItemList.clear()
     (binding.includeTargetChart.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
       gridSpanCount(tableList.size)
 
@@ -484,19 +501,22 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
     }
     labelGroupAdapter.addAll(lableItemList)
 
+    getWidgetModel()?.apply {
+      if (this.widgetTypeList.size > 0) {
+        binding.includeTargetChart.tvWidgetName.setText(this.widgetTypeList.get(count).getTitle())
+      }
+    }
+
   }
 
   override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
-    binding.includeTargetChart.tvWidgetName.setText("")
     if (currentPosition != previousPosition) {
       itemList.get(currentPosition).updateItem(true)
       itemList.get(previousPosition).updateItem(false)
       previousPosition = currentPosition
     }
-    if (widgetModel.widgetTypeList.size > 0) {
-      binding.includeTargetChart.tvWidgetName.setText(widgetModel.widgetTypeList.get(0).getTitle())
-    }
     this.widgetModel = widgetModel
+    count = 0
   }
 
   fun gridSpanCount(listCount: Int): Int {
@@ -507,6 +527,29 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView {
       else -> 1
     }
 
+  }
+
+  override fun onClick(view: View?) {
+    when (view?.id) {
+      R.id.iv_left_arrow -> {
+        count--
+        if (count >= 0)
+          if (tableListdata.get(count).size > 0)
+            tableListdata.get(count).renderUI()
+          else
+            chartClear()
+        else
+          count = 0
+      }
+      R.id.iv_right_arrow -> {
+        if (count < 2)
+          count++
+        if (tableListdata.get(count).size > 0)
+          tableListdata.get(count).renderUI()
+        else
+          chartClear()
+      }
+    }
   }
 
 }

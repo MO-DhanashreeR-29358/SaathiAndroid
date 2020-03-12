@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class TeamTargetResponse(
   @JvmField @SerializedName("Table")
-  val table: List<TableItem>?,
+  val table: List<TableItem>,
 
   @JvmField @SerializedName("Table1")
-  val table1: List<TableItem>?,
+  val table1: List<TableItem>,
 
   @JvmField @SerializedName("Table2")
-  val table2: List<TableItem>?,
+  val table2: List<TableItem>,
 
   @JvmField @SerializedName("Table3")
-  val table3: List<TeamTable3Item>?
+  val table3: List<TeamTable3Item>
 
 )
