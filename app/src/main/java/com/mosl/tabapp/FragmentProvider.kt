@@ -31,6 +31,8 @@ import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule
 import com.mosl.tabapp.dashboard.target.TargetFragment
 import com.mosl.tabapp.dashboard.target.TargetModule
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
@@ -106,8 +108,11 @@ interface FragmentProvider {
   @ContributesAndroidInjector(modules = [TargetModule::class])
   fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
 
-    @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
-    fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
+  @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
+  fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
+
+  @ContributesAndroidInjector(modules = [TeamTargetModule::class])
+  fun provideTeamTargetFragmentFactory(): TeamTargetFragment
 
   @ContributesAndroidInjector
   fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment

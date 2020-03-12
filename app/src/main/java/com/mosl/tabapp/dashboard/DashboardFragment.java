@@ -78,6 +78,7 @@ import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment;
 import com.mosl.tabapp.dashboard.target.TargetFragment;
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment;
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
@@ -805,8 +806,8 @@ public class DashboardFragment extends CommonFragment
 
     private void loadTeamTargetAchievement() {
         Bundle args = new Bundle();
-        TargetAchievementTeamFragment leadsFragment =
-                new TargetAchievementTeamFragment();
+        TeamTargetFragment leadsFragment =
+            new TeamTargetFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()

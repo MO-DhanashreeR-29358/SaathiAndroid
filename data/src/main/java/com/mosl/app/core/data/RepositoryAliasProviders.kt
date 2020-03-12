@@ -5,6 +5,7 @@ import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
+import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.app.core.data.trends.TrendsRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
@@ -12,6 +13,7 @@ import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
+import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
 import com.mosl.mobile.domain.tradeyesterday.ClientTradeYesterdayRepository
 import com.mosl.mobile.domain.trends.TrendsRepository
 import dagger.Binds
@@ -33,7 +35,10 @@ interface RepositoryAliasProviders {
   fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
 
   @Binds
-  fun provideAuTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
+  fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
+
+  @Binds
+  fun provideTeamTargetVsAchRepository(repository: TeamTargetRepositoryImpl): TeamTargetRepository
 
   @Binds
   fun provideClientTradeYesterdayRepository(repository: ClientTradeYesterdayRepositoryImpl): ClientTradeYesterdayRepository
