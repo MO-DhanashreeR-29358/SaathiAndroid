@@ -74,6 +74,7 @@ class MenuDataSourceImpl @Inject constructor(
   protected fun getAuSalesBank(): List<BaseMenu> {
     return listOf(
         getDashboard(),
+        getOpenAccount(),
         getAUBankMeeting(),
         getAUBankMeetingReport(),
         getSalesBrochure(),
