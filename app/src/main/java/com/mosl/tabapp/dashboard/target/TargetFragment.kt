@@ -22,7 +22,12 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.bank.*
+import com.mosl.mobile.domain.bank.BankCodeModel
+import com.mosl.mobile.domain.bank.BranchCodeModel
+import com.mosl.mobile.domain.bank.SelectBank
+import com.mosl.mobile.domain.bank.SelectBranch
+import com.mosl.mobile.domain.bank.SelectSubBranch
+import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.mobile.domain.target.Table1ItemModel
 import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.mobile.domain.target.TargetItemModel
@@ -42,7 +47,8 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 import javax.inject.Inject
 
 class TargetFragment : CommonFragment(), TargetView {
@@ -435,9 +441,10 @@ class TargetFragment : CommonFragment(), TargetView {
     ): PieData {
         val entries = ArrayList<PieEntry>()
         for (i in tableItemList.indices) {
+            val value = tableItemList[i].value?.toFloat() ?: 0.0f
             entries.add(
                 PieEntry(
-                    tableItemList[i].value!!.toFloat(),
+                    value,
                     tableItemList[i].label, i
                 )
             )
