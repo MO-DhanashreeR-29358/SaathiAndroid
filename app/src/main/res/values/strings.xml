@@ -285,6 +285,8 @@
     <string name="txt_label_total">Total</string>
     <string name="saathi_init">saathi_init</string>
     <string name="txt_lable_title">Title</string>
+    <string name="txt_no_clients_having_birthday">No clients having Birthday %1$s</string>
+    <string name="txt_no_clients_having_anniversary">No clients having Anniversary %1$s</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

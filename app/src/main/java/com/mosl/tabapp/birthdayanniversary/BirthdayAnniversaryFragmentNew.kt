@@ -7,6 +7,7 @@ import android.widget.RadioGroup
 import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
@@ -21,16 +22,24 @@ import com.mosl.mobile.domain.birthdayanniversary.FilterInput
 import com.mosl.mobile.domain.birthdayanniversary.FiltersItemInput
 import com.mosl.mobile.domain.birthdayanniversary.ProfileSpinner
 import com.mosl.mobile.domain.birthdayanniversary.RequestInput
+import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.tabapp.R
+import com.mosl.tabapp.R.string
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.GetDataList
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
 import com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.LEADPROFILE
 import com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentBirthdayAnniversaryNewBinding
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -53,6 +62,7 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   private val subject = PublishSubject.create<BirthdayAnniversaryUiEvent>()
   private var filterType = "2"
   private var dayType = TODAY_FLAG
+  private var dataFoundFlag = false
   override fun getLayout(): Int {
     return R.layout.fragment_birthday_anniversary_new
   }
@@ -60,8 +70,8 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentBirthdayAnniversaryNewBinding.bind(view)
-    setUpView()
     setUpRecyclerView()
+    setUpView()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
   }
@@ -80,12 +90,13 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
       val arrEventType = listOf(*eventTypeArray)
       spinnerEventAdapter.setSpinnerData(spEventType, arrEventType)
 
+      segmentedGroup.setOnCheckedChangeListener(this@BirthdayAnniversaryFragmentNew)
+
     }
 
   }
 
   private fun setUpRecyclerView() {
-
     val groupAdapter = GroupAdapter<ViewHolder>()
     section = DataManagerSection(onRetryClick)
     section.retrySubject = dataActionSubject
@@ -148,23 +159,123 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
     getData()
   }
 
-  override fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>) {
+  override fun onEmailAllClick(): Observable<Unit> {
+    return binding.ivEmailAll.clicks()
+  }
+
+  override fun sendEmailAll(): Observable<SendEmailAll> {
+    return subject.ofType()
+  }
+
+  override fun sendGift(): Observable<SendGift> {
+    return subject.ofType()
+  }
+
+  override fun renderSendGift(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
     uiModel.onSuccess {
+      MSFDialog.alertDialog(
+        requireContext(), 0,
+        resources.getString(string.motilal_oswal),
+        MOSLConstants.GIFT_SEND,
+        "Ok",
+        true, null
+      )
+    }
+  }
+
+  override fun renderEmailAllClick() {
+    if (dataFoundFlag) {
+      if (!filterType.equals("3", ignoreCase = true)) {
+        MSFDialog.alertDialog(
+          requireContext(), 0,
+          resources.getString(string.motilal_oswal), MOSLConstants.EMAIL_ALL_MESSAGE,
+          "Yes", "No", true
+        ) { action: Action, _: Array<Any?>? ->
+          if (action == OK) {
+            //sendEmailAll()
+            val eventType = if (getEventType().equals("Birthday", ignoreCase = true)) {
+              "B"
+            } else {
+              "A"
+            }
+            val dayTypes = if (dayType.equals("belated", ignoreCase = true)) {
+              "-L"
+            } else {
+              "-T"
+            }
+            val input = SendEmailRequestInput(
+              selectedUcids = null,
+              checkAll = true,
+              eventType = eventType + dayTypes,
+              employeeCode = userManager.getUser()?.employeeCode,
+              filterType = filterType,
+              messageType = "E"
+            )
+            subject.onNext(SendEmailAll(input))
+          }
+        }
+      }
+    }
+  }
+
+  override fun renderSendEmailAll(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      MSFDialog.alertDialog(
+        requireContext(), 0,
+        resources.getString(string.motilal_oswal),
+        MOSLConstants.EMAIL_SEND,
+        "Ok",
+        true, null
+      )
+    }
+  }
+
+  override fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+      dataFoundFlag = false
+
+    }
+    uiModel.onSuccess {
       Timber.d("Success")
-      val itemList = it.data
-      itemList.safeMap { data ->
-        ItemBirthdayAnniversary(data, filterType, requireContext())
+      section.clearContent()
+      if (it.data.isNotEmpty()) {
+        binding.tvNoData.visibility = View.GONE
+        section.setContent(it.data.map { data ->
+          ItemBirthdayAnniversary(
+            data,
+            filterType,
+            requireContext(),
+            subject,
+            getEventType()
+          )
+        })
+        dataFoundFlag = true
+      } else {
+        binding.tvNoData.visibility = View.VISIBLE
+        if (getEventType().equals("Birthday", ignoreCase = true)) {
+          binding.tvNoData.text =
+            String.format(resources.getString(string.txt_no_clients_having_birthday), dayType)
+        } else {
+          binding.tvNoData.text =
+            String.format(getString(string.txt_no_clients_having_anniversary), dayType)
+        }
       }
 
     }
   }
 
   private fun getData() {
-    var profileId: String
+    val profileId: String
     val profileCodeStr = getProfileValue().id.toString()
     val profileNameStr = getProfileValue().lookUpName
     profileId = if (profileCodeStr.equals("-1", ignoreCase = true)) {
@@ -228,10 +339,6 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
         getData()
         CRMAppUtil.collapse(binding.ivEmailAll)
       }
-      else -> {
-        // Nothing to do
-      }
-
     }
   }
 

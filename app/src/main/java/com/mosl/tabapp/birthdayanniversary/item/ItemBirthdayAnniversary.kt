@@ -1,64 +1,71 @@
 package com.mosl.tabapp.birthdayanniversary.item
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryListData
+import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding
 import com.mosl.tabapp.databinding.ItemRecyclerBirthdayAnniversaryNewBinding
-import com.mosl.tabapp.model.BirthdayAnniversaryModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.xwray.groupie.databinding.BindableItem
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class ItemBirthdayAnniversary(
   private val data: BirthdayAnniversaryListData,
   private val filterType: String,
-  private val context: Context
+  private val context: Context,
+  private val subject: PublishSubject<BirthdayAnniversaryUiEvent>,
+  private val eventType: String
 ) : BindableItem<ItemRecyclerBirthdayAnniversaryNewBinding>() {
   override fun getLayout(): Int {
     return R.layout.item_recycler_birthday_anniversary_new
   }
 
-  @SuppressLint("SetTextI18n")
   override fun bind(viewBinding: ItemRecyclerBirthdayAnniversaryNewBinding, position: Int) {
     viewBinding.apply {
-     /* try {
-        val birthDate: Array<String> =
-          data.birthday.split("T").toTypedArray()
-        val dateFormat = CRMAppUtil.getDate(birthDate[0], "yyyy-MM-dd")
-        val date = CRMAppUtil.getDateStr(dateFormat, "dd MMM yyyy")
-        tvDate.text = date
-      } catch (e: Exception) {
-        Timber.d(e)
-      }*/
+      var isGiftFlag = false
+      when (eventType) {
+        "Birthday" -> {
+          tvDate.text = splitDate(data.dob)
+          tvEvent.text =
+            data.noOfYearBirthday + CRMAppUtil.getDayOfMonthSuffix(data.noOfYearBirthday.toInt()) + eventType
+          isGiftFlag = data.birthdayFlag
+          ivBirthdayAnniversary.setBackgroundResource(R.drawable.ic_bday)
+        }
+        "Anniversary" -> {
+          tvDate.text = splitDate(data.anniversaryDate)
+          tvEvent.text =
+            data.anniversaryCount + CRMAppUtil.getDayOfMonthSuffix(data.anniversaryCount.toInt()) + eventType
+          isGiftFlag = data.anniversaryFlag
+          ivBirthdayAnniversary.setBackgroundResource(R.drawable.ic_anniversary)
+        }
+      }
+
       tvClientName.text = data.clientName
       if (data.clientCode.equals("0", ignoreCase = true) || data.clientCode.isBlank()) {
         tvClientCode.text = data.ucid
       } else {
         tvClientCode.text = data.clientCode
       }
-      /*tvEvent.text =
-        data.totalYears + CRMAppUtil.getDayOfMonthSuffix(data.totalYears.toInt()) + data.title*/
 
-      /*if (data.title.equals("Birthday", ignoreCase = true)) {
-        ivBirthdayAnniversary.setBackgroundResource(R.drawable.ic_bday)
-      } else {
-        ivBirthdayAnniversary.setBackgroundResource(R.drawable.ic_anniversary)
-      }*/
       //dont open it for belated
       if (!filterType.equals("1", ignoreCase = false)) {
         ivPopup.setOnClickListener { view ->
@@ -77,6 +84,7 @@ class ItemBirthdayAnniversary(
             window?.setLayout(
               ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
+            window?.setGravity(Gravity.CENTER);
             setCanceledOnTouchOutside(true)
             dialogBinding.ivCall.setOnClickListener {
               if (!filterType.equals("3", ignoreCase = true)) {
@@ -108,10 +116,10 @@ class ItemBirthdayAnniversary(
               }
             }
 
-            /*dialogBinding.ivSms.setOnClickListener {
+            dialogBinding.ivSms.setOnClickListener {
               if (!filterType.equals("3", ignoreCase = true)) {
-                if (data.backOfficeMobileNumber != "android.intent.action.VIEW") {
-                  val smsIntent = Intent("")
+                if (!data.backOfficeMobileNumber.isNullOrBlank()) {
+                  val smsIntent = Intent("android.intent.action.VIEW")
                   smsIntent.data = Uri.parse(
                     "smsto:" + Uri.encode(
                       data.backOfficeMobileNumber
@@ -119,8 +127,8 @@ class ItemBirthdayAnniversary(
                   )
                   smsIntent.putExtra(
                     "sms_body",
-                    if (data.title
-                        .equals("birthday", ignoreCase = true)
+                    if (eventType
+                        .equals("Birthday", ignoreCase = true)
                     ) MOSLConstants.BIRTHDAY_MESSAGE else MOSLConstants.ANNIVERSARY_MESSAGE
                   )
                   smsIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -134,7 +142,7 @@ class ItemBirthdayAnniversary(
                 }
                 dismiss()
               }
-            }*/
+            }
 
             dialogBinding.ivEmail.setOnClickListener {
               if (!filterType.equals("3", ignoreCase = true)) {
@@ -144,25 +152,31 @@ class ItemBirthdayAnniversary(
                   MOSLConstants.EMAIL_MESSAGE_CLIENT, "Yes", "No", true
                 ) { action: Action, _: Array<Any?>? ->
                   if (action == OK) {
-                    /*sendEmail(
-                      data.ucid,
-                      data.eventType
-                    )*/
+                    val input = SendEmailRequestInput(
+                      selectedUcids = data.ucid,
+                      checkAll = false,
+                      eventType = "$eventType-T",
+                      employeeCode = null,
+                      filterType = null,
+                      messageType = "E"
+                    )
+                    subject.onNext(SendEmailAll(input))
                   }
                 }
                 dismiss()
               }
             }
 
-            /*dialogBinding.ivSendGift.setOnClickListener {
-              if (!data.isGiftFlag) {
-                *//*sendGift(
-                  data.ucid,
-                  data.eventType
-                )*//*
+            dialogBinding.ivSendGift.setOnClickListener {
+              if (!isGiftFlag) {
+                subject.onNext(SendGift(data.ucid, eventType))
               }
               dismiss()
-            }*/
+            }
+
+            dialogBinding.ivClose.setOnClickListener {
+              dismiss()
+            }
 
           }.show()
 
@@ -172,5 +186,19 @@ class ItemBirthdayAnniversary(
 
     }
 
+  }
+
+  private fun splitDate(date: String): String {
+    var newDate = ""
+    try {
+      val birthDate: Array<String> =
+        date.split("T").toTypedArray()
+      val dateFormat = CRMAppUtil.getDate(birthDate[0], "yyyy-MM-dd")
+      newDate = CRMAppUtil.getDateStr(dateFormat, "dd MMM yyyy")
+
+    } catch (e: Exception) {
+      Timber.d(e)
+    }
+    return newDate
   }
 }

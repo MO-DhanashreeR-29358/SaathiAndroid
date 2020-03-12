@@ -79,10 +79,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/secondaryBackground"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvClientName"
             app:layout_constraintBottom_toBottomOf="@id/tvClientCode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvClientName"
 
             />
 
@@ -108,8 +108,8 @@
             android:layout_marginStart="@dimen/_30sdp"
             android:layout_marginEnd="@dimen/_30sdp"
             android:background="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvClientName"
             />
 

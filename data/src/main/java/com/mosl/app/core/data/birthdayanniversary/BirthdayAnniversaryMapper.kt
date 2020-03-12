@@ -8,6 +8,7 @@ import com.mosl.mobile.domain.birthdayanniversary.FilterInput
 import com.mosl.mobile.domain.birthdayanniversary.FiltersItemInput
 import com.mosl.mobile.domain.birthdayanniversary.PermissionsData
 import com.mosl.mobile.domain.birthdayanniversary.RequestInput
+import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
@@ -15,6 +16,7 @@ import com.mosl.saathi.api.model.birthdayanniversary.Filter
 import com.mosl.saathi.api.model.birthdayanniversary.FiltersItem
 import com.mosl.saathi.api.model.birthdayanniversary.Permissions
 import com.mosl.saathi.api.model.birthdayanniversary.Request
+import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
 
 fun BirthdayAnniversaryItem.mapBirthdayResponseTransform(): BirthdayAnniversaryItemResponse {
   return BirthdayAnniversaryItemResponse(
@@ -74,6 +76,17 @@ fun BirthdayRequestInput.mapBirthdayRequest(): BirthdayAnniversaryRequest {
     filter = filter.mapFilter(),
     isAdminMode = isAdminMode,
     request = request.mapRequest()
+  )
+}
+
+fun SendEmailRequestInput.mapSendEmailRequest(): SendEmailRequest {
+  return SendEmailRequest(
+    selectedUcids = selectedUcids,
+    messageType = messageType,
+    filterType = filterType,
+    employeeCode = employeeCode,
+    checkAll = checkAll,
+    eventType = eventType
   )
 }
 

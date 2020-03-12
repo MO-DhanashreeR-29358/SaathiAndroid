@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
+import io.reactivex.Observable
 import javax.inject.Inject
 
 class BirthdayAnniversaryPresenter @Inject constructor(
@@ -36,18 +37,42 @@ class BirthdayAnniversaryPresenter @Inject constructor(
       }
       .addTo(disposable)
 
-    view.onProfileSpinnerSelection()
+    Observable.merge(
+      view.onProfileSpinnerSelection(),
+      view.onEventTypeSpinnerSelection()
+    )
       .filter(InvalidSelectionPredicate)
+      .skip(1)
       .subscribe {
         view.renderGetData()
       }
       .addTo(disposable)
 
-    view.onEventTypeSpinnerSelection()
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
+    view.onEmailAllClick()
       .subscribe {
-        view.renderGetData()
+        view.renderEmailAllClick()
+      }.addTo(disposable)
+
+    view.sendEmailAll()
+      .map {
+        it.request
+      }
+      .switchMap {
+        repository.postSendEmail(it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderSendEmailAll(it)
+      }
+      .addTo(disposable)
+
+    view.sendGift()
+      .switchMap {
+        repository.postSendGift(it.ucid, it.eventType)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderSendGift(it)
       }
       .addTo(disposable)
 

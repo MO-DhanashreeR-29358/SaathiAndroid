@@ -6,10 +6,12 @@ import com.mosl.commons.rx.safeMap
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryItemResponse
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayRequestInput
+import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
+import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -29,5 +31,14 @@ class BirthdayAnniversaryRepositoryImpl @Inject constructor(
     return saathiApi.postBirthdayAnniversary(birthdayRequest).map {
       it.mapBirthdayResponseTransform()
     }
+  }
+
+  override fun postSendEmail(request: SendEmailRequestInput): Observable<String> {
+    val sendEmailRequest = request.mapSendEmailRequest()
+    return saathiApi.postSendEmail(sendEmailRequest)
+  }
+
+  override fun postSendGift(ucid: String, eventType: String): Observable<String> {
+    return saathiApi.postSendGift(SendGiftRequest(ucid, eventType))
   }
 }

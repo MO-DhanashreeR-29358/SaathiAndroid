@@ -1,6 +1,5 @@
 package com.mosl.mobile.domain.birthdayanniversary
 
-
 data class BirthdayAnniversaryItemResponse(
   @JvmField val errors: Any?,
 
@@ -86,6 +85,21 @@ data class FiltersItemInput(
   @JvmField val field: String = "ClientPotential",
 
   @JvmField var value: ArrayList<String> = arrayListOf("")
+)
+
+data class SendEmailRequestInput(
+  @JvmField val selectedUcids: String?,
+
+  @JvmField val checkAll: Boolean,
+
+  @JvmField val eventType: String,
+
+  @JvmField val messageType: String,
+
+  @JvmField val employeeCode: String?,
+
+  @JvmField val filterType: String?
+
 )
 
 
