@@ -122,7 +122,8 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
     getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }
-    additionalParameterMap[MOSLConstants.COL_FILTER] = "columnName"
+    additionalParameterMap[MOSLConstants.COL_FILTER] =
+      "columnName"//TODO send column name after library update
     additionalParameterMap[MOSLConstants.ROW_FILTER] = rowData
     additionalParameterMap[SELF_KEY] = dashboardModel.dashboardFor
     return additionalParameterMap

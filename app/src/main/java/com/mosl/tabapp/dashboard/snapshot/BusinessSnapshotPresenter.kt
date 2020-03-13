@@ -50,7 +50,7 @@ class BusinessSnapshotPresenter @Inject constructor(
         fltPeriod = view.getFilter2()?.value,
         fltHierarchy = dashboardModel.dashboardFor,
         fltSelfBranch = view.getFilter1()?.value,
-        fltProspect = view.getFilter3()?.value
+        fltProspect = view.getFilter3()?.value//TODO confirm Key name from backend
       )
     )
   }
