@@ -6,35 +6,12 @@ import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerModule
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryModule
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
-import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
-import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
-import com.mosl.tabapp.dashboard.ClientsFragment
-import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
-import com.mosl.tabapp.dashboard.ClientsLeadsFragment
-import com.mosl.tabapp.dashboard.ClientsTradedYesterdayFragment
-import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
-import com.mosl.tabapp.dashboard.ProductivityFragment
-import com.mosl.tabapp.dashboard.TargetAchievementFragment
-import com.mosl.tabapp.dashboard.TargetAchievementTeamFragment
-import com.mosl.tabapp.dashboard.TrendsTabFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsModule
-import com.mosl.tabapp.dashboard.ausfb.target.AuTargetFragment
-import com.mosl.tabapp.dashboard.ausfb.target.AuTargetModule
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.DocumentFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
-import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
 import com.mosl.tabapp.dashboard.ClientsFragment
@@ -68,10 +45,10 @@ import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
+import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
@@ -90,155 +67,154 @@ import dagger.android.ContributesAndroidInjector
 
 @Module(includes = [LeadViewDetailFragmentProvider::class])
 abstract class FragmentProvider {
-@Module
-interface FragmentProvider {
+  @Module
+  interface FragmentProvider {
 
-  @ContributesAndroidInjector
-  fun provideLeadCreationFactory(): LeadCreationFragment
+    @ContributesAndroidInjector
+    fun provideLeadCreationFactory(): LeadCreationFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadViewMainFactory(): LeadViewMainFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewMainFactory(): LeadViewMainFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadViewDetailFactory(): LeadViewDetailFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewDetailFactory(): LeadViewDetailFragment
 
-  @ContributesAndroidInjector
-  fun provideDocumentFactory(): DocumentFragment
+    @ContributesAndroidInjector
+    fun provideDocumentFactory(): DocumentFragment
 
-  @ContributesAndroidInjector
-  fun provideDashboardFragmentFactory(): DashboardFragment
+    @ContributesAndroidInjector
+    fun provideDashboardFragmentFactory(): DashboardFragment
 
-  @ContributesAndroidInjector
-  fun provideCalendarFragmentFactory(): CalendarFragment
+    @ContributesAndroidInjector
+    fun provideCalendarFragmentFactory(): CalendarFragment
 
-  @ContributesAndroidInjector
-  fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
+    @ContributesAndroidInjector
+    fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
 
-  @ContributesAndroidInjector(modules = [BirthdayAnniversaryModule::class])
-  abstract fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragmentNew
-  @ContributesAndroidInjector
-  fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
+    @ContributesAndroidInjector(modules = [BirthdayAnniversaryModule::class])
+    abstract fun provideBirthdayAnniversaryFragmentNewFactory(): BirthdayAnniversaryFragmentNew
 
-  @ContributesAndroidInjector(modules = [QueryModule::class])
-  fun provideQueryFragmentFactory(): QueryFragment
+    @ContributesAndroidInjector
+    fun provideBirthdayAnniversaryFragmentFactory(): BirthdayAnniversaryFragment
 
-  @ContributesAndroidInjector
-  fun provideWebviewFragmentFactory(): WebViewFragment
+    @ContributesAndroidInjector(modules = [QueryModule::class])
+    fun provideQueryFragmentFactory(): QueryFragment
 
-  @ContributesAndroidInjector
-  fun provideClientLeadsFactory(): ClientsLeadsFragment
+    @ContributesAndroidInjector
+    fun provideWebviewFragmentFactory(): WebViewFragment
 
-  @ContributesAndroidInjector(modules = [LeadsModule::class])
-  fun provideLeadsFragmentFactory(): LeadsFragment
+    @ContributesAndroidInjector
+    fun provideClientLeadsFactory(): ClientsLeadsFragment
 
-  @ContributesAndroidInjector(modules = [ClientsModule::class])
-  fun provideClientFragmentFactory(): ClientsFragmentNew
+    @ContributesAndroidInjector(modules = [LeadsModule::class])
+    fun provideLeadsFragmentFactory(): LeadsFragment
 
-  @ContributesAndroidInjector(modules = [BannerModule::class])
-  fun provideBannerFragmentFactory(): BannerFragment
+    @ContributesAndroidInjector(modules = [ClientsModule::class])
+    fun provideClientFragmentFactory(): ClientsFragmentNew
 
-  @ContributesAndroidInjector(modules = [TargetModule::class])
-  fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
+    @ContributesAndroidInjector(modules = [BannerModule::class])
+    fun provideBannerFragmentFactory(): BannerFragment
 
-  @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
-  fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
+    @ContributesAndroidInjector(modules = [TargetModule::class])
+    fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
 
-  @ContributesAndroidInjector(modules = [TeamTargetModule::class])
-  fun provideTeamTargetFragmentFactory(): TeamTargetFragment
+    @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
+    fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
 
-  @ContributesAndroidInjector
-  fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
+    @ContributesAndroidInjector(modules = [TeamTargetModule::class])
+    fun provideTeamTargetFragmentFactory(): TeamTargetFragment
 
-  @ContributesAndroidInjector
-  fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
+    @ContributesAndroidInjector
+    fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
 
-  @ContributesAndroidInjector
-  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
+    @ContributesAndroidInjector
+    fun provideTargetAchievementFragmentFactory(): TargetAchievementFragment
 
-  @ContributesAndroidInjector
-  fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
+    @ContributesAndroidInjector
+    fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
 
-  @ContributesAndroidInjector
-  fun provideBusinessSnapFragmentFactory(): BusinessSnapshotFragment
+    @ContributesAndroidInjector
+    fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
 
-  @ContributesAndroidInjector
-  fun provideBusinessSnapAdvFragmentFactory(): BusSnapshotAdvFragment
+    @ContributesAndroidInjector
+    fun provideBusinessSnapFragmentFactory(): BusinessSnapshotFragment
 
-  @ContributesAndroidInjector
-  fun provideClientsFragmentFactory(): ClientsFragment
+    @ContributesAndroidInjector
+    fun provideBusinessSnapAdvFragmentFactory(): BusSnapshotAdvFragment
 
-  @ContributesAndroidInjector
-  fun provideClientLeadFragmentFactory(): ClientsLeadShowFragment
+    @ContributesAndroidInjector
+    fun provideClientsFragmentFactory(): ClientsFragment
 
-  @ContributesAndroidInjector
-  fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragment
+    @ContributesAndroidInjector
+    fun provideClientLeadFragmentFactory(): ClientsLeadShowFragment
 
-  @ContributesAndroidInjector
-  fun provideProductivityFragmentFactory(): ProductivityFragment
+    @ContributesAndroidInjector
+    fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragment
 
-  @ContributesAndroidInjector
-  fun provideTargetAchievementTeamFragmentFactory(): TargetAchievementTeamFragment
+    @ContributesAndroidInjector
+    fun provideProductivityFragmentFactory(): ProductivityFragment
 
-  @ContributesAndroidInjector
-  fun provideTrendsFragmentFactory(): TrendsTabFragment
+    @ContributesAndroidInjector
+    fun provideTargetAchievementTeamFragmentFactory(): TargetAchievementTeamFragment
 
-  @ContributesAndroidInjector
-  fun provideNotificationFragmentFactory(): NotificationFragment
+    @ContributesAndroidInjector
+    fun provideTrendsFragmentFactory(): TrendsTabFragment
 
-  @ContributesAndroidInjector
-  fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
+    @ContributesAndroidInjector
+    fun provideNotificationFragmentFactory(): NotificationFragment
 
-  @ContributesAndroidInjector
-  fun provideReportFragmentFactory(): ReportFragment
+    @ContributesAndroidInjector
+    fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
 
-  @ContributesAndroidInjector
-  fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
+    @ContributesAndroidInjector
+    fun provideReportFragmentFactory(): ReportFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
+    @ContributesAndroidInjector
+    fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadProfilingFactory(): LeadProfilingFragment
+    @ContributesAndroidInjector
+    fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
 
-  @ContributesAndroidInjector
-  fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
+    @ContributesAndroidInjector
+    fun provideLeadProfilingFactory(): LeadProfilingFragment
 
-  @ContributesAndroidInjector
-  fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
+    @ContributesAndroidInjector
+    fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
 
-  @ContributesAndroidInjector(modules = [SetAppointmentModule::class])
-  abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
-  @ContributesAndroidInjector
-  fun provideSetAppointmentFactory(): SetAppointmentFragment
+    @ContributesAndroidInjector
+    fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment
 
-  @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
-  fun provideCreateMeetingFactory(): CreateMeetingFragment
+    @ContributesAndroidInjector(modules = [SetAppointmentModule::class])
+    abstract fun provideSetAppointmentFactory(): SetAppointmentFragment
 
-  @ContributesAndroidInjector
-  fun provideSMTFragmentFactory(): SMTFragment
+    @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
+    fun provideCreateMeetingFactory(): CreateMeetingFragment
 
-  @ContributesAndroidInjector
-  fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
+    @ContributesAndroidInjector
+    fun provideSMTFragmentFactory(): SMTFragment
 
-  @ContributesAndroidInjector
-  fun provideBankMeetingFactory(): BankMeetingFragment
+    @ContributesAndroidInjector
+    fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
 
-  @ContributesAndroidInjector
-  fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
+    @ContributesAndroidInjector
+    fun provideBankMeetingFactory(): BankMeetingFragment
 
-  @ContributesAndroidInjector(modules = [OTPModule::class])
-  fun provideOTPFactory(): OTPFragment
+    @ContributesAndroidInjector
+    fun provideBankMeetingReportFactory(): BankMeetingReportFragmentNew
 
-  @ContributesAndroidInjector(modules = [BusinessSnapshotAdvModule::class])
-  fun provideBusinessSnapshotAdvFragmentFactory(): BusinessSnapshotAdvFragment
+    @ContributesAndroidInjector(modules = [OTPModule::class])
+    fun provideOTPFactory(): OTPFragment
 
-  @ContributesAndroidInjector(modules = [BusinessSnapshotModule::class])
-  fun provideBusinessSnapshotFragmentFactory(): com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
+    @ContributesAndroidInjector(modules = [BusinessSnapshotAdvModule::class])
+    fun provideBusinessSnapshotAdvFragmentFactory(): BusinessSnapshotAdvFragment
 
-  @ContributesAndroidInjector(modules = [ClientsTradedYesterdayModule::class])
-  fun provideClientTradeYesterdayFragmentFactory(): com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
+    @ContributesAndroidInjector(modules = [BusinessSnapshotModule::class])
+    fun provideBusinessSnapshotFragmentFactory(): com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
 
+    @ContributesAndroidInjector(modules = [ClientsTradedYesterdayModule::class])
+    fun provideClientTradeYesterdayFragmentFactory(): com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
+  }
 }

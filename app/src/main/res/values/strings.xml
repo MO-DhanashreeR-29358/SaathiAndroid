@@ -137,7 +137,12 @@
     <string name="hint_text_last_modified_date">Last Modified Date</string>
     <string name="hint_text_modified_by">Modified By</string>
     <string name="hint_text_source">Source</string>
-
+    <string name="btn_label_send_otp">Send OTP</string>
+    <string name="btn_label_verify_otp">Verify OTP</string>
+    <string name="hint_label_enter_otp">Enter OTP*</string>
+    <string name="txt_label_resend_otp">Resend OTP</string>
+    <string name="btn_label_submit_otp">Submit OTP</string>
+    <string name="error_lable_no_records_found">No records found</string>
 
     <string name="text_button_label_belated">Belated</string>
     <string name="text_button_label_today">Today</string>
