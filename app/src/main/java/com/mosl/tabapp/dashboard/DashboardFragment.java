@@ -53,11 +53,11 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem;
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest;
 import com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item;
 import com.mosl.saathi.api.model.dashboard.actionablecount.TableItem;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableFilterItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsItem;
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem;
@@ -74,8 +74,12 @@ import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
-import com.mosl.tabapp.dashboard.ausfb.target.AuTargetFragment;
+import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
+import com.mosl.tabapp.dashboard.leads.LeadsFragment;
+import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment;
+import com.mosl.tabapp.dashboard.target.TargetFragment;
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment;
+import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
@@ -324,7 +328,7 @@ public class DashboardFragment extends CommonFragment
 
     btnClientTraded.setOnClickListener(this);
 
-    if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
+    if (requireNonNull(userManager.getUser()).isAufsb()) {
       floatingActionsMenu.setVisibility(View.GONE);
     }
 
@@ -631,11 +635,7 @@ public class DashboardFragment extends CommonFragment
         loadLeadBusinessSnapShot();
       } else if (id == R.id.btnLeads) {
         hideKeyboard(view);
-        if (userManager.getUser().isAuBankSalesSupport()) {
-          loadAusfbLead();
-        } else {
-          loadLead();
-        }
+        loadLead();
       } else if (id == R.id.btnProductivity) {
         hideKeyboard(view);
         loadProductivity();
@@ -707,19 +707,7 @@ public class DashboardFragment extends CommonFragment
   private void loadLead() {
     Bundle args = new Bundle();
     setTabActivre(btnLeads);
-    ClientsLeadsFragment leadsFragment = new ClientsLeadsFragment();
-    args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-    leadsFragment.setArguments(args);
-    requireActivity().getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, leadsFragment)
-        .commit();
-  }
-
-  private void loadAusfbLead() {
-    Bundle args = new Bundle();
-    setTabActivre(btnLeads);
-    AuLeadsFragment leadsFragment = new AuLeadsFragment();
+    LeadsFragment leadsFragment = new LeadsFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -743,7 +731,7 @@ public class DashboardFragment extends CommonFragment
   private void loadBusinessSnapShotAdvisor() {
     setTabActivre(btnBusinessSnapshotAdvisor);
     Bundle args = new Bundle();
-    BusSnapshotAdvFragment leadsFragment = new BusSnapshotAdvFragment();
+    BusinessSnapshotAdvFragment leadsFragment = new BusinessSnapshotAdvFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -755,8 +743,8 @@ public class DashboardFragment extends CommonFragment
   private void loadClientTraded() {
     Bundle args = new Bundle();
     setTabActivre(btnClientTraded);
-    ClientsTradedYesterdayFragment clientsFragment =
-        ClientsTradedYesterdayFragment.newInstance(getContext());
+    com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment clientsFragment =
+        new com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
 
     clientsFragment.setArguments(args);
@@ -769,7 +757,8 @@ public class DashboardFragment extends CommonFragment
   private void loadLeadBusinessSnapShot() {
     setTabActivre(btnBusinessSnapshot);
     Bundle args = new Bundle();
-    BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
+    com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment leadsFragment =
+        new com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -780,7 +769,7 @@ public class DashboardFragment extends CommonFragment
 
   private void loadClients() {
     setTabActivre(btnClient);
-    ClientsFragment clientsFragment = new ClientsFragment();
+    ClientsFragmentNew clientsFragment = new ClientsFragmentNew();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     clientsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -810,20 +799,8 @@ public class DashboardFragment extends CommonFragment
 
   private void loadTargetAchievement() {
     Bundle args = new Bundle();
-    TargetAchievementFragment leadsFragment =
-        new TargetAchievementFragment();
-    args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-    leadsFragment.setArguments(args);
-    requireActivity().getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.llTargetAchievementADV, leadsFragment)
-        .commit();
-  }
-
-  private void loadAusfbTargetAchievement() {
-    Bundle args = new Bundle();
-    AuTargetFragment leadsFragment =
-        new AuTargetFragment();
+    TargetFragment leadsFragment =
+        new TargetFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -834,8 +811,8 @@ public class DashboardFragment extends CommonFragment
 
   private void loadTeamTargetAchievement() {
     Bundle args = new Bundle();
-    TargetAchievementTeamFragment leadsFragment =
-        new TargetAchievementTeamFragment();
+    TeamTargetFragment leadsFragment =
+        new TeamTargetFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -846,18 +823,19 @@ public class DashboardFragment extends CommonFragment
 
   private void loadMonthTrends() {
     Bundle args = new Bundle();
-    TrendsTabFragment leadsFragment = new TrendsTabFragment();
+    MonthOnMonthTrendsFragment monthOnMonthTrendsFragment = new MonthOnMonthTrendsFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
-    leadsFragment.setArguments(args);
+    monthOnMonthTrendsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
         .beginTransaction()
-        .replace(R.id.llMonthvsTrends, leadsFragment)
+        .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
         .commit();
   }
 
   private void loadBusinessSnapShot() {
     Bundle args = new Bundle();
-    BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
+    com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment leadsFragment =
+        new com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     leadsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -1322,7 +1300,7 @@ public class DashboardFragment extends CommonFragment
         toggleSectionExpansion(llClientsLeads, ivClientLeads);
       }
       setClientLayoutVisibility(MY_LEAD_AU_SUPPORT);
-      loadAusfbLead();
+      loadLead();
       DashboardSystemModel.setLeadSystemName(MY_LEAD_AU_SUPPORT);
     } else if (currentDashboard.isGroupExists(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
       llClient.setVisibility(View.VISIBLE);
@@ -1430,7 +1408,7 @@ public class DashboardFragment extends CommonFragment
         toggleSectionExpansion(llTargetAchievementADV, ivTargetAchievementADV);
       }
       llTarget.setVisibility(View.VISIBLE);
-      loadAusfbTargetAchievement();
+      loadTargetAchievement();
       DashboardSystemModel.setTargetAchivementSystemName(AUSFB_TARGET_ACHIEVEMNET);
     }
 
@@ -1577,7 +1555,7 @@ public class DashboardFragment extends CommonFragment
 
   private void incentiveWebServiceCall(final String widgetSystemName) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      ClientRequest request = new ClientRequest(
+      CommonRequest request = new CommonRequest(
           businessProfileIdForDashboard,
           getAddtionalParameterMap(),
           widgetSystemName,
@@ -1613,7 +1591,7 @@ public class DashboardFragment extends CommonFragment
 
   private void currentQuarterStatusWebServiceCall(final String widgetSystemName) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      ClientRequest request = new ClientRequest(
+      CommonRequest request = new CommonRequest(
           businessProfileIdForDashboard,
           getAddtionalParameterMap(),
           widgetSystemName,
