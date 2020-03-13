@@ -9,3 +9,17 @@ data class BusinessSnapshotTableItemModel(
   @JvmField val parameter: String?,
   @JvmField val ytdCount: String?
 )
+
+data class BusinessSnapshotData(
+  @JvmField val data: List<String>
+)
+
+data class BusinessSnapshotCombo(
+  val headers: List<String>,
+  val data: List<BusinessSnapshotData>
+)
+
+data class ColHeader(
+  val label: String,
+  val index: Int = 0
+)

@@ -27,6 +27,7 @@ import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew
 import com.mosl.tabapp.dashboard.clients.ClientsModule
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsModule
+import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule
 import com.mosl.tabapp.dashboard.target.TargetFragment
@@ -200,6 +201,9 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [BusinessSnapshotAdvModule::class])
   fun provideBusinessSnapshotAdvFragmentFactory(): BusinessSnapshotAdvFragment
+
+  @ContributesAndroidInjector(modules = [BusinessSnapshotModule::class])
+  fun provideBusinessSnapshotFragmentFactory(): com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
 
   @ContributesAndroidInjector(modules = [ClientsTradedYesterdayModule::class])
   fun provideClientTradeYesterdayFragmentFactory(): com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment

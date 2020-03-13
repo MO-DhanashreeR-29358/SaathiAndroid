@@ -470,6 +470,12 @@ interface SaathiApi {
     @Body request: TrendsRequest
   ): Observable<String>
 
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getDashboardDataNew(
+    @Body request: BusinessSnapshotRequest
+  ): Observable<String>
+
   @POST("Dashboard/LoadWidgetAsync")
   fun getLeadWidgetData(
     @Body request: LeadRequest

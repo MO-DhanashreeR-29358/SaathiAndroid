@@ -2,7 +2,7 @@ package com.mosl.tabapp.dashboard.snapshot.advance
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
-import com.mosl.mobile.domain.clients.APClientsInput
+import com.mosl.mobile.domain.clients.BusinessSnapAdditionalParametersInput
 import com.mosl.mobile.domain.snapshot.BusinessSnapInput
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.tabapp.constants.MOSLConstants
@@ -44,9 +44,11 @@ class BusinessSnapshotAdvPresenter @Inject constructor(
       widgetSystemName = view.getWidgetSystemsName(),
       productId = dashboardModel.productId,
       employeeCode = dashboardModel.employeeCode,
-      additionalParameters = APClientsInput(
+      additionalParameters = BusinessSnapAdditionalParametersInput(
         fltPeriod = MOSLConstants.SELF_KEY,
-        fltHierarchy = dashboardModel.dashboardFor
+        fltHierarchy = dashboardModel.dashboardFor,
+        fltSelfBranch = null,
+        fltProspect = null
       )
     )
   }
