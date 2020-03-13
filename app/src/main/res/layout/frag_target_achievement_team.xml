@@ -243,7 +243,8 @@
                             android:layout_alignParentRight="true"
                             android:padding="@dimen/_4sdp"
                             android:layout_marginTop="@dimen/_56sdp"
-                            app:srcCompat="@drawable/ic_new_right_arrow_gray" />
+                          app:srcCompat="@drawable/ic_new_right_arrow_gray"
+                          />
 
                       <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewFirst"
@@ -317,7 +318,8 @@
                             android:layout_alignParentRight="true"
                             android:padding="@dimen/_4sdp"
                             android:layout_marginTop="@dimen/_56sdp"
-                            app:srcCompat="@drawable/ic_new_right_arrow_gray" />
+                          app:srcCompat="@drawable/ic_new_right_arrow_gray"
+                          />
 
                       <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewSecond"
@@ -391,7 +393,8 @@
                             android:layout_alignParentRight="true"
                             android:padding="@dimen/_4sdp"
                             android:layout_marginTop="@dimen/_56sdp"
-                            app:srcCompat="@drawable/ic_new_right_arrow_gray" />
+                          app:srcCompat="@drawable/ic_new_right_arrow_gray"
+                          />
 
                       <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/verticalRecyclerViewThird"

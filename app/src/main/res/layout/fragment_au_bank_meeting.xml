@@ -50,7 +50,7 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginBottom="@dimen/margin_small"
                     android:gravity="end"
-                    android:src="@drawable/ic_calendar"
+                    app:srcCompat="@drawable/ic_calendar"
                     android:layout_weight="0.1" />
 
             </LinearLayout>

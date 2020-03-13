@@ -146,7 +146,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_5sdp"
-                app:srcCompat="@drawable/ic_new_right_arrow_gray" />
+                app:srcCompat="@drawable/ic_new_right_arrow_gray"
+                />
         </RelativeLayout>
 
         <View

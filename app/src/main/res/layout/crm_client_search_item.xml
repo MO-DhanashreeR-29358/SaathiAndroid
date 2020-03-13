@@ -146,7 +146,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        app:srcCompat="@drawable/ic_new_set_appointment_search" />
+                      app:srcCompat="@drawable/ic_set_appointment_search"
+                      />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -220,7 +221,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        app:srcCompat="@drawable/ic_new_open_account_search" />
+                      app:srcCompat="@drawable/ic_open_account_search"
+                      />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -246,7 +248,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        app:srcCompat="@drawable/ic_new_open_account_search" />
+                      app:srcCompat="@drawable/ic_open_account_search"
+                      />
 
                     <TextView
                         android:layout_width="wrap_content"
