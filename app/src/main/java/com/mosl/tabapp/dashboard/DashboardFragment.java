@@ -750,7 +750,8 @@ public class DashboardFragment extends CommonFragment
     private void loadLeadBusinessSnapShot() {
         setTabActivre(btnBusinessSnapshot);
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
+        com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment leadsFragment =
+            new com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
@@ -827,7 +828,8 @@ public class DashboardFragment extends CommonFragment
 
     private void loadBusinessSnapShot() {
         Bundle args = new Bundle();
-        BusinessSnapshotFragment leadsFragment = new BusinessSnapshotFragment();
+        com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment leadsFragment =
+            new com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment();
         args.putSerializable(DASHBOARD_MODEL, currentDashboard);
         leadsFragment.setArguments(args);
         requireActivity().getSupportFragmentManager()
