@@ -1,5 +1,6 @@
 package com.mosl.tabapp.birthdayanniversary
 
+import android.content.Context
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
@@ -8,14 +9,24 @@ import com.mosl.mobile.domain.birthdayanniversary.BirthdayRequestInput
 import com.mosl.mobile.domain.birthdayanniversary.RequestInput
 import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
+import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.BELATED_FLAG
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_A
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_B
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_BIRTHDAY
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_MSG_TYPE
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_TYPE_L
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_TYPE_T
 import com.mosl.tabapp.constants.MOSLConstants
 import io.reactivex.Observable
+
 import javax.inject.Inject
 
 class BirthdayAnniversaryPresenter @Inject constructor(
   view: BirthdayAnniversaryView,
-  private val repository: BirthdayAnniversaryRepository
+  private val repository: BirthdayAnniversaryRepository,
+  val context: Context,
+  val userManager: UserManagerImpl
 ) : BasePresenter<BirthdayAnniversaryView>(view) {
   override fun start() {
     onFetchCalled()
@@ -57,7 +68,7 @@ class BirthdayAnniversaryPresenter @Inject constructor(
 
     view.sendEmailAll()
       .map {
-        it.getEmailRequest()
+        getEmailRequest(it.selectedUcids, it.checkAll)
       }
       .switchMap {
         repository.postSendEmail(it)
@@ -98,21 +109,33 @@ class BirthdayAnniversaryPresenter @Inject constructor(
 
   }
 
-  private fun SendEmailAll.getEmailRequest(): SendEmailRequestInput {
+  private fun getEmailRequest(ucid: String?, isCheckAll: Boolean): SendEmailRequestInput {
+    val eventType = if (view.getEventType().equals(KEY_BIRTHDAY, ignoreCase = true)) {
+      KEY_B
+    } else {
+      KEY_A
+    }
+    val dayTypes = if (view.getDayType().equals(BELATED_FLAG, ignoreCase = true)) {
+      KEY_TYPE_L
+    } else {
+      KEY_TYPE_T
+    }
+
+
     return SendEmailRequestInput(
-      selectedUcids = selectedUcids,
-      eventType = eventType,
-      checkAll = checkAll,
-      employeeCode = employeeCode,
-      filterType = filterType,
-      messageType = messageType
+      selectedUcids = ucid,
+      eventType = eventType + dayTypes,
+      checkAll = isCheckAll,
+      employeeCode = userManager.getUser()?.employeeCode,
+      filterType = view.getFilterType(),
+      messageType = KEY_MSG_TYPE
     )
 
   }
 
   private fun getProfileRequestInput(): LookupRequestInput {
     return LookupRequestInput(
-      businessUnitId = view.getBusinessId(),
+      businessUnitId = userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: "",
       lookupTypeId = MOSLConstants.LEADPROFILE,
       parentId = null,
       IgnoreBusinessUnit = null
@@ -120,10 +143,10 @@ class BirthdayAnniversaryPresenter @Inject constructor(
   }
 
   private fun getRequest(): RequestInput {
-    val eventType = if (view.getEventType().equals("Birthday", ignoreCase = true)) {
-      "B"
+    val eventType = if (view.getEventType().equals(KEY_BIRTHDAY, ignoreCase = true)) {
+      KEY_B
     } else {
-      "A"
+      KEY_A
     }
     return RequestInput(
       dayType = view.getFilterType(),

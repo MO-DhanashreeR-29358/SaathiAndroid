@@ -12,11 +12,7 @@ sealed class BirthdayAnniversaryUiEvent {
   data class SendGift(val ucid: String, val eventType: String) : BirthdayAnniversaryUiEvent()
   data class SendEmailAll(
     val selectedUcids: String?,
-    val checkAll: Boolean,
-    val eventType: String,
-    val employeeCode: String?,
-    val filterType: String?,
-    val messageType: String
+    val checkAll: Boolean
   ) : BirthdayAnniversaryUiEvent()
 
 }

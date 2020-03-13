@@ -38,7 +38,6 @@ import com.xwray.groupie.ViewHolder
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -51,7 +50,7 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   private lateinit var spinnerProfileAdapter: ArrayAdapter<ProfileSpinner>
   private lateinit var spinnerEventAdapter: ArrayAdapter<String>
   private val subject = PublishSubject.create<BirthdayAnniversaryUiEvent>()
-  private var filterType = "2"
+  private var filterType = FILTER_TYPE_TWO
   private var dayType = TODAY_FLAG
   private var dataFoundFlag = false
   override fun getLayout(): Int {
@@ -107,8 +106,8 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
     return binding.spProfile.selectedItem as ProfileSpinner
   }
 
-  override fun getBusinessId(): String {
-    return userManager.getUser()?.currentBusinessProfile?.businessUnitId!!
+  override fun getDayType(): String {
+    return dayType
   }
 
   override fun getFilterType(): String {
@@ -151,23 +150,23 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   override fun onButtonTodayClick(): Observable<Unit> {
     return binding.btnToday.clicks().map {
       filterType = "2"
-      dayType = "today"
+      dayType = TODAY_FLAG
       CRMAppUtil.expand(binding.ivEmailAll)
     }
   }
 
   override fun onButtonBelatedClick(): Observable<Unit> {
     return binding.btnBelated.clicks().map {
-      filterType = "1"
-      dayType = "belated"
+      filterType = FILTER_TYPE_ONE
+      dayType = BELATED_FLAG
       CRMAppUtil.collapse(binding.ivEmailAll)
     }
   }
 
   override fun onButtonUpcomingClick(): Observable<Unit> {
     return binding.btnUpcomming.clicks().map {
-      filterType = "3"
-      dayType = "upcoming"
+      filterType = FILTER_TYPE_THREE
+      dayType = UPCOMING_FLAG
       CRMAppUtil.collapse(binding.ivEmailAll)
     }
   }
@@ -206,24 +205,10 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
         ) { action: Action, _: Array<Any?>? ->
           if (action == OK) {
             //sendEmailAll()
-            val eventType = if (getEventType().equals("Birthday", ignoreCase = true)) {
-              "B"
-            } else {
-              "A"
-            }
-            val dayTypes = if (dayType.equals("belated", ignoreCase = true)) {
-              "-L"
-            } else {
-              "-T"
-            }
             subject.onNext(
               SendEmailAll(
-                null,
-                true,
-                eventType + dayTypes,
-                userManager.getUser()?.employeeCode!!,
-                filterType,
-                "E"
+                "0",
+                true
               )
             )
           }
@@ -311,8 +296,19 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   }
 
   companion object {
-    private const val TODAY_FLAG = "today"
-
+    const val TODAY_FLAG = "today"
+    const val BELATED_FLAG = "belated"
+    const val UPCOMING_FLAG = "upcoming"
+    const val FILTER_TYPE_ONE = "1"
+    const val FILTER_TYPE_TWO = "2"
+    const val FILTER_TYPE_THREE = "3"
+    const val KEY_BIRTHDAY = "Birthday"
+    const val KEY_ANNIVERSARY = "Anniversary"
+    const val KEY_A = "A"
+    const val KEY_B = "B"
+    const val KEY_MSG_TYPE = "E"
+    const val KEY_TYPE_L = "-L"
+    const val KEY_TYPE_T = "-T"
   }
 
 }

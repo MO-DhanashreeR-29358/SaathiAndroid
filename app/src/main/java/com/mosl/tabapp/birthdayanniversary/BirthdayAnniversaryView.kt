@@ -12,7 +12,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
 import io.reactivex.Observable
 
 interface BirthdayAnniversaryView : BaseView {
-  fun getBusinessId(): String
+  fun getDayType(): String
   fun getFilterType(): String
   fun getEventType(): String
   fun getProfileValue(): ProfileSpinner
