@@ -328,7 +328,7 @@ public class DashboardFragment extends CommonFragment
 
     btnClientTraded.setOnClickListener(this);
 
-    if (requireNonNull(userManager.getUser()).isAufsb()) {
+    if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
       floatingActionsMenu.setVisibility(View.GONE);
     }
 
@@ -428,7 +428,7 @@ public class DashboardFragment extends CommonFragment
       }
     });
 
-    if (userManager.getUser().isAufsb()) {
+    if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
       rlClientLeads.setVisibility(View.GONE);
       btnLeads.setText(DASHBOARD);
     }
@@ -883,7 +883,7 @@ public class DashboardFragment extends CommonFragment
         }
         dashboardBtnList.clear();
         dashboardList.clear();
-        if (requireNonNull(userManager.getUser()).isAufsb()) {
+        if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
           lldashboardAufsb.setVisibility(View.VISIBLE);
           ivActionableInsights.setVisibility(View.GONE);
           tvMain.setVisibility(View.GONE);
@@ -2142,9 +2142,12 @@ public class DashboardFragment extends CommonFragment
 
   private void webServiceInceniveSlab(String dashboardId) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      String employeeCode = "0";
+      if (userManager.getUser() != null) {
+        employeeCode = userManager.getUser().employeeCode;
+      }
       IncentivePolicyRequest request = new IncentivePolicyRequest(
-          businessProfileIdForDashboard,
-          requireNonNull(userManager.getUser()).employeeCode,
+          businessProfileIdForDashboard, employeeCode,
           dashboardId
       );
       Disposable subscribe = getSaathiApi().getIncentivePolicy(request)
