@@ -1,14 +1,15 @@
 package com.mosl.tabapp.leadViewDetail.activity.item
 
+import android.view.View
 import com.mosl.tabapp.R
+import com.mosl.tabapp.core.groupie.ViewBindingItem
 import com.mosl.tabapp.databinding.ItemLeadViewActivitiesBinding
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.ExpandableItem
-import com.xwray.groupie.databinding.BindableItem
 
 class LeadViewActivitiesItem(
   private val title: String
-) : BindableItem<ItemLeadViewActivitiesBinding>(), ExpandableItem {
+) : ViewBindingItem<ItemLeadViewActivitiesBinding>(), ExpandableItem {
 
   private var expandableGroup: ExpandableGroup? = null
 
@@ -50,6 +51,10 @@ class LeadViewActivitiesItem(
 
   override fun hashCode(): Int {
     return title.hashCode()
+  }
+
+  override fun initBinding(itemView: View): ItemLeadViewActivitiesBinding {
+    return ItemLeadViewActivitiesBinding.bind(itemView)
   }
 
 }

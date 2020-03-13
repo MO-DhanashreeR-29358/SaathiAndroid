@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.core.widget.NestedScrollView
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/lead_background"
+            android:orientation="vertical"
+            >
 
-            <LinearLayout
-                android:id="@+id/linearLayout1"
+            <TextView
+                android:id="@+id/tvAppointment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/lead_background"
-                android:orientation="vertical">
+                android:layout_margin="@dimen/_5sdp"
+                android:background="#ffffffff"
+                android:gravity="center"
+                android:text="Appointment"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                />
 
-                <TextView
-                    android:id="@+id/tvAppointment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="#ffffffff"
-                    android:gravity="center"
-                    android:text="Appointment"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_14sdp" />
+            <LinearLayout
+                android:id="@+id/llAppointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                >
 
-                <LinearLayout
-                    android:id="@+id/llAppointment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <include layout="@layout/frag_lead_activities_appoint_list" />
-
-                </LinearLayout>
+                <include layout="@layout/frag_lead_activities_appoint_list" />
 
             </LinearLayout>
 
+        </LinearLayout>
 
-            <LinearLayout
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout1"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/lead_background"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tvMeeting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/linearLayout1"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/lead_background"
-                android:orientation="vertical">
+                android:layout_margin="@dimen/_5sdp"
+                android:background="#ffffffff"
+                android:gravity="center"
+                android:text="Meeting"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                />
 
-                <TextView
-                    android:id="@+id/tvMeeting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:background="#ffffffff"
-                    android:gravity="center"
-                    android:text="Meeting"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_14sdp" />
+            <LinearLayout
+                android:id="@+id/llMeeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
 
-                <LinearLayout
-                    android:id="@+id/llMeeting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <include layout="@layout/frag_lead_activities_meeting_list" />
-
-                </LinearLayout>
+                <include layout="@layout/frag_lead_activities_meeting_list" />
 
             </LinearLayout>
-        </RelativeLayout>
-    </androidx.core.widget.NestedScrollView>
-</layout>
+
+        </LinearLayout>
+    </RelativeLayout>
+</androidx.core.widget.NestedScrollView>
