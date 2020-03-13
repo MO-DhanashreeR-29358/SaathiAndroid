@@ -3,6 +3,7 @@ package com.mosl.tabapp.dashboard.target
 import android.content.Context
 import android.view.View
 import com.mosl.mobile.domain.target.TableItemModel
+import com.mosl.shared.util.Utility
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.TargetSummaryCountItemBinding
 import com.xwray.groupie.databinding.BindableItem
@@ -22,10 +23,9 @@ class TargetSummaryCountItem(
 
     override fun bind(viewBinding: TargetSummaryCountItemBinding, position: Int) {
         viewBinding.apply {
-
             txtValue.setText(itemModel.value)
+          txtValue.setTextColor(Utility.VORDIPLOM_COLORS.get(position))
             txtName.setText(itemModel.displayText)
-
             if (itemModel.ord == 1) {
                 verticalView.visibility = View.GONE
             } else {

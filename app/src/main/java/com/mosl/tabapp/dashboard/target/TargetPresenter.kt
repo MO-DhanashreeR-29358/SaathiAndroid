@@ -10,14 +10,19 @@ import com.mosl.mobile.domain.target.TargetInput
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
-import com.mosl.tabapp.constants.MOSLConstants.*
+import com.mosl.tabapp.constants.MOSLConstants.KEY
+import com.mosl.tabapp.constants.MOSLConstants.LABEL
+import com.mosl.tabapp.constants.MOSLConstants.MAP
+import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
+import com.mosl.tabapp.constants.MOSLConstants.TEAM_TARGET_TITLE
+import com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import java.io.Serializable
-import java.util.*
+import java.util.HashMap
 import javax.inject.Inject
 
 class TargetPresenter @Inject constructor(
@@ -104,7 +109,7 @@ class TargetPresenter @Inject constructor(
     fun toNavigate(addtionalParameterMap: MutableMap<String, String> = HashMap()) {
         val args = Bundle()
         args.putString(SYSTEM_NAME, view.getWidgetModel()?.systemName)
-        args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.systemName)
+      args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.name)
         args.putSerializable(MAP, addtionalParameterMap as Serializable?)
         navigator.openPage(
             NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true,

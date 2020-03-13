@@ -3,6 +3,7 @@ package com.mosl.tabapp.dashboard.teamtarget
 import android.content.Context
 import android.view.View
 import com.mosl.mobile.domain.teamtarget.TeamTableItem3Model
+import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.TargetSummaryCountItemBinding
 import com.xwray.groupie.databinding.BindableItem
@@ -21,8 +22,8 @@ class TeamTargetSummaryCountItem(
 
   override fun bind(viewBinding: TargetSummaryCountItemBinding, position: Int) {
     viewBinding.apply {
-
       txtValue.setText(itemModel.value)
+      txtValue.setTextColor(VORDIPLOM_COLORS.get(position))
       txtName.setText(itemModel.displayText)
 
       if (itemModel.ord == 1) {

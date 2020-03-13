@@ -32,6 +32,7 @@ import com.mosl.mobile.domain.target.Table1ItemModel
 import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.mobile.domain.target.TargetItemModel
 import com.mosl.mobile.user.login.user
+import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -82,26 +83,6 @@ class TargetFragment : CommonFragment(), TargetView {
 
     private val summaryCountGroupAdapter = GroupAdapter<ViewHolder>()
     private val labelGroupAdapter = GroupAdapter<ViewHolder>()
-
-    private val VORDIPLOM_COLORS = intArrayOf(
-        Color.rgb(255, 21, 0),
-        Color.rgb(38, 127, 183),
-        Color.rgb(0, 177, 207),
-        Color.rgb(22, 225, 143),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46),
-        Color.rgb(255, 21, 0),
-        Color.rgb(38, 127, 183),
-        Color.rgb(0, 177, 207),
-        Color.rgb(22, 225, 143),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46),
-        Color.rgb(64, 0, 255),
-        Color.rgb(255, 255, 0),
-        Color.rgb(254, 46, 46)
-    )
 
     override fun getLayout(): Int {
         return R.layout.fragment_target

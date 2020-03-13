@@ -14,8 +14,6 @@ import com.mosl.tabapp.constants.MOSLConstants.KEY
 import com.mosl.tabapp.constants.MOSLConstants.LABEL
 import com.mosl.tabapp.constants.MOSLConstants.MAP
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
-import com.mosl.tabapp.constants.MOSLConstants.TEAM_TARGET_TITLE
-import com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -71,7 +69,7 @@ class TeamTargetPresenter @Inject constructor(
 
     view.onPieChartClick()
       .subscribe {
-        PieChartClick(it.label)
+        PieChartClick(it.label, it.widgetType)
       }.addTo(disposable)
 
     val bankChange = Observable.merge(
@@ -99,9 +97,10 @@ class TeamTargetPresenter @Inject constructor(
     toNavigate(addtionalParameterMap)
   }
 
-  private fun PieChartClick(label: String?) {
+  private fun PieChartClick(label: String?, widgetType: String?) {
     val addtionalParameterMap: MutableMap<String, String> = HashMap()
     label?.let { addtionalParameterMap.put(KEY, it) }
+    widgetType?.let { addtionalParameterMap.put(WIDGETTYPE, it) }
     addtionalParameterMap.putAll(view.getAddtionalParameterMap())
     toNavigate(addtionalParameterMap)
   }
@@ -109,7 +108,7 @@ class TeamTargetPresenter @Inject constructor(
   fun toNavigate(addtionalParameterMap: MutableMap<String, String> = HashMap()) {
     val args = Bundle()
     args.putString(SYSTEM_NAME, view.getWidgetModel()?.systemName)
-    args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.systemName)
+    args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.name)
     args.putSerializable(MAP, addtionalParameterMap as Serializable?)
     navigator.openPage(
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true,
@@ -131,6 +130,11 @@ class TeamTargetPresenter @Inject constructor(
         fltHierarchy = dashboardModel.dashboardFor
       )
     )
+  }
+
+  companion object {
+    const val WIDGETTYPE = "WidgetType"
+    const val TEAM_TARGET_TITLE = "Target Vs Achievement"
   }
 
 }

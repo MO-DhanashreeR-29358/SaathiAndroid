@@ -32,6 +32,7 @@ import com.mosl.mobile.domain.teamtarget.TeamTableItem3Model
 import com.mosl.mobile.domain.teamtarget.TeamTableItemModel
 import com.mosl.mobile.domain.teamtarget.TeamTargetItemModel
 import com.mosl.mobile.user.login.user
+import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -57,6 +58,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
   private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
   private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
   private lateinit var subBranchAdapter: ArrayAdapter<SubBranchCodeModel>
+
   @Inject
   lateinit var presenter: TeamTargetPresenter
 
@@ -84,26 +86,6 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
   private val labelGroupAdapter = GroupAdapter<ViewHolder>()
 
   private var tableListdata: List<List<TeamTableItemModel>> = mutableListOf()
-
-  private val VORDIPLOM_COLORS = intArrayOf(
-    Color.rgb(255, 21, 0),
-    Color.rgb(38, 127, 183),
-    Color.rgb(0, 177, 207),
-    Color.rgb(22, 225, 143),
-    Color.rgb(64, 0, 255),
-    Color.rgb(255, 255, 0),
-    Color.rgb(254, 46, 46),
-    Color.rgb(255, 21, 0),
-    Color.rgb(38, 127, 183),
-    Color.rgb(0, 177, 207),
-    Color.rgb(22, 225, 143),
-    Color.rgb(64, 0, 255),
-    Color.rgb(255, 255, 0),
-    Color.rgb(254, 46, 46),
-    Color.rgb(64, 0, 255),
-    Color.rgb(255, 255, 0),
-    Color.rgb(254, 46, 46)
-  )
 
   private var count = 0
 
@@ -418,6 +400,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
   private fun List<TeamTableItemModel>.renderUI() {
     setDataBroking(this)
     LableView(this)
+    setTitle()
   }
 
   private fun setDataBroking(
@@ -437,7 +420,12 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         h: Highlight
       ) {
 
-        pieChartEvent.onNext(TeamWidgetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
+        pieChartEvent.onNext(
+          TeamWidgetUiEvent.PieChartClick(
+            tableItemList[h.x.toInt()].label,
+            tableItemList[h.x.toInt()].widgetType
+          )
+        )
 
       }
 
@@ -488,6 +476,14 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
 
   }
 
+  fun setTitle() {
+    getWidgetModel()?.apply {
+      if (this.widgetTypeList.size > 0) {
+        binding.includeTargetChart.tvWidgetName.setText(this.widgetTypeList.get(count).getTitle())
+      }
+    }
+  }
+
   fun LableView(tableList: List<TeamTableItemModel>) {
     labelGroupAdapter.clear()
     lableItemList.clear()
@@ -500,12 +496,6 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
       )
     }
     labelGroupAdapter.addAll(lableItemList)
-
-    getWidgetModel()?.apply {
-      if (this.widgetTypeList.size > 0) {
-        binding.includeTargetChart.tvWidgetName.setText(this.widgetTypeList.get(count).getTitle())
-      }
-    }
 
   }
 
@@ -523,7 +513,6 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     return when {
       listCount >= 3 -> 3
       listCount == 2 -> 2
-
       else -> 1
     }
 
@@ -534,20 +523,24 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
       R.id.iv_left_arrow -> {
         count--
         if (count >= 0)
-          if (tableListdata.get(count).size > 0)
+          if (tableListdata.get(count).size > 0) {
             tableListdata.get(count).renderUI()
-          else
+          } else {
             chartClear()
+            setTitle()
+          }
         else
           count = 0
       }
       R.id.iv_right_arrow -> {
         if (count < 2)
           count++
-        if (tableListdata.get(count).size > 0)
+        if (tableListdata.get(count).size > 0) {
           tableListdata.get(count).renderUI()
-        else
+        } else {
           chartClear()
+          setTitle()
+        }
       }
     }
   }

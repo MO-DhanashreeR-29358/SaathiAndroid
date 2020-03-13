@@ -3,6 +3,7 @@ package com.mosl.shared.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import java.text.SimpleDateFormat;
@@ -70,4 +71,14 @@ public class Utility {
 		calendar.get(Calendar.MINUTE);
 		return calendar.getTime();
 	}
+
+  public static int[] VORDIPLOM_COLORS = {
+      Color.rgb(255, 21, 0), Color.rgb(38, 127, 183), Color.rgb(0, 177, 207),
+      Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+      Color.rgb(254, 46, 46), Color.rgb(255, 21, 0), Color.rgb(38, 127, 183),
+      Color.rgb(0, 177, 207),
+      Color.rgb(22, 225, 143), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+      Color.rgb(254, 46, 46), Color.rgb(64, 0, 255), Color.rgb(255, 255, 0),
+      Color.rgb(254, 46, 46)
+  };
 }

@@ -10,7 +10,7 @@ sealed class TeamWidgetUiEvent {
   data class SummaryCountItemClick(@JvmField val tabelItemInfo: TeamTableItem3Model) :
     TeamWidgetUiEvent()
 
-  data class PieChartClick(@JvmField val label: String?) :
+  data class PieChartClick(@JvmField val label: String?, @JvmField val widgetType: String?) :
     TeamWidgetUiEvent()
 
 }
