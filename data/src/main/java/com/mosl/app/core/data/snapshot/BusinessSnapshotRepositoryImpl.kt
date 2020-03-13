@@ -7,6 +7,7 @@ import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotResponseModel
 import com.mosl.mobile.domain.snapshot.ColHeader
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.shared.util.toRemoveDecimals
 import io.reactivex.Observable
 import org.json.JSONObject
 import javax.inject.Inject
@@ -52,12 +53,25 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
           headers.forEach { header ->
             values.add(json.get(header).toString())
           }
-          data.add(BusinessSnapshotData(values))
+          data.add(BusinessSnapshotData(setData(values)))
         }
         BusinessSnapshotCombo(headers, data = data)
       } else {
         BusinessSnapshotCombo(emptyList(), data = emptyList())
       }
     }
+  }
+
+  private fun setData(values: ArrayList<String>): ArrayList<String> {
+    val list: ArrayList<String> = ArrayList()
+    list.add(values[0])
+    for (i in 1 until values.size) {
+      if (values[i] != "null" && values[i] != "")
+        list.add(values[i].toDouble().toRemoveDecimals())
+      else if (values[i] == "null")
+        list.add(values[i].replace("null", ""))
+      else list.add(values[i])
+    }
+    return list
   }
 }

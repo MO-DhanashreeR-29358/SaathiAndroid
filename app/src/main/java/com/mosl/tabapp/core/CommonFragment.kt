@@ -13,7 +13,6 @@ import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
-import java.util.Locale
 import javax.inject.Inject
 
 open class CommonFragment : BaseFragment() {
@@ -26,10 +25,6 @@ open class CommonFragment : BaseFragment() {
 
   fun stringOrEmpty(input: String?): String {
     return stringOrDefault(input, "")
-  }
-
-  fun Double.toDecimalsOrDash(decimals: Int = 2): String {
-    return if (this == 0.0) "0" else String.format(Locale.ENGLISH, "%.${decimals}f", this)
   }
 
   protected fun toggleSectionExpansion(

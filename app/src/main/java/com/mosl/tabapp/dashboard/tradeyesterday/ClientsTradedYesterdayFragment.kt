@@ -7,6 +7,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.tradeyesterday.ClientTradeYesterdayResponseModel
+import com.mosl.shared.util.toDecimalsOrDash
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.NO_OF_CLIENTS
