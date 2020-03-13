@@ -35,7 +35,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.saathi.api.model.dashboard.targetteam.Table3Item;
 import com.mosl.saathi.api.model.dashboard.targetteam.TableItem;
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem;
@@ -661,7 +661,7 @@ public class TargetAchievementTeamFragment extends CommonFragment
 
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     getAddtionalParameterMap(),
                     widgetSystemName,

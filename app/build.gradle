@@ -35,6 +35,10 @@ android {
   Properties versionProps = new Properties()
   versionProps.load(new FileInputStream(file('../version.properties')))
 
+  viewBinding {
+    enabled = true
+  }
+
   dataBinding {
     enabled = true
   }

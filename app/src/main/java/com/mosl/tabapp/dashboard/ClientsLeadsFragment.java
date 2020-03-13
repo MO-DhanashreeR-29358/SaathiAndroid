@@ -28,7 +28,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMValueFormatter;
@@ -60,9 +60,6 @@ import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
 import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
 import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
 import static com.mosl.tabapp.constants.MOSLConstants.MAP;
@@ -73,6 +70,9 @@ import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PERIOD_FILTER;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PRODUCT_FILTER;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.SOURCE_FILTER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -166,12 +166,12 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
                     ArrayAdapter<FilterRowData> adapter1 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter1.setAdapter(adapter1);
                     AdapterUtils.setSpinnerData(adapter1, spFilter1, filterList.get(0).getFilterData());
-                    spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
+                    spFilter1.setSelection(this.getArguments().getInt(PERIOD_FILTER));
 
                     ArrayAdapter<FilterRowData> adapter2 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter2.setAdapter(adapter2);
                     AdapterUtils.setSpinnerData(adapter2, spFilter2, filterList.get(1).getFilterData());
-                    spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
+                    spFilter2.setSelection(this.getArguments().getInt(PRODUCT_FILTER));
 
                     spFilter2.setVisibility(View.VISIBLE);
                     getSpinnerSelection();
@@ -181,17 +181,17 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
                     ArrayAdapter<FilterRowData> adapter1 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter1.setAdapter(adapter1);
                     AdapterUtils.setSpinnerData(adapter1, spFilter1, filterList.get(0).getFilterData());
-                    spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
+                    spFilter1.setSelection(this.getArguments().getInt(PERIOD_FILTER));
 
                     ArrayAdapter<FilterRowData> adapter2 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter2.setAdapter(adapter2);
                     AdapterUtils.setSpinnerData(adapter2, spFilter2, filterList.get(1).getFilterData());
-                    spFilter2.setSelection(this.getArguments().getInt(FILTERSECOND));
+                    spFilter2.setSelection(this.getArguments().getInt(PRODUCT_FILTER));
 
                     ArrayAdapter<FilterRowData> adapter3 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter3.setAdapter(adapter3);
                     AdapterUtils.setSpinnerData(adapter3, spFilter3, filterList.get(2).getFilterData());
-                    spFilter3.setSelection(this.getArguments().getInt(FILTERTHIRD));
+                    spFilter3.setSelection(this.getArguments().getInt(SOURCE_FILTER));
 
                     spFilter2.setVisibility(View.VISIBLE);
                     spFilter3.setVisibility(View.VISIBLE);
@@ -200,7 +200,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
                     ArrayAdapter<FilterRowData> adapter1 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter1.setAdapter(adapter1);
                     AdapterUtils.setSpinnerData(adapter1, spFilter1, filterList.get(0).getFilterData());
-                    spFilter1.setSelection(this.getArguments().getInt(FILTERFIRST));
+                    spFilter1.setSelection(this.getArguments().getInt(PERIOD_FILTER));
                     getSpinnerSelection();
                 }
             }
@@ -362,7 +362,7 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
             Map<String, String> additionalMap = getAddtionalParameterMap();
 
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     additionalMap,
                     widgetSystemName,
@@ -493,9 +493,6 @@ public class ClientsLeadsFragment extends CommonFragment implements View.OnClick
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
             args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
             args.putString(SYSTEM_NAME, widgetSystemName);
-            args.putInt(FILTERFIRST, spFilter1.getSelectedItemPosition());
-            args.putInt(FILTERSECOND, spFilter2.getSelectedItemPosition());
-            args.putInt(FILTERTHIRD, spFilter3.getSelectedItemPosition());
             args.putString(TYPESOFLEAD, LEAD);
             clientsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()

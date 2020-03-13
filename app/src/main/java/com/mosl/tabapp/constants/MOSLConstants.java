@@ -292,6 +292,9 @@ public interface MOSLConstants extends LabelConfig {
     String MTD_CNT = "MTD_CNT";
     String MTD = "MTD";
     String YTD_CNT = "YTD_CNT";
+    String REVENUE_TYPE = "REVENUETYPE";
+    String NO_OF_CLIENTS = "NOOFCLIENTS";
+    String REVENUE_GENERATED = "REVENUEGENERATED";
 
     String ATTENDEEE_NOT_FOUND_MESSAGE = "Not found";
 
@@ -301,9 +304,7 @@ public interface MOSLConstants extends LabelConfig {
     String WIDGETNAME = "Widget name";
     String LABEL = "Label";
     String KEY = "key";
-    String FILTERFIRST = "filterFirst";
-    String FILTERSECOND = "filterSecond";
-    String FILTERTHIRD = "filterThird";
+
     String TYPESOFLEAD = "types_of_lead";
     //profile type
     String RETAIL = "retail";
@@ -397,6 +398,7 @@ public interface MOSLConstants extends LabelConfig {
 
     String STRING_MAP = "map";
     String STRING_TITLE = "title";
-
+    String SEND_OTP_LABLE = "Send OTP";
+    String VERIFY_OTP_LABLE = "Verify OTP";
 }
 

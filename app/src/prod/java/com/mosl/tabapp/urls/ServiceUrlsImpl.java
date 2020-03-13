@@ -18,7 +18,7 @@ public class ServiceUrlsImpl {
     @Contract(pure = true)
     public static String CRM_COLLATERAL_URL() {
         return
-            "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
+            "http://onlinetrade.motilaloswal.com/emailers/TGS/2015/Landing_page/TGS_landing_page.html";
     }
     @NonNull
     @Contract(pure = true)

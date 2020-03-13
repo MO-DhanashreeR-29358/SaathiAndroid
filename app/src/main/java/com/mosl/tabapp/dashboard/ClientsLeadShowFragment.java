@@ -15,11 +15,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.commons.data.UiModel;
-import com.mosl.saathi.api.model.dashboard.client.ClientRequest;
+import com.mosl.saathi.api.model.dashboard.CommonRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
-import com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment;
+import com.mosl.tabapp.dashboard.leads.LeadsFragment;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
@@ -41,9 +41,6 @@ import io.reactivex.disposables.Disposable;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERFIRST;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERSECOND;
-import static com.mosl.tabapp.constants.MOSLConstants.FILTERTHIRD;
 import static com.mosl.tabapp.constants.MOSLConstants.LABEL;
 import static com.mosl.tabapp.constants.MOSLConstants.LEAD;
 import static com.mosl.tabapp.constants.MOSLConstants.MAP;
@@ -53,9 +50,12 @@ import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
-import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKBRANCHCODE;
-import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKNAME;
-import static com.mosl.tabapp.dashboard.ausfb.leads.AuLeadsFragment.FLT_BANKSUBBROKERCODE;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.FLT_BANKBRANCHCODE;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.FLT_BANKNAME;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.FLT_BANKSUBBROKERCODE;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PERIOD_FILTER;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PRODUCT_FILTER;
+import static com.mosl.tabapp.dashboard.leads.LeadsFragment.SOURCE_FILTER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
 /**
@@ -191,7 +191,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                                    Map<String, String> getAddtionalParameterMap) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             String businessProfileId = dashboardModel.getBusinessProfileIdForDashboard();
-            ClientRequest request = new ClientRequest(
+            CommonRequest request = new CommonRequest(
                     businessProfileId,
                     getAddtionalParameterMap,
                     systemName,
@@ -232,15 +232,15 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
                     getString(TYPESOFLEAD).equalsIgnoreCase(LEAD)) {
                 leadsFragment = new ClientsLeadsFragment();
             } else {
-                leadsFragment = new AuLeadsFragment();
+                leadsFragment = new LeadsFragment();
                 args.putInt(FLT_BANKNAME, this.getArguments().getInt(FLT_BANKNAME));
                 args.putInt(FLT_BANKBRANCHCODE, this.getArguments().getInt(FLT_BANKBRANCHCODE));
                 args.putInt(FLT_BANKSUBBROKERCODE, this.getArguments().getInt(FLT_BANKSUBBROKERCODE));
             }
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
-            args.putInt(FILTERFIRST, this.getArguments().getInt(FILTERFIRST));
-            args.putInt(FILTERSECOND, this.getArguments().getInt(FILTERSECOND));
-            args.putInt(FILTERTHIRD, this.getArguments().getInt(FILTERTHIRD));
+            args.putInt(PERIOD_FILTER, this.getArguments().getInt(PERIOD_FILTER));
+            args.putInt(PRODUCT_FILTER, this.getArguments().getInt(PRODUCT_FILTER));
+            args.putInt(SOURCE_FILTER, this.getArguments().getInt(SOURCE_FILTER));
             leadsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

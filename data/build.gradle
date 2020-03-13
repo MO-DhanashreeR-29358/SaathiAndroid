@@ -46,6 +46,7 @@ dependencies {
   implementation deps.retrofit.core
   implementation deps.retrofit.gson
   implementation deps.retrofit.rxJava
+  implementation deps.retrofit.scalar
   implementation deps.kotlin
   implementation deps.timber
   api deps.mofslArtifacts.appcore
@@ -57,6 +58,7 @@ dependencies {
 
   implementation deps.okHttp.core
   implementation deps.okHttp.logger
+  implementation deps.retrofit.scalar
 
   implementation project(':saathiapi')
   implementation project(':appuser')

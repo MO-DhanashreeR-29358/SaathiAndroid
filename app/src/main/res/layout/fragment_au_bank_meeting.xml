@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_6sdp"
-            >
+            android:padding="@dimen/_6sdp">
 
             <TextView
                 android:id="@+id/tv_meeting_date_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_label_meeting_date"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/ll_date"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/list_bacground"
                 android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_date_label"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_date_label">
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/tvDate"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".8"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".85"
+                    android:clickable="false"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
-                    />
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:inputType="none" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivDatePicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/margin_small"
                     android:gravity="end"
                     android:src="@drawable/ic_calendar"
-                    />
+                    android:layout_weight="0.1" />
 
             </LinearLayout>
 
@@ -65,35 +65,31 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/ll_date"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/ll_date" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="ll_date,tv_date_error"
-                />
+                app:constraint_referenced_ids="ll_date,tv_date_error" />
 
             <TextView
                 android:id="@+id/tv_meeting_type_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_label_meeting_type"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_date"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_date" />
 
             <Spinner
                 android:id="@+id/sp_meeting_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_type_label"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_type_label" />
 
             <TextView
                 android:id="@+id/tv_meeting_type_error"
@@ -105,35 +101,31 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_type"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_type" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="sp_meeting_type,tv_meeting_type_error"
-                />
+                app:constraint_referenced_ids="sp_meeting_type,tv_meeting_type_error" />
 
             <TextView
                 android:id="@+id/tv_meeting_duration_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_label_meeting_duration"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_type"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_type" />
 
             <Spinner
                 android:id="@+id/sp_meeting_duration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_duration_label"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_duration_label" />
 
             <TextView
                 android:id="@+id/tv_meeting_duration_error"
@@ -145,27 +137,24 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_duration"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/sp_meeting_duration" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_meeting_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="sp_meeting_duration,tv_meeting_duration_error"
-                />
+                app:constraint_referenced_ids="sp_meeting_duration,tv_meeting_duration_error" />
 
             <TextView
                 android:id="@+id/tv_meeting_description_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_hint_label_enter_meeting_description"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_duration"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barrier_meeting_duration" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_meeting_description"
@@ -174,39 +163,35 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/tv_meeting_description_label">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_meeting_description"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_70sdp"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
                     android:hint="@string/text_hint_label_enter_meeting_description"
                     android:maxLength="1000"
-                    android:maxLines="5"
-                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
-                    style="@style/Widget.AppCompat.EditText"
-                    />
+                    android:maxLines="5" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_bank_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_label_bank"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/il_meeting_description"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/il_meeting_description" />
 
             <Spinner
                 android:id="@+id/sp_bank"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_bank_label"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tv_bank_label" />
 
             <TextView
                 android:id="@+id/tv_bank_error"
@@ -218,35 +203,31 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/sp_bank"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/sp_bank" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="sp_bank,tv_bank_error"
-                />
+                app:constraint_referenced_ids="sp_bank,tv_bank_error" />
 
             <TextView
                 android:id="@+id/tv_branch_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/text_label_branch"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_bank"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barrier_bank" />
 
             <Spinner
                 android:id="@+id/sp_branch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@+id/tv_branch_label"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/tv_branch_label" />
 
             <TextView
                 android:id="@+id/tv_branch_error"
@@ -258,16 +239,14 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/sp_branch"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/sp_branch" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="sp_branch,tv_branch_error"
-                />
+                app:constraint_referenced_ids="sp_branch,tv_branch_error" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_sub_broker"
@@ -276,21 +255,20 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_branch"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/barrier_branch">
 
                 <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_sub_broker"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
                     android:focusable="false"
                     android:hint="@string/text_hint_label_enter_sub_broker"
-                    android:inputType="none"
-                    style="@style/Widget.AppCompat.EditText"
-                    />
+                    android:inputType="none" />
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <RelativeLayout
                 android:id="@+id/ll_bank_employee"
@@ -298,33 +276,30 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/il_sub_broker"
-                tools:visibility="visible"
-                >
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/tv_bank_employee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:paddingBottom="@dimen/_10sdp"
                     android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:text="@string/text_hint_label_enter_bank_employee"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/tv_bank_employee_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_5sdp"
-                    android:layout_toEndOf="@+id/tv_bank_employee"
                     android:layout_toStartOf="@+id/ib_bank_employee"
-                    android:paddingBottom="@dimen/_10sdp"
+                    android:layout_toEndOf="@+id/tv_bank_employee"
                     android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <ImageButton
                     android:id="@+id/ib_bank_employee"
@@ -334,8 +309,7 @@
                     android:layout_centerInParent="true"
                     android:background="@color/white"
                     android:padding="@dimen/_5sdp"
-                    android:src="@drawable/ic_plus"
-                    />
+                    android:src="@drawable/ic_plus" />
 
             </RelativeLayout>
 
@@ -349,16 +323,14 @@
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/ll_bank_employee"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/ll_bank_employee" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_bank_employee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="ll_bank_employee,tv_bank_employee_error"
-                />
+                app:constraint_referenced_ids="ll_bank_employee,tv_bank_employee_error" />
             <!--<android.support.design.widget.TextInputLayout
                 android:id="@+id/il_bank_employee"
                 android:layout_width="match_parent"
@@ -389,8 +361,7 @@
                 android:visibility="gone"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
                 il_sub_broker,ll_bank_employee"
-                tools:visibility="visible"
-                />
+                tools:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_subject"
@@ -401,18 +372,16 @@
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/barrier_bank_employee"
-                tools:visibility="visible"
-                >
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_subject"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
                     android:hint="@string/text_hint_label_enter_subject"
-                    android:maxLength="100"
-                    style="@style/Widget.AppCompat.EditText"
-                    />
+                    android:maxLength="100" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--<include
@@ -426,8 +395,27 @@
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
-                 il_sub_broker,il_subject"
-                />
+                 il_sub_broker,il_subject" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_mobile_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_mobile_number"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/text_hint_label_client_mobile_no"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="10" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_client_name"
@@ -437,20 +425,18 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_client_name"
-                tools:visibility="visible"
-                >
+                app:layout_constraintTop_toBottomOf="@+id/il_mobile_number"
+                tools:visibility="visible">
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_client_name"
+                    style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
                     android:hint="@string/text_hint_label_enter_client"
                     android:imeActionLabel="@string/text_label_add"
-                    android:imeOptions="actionDone"
-                    style="@style/Widget.AppCompat.EditText"
-                    />
+                    android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -459,8 +445,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/il_client_name"
-                tools:visibility="visible"
-                />
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_button"
@@ -468,8 +453,7 @@
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="barrier_bank_employee,il_meeting_description,
-                 il_sub_broker,il_subject,il_client_name,rv_client_name"
-                />
+                 il_sub_broker,il_subject,il_client_name,rv_client_name" />
 
             <Button
                 android:id="@+id/btn_save"
@@ -481,8 +465,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/btn_reset"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_button"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barrier_button" />
 
             <Button
                 android:id="@+id/btn_reset"
@@ -494,8 +477,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
-                app:layout_constraintStart_toEndOf="@+id/btn_save"
-                />
+                app:layout_constraintStart_toEndOf="@+id/btn_save" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

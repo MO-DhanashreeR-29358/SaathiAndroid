@@ -1211,12 +1211,13 @@ public class LeadCreationFragment extends CommonFragment
                             categoryNameStr = ((RowData) spCategory.getSelectedItem()).getValue();
                             String sysName = ((RowData) spCategory.getSelectedItem()).getSchmeID();
                             tvCategoryError.setVisibility(View.GONE);
-                            if (!sysName.equalsIgnoreCase("INDIVIDUAL")) {
-                                isIndividualsFlag = false;
-                                etContactPerson.setVisibility(View.VISIBLE);
-                            } else {
+                            tvContactPersonError.setVisibility(View.GONE);
+                            if (sysName.equalsIgnoreCase("INDIVIDUAL")) {
                                 isIndividualsFlag = true;
                                 etContactPerson.setVisibility(View.GONE);
+                            } else {
+                                isIndividualsFlag = false;
+                                etContactPerson.setVisibility(View.VISIBLE);
                             }
 
                             ilName.setHint(categoryNameStr + " Name*");

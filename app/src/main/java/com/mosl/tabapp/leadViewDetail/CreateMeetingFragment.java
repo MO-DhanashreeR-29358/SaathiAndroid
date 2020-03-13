@@ -39,13 +39,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
+import com.mosl.mobile.pdf.OTPFragment;
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest;
@@ -60,10 +64,13 @@ import com.mosl.saathi.api.model.lead.LeadViewItem;
 import com.mosl.saathi.api.model.lead.LeadViewRequest;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
+import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest;
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest;
+import com.mosl.tabapp.Permisssion.PermissionCheckHelperFragment;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView;
 import com.mosl.tabapp.common.CRMAppUtil;
+import com.mosl.tabapp.common.FusedLocation;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AddedAttendeeModel;
@@ -72,10 +79,11 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
-import com.mosl.tabapp.permission.PermissionCheckHelperFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-import io.reactivex.disposables.Disposable;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -83,10 +91,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
@@ -97,7 +108,6 @@ import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
-import static com.mosl.tabapp.common.CRMMOSLCommon.enableLocationSetting;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE;
@@ -136,10 +146,12 @@ import static com.mosl.tabapp.constants.MOSLConstants.SELECT_OUT_STATION_MEETING
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT;
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_SUB_CATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.SELECT_TRAVELLING_MODE;
+import static com.mosl.tabapp.constants.MOSLConstants.SEND_OTP_LABLE;
 import static com.mosl.tabapp.constants.MOSLConstants.SPL_ATTENDEE_ALREADY_ADDED;
 import static com.mosl.tabapp.constants.MOSLConstants.SUBCATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.TRAVELLINGMODEID;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
+import static com.mosl.tabapp.constants.MOSLConstants.VERIFY_OTP_LABLE;
 import static com.mosl.tabapp.constants.MOSLConstants.YES;
 import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
@@ -150,7 +162,8 @@ import static java.lang.String.format;
  */
 
 public class CreateMeetingFragment extends CommonFragment
-        implements View.OnClickListener, TextView.OnEditorActionListener {
+        implements View.OnClickListener, TextView.OnEditorActionListener,
+        FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
     final public static String TAG = CreateMeetingFragment.class.getSimpleName();
     private final ArrayList<RowData> arrCategory = new ArrayList<>();
     private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
@@ -166,6 +179,8 @@ public class CreateMeetingFragment extends CommonFragment
     private final ArrayList<RowData> arrTravellingMode = new ArrayList<>();
     @Inject
     PermissionCheckHelperFragment permissionCheckHelper;
+    @Inject
+    FusedLocation fusedLocation;
     private ImageView ivLead;
     private EditText etCustomerComment, etMeetingDescription, etCategory, etSubCategory,
             etClientCode,
@@ -215,12 +230,15 @@ public class CreateMeetingFragment extends CommonFragment
     private ArrayList<CreateMeetingTravellingModel> travellingList;
     private ArrayAdapter<RowData> arrAdapMeetingReason;
     private boolean enableLocationGroup;
-
+    private Button btnSendOtp;
+    private Boolean isSendOtpSuccessful = false;
 
     @Override
     protected int getLayout() {
         return R.layout.frag_create_meeting;
     }
+
+    private PublishSubject<Boolean> otpEvent = PublishSubject.create();
 
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -245,6 +263,16 @@ public class CreateMeetingFragment extends CommonFragment
         meetingObjective();
         meetingLocation();
         return createMeetingView;
+    }
+
+    private void setVisibilityOTP(Boolean status) {
+        if (userManager.getUser().isRM()) {
+            if (status) {
+                btnSendOtp.setVisibility(View.VISIBLE);
+            } else {
+                btnSendOtp.setVisibility(View.GONE);
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -309,6 +337,7 @@ public class CreateMeetingFragment extends CommonFragment
         setIcon(llActionables, tvActionables);
         tvActionables.setOnClickListener(this);
         Button btnSave = createMeetingView.findViewById(R.id.btnSave);
+        btnSendOtp = createMeetingView.findViewById(R.id.btnSendOtp);
         Button btnReset = createMeetingView.findViewById(R.id.btnReset);
         ImageButton ibSplAttendee = createMeetingView.findViewById(R.id.ibSplAttendee);
         ImageButton ibAttendee = createMeetingView.findViewById(R.id.ibAttendee);
@@ -356,6 +385,7 @@ public class CreateMeetingFragment extends CommonFragment
         ibSplAttendee.setOnClickListener(this);
         tvAttendeeCount.setOnClickListener(this);
         tvSplAttendeeCount.setOnClickListener(this);
+        btnSendOtp.setOnClickListener(this);
 
         hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
@@ -519,8 +549,11 @@ public class CreateMeetingFragment extends CommonFragment
                 }
             }
         });
-    }
 
+        arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+        spMeetingReason.setAdapter(arrAdapMeetingReason);
+
+    }
 
     private void setMeetingLocationListener() {
         disposable.add(
@@ -648,7 +681,6 @@ public class CreateMeetingFragment extends CommonFragment
                         }));
     }
 
-
     private void setOutStationListener() {
         disposable.add(
                 itemSelections(spOutStaition)
@@ -671,28 +703,22 @@ public class CreateMeetingFragment extends CommonFragment
                             if (!spActivityType.getSelectedItem()
                                     .toString()
                                     .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-                                arrMeetingReason.clear();
-                                arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
                                 meetingReason();
-                                if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Email")
-                                        || spActivityType.getSelectedItem()
-                                        .toString()
-                                        .equalsIgnoreCase("Phone")) {
+                                if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")) {
+                                    enableLocationGroup = true;
+                                    enableField(llLocationGroup);
+                                    setVisibilityOTP(true);
+                                } else {
                                     enableLocationGroup = false;
                                     disableField(llLocationGroup);
                                     disableReset();
-                                } else {
-                                    enableLocationGroup = true;
-                                    enableField(llLocationGroup);
+                                    setVisibilityOTP(false);
                                 }
                             } else {
+                                setVisibilityOTP(false);
                                 arrMeetingReason.clear();
                                 arrMeetingReason.add(new RowData(0, "-1", SELECT_MEETING_REASON));
-                                arrAdapMeetingReason =
-                                        new ArrayAdapter<>(requireContext(), R.layout.simple_spinner_item,
-                                                arrMeetingReason);
-                                arrAdapMeetingReason.setDropDownViewResource(R.layout.mdropdown);
-                                spMeetingReason.setAdapter(arrAdapMeetingReason);
+                                AdapterUtils.setSpinnerData(arrAdapMeetingReason, spMeetingReason, arrMeetingReason);
                                 arrAdapMeetingReason.notifyDataSetChanged();
                             }
                         }));
@@ -704,9 +730,54 @@ public class CreateMeetingFragment extends CommonFragment
                         .filter(InvalidSelectionPredicate)
                         .skip(1)
                         .subscribe(xyz -> {
-                            meetingObjectiveIdStr = ((RowData) spMeetingObjective.getSelectedItem()).getKey();
+                            meetingObjectiveIdStr =
+                                    ((RowData) spMeetingObjective.getSelectedItem()).getKey();
                             tvMeetingObjectiveError.setVisibility(View.GONE);
                         }));
+    }
+
+    private void sendOTPRequest() {
+
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+
+            String geoArea = "";
+
+            Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+            try {
+                List<Address> addressList = geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+                        mCurrentLocation.getLongitude(), 1);
+                geoArea = addressList.get(0).getAddressLine(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            SendOTPRequest request =
+                    new SendOTPRequest(leadId, mUCID, geoArea,
+                            mCurrentLocation.getLongitude() + "",
+                            mCurrentLocation.getLatitude() + "", "2", 0,
+                            userManager.getUser().employeeCode);
+            Disposable disposable = getSaathiApi().getStartMeeting(request)
+                    .compose(applyUiModel())
+                    .subscribe(this::renderSendOTP);
+        } else {
+            noInternetConnectionDialog();
+        }
+    }
+
+    private void renderSendOTP(UiModel<String> uiModel) {
+        toggleProgress(uiModel.inProgress);
+
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrTravellingMode.clear();
+            showOnFailurePopup(error);
+        }
+        String data = uiModel.data;
+        if (data != null) {
+            Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
+                    .show();
+            btnSendOtp.setText(R.string.btn_label_verify_otp);
+        }
     }
 
     @Override
@@ -725,68 +796,109 @@ public class CreateMeetingFragment extends CommonFragment
                 selectDate();
             } else if (id == R.id.tvActionables) {
                 toggleSectionExpansion(llActionables, tvActionables);
+            } else if (id == R.id.btnSendOtp) {
+                if (isSendOtpSuccessful) {
+                    Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG).show();
+                } else {
+                    if (btnSendOtp.getText().equals(SEND_OTP_LABLE)) {
+                        if (checkPermission()) {
+                            if (mCurrentLocation != null) {
+                                sendOTPRequest();
+                            } else {
+                                fusedLocation.LocationUpdates();
+                            }
+                        }
+                    } else if (btnSendOtp.getText().equals(VERIFY_OTP_LABLE)) {
+                        FragmentTransaction ft =
+                                requireActivity().getSupportFragmentManager().beginTransaction();
+
+                        OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
+                        dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+                        dialogFragment.setListener(this);
+                        dialogFragment.show(ft, "");
+                    }
+                }
             } else if (id == R.id.btnReset) {
                 resetData();
             } else if (id == R.id.btnSave) {
-                if (validateForm()) {
-                    MeetingApptModel meetingApptModel = new MeetingApptModel();
-                    meetingApptModel.setMeetingType("M");
-                    meetingApptModel.setDisplayType("A");
-                    meetingApptModel.setPincode(etPinCode.getText().toString());
-                    meetingApptModel.setAmount(etAmount.getText().toString());
-                    meetingApptModel.setMeetingAddress(etLocation.getText().toString());
-                    meetingApptModel.setMeetingAddressTypeId(
-                            ((RowData) spMeetingLocation.getSelectedItem()).getKey());
-                    meetingApptModel.setTravellingList(travellingAdapter.getTravellingList());
-                    meetingApptModel.setLeadId(leadId);
-                    meetingApptModel.setUcid(mUCID);
-                    meetingApptModel.setMeetingDate(
-                            CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
-                    meetingApptModel.setProduct("0");
-                    meetingApptModel.setProductList(productAdapter.getListProduct());
-                    meetingApptModel.setMeetingDuration(meetingDurationCodeStr);
-                    meetingApptModel.setMeetingObjectiveID(meetingObjectiveIdStr);
-                    meetingApptModel.setActivityTypeID(activityTypeCodeStr);
-                    meetingApptModel.setMeetingReason(meetingReasonCodeStr);
-                    meetingApptModel.setMeetingDes(
-                            getJsonSafeString(etMeetingDescription.getText().toString().trim()));
-                    meetingApptModel.setMeetingAttendee(addedAttendeeModelList);
-                    meetingApptModel.setSplMeetingAttendee(addedSplAttendeeModelList);
-                    meetingApptModel.setCustomerComment(
-                            getJsonSafeString(etCustomerComment.getText().toString().trim()));
-                    meetingApptModel.setActionables(actionablesCodeStr);
-                    meetingApptModel.setCategory(categoryCodeStr);
-                    meetingApptModel.setEtCategory(etCategory.getText().toString().trim());
-                    meetingApptModel.setSubCategory(subCategoryCodestr);
-                    meetingApptModel.setEtSubCategory(etSubCategory.getText().toString().trim());
-                    meetingApptModel.setBaClient(baClientCodeStr);
-                    meetingApptModel.setOutStation(outStaitionCodeStr);
-                    meetingApptModel.setClientCode(etClientCode.getText().toString().trim());
-                    meetingApptModel.setClientName(etClientName.getText().toString().trim());
-                    if (mCurrentLocation != null) {
-                        Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
-                        try {
-                            List<Address> addressList =
-                                    geocoder.getFromLocation(mCurrentLocation.getLatitude(),
-                                            mCurrentLocation.getLongitude(), 1);
-                            meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                saveMeeting();
 
-                        meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
-                        meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
-                    }
-                    if (enableLocationGroup && mCurrentLocation == null) {
-                        getLatLong(meetingApptModel);
-                    } else {
-                        isMockLocation(meetingApptModel);
-                    }
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void saveMeeting() {
+        if (validateForm()) {
+            MeetingApptModel meetingApptModel = new MeetingApptModel();
+            meetingApptModel.setMeetingType("M");
+            meetingApptModel.setDisplayType("A");
+            meetingApptModel.setPincode(etPinCode.getText().toString());
+            meetingApptModel.setAmount(etAmount.getText().toString());
+            meetingApptModel.setMeetingAddress(etLocation.getText().toString());
+            meetingApptModel.setMeetingAddressTypeId(
+                    ((RowData) spMeetingLocation.getSelectedItem()).getKey());
+            meetingApptModel.setTravellingList(travellingAdapter.getTravellingList());
+            meetingApptModel.setLeadId(leadId);
+            meetingApptModel.setUcid(mUCID);
+            meetingApptModel.setMeetingDate(
+                    CRMAppUtil.getDBDate(currentYear, month, day, hour, minute));
+            meetingApptModel.setProduct("0");
+            meetingApptModel.setProductList(productAdapter.getListProduct());
+            meetingApptModel.setMeetingDuration(meetingDurationCodeStr);
+            meetingApptModel.setMeetingObjectiveID(meetingObjectiveIdStr);
+            meetingApptModel.setActivityTypeID(activityTypeCodeStr);
+            meetingApptModel.setMeetingReason(meetingReasonCodeStr);
+            meetingApptModel.setMeetingDes(
+                    getJsonSafeString(etMeetingDescription.getText().toString().trim()));
+            meetingApptModel.setMeetingAttendee(addedAttendeeModelList);
+            meetingApptModel.setSplMeetingAttendee(addedSplAttendeeModelList);
+            meetingApptModel.setCustomerComment(
+                    getJsonSafeString(etCustomerComment.getText().toString().trim()));
+            meetingApptModel.setActionables(actionablesCodeStr);
+            meetingApptModel.setCategory(categoryCodeStr);
+            meetingApptModel.setEtCategory(etCategory.getText().toString().trim());
+            meetingApptModel.setSubCategory(subCategoryCodestr);
+            meetingApptModel.setEtSubCategory(etSubCategory.getText().toString().trim());
+            meetingApptModel.setBaClient(baClientCodeStr);
+            meetingApptModel.setOutStation(outStaitionCodeStr);
+            meetingApptModel.setClientCode(etClientCode.getText().toString().trim());
+            meetingApptModel.setClientName(etClientName.getText().toString().trim());
+            if (mCurrentLocation != null) {
+                Geocoder geocoder = new Geocoder(requireContext(), Locale.getDefault());
+                try {
+                    List<Address> addressList =
+                            geocoder.getFromLocation(mCurrentLocation.getLatitude(),
+                                    mCurrentLocation.getLongitude(), 1);
+                    meetingApptModel.setGeoArea(addressList.get(0).getAddressLine(0));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
+                meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
+            }
+            if (enableLocationGroup && mCurrentLocation == null) {
+                getLatLong(meetingApptModel);
+            } else {
+                isMockLocation(meetingApptModel);
+            }
+        }
+    }
+
+    private boolean checkPermission() {
+        if (!permissionCheckHelper.locationPermission()) {
+            permissionCheckHelper.requestLocation();
+            return false;
+        } else if (!((LocationManager) requireContext().getSystemService(
+                Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
+                && hasGPSDevice(requireContext())) {
+
+            fusedLocation.initDispatcher(this);
+            return false;
+        }
+        return true;
     }
 
     private void isMockLocation(MeetingApptModel meetingApptModel) {
@@ -853,7 +965,6 @@ public class CreateMeetingFragment extends CommonFragment
                     meetingApptModel.setGeoLatitude(mCurrentLocation.getLatitude() + "");
                     meetingApptModel.setGeoLongitude(mCurrentLocation.getLongitude() + "");
                     isMockLocation(meetingApptModel);
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -910,6 +1021,8 @@ public class CreateMeetingFragment extends CommonFragment
         travellingList.clear();
         productAdapter.deleteAllProduct();
         travellingAdapter.deleteAllProduct();
+        setVisibilityOTP(false);
+        btnSendOtp.setText(R.string.btn_label_send_otp);
     }
 
     /**
@@ -917,7 +1030,20 @@ public class CreateMeetingFragment extends CommonFragment
      */
 
     private boolean validateForm() {
-        if (spProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT)
+        if (userManager.getUser().isRM() && !isSendOtpSuccessful &&
+                spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")) {
+
+            alert("Please verify OTP to create meeting");
+            return false;
+
+        } else if (spActivityType.getSelectedItem()
+                .toString()
+                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
+            tvActivityTypeError.setVisibility(View.VISIBLE);
+            tvActivityTypeError.setText(SELECT_ACTIVITY_TYPE);
+            tvActivityTypeError.requestFocus();
+            return false;
+        } else if (spProduct.getSelectedItem().toString().equalsIgnoreCase(SELECT_PRODUCT)
                 && productAdapter.getListProduct().size() == 0) {
             tvProductError.setVisibility(View.VISIBLE);
             tvProductError.setText(SELECT_PRODUCT);
@@ -941,13 +1067,6 @@ public class CreateMeetingFragment extends CommonFragment
             tvMeetingObjectiveError.setVisibility(View.VISIBLE);
             tvMeetingObjectiveError.setText(SELECT_MEETING_OBJECTIVE);
             tvMeetingObjectiveError.requestFocus();
-            return false;
-        } else if (spActivityType.getSelectedItem()
-                .toString()
-                .equalsIgnoreCase(SELECT_ACTIVITY_TYPE)) {
-            tvActivityTypeError.setVisibility(View.VISIBLE);
-            tvActivityTypeError.setText(SELECT_ACTIVITY_TYPE);
-            tvActivityTypeError.requestFocus();
             return false;
         } else if (spMeetingReason.getSelectedItem()
                 .toString()
@@ -1065,10 +1184,11 @@ public class CreateMeetingFragment extends CommonFragment
                 Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER)
                 && hasGPSDevice(requireContext())) {
 
-            enableLocationSetting(requireActivity());
+            fusedLocation.initDispatcher(this);
 
             return false;
         }
+
         return true;
     }
 
@@ -1223,7 +1343,8 @@ public class CreateMeetingFragment extends CommonFragment
                 String lookUpName = stringOrEmpty(item.lookUpName);
                 arrCategory.add(new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapCategory = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapCategory =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spCategory.setAdapter(arrAdapCategory);
             AdapterUtils.setSpinnerData(arrAdapCategory, spCategory, arrCategory);
             arrAdapCategory.notifyDataSetChanged();
@@ -1266,9 +1387,11 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingObjective.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingsObjective = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapMeetingsObjective =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingObjective.setAdapter(arrAdapMeetingsObjective);
-            AdapterUtils.setSpinnerData(arrAdapMeetingsObjective, spMeetingObjective, arrMeetingObjective);
+            AdapterUtils.setSpinnerData(arrAdapMeetingsObjective, spMeetingObjective,
+                    arrMeetingObjective);
             arrAdapMeetingsObjective.notifyDataSetChanged();
 
             setMeetingObjectiveListener();
@@ -1317,7 +1440,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrSubCategory.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSubCategory = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapSubCategory =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spSubCategory.setAdapter(arrAdapSubCategory);
             AdapterUtils.setSpinnerData(arrAdapSubCategory, spSubCategory, arrSubCategory);
             arrAdapSubCategory.notifyDataSetChanged();
@@ -1359,7 +1483,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrSelectProduct.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapSelectProduct =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spProduct.setAdapter(arrAdapSelectProduct);
             AdapterUtils.setSpinnerData(arrAdapSelectProduct, spProduct, arrSelectProduct);
             arrAdapSelectProduct.notifyDataSetChanged();
@@ -1402,9 +1527,11 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingDuration.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingDuration = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapMeetingDuration =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingDuration.setAdapter(arrAdapMeetingDuration);
-            AdapterUtils.setSpinnerData(arrAdapMeetingDuration, spMeetingDuration, arrMeetingDuration);
+            AdapterUtils.setSpinnerData(arrAdapMeetingDuration, spMeetingDuration,
+                    arrMeetingDuration);
             arrAdapMeetingDuration.notifyDataSetChanged();
 
             setMeetingDurationListener();
@@ -1446,7 +1573,8 @@ public class CreateMeetingFragment extends CommonFragment
                         new RowData(i + 1, lookUpId, lookUpName));
             }
 
-            ArrayAdapter<RowData> arrAdapActivityType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapActivityType =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActivityType.setAdapter(arrAdapActivityType);
             AdapterUtils.setSpinnerData(arrAdapActivityType, spActivityType, arrActivityType);
             arrAdapActivityType.notifyDataSetChanged();
@@ -1490,11 +1618,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingReason.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            arrAdapMeetingReason = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
-            spMeetingReason.setAdapter(arrAdapMeetingReason);
             AdapterUtils.setSpinnerData(arrAdapMeetingReason, spMeetingReason, arrMeetingReason);
             arrAdapMeetingReason.notifyDataSetChanged();
-
             setMeetingReasonListener();
         }
     }
@@ -1534,7 +1659,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrBAClient.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapBAClient = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapBAClient =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spBAClient.setAdapter(arrAdapBAClient);
             AdapterUtils.setSpinnerData(arrAdapBAClient, spBAClient, arrBAClient);
             arrAdapBAClient.notifyDataSetChanged();
@@ -1576,7 +1702,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrOutStation.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapOutStation = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapOutStation =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spOutStaition.setAdapter(arrAdapOutStation);
             AdapterUtils.setSpinnerData(arrAdapOutStation, spOutStaition, arrOutStation);
             arrAdapOutStation.notifyDataSetChanged();
@@ -1618,7 +1745,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrActionables.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapActionables = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapActionables =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spActionables.setAdapter(arrAdapActionables);
             AdapterUtils.setSpinnerData(arrAdapActionables, spActionables, arrActionables);
             arrAdapActionables.notifyDataSetChanged();
@@ -1659,9 +1787,11 @@ public class CreateMeetingFragment extends CommonFragment
                 arrMeetingLocation.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapMeetingLocation = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapMeetingLocation =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spMeetingLocation.setAdapter(arrAdapMeetingLocation);
-            AdapterUtils.setSpinnerData(arrAdapMeetingLocation, spMeetingLocation, arrMeetingLocation);
+            AdapterUtils.setSpinnerData(arrAdapMeetingLocation, spMeetingLocation,
+                    arrMeetingLocation);
             arrAdapMeetingLocation.notifyDataSetChanged();
 
             setMeetingLocationListener();
@@ -1726,7 +1856,8 @@ public class CreateMeetingFragment extends CommonFragment
                 arrTravellingMode.add(
                         new RowData(i + 1, lookUpId, lookUpName));
             }
-            ArrayAdapter<RowData> arrAdapTravellingMode = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+            ArrayAdapter<RowData> arrAdapTravellingMode =
+                    SpinnerAdapterFactory.getDefaultAdapter(requireContext());
             spTravellingMode.setAdapter(arrAdapTravellingMode);
             AdapterUtils.setSpinnerData(arrAdapTravellingMode, spTravellingMode, arrTravellingMode);
             arrAdapTravellingMode.notifyDataSetChanged();
@@ -1747,17 +1878,23 @@ public class CreateMeetingFragment extends CommonFragment
                 .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         DatePicker dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
+        LinearLayout linearLayoutOfFromDate = dialog.findViewById(R.id.linearLayoutOfFromDate);
         dpFromDate.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
         ImageView close = dialog.findViewById(R.id.ibtnClose);
         Button btnSubmit = dialog.findViewById(R.id.btnSubmit);
         final TimePicker timePicker = dialog.findViewById(R.id.timePicker);
         timePicker.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
 
+
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -1);
-        dpFromDate.setMinDate(cal.getTimeInMillis());
+        if (spActivityType.getSelectedItem().toString().equalsIgnoreCase("Personal Meeting")
+                && userManager.getUser().isRM()) {
+            dpFromDate.setMinDate(System.currentTimeMillis() - 1000);
+        } else {
+            dpFromDate.setMinDate(cal.getTimeInMillis());
+        }
         dpFromDate.setMaxDate(System.currentTimeMillis() - 1000);
-
         if (mainFromDate != null) {
             try {
                 String[] dateSplit = mainFromDate.split("-");
@@ -1772,7 +1909,6 @@ public class CreateMeetingFragment extends CommonFragment
             } catch (Exception e) {
                 Timber.d(e, TAG);
             }
-
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
                     today.get(Calendar.DATE), (view, year, monthOfYear, dayOfMonth) -> {
@@ -1940,7 +2076,9 @@ public class CreateMeetingFragment extends CommonFragment
                 dialogSplAttendeeList.findViewById(R.id.pbLoadingIndicator));
         etSearchAttendee.setOnItemClickListener((parent, view, position, id) -> {
 
-            SplAttendeeModel clientModel = splAttendeeAdapter.getCount() > position ? splAttendeeAdapter.getItem(position) : new SplAttendeeModel("");
+            SplAttendeeModel clientModel =
+                    splAttendeeAdapter.getCount() > position ? splAttendeeAdapter.getItem(position)
+                            : new SplAttendeeModel("");
             boolean has = listHasAttende(addedAttendeeModelList, addedSplAttendeeModelList,
                     clientModel.getAttendeeCode());
 
@@ -2008,21 +2146,10 @@ public class CreateMeetingFragment extends CommonFragment
     }
 
     private void startLocationUpdates() {
-        Handler mainHandler = new Handler(requireContext().getMainLooper());
 
-        // This is your code
-        Runnable myRunnable = () -> {
-            if (permissionCheckHelper.locationPermission()) {
-                getFusedLocationProviderClient(requireContext()).requestLocationUpdates(
-                        getmLocationRequest(), new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                mCurrentLocation = locationResult.getLastLocation();
-                            }
-                        }, Looper.myLooper());
-            }
-        };
-        mainHandler.post(myRunnable);
+        if (permissionCheckHelper.locationPermission()) {
+            fusedLocation.initDispatcher(this);
+        }
     }
 
     private void setCount(int cnt) {
@@ -2039,6 +2166,16 @@ public class CreateMeetingFragment extends CommonFragment
         } else {
             tvSplAttendeeCount.setText(format("(%s)", String.valueOf(cnt)));
         }
+    }
+
+    @Override
+    public void onLatLongChanged(Location location) {
+        mCurrentLocation = location;
+    }
+
+    @Override
+    public void onSuccessResult(boolean status) {
+        isSendOtpSuccessful = status;
     }
 
     public class AttendeeAdapter extends BaseAdapter implements Filterable {
