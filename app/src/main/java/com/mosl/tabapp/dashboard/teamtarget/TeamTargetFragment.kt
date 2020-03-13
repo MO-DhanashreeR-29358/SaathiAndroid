@@ -318,23 +318,26 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     selectBranch.add(0, SelectBranch)
     val selectSubBranch = mutableListOf<SubBranchCodeModel>()
     selectSubBranch.add(0, SelectSubBranch)
-    when (dropdownTypes) {
-      1 -> {
-        bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
-        branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-        subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
-      }
-      2 -> {
-        branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-        subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
-      }
-      3 -> {
-        subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
-      }
-      else -> {
-        bankAdapter.setSpinnerData(binding.spFilterBank, selectBank)
-        branchAdapter.setSpinnerData(binding.spFilterBranch, selectBranch)
-        subBranchAdapter.setSpinnerData(binding.spFilterSubBranch, selectSubBranch)
+    binding.apply {
+
+      when (dropdownTypes) {
+        1 -> {
+          bankAdapter.setSpinnerData(spFilterBank, selectBank)
+          branchAdapter.setSpinnerData(spFilterBranch, selectBranch)
+          subBranchAdapter.setSpinnerData(spFilterSubBranch, selectSubBranch)
+        }
+        2 -> {
+          branchAdapter.setSpinnerData(spFilterBranch, selectBranch)
+          subBranchAdapter.setSpinnerData(spFilterSubBranch, selectSubBranch)
+        }
+        3 -> {
+          subBranchAdapter.setSpinnerData(spFilterSubBranch, selectSubBranch)
+        }
+        else -> {
+          bankAdapter.setSpinnerData(spFilterBank, selectBank)
+          branchAdapter.setSpinnerData(spFilterBranch, selectBranch)
+          subBranchAdapter.setSpinnerData(spFilterSubBranch, selectSubBranch)
+        }
       }
     }
   }
@@ -526,8 +529,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
           if (tableListdata.get(count).size > 0) {
             tableListdata.get(count).renderUI()
           } else {
-            chartClear()
             setTitle()
+            chartClear()
           }
         else
           count = 0
@@ -538,8 +541,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         if (tableListdata.get(count).size > 0) {
           tableListdata.get(count).renderUI()
         } else {
-          chartClear()
           setTitle()
+          chartClear()
         }
       }
     }
