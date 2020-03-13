@@ -4,6 +4,12 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
+import com.mosl.mobile.domain.birthdayanniversary.BirthdayRequestInput
+import com.mosl.mobile.domain.birthdayanniversary.RequestInput
+import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
+import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
+import com.mosl.tabapp.constants.MOSLConstants
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -14,7 +20,7 @@ class BirthdayAnniversaryPresenter @Inject constructor(
   override fun start() {
     onFetchCalled()
       .map {
-        view.getProfileRequestInput()
+        getProfileRequestInput()
       }
       .switchMap {
         repository.getAllLookUp(it)
@@ -26,7 +32,12 @@ class BirthdayAnniversaryPresenter @Inject constructor(
 
     view.getDataList()
       .map {
-        it.request
+        BirthdayRequestInput(
+          filter = it.filter,
+          request = getRequest(),
+          isAdminMode = it.isAdminMode
+        )
+
       }
       .switchMap {
         repository.postBirthdayAnniversary(it)
@@ -37,16 +48,7 @@ class BirthdayAnniversaryPresenter @Inject constructor(
       }
       .addTo(disposable)
 
-    Observable.merge(
-      view.onProfileSpinnerSelection(),
-      view.onEventTypeSpinnerSelection()
-    )
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
-      .subscribe {
-        view.renderGetData()
-      }
-      .addTo(disposable)
+
 
     view.onEmailAllClick()
       .subscribe {
@@ -55,7 +57,7 @@ class BirthdayAnniversaryPresenter @Inject constructor(
 
     view.sendEmailAll()
       .map {
-        it.request
+        it.getEmailRequest()
       }
       .switchMap {
         repository.postSendEmail(it)
@@ -76,6 +78,61 @@ class BirthdayAnniversaryPresenter @Inject constructor(
       }
       .addTo(disposable)
 
+    val onSpinnerClick = Observable.merge(
+      view.onProfileSpinnerSelection(),
+      view.onEventTypeSpinnerSelection()
+    ).filter(InvalidSelectionPredicate)
+      .skip(1)
+
+    val onButtonClick = Observable.merge(
+      view.onButtonUpcomingClick(),
+      view.onButtonBelatedClick(),
+      view.onButtonTodayClick()
+    )
+
+    Observable.merge(onButtonClick, onSpinnerClick)
+      .subscribe {
+        view.renderGetData()
+      }
+      .addTo(disposable)
+
+  }
+
+  private fun SendEmailAll.getEmailRequest(): SendEmailRequestInput {
+    return SendEmailRequestInput(
+      selectedUcids = selectedUcids,
+      eventType = eventType,
+      checkAll = checkAll,
+      employeeCode = employeeCode,
+      filterType = filterType,
+      messageType = messageType
+    )
+
+  }
+
+  private fun getProfileRequestInput(): LookupRequestInput {
+    return LookupRequestInput(
+      businessUnitId = view.getBusinessId(),
+      lookupTypeId = MOSLConstants.LEADPROFILE,
+      parentId = null,
+      IgnoreBusinessUnit = null
+    )
+  }
+
+  private fun getRequest(): RequestInput {
+    val eventType = if (view.getEventType().equals("Birthday", ignoreCase = true)) {
+      "B"
+    } else {
+      "A"
+    }
+    return RequestInput(
+      dayType = view.getFilterType(),
+      totalCount = "0",
+      pageSize = MOSLConstants.REPORT_PAGE_SIZE,
+      occasion = eventType,
+      calculatedPage = "0",
+      page = "1"
+    )
   }
 
 }

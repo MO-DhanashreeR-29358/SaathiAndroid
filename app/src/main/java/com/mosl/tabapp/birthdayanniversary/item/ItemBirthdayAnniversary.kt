@@ -6,12 +6,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryListData
-import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent
@@ -68,7 +66,7 @@ class ItemBirthdayAnniversary(
 
       //dont open it for belated
       if (!filterType.equals("1", ignoreCase = false)) {
-        ivPopup.setOnClickListener { view ->
+        ivPopup.setOnClickListener {
           Dialog(context).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -80,12 +78,11 @@ class ItemBirthdayAnniversary(
                 )
               )
             setContentView(dialogBinding.root)
-
             window?.setLayout(
               ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
-            window?.setGravity(Gravity.CENTER);
             setCanceledOnTouchOutside(true)
+
             dialogBinding.ivCall.setOnClickListener {
               if (!filterType.equals("3", ignoreCase = true)) {
                 MSFDialog.alertDialog(
@@ -118,7 +115,7 @@ class ItemBirthdayAnniversary(
 
             dialogBinding.ivSms.setOnClickListener {
               if (!filterType.equals("3", ignoreCase = true)) {
-                if (!data.backOfficeMobileNumber.isNullOrBlank()) {
+                if (data.backOfficeMobileNumber.isNotBlank()) {
                   val smsIntent = Intent("android.intent.action.VIEW")
                   smsIntent.data = Uri.parse(
                     "smsto:" + Uri.encode(
@@ -152,15 +149,16 @@ class ItemBirthdayAnniversary(
                   MOSLConstants.EMAIL_MESSAGE_CLIENT, "Yes", "No", true
                 ) { action: Action, _: Array<Any?>? ->
                   if (action == OK) {
-                    val input = SendEmailRequestInput(
-                      selectedUcids = data.ucid,
-                      checkAll = false,
-                      eventType = "$eventType-T",
-                      employeeCode = null,
-                      filterType = null,
-                      messageType = "E"
+                    subject.onNext(
+                      SendEmailAll(
+                        data.ucid,
+                        false,
+                        "$eventType-T",
+                        null,
+                        null,
+                        "E"
+                      )
                     )
-                    subject.onNext(SendEmailAll(input))
                   }
                 }
                 dismiss()

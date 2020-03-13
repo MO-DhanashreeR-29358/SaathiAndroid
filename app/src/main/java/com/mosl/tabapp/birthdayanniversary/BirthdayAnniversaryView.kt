@@ -12,19 +12,23 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
 import io.reactivex.Observable
 
 interface BirthdayAnniversaryView : BaseView {
-  fun getProfileRequestInput(): LookupRequestInput
+  fun getBusinessId(): String
+  fun getFilterType(): String
   fun getEventType(): String
   fun getProfileValue(): ProfileSpinner
   fun onProfileSpinnerSelection(): Observable<Int>
   fun onEventTypeSpinnerSelection(): Observable<Int>
   fun renderProfileSpinner(uiModel: UiModel<List<LookupItemResponse>>)
   fun getDataList(): Observable<GetDataList>
+  fun sendGift(): Observable<SendGift>
+  fun sendEmailAll(): Observable<SendEmailAll>
+  fun onEmailAllClick(): Observable<Unit>
+  fun onButtonTodayClick(): Observable<Unit>
+  fun onButtonBelatedClick(): Observable<Unit>
+  fun onButtonUpcomingClick(): Observable<Unit>
   fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>)
   fun renderGetData()
-  fun onEmailAllClick(): Observable<Unit>
   fun renderEmailAllClick()
-  fun sendEmailAll(): Observable<SendEmailAll>
-  fun sendGift(): Observable<SendGift>
   fun renderSendEmailAll(uiModel: UiModel<String>)
   fun renderSendGift(uiModel: UiModel<String>)
 }

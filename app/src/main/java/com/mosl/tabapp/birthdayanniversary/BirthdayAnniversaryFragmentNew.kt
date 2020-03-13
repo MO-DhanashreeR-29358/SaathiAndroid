@@ -3,8 +3,6 @@ package com.mosl.tabapp.birthdayanniversary
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.RadioGroup
-import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jakewharton.rxbinding3.view.clicks
@@ -17,14 +15,10 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryItemResponse
-import com.mosl.mobile.domain.birthdayanniversary.BirthdayRequestInput
 import com.mosl.mobile.domain.birthdayanniversary.FilterInput
 import com.mosl.mobile.domain.birthdayanniversary.FiltersItemInput
 import com.mosl.mobile.domain.birthdayanniversary.ProfileSpinner
-import com.mosl.mobile.domain.birthdayanniversary.RequestInput
-import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
-import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.GetDataList
@@ -33,8 +27,6 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
 import com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.LEADPROFILE
-import com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentBirthdayAnniversaryNewBinding
 import com.mosl.tabapp.ui.MSFDialog
@@ -52,8 +44,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView,
-  OnCheckedChangeListener {
+class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView {
   lateinit var binding: FragmentBirthdayAnniversaryNewBinding
   @Inject lateinit var presenter: BirthdayAnniversaryPresenter
   private lateinit var section: DataManagerSection
@@ -77,7 +68,6 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   }
 
   private fun setUpView() {
-
     binding.apply {
       val context = requireContext()
       spinnerProfileAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
@@ -89,9 +79,6 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
         context.resources.getStringArray(R.array.BirthdayAniversary)
       val arrEventType = listOf(*eventTypeArray)
       spinnerEventAdapter.setSpinnerData(spEventType, arrEventType)
-
-      segmentedGroup.setOnCheckedChangeListener(this@BirthdayAnniversaryFragmentNew)
-
     }
 
   }
@@ -120,14 +107,12 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
     return binding.spProfile.selectedItem as ProfileSpinner
   }
 
-  override fun getProfileRequestInput(): LookupRequestInput {
-    val businessId = userManager.getUser()!!.currentBusinessProfile.businessUnitId
-    return LookupRequestInput(
-      businessUnitId = businessId!!,
-      lookupTypeId = LEADPROFILE,
-      parentId = null,
-      IgnoreBusinessUnit = null
-    )
+  override fun getBusinessId(): String {
+    return userManager.getUser()?.currentBusinessProfile?.businessUnitId!!
+  }
+
+  override fun getFilterType(): String {
+    return filterType
   }
 
   override fun getEventType(): String {
@@ -161,6 +146,30 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
 
   override fun onEmailAllClick(): Observable<Unit> {
     return binding.ivEmailAll.clicks()
+  }
+
+  override fun onButtonTodayClick(): Observable<Unit> {
+    return binding.btnToday.clicks().map {
+      filterType = "2"
+      dayType = "today"
+      CRMAppUtil.expand(binding.ivEmailAll)
+    }
+  }
+
+  override fun onButtonBelatedClick(): Observable<Unit> {
+    return binding.btnBelated.clicks().map {
+      filterType = "1"
+      dayType = "belated"
+      CRMAppUtil.collapse(binding.ivEmailAll)
+    }
+  }
+
+  override fun onButtonUpcomingClick(): Observable<Unit> {
+    return binding.btnUpcomming.clicks().map {
+      filterType = "3"
+      dayType = "upcoming"
+      CRMAppUtil.collapse(binding.ivEmailAll)
+    }
   }
 
   override fun sendEmailAll(): Observable<SendEmailAll> {
@@ -207,15 +216,16 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
             } else {
               "-T"
             }
-            val input = SendEmailRequestInput(
-              selectedUcids = null,
-              checkAll = true,
-              eventType = eventType + dayTypes,
-              employeeCode = userManager.getUser()?.employeeCode,
-              filterType = filterType,
-              messageType = "E"
+            subject.onNext(
+              SendEmailAll(
+                null,
+                true,
+                eventType + dayTypes,
+                userManager.getUser()?.employeeCode!!,
+                filterType,
+                "E"
+              )
             )
-            subject.onNext(SendEmailAll(input))
           }
         }
       }
@@ -246,7 +256,6 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
 
     }
     uiModel.onSuccess {
-      Timber.d("Success")
       section.clearContent()
       if (it.data.isNotEmpty()) {
         binding.tvNoData.visibility = View.GONE
@@ -284,12 +293,6 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
       profileNameStr
     }
 
-    val eventType = if (getEventType().equals("Birthday", ignoreCase = true)) {
-      "B"
-    } else {
-      "A"
-    }
-
     val filtersItem = FiltersItemInput()
     val valueList = java.util.ArrayList<String>()
     valueList.add(profileId)
@@ -299,51 +302,17 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
     filters.add(filtersItem)
     val filter = FilterInput(filters, "and")
 
-    val request = RequestInput(
-      filterType,
-      "0",
-      REPORT_PAGE_SIZE,
-      eventType,
-      "0",
-      "1"
-    )
     subject.onNext(
       GetDataList(
-        BirthdayRequestInput(
-          filter,
-          request,
-          true
-        )
+        filter, true
       )
     )
 
   }
 
-  override fun onCheckedChanged(p0: RadioGroup?, checkedId: Int) {
-    when (checkedId) {
-      R.id.btnBelated -> {
-        filterType = "1"
-        dayType = "belated"
-        getData()
-        CRMAppUtil.collapse(binding.ivEmailAll)
-      }
-      R.id.btnToday -> {
-        filterType = "2"
-        dayType = "today"
-        getData()
-        CRMAppUtil.expand(binding.ivEmailAll)
-      }
-      R.id.btnUpcomming -> {
-        filterType = "3"
-        dayType = "upcoming"
-        getData()
-        CRMAppUtil.collapse(binding.ivEmailAll)
-      }
-    }
-  }
-
   companion object {
     private const val TODAY_FLAG = "today"
+
   }
 
 }
