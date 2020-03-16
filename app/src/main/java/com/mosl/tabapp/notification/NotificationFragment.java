@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -239,7 +240,7 @@ public class NotificationFragment extends CommonFragment
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public LinearLayout linearLayout;
+            public ConstraintLayout linearLayout;
             TextView timestamp, txtMessage, dateUpper, dateLower;
 
             MyViewHolder(View view) {

@@ -27,6 +27,7 @@ import java.lang.annotation.RetentionPolicy;
     NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT,
     NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL,
     NavigationConstants.NAVIGATE_TO_NOTIFICATION,
+    NavigationConstants.NAVIGATE_TO_NOTIFICATION_NEW,
     NavigationConstants.NAVIGATE_TO_REPORTS,
 	NavigationConstants.NAVIGATE_TO_LEAD_CREATION,
 	NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
@@ -68,4 +69,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_PENDING_FOR_APPROVAL = 28;
     int NAVIGATE_TO_NOTIFICATION = 29;
     int NAVIGATE_TO_REPORTS = 30;
+    int NAVIGATE_TO_NOTIFICATION_NEW = 31;
 }

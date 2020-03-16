@@ -19,6 +19,7 @@ import com.mosl.tabapp.leadViewDetail.document.DocumentFragmentNew
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
+import com.mosl.tabapp.notification.NotificationFragmentKtt
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
@@ -54,7 +55,8 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> SecondLevelReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
-      NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
+      NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragmentKtt()
+      NavigationConstants.NAVIGATE_TO_NOTIFICATION_NEW -> NotificationFragment()
       NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
@@ -90,6 +92,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> true
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> true
       NavigationConstants.NAVIGATE_TO_NOTIFICATION -> true
+      NavigationConstants.NAVIGATE_TO_NOTIFICATION_NEW -> true
       NavigationConstants.NAVIGATE_TO_REPORTS -> true
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
