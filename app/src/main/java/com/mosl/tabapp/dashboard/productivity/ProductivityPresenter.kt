@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.productivity.ProductivityAdditionalParametersInput
 import com.mosl.mobile.domain.productivity.ProductivityInput
 import com.mosl.mobile.domain.productivity.ProductivityRepository
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.dashboard.productivity.ProductivityFragment.Companion.PRODUCTIVITY
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -28,8 +29,8 @@ class ProductivityPresenter @Inject constructor(
       .subscribe(view::renderData)
       .addTo(disposable)
 
-    view.onNavigateEvent().subscribe {
-      navigationFlow(it)
+    view.onShowMoreClick().subscribe {
+      navigationFlow()
     }.addTo(disposable)
   }
 
@@ -45,10 +46,12 @@ class ProductivityPresenter @Inject constructor(
     )
   }
 
-  private fun navigationFlow(data: MutableMap<String, String>) {
+  private fun navigationFlow() {
+    val data: MutableMap<String, String> = mutableMapOf()
+    data.putAll(view.getAdditionalParameterMap())
     val args = Bundle()
     args.putString(MOSLConstants.SYSTEM_NAME, view.getWidgetSystemsName())
-    args.putString(MOSLConstants.LABEL, MOSLConstants.BUSINESS_SNAPSHOT_TITLE)
+    args.putString(MOSLConstants.LABEL, PRODUCTIVITY)
     args.putSerializable(MOSLConstants.MAP, data as Serializable?)
     navigator.openPage(
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,

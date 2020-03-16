@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.productivity.ProductivityData
 import com.mosl.mobile.domain.productivity.ProductivityInput
 import com.mosl.mobile.domain.productivity.ProductivityRepository
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.shared.util.toRemoveDecimals
+import com.mosl.shared.util.toConvertDecimals
 import io.reactivex.Observable
 import org.json.JSONObject
 import javax.inject.Inject
@@ -60,7 +60,7 @@ class ProductivityRepositoryImpl @Inject constructor(
     list.add(values[0])
     for (i in 1 until values.size) {
       if (values[i] != "null" && values[i] != "")
-        list.add(values[i].toDouble().toRemoveDecimals())
+        list.add(values[i].toConvertDecimals())
       else if (values[i] == "null")
         list.add(values[i].replace("null", ""))
       else list.add(values[i])

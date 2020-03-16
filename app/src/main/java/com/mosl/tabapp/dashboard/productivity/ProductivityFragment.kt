@@ -2,6 +2,7 @@ package com.mosl.tabapp.dashboard.productivity
 
 import android.os.Bundle
 import android.view.View
+import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
@@ -63,20 +64,24 @@ class ProductivityFragment : CommonFragment(), productivityView {
     val mfAdapter =
       requireContext().createRowAdapter<ProductivityTableRow>(dynamicHeaderRow)
         .apply {
-          viewProvider.rowClickListener = { row, view ->
-            val reportData = tableRowAdapter.getItem(row).data
-            navigateEvent.onNext(getAdditionalParameterMap(reportData.data[0]))
-          }
+//          viewProvider.rowClickListener = { row, view ->
+//            val reportData = tableRowAdapter.getItem(row).data
+//            navigateEvent.onNext(getAdditionalParameterMap(reportData.data[0]))
+//          }
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
+
+    if (dashboardModel.dashboardFor.equals(TEAM, ignoreCase = true)) {
+      binding.tvShowMore.setVisibility(View.VISIBLE)
+    }
   }
 
   override fun getWidgetSystemsName(): String? {
     return model.systemName
   }
 
-  override fun getAdditionalParameterMap(rowData: String): MutableMap<String, String> {
+  override fun getAdditionalParameterMap(): MutableMap<String, String> {
     val additionalParameterMap: MutableMap<String, String> = HashMap()
     additionalParameterMap[SELF_KEY] = dashboardModel.dashboardFor
     return additionalParameterMap
@@ -84,6 +89,10 @@ class ProductivityFragment : CommonFragment(), productivityView {
 
   override fun onNavigateEvent(): Observable<MutableMap<String, String>> {
     return navigateEvent.ofType()
+  }
+
+  override fun onShowMoreClick(): Observable<Unit> {
+    return binding.tvShowMore.clicks()
   }
 
   override fun renderData(uiModel: UiModel<ProductivityCombo>) {
@@ -106,4 +115,10 @@ class ProductivityFragment : CommonFragment(), productivityView {
       )
     }
   }
+
+  companion object {
+    const val TEAM = "TEAM"
+    const val PRODUCTIVITY = "Productivity"
+  }
+
 }

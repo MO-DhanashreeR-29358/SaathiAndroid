@@ -8,7 +8,8 @@ import io.reactivex.Observable
 interface productivityView : BaseView {
 
   fun onNavigateEvent(): Observable<MutableMap<String, String>>
+  fun onShowMoreClick(): Observable<Unit>
   fun getWidgetSystemsName(): String?
-  fun getAdditionalParameterMap(rowData: String): Map<String, String>
+  fun getAdditionalParameterMap(): Map<String, String>
   fun renderData(uiModel: UiModel<ProductivityCombo>)
 }
