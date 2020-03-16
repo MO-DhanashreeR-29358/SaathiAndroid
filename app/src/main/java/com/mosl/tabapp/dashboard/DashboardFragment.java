@@ -76,6 +76,7 @@ import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
+import com.mosl.tabapp.dashboard.productivity.ProductivityFragment;
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment;
 import com.mosl.tabapp.dashboard.target.TargetFragment;
 import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment;

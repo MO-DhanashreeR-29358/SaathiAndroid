@@ -24,7 +24,7 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
 
   override fun getDashboardData(request: BusinessSnapInput): Observable<BusinessSnapshotCombo> {
     val leadRequest = request.transformDashboardRequest()
-    return api.getDashboardDataNew(leadRequest).map { response ->
+    return api.getBusinessSnapshotAdv(leadRequest).map { response ->
       val jsonObject = JSONObject(response)
       val jsonArray = if (jsonObject.has("Response")) {
         jsonObject.getJSONObject("Response").getJSONArray("Table")

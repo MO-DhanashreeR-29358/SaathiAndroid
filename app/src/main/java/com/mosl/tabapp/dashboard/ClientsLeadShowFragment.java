@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -24,9 +23,7 @@ import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,8 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.COL_FILTER;
@@ -230,7 +226,7 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
             CommonFragment leadsFragment;
             if (this.getArguments().
                     getString(TYPESOFLEAD).equalsIgnoreCase(LEAD)) {
-                leadsFragment = new ClientsLeadsFragment();
+              leadsFragment = new ClientsLeadsFragmentOld();
             } else {
                 leadsFragment = new LeadsFragment();
                 args.putInt(FLT_BANKNAME, this.getArguments().getInt(FLT_BANKNAME));

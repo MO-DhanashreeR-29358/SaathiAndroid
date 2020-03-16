@@ -39,7 +39,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
  * Created by Sanket Gurav on 7/5/2017.
  */
 
-public class ClientsTradedYesterdayFragment extends CommonFragment
+public class ClientsTradedYesterdayFragmentOld extends CommonFragment
         implements View.OnClickListener {
     private DashboardModel dashboardModel;
     private String widgetSystemName;
@@ -66,8 +66,8 @@ public class ClientsTradedYesterdayFragment extends CommonFragment
         return R.layout.frag_client_traded;
     }
 
-    public static ClientsTradedYesterdayFragment newInstance(Context context) {
-        ClientsTradedYesterdayFragment fragment = new ClientsTradedYesterdayFragment();
+  public static ClientsTradedYesterdayFragmentOld newInstance(Context context) {
+    ClientsTradedYesterdayFragmentOld fragment = new ClientsTradedYesterdayFragmentOld();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
