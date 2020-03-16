@@ -11,6 +11,8 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryModule
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.calendar.CalendarFragmentNew
+import com.mosl.tabapp.calendar.CalendarModule
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
@@ -85,6 +87,9 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector
   fun provideCalendarFragmentFactory(): CalendarFragment
+
+  @ContributesAndroidInjector(modules = [CalendarModule::class])
+  fun provideCalendarFragmentNewFactory(): CalendarFragmentNew
 
   @ContributesAndroidInjector
   fun providePendingApprovalFragmentFactory(): PendingApprovalFragment

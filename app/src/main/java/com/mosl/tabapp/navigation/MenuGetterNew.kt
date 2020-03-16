@@ -7,6 +7,7 @@ import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.calendar.CalendarFragmentNew
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
@@ -37,7 +38,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
-      NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
+      NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragmentNew()
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragmentNew()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
