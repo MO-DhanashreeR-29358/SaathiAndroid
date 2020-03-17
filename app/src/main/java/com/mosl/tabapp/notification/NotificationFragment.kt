@@ -91,6 +91,7 @@ class NotificationFragment : CommonFragment(), NotificationView {
   }
 
   override fun render(uiModel: UiModel<List<NotificationResponseData>>) {
+    section.toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       section.showError(it)
     }
