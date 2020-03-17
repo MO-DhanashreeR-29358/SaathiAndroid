@@ -53,7 +53,6 @@ import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
-import com.mosl.tabapp.notification.NotificationFragmentKtt
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
@@ -161,11 +160,8 @@ interface FragmentProvider {
   @ContributesAndroidInjector
   fun provideTrendsFragmentFactory(): TrendsTabFragmentOld
 
-  @ContributesAndroidInjector
-  fun provideNotificationFragmentFactory(): NotificationFragment
-
   @ContributesAndroidInjector(modules = [NotificationModule::class])
-  fun provideNotificationFragmentKttFactory(): NotificationFragmentKtt
+  fun provideNotificationFragmentKttFactory(): NotificationFragment
 
   @ContributesAndroidInjector
   fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment

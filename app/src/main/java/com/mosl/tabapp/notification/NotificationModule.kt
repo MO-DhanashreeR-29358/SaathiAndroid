@@ -6,5 +6,5 @@ import dagger.Module
 @Module
 abstract class NotificationModule {
     @Binds
-    abstract fun bindLeadViewActivitiesView(fragment: NotificationFragmentKtt): NotificationView
+    abstract fun bindLeadViewActivitiesView(fragment: NotificationFragment): NotificationView
 }

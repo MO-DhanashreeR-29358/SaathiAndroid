@@ -9,11 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.notification.NotificationRequest;
@@ -28,15 +26,12 @@ import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.model.NotificationModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.BUSINESS;
@@ -50,7 +45,7 @@ import static com.mosl.tabapp.model.AccountDetails.isAufsb;
  * Created by raju on 4/20/2017.
  */
 
-public class NotificationFragment extends CommonFragment
+public class NotificationFragmentOld extends CommonFragment
         implements AdapterView.OnItemSelectedListener {
     private RecyclerView recyclerView;
     private final ArrayList<NotificationModel> notificationList = new ArrayList<>();
@@ -83,7 +78,7 @@ public class NotificationFragment extends CommonFragment
         spCategory.setAdapter(arrAdapCategory);
         AdapterUtils.setSpinnerData(arrAdapCategory, spCategory, arrCategory);
 
-        spCategory.setOnItemSelectedListener(NotificationFragment.this);
+        spCategory.setOnItemSelectedListener(NotificationFragmentOld.this);
 
         if (isAufsb()) {
             spCategory.setVisibility(View.GONE);

@@ -56,7 +56,7 @@ interface RepositoryAliasProviders {
   fun provideTrendsRepositoryRepository(repository: TrendsRepositoryImpl): TrendsRepository
 
   @Binds
-  abstract fun bindLeadViewDetailActivitiesRepository(repository: NotificationRepositoryImpl): NotificationRepository
+  abstract fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository
 
   @Binds
   abstract fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository

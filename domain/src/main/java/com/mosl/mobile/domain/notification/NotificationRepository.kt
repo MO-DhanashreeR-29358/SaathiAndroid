@@ -3,5 +3,5 @@ package com.mosl.mobile.domain.notification
 import io.reactivex.Observable
 
 interface NotificationRepository {
-  fun getNotificationData(request: NotificationRequestInput): Observable<List<NotificationResponseData>>
+  fun getNotificationData(notificationRequestInput: NotificationRequestInput): Observable<List<NotificationResponseData>>
 }

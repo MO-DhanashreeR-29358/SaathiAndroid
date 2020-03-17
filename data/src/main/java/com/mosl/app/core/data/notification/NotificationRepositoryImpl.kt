@@ -11,12 +11,12 @@ class NotificationRepositoryImpl @Inject constructor(
   val saathiApi: SaathiApi
 ) : NotificationRepository {
 
-  override fun getNotificationData(request: NotificationRequestInput): Observable<List<NotificationResponseData>> {
+  override fun getNotificationData(notificationRequestInput: NotificationRequestInput): Observable<List<NotificationResponseData>> {
 
-    val rewques = request.responseClientDetailItemTransform()
+    val request = notificationRequestInput.requestTransform()
 
-    return saathiApi.getNotifications(rewques).map {
-      it.responseNotificationDataTransform()
+    return saathiApi.getNotifications(request).map {
+      it.responseTransform()
     }
   }
 }

@@ -9,43 +9,54 @@ import com.mosl.shared.util.Utility.stringOrEmpty
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.NotificationListBinding
 import com.xwray.groupie.databinding.BindableItem
-import java.util.*
+import java.util.Date
 
 class NotificationItem(
-    internal val model: NotificationResponseData
+  internal val model: NotificationResponseData
 ) : BindableItem<NotificationListBinding>() {
 
-    override fun getLayout(): Int {
-        return R.layout.notification_list
+  override fun getLayout(): Int {
+    return R.layout.notification_list
+  }
+
+  override fun bind(
+    viewBinding: NotificationListBinding,
+    position: Int
+  ) {
+    viewBinding.apply {
+
+      if (position % 2 == 1) {
+        linearLayoutOfListItem.setBackgroundColor(Color.parseColor("#FFFFFF"))
+      } else {
+        linearLayoutOfListItem.setBackgroundColor(Color.parseColor("#F5F5F5"))
+      }
+
+      val creationDate: Date = DATE_TIME_UTC.parseOrDefault(stringOrEmpty(model.creationDate))
+      val (original, day, month, time) = creationDate.toNewsDate()
+
+      txtMessage.text = model.message
+      timestamp.text = time
+      dateUpper.text = day
+      dateLower.text = month
     }
+  }
 
-    override fun bind(
-        viewBinding: NotificationListBinding,
-        position: Int
-    ) {
-        viewBinding.apply {
+  fun getAdditionalData(): String {
+    return model.additionalData
+  }
 
-            if (position % 2 == 1) {
-                linearLayoutOfListItem.setBackgroundColor(Color.parseColor("#FFFFFF"))
-            } else {
-                linearLayoutOfListItem.setBackgroundColor(Color.parseColor("#F5F5F5"))
-            }
+  override fun hashCode(): Int {
+    return model.hashCode()
+  }
 
-            val creationDate: Date = DATE_TIME_UTC.parseOrDefault(stringOrEmpty(model.creationDate))
-            val (original, day, month, time) = creationDate.toNewsDate()
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
 
-            txtMessage.text = model.message
-            timestamp.text = time
-            dateUpper.text = day
-            dateLower.text = month
-        }
-    }
+    other as NotificationItem
 
-    fun getAdditionalData(): String {
-        return model.additionalData
-    }
+    if (model != other.model) return false
 
-    override fun hashCode(): Int {
-        return model.hashCode()
-    }
+    return true
+  }
 }
