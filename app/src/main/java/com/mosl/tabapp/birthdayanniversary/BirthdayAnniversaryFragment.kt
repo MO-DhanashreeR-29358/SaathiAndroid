@@ -236,7 +236,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
   }
 
   override fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>) {
-    toggleProgress(uiModel.inProgress)
+    section.toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       section.showError(it)
       dataFoundFlag = false

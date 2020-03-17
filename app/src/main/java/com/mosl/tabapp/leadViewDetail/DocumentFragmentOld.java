@@ -28,13 +28,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest;
 import com.mosl.saathi.api.model.documents.DocumentsRequest;
@@ -49,9 +47,7 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.DocumentModel;
 import com.mosl.tabapp.ui.MSFDialog;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -65,8 +61,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static android.app.Activity.RESULT_OK;
@@ -85,7 +80,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.SOME_SERVER_ERROR_OCCURRED
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class DocumentFragment extends CommonFragment implements View.OnClickListener {
+public class DocumentFragmentOld extends CommonFragment implements View.OnClickListener {
 
 	private static final int MY_PERMISSIONS_REQUEST_STORAGE_ACCESS = 31;
 	private static final String[] ALLOWED_FILE_TYPE = {

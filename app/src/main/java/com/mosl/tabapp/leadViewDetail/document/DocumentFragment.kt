@@ -62,7 +62,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback {
+class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
   lateinit var binding: FragmentDocumentNewBinding
   @Inject lateinit var imageUploadHelper: ImageUploadHelper
   private lateinit var section: DataManagerSection
@@ -170,7 +170,7 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
   }
 
   override fun renderUploadDocument(uiModel: UiModel<UploadDocumentData>) {
-    section.toggleProgress(uiModel.inProgress)
+    toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
@@ -229,9 +229,9 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
   }
 
   override fun renderLeadDocuments(uiModel: UiModel<List<LeadDocumentsItemData>>) {
-    toggleProgress(uiModel.inProgress)
+    section.toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
-      showOnFailurePopup(it)
+      section.showError(it)
     }
 
     uiModel.onSuccess { dataList ->

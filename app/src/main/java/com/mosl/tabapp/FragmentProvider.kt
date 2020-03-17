@@ -41,7 +41,6 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
@@ -78,9 +77,6 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector
   fun provideLeadViewDetailFactory(): LeadViewDetailFragment
-
-  @ContributesAndroidInjector
-  fun provideDocumentFactory(): DocumentFragment
 
   @ContributesAndroidInjector
   fun provideDashboardFragmentFactory(): DashboardFragment

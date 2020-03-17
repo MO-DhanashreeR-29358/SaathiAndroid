@@ -10,7 +10,7 @@ import dagger.Provides
 @Module
 abstract class DocumentModule {
   @Binds
-  abstract fun bindDocumentView(fragment: DocumentFragmentNew): DocumentView
+  abstract fun bindDocumentView(fragment: DocumentFragment): DocumentView
 
   @Binds
   abstract fun bindDocumentRepository(repository: DocumentRepositoryImpl): DocumentRepository
@@ -19,7 +19,7 @@ abstract class DocumentModule {
   companion object {
     @Provides @JvmStatic
     fun provideImageUploadHelper(
-      fragment: DocumentFragmentNew
+      fragment: DocumentFragment
     ): ImageUploadHelper {
       return ImageUploadHelper(fragment)
     }
