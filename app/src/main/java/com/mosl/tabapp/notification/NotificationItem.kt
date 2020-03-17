@@ -34,16 +34,18 @@ class NotificationItem(
             val creationDate: Date = DATE_TIME_UTC.parseOrDefault(stringOrEmpty(model.creationDate))
             val (original, day, month, time) = creationDate.toNewsDate()
 
-            txtMessage.text = (model.message)
-            timestamp.text = (time)
-            dateUpper.text = (day)
-            dateLower.text = (month)
-//            linearLayoutOfListItem.setOnClickListener(View.OnClickListener { navigateTo(model.getAdditionalData()) })
+            txtMessage.text = model.message
+            timestamp.text = time
+            dateUpper.text = day
+            dateLower.text = month
         }
+    }
+
+    fun getAdditionalData(): String {
+        return model.additionalData
     }
 
     override fun hashCode(): Int {
         return model.hashCode()
     }
-
 }

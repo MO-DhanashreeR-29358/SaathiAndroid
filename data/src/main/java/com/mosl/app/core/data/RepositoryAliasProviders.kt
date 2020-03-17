@@ -4,6 +4,7 @@ import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
+import com.mosl.app.core.data.notification.NotificationRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
@@ -11,6 +12,7 @@ import com.mosl.app.core.data.trends.TrendsRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
+import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
@@ -45,4 +47,7 @@ interface RepositoryAliasProviders {
 
   @Binds
   fun provideTrendsRepositoryRepository(repository: TrendsRepositoryImpl): TrendsRepository
+
+  @Binds
+  abstract fun bindLeadViewDetailActivitiesRepository(repository: NotificationRepositoryImpl): NotificationRepository
 }

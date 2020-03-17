@@ -1,4 +1,5 @@
 package com.mosl.tabapp.notification
 
-class NotificationUiEvent {
+sealed class NotificationUiEvent {
+    data class ItemClick(@JvmField val additionalData: String) : NotificationUiEvent()
 }
