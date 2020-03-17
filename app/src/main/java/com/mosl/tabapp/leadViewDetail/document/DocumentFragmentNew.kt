@@ -170,7 +170,7 @@ class DocumentFragmentNew : CommonFragment(), DocumentView, ImageUploadCallback 
   }
 
   override fun renderUploadDocument(uiModel: UiModel<UploadDocumentData>) {
-    toggleProgress(uiModel.inProgress)
+    section.toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       showOnFailurePopup(it)
     }

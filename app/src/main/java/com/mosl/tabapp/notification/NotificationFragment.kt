@@ -91,13 +91,11 @@ class NotificationFragment : CommonFragment(), NotificationView {
   }
 
   override fun render(uiModel: UiModel<List<NotificationResponseData>>) {
-
-    section.clearContent()
-
     uiModel.onFailure {
       section.showError(it)
     }
     uiModel.onSuccess {
+      section.clearContent()
       if (it.isEmpty()) {
         section.showEmptyView(ErrorModel(ERROR_MSG, NO_DATA_ERROR))
       } else {

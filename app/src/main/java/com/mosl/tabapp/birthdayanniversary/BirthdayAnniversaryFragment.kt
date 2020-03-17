@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
+import com.mosl.app.core.error.ErrorModel
+import com.mosl.app.core.error.ErrorState.NO_DATA_ERROR
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -238,12 +240,10 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
     uiModel.onFailure {
       section.showError(it)
       dataFoundFlag = false
-
     }
     uiModel.onSuccess {
       section.clearContent()
       if (it.data.isNotEmpty()) {
-        binding.tvNoData.visibility = View.GONE
         section.setContent(it.data.map { data ->
           ItemBirthdayAnniversary(
             data,
@@ -255,13 +255,25 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
         })
         dataFoundFlag = true
       } else {
-        binding.tvNoData.visibility = View.VISIBLE
         if (getEventType().equals(KEY_BIRTHDAY, ignoreCase = true)) {
-          binding.tvNoData.text =
-            String.format(resources.getString(string.txt_no_clients_having_birthday), dayType)
+          section.showEmptyView(
+            ErrorModel(
+              String.format(
+                resources.getString(string.txt_no_clients_having_birthday),
+                dayType
+              ), NO_DATA_ERROR
+            )
+          )
         } else {
-          binding.tvNoData.text =
-            String.format(getString(string.txt_no_clients_having_anniversary), dayType)
+          section.showEmptyView(
+            ErrorModel(
+              String.format(
+                resources.getString(string.txt_no_clients_having_anniversary),
+                dayType
+              ), NO_DATA_ERROR
+            )
+          )
+
         }
       }
 
