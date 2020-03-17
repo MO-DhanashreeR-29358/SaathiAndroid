@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:text="@string/SHOW_MORE"
+                    android:text="@string/txt_lable_show_more"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/txt_size" />
 

@@ -16,10 +16,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryData;
@@ -40,16 +38,13 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.BirthdayAnniversaryModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import info.hoang8f.android.segmented.SegmentedGroup;
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import info.hoang8f.android.segmented.SegmentedGroup;
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -67,9 +62,9 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by Vijay on 08/03/2017.
  */
 
-public class BirthdayAnniversaryFragment extends CommonFragment
+public class BirthdayAnniversaryFragmentOld extends CommonFragment
         implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
-    private final static String TAG = BirthdayAnniversaryFragment.class.getSimpleName();
+    private final static String TAG = BirthdayAnniversaryFragmentOld.class.getSimpleName();
     private static String TODAY_FLAG = "today";
     private RecyclerView rvBirthdayAnniversary;
     private Spinner spProfile, spEventType;
