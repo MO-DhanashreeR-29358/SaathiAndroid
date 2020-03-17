@@ -11,13 +11,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -48,19 +46,16 @@ import com.mosl.tabapp.model.dashboard.DashboardGroupModel;
 import com.mosl.tabapp.model.dashboard.DashboardModel;
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL;
@@ -74,7 +69,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by raju on 2/27/2017.
  */
 
-public class TrendsTabFragment extends CommonFragment {
+public class TrendsTabFragmentOld extends CommonFragment {
     private String[] mMonths;
 
     private DashboardModel dashboardModel;

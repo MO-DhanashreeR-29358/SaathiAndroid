@@ -12,10 +12,10 @@ import android.widget.Toast
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryListData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.FILTER_TYPE_ONE
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.FILTER_TYPE_THREE
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_ANNIVERSARY
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_BIRTHDAY
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.FILTER_TYPE_ONE
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.FILTER_TYPE_THREE
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_ANNIVERSARY
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_BIRTHDAY
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift

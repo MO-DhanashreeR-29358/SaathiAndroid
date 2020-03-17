@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
-
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.dashboard.CommonRequest;
@@ -27,16 +26,13 @@ import com.mosl.tabapp.model.dashboard.WidgetFilterModel;
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -57,7 +53,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.YTD_CNT;
  * Created by raju on 2/14/2017.
  */
 
-public class ClientsFragment extends CommonFragment {
+public class ClientsFragmentOld extends CommonFragment {
     private Spinner spClients;
     private DashboardModel dashboardModel;
     private String widgetSystemName;

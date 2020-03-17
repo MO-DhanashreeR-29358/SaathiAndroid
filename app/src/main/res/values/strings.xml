@@ -24,7 +24,7 @@
     <string name="MTD_COUNT">MTD\nCount</string>
     <string name="MTD">MTD</string>
     <string name="PARAMETERS">Parameters</string>
-    <string name="SHOW_MORE">Show More</string>
+    <string name="txt_lable_show_more">Show More</string>
     <string name="YTD_COUNT">YTD\nCount</string>
     <string name="YTD">YTD</string>
     <string name="rupee_symbol">\u20B9</string>
@@ -301,6 +301,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_lable_no_clients_having_birthday_today">No clients having Birthday today</string>
 
 
 </resources>

@@ -2,17 +2,21 @@ package com.mosl.app.core.data
 
 import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
+import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.notification.NotificationRepositoryImpl
+import com.mosl.app.core.data.productivity.ProductivityRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.app.core.data.trends.TrendsRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
+import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.notification.NotificationRepository
+import com.mosl.mobile.domain.productivity.ProductivityRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
@@ -37,6 +41,9 @@ interface RepositoryAliasProviders {
   fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
 
   @Binds
+  fun provideProvideRepository(repository: ProductivityRepositoryImpl): ProductivityRepository
+
+  @Binds
   fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
 
   @Binds
@@ -50,4 +57,7 @@ interface RepositoryAliasProviders {
 
   @Binds
   abstract fun bindLeadViewDetailActivitiesRepository(repository: NotificationRepositoryImpl): NotificationRepository
+
+  @Binds
+  abstract fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
 }

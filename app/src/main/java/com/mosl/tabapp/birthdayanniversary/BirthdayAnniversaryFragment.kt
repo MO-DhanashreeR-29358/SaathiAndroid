@@ -28,7 +28,7 @@ import com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.FragmentBirthdayAnniversaryNewBinding
+import com.mosl.tabapp.databinding.FragmentBirthdayAnniversaryBinding
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
@@ -43,8 +43,8 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView {
-  lateinit var binding: FragmentBirthdayAnniversaryNewBinding
+class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
+  lateinit var binding: FragmentBirthdayAnniversaryBinding
   @Inject lateinit var presenter: BirthdayAnniversaryPresenter
   private lateinit var section: DataManagerSection
   private lateinit var spinnerProfileAdapter: ArrayAdapter<ProfileSpinner>
@@ -54,12 +54,12 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   private var dayType = TODAY_FLAG
   private var dataFoundFlag = false
   override fun getLayout(): Int {
-    return R.layout.fragment_birthday_anniversary_new
+    return R.layout.fragment_birthday_anniversary
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragmentBirthdayAnniversaryNewBinding.bind(view)
+    binding = FragmentBirthdayAnniversaryBinding.bind(view)
     setUpRecyclerView()
     setUpView()
     presenter.start()
@@ -149,7 +149,7 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
 
   override fun onButtonTodayClick(): Observable<Unit> {
     return binding.btnToday.clicks().map {
-      filterType = "2"
+      filterType = FILTER_TYPE_TWO
       dayType = TODAY_FLAG
       CRMAppUtil.expand(binding.ivEmailAll)
     }
@@ -236,7 +236,7 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
   override fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
-      showOnFailurePopup(it)
+      section.showError(it)
       dataFoundFlag = false
 
     }
@@ -256,7 +256,7 @@ class BirthdayAnniversaryFragmentNew : CommonFragment(), BirthdayAnniversaryView
         dataFoundFlag = true
       } else {
         binding.tvNoData.visibility = View.VISIBLE
-        if (getEventType().equals("Birthday", ignoreCase = true)) {
+        if (getEventType().equals(KEY_BIRTHDAY, ignoreCase = true)) {
           binding.tvNoData.text =
             String.format(resources.getString(string.txt_no_clients_having_birthday), dayType)
         } else {

@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -22,7 +21,6 @@ import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -55,16 +53,13 @@ import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.model.dashboard.WidgetType;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -82,7 +77,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE;
  * Created by raju on 2/16/2017.
  */
 
-public class TargetAchievementFragment extends CommonFragment implements View.OnClickListener {
+public class TargetAchievementFragmentOld extends CommonFragment implements View.OnClickListener {
 
     private TextView txtRightValue, txtRightStr, txtCenterValue, txtCenterStr, txtLeftStr,
             txtLeftValue, tvUniqueLeads, tvError;

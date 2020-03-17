@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -23,9 +22,7 @@ import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -33,8 +30,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -49,7 +45,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class ProductivityFragment extends CommonFragment implements View.OnClickListener {
+public class ProductivityFragmentOld extends CommonFragment implements View.OnClickListener {
 
     private DashboardModel dashboardModel;
     private String widgetSystemName;
@@ -68,7 +64,7 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
 
     @Override
     protected int getLayout() {
-        return R.layout.frag_productivity;
+      return R.layout.frag_productivity_old;
     }
 
     private void setUpView(View productivityView) {
