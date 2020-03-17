@@ -308,7 +308,7 @@ public class LeadProfilingFragment extends CommonFragment
                 List<View> innerList = new ArrayList<>();
                 LinearLayout llSegment = new LinearLayout(getActivity());
                 llSegment.setOrientation(LinearLayout.VERTICAL);
-                llSegment.setBackgroundResource(R.color.dashbord_background);
+                llSegment.setBackgroundResource(R.color.dashboard_background);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         DrawerLayout.LayoutParams.WRAP_CONTENT

@@ -126,7 +126,7 @@
     <color name="market_header_text">#54534F</color>
     <color name="market_view">#54534F</color>
     <color name="market_text">#B49022</color>
-     <color name="dashbord_background">#deddde</color>
+     <color name="dashboard_background">#deddde</color>
      <color name="txt_dselect">#5f5856</color>
     <!--Contest And Reward-->
     <color name="contest_background">#EFE3AF</color>

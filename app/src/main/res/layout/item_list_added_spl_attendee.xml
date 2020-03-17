@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:background="@color/dashbord_background">
+            android:background="@color/dashboard_background">
 
         </View>
     </LinearLayout>

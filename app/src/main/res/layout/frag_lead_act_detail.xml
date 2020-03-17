@@ -4,7 +4,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dashbord_background">
+        android:background="@color/dashboard_background">
 
         <LinearLayout
             android:layout_width="match_parent"

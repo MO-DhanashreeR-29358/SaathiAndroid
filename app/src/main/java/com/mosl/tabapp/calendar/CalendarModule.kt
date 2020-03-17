@@ -1,7 +1,6 @@
 package com.mosl.tabapp.calendar
-
-import com.mosl.app.core.data.calendar.CalendarRepositoryImpl
-import com.mosl.mobile.domain.calendar.CalendarRepository
+import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragmentNew
+import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListView
 import dagger.Binds
 import dagger.Module
 
@@ -11,5 +10,5 @@ abstract class CalendarModule {
   abstract fun bindsCalendarFragmentView(fragment: CalendarFragmentNew): CalendarFragmentView
 
   @Binds
-  abstract fun bindsCalendarRepository(repository: CalendarRepositoryImpl): CalendarRepository
+  abstract fun bindsCalendarAppointsListFragmentView(fragment: CalendarAppointsListFragmentNew): CalendarAppointsListView
 }

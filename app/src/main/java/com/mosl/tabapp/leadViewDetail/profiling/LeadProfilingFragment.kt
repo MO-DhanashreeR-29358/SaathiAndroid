@@ -297,7 +297,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         val innerList = ArrayList<View>()
         val llSegment = LinearLayout(activity)
         llSegment.orientation = LinearLayout.VERTICAL
-        llSegment.setBackgroundResource(R.color.dashbord_background)
+        llSegment.setBackgroundResource(R.color.dashboard_background)
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             DrawerLayout.LayoutParams.WRAP_CONTENT

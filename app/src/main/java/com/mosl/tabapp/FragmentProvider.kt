@@ -13,6 +13,7 @@ import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarFragmentNew
 import com.mosl.tabapp.calendar.CalendarModule
+import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragmentNew
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.BusSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.BusinessSnapshotFragment
@@ -90,6 +91,9 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [CalendarModule::class])
   fun provideCalendarFragmentNewFactory(): CalendarFragmentNew
+
+  @ContributesAndroidInjector(modules = [CalendarModule::class])
+  fun provideCalendarAppointsListFragmentNewFactory(): CalendarAppointsListFragmentNew
 
   @ContributesAndroidInjector
   fun providePendingApprovalFragmentFactory(): PendingApprovalFragment
@@ -198,9 +202,6 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector
   fun provideSMTFragmentFactory(): SMTFragment
-
-  @ContributesAndroidInjector
-  fun provideCalendarAppointsListFactory(): CalendarAppointsListFragment
 
   @ContributesAndroidInjector
   fun provideBankMeetingFactory(): BankMeetingFragment

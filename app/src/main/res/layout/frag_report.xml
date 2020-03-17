@@ -32,7 +32,7 @@
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:background="@color/dashbord_background"
+        android:background="@color/dashboard_background"
         android:orientation="vertical">
 
         <LinearLayout
@@ -93,7 +93,7 @@
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_5sdp"
-        android:background="@color/dashbord_background"
+        android:background="@color/dashboard_background"
         android:orientation="vertical">
 
         <LinearLayout

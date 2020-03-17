@@ -165,7 +165,6 @@
     </string-array>
 
 
-
     <string-array name="SelectQuarter">
         <item>Q1</item>
         <item>Q2</item>
@@ -298,6 +297,11 @@
     <string name="txt_label_total">Total</string>
     <string name="saathi_init">saathi_init</string>
     <string name="txt_lable_title">Title</string>
+    <string name="txt_label_lead_or_client_id">Lead ID/Client Code</string>
+    <string name="txt_label_name">Name</string>
+    <string name="txt_label_date">Date</string>
+    <string name="txt_label_time">Time</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

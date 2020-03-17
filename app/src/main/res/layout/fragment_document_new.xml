@@ -5,14 +5,14 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dashbord_background"
+        android:background="@color/dashboard_background"
         android:fillViewport="true"
         android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/dashbord_background">
+            android:background="@color/dashboard_background">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvDocumentList"

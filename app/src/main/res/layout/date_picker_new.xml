@@ -1,0 +1,126 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#BFffffff"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_15sdp"
+            android:theme="@style/DateDialogCustom"
+            >
+
+            <ImageButton
+                android:id="@+id/ibtnClose"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/close_bussiness"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription"
+                />
+
+            <View
+                android:id="@+id/linearLayoutOfFromDate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/date_picker_border"
+                app:layout_constraintBottom_toBottomOf="@+id/datePickerFromDate"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayoutOfToDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ibtnClose"
+                />
+
+            <TextView
+                android:id="@+id/tv_from_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="From Date"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayoutOfFromDate"
+                app:layout_constraintStart_toStartOf="@+id/linearLayoutOfFromDate"
+                app:layout_constraintTop_toTopOf="@+id/linearLayoutOfFromDate"
+                />
+
+            <DatePicker
+                android:id="@+id/datePickerFromDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayoutOfFromDate"
+                app:layout_constraintStart_toStartOf="@+id/linearLayoutOfFromDate"
+                app:layout_constraintTop_toBottomOf="@+id/tv_from_date"
+                />
+
+
+            <View
+                android:id="@+id/linearLayoutOfToDate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/date_picker_border"
+                app:layout_constraintBottom_toBottomOf="@+id/timePicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/datePickerFromDate"
+                />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Time"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayoutOfToDate"
+                app:layout_constraintStart_toStartOf="@+id/linearLayoutOfToDate"
+                app:layout_constraintTop_toTopOf="@+id/linearLayoutOfToDate"
+                />
+
+            <DatePicker
+                android:id="@+id/timePicker"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayoutOfToDate"
+                app:layout_constraintStart_toStartOf="@+id/linearLayoutOfToDate"
+                app:layout_constraintTop_toBottomOf="@+id/tv_time"
+
+                />
+
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/button_state_bg"
+                android:gravity="center"
+                android:padding="@dimen/_8sdp"
+                android:text="Submit"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timePicker"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </ScrollView>
+</layout>

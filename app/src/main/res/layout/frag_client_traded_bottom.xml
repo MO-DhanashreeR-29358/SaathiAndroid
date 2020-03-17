@@ -47,7 +47,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:background="@color/dashbord_background"></View>
+        android:background="@color/dashboard_background"></View>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

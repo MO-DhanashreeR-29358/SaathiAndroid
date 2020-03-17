@@ -13,7 +13,7 @@
             android:layout_width="@dimen/_230sdp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@color/dashbord_background">
+            android:background="@color/dashboard_background">
 
             <LinearLayout
                 android:id="@+id/lltext"

@@ -1,5 +1,6 @@
 package com.mosl.tabapp.calendar
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -11,8 +12,9 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.mobile.domain.calendar.CalenderItemResponse
-import com.mosl.mobile.domain.calendar.LeadActivitiesAppointData
 import com.mosl.tabapp.R
+import com.mosl.tabapp.calendar.CalendarUiEvent.ItemClick
+import com.mosl.tabapp.calendar.item.ItemCalendarFragment
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentCalendarNewBinding
@@ -21,6 +23,9 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -36,9 +41,8 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
   @Inject lateinit var presenter: CalendarFragmentPresenter
   private lateinit var section: DataManagerSection
   private val oneDayDecorator = OneDayDecorator()
-
-  private lateinit var selectionDate: String
-
+  private val subject = PublishSubject.create<CalendarUiEvent>()
+  private lateinit var itemResponseList: List<CalenderItemResponse>
   override fun getLayout(): Int {
     return R.layout.fragment_calendar_new
   }
@@ -47,9 +51,10 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentCalendarNewBinding.bind(view)
     setUpView()
-    setUpRecyclerView()
+
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
+    setUpRecyclerView()
   }
 
   private fun setUpView() {
@@ -89,6 +94,11 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
       isNestedScrollingEnabled = false
     }
     groupAdapter.add(section)
+    groupAdapter.setOnItemClickListener { item, _ ->
+      if (item is ItemCalendarFragment) {
+        subject.onNext(ItemClick(item.data))
+      }
+    }
   }
 
   override fun getSelectedDatesString(): String {
@@ -99,6 +109,14 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
   override fun getSelectedDate(): Date? {
     val date: CalendarDay = binding.materialCalendarView.selectedDate ?: return null
     return date.date
+  }
+
+  override fun onItemClicked(): Observable<ItemClick> {
+    return subject.ofType()
+  }
+
+  override fun getResponseList(): List<CalenderItemResponse> {
+    return itemResponseList
   }
 
   override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
@@ -113,47 +131,27 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
       showOnFailurePopup(it)
     }
     uiModel.onSuccess {
+      itemResponseList = it
       section.clearContent()
       if (it.isNotEmpty()) {
         Timber.d("Success")
         binding.tvNochart.visibility = View.GONE
         for (item in it) {
-          val itemData = LeadActivitiesAppointData(
-            status = item.status,
-            meetingId = item.meetingID,
-            leadId = item.leadId,
-            name = item.name,
-            email = item.email,
-            mobNo = item.mobNo,
-            date = item.dateDisplay,
-            time = item.meetingDate,
-            attendeeEmp = item.attendeeEmp,
-            product = item.product,
-            statusName = item.statusName,
-            activityType = item.activityType,
-            meetingReason = item.meetingReason,
-            meetingDuration = item.meetingDuration,
-            category = item.category,
-            actionable = item.actionable,
-            comments = item.comments,
-            stage = item.stage,
-            callback = item.stage,
-            queryDesc = item.queryDesc,
-            ucId = item.leadId,
-            createdBy = item.createdBy,
-            repeatOnCode = item.repetitionEndsOn
+          section.setContent(
+            ItemCalendarFragment(
+              item
+            )
           )
-          section.setContent(ItemCalendarFragment(itemData))
         }
 
       } else {
         binding.tvNochart.visibility = View.VISIBLE
       }
-
     }
   }
 
   companion object {
-    val FORMATTER = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    @SuppressLint("ConstantLocale") val FORMATTER = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    const val DATA_LIST = "dataList"
   }
 }
