@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -150,7 +152,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_calendar" />
+                    app:srcCompat="@drawable/ic_calendar"
+                    />
 
             </RelativeLayout>
 
@@ -181,7 +184,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:src="@drawable/ic_calendar" />
+                    app:srcCompat="@drawable/ic_calendar"
+                    />
 
             </RelativeLayout>
         </LinearLayout>

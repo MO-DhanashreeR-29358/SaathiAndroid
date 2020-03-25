@@ -5,13 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.mosl.mobile.user.login.UserManager
-import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
-import com.mosl.tabapp.constants.MOSLConstants.*
+import com.mosl.tabapp.constants.MOSLConstants.EMPLOYEE_CODE
+import com.mosl.tabapp.constants.MOSLConstants.LEADID
+import com.mosl.tabapp.constants.MOSLConstants.MOBILE
+import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_ID
+import com.mosl.tabapp.constants.MOSLConstants.PROFILE_ID
+import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchResultModel
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -109,10 +119,13 @@ class AutoCompleteAdapter(
         }
       }
 
-      if (userManager.user.isAufsb()) {
-        holderView.rlSetAppointment.visibility = View.GONE
-        holderView.rlCreateMeeting.visibility = View.GONE
+      userManager.getUser()?.apply {
+        if (this.isAufsb()) {
+          holderView.rlSetAppointment.visibility = View.GONE
+          holderView.rlCreateMeeting.visibility = View.GONE
+        }
       }
+
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)

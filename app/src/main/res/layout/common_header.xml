@@ -18,7 +18,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_3sdp"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_black_close"
+            />
     </RelativeLayout>
     <!--  <TextView
           android:id="@+id/pageHeaderText"
