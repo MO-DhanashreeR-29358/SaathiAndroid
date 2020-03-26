@@ -15,6 +15,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.crashlytics.android.Crashlytics
 import com.f2prateek.rx.preferences2.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -31,7 +32,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.RemoteConfigData
+import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.AppTitle
@@ -47,6 +48,7 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -118,7 +120,10 @@ class CommonActivity : BaseActivity(),
 
   @Inject
   lateinit var gson: Gson
-  lateinit var remoteConfigModel: RemoteConfigModel;
+  lateinit var remoteConfigModel: RemoteConfigModel
+
+  @Inject
+  lateinit var firebaseHelper: FirebaseHelper
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -266,8 +271,7 @@ class CommonActivity : BaseActivity(),
     val periodicDataSyncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(
       32,
       MINUTES
-    ).setConstraints(networkConstraints())
-      .build()
+    ).build()
 
     val periodicLocationWork = PeriodicWorkRequestBuilder<LocationWorker>(
       15,
@@ -396,7 +400,7 @@ class CommonActivity : BaseActivity(),
 
     locationWorkManager.cancelWorkById(compressionLocationWorkId)
     dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
-
+    firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
     startActivity(login)
@@ -453,6 +457,7 @@ class CommonActivity : BaseActivity(),
   }
 
   override fun hideAppTitle() {
+    Crashlytics.getInstance().crash()
     binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
   }
 

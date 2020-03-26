@@ -30,6 +30,7 @@ class LoginPresenter @Inject constructor(
           view.renderLogin(it)
 
           if (it.isSuccess) {
+            view.setUserProperty(it.data)
             disposable.add(loginRepository.fetchReportTypes().compose(applyUiModel())
                 .subscribe {
                   view.renderReportsData(it)
