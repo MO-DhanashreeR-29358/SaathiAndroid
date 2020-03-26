@@ -15,7 +15,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.crashlytics.android.Crashlytics
 import com.f2prateek.rx.preferences2.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -457,7 +456,6 @@ class CommonActivity : BaseActivity(),
   }
 
   override fun hideAppTitle() {
-    Crashlytics.getInstance().crash()
     binding.actionBar.setTitleAndOverflow(AppTitle.EMPTY)
   }
 
