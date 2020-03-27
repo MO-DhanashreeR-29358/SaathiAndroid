@@ -484,8 +484,8 @@ public class ClientsLeadsFragmentOld extends CommonFragment implements View.OnCl
         int id = view.getId();
         if (id == R.id.llShowMore) {
             Bundle args = new Bundle();
-            ClientsLeadShowFragment clientsFragment =
-                    ClientsLeadShowFragment.newInstance();
+          ClientsLeadShowFragmentOld clientsFragment =
+              ClientsLeadShowFragmentOld.newInstance();
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
             args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
             args.putString(SYSTEM_NAME, widgetSystemName);

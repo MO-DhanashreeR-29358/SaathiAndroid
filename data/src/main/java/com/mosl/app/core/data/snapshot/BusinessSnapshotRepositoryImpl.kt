@@ -53,7 +53,7 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
           headers.forEach { header ->
             values.add(json.get(header).toString())
           }
-          data.add(BusinessSnapshotData(setData(values)))
+          data.add(BusinessSnapshotData(setData(values), headers))
         }
         BusinessSnapshotCombo(headers, data = data)
       } else {

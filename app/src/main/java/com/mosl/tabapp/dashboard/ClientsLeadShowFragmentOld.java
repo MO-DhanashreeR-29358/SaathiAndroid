@@ -58,7 +58,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by raju on 2/15/2017.
  */
 
-public class ClientsLeadShowFragment extends CommonFragment implements View.OnClickListener {
+public class ClientsLeadShowFragmentOld extends CommonFragment implements View.OnClickListener {
 
     private TableFixHeaders table;
     private TextView tvNochart;
@@ -69,8 +69,8 @@ public class ClientsLeadShowFragment extends CommonFragment implements View.OnCl
     private LinkedHashMap lMap;
     private SparseArray tabaleHeaderMap = new SparseArray<>();
 
-    public static ClientsLeadShowFragment newInstance() {
-        ClientsLeadShowFragment fragment = new ClientsLeadShowFragment();
+  public static ClientsLeadShowFragmentOld newInstance() {
+    ClientsLeadShowFragmentOld fragment = new ClientsLeadShowFragmentOld();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
