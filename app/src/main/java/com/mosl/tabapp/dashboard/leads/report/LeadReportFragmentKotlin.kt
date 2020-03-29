@@ -46,19 +46,16 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
   }
 
   private fun setUpView() {
-
     dashboardModel =
       arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
     map = arguments
       ?.getSerializable(MOSLConstants.MAP) as HashMap<String, String>
     widgetSystemName = arguments?.getString(MOSLConstants.SYSTEM_NAME) ?: ""
-
     newWebServiceCall(widgetSystemName, map)
     binding.tvShowLess.setOnClickListener(this)
   }
 
-  private fun renderLeadTable(responseJsonObj: Map<String, Any?>) {
-    //hideProgress();
+  private fun renderTable(responseJsonObj: Map<String, Any?>) {
     val leadTableAdapter =
       LeadTableAdapter(requireActivity(), map, navigator, widgetSystemName)
     binding.table.adapter = leadTableAdapter
@@ -67,57 +64,58 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
       responseJsonObj["Table"] as List<Map<String, Any>>?
     val columns = ArrayList<String>()
     val header = ArrayList<String>()
-    if (arrayDetail!!.size != 0) {
-      for (y in 2 until arrayDetail.size) {
-        val objDetailSecond = arrayDetail[0]
-        if (columns.size == 0) {
-          for (keySetE in objDetailSecond.keys) {
-            columns.add(keySetE)
+    arrayDetail?.apply {
+      if (this.size > 0) {
+        for (y in 2 until this.size) {
+          val objDetailSecond = this[0]
+          if (columns.size == 0) {
+            for (keySetE in objDetailSecond.keys) {
+              columns.add(keySetE)
+            }
+            for (column in columns) {
+              val columnData = if (objDetailSecond[column]
+                  .toString() == ""
+              ) "" else objDetailSecond[column].toString()
+              header.add(columnData)
+            }
+            var stockArr = arrayOfNulls<String>(header.size)
+            stockArr = header.toArray(stockArr)
+            leadTableAdapter.setHeadersSecond(stockArr)
           }
+          val objDetail = this[y]
+          var stockArr = arrayOfNulls<String>(columns.size)
+          stockArr = columns.toArray(stockArr)
+          leadTableAdapter.setHeaders(stockArr)
+          val data =
+            LinkedHashMap<String, String?>()
           for (column in columns) {
-            val columnData = if (objDetailSecond[column]
-                .toString() == ""
-            ) "" else objDetailSecond[column].toString()
-            header.add(columnData)
+            val columnData = if (objDetail[column]
+                .toString()
+              == ""
+            ) "0" else objDetail[column].toString()
+            data[column] = columnData
           }
-          var stockArr = arrayOfNulls<String>(header.size)
-          stockArr = header.toArray(stockArr)
-          leadTableAdapter.setHeadersSecond(stockArr)
+          leadTableAdapter.renderData(data)
         }
-        val objDetail = arrayDetail[y]
-        var stockArr = arrayOfNulls<String>(columns.size)
-        stockArr = columns.toArray(stockArr)
-        leadTableAdapter.setHeaders(stockArr)
-        val hm =
-          LinkedHashMap<String, String?>()
-        for (column in columns) {
-          val columnData = if (objDetail[column]
-              .toString()
-            == ""
-          ) "0" else objDetail[column].toString()
-          hm[column] = columnData
-        }
-        leadTableAdapter.add(hm)
+        leadTableAdapter.notifyDataSetChanged()
+        binding.table.visibility = View.VISIBLE
+        binding.tvNochart.visibility = View.GONE
+      } else {
+        binding.table.visibility = View.GONE
+        binding.tvNochart.visibility = View.VISIBLE
       }
-      leadTableAdapter.notifyDataSetChanged()
-      binding.table.visibility = View.VISIBLE
-      binding.tvNochart.visibility = View.GONE
-    } else {
-      binding.table.visibility = View.GONE
-      binding.tvNochart.visibility = View.VISIBLE
     }
   }
 
-  private fun renderClientLeadShow(uiModel: UiModel<Map<String, Any?>>) {
-    toggleProgress(true)
+  private fun renderData(uiModel: UiModel<Map<String, Any?>>) {
+    toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
-      toggleProgress(false)
       showOnFailurePopup(it)
+      binding.table.visibility = View.GONE
       binding.tvNochart.visibility = View.VISIBLE
     }
     uiModel.onSuccess {
-      toggleProgress(false)
-      renderLeadTable(it)
+      renderTable(it)
     }
   }
 
@@ -153,7 +151,7 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
         }
         .compose(applyUiModel())
         .subscribe { uiModel: UiModel<Map<String, Any?>> ->
-          renderClientLeadShow(uiModel)
+          renderData(uiModel)
         }
     } else {
       noInternetConnectionDialog()

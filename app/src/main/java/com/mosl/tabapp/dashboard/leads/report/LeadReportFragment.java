@@ -125,7 +125,7 @@ public class LeadReportFragment extends CommonFragment implements View.OnClickLi
                   .equals("") ? "0" : objDetail.get(column).toString();
           hm.put(column, columnData);
         }
-        leadTableAdapter.add(hm);
+        leadTableAdapter.renderData(hm);
       }
       leadTableAdapter.notifyDataSetChanged();
       binding.table.setVisibility(View.VISIBLE);

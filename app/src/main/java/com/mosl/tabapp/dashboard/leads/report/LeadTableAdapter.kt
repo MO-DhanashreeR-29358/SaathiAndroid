@@ -66,7 +66,7 @@ class LeadTableAdapter internal constructor(
   }
 
   fun clear() {}
-  fun add(row: HashMap<String, String?>) {
+  fun renderData(row: HashMap<String, String?>) {
     hashArray.add(row)
     val rowData = arrayOfNulls<String>(headers.size)
     var ctr = 0
