@@ -15,7 +15,6 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -39,7 +38,7 @@ import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
 import com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ClientsLeadShowFragmentOld
+import com.mosl.tabapp.dashboard.leads.report.LeadReportFragment
 import com.mosl.tabapp.databinding.FragmentLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -464,7 +463,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
             R.id.tvShowMore -> {
                 val args = Bundle()
                 val clientsFragment =
-                  ClientsLeadShowFragmentOld.newInstance()
+                  LeadReportFragment()
                 args.putSerializable(DASHBOARD_MODEL, dashboardModel)
                 args.putSerializable(
                     MAP,
