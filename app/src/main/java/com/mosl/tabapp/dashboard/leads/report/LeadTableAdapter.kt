@@ -1,7 +1,8 @@
+package com.mosl.tabapp.dashboard.leads.report
+
 import android.content.res.Resources.NotFoundException
 import android.graphics.Typeface
 import android.os.Bundle
-import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,37 +30,21 @@ class LeadTableAdapter internal constructor(
   widgetSystemsName: String
 ) : BaseTableAdapter() {
   private val commonHeaders: Array<CommonHeader>
-  @JvmField var headers = arrayOf<String?>()
+  private var headers = arrayOf<String?>()
   private var headers2 = arrayOf<String?>()
-  private val hashArray: ArrayList<HashMap<String?, String?>>
+  private val hashArray: ArrayList<HashMap<String, String?>>
   private val requireActivity: FragmentActivity
   private val widgetSystemsName: String
   private val navigator: ScreenNavigatorImpl
   private val map: Map<String, String?>
-  lateinit var tableHeaderMap: SparseArray<*>
-
-  private inner class CommonHeader internal constructor(val name: String) {
-    val list: MutableList<Item>
-    fun size(): Int {
-      return list.size
-    }
-
-    operator fun get(i: Int): Item {
-      return list[i]
-    }
-
-    init {
-      list = ArrayList()
-    }
-  }
-
-  private inner class Item constructor(val data: Array<String?>)
+  private var tableHeaderMap: Map<Int, List<Map<Int, String>>>? =
+    null
 
   fun setHeaders(headers: Array<String?>) {
     this.headers = headers
   }
 
-  fun setTableMap(tableHeaderMap: SparseArray<*>) {
+  fun setTableMap(tableHeaderMap: Map<Int, List<Map<Int, String>>>) {
     this.tableHeaderMap = tableHeaderMap
   }
 
@@ -72,7 +57,7 @@ class LeadTableAdapter internal constructor(
   }
 
   fun clear() {}
-  fun add(row: HashMap<String?, String?>) {
+  fun add(row: HashMap<String, String?>) {
     hashArray.add(row)
     val rowData = arrayOfNulls<String>(headers.size)
     var ctr = 0
@@ -81,23 +66,19 @@ class LeadTableAdapter internal constructor(
       rowData[ctr] = value
       ctr++
     }
-    commonHeaders[0].list.add(
-      Item(
-        rowData
-      )
-    )
+    commonHeaders[0].list.add(Item(rowData))
   }
 
   private fun getRowKeyName(childId: Double): String? {
-    for (ctr in 0 until tableHeaderMap.size()) {
-      val groupId = tableHeaderMap.keyAt(ctr)
-      val childList =
-        tableHeaderMap[groupId] as List<Map<*, *>>
-      for (childMap in childList) {
-        val childListSet: Set<Any?> = childMap.keys
-        for (childIdFromMap in childListSet) {
-          if (childId == childIdFromMap) {
-            return childMap[childIdFromMap] as String?
+    tableHeaderMap?.apply {
+
+      for ((_, value) in this) {
+        for (childMap: Map<Int, String> in value) {
+          val childListSet: Set<Int> = childMap.keys
+          for (childIdFromMap in childListSet) {
+            if (childId == childIdFromMap.toDouble()) {
+              return childMap[childIdFromMap] as String?
+            }
           }
         }
       }
@@ -106,8 +87,7 @@ class LeadTableAdapter internal constructor(
   }
 
   private fun isGroup(id: Double): Boolean {
-    for (ctr in 0 until tableHeaderMap.size()) {
-      val groupId = tableHeaderMap.keyAt(ctr)
+    for ((groupId) in tableHeaderMap!!) {
       if (groupId.toDouble() == id) return true
     }
     return false
@@ -132,7 +112,7 @@ class LeadTableAdapter internal constructor(
         view = getBody(row, column, requireActivity)
         view.setOnClickListener { view1: View? ->
           val newColumn = column + 1
-          val stringSet: MutableSet<String?> = hashArray[row].keys
+          val stringSet: Set<String> = hashArray[row].keys
           val columnName = stringSet.toTypedArray()[newColumn]
           val addtionalParameterMap: MutableMap<String, String?> =
             HashMap()
@@ -165,8 +145,7 @@ class LeadTableAdapter internal constructor(
   //click on symbol header
   private fun getFirstHeader(context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
-    val binding =
-      ItemTableHeaderFirstLeadBinding.inflate(inflater)
+    val binding = ItemTableHeaderFirstLeadBinding.inflate(inflater)
     binding.text1.text = headers[1]
     binding.text1.setTypeface(null, Typeface.BOLD)
     return binding.root
@@ -175,8 +154,7 @@ class LeadTableAdapter internal constructor(
   //click on header other than symbol
   private fun getHeader(column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
-    val binding =
-      ItemTableHeaderLeadBinding.inflate(inflater)
+    val binding = ItemTableHeaderLeadBinding.inflate(inflater)
     binding.text1.text = headers[column + 1]
     binding.text2.text = headers2[column + 1]
     return binding.root
@@ -184,8 +162,7 @@ class LeadTableAdapter internal constructor(
 
   private fun getFirstBody(row: Int, column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
-    val binding =
-      ItemTableFirstLeadBinding.inflate(inflater)
+    val binding = ItemTableFirstLeadBinding.inflate(inflater)
     try {
       if (hashArray[row]["id"] != null && isGroup(
           hashArray[row]["id"]!!.toDouble()
@@ -233,8 +210,7 @@ class LeadTableAdapter internal constructor(
 
   private fun getBody(row: Int, column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
-    val binding =
-      ItemTableBinding.inflate(inflater)
+    val binding = ItemTableBinding.inflate(inflater)
     try {
       if (hashArray[row]["id"] != null && isGroup(
           hashArray[row]["id"]!!.toDouble()
@@ -251,14 +227,10 @@ class LeadTableAdapter internal constructor(
           .equals("total", ignoreCase = true)
       ) {
         binding.text1.setTypeface(null, Typeface.BOLD)
-        binding.text1.setTextColor(
-          ContextCompat.getColor(requireActivity, color.black)
-        )
+        binding.text1.setTextColor(requireActivity.resources.getColor(color.black))
         binding.itemTable.setBackgroundResource(color.lead_total_back)
       } else {
-        binding.text1.setTextColor(
-          ContextCompat.getColor(requireActivity, color.black)
-        )
+        binding.text1.setTextColor(requireActivity.resources.getColor(color.black))
         binding.itemTable.setBackgroundResource(color.lead_ekyc_back)
       }
       binding.text1.text = getDevice(row).data[column + 1]
@@ -272,8 +244,7 @@ class LeadTableAdapter internal constructor(
 
   private fun getFamilyView(row: Int, column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
-    val binding =
-      ItemTableFamilyBinding.inflate(inflater)
+    val binding = ItemTableFamilyBinding.inflate(inflater)
     val string: String
     string = if (column == -1) {
       getFamily(row).name
@@ -287,12 +258,10 @@ class LeadTableAdapter internal constructor(
   override fun getWidth(column: Int): Int {
     var widthSize = 0
     if (column == -1) {
-      widthSize =
-        requireActivity.resources.getDimensionPixelSize(dimen._90sdp)
+      widthSize = requireActivity.resources.getDimensionPixelSize(dimen._90sdp)
     }
     for (i in 0 until column) {
-      widthSize =
-        requireActivity.resources.getDimensionPixelSize(dimen._135sdp)
+      widthSize = requireActivity.resources.getDimensionPixelSize(dimen._135sdp)
     }
     return widthSize
   }
@@ -322,32 +291,47 @@ class LeadTableAdapter internal constructor(
   }
 
   private fun getFamily(row: Int): CommonHeader {
-    var rowCount = row
+    var row = row
     val family = 0
     while (row >= 0) {
-      rowCount -= commonHeaders[family].size()
+      row -= commonHeaders[family].size()
     }
     return commonHeaders[family]
   }
 
   private fun getDevice(row: Int): Item {
-    var rowCount = row
+    var row = row
     val family = 0
     while (row >= 0) {
-      rowCount -= commonHeaders[family].size()
+      row -= commonHeaders[family].size()
     }
-    return commonHeaders[family][rowCount + commonHeaders[family].size()]
+    return commonHeaders[family][row + commonHeaders[family].size()]
   }
 
   override fun getViewTypeCount(): Int {
     return 5
   }
 
+  private inner class CommonHeader internal constructor(val name: String) {
+    val list: MutableList<Item>
+    fun size(): Int {
+      return list.size
+    }
+
+    operator fun get(i: Int): Item {
+      return list[i]
+    }
+
+    init {
+      list = ArrayList()
+    }
+  }
+
+  inner class Item constructor(val data: Array<String?>)
+
   init {
     commonHeaders =
-      arrayOf(
-        CommonHeader("asd")
-      )
+      arrayOf(CommonHeader("asd"))
     hashArray = ArrayList()
     this.requireActivity = requireActivity
     this.map = map

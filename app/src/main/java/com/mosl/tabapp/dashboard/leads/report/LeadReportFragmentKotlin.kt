@@ -1,6 +1,5 @@
 package com.mosl.tabapp.dashboard.leads.report
 
-import LeadTableAdapter
 import android.os.Bundle
 import android.view.View
 import com.google.gson.Gson
@@ -89,9 +88,9 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
         val objDetail = arrayDetail[y]
         var stockArr = arrayOfNulls<String>(columns.size)
         stockArr = columns.toArray(stockArr)
-        leadTableAdapter.headers = stockArr
+        leadTableAdapter.setHeaders(stockArr)
         val hm =
-          LinkedHashMap<String?, String?>()
+          LinkedHashMap<String, String?>()
         for (column in columns) {
           val columnData = if (objDetail[column]
               .toString()
