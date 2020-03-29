@@ -1,6 +1,5 @@
 package com.mosl.tabapp.dashboard.leads.report
 
-import android.content.res.Resources.NotFoundException
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -37,8 +36,18 @@ class LeadTableAdapter internal constructor(
   private val widgetSystemsName: String
   private val navigator: ScreenNavigatorImpl
   private val map: Map<String, String?>
-  private var tableHeaderMap: Map<Int, List<Map<Int, String>>>? =
-    null
+  var tableHeaderMap: Map<Int, List<Map<Int, String>>>
+
+  init {
+    commonHeaders =
+      arrayOf(CommonHeader("asd"))
+    hashArray = arrayListOf()
+    this.requireActivity = requireActivity
+    this.map = map
+    this.navigator = navigator
+    this.widgetSystemsName = widgetSystemsName
+    this.tableHeaderMap = mutableMapOf()
+  }
 
   fun setHeaders(headers: Array<String?>) {
     this.headers = headers
@@ -70,26 +79,26 @@ class LeadTableAdapter internal constructor(
   }
 
   private fun getRowKeyName(childId: Double): String? {
-    tableHeaderMap?.apply {
-
-      for ((_, value) in this) {
+    if (tableHeaderMap.size > 0)
+      for ((_, value) in tableHeaderMap) {
         for (childMap: Map<Int, String> in value) {
           val childListSet: Set<Int> = childMap.keys
           for (childIdFromMap in childListSet) {
             if (childId == childIdFromMap.toDouble()) {
-              return childMap[childIdFromMap] as String?
+              return childMap[childIdFromMap]
             }
           }
         }
       }
-    }
+
     return null
   }
 
   private fun isGroup(id: Double): Boolean {
-    for ((groupId) in tableHeaderMap!!) {
-      if (groupId.toDouble() == id) return true
-    }
+    if (tableHeaderMap.size > 0)
+      for ((groupId) in tableHeaderMap) {
+        if (groupId.toDouble() == id) return true
+      }
     return false
   }
 
@@ -118,7 +127,7 @@ class LeadTableAdapter internal constructor(
             HashMap()
           addtionalParameterMap[MOSLConstants.COL_FILTER] = columnName
           addtionalParameterMap[MOSLConstants.ROW_FILTER] =
-            getRowKeyName(hashArray[row]["id"]!!.toDouble())
+            getRowKeyName(hashArray[row][ID]!!.toDouble())
           addtionalParameterMap.putAll(map)
           val args = Bundle()
           args.putString(MOSLConstants.SYSTEM_NAME, widgetSystemsName)
@@ -163,46 +172,40 @@ class LeadTableAdapter internal constructor(
   private fun getFirstBody(row: Int, column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
     val binding = ItemTableFirstLeadBinding.inflate(inflater)
-    try {
-      if (hashArray[row]["id"] != null && isGroup(
-          hashArray[row]["id"]!!.toDouble()
+    if (hashArray[row][ID] != null && isGroup(
+        hashArray[row][ID]!!.toDouble()
+      )
+    ) {
+      binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
+      binding.tvTableFirst.setTextColor(
+        ContextCompat.getColor(
+          context,
+          color.flush_orange
         )
-      ) {
-        binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
-        binding.tvTableFirst.setTextColor(
-          ContextCompat.getColor(
-            context,
-            color.flush_orange
-          )
+      )
+      binding.itemTableFirstLead.setBackgroundResource(color.lead_self_back)
+    } else if (hashArray[row][STAGE] != null && hashArray[row][STAGE].equals(
+        TOTAL,
+        ignoreCase = true
+      )
+    ) {
+      binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
+      binding.tvTableFirst.setTextColor(
+        ContextCompat.getColor(
+          context,
+          color.black
         )
-        binding.itemTableFirstLead.setBackgroundResource(color.lead_self_back)
-      } else if (hashArray[row]["stage"] != null && hashArray[row]["stage"].equals(
-          "total",
-          ignoreCase = true
+      )
+      binding.itemTableFirstLead.setBackgroundResource(color.secondaryBackground)
+    } else {
+      binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
+      binding.tvTableFirst.setTextColor(
+        ContextCompat.getColor(
+          context,
+          color.black
         )
-      ) {
-        binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
-        binding.tvTableFirst.setTextColor(
-          ContextCompat.getColor(
-            context,
-            color.black
-          )
-        )
-        binding.itemTableFirstLead.setBackgroundResource(color.secondaryBackground)
-      } else {
-        binding.tvTableFirst.setTypeface(null, Typeface.BOLD)
-        binding.tvTableFirst.setTextColor(
-          ContextCompat.getColor(
-            context,
-            color.black
-          )
-        )
-        binding.itemTableFirstLead.setBackgroundResource(color.lead_ekyc_back)
-      }
-    } catch (e: NumberFormatException) {
-      e.printStackTrace()
-    } catch (e: NotFoundException) {
-      e.printStackTrace()
+      )
+      binding.itemTableFirstLead.setBackgroundResource(color.lead_ekyc_back)
     }
     binding.tvTableFirst.text = getDevice(row).data[column + 2]
     return binding.root
@@ -211,34 +214,28 @@ class LeadTableAdapter internal constructor(
   private fun getBody(row: Int, column: Int, context: FragmentActivity): View {
     val inflater = LayoutInflater.from(context)
     val binding = ItemTableBinding.inflate(inflater)
-    try {
-      if (hashArray[row]["id"] != null && isGroup(
-          hashArray[row]["id"]!!.toDouble()
+    if (hashArray[row][ID] != null && isGroup(
+        hashArray[row][ID]!!.toDouble()
+      )
+    ) {
+      binding.text1.setTextColor(
+        ContextCompat.getColor(
+          context,
+          color.flush_orange
         )
-      ) {
-        binding.text1.setTextColor(
-          ContextCompat.getColor(
-            context,
-            color.flush_orange
-          )
-        )
-        binding.itemTable.setBackgroundResource(color.lead_self_back)
-      } else if (hashArray[row]["stage"] != null && hashArray[row]["stage"]
-          .equals("total", ignoreCase = true)
-      ) {
-        binding.text1.setTypeface(null, Typeface.BOLD)
-        binding.text1.setTextColor(requireActivity.resources.getColor(color.black))
-        binding.itemTable.setBackgroundResource(color.lead_total_back)
-      } else {
-        binding.text1.setTextColor(requireActivity.resources.getColor(color.black))
-        binding.itemTable.setBackgroundResource(color.lead_ekyc_back)
-      }
-      binding.text1.text = getDevice(row).data[column + 1]
-    } catch (e: NumberFormatException) {
-      e.printStackTrace()
-    } catch (e: NotFoundException) {
-      e.printStackTrace()
+      )
+      binding.itemTable.setBackgroundResource(color.lead_self_back)
+    } else if (hashArray[row][STAGE] != null && hashArray[row][STAGE]
+        .equals(TOTAL, ignoreCase = true)
+    ) {
+      binding.text1.setTypeface(null, Typeface.BOLD)
+      binding.text1.setTextColor(ContextCompat.getColor(requireActivity, color.black))
+      binding.itemTable.setBackgroundResource(color.lead_total_back)
+    } else {
+      binding.text1.setTextColor(ContextCompat.getColor(requireActivity, color.black))
+      binding.itemTable.setBackgroundResource(color.lead_ekyc_back)
     }
+    binding.text1.text = getDevice(row).data[column + 1]
     return binding.root
   }
 
@@ -267,18 +264,15 @@ class LeadTableAdapter internal constructor(
   }
 
   override fun getHeight(row: Int): Int {
-    val height: Int
-    height = if (row == -1) {
+    return if (row == -1) {
       requireActivity.resources.getDimensionPixelSize(dimen._40sdp)
     } else {
       requireActivity.resources.getDimensionPixelSize(dimen._40sdp)
     }
-    return height
   }
 
   override fun getItemViewType(row: Int, column: Int): Int {
-    val itemViewType: Int
-    itemViewType = if (row == -1 && column == -1) {
+    return if (row == -1 && column == -1) {
       0
     } else if (row == -1) {
       1
@@ -287,25 +281,24 @@ class LeadTableAdapter internal constructor(
     } else {
       3
     }
-    return itemViewType
   }
 
   private fun getFamily(row: Int): CommonHeader {
-    var row = row
+    var rowCount = row
     val family = 0
-    while (row >= 0) {
-      row -= commonHeaders[family].size()
+    while (rowCount >= 0) {
+      rowCount -= commonHeaders[family].size()
     }
     return commonHeaders[family]
   }
 
   private fun getDevice(row: Int): Item {
-    var row = row
+    var rowCount = row
     val family = 0
-    while (row >= 0) {
-      row -= commonHeaders[family].size()
+    while (rowCount >= 0) {
+      rowCount -= commonHeaders[family].size()
     }
-    return commonHeaders[family][row + commonHeaders[family].size()]
+    return commonHeaders[family][rowCount + commonHeaders[family].size()]
   }
 
   override fun getViewTypeCount(): Int {
@@ -326,16 +319,11 @@ class LeadTableAdapter internal constructor(
       list = ArrayList()
     }
   }
-
   inner class Item constructor(val data: Array<String?>)
-
-  init {
-    commonHeaders =
-      arrayOf(CommonHeader("asd"))
-    hashArray = ArrayList()
-    this.requireActivity = requireActivity
-    this.map = map
-    this.navigator = navigator
-    this.widgetSystemsName = widgetSystemsName
+  companion object {
+    const val ID = "id"
+    const val STAGE = "stage"
+    const val TOTAL = "total"
   }
+
 }
