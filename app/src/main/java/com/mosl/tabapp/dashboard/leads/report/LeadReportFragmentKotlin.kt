@@ -15,7 +15,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ClientsLeadsFragmentOld
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.databinding.FragTableLeadShowBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
@@ -63,7 +62,7 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
     val leadTableAdapter =
       LeadTableAdapter(requireActivity(), map, navigator, widgetSystemName)
     binding.table.adapter = leadTableAdapter
-    //   newPrepareGroupMap(responseJsonObj, leadTableAdapter) //prepare group map
+    newPrepareGroupMap(responseJsonObj, leadTableAdapter) //prepare group map
     val arrayDetail =
       responseJsonObj["Table"] as List<Map<String, Any>>?
     val columns = ArrayList<String>()
@@ -163,46 +162,74 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
 
   override fun onClick(view: View) {
     val id = view.id
+    val args = Bundle()
+    val leadsFragment: CommonFragment = LeadsFragment()
     if (id == R.id.tvShowLess) {
-      val args = Bundle()
-      val leadsFragment: CommonFragment
-      if (this.arguments!!.getString(MOSLConstants.TYPESOFLEAD)
-          .equals(MOSLConstants.LEAD, ignoreCase = true)
-      ) {
-        leadsFragment = ClientsLeadsFragmentOld()
-      } else {
-        leadsFragment = LeadsFragment()
+      arguments?.apply {
         args.putInt(
           LeadsFragment.FLT_BANKNAME,
-          this.arguments!!.getInt(LeadsFragment.FLT_BANKNAME)
+          this.getInt(LeadsFragment.FLT_BANKNAME)
         )
         args.putInt(
           LeadsFragment.FLT_BANKBRANCHCODE,
-          this.arguments!!.getInt(LeadsFragment.FLT_BANKBRANCHCODE)
+          this.getInt(LeadsFragment.FLT_BANKBRANCHCODE)
         )
         args.putInt(
           LeadsFragment.FLT_BANKSUBBROKERCODE,
-          this.arguments!!.getInt(LeadsFragment.FLT_BANKSUBBROKERCODE)
+          this.getInt(LeadsFragment.FLT_BANKSUBBROKERCODE)
+        )
+        args.putSerializable(MOSLConstants.DASHBOARD_MODEL, dashboardModel)
+        args.putInt(
+          LeadsFragment.PERIOD_FILTER,
+          this.getInt(LeadsFragment.PERIOD_FILTER)
+        )
+        args.putInt(
+          LeadsFragment.PRODUCT_FILTER,
+          this.getInt(LeadsFragment.PRODUCT_FILTER)
+        )
+        args.putInt(
+          LeadsFragment.SOURCE_FILTER,
+          this.getInt(LeadsFragment.SOURCE_FILTER)
         )
       }
-      args.putSerializable(MOSLConstants.DASHBOARD_MODEL, dashboardModel)
-      args.putInt(
-        LeadsFragment.PERIOD_FILTER,
-        this.arguments!!.getInt(LeadsFragment.PERIOD_FILTER)
-      )
-      args.putInt(
-        LeadsFragment.PRODUCT_FILTER,
-        this.arguments!!.getInt(LeadsFragment.PRODUCT_FILTER)
-      )
-      args.putInt(
-        LeadsFragment.SOURCE_FILTER,
-        this.arguments!!.getInt(LeadsFragment.SOURCE_FILTER)
-      )
       leadsFragment.arguments = args
       requireActivity().supportFragmentManager
         .beginTransaction()
         .replace(R.id.llReplaceClientFragment, leadsFragment)
         .commit()
+    }
+  }
+
+  fun newPrepareGroupMap(
+    responseJsonObj: Map<String, Any?>,
+    leadTableAdapter: LeadTableAdapter
+  ) {
+    try {
+      if (responseJsonObj["Table2"] == null) return
+      val jsonArray =
+        responseJsonObj["Table2"] as List<Map<String, Any>>?
+      val tableHeaderMap: MutableMap<Int, MutableList<Map<Int, String>>> =
+        HashMap()
+      if (jsonArray == null) return
+      for (ctr in jsonArray.indices) {
+        val jsonRowObject = jsonArray[ctr]
+        val groupId = jsonRowObject["GroupId"].toString().toInt()
+        val childid = jsonRowObject["childid"].toString().toInt()
+        val rowFilter = jsonRowObject["RowFilter"].toString()
+        var childList =
+          tableHeaderMap[groupId]
+        if (childList == null) {
+          childList = ArrayList()
+        }
+        val childMap: MutableMap<Int, String> =
+          HashMap<Int, String>()
+        childMap[childid] = rowFilter
+        childList.add(childMap)
+        tableHeaderMap[groupId] = childList
+        leadTableAdapter.setTableMap(tableHeaderMap)
+      }
+    } catch (ex: Exception) {
+      ex.printStackTrace()
     }
   }
 

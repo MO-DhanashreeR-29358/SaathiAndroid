@@ -65,7 +65,6 @@ import static com.mosl.tabapp.constants.MOSLConstants.SELF_KEY;
 import static com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME;
-import static com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD;
 import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PERIOD_FILTER;
 import static com.mosl.tabapp.dashboard.leads.LeadsFragment.PRODUCT_FILTER;
 import static com.mosl.tabapp.dashboard.leads.LeadsFragment.SOURCE_FILTER;
@@ -489,7 +488,6 @@ public class ClientsLeadsFragmentOld extends CommonFragment implements View.OnCl
             args.putSerializable(DASHBOARD_MODEL, dashboardModel);
             args.putSerializable(MAP, (Serializable) getAddtionalParameterMap());
             args.putString(SYSTEM_NAME, widgetSystemName);
-            args.putString(TYPESOFLEAD, LEAD);
             clientsFragment.setArguments(args);
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()

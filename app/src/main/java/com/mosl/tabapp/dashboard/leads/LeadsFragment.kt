@@ -32,14 +32,12 @@ import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants.AUSFB_LEAD
 import com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL
 import com.mosl.tabapp.constants.MOSLConstants.MAP
 import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
-import com.mosl.tabapp.constants.MOSLConstants.TYPESOFLEAD
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.leads.report.LeadReportFragment
+import com.mosl.tabapp.dashboard.leads.report.LeadReportFragmentKotlin
 import com.mosl.tabapp.databinding.FragmentLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -464,7 +462,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
             R.id.tvShowMore -> {
                 val args = Bundle()
                 val clientsFragment =
-                  LeadReportFragment()
+                    LeadReportFragmentKotlin()
                 args.putSerializable(DASHBOARD_MODEL, dashboardModel)
                 args.putSerializable(
                     MAP,
@@ -477,7 +475,6 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
                 args.putInt(FLT_BANKBRANCHCODE, binding.spBranch.selectedItemPosition)
                 args.putInt(FLT_BANKSUBBROKERCODE, binding.spSubBranch.selectedItemPosition)
                 args.putString(SYSTEM_NAME, getWidgetSystemsName())
-                args.putString(TYPESOFLEAD, AUSFB_LEAD)
                 clientsFragment.arguments = args
                 requireActivity().supportFragmentManager
                     .beginTransaction()
