@@ -3,7 +3,6 @@ package com.mosl.tabapp.dashboard.leads.report;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +44,7 @@ public class LeadTableAdapterJava extends BaseTableAdapter {
   private String widgetSystemsName;
   private ScreenNavigatorImpl navigator;
   private Map<String, String> map;
-  private SparseArray tableHeaderMap;
+  private Map<Integer, List<Map>> tableHeaderMap;
 
   LeadTableAdapterJava(FragmentActivity requireActivity, Map<String, String> map,
       ScreenNavigatorImpl navigator,
@@ -62,7 +61,7 @@ public class LeadTableAdapterJava extends BaseTableAdapter {
     this.headers = headers;
   }
 
-  void setTableMap(SparseArray tableHeaderMap) {
+  void setTableMap(Map<Integer, List<Map>> tableHeaderMap) {
     this.tableHeaderMap = tableHeaderMap;
   }
 
@@ -92,14 +91,12 @@ public class LeadTableAdapterJava extends BaseTableAdapter {
     commonHeaders[0].list.add(new Item(rowData));
   }
 
-  private String getRowKeyName(Double childId) {
-    for (int ctr = 0; ctr < tableHeaderMap.size(); ctr++) {
-      int groupId = tableHeaderMap.keyAt(ctr);
-      List<Map> childList = (List<Map>) tableHeaderMap.get(groupId);
-      for (Map childMap : childList) {
+  private String getRowKeyName(double childId) {
+    for (Map.Entry<Integer, List<Map>> entry : tableHeaderMap.entrySet()) {
+      for (Map childMap : entry.getValue()) {
         Set<Integer> childListSet = childMap.keySet();
         for (Integer childIdFromMap : childListSet) {
-          if (childId == childIdFromMap.intValue()) {
+          if (childId == childIdFromMap) {
             return (String) childMap.get(childIdFromMap);
           }
         }
@@ -109,8 +106,8 @@ public class LeadTableAdapterJava extends BaseTableAdapter {
   }
 
   private boolean isGroup(double id) {
-    for (int ctr = 0; ctr < tableHeaderMap.size(); ctr++) {
-      int groupId = tableHeaderMap.keyAt(ctr);
+    for (Map.Entry<Integer, List<Map>> entry : tableHeaderMap.entrySet()) {
+      int groupId = entry.getKey();
       if (groupId == id) return true;
     }
     return false;

@@ -242,7 +242,7 @@ public class LeadReportFragment extends CommonFragment implements View.OnClickLi
       if (responseJsonObj.get("Table2") == null) return;
       List<Map<String, Object>> jsonArray =
           (List<Map<String, Object>>) responseJsonObj.get("Table2");
-      SparseArray tableHeaderMap = new SparseArray<>();
+      Map<Integer, List<Map>> tableHeaderMap = new HashMap<>();
       if (jsonArray == null) return;
       for (int ctr = 0; ctr < jsonArray.size(); ctr++) {
         Map<String, Object> jsonRowObject = jsonArray.get(ctr);
@@ -250,7 +250,7 @@ public class LeadReportFragment extends CommonFragment implements View.OnClickLi
         int childid = Integer.parseInt(jsonRowObject.get("childid").toString());
         String rowFilter = jsonRowObject.get("RowFilter").toString();
 
-        List<Map> childList = (List) tableHeaderMap.get(groupId);
+        List<Map> childList = tableHeaderMap.get(groupId);
         if (childList == null) {
           childList = new ArrayList<>();
         }
