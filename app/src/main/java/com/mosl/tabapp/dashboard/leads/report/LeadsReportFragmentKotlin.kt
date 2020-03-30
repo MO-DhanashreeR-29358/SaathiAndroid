@@ -43,6 +43,8 @@ class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClic
   }
 
   private fun setUpView() {
+    dashboardModel =
+      arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
     binding.tvShowLess.setOnClickListener(this)
   }
 
@@ -55,7 +57,6 @@ class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClic
     }
     uiModel.onSuccess {
       if (it.header.size > 0) {
-
         it.render()
       } else {
         binding.table.visibility = View.GONE
