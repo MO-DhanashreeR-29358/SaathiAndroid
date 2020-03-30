@@ -42,7 +42,7 @@ class NotificationItem(
   }
 
   fun getAdditionalData(): String {
-    return model.additionalData
+    return model.additionalData ?: ""
   }
 
   override fun hashCode(): Int {
