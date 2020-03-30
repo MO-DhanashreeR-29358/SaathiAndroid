@@ -37,7 +37,7 @@ import com.mosl.tabapp.constants.MOSLConstants.MAP
 import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.leads.report.LeadReportFragmentKotlin
+import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragmentKotlin
 import com.mosl.tabapp.databinding.FragmentLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -76,7 +76,6 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentLeadsBinding.bind(view)
         setUpView()
         presenter.start()
@@ -462,7 +461,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
             R.id.tvShowMore -> {
                 val args = Bundle()
                 val clientsFragment =
-                    LeadReportFragmentKotlin()
+                  LeadsReportFragmentKotlin()
                 args.putSerializable(DASHBOARD_MODEL, dashboardModel)
                 args.putSerializable(
                     MAP,

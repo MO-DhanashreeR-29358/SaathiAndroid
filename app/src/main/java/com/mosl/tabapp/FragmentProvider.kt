@@ -27,7 +27,8 @@ import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew
 import com.mosl.tabapp.dashboard.clients.ClientsModule
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsModule
-import com.mosl.tabapp.dashboard.leads.report.LeadReportFragmentKotlin
+import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragmentKotlin
+import com.mosl.tabapp.dashboard.leads.report.LeadsReportModule
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityModule
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule
@@ -138,8 +139,8 @@ interface FragmentProvider {
   @ContributesAndroidInjector
   fun provideClientsFragmentFactory(): ClientsFragmentOld
 
-  @ContributesAndroidInjector
-  fun provideClientLeadFragmentFactory(): LeadReportFragmentKotlin
+  @ContributesAndroidInjector(modules = [LeadsReportModule::class])
+  fun provideClientLeadFragmentFactory(): LeadsReportFragmentKotlin
 
   @ContributesAndroidInjector
   fun provideClientTradedFragmentFactory(): ClientsTradedYesterdayFragmentOld

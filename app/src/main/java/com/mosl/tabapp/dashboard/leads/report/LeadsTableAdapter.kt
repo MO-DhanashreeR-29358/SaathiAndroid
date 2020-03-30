@@ -23,10 +23,10 @@ import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedHashMap
 
-class LeadTableAdapter internal constructor(
+class LeadsTableAdapter internal constructor(
   requireActivity: FragmentActivity, map: Map<String, String?>,
   navigator: ScreenNavigatorImpl,
-  widgetSystemsName: String
+  widgetSystemsName: String?
 ) : BaseTableAdapter() {
   private val commonHeaders: Array<CommonHeader>
   private var headers = arrayOf<String?>()
@@ -45,7 +45,7 @@ class LeadTableAdapter internal constructor(
     this.requireActivity = requireActivity
     this.map = map
     this.navigator = navigator
-    this.widgetSystemsName = widgetSystemsName
+    this.widgetSystemsName = widgetSystemsName ?: ""
     this.tableHeaderMap = mutableMapOf()
   }
 

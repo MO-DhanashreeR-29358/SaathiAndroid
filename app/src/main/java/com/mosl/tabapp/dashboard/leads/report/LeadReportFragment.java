@@ -81,9 +81,9 @@ public class LeadReportFragment extends CommonFragment implements View.OnClickLi
 
   private void renderLeadTable(Map<String, Object> responseJsonObj) {
     //hideProgress();
-    LeadTableAdapter
+    LeadsTableAdapter
         leadTableAdapter =
-        new LeadTableAdapter(requireActivity(), map, navigator, widgetSystemName);
+        new LeadsTableAdapter(requireActivity(), map, navigator, widgetSystemName);
     binding.table.setAdapter(leadTableAdapter);
 
     newPrepareGroupMap(responseJsonObj, leadTableAdapter); //prepare group map
@@ -219,7 +219,7 @@ public class LeadReportFragment extends CommonFragment implements View.OnClickLi
   }
 
   private void newPrepareGroupMap(Map<String, Object> responseJsonObj,
-      LeadTableAdapter leadTableAdapter) {
+      LeadsTableAdapter leadTableAdapter) {
     try {
       if (responseJsonObj.get("Table2") == null) return;
       List<Map<String, Object>> jsonArray =

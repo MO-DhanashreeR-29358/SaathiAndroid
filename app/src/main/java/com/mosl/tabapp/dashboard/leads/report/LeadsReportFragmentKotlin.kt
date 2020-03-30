@@ -21,21 +21,25 @@ import com.mosl.tabapp.model.dashboard.DashboardModel
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedHashMap
+import javax.inject.Inject
 
-class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
+class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClickListener {
   lateinit var binding: FragTableLeadShowBinding
   lateinit var dashboardModel: DashboardModel
   lateinit var map: HashMap<String, String>
   lateinit var widgetSystemName: String
-  val addtionalParameterMap: Map<String, String> =
+  private val addtionalParameterMap: Map<String, String> =
     HashMap()
+
+  @Inject
+  lateinit var presenter: LeadsReportPresenter
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     binding = FragTableLeadShowBinding.bind(view)
     setUpView()
-    //  presenter.start()
+    presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
     hideAppTitle()
     setUpView()
@@ -46,18 +50,17 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
   }
 
   private fun setUpView() {
-    dashboardModel =
-      arguments?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel
-    map = arguments
-      ?.getSerializable(MOSLConstants.MAP) as HashMap<String, String>
-    widgetSystemName = arguments?.getString(MOSLConstants.SYSTEM_NAME) ?: ""
-    newWebServiceCall(widgetSystemName, map)
     binding.tvShowLess.setOnClickListener(this)
   }
 
-  private fun renderTable(responseJsonObj: Map<String, Any?>) {
+  private fun renderTable(responseJsonObj: Map<String, Any>) {
     val leadTableAdapter =
-      LeadTableAdapter(requireActivity(), map, navigator, widgetSystemName)
+      LeadsTableAdapter(
+        requireActivity(),
+        getAddtionalParameterMap(),
+        navigator,
+        getWidgetSystemsName()
+      )
     binding.table.adapter = leadTableAdapter
     newPrepareGroupMap(responseJsonObj, leadTableAdapter) //prepare group map
     val arrayDetail =
@@ -107,7 +110,7 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
     }
   }
 
-  private fun renderData(uiModel: UiModel<Map<String, Any?>>) {
+  override fun renderData(uiModel: UiModel<Map<String, Any>>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
       showOnFailurePopup(it)
@@ -151,7 +154,7 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
         }
         .compose(applyUiModel())
         .subscribe { uiModel: UiModel<Map<String, Any?>> ->
-          renderData(uiModel)
+          // renderData(uiModel)
         }
     } else {
       noInternetConnectionDialog()
@@ -200,7 +203,7 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
 
   fun newPrepareGroupMap(
     responseJsonObj: Map<String, Any?>,
-    leadTableAdapter: LeadTableAdapter
+    leadTableAdapter: LeadsTableAdapter
   ) {
     try {
       if (responseJsonObj["Table2"] == null) return
@@ -229,6 +232,14 @@ class LeadReportFragmentKotlin : CommonFragment(), View.OnClickListener {
     } catch (ex: Exception) {
       ex.printStackTrace()
     }
+  }
+
+  override fun getWidgetSystemsName(): String? {
+    return arguments?.getString(MOSLConstants.SYSTEM_NAME)
+  }
+
+  override fun getAddtionalParameterMap(): Map<String, String> {
+    return arguments?.getSerializable(MOSLConstants.MAP) as HashMap<String, String>
   }
 
 }
