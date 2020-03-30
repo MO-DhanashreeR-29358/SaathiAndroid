@@ -5,7 +5,7 @@ import io.reactivex.Observable
 interface MappingHistoryRepository {
   fun getDashboardData(
     leadId: String,
-    ucidId: String,
+    ucId: String,
     eventType: String
   ): Observable<MappingHistoryCombo>
 }
