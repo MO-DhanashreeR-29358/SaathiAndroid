@@ -1,8 +1,6 @@
 package com.mosl.app.core.data.lead.reports
 
 import com.mosl.mobile.domain.lead.report.LeadsReportInput
-import com.mosl.mobile.domain.lead.report.LeadsReportModel
-import com.mosl.saathi.api.model.dashboard.lead.report.LeadReportResponse
 import com.mosl.saathi.api.model.dashboard.lead.report.LeadsReportRequest
 
 fun LeadsReportInput.requestTransform(): LeadsReportRequest {
@@ -16,10 +14,4 @@ fun LeadsReportInput.requestTransform(): LeadsReportRequest {
   )
 }
 
-fun LeadReportResponse.responseTransform(): LeadsReportModel {
-  return LeadsReportModel(
-    table = table,
-    table2 = table2
-  )
-}
 
