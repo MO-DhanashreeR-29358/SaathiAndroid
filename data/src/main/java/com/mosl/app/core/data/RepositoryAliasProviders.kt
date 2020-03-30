@@ -6,6 +6,7 @@ import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryI
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl
+import com.mosl.app.core.data.leadviewdetail.history.MappingHistoryRepositoryImpl
 import com.mosl.app.core.data.notification.NotificationRepositoryImpl
 import com.mosl.app.core.data.productivity.ProductivityRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
@@ -17,6 +18,7 @@ import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.lead.report.LeadsReportRepository
+import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
 import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.productivity.ProductivityRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
@@ -47,6 +49,9 @@ interface RepositoryAliasProviders {
 
   @Binds
   fun provideProvideRepository(repository: ProductivityRepositoryImpl): ProductivityRepository
+
+  @Binds
+  fun provideMappingHistoryRepository(repository: MappingHistoryRepositoryImpl): MappingHistoryRepository
 
   @Binds
   fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository

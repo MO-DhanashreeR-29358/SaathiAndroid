@@ -10,6 +10,7 @@ import com.mosl.tabapp.dashboard.productivity.ProductivityFragment.Companion.PRO
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import java.io.Serializable
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class ProductivityPresenter @Inject constructor(
 ) : BasePresenter<productivityView>(view) {
   override fun start() {
 
-    onFetchCalled().switchMap {
+    Observable.merge(onFetchCalled(), onRetryCalled()).switchMap {
         repository.getDashboardData(getWidgetRequest())
           .compose(applyUiModel())
       }

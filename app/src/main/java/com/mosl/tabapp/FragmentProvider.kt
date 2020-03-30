@@ -51,6 +51,8 @@ import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.UpdateMeetingFragment
+import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
+import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
@@ -117,6 +119,9 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [TeamTargetModule::class])
   fun provideTeamTargetFragmentFactory(): TeamTargetFragment
+
+  @ContributesAndroidInjector(modules = [MappingHistoryModule::class])
+  fun provideMappingHistoryFragment(): MappingHistoryFragment
 
   @ContributesAndroidInjector
   fun provideUpdateMeetingFragmentFactory(): UpdateMeetingFragment
