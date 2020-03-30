@@ -10,13 +10,17 @@ import com.mosl.mobile.domain.lead.report.LeadsReportModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.leads.LeadUiEvent
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.databinding.FragTableLeadShowBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import java.util.HashMap
 import javax.inject.Inject
 
-class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClickListener {
+class LeadsReportFragment : CommonFragment(), LeadsReportView, View.OnClickListener {
   lateinit var binding: FragTableLeadShowBinding
   lateinit var dashboardModel: DashboardModel
   lateinit var map: HashMap<String, String>
@@ -26,6 +30,9 @@ class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClic
 
   @Inject
   lateinit var presenter: LeadsReportPresenter
+
+  private val cellEvent =
+    PublishSubject.create<LeadUiEvent>()
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
@@ -70,9 +77,7 @@ class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClic
     val leadTableAdapter =
       LeadsTableAdapter(
         requireActivity(),
-        getAddtionalParameterMap(),
-        navigator,
-        getWidgetSystemsName()
+        cellEvent
       )
     binding.table.adapter = leadTableAdapter
 
@@ -132,6 +137,10 @@ class LeadsReportFragmentKotlin : CommonFragment(), LeadsReportView, View.OnClic
 
   override fun getAddtionalParameterMap(): Map<String, String> {
     return arguments?.getSerializable(MOSLConstants.MAP) as HashMap<String, String>
+  }
+
+  override fun cellEvent(): Observable<LeadUiEvent.CellClick> {
+    return cellEvent.ofType()
   }
 
 }

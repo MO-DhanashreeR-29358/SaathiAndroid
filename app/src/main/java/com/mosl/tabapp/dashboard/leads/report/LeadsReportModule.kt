@@ -9,12 +9,12 @@ import dagger.Provides
 @Module
 class LeadsReportModule {
   @Provides
-  internal fun provideAuLeadView(fragment: LeadsReportFragmentKotlin): LeadsReportView {
+  internal fun provideAuLeadView(fragment: LeadsReportFragment): LeadsReportView {
     return fragment
   }
 
   @Provides
-  internal fun provideDashBoardModel(fragment: LeadsReportFragmentKotlin): DashboardModel {
+  internal fun provideDashBoardModel(fragment: LeadsReportFragment): DashboardModel {
     val args: Bundle? = fragment.getArguments()
     val dashboardModel: DashboardModel =
       args?.getSerializable(MOSLConstants.DASHBOARD_MODEL) as DashboardModel

@@ -1,7 +1,6 @@
 package com.mosl.tabapp.dashboard.leads.report
 
 import android.graphics.Typeface
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,32 +9,27 @@ import androidx.fragment.app.FragmentActivity
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.dashboard.leads.LeadUiEvent
 import com.mosl.tabapp.databinding.ItemTableBinding
 import com.mosl.tabapp.databinding.ItemTableFamilyBinding
 import com.mosl.tabapp.databinding.ItemTableFirstLeadBinding
 import com.mosl.tabapp.databinding.ItemTableHeaderFirstLeadBinding
 import com.mosl.tabapp.databinding.ItemTableHeaderLeadBinding
-import com.mosl.tabapp.navigation.NavigationConstants
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter
-import java.io.Serializable
+import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedHashMap
 
 class LeadsTableAdapter internal constructor(
-  requireActivity: FragmentActivity, map: Map<String, String?>,
-  navigator: ScreenNavigatorImpl,
-  widgetSystemsName: String?
+  requireActivity: FragmentActivity,
+  val cellEvent: PublishSubject<LeadUiEvent>
 ) : BaseTableAdapter() {
   private val commonHeaders: Array<CommonHeader>
   private var headers = arrayOf<String?>()
   private var headers2 = arrayOf<String?>()
   private val hashArray: ArrayList<HashMap<String, String?>>
   private val requireActivity: FragmentActivity
-  private val widgetSystemsName: String
-  private val navigator: ScreenNavigatorImpl
-  private val map: Map<String, String?>
   var tableHeaderMap: Map<Int, List<Map<Int, String>>>
 
   init {
@@ -43,9 +37,6 @@ class LeadsTableAdapter internal constructor(
       arrayOf(CommonHeader("asd"))
     hashArray = arrayListOf()
     this.requireActivity = requireActivity
-    this.map = map
-    this.navigator = navigator
-    this.widgetSystemsName = widgetSystemsName ?: ""
     this.tableHeaderMap = mutableMapOf()
   }
 
@@ -78,20 +69,20 @@ class LeadsTableAdapter internal constructor(
     commonHeaders[0].list.add(Item(rowData))
   }
 
-  private fun getRowKeyName(childId: Double): String? {
+  private fun getRowKeyName(childId: Double): String {
     if (tableHeaderMap.size > 0)
       for ((_, value) in tableHeaderMap) {
         for (childMap: Map<Int, String> in value) {
           val childListSet: Set<Int> = childMap.keys
           for (childIdFromMap in childListSet) {
             if (childId == childIdFromMap.toDouble()) {
-              return childMap[childIdFromMap]
+              return childMap[childIdFromMap] ?: ""
             }
           }
         }
       }
 
-    return null
+    return ""
   }
 
   private fun isGroup(id: Double): Boolean {
@@ -123,25 +114,16 @@ class LeadsTableAdapter internal constructor(
           val newColumn = column + 1
           val stringSet: Set<String> = hashArray[row].keys
           val columnName = stringSet.toTypedArray()[newColumn]
-          val addtionalParameterMap: MutableMap<String, String?> =
+          val addtionalParameterMap: MutableMap<String, String> =
             HashMap()
           addtionalParameterMap[MOSLConstants.COL_FILTER] = columnName
           addtionalParameterMap[MOSLConstants.ROW_FILTER] =
             getRowKeyName(hashArray[row][ID]!!.toDouble())
-          addtionalParameterMap.putAll(map)
-          val args = Bundle()
-          args.putString(MOSLConstants.SYSTEM_NAME, widgetSystemsName)
-          args.putString(MOSLConstants.LABEL, MOSLConstants.LEAD)
-          args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
           val lMap =
             hashArray[row] as LinkedHashMap<*, *>
           val columnData = lMap[columnName].toString()
           if (!columnData.trim { it <= ' ' }.equals("0", ignoreCase = true)) {
-            navigator.openPage(
-              NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
-              args,
-              true, false
-            )
+            cellEvent.onNext(LeadUiEvent.CellClick(addtionalParameterMap))
           }
         }
       }
@@ -319,6 +301,7 @@ class LeadsTableAdapter internal constructor(
       list = ArrayList()
     }
   }
+
   inner class Item constructor(val data: Array<String?>)
   companion object {
     const val ID = "id"
