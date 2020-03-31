@@ -10,13 +10,13 @@ import com.mosl.mobile.domain.birthdayanniversary.RequestInput
 import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.mobile.user.login.UserManagerImpl
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.BELATED_FLAG
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_A
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_B
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_BIRTHDAY
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_MSG_TYPE
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_TYPE_L
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew.Companion.KEY_TYPE_T
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.BELATED_FLAG
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_A
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_B
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_BIRTHDAY
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_MSG_TYPE
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_TYPE_L
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_TYPE_T
 import com.mosl.tabapp.constants.MOSLConstants
 import io.reactivex.Observable
 

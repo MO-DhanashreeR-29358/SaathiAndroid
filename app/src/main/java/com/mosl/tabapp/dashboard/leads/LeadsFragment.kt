@@ -21,15 +21,23 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.bank.*
+import com.mosl.mobile.domain.bank.BankCodeModel
+import com.mosl.mobile.domain.bank.BranchCodeModel
+import com.mosl.mobile.domain.bank.SelectBank
+import com.mosl.mobile.domain.bank.SelectBranch
+import com.mosl.mobile.domain.bank.SelectSubBranch
+import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants.*
+import com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL
+import com.mosl.tabapp.constants.MOSLConstants.MAP
+import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
+import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.ClientsLeadShowFragment
+import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment
 import com.mosl.tabapp.databinding.FragmentLeadsBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -39,7 +47,9 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import java.io.Serializable
-import java.util.*
+import java.util.ArrayList
+import java.util.Collections
+import java.util.HashMap
 import javax.inject.Inject
 
 class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
@@ -66,7 +76,6 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentLeadsBinding.bind(view)
         setUpView()
         presenter.start()
@@ -452,7 +461,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
             R.id.tvShowMore -> {
                 val args = Bundle()
                 val clientsFragment =
-                    ClientsLeadShowFragment.newInstance()
+                    LeadsReportFragment()
                 args.putSerializable(DASHBOARD_MODEL, dashboardModel)
                 args.putSerializable(
                     MAP,
@@ -465,7 +474,6 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
                 args.putInt(FLT_BANKBRANCHCODE, binding.spBranch.selectedItemPosition)
                 args.putInt(FLT_BANKSUBBROKERCODE, binding.spSubBranch.selectedItemPosition)
                 args.putString(SYSTEM_NAME, getWidgetSystemsName())
-                args.putString(TYPESOFLEAD, AUSFB_LEAD)
                 clientsFragment.arguments = args
                 requireActivity().supportFragmentManager
                     .beginTransaction()

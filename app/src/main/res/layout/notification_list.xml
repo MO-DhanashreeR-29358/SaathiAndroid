@@ -1,90 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayoutOfListItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="@dimen/_5sdp"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/_5sdp">
 
         <View
             android:id="@+id/rowTab"
             android:layout_width="5dp"
-            android:layout_height="match_parent"
-            android:background="@color/yellow_menu" />
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@color/yellow_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/dateView"
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="@dimen/_56sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintStart_toEndOf="@+id/rowTab"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_date" />
+
+        <TextView
+            android:id="@+id/dateUpper"
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_size"
+            app:layout_constraintEnd_toEndOf="@+id/dateView"
+            app:layout_constraintStart_toStartOf="@+id/dateView"
+            app:layout_constraintTop_toTopOf="@+id/dateView" />
+
+        <TextView
+            android:id="@+id/dateLower"
+            android:layout_width="@dimen/_56sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_size"
+            app:layout_constraintBottom_toBottomOf="@+id/dateView"
+            app:layout_constraintEnd_toEndOf="@+id/dateView"
+            app:layout_constraintStart_toStartOf="@+id/dateView" />
+
+        <TextView
+            android:id="@+id/txtMessage"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="vertical">
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:ellipsize="end"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/txt_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/dateView"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <RelativeLayout
-                android:id="@+id/relativeLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtMessage"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:drawableLeft="@drawable/ic_clock"
+            android:gravity="end|center_vertical"
+            android:text=""
+            android:textSize="@dimen/txt_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtMessage" />
 
-              <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_date" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <RelativeLayout
-                    android:id="@+id/linaerLayout"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true">
-
-                    <TextView
-                        android:id="@+id/dateUpper"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/txt_size" />
-                </RelativeLayout>
-
-
-                <TextView
-                    android:id="@+id/dateLower"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linaerLayout"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/txt_size" />
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/txtMessage"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/relativeLayout"
-                android:ellipsize="end"
-                android:textColor="@color/black"
-                android:textSize="@dimen/txt_size" />
-
-            <TextView
-                android:id="@+id/timestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/txtMessage"
-                android:drawableLeft="@drawable/ic_clock"
-                android:textSize="@dimen/txt_size" />
-        </RelativeLayout>
-    </LinearLayout>
-</LinearLayout>
+</layout>

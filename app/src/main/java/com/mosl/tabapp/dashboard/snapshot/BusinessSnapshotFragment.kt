@@ -32,8 +32,10 @@ import javax.inject.Inject
 
 class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
   private lateinit var binding: FragBusinessSnapshotNewBinding
+
   @Inject
   lateinit var presenter: BusinessSnapshotPresenter
+
   @Inject
   lateinit var dashboardModel: DashboardModel
   private lateinit var model: WidgetModel
@@ -69,8 +71,14 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
       requireContext().createRowAdapter<BusinessSnapshotTableRow>(dynamicHeaderRow)
         .apply {
           viewProvider.rowClickListener = { row, view ->
+            val column = view.getTag(R.id.tag_column) as Int
             val reportData = tableRowAdapter.getItem(row).data
-            navigateEvent.onNext(getAdditionalParameterMap(reportData.data[0]))
+            navigateEvent.onNext(
+              getAdditionalParameterMap(
+                reportData.data[0],
+                reportData.headers[column + 1]
+              )
+            )
           }
         }
     tableRowAdapter = mfAdapter
@@ -117,13 +125,16 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
     return binding.spFilter3.selectedItem as? FilterRowData
   }
 
-  override fun getAdditionalParameterMap(rowData: String): MutableMap<String, String> {
+  override fun getAdditionalParameterMap(
+    rowData: String,
+    columnData: String
+  ): MutableMap<String, String> {
     val additionalParameterMap: MutableMap<String, String> = HashMap()
     getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }
     additionalParameterMap[MOSLConstants.COL_FILTER] =
-      "columnName"//TODO send column name after library update
+      columnData
     additionalParameterMap[MOSLConstants.ROW_FILTER] = rowData
     additionalParameterMap[SELF_KEY] = dashboardModel.dashboardFor
     return additionalParameterMap

@@ -8,16 +8,16 @@ data class LeadReportRequest(
   @JvmField val totalCount: Int = 0,
 
   @SerializedName("Period_From")
-  @JvmField val periodFrom: String,
+  @JvmField val periodFrom: String?,
 
   @SerializedName("IsExportToExcel")
   @JvmField val isExportToExcel: Boolean,
 
   @SerializedName("EmployeeCode")
-  @JvmField val employeeCode: String,
+  @JvmField val employeeCode: String?,
 
   @SerializedName("PageSize")
-  @JvmField val pageSize: String,
+  @JvmField val pageSize: String?,
 
   @SerializedName("CalculatedPage")
   @JvmField val calculatedPage: Int = 0,
@@ -29,14 +29,14 @@ data class LeadReportRequest(
   @JvmField val page: Int = 0,
 
   @SerializedName("ReportTypeSystemName")
-  @JvmField val reportTypeSystemName: String,
+  @JvmField val reportTypeSystemName: String?,
 
   @SerializedName("BusinessChannel")
   @JvmField val businessChannel: String = "-1",
 
   @SerializedName("Period_To")
-  @JvmField val periodTo: String,
+  @JvmField val periodTo: String?,
 
   @SerializedName("BranchCode")
-  @JvmField val branchCode: String
+  @JvmField val branchCode: String?
 )

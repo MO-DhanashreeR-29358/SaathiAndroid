@@ -3,16 +3,28 @@ package com.mosl.app.core.data
 import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.calendar.CalendarRepositoryImpl
+import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
+import com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl
+import com.mosl.app.core.data.leadviewdetail.history.MappingHistoryRepositoryImpl
+import com.mosl.app.core.data.notification.NotificationRepositoryImpl
+import com.mosl.app.core.data.productivity.ProductivityRepositoryImpl
+import com.mosl.app.core.data.report.HierarchyReportRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.app.core.data.trends.TrendsRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.calendar.CalendarRepository
+import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.lead.LeadRepository
+import com.mosl.mobile.domain.lead.report.LeadsReportRepository
+import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
+import com.mosl.mobile.domain.notification.NotificationRepository
+import com.mosl.mobile.domain.productivity.ProductivityRepository
+import com.mosl.mobile.domain.report.HierarchyReportRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
@@ -31,10 +43,19 @@ interface RepositoryAliasProviders {
   fun provideAusfbLeadRepository(repository: LeadRepositoryImpl): LeadRepository
 
   @Binds
+  fun provideLeadReportsRepository(repository: LeadsReportRepositoryImpl): LeadsReportRepository
+
+  @Binds
   fun provideClientsRepositoryRepository(repository: ClientsRepositoryImpl): ClientsRepository
 
   @Binds
   fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
+
+  @Binds
+  fun provideProvideRepository(repository: ProductivityRepositoryImpl): ProductivityRepository
+
+  @Binds
+  fun provideMappingHistoryRepository(repository: MappingHistoryRepositoryImpl): MappingHistoryRepository
 
   @Binds
   fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
@@ -50,4 +71,13 @@ interface RepositoryAliasProviders {
 
   @Binds
   abstract fun bindsCalendarRepository(repository: CalendarRepositoryImpl): CalendarRepository
+
+  @Binds
+  abstract fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository
+
+  @Binds
+  abstract fun provideHierarchyReportRepository(repository: HierarchyReportRepositoryImpl): HierarchyReportRepository
+
+  @Binds
+  abstract fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
 }

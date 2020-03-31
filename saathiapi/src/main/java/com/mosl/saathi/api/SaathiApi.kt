@@ -66,6 +66,8 @@ import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import com.mosl.saathi.api.model.dashboard.lead.LeadRequest
 import com.mosl.saathi.api.model.dashboard.lead.LeadResponse
+import com.mosl.saathi.api.model.dashboard.lead.report.LeadsReportRequest
+import com.mosl.saathi.api.model.dashboard.productivity.ProductivityRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.BusinessSnapshotRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
@@ -472,14 +474,26 @@ interface SaathiApi {
 
   @ExcludeWrapper
   @POST("Dashboard/LoadWidgetAsync")
-  fun getDashboardDataNew(
+  fun getBusinessSnapshotAdv(
     @Body request: BusinessSnapshotRequest
+  ): Observable<String>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getProductivity(
+    @Body request: ProductivityRequest
   ): Observable<String>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getLeadWidgetData(
     @Body request: LeadRequest
   ): Observable<LeadResponse>
+
+  @ExcludeWrapper
+  @POST("Dashboard/LoadWidgetAsync")
+  fun getLeadReportWidgetData(
+    @Body request: LeadsReportRequest
+  ): Observable<String>
 
   @POST("Dashboard/LoadWidgetAsync")
   fun getClientsWidgetData(

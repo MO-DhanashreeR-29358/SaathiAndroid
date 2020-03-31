@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragmentNew
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarFragmentNew
@@ -17,17 +17,17 @@ import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
-import com.mosl.tabapp.leadViewDetail.document.DocumentFragmentNew
+import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
+import com.mosl.tabapp.report.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.ReportFragment
-import com.mosl.tabapp.ui.SecondLevelReportFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 
@@ -41,7 +41,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
       NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragmentNew()
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
-      NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragmentNew()
+      NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
       NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebViewFragment().apply {
         args.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL)
@@ -54,13 +54,13 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
-      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> SecondLevelReportFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
       NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
       NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
-      NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragmentNew()
+      NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> SMTFragment()
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
