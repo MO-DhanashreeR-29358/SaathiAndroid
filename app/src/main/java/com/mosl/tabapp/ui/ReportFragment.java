@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -35,9 +34,7 @@ import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,8 +43,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -91,7 +87,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
 
     private void setUpView(View reportView) {
         widgetSystemName = this.getArguments().getString(MOSLConstants.SYSTEM_NAME);
-
+        titleName = this.getArguments().getString(MOSLConstants.NAME);
         tvNochart = reportView.findViewById(R.id.tvNochart);
         txtLables = reportView.findViewById(R.id.txtLables);
         table = reportView.findViewById(R.id.table);
@@ -100,7 +96,7 @@ public class ReportFragment extends CommonFragment implements View.OnClickListen
         RelativeLayout rlEndDate = reportView.findViewById(R.id.rlEndDate);
         RelativeLayout rlStartDate = reportView.findViewById(R.id.rlStartDate);
 
-        txtLables.setText(this.getArguments().getString(MOSLConstants.NAME));
+        txtLables.setText(titleName);
         spBranch = reportView.findViewById(R.id.spBranch);
         mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd");
         fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd");

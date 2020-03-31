@@ -60,11 +60,12 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.report.HierarchyReportFragment
+import com.mosl.tabapp.report.HierarchyReportModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.ui.ReportFragment
-import com.mosl.tabapp.ui.SecondLevelReportFragment
 import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -171,8 +172,8 @@ interface FragmentProvider {
   @ContributesAndroidInjector
   fun provideReportFragmentFactory(): ReportFragment
 
-  @ContributesAndroidInjector
-  fun provideSecondLevelReportFragmentFactory(): SecondLevelReportFragment
+  @ContributesAndroidInjector(modules = [HierarchyReportModule::class])
+  fun provideHierarchyReportFragmentFactory(): HierarchyReportFragment
 
   @ContributesAndroidInjector
   fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
