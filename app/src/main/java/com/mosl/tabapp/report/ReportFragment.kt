@@ -1,0 +1,362 @@
+package com.mosl.tabapp.report
+
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.text.Editable.Factory
+import android.view.View
+import android.view.ViewGroup.LayoutParams
+import android.view.Window
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.ImageView
+import com.jakewharton.rxbinding3.widget.itemSelections
+import com.mosl.app.core.error.ErrorModel
+import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
+import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.report.AssignedLeadReportModel
+import com.mosl.mobile.domain.report.HierarchyReportCombo
+import com.mosl.tabapp.R
+import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
+import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.FragReportBinding
+import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.report.HierarchyReportUIEvent.CellEvent
+import com.mosl.tabapp.table.DynamicHeaderRow
+import com.mosl.tabapp.table.createRowAdapter
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.util.NAME
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tableview.rowadapter.TableRowAdapter
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import javax.inject.Inject
+
+class ReportFragment : CommonFragment(),
+  ReportView {
+  private lateinit var binding: FragReportBinding
+  val TAG = ReportFragment::class.java.simpleName
+
+  @Inject
+  lateinit var presenter: ReportPresenter
+
+  private lateinit var model: WidgetModel
+  private lateinit var dynamicHeaderRow: DynamicHeaderRow
+  private lateinit var tableRowAdapter: TableRowAdapter<HierarchyReportTableRow>
+  private val navigateEvent = PublishSubject.create<CellEvent>()
+  private val datePickerEvent = PublishSubject.create<Unit>()
+  private lateinit var branchAdapter: ArrayAdapter<AssignedLeadReportModel>
+
+  lateinit var mainFromDate: String
+  lateinit var mainToDate: String
+  lateinit var toPostingDate: String
+  lateinit var fromPostingDate: String
+
+  lateinit var fromDat: Date
+  lateinit var toDate: Date
+  override fun getLayout(): Int {
+    return R.layout.frag_report
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding = FragReportBinding.bind(view)
+    setUpView()
+    setUpDate()
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+  }
+
+  private fun setUpView() {
+
+    branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spBranch.adapter = branchAdapter
+    binding.txtLables.text = arguments?.getString(NAME)
+    binding.tableWrapper.setRetryListener(onRetryClick)
+    dynamicHeaderRow = HierarchyReportTableMapper.header(
+      requireContext()
+    ) as DynamicHeaderRow
+    val mfAdapter =
+      requireContext().createRowAdapter<HierarchyReportTableRow>(dynamicHeaderRow)
+        .apply {
+          viewProvider.rowClickListener = { row, view ->
+            val reportData = tableRowAdapter.getItem(row).data
+            val leadId = getValue(
+              "LEAD ID", "LeadId", "Lead_Id",
+              "LeadId ClientCode", "LEADID/CLIENTCODE", hasMap = reportData.hasMap
+            )
+            val UCID = getValue(
+              "Client UCID", "CLIENT UCID",
+              "Client ucid", hasMap = reportData.hasMap
+            )
+            navigateEvent.onNext(
+              CellEvent(
+                leadId
+                , UCID
+              )
+            )
+          }
+        }
+    tableRowAdapter = mfAdapter
+    binding.tableWrapper.setAdapter(tableRowAdapter)
+
+  }
+
+  private fun setUpDate() {
+    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd")
+    fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
+    fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy")
+    mainToDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
+    toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
+    toPostingDate = CRMAppUtil.getDateStr(toDate, "dd-MM-yyyy")
+    binding.tvStartDate.setText(
+      CRMAppUtil.getDateStr(
+        fromDat,
+        MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY
+      )
+    )
+    binding.rlEndDate.setOnClickListener {
+      selectDate()
+    }
+    binding.tvEndDate.setText(
+      CRMAppUtil.getDateStr(
+        toDate,
+        MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY
+      )
+    )
+    binding.rlStartDate.setOnClickListener {
+      selectDate()
+    }
+  }
+
+  private fun selectDate() {
+    val today = Calendar.getInstance()
+    val dialog = Dialog(requireContext())
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.setContentView(layout.date_picker_from_to)
+    dialog.getWindow()
+      ?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+    val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
+    val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
+    dpToDate.maxDate = System.currentTimeMillis() - 1000
+    dpFromDate.maxDate = System.currentTimeMillis() - 1000
+    val close: ImageView =
+      dialog.findViewById(R.id.ibtnClose)
+    val btnSubmit: Button =
+      dialog.findViewById(R.id.btnSubmit)
+    if (mainFromDate != null) {
+      try {
+        val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
+        dpFromDate.init(
+          dateSplit[0].toInt(),
+          dateSplit[1].toInt() - 1,
+          dateSplit[2].toInt()
+        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+          mainFromDate =
+            year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+        }
+      } catch (e: Exception) {
+        Timber.d(e, TAG)
+      }
+    } else {
+      dpFromDate.init(
+        today.get(Calendar.YEAR),
+        Calendar.APRIL,
+        today.getFirstDayOfWeek()
+      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        mainFromDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+      }
+    }
+    if (mainFromDate != null) {
+      try {
+        val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
+        dpToDate.init(
+          dateSplit[0].toInt(),
+          dateSplit[1].toInt() - 1,
+          dateSplit[2].toInt()
+        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+          mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+        }
+      } catch (e: Exception) {
+        Timber.d(e, TAG)
+      }
+    } else {
+      dpToDate.init(
+        today.get(Calendar.YEAR),
+        today.get(Calendar.MONTH),
+        today.get(Calendar.DAY_OF_MONTH)
+      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        today.set(year, monthOfYear, dayOfMonth)
+        mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+      }
+    }
+    close.setOnClickListener { v: View? -> dialog.dismiss() }
+    btnSubmit.setOnClickListener { v: View? ->
+      fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
+      toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
+      if (fromDat.after(toDate)) {
+        MSFDialog.alertDialog(
+          requireContext(), 0, "Motilal Oswal", MOSLConstants.INVALID_DATE_RANGE,
+          "OK", true, null
+        )
+      } else {
+        if (mainFromDate != null) {
+          fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
+          fromPostingDate = CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
+          binding.tvStartDate.setText(fromPostingDate)
+        }
+        if (mainToDate != null) {
+          toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
+          toPostingDate = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
+          binding.tvEndDate.setText(toPostingDate)
+        }
+        datePickerEvent.onNext(Unit)
+        dialog.dismiss()
+      }
+
+    }
+    dialog.show()
+  }
+
+  fun prefix(input: Int): String? {
+    return if (Integer.toString(input).length == 1) {
+      "0$input"
+    } else input.toString() + ""
+  }
+
+  private fun openDatePicker() {
+    val cal = Calendar.getInstance()
+    val y = cal.get(Calendar.YEAR)
+    val m = cal.get(Calendar.MONTH)
+    val d = cal.get(Calendar.DAY_OF_MONTH)
+
+    val datePickerDialog = DatePickerDialog(
+      requireContext(),
+      DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+
+        val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year"
+        val pattern = "dd/MM/yyyy"
+        val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
+        val date = simpleDateFormat.parse(dateStr)
+        binding.tvStartDate.text = Factory.getInstance()
+          .newEditable(simpleDateFormat.format(date))
+
+      },
+      y,
+      m,
+      d
+    )
+
+    datePickerDialog.datePicker.maxDate = cal.timeInMillis
+    datePickerDialog.show()
+  }
+
+  private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
+    for (key in keys) {
+      val value: String? = hasMap.get(key)
+      if (value != null) {
+        return value
+      }
+    }
+    return "0"
+  }
+
+  override fun renderData(uiModel: UiModel<HierarchyReportCombo>) {
+    binding.tableWrapper.toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      binding.tableWrapper.showError(error)
+    }
+
+    uiModel.onSuccess { data ->
+      val headerData = mutableListOf<String>()
+      data.headers.map {
+        headerData.add(CRMAppUtil.getRefreshColumnName(it))
+      }
+      dynamicHeaderRow.setHeader(headerData)
+      val hierarchyReport: List<HierarchyReportTableRow> =
+        HierarchyReportTableMapper.map(data.data)
+      binding.tableWrapper.setData(
+        hierarchyReport, ErrorModel.noData(getString(R.string.error_message_no_data_available))
+      )
+    }
+  }
+
+  override fun widgetSystemsName(): String? {
+    return arguments?.getString(SYSTEM_NAME)
+  }
+
+  override fun titleName(): String? {
+    return arguments?.getString(NAME)
+  }
+
+  override fun fromDate(): String {
+    return CRMAppUtil.getDateFromString(
+      binding.tvStartDate.text.toString(),
+      "dd-MMM-yyyy",
+      "yyyy-MM-dd"
+    )
+  }
+
+  override fun toDate(): String {
+    return CRMAppUtil.getDateFromString(
+      binding.tvEndDate.text.toString(),
+      "dd-MMM-yyyy",
+      "yyyy-MM-dd"
+    )
+  }
+
+  override fun onBranchChange(): Observable<Int> {
+    return binding.spBranch.itemSelections()
+  }
+
+  override fun getBranch(): AssignedLeadReportModel? {
+    return binding.spBranch.selectedItem as? AssignedLeadReportModel
+  }
+
+  override fun renderBranchFilter(uiModel: UiModel<List<AssignedLeadReportModel>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      showOnFailurePopup(error)
+
+    }
+
+    uiModel.onSuccess {
+      branchAdapter.setSpinnerData(binding.spBranch, it)
+
+    }
+  }
+
+  override fun onNavigateEvent(): Observable<CellEvent> {
+    return navigateEvent.ofType()
+  }
+
+  override fun onDatePickerEvent(): Observable<Unit> {
+    return datePickerEvent.ofType()
+  }
+
+  override fun onFragmentReopened(args: Bundle) {
+    super.onFragmentReopened(args)
+    binding.txtLables.text = args.getString(MOSLConstants.NAME)
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+  }
+
+}

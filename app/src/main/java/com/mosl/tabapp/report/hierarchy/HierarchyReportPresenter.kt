@@ -43,7 +43,7 @@ class HierarchyReportPresenter @Inject constructor(
       page = 0,
       reportTypeSystemName = mMap.get(ReportTypeSystemName),
       businessChannel = "-1",
-      pageSize = mMap.get(PageSize),
+      pageSize = MOSLConstants.REPORT_PAGE_SIZE,
       periodTo = mMap.get(Period_To),
       branchCode = mMap.get(BranchCode)
     )

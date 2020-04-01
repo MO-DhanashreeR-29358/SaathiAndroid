@@ -4,5 +4,6 @@ import io.reactivex.Observable
 
 interface HierarchyReportRepository {
 
-  fun getDashboardData(request: HierarchyReportInput): Observable<HierarchyReportCombo>
+  fun getBranch(): Observable<List<AssignedLeadReportModel>>
+  fun getDashboardData(hierarchyReportInput: HierarchyReportInput): Observable<HierarchyReportCombo>
 }

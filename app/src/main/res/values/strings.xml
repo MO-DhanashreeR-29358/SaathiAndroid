@@ -307,6 +307,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txt_lable_no_clients_having_birthday_today">No clients having Birthday today</string>
     <string name="txt_no_notification_msg">You don\'t have any notifications right now.</string>
+    <string name="txt_lable_select_channel">Select Channel</string>
+    <string name="txt_branch_select_branch">Select Branch</string>
+    <string name="txt_lable_from_date">From Date</string>
+    <string name="txt_lable_to_date">To Date</string>
 
 
 </resources>

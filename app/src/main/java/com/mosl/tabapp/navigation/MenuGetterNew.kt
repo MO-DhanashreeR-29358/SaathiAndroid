@@ -22,10 +22,10 @@ import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
+import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.smt.SMTFragment
-import com.mosl.tabapp.ui.ReportFragmentOld
 import com.mosl.tabapp.ui.WebViewFragment
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 
@@ -55,7 +55,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
       NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
-      NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragmentOld()
+      NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
