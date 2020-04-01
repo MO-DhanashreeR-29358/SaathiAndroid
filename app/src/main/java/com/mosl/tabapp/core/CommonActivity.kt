@@ -11,7 +11,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -278,14 +277,8 @@ class CommonActivity : BaseActivity(),
       MINUTES
     ).build()
 
-    locationWorkManager.enqueueUniquePeriodicWork(
-      "MyLocationWork",
-      ExistingPeriodicWorkPolicy.KEEP, periodicLocationWork
-    )
-    dataSyncWorkManager.enqueueUniquePeriodicWork(
-      "MyDataWork",
-      ExistingPeriodicWorkPolicy.KEEP, periodicDataSyncWork
-    )
+    locationWorkManager.enqueue(periodicLocationWork)
+    dataSyncWorkManager.enqueue(periodicDataSyncWork)
 
     compressionDataSyncWorkId = periodicDataSyncWork.id
     compressionLocationWorkId = periodicLocationWork.id
