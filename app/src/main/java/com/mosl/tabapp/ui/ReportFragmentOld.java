@@ -67,8 +67,8 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by Bhavesh on 09-10-2017.
  */
 
-public class ReportFragment extends CommonFragment implements View.OnClickListener {
-    private final static String TAG = ReportFragment.class.getSimpleName();
+public class ReportFragmentOld extends CommonFragment implements View.OnClickListener {
+    private final static String TAG = ReportFragmentOld.class.getSimpleName();
     private TableFixHeaders table;
     private TextView tvNochart;
     private String widgetSystemName;

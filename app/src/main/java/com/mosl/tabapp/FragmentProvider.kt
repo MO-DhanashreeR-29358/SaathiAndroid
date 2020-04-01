@@ -8,7 +8,6 @@ import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerModule
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryModule
-import com.mosl.tabapp.calendar.CalendarAppointsListFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarFragmentNew
 import com.mosl.tabapp.calendar.CalendarModule
@@ -63,12 +62,12 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
-import com.mosl.tabapp.report.HierarchyReportFragment
-import com.mosl.tabapp.report.HierarchyReportModule
+import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
+import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
-import com.mosl.tabapp.ui.ReportFragment
+import com.mosl.tabapp.ui.ReportFragmentOld
 import com.mosl.tabapp.ui.WebViewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -179,7 +178,7 @@ interface FragmentProvider {
   fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
 
   @ContributesAndroidInjector
-  fun provideReportFragmentFactory(): ReportFragment
+  fun provideReportFragmentFactory(): ReportFragmentOld
 
   @ContributesAndroidInjector(modules = [HierarchyReportModule::class])
   fun provideHierarchyReportFragmentFactory(): HierarchyReportFragment

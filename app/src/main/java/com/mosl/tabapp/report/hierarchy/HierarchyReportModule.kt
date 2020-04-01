@@ -1,4 +1,4 @@
-package com.mosl.tabapp.report
+package com.mosl.tabapp.report.hierarchy
 
 import dagger.Module
 import dagger.Provides

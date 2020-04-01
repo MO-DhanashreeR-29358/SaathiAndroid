@@ -1,4 +1,4 @@
-package com.mosl.tabapp.report
+package com.mosl.tabapp.report.hierarchy
 
 import android.os.Bundle
 import android.view.View
@@ -15,6 +15,9 @@ import com.mosl.tabapp.constants.MOSLConstants.STRING_TITLE
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragHierarchyReportBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.report.HierarchyReportTableMapper
+import com.mosl.tabapp.report.HierarchyReportTableRow
+import com.mosl.tabapp.report.HierarchyReportUIEvent.CellEvent
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
 import com.mosl.tableview.rowadapter.TableRowAdapter
@@ -23,7 +26,8 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class HierarchyReportFragment : CommonFragment(), HierarchyReportView {
+class HierarchyReportFragment : CommonFragment(),
+  HierarchyReportView {
   private lateinit var binding: FragHierarchyReportBinding
 
   @Inject
@@ -32,7 +36,7 @@ class HierarchyReportFragment : CommonFragment(), HierarchyReportView {
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<HierarchyReportTableRow>
-  private val navigateEvent = PublishSubject.create<HierarchyReportUIEvent.CellEvent>()
+  private val navigateEvent = PublishSubject.create<CellEvent>()
 
   override fun getLayout(): Int {
     return R.layout.frag_hierarchy_report
@@ -50,7 +54,9 @@ class HierarchyReportFragment : CommonFragment(), HierarchyReportView {
 
     binding.txtLables.text = arguments?.getString(STRING_TITLE)
     binding.tableWrapper.setRetryListener(onRetryClick)
-    dynamicHeaderRow = HierarchyReportTableMapper.header(requireContext()) as DynamicHeaderRow
+    dynamicHeaderRow = HierarchyReportTableMapper.header(
+      requireContext()
+    ) as DynamicHeaderRow
     val mfAdapter =
       requireContext().createRowAdapter<HierarchyReportTableRow>(dynamicHeaderRow)
         .apply {
@@ -65,7 +71,7 @@ class HierarchyReportFragment : CommonFragment(), HierarchyReportView {
               "Client ucid", hasMap = reportData.hasMap
             )
             navigateEvent.onNext(
-              HierarchyReportUIEvent.CellEvent(
+              CellEvent(
                 leadId
                 , UCID
               )
@@ -107,7 +113,7 @@ class HierarchyReportFragment : CommonFragment(), HierarchyReportView {
     }
   }
 
-  override fun onNavigateEvent(): Observable<HierarchyReportUIEvent.CellEvent> {
+  override fun onNavigateEvent(): Observable<CellEvent> {
     return navigateEvent.ofType()
   }
 

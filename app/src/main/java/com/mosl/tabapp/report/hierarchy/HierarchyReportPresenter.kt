@@ -1,4 +1,4 @@
-package com.mosl.tabapp.report
+package com.mosl.tabapp.report.hierarchy
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
