@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -269,18 +268,12 @@ class CommonActivity : BaseActivity(),
 
   private fun startWorkManager() {
     val dataRepeatInterval: Long = 32
-    val periodicDataSyncWork = if (Build.VERSION.SDK_INT >= 26) {
+    val periodicDataSyncWork =
       PeriodicWorkRequestBuilder<DataSyncWorker>(
         dataRepeatInterval,
         MINUTES
       ).build()
-    } else {
-      PeriodicWorkRequestBuilder<DataSyncWorker>(
-        dataRepeatInterval,
-        MINUTES
-      ).setConstraints(networkConstraints())
-        .build()
-    }
+
     val periodicLocationWork = PeriodicWorkRequestBuilder<LocationWorker>(
       16,
       MINUTES
