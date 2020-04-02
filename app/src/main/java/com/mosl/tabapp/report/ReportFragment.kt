@@ -1,11 +1,9 @@
 package com.mosl.tabapp.report
 
-import android.app.DatePickerDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable.Factory
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
@@ -22,6 +20,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.report.AssignedLeadReportModel
 import com.mosl.mobile.domain.report.HierarchyReportCombo
+import com.mosl.shared.util.AppDateFormats
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.common.CRMAppUtil
@@ -41,10 +40,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import javax.inject.Inject
 
 class ReportFragment : CommonFragment(),
@@ -64,13 +60,11 @@ class ReportFragment : CommonFragment(),
 
   lateinit var mainFromDate: String
   lateinit var mainToDate: String
-  lateinit var toPostingDate: String
-  lateinit var fromPostingDate: String
 
   lateinit var fromDat: Date
   lateinit var toDate: Date
   override fun getLayout(): Int {
-    return R.layout.frag_report
+    return layout.frag_report
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,24 +114,17 @@ class ReportFragment : CommonFragment(),
   private fun setUpDate() {
     mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd")
     fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-    fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy")
     mainToDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
     toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
-    toPostingDate = CRMAppUtil.getDateStr(toDate, "dd-MM-yyyy")
+
     binding.tvStartDate.setText(
-      CRMAppUtil.getDateStr(
-        fromDat,
-        MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY
-      )
+      AppDateFormats.DF_JSON_DATE6.format(fromDat)
     )
     binding.rlEndDate.setOnClickListener {
       selectDate()
     }
     binding.tvEndDate.setText(
-      CRMAppUtil.getDateStr(
-        toDate,
-        MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY
-      )
+      AppDateFormats.DF_JSON_DATE6.format(toDate)
     )
     binding.rlStartDate.setOnClickListener {
       selectDate()
@@ -145,7 +132,6 @@ class ReportFragment : CommonFragment(),
   }
 
   private fun selectDate() {
-    val today = Calendar.getInstance()
     val dialog = Dialog(requireContext())
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -160,52 +146,34 @@ class ReportFragment : CommonFragment(),
       dialog.findViewById(R.id.ibtnClose)
     val btnSubmit: Button =
       dialog.findViewById(R.id.btnSubmit)
-    if (mainFromDate != null) {
-      try {
-        val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
-        dpFromDate.init(
-          dateSplit[0].toInt(),
-          dateSplit[1].toInt() - 1,
-          dateSplit[2].toInt()
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          mainFromDate =
-            year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      } catch (e: Exception) {
-        Timber.d(e, TAG)
-      }
-    } else {
+
+    try {
+      val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
       dpFromDate.init(
-        today.get(Calendar.YEAR),
-        Calendar.APRIL,
-        today.getFirstDayOfWeek()
+        dateSplit[0].toInt(),
+        dateSplit[1].toInt() - 1,
+        dateSplit[2].toInt()
       ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-        mainFromDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+        mainFromDate =
+          year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
+    } catch (e: Exception) {
+      Timber.d(e)
     }
-    if (mainFromDate != null) {
-      try {
-        val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
-        dpToDate.init(
-          dateSplit[0].toInt(),
-          dateSplit[1].toInt() - 1,
-          dateSplit[2].toInt()
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      } catch (e: Exception) {
-        Timber.d(e, TAG)
-      }
-    } else {
+
+    try {
+      val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
       dpToDate.init(
-        today.get(Calendar.YEAR),
-        today.get(Calendar.MONTH),
-        today.get(Calendar.DAY_OF_MONTH)
+        dateSplit[0].toInt(),
+        dateSplit[1].toInt() - 1,
+        dateSplit[2].toInt()
       ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-        today.set(year, monthOfYear, dayOfMonth)
         mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
+    } catch (e: Exception) {
+      Timber.d(e)
     }
+
     close.setOnClickListener { v: View? -> dialog.dismiss() }
     btnSubmit.setOnClickListener { v: View? ->
       fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
@@ -216,15 +184,13 @@ class ReportFragment : CommonFragment(),
           "OK", true, null
         )
       } else {
-        if (mainFromDate != null) {
-          fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-          fromPostingDate = CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          binding.tvStartDate.setText(fromPostingDate)
+        mainFromDate.apply {
+          fromDat = CRMAppUtil.getDate(this, "yyyy-MM-dd")
+          binding.tvStartDate.setText(AppDateFormats.DF_JSON_DATE6.format(fromDat))
         }
-        if (mainToDate != null) {
-          toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
-          toPostingDate = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          binding.tvEndDate.setText(toPostingDate)
+        mainToDate.apply {
+          toDate = CRMAppUtil.getDate(this, "yyyy-MM-dd")
+          binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
         }
         datePickerEvent.onNext(Unit)
         dialog.dismiss()
@@ -238,33 +204,6 @@ class ReportFragment : CommonFragment(),
     return if (Integer.toString(input).length == 1) {
       "0$input"
     } else input.toString() + ""
-  }
-
-  private fun openDatePicker() {
-    val cal = Calendar.getInstance()
-    val y = cal.get(Calendar.YEAR)
-    val m = cal.get(Calendar.MONTH)
-    val d = cal.get(Calendar.DAY_OF_MONTH)
-
-    val datePickerDialog = DatePickerDialog(
-      requireContext(),
-      DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-
-        val dateStr = "$dayOfMonth/${monthOfYear + 1}/$year"
-        val pattern = "dd/MM/yyyy"
-        val simpleDateFormat = SimpleDateFormat(pattern, Locale.ENGLISH)
-        val date = simpleDateFormat.parse(dateStr)
-        binding.tvStartDate.text = Factory.getInstance()
-          .newEditable(simpleDateFormat.format(date))
-
-      },
-      y,
-      m,
-      d
-    )
-
-    datePickerDialog.datePicker.maxDate = cal.timeInMillis
-    datePickerDialog.show()
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
