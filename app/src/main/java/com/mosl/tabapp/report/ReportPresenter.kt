@@ -79,7 +79,7 @@ class ReportPresenter @Inject constructor(
   private fun navigationFlow(leadID: String, UCID: String, employeeCode: String) {
     val args = Bundle()
     var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-    if (employeeCode.isEmpty()) {
+    if (employeeCode.equals("0")) {
       navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, UCID)
