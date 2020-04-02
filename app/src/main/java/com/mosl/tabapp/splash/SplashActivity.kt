@@ -27,6 +27,7 @@ import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
+import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.Observable
@@ -45,6 +46,9 @@ class SplashActivity : LeanBaseActivity() {
     lateinit var userManager: UserManager
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
+
+    @Inject
+    lateinit var firebaseHelper: FirebaseHelper
     private val handler = Handler()
     private var count = 0
 
@@ -262,6 +266,7 @@ class SplashActivity : LeanBaseActivity() {
     fun renderLoginData(uimodel: UiModel<User>) {
 
         uimodel.onSuccess {
+            firebaseHelper.setUserProperty(it.employeeCode)
             setUserPreferenceData(it)
         }
 

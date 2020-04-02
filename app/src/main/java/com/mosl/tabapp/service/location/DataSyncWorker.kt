@@ -38,17 +38,18 @@ class DataSyncWorker(
   }
 
   override fun doWork(): Result {
-    try {
+
+    return try {
       if (userManager.isLoggedIn()) {
-        if (SaathiAppNew.get().getDB()?.daoAccess()?.getLocationList()?.size != 0) {
+        if (SaathiAppNew.get().getDB()?.daoAccess()?.locationList?.size != 0) {
           LocationUpdate()
         }
       }
-      return Result.success()
+      Result.success()
     } catch (e: Exception) {
       e.printStackTrace()
       Timber.d(e.toString())
-      return Result.retry()
+      return Result.failure()
     }
 
   }

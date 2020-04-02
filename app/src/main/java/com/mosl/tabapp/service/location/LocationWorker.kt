@@ -57,17 +57,17 @@ class LocationWorker(
 
   override fun doWork(): Result {
 
-    try {
+    return try {
       if (userManager.isLoggedIn()) {
         if (hasGPSDevice(context)) {
           startLocationUpdates()
         }
       }
-      return Result.success()
+      Result.success()
     } catch (e: Exception) {
       e.printStackTrace()
       Timber.d(e.toString())
-      return Result.retry()
+      return Result.failure()
     }
 
   }
@@ -89,7 +89,7 @@ class LocationWorker(
     val settingsClient = LocationServices.getSettingsClient(context)
     settingsClient.checkLocationSettings(locationSettingsRequest)
 
-    val mainHandler = Handler(context.getMainLooper())
+    val mainHandler = Handler(context.mainLooper)
 
     val myRunnable = Runnable {
 
