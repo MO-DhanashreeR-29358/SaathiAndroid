@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
@@ -11,6 +12,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
@@ -266,19 +268,32 @@ class CommonActivity : BaseActivity(),
   }
 
   private fun startWorkManager() {
-    val periodicDataSyncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(
-      20,
-      MINUTES
-    ).setConstraints(networkConstraints())
-      .build()
-
+    val dataRepeatInterval: Long = 32
+    val periodicDataSyncWork = if (Build.VERSION.SDK_INT >= 26) {
+      PeriodicWorkRequestBuilder<DataSyncWorker>(
+        dataRepeatInterval,
+        MINUTES
+      ).build()
+    } else {
+      PeriodicWorkRequestBuilder<DataSyncWorker>(
+        dataRepeatInterval,
+        MINUTES
+      ).setConstraints(networkConstraints())
+        .build()
+    }
     val periodicLocationWork = PeriodicWorkRequestBuilder<LocationWorker>(
       16,
       MINUTES
     ).build()
 
-    locationWorkManager.enqueue(periodicLocationWork)
-    dataSyncWorkManager.enqueue(periodicDataSyncWork)
+    locationWorkManager.enqueueUniquePeriodicWork(
+      "MyLocationWork",
+      ExistingPeriodicWorkPolicy.KEEP, periodicLocationWork
+    )
+    dataSyncWorkManager.enqueueUniquePeriodicWork(
+      "MyDataWork",
+      ExistingPeriodicWorkPolicy.KEEP, periodicDataSyncWork
+    )
 
     compressionDataSyncWorkId = periodicDataSyncWork.id
     compressionLocationWorkId = periodicLocationWork.id
