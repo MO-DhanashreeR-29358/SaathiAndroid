@@ -46,7 +46,7 @@ class ReportPresenter @Inject constructor(
       .addTo(disposable)
 
     view.onNavigateEvent().subscribe {
-      navigationFlow(it.leadId, it.UCID)
+      navigationFlow(it.leadId, it.UCID, it.employeeCode)
     }.addTo(disposable)
   }
 
@@ -76,16 +76,34 @@ class ReportPresenter @Inject constructor(
     return ""
   }
 
-  private fun navigationFlow(leadID: String, UCID: String) {
+  private fun navigationFlow(leadID: String, UCID: String, employeeCode: String) {
     val args = Bundle()
-    args.putString(MOSLConstants.LEAD_ID, leadID)
-    args.putString(MOSLConstants.UCID, UCID)
+    var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+    if (employeeCode.isEmpty()) {
+      navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+      args.putString(MOSLConstants.LEAD_ID, leadID)
+      args.putString(MOSLConstants.UCID, UCID)
+    } else {
+      args.putString(MOSLConstants.STRING_TITLE, view.titleName())
+      args.putSerializable(MOSLConstants.STRING_MAP, employeeCode.getMap())
+      navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT
+    }
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER,
+      navigationConstants,
       args,
       addToStack = true,
       forceReload = false
     )
+  }
+
+  private fun String.getMap(): HashMap<String, String> {
+    val dataMap: HashMap<String, String> = HashMap()
+    dataMap[EmployeeCode] = this
+    dataMap[BranchCode] = getBranch(view.getBranch())
+    dataMap[Period_From] = view.fromDate()
+    dataMap[Period_To] = view.toDate()
+    view.widgetSystemsName()?.let { dataMap[ReportTypeSystemName] = it }
+    return dataMap
   }
 
   companion object {

@@ -98,10 +98,14 @@ class ReportFragment : CommonFragment(),
               "Client UCID", "CLIENT UCID",
               "Client ucid", hasMap = reportData.hasMap
             )
+            val employeeCode = getValue(
+              "EMPLOYEE CODE", "EMPLOYEE_CODE",
+              hasMap = reportData.hasMap
+            )
             navigateEvent.onNext(
               CellEvent(
                 leadId
-                , UCID
+                , UCID, employeeCode
               )
             )
           }
