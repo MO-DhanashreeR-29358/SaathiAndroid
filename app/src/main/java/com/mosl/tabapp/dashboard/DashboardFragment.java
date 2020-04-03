@@ -69,6 +69,7 @@ import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem;
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest;
 import com.mosl.tabapp.R;
+import com.mosl.tabapp.actionableinsight.ActionableInsightDialogFragment;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CRMDecimalValueFormater;
 import com.mosl.tabapp.common.FilterRowData;
@@ -627,7 +628,16 @@ public class DashboardFragment extends CommonFragment
       }
       if (id == R.id.ivActionableInsights) {
         hideKeyboard(view);
-        actionableInsightDialog();
+        ActionableInsightDialogFragment dialogFragment = new ActionableInsightDialogFragment();
+        ArrayList<WidgetModel> widgetList =
+            (ArrayList<WidgetModel>) currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ActionableInsightDialogFragment.ARG_LIST_DATA, widgetList);
+        bundle.putString(ActionableInsightDialogFragment.ARG_DASHBOARD_FOR,
+            currentDashboard.getDashboardFor());
+        dialogFragment.setArguments(bundle);
+        dialogFragment.show(requireFragmentManager(), "Actionable Dialog");
+        //actionableInsightDialog();
       } else if (id == R.id.btnClient) {
         hideKeyboard(view);
         loadClients();

@@ -2,6 +2,8 @@ package com.mosl.tabapp
 
 import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.mobile.pdf.OTPModule
+import com.mosl.tabapp.actionableinsight.ActionableInsightDialogFragment
+import com.mosl.tabapp.actionableinsight.ActionableInsightModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
@@ -224,4 +226,7 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [ClientsTradedYesterdayModule::class])
   fun provideClientTradeYesterdayFragmentFactory(): com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
+
+  @ContributesAndroidInjector(modules = [ActionableInsightModule::class])
+  fun provideActionableInsightsFragmentfactory(): ActionableInsightDialogFragment
 }

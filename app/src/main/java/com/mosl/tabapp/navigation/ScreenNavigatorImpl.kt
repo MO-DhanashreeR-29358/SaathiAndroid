@@ -18,15 +18,25 @@ import com.mosl.navigator.NavigationHelper
 import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
 import com.mosl.navigator.asFragmentEntry
+import com.mosl.tabapp.actionableinsight.ActionableInsightDetailData
+import com.mosl.tabapp.actionableinsight.ActionableInsightNavigator
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
 import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.ACTIONABLE
+import com.mosl.tabapp.constants.MOSLConstants.FILTER_LIST
+import com.mosl.tabapp.constants.MOSLConstants.LABEL
 import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
+import com.mosl.tabapp.constants.MOSLConstants.MAP
 import com.mosl.tabapp.constants.MOSLConstants.MEETING_ID
+import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
+import com.mosl.tabapp.constants.MOSLConstants.SPINNER_LIST
+import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
 import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.WIDGETNAME
 import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.ekyc.NEW
@@ -40,8 +50,11 @@ import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragmen
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingView.Companion.ARG_UPDATE_MEETING
 import com.mosl.tabapp.leadViewDetail.updatemeeting.mapToUpdateMeetingScreenData
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
+import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_UPDATE_MEETING
+import java.io.Serializable
+import java.util.HashMap
 import javax.inject.Inject
 
 @ActivityScoped
@@ -51,7 +64,7 @@ class ScreenNavigatorImpl @Inject constructor(
   val userManager: UserManager,
   val navigator: Navigator
 ) : BaseNavigator, EkycNavigator, BannerNavigator,
-    LeadViewActivitiesNavigator {
+    LeadViewActivitiesNavigator, ActionableInsightNavigator {
 
   override fun openPage(
     pageId: Int,
@@ -245,5 +258,26 @@ class ScreenNavigatorImpl @Inject constructor(
     }
 
     openPage(NAVIGATE_TO_UPDATE_MEETING, args, true)
+  }
+
+  override fun navigateToSecondLevelDashboard(
+    actionableInsightDetailData: ActionableInsightDetailData
+  ) {
+    val addtionalParameterMap: MutableMap<String, String> = HashMap()
+    addtionalParameterMap.put(SELF_KEY, actionableInsightDetailData.paramVal)
+
+    val args = Bundle().apply {
+      putString(SYSTEM_NAME, actionableInsightDetailData.data.systemName)
+      putString(LABEL, ACTIONABLE)
+      putString(WIDGETNAME, actionableInsightDetailData.data.name)
+      if (actionableInsightDetailData.filterList.isNotEmpty()) {
+        putParcelableArrayList(FILTER_LIST, actionableInsightDetailData.filterList)
+      }
+      if (actionableInsightDetailData.spinnerList.isNotEmpty()) {
+        putParcelableArrayList(SPINNER_LIST, actionableInsightDetailData.spinnerList)
+      }
+      putSerializable(MAP, addtionalParameterMap as Serializable)
+    }
+    openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true)
   }
 }
