@@ -30,7 +30,6 @@ fun List<TrendsTableItem>.itemTransform(): List<TrendsTableItemModel> {
       parameters = it.parameters,
       chartType = it.chartType, dec = it.dec,
       oct = it.oct, nov = it.nov, jan = it.jan, feb = it.feb, mar = it.mar
-
     )
   }
 }

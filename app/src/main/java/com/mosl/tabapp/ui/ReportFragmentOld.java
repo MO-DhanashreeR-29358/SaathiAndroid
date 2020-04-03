@@ -123,7 +123,7 @@ public class ReportFragmentOld extends CommonFragment implements View.OnClickLis
 
     @Override
     protected int getLayout() {
-        return R.layout.frag_report;
+        return R.layout.frag_report_old;
     }
 
     private void renderAssignedLeadReports(UiModel<List<AssignedLeadReportItem>> uiModel) {
@@ -423,7 +423,7 @@ public class ReportFragmentOld extends CommonFragment implements View.OnClickLis
     public void onFragmentReopened(@NotNull Bundle args) {
         super.onFragmentReopened(args);
         widgetSystemName =
-                args.getString(MOSLConstants.SYSTEM_NAME);
+            args.getString(MOSLConstants.SYSTEM_NAME);
         titleName = args.getString(MOSLConstants.NAME);
         txtLables.setText(titleName);
         selectBranch();
