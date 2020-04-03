@@ -267,10 +267,9 @@ class CommonActivity : BaseActivity(),
   }
 
   private fun startWorkManager() {
-    val dataRepeatInterval: Long = 32
     val periodicDataSyncWork =
       PeriodicWorkRequestBuilder<DataSyncWorker>(
-        dataRepeatInterval,
+        32,
         MINUTES
       ).build()
 
