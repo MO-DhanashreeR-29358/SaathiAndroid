@@ -1,4 +1,4 @@
-package com.mosl.tabapp.actionableinsight
+package com.mosl.tabapp.dashboard.actionableinsight
 
 interface ActionableInsightNavigator {
   fun navigateToSecondLevelDashboard(actionableInsightDetailData: ActionableInsightDetailData)
