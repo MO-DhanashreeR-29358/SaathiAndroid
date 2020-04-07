@@ -5,28 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/title_black"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_4sdp">
+        android:layout_margin="@dimen/_4sdp"
+        >
 
-      <androidx.appcompat.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivLeadViewArrow"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/_6sdp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_menu_three_dot" />
+            app:srcCompat="@drawable/ic_menu_three_dot"
+            />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivLead"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            />
 
     </RelativeLayout>
 
@@ -39,71 +44,80 @@
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/txt_size"
-        tools:text="Lead name" />
+        tools:text="Lead name"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_5sdp"
         android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginRight="@dimen/_10sdp">
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        >
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_weight="1.1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="Client Code"
+                android:text="@string/txt_lable_client_code"
                 android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section" />
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="Lead Id:"
+                android:text="@string/txt_lable_lead_id"
                 android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section" />
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="Branch Code"
+                android:text="@string/txt_lable_branch_code"
                 android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section" />
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="Current Stage"
+                android:text="@string/txt_lable_current_stage"
                 android:textColor="@color/white"
-                android:textSize="@dimen/txt_size_lms_top_section" />
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
-                android:text="In Current Stage Since"
-                android:textColor="@color/white"
                 android:layout_marginBottom="@dimen/_2sdp"
-                android:textSize="@dimen/txt_size_lms_top_section" />
+                android:text="@string/txt_lable_in_current_stage_since"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_5sdp"
             android:layout_weight="1"
             android:gravity="end"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <TextView
                 android:id="@+id/tvClientCode"
@@ -113,16 +127,18 @@
                 android:gravity="end"
                 android:textColor="@color/white"
                 android:textSize="@dimen/txt_size_lms_top_section"
-                tools:text="Data" />
+                tools:text="Data"
+                />
 
             <TextView
                 android:id="@+id/tvLeadId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:textSize="@dimen/txt_size_lms_top_section"
                 android:textColor="@color/white"
-                tools:text="Data" />
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
 
             <TextView
                 android:id="@+id/tvBranchCode"
@@ -132,7 +148,8 @@
                 android:gravity="end"
                 android:textColor="@color/white"
                 android:textSize="@dimen/txt_size_lms_top_section"
-                tools:text="Data" />
+                tools:text="Data"
+                />
 
             <TextView
                 android:id="@+id/tvCurrentStage"
@@ -142,19 +159,22 @@
                 android:gravity="end"
                 android:textColor="@color/white"
                 android:textSize="@dimen/txt_size_lms_top_section"
-                tools:text="Data" />
+                tools:text="Data"
+                />
 
             <TextView
                 android:id="@+id/tvCurrentStageSince"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
                 android:gravity="end"
                 android:textColor="@color/white"
                 android:textSize="@dimen/txt_size_lms_top_section"
-                android:layout_marginBottom="@dimen/_2sdp"
-                tools:text="Data" />
+                tools:text="Data"
+                />
         </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout>

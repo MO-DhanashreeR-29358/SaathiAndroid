@@ -1,6 +1,8 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -36,12 +38,14 @@ import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.jetbrains.annotations.NotNull;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITIES;
 import static com.mosl.tabapp.constants.MOSLConstants.DETAILS;
@@ -64,7 +68,8 @@ import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CREATE_
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SUGGEST_ME;
 
-public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener {
+public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener,
+    AutoCompleteAdapter.DiyLinkClickListner {
 
   private static final String SEARCH_TYPE_LEAD = "Lead";
   private static final String SEARCH_TYPE_CLIENT = "Client";
@@ -85,6 +90,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
   private TabLayout indicatorLeadView;
   private int createMeetingId = 0;
   private int diyCode = 0;
+  private String diyLink = "";
 
   @Override
   protected int getLayout() {
@@ -321,7 +327,8 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       prospectSourceName = stringOrEmpty(data.prospectSource);
       prospectSourceDetail = stringOrEmpty(String.valueOf(data.leadSourceDetailsID));
       oaoUserId = data.oAOUserid;
-      diyCode = data.diy_code;
+      diyCode = data.diyCode;
+      diyLink = stringOrEmpty(data.diyLink);
       List<LeadProductMappingItem> productMapping = data.leadProductMapping;
       if (productMapping.size() != 0) {
         for (int i = 0; i < productMapping.size(); i++) {
@@ -374,7 +381,8 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     ImageView ivCall = dialog.findViewById(R.id.ivCall);
     ImageView ivSms = dialog.findViewById(R.id.ivSms);
     ImageView ivOpenAccount = dialog.findViewById(R.id.ivOpenAccount);
-    ImageView ivDiy = dialog.findViewById(R.id.ivDiy);
+    ImageView ivShareLink = dialog.findViewById(R.id.ivShareLink);
+    ImageView ivCopyLink = dialog.findViewById(R.id.ivCopyLink);
     ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
     ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
     View view3 = dialog.findViewById(R.id.view3);
@@ -384,13 +392,10 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       ivSuggestMe.setVisibility(View.GONE);
     }
     if (userManager.getUser().isSMTEnabled()) {
+      view3.setVisibility(View.VISIBLE);
       ivSuggestMe.setVisibility(View.VISIBLE);
-      if (diyCode > 0) {
-        view3.setVisibility(View.VISIBLE);
-      }
     } else {
       ivSuggestMe.setVisibility(View.GONE);
-      view3.setVisibility(View.GONE);
     }
 
     if (oaoUserId != null && oaoUserId > 0) {
@@ -402,21 +407,25 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     }
 
     if (diyCode > 0) {
-      ivDiy.setVisibility(View.VISIBLE);
-      view3.setVisibility(View.VISIBLE);
+      if (!diyLink.isEmpty()) {
+        view3.setVisibility(View.VISIBLE);
+      }
+      ivShareLink.setVisibility(View.VISIBLE);
     } else {
-      ivDiy.setVisibility(View.GONE);
-      view3.setVisibility(View.GONE);
+      ivShareLink.setVisibility(View.GONE);
+    }
+    if (diyLink.isEmpty() || diyCode == 0) {
+      ivCopyLink.setVisibility(View.GONE);
+    } else {
+      ivCopyLink.setVisibility(View.VISIBLE);
     }
 
     ivOaoForm.setOnClickListener(view -> {
       dialog.dismiss();
-
       ekycNavigator.openNewEkycApp(true, oaoUserId.toString());
     });
     ivOpenAccount.setOnClickListener(view -> {
       dialog.dismiss();
-
       gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
           prospectSourceDetail, intrestedIn));
     });
@@ -480,10 +489,28 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     ivClose.setOnClickListener(view -> {
       dialog.dismiss();
     });
+    ivShareLink.setOnClickListener(view -> {
+      dialog.dismiss();
+      renderDiyLink(leadId, this);
+    });
     ivSuggestMe.setOnClickListener(view -> {
       getSuggestMe();
       dialog.dismiss();
     });
+
+    ivCopyLink.setOnClickListener(view -> {
+      if (diyLink.isEmpty()) {
+        Toast.makeText(requireContext(), R.string.txt_lable_link_error_msg, Toast.LENGTH_LONG)
+            .show();
+      } else {
+        ClipboardManager clipboard =
+            (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("label", diyLink);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(requireContext(), R.string.txt_lable_link_msg, Toast.LENGTH_LONG).show();
+      }
+    });
+
     dialog.show();
   }
 
@@ -525,8 +552,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       String encryptedUrl = stringOrEmpty(data.encryptedURL);
       Bundle bundle = new Bundle();
       bundle.putString(URL_PATH, encryptedUrl);
-      //navigateTo(NAV_TO_WEB_VIEW, bundle, getFragmentManager(),
-      //	true);
       navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
     }
   }
@@ -536,5 +561,9 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     super.onFragmentReopened(args);
     getUserID(args);
     pagerAction();
+  }
+
+  @Override public void getDiyUrl(@NotNull String url) {
+    diyLink = url;
   }
 }

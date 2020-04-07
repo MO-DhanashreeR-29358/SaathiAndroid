@@ -54,7 +54,8 @@ data class LeadViewItem(
         "leadFieldSectionModels"
     ) val leadFieldSectionModels: List<LeadFieldSection>?,
     @JvmField @SerializedName("ProfileID") val profileID: Int,
-    @JvmField @SerializedName("DIY") val diy_code: Int,
+  @JvmField @SerializedName("DIY") val diyCode: Int,
+  @JvmField @SerializedName("DIYUrl") val diyLink: String?,
     @JvmField @SerializedName("DedupeModel") val dedupeModel: DedupeModel,
     @JvmField @SerializedName("LoginId") val loginId: String?,
     @JvmField @SerializedName("ApprovalMessage") val approvalMessage: String?,

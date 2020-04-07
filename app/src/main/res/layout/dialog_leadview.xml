@@ -17,7 +17,7 @@
         android:id="@+id/view0"
         android:layout_width="0dp"
         android:layout_height="0dp"
-            android:background="@color/black"
+        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/ivCall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +115,20 @@
         />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivSuggestMe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/view3"
+        app:layout_constraintStart_toEndOf="@id/view2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_suggest_me"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivCall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -141,33 +155,33 @@
         />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivDiy"
+        android:id="@+id/ivShareLink"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/ivCall"
-        app:layout_constraintEnd_toStartOf="@id/ivSuggestMe"
+        app:layout_constraintEnd_toStartOf="@id/ivCopyLink"
         app:layout_constraintStart_toStartOf="@id/view2"
         app:layout_constraintTop_toTopOf="@id/ivCall"
-        app:srcCompat="@drawable/ic_diy_40x45"
+        app:srcCompat="@drawable/ic_share_link"
         />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivSuggestMe"
+        android:id="@+id/ivCopyLink"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:visibility="gone"
+        android:paddingBottom="5dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/ivCall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/ivDiy"
+        app:layout_constraintStart_toEndOf="@id/ivShareLink"
         app:layout_constraintTop_toTopOf="@id/ivCall"
-        app:srcCompat="@drawable/ic_suggest_me"
+        app:srcCompat="@drawable/ic_copy_link"
         />
 
 

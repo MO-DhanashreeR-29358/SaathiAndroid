@@ -24,8 +24,8 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.AppTitle
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.SearchResponse
 import com.mosl.saathi.api.model.lead.request.SearchRequest
+import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.CREATE_MEETING_ID

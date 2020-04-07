@@ -1,4 +1,4 @@
-package com.mosl.saathi.api.model
+package com.mosl.saathi.api.model.search
 
 import com.google.gson.annotations.SerializedName
 

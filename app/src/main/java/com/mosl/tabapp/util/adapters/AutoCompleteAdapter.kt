@@ -166,6 +166,11 @@ class AutoCompleteAdapter(
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
       })
+
+      holderView.rlDiyLink.setOnClickListener {
+        convertToEkyc.renderDiyLink(resultModel.leadId, null)
+        clickListener.onSearchResultClick()
+      }
       holderView.rlOAOForm.setOnClickListener({
         navigator.openNewEkycApp(true, resultModel.oaoUserId.toString())
         clickListener.onSearchResultClick()
@@ -263,6 +268,10 @@ class AutoCompleteAdapter(
 
   interface ConvertToEkyc {
     fun gotoEkycPage(ekycModule: EkycModule)
+    fun renderDiyLink(
+      leadId: String,
+      callBack: DiyLinkClickListner?
+    )
   }
 
   interface MsgDialog {
@@ -271,5 +280,9 @@ class AutoCompleteAdapter(
 
   interface SearchResultClickListener {
     fun onSearchResultClick()
+  }
+
+  interface DiyLinkClickListner {
+    fun getDiyUrl(url: String)
   }
 }

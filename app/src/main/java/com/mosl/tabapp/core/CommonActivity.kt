@@ -57,6 +57,7 @@ import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.MsgDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -536,6 +537,13 @@ class CommonActivity : BaseActivity(),
   override fun gotoEkycPage(ekycModule: EkycModule) {
     Timber.d("ekyc module %s", ekycModule.toString())
     activityNavHelper.convertEkycApi(this, ekycModule)
+  }
+
+  override fun renderDiyLink(
+    leadId: String,
+    callBack: DiyLinkClickListner?
+  ) {
+    activityNavHelper.getDiyLink(this, leadId, callBack)
   }
 
   override fun onDestroy() {
