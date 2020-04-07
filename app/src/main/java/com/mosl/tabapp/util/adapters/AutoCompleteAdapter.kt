@@ -23,7 +23,7 @@ import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_ID
 import com.mosl.tabapp.constants.MOSLConstants.PROFILE_ID
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.core.EkycModule
-import com.mosl.tabapp.model.SearchResultModel
+import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 
@@ -33,7 +33,7 @@ class AutoCompleteAdapter(
   val clickListener: SearchResultClickListener
 ) : BaseAdapter(), Filterable {
   private val inflater: LayoutInflater = LayoutInflater.from(context)
-  private val resultsList = ArrayList<SearchResultModel>()
+  private val resultsList = ArrayList<SearchModelNew>()
   lateinit var navigator: ScreenNavigatorImpl
   lateinit var convertToEkyc: ConvertToEkyc
   lateinit var msgDialog: MsgDialog
@@ -57,9 +57,9 @@ class AutoCompleteAdapter(
   ): View {
     val convertView = if (oldView == null) {
       inflater.inflate(R.layout.crm_client_search_item, parent, false)
-          .apply {
-            tag = HolderView(this)
-          }
+        .apply {
+          tag = HolderView(this)
+        }
     } else oldView
 
     val holderView: HolderView = convertView.tag as HolderView
@@ -87,7 +87,7 @@ class AutoCompleteAdapter(
         holderView.ivDropDownArrow.visibility = View.GONE
         holderView.clientName.setText(String.format("Name :%s", name))
         holderView.clientUcid.setText(
-            String.format("Business Profile: %s", resultModel.businessProfileName)
+          String.format("Business Profile: %s", resultModel.businessProfileName)
         )
         holderView.clientID.setText(String.format("Emp Id: %s,", resultModel.empCode))
         holderView.error.visibility = View.GONE
@@ -103,7 +103,7 @@ class AutoCompleteAdapter(
       }
       val ucid = resultModel.ucid
       holderView.clientUcid.setText(String.format("UCID: %s", ucid))
-      var ekyMenuType = SEARCH_TYPE_LEAD
+      val ekyMenuType: String
       if (!ucid.equals("0")) {
         ekyMenuType = SEARCH_TYPE_CLIENT
       } else {
@@ -117,7 +117,13 @@ class AutoCompleteAdapter(
           holderView.rlOpenAccount.visibility = View.VISIBLE
           holderView.rlOAOForm.visibility = View.GONE
         }
+        if (resultModel.isDiyLinkValid) {
+          holderView.rlDiyLink.visibility = View.VISIBLE
+        } else {
+          holderView.rlDiyLink.visibility = View.GONE
+        }
       }
+
 
       userManager.getUser()?.apply {
         if (this.isAufsb()) {
@@ -151,11 +157,11 @@ class AutoCompleteAdapter(
       holderView.rlOpenAccount.setOnClickListener({
         clearAll()
         val data = EkycModule(
-            mobile = resultModel.mobileNo, email = resultModel.email,
-            branchEmpCode = resultModel.leadOwner, interestedIn = resultModel.interestedIn,
-            prospectSourceDetails = resultModel.prospectSourceDetails,
-            prospectSource = resultModel.prospectSourceName,
-            source = resultModel.sourceName
+          mobile = resultModel.mobileNo, email = resultModel.email,
+          branchEmpCode = resultModel.leadOwner, interestedIn = resultModel.interestedIn,
+          prospectSourceDetails = resultModel.prospectSourceDetails,
+          prospectSource = resultModel.prospectSourceName,
+          source = resultModel.sourceName
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
@@ -194,7 +200,7 @@ class AutoCompleteAdapter(
     clickListener.onSearchResultClick()
   }
 
-  override fun getItem(position: Int): SearchResultModel {
+  override fun getItem(position: Int): SearchModelNew {
     return resultsList[position]
   }
 
@@ -220,7 +226,7 @@ class AutoCompleteAdapter(
     }
   }
 
-  fun setResultList(results: List<SearchResultModel>) {
+  fun setResultList(results: List<SearchModelNew>) {
     if (results.isEmpty()) {
       notifyDataSetInvalidated()
     } else {
@@ -242,6 +248,7 @@ class AutoCompleteAdapter(
     val error: TextView = parent.findViewById(R.id.tvError)
     val llExpand: LinearLayout = parent.findViewById(R.id.llExpand)
     val llDropDownMenuLayout: LinearLayout = parent.findViewById(R.id.llDropDownMenuLayout)
+    val rlDiyLink: RelativeLayout = parent.findViewById(R.id.rlDiyLink)
     val rlSetAppointment: RelativeLayout = parent.findViewById(R.id.rlSetAppointment)
     val rlCreateMeeting: RelativeLayout = parent.findViewById(R.id.rlCrateMeeting)
     val rlViewDetail: RelativeLayout = parent.findViewById(R.id.rlViewDetail)

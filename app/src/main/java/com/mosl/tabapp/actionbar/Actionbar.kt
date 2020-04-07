@@ -6,7 +6,12 @@ import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.AutoCompleteTextView
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.hideKeyBoard
@@ -26,8 +31,25 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants.CREATE_MEETING_ID
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
-import com.mosl.tabapp.model.SearchResultModel
-import com.mosl.tabapp.util.*
+import com.mosl.tabapp.model.SearchModelNew
+import com.mosl.tabapp.util.BUSINESS_PROFILE
+import com.mosl.tabapp.util.CLIENTCODE
+import com.mosl.tabapp.util.DIY_CODE
+import com.mosl.tabapp.util.EMAIL
+import com.mosl.tabapp.util.EMPLOYEE_CODE
+import com.mosl.tabapp.util.INTERESTEDIN
+import com.mosl.tabapp.util.LEADID
+import com.mosl.tabapp.util.LEAD_OWNER
+import com.mosl.tabapp.util.MOBILE
+import com.mosl.tabapp.util.NAME
+import com.mosl.tabapp.util.OAOUSERID
+import com.mosl.tabapp.util.PRODUCT_ID
+import com.mosl.tabapp.util.PROFILE_ID
+import com.mosl.tabapp.util.PROSPECTSOURCEDETAILS
+import com.mosl.tabapp.util.PROSPECTSOURCENAME
+import com.mosl.tabapp.util.SEARCH_TYPE_DASHBOARD_HINT
+import com.mosl.tabapp.util.SOURCENAME
+import com.mosl.tabapp.util.UCID
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.SearchResultClickListener
@@ -106,7 +128,7 @@ class Actionbar @JvmOverloads constructor(
                                     val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
                                     val businessProfileId = jsonObject.getString(PROFILE_ID)
                                     val productId = jsonObject.getString(PRODUCT_ID)
-                                    SearchResultModel(
+                                    SearchModelNew(
                                         getSearchHint(),
                                         empCode,
                                         name,
@@ -128,9 +150,10 @@ class Actionbar @JvmOverloads constructor(
                                     val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
                                     val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
                                     val oaoUserId = jsonObject.getInt(OAOUSERID)
+                                    val diyCode = jsonObject.getInt(DIY_CODE)
                                     val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
                                     val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
-                                    SearchResultModel(
+                                    SearchModelNew(
                                         getSearchHint(),
                                         leadid,
                                         name,
@@ -144,13 +167,14 @@ class Actionbar @JvmOverloads constructor(
                                         prospectSourceDetails,
                                         interestedIn,
                                         clientCode,
-                                        createMeetingId
+                                        createMeetingId,
+                                        diyCode
                                     )
                                 }
                             }
                         } else {
                             listOf(
-                                SearchResultModel(
+                                SearchModelNew(
                                     "", "", NO_RECORDS_FOUND, "", "",
                                     ""
                                 )
@@ -181,7 +205,7 @@ class Actionbar @JvmOverloads constructor(
     }
 
     fun renderSearchResult(
-        uiModel: UiModel<List<SearchResultModel>>
+        uiModel: UiModel<List<SearchModelNew>>
     ) {
         toggleSearchProgress(uiModel.inProgress)
 

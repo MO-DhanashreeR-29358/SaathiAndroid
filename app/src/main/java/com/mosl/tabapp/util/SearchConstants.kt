@@ -16,5 +16,6 @@ const val SOURCENAME = "SourceName"
 const val PROSPECTSOURCENAME = "ProspectSourceName"
 const val PROSPECTSOURCEDETAILS = "ProspectSourceDetails"
 const val INTERESTEDIN = "InterestedIn"
+const val DIY_CODE = "DIY"
 
 const val SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for"

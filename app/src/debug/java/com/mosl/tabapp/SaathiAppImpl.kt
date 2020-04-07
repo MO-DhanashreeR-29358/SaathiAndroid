@@ -22,7 +22,6 @@ class SaathiAppImpl : SaathiAppNew() {
         return element.lineNumber.toString() + ":" + super.createStackElementTag(element)
       }
     })
-
     RxJavaPlugins.setErrorHandler { throwable ->
       Timber.tag("RxError")
           .e(throwable)
