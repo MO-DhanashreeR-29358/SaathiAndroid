@@ -272,7 +272,7 @@ class CommonActivity : BaseActivity(),
       PeriodicWorkRequestBuilder<DataSyncWorker>(
         32,
         MINUTES
-      ).build()
+      ).setConstraints(networkConstraints()).build()
 
     val periodicLocationWork = PeriodicWorkRequestBuilder<LocationWorker>(
       16,
