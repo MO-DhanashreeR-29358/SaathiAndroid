@@ -1,4 +1,4 @@
-package com.mosl.tabapp.actionableinsight;
+package com.mosl.tabapp.dashboard.actionableinsight;
 
 import com.mosl.tabapp.model.dashboard.WidgetModel;
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
@@ -8,8 +8,8 @@ import dagger.Provides;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import static com.mosl.tabapp.actionableinsight.ActionableInsightDialogFragment.ARG_DASHBOARD_FOR;
-import static com.mosl.tabapp.actionableinsight.ActionableInsightDialogFragment.ARG_LIST_DATA;
+import static com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.ARG_DASHBOARD_FOR;
+import static com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.ARG_LIST_DATA;
 
 @Module public abstract class ActionableInsightModule {
 

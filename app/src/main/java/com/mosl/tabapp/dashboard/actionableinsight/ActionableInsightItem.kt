@@ -1,4 +1,4 @@
-package com.mosl.tabapp.actionableinsight
+package com.mosl.tabapp.dashboard.actionableinsight
 
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ItemActionableInsightBinding

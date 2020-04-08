@@ -90,7 +90,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
     section.retrySubject = dataActionSubject
     groupAdapter.add(section)
     binding.rvBirthdayAnniversary.apply {
-      layoutManager = GridLayoutManager(requireContext(), 3)
+      layoutManager = GridLayoutManager(requireContext(), 1)
       setHasFixedSize(true)
       adapter = groupAdapter
     }
@@ -244,6 +244,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
     uiModel.onSuccess {
       section.clearContent()
       if (it.data.isNotEmpty()) {
+        (binding.rvBirthdayAnniversary.getLayoutManager() as GridLayoutManager).spanCount = 3
         section.setContent(it.data.map { data ->
           ItemBirthdayAnniversary(
             data,

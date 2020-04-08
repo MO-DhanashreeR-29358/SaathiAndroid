@@ -1,4 +1,4 @@
-package com.mosl.tabapp.actionableinsight
+package com.mosl.tabapp.dashboard.actionableinsight
 
 import com.mosl.app.core.base.BasePresenter
 import io.reactivex.Observable
@@ -24,6 +24,7 @@ class ActionableInsightPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onActionableInsightItemClick()
+      .filter { !it.widgetModel.actionableCount.equals("0") }
         .subscribe {
           view.dismissDialog()
           navigator.navigateToSecondLevelDashboard(

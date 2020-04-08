@@ -1,4 +1,4 @@
-package com.mosl.tabapp.actionableinsight
+package com.mosl.tabapp.dashboard.actionableinsight
 
 import android.content.Context
 import android.os.Bundle
@@ -12,7 +12,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.tabapp.R
-import com.mosl.tabapp.actionableinsight.ActionableInsightEvent.OnItemClicked
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightEvent.OnItemClicked
 import com.mosl.tabapp.databinding.DialogFragmentActionableInsightsBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.xwray.groupie.GroupAdapter

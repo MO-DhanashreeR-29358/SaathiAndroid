@@ -4,11 +4,13 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.productivity.ColHeader
+import com.mosl.mobile.domain.report.AssignedLeadReportModel
 import com.mosl.mobile.domain.report.HierarchyReportCombo
 import com.mosl.mobile.domain.report.HierarchyReportData
 import com.mosl.mobile.domain.report.HierarchyReportInput
 import com.mosl.mobile.domain.report.HierarchyReportRepository
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import io.reactivex.Observable
 import org.json.JSONObject
 import java.util.HashMap
@@ -18,6 +20,12 @@ class HierarchyReportRepositoryImpl @Inject constructor(
   val api: SaathiApi,
   val gson: Gson
 ) : HierarchyReportRepository {
+  override fun getBranch(): Observable<List<AssignedLeadReportModel>> {
+    val request = AssignedLeadReportRequest("-1")
+    return api.postAssignedLeadReport(request).map {
+      it.requestTransform()
+    }
+  }
 
   override fun getDashboardData(
     hierarchyReportInput: HierarchyReportInput

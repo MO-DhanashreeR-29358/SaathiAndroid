@@ -18,8 +18,6 @@ import com.mosl.navigator.NavigationHelper
 import com.mosl.navigator.NavigationRequest
 import com.mosl.navigator.Navigator
 import com.mosl.navigator.asFragmentEntry
-import com.mosl.tabapp.actionableinsight.ActionableInsightDetailData
-import com.mosl.tabapp.actionableinsight.ActionableInsightNavigator
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
@@ -37,6 +35,8 @@ import com.mosl.tabapp.constants.MOSLConstants.SPINNER_LIST
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
 import com.mosl.tabapp.constants.MOSLConstants.UCID
 import com.mosl.tabapp.constants.MOSLConstants.WIDGETNAME
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDetailData
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightNavigator
 import com.mosl.tabapp.ekyc.EKYC_PACKAGE_NAME
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.ekyc.NEW

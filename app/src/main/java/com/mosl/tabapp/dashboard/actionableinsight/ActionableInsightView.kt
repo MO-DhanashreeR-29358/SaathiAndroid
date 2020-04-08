@@ -1,7 +1,7 @@
-package com.mosl.tabapp.actionableinsight
+package com.mosl.tabapp.dashboard.actionableinsight
 
 import com.mosl.app.core.base.BaseView
-import com.mosl.tabapp.actionableinsight.ActionableInsightEvent.OnItemClicked
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightEvent.OnItemClicked
 import com.mosl.tabapp.model.dashboard.WidgetModel
 
 interface ActionableInsightView : BaseView {
