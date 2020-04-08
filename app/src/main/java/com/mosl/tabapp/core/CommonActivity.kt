@@ -2,9 +2,12 @@ package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
@@ -51,6 +54,8 @@ import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.service.ForegroundService
+import com.mosl.tabapp.service.ForegroundService.LocalBinder
 import com.mosl.tabapp.service.location.DataSyncWorker
 import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
@@ -125,8 +130,24 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
 
+  private var mBound = false
+  var mService: ForegroundService? = null
+
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
+  }
+
+  private val mServiceConnection: ServiceConnection = object : ServiceConnection {
+    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+      val binder = service as LocalBinder
+      mService = binder.service
+      mBound = true
+    }
+
+    override fun onServiceDisconnected(name: ComponentName) {
+      mService = null
+      mBound = false
+    }
   }
 
   override fun onCreate(
@@ -156,15 +177,29 @@ class CommonActivity : BaseActivity(),
     locationWorkManager = WorkManager.getInstance(this)
     dataSyncWorkManager = WorkManager.getInstance(this)
 
-
     userManager.getUser()?.apply {
       if (!this.isAufsb()) {
-        startWorkManager()
+        startService(Intent(this@CommonActivity, ForegroundService::class.java))
+        // startWorkManager()
       }
     }
     setupObservables()
     setBanner()
 
+  }
+
+  override fun onStart() {
+    super.onStart()
+    bindService(
+      Intent(this, ForegroundService::class.java), mServiceConnection,
+      Context.BIND_AUTO_CREATE
+    )
+  }
+
+  override fun onStop() {
+    super.onStop()
+    unbindService(mServiceConnection)
+    mBound = false
   }
 
   private fun setBanner() {
@@ -399,8 +434,8 @@ class CommonActivity : BaseActivity(),
   fun openLogin() {
     //open image slider instead of splash
 
-    locationWorkManager.cancelWorkById(compressionLocationWorkId)
-    dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
+//  locationWorkManager.cancelWorkById(compressionLocationWorkId)
+//  dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
     firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
