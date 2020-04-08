@@ -12,7 +12,7 @@
         android:id="@+id/llExpand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dashbord_background"
+        android:background="@color/dashboard_background"
         >
 
         <RelativeLayout

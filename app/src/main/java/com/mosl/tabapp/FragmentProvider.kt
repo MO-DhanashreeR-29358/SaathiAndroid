@@ -47,8 +47,8 @@ import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
-import com.mosl.tabapp.leadViewDetail.LeadProfilingFragment
-import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragment
+import com.mosl.tabapp.leadViewDetail.LeadProfilingFragmentOld
+import com.mosl.tabapp.leadViewDetail.LeadViewActivitiesFragmentOld
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
@@ -187,13 +187,13 @@ interface FragmentProvider {
   fun provideHierarchyReportFragmentFactory(): HierarchyReportFragment
 
   @ContributesAndroidInjector
-  fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragment
+  fun provideLeadViewActivitieFactory(): LeadViewActivitiesFragmentOld
 
   @ContributesAndroidInjector
   fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
 
   @ContributesAndroidInjector
-  fun provideLeadProfilingFactory(): LeadProfilingFragment
+  fun provideLeadProfilingFactory(): LeadProfilingFragmentOld
 
   @ContributesAndroidInjector
   fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment

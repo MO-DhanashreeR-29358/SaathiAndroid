@@ -16,10 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem;
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest;
@@ -35,13 +33,11 @@ import com.mosl.tabapp.model.profile.ProfileOption;
 import com.mosl.tabapp.model.profile.ProfileQuestion;
 import com.mosl.tabapp.model.profile.ProfileQuestionGroup;
 import com.mosl.tabapp.ui.MSFDialog;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -53,9 +49,9 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by Vijay on 16/03/2017.
  */
 
-public class LeadProfilingFragment extends CommonFragment
+public class LeadProfilingFragmentOld extends CommonFragment
         implements View.OnClickListener, View.OnFocusChangeListener {
-    public final static String TAG = LeadProfilingFragment.class.getSimpleName();
+    public final static String TAG = LeadProfilingFragmentOld.class.getSimpleName();
     private static final int TEXT_BOX = 1;
     private static final int DROP_DOWN = 4;
     private static final int RADIO_BUTTON = 2;
@@ -74,8 +70,8 @@ public class LeadProfilingFragment extends CommonFragment
     //This list is added just to have reffrence of each question so if we can findthem in on click event of their siblings child
     private Map<String, View> questionList;
 
-    public static LeadProfilingFragment newInstance(int position, String type, String leadId) {
-        LeadProfilingFragment fragment = new LeadProfilingFragment();
+    public static LeadProfilingFragmentOld newInstance(int position, String type, String leadId) {
+        LeadProfilingFragmentOld fragment = new LeadProfilingFragmentOld();
         Bundle args = new Bundle();
         args.putInt("Position", position);
         args.putString("Type", type);

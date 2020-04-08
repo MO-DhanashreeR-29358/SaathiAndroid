@@ -13,11 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest;
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse;
@@ -34,14 +32,11 @@ import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.mosl.tabapp.model.LeadActivitiesMeetingModel;
 import com.mosl.tabapp.ui.CustomDialog;
 import com.mosl.tabapp.ui.MSFDialog;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -65,7 +60,7 @@ import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APP
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_UPDATE_MEETING;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class LeadViewActivitiesFragment extends CommonFragment implements View.OnClickListener {
+public class LeadViewActivitiesFragmentOld extends CommonFragment implements View.OnClickListener {
 	private static String leadId;
 	private static String mUcid;
 	Context mContext;
@@ -77,10 +72,11 @@ public class LeadViewActivitiesFragment extends CommonFragment implements View.O
 	private ArrayList<LeadActivitiesMeetingModel> meetingList = new ArrayList<>();
 	private AppointmentAdapter appointmentAdapter;
 	private ViewPager viewPager;
-	private final static String TAG = LeadViewActivitiesFragment.class.getSimpleName();
-	public static LeadViewActivitiesFragment newInstance(int position, String type, String leadID,
+	private final static String TAG = LeadViewActivitiesFragmentOld.class.getSimpleName();
+
+	public static LeadViewActivitiesFragmentOld newInstance(int position, String type, String leadID,
 		String ucid) {
-		LeadViewActivitiesFragment fragment = new LeadViewActivitiesFragment();
+		LeadViewActivitiesFragmentOld fragment = new LeadViewActivitiesFragmentOld();
 		leadId = leadID;
 		mUcid = ucid;
 		Bundle args = new Bundle();
