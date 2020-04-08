@@ -11,6 +11,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
@@ -117,6 +118,13 @@ open class CommonFragment : BaseFragment() {
     ekycModule: EkycModule
   ) {
     (requireActivity() as CommonActivity).gotoEkycPage(ekycModule)
+  }
+
+  fun renderDiyLink(
+    leadId: String,
+    callBack: DiyLinkClickListner
+  ) {
+    (requireActivity() as CommonActivity).renderDiyLink(leadId, callBack)
   }
 
   fun noInternetConnectionDialog() {

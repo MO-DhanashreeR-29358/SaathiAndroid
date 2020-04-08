@@ -21,6 +21,8 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.prospect.ProspectRequest
 import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
+import com.mosl.saathi.api.model.search.DiyLinkResponse
+import com.mosl.saathi.api.model.search.DiyRequest
 import com.mosl.shared.util.Utility
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
@@ -30,11 +32,11 @@ import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
-import com.mosl.tabapp.ws.CRMWebServiceHandler
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
-import java.util.*
+import java.util.Objects
 import javax.inject.Inject
 
 @ActivityScoped
@@ -59,15 +61,15 @@ class ActivityNavigationHelper @Inject constructor(
       val target = NotificationData(category)
       if (target.page.equals(LEADVIEW)) {
         screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
+          NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
         )
       } else {
         screenNavigator.openPage(
-            notificationNavigation(category)
+          notificationNavigation(category)
         )
       }
     } else if (userManager.user.isAuBankSalesSupport()) {
-        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, true)
+      screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, true)
     } else {
       val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
       when {
@@ -125,14 +127,27 @@ class ActivityNavigationHelper @Inject constructor(
     if (context.isNetworkConnected()) {
       val request = SuggestMeRequest(0, 0)
       disposable.add(
-          CRMWebServiceHandler.getSaathiApi()
-              .suggestMe(request)
-              .compose(
-                  applyUiModel()
-              )
-              .subscribe(
-                  Consumer { this.renderSuggestMe(it, context) })
+        saathiApi
+          .suggestMe(request)
+          .compose(
+            applyUiModel()
+          )
+          .subscribe(
+            Consumer { this.renderSuggestMe(it, context) })
       )
+    } else {
+      noInternetConnectionDialog(context)
+    }
+  }
+
+  fun getDiyLink(context: Context, leadId: String, callBack: DiyLinkClickListner?) {
+    if (context.isNetworkConnected()) {
+      val request = DiyRequest(leadId)
+      disposable.add(saathiApi
+        .createDiy(request)
+        .compose(applyUiModel())
+        .subscribe { this.renderDiyLink(it, context, callBack) })
+
     } else {
       noInternetConnectionDialog(context)
     }
@@ -161,20 +176,49 @@ class ActivityNavigationHelper @Inject constructor(
 
   }
 
+  private fun renderDiyLink(
+    uiModel: UiModel<SaathiCommonResponse<DiyLinkResponse>>,
+    context: Context, callBack: DiyLinkClickListner?
+  ) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      showOnFailurePopup(error, context)
+    }
+
+
+    uiModel.onSuccess { data ->
+      if (data.response != null) {
+        callBack?.getDiyUrl(data.response!!.url)
+        MSFDialog.alertDialog(
+          context, 0,
+          context.getResources().getString(R.string.motilal_oswal),
+          data.message, "OK", true, null
+        )
+      } else
+        MSFDialog.alertDialog(
+          context, 0,
+          context.getResources().getString(R.string.motilal_oswal),
+          data.errors?.get(0)?.message, "OK", true, null
+        )
+    }
+
+  }
+
   fun convertEkycApi(
     context: Context,
     ekycModule: EkycModule
   ) {
     if (context.isNetworkConnected()) {
       val request = ProspectRequest(
-          ekycModule.mobile, ekycModule.email, ekycModule.branchEmpCode, ekycModule.source,
-          ekycModule.prospectSource, ekycModule.prospectSourceDetails, ekycModule.interestedIn
+        ekycModule.mobile, ekycModule.email, ekycModule.branchEmpCode, ekycModule.source,
+        ekycModule.prospectSource, ekycModule.prospectSourceDetails, ekycModule.interestedIn
       )
 
       disposable.add(saathiApi
-          .registerProspectOnline(request)
-          .compose(applyUiModel())
-          .subscribe { this.renderProspect(it, context) })
+        .registerProspectOnline(request)
+        .compose(applyUiModel())
+        .subscribe { this.renderProspect(it, context) })
 
     } else {
       noInternetConnectionDialog(context)
@@ -199,9 +243,9 @@ class ActivityNavigationHelper @Inject constructor(
         ekycNavigator.openNewEkycApp(true, oaoUserId)
       } else {
         MSFDialog.alertDialog(
-            context, 0,
-            context.getResources().getString(R.string.motilal_oswal),
-            data.message, "OK", true, null
+          context, 0,
+          context.getResources().getString(R.string.motilal_oswal),
+          data.message, "OK", true, null
         )
       }
     }
@@ -216,10 +260,10 @@ class ActivityNavigationHelper @Inject constructor(
 
   private fun noInternetConnectionDialog(context: Context) {
     MSFDialog.alertDialog(
-        context, 0,
-        context.getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION,
-        MOSLConstants.OK, true,
-        null
+      context, 0,
+      context.getResources().getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION,
+      MOSLConstants.OK, true,
+      null
     )
   }
 
@@ -234,9 +278,9 @@ class ActivityNavigationHelper @Inject constructor(
       message = MOSLResponseWrapper.SERVER_ERROR_OCCURRED
     }
     MSFDialog.alertDialog(
-        context, 0,
-        context.getResources().getString(R.string.motilal_oswal),
-        message, "OK", true, null
+      context, 0,
+      context.getResources().getString(R.string.motilal_oswal),
+      message, "OK", true, null
     )
   }
 
@@ -255,9 +299,9 @@ class ActivityNavigationHelper @Inject constructor(
   private fun openLeadViewDetail(data: NotificationData): Bundle {
     val bundle = Bundle()
     val leadId = data.paramMap
-        ?.get(MOSLConstants.LEAD_ID)
+      ?.get(MOSLConstants.LEAD_ID)
     val ucid = data.paramMap
-        ?.get(MOSLConstants.UCID)
+      ?.get(MOSLConstants.UCID)
     bundle.putString(MOSLConstants.UCID, ucid)
     bundle.putString(MOSLConstants.LEAD_ID, leadId)
     bundle.putParcelable(MOSLConstants.NOTIFICATION_DATA, data)

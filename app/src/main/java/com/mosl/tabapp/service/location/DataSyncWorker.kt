@@ -4,11 +4,15 @@ import android.content.Context
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.mosl.app.core.network.isNetworkConnected
+import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.utils.obtain
 import com.mosl.mobile.domain.location.LocationRepository
 import com.mosl.mobile.domain.location.LocationResponse
+import com.mosl.mobile.user.annotation.LastLocationAPITime
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.shared.util.AppDateFormats
+import com.mosl.shared.util.Utility
 import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.SaathiAppNew
 import io.reactivex.disposables.CompositeDisposable
@@ -22,35 +26,42 @@ class DataSyncWorker(
   @Inject lateinit var userManager: UserManager
   @Inject lateinit var saathiApi: SaathiApi
   @Inject lateinit var repository: LocationRepository
+
+  @field:LastLocationAPITime
+  @Inject
+  lateinit var lastLocationAPITime: StringPreference
   protected val disposable: CompositeDisposable = CompositeDisposable()
 
   init {
     context.applicationContext.obtain<AppComponent>(AppComponent::class.java)
-        .inject(this)
+      .inject(this)
   }
 
   override fun doWork(): Result {
-    try {
+
+    return try {
       if (userManager.isLoggedIn()) {
-        if (SaathiAppNew.get().getDB()?.daoAccess()?.getLocationList()?.size != 0) {
+        if (SaathiAppNew.get().getDB()?.daoAccess()?.locationList?.size != 0) {
           LocationUpdate()
         }
       }
-      return Result.success()
+      Result.success()
     } catch (e: Exception) {
       e.printStackTrace()
       Timber.d(e.toString())
-      return Result.retry()
+      return Result.failure()
     }
 
   }
 
   private fun LocationUpdate() {
-    if (context.isNetworkConnected()) {
+    if (context.isNetworkConnected() && (lastLocationAPITime.get()
+        .isEmpty() || Utility.isTimeInterval(lastLocationAPITime.get(), 15))
+    ) {
       val locationResponse = repository.getGeoLocation(
           SaathiAppNew.get().getDB()?.daoAccess()?.getLocationList()!!.transformLocationData()
-      )
-          .blockingFirst()
+        )
+        .blockingFirst()
       renderLocation(locationResponse);
     }
 
@@ -58,10 +69,11 @@ class DataSyncWorker(
 
   private fun renderLocation(uiModel: LocationResponse) {
     uiModel.isSuccessful.let {
+      lastLocationAPITime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
       SaathiAppNew.get()
-          .getDB()
-          ?.daoAccess()
-          ?.deleteAll()
+        .getDB()
+        ?.daoAccess()
+        ?.deleteAll()
     }
   }
 }

@@ -31,7 +31,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.RemoteConfigData
+import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.AppTitle
@@ -47,6 +47,7 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -56,6 +57,7 @@ import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.MsgDialog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -118,7 +120,10 @@ class CommonActivity : BaseActivity(),
 
   @Inject
   lateinit var gson: Gson
-  lateinit var remoteConfigModel: RemoteConfigModel;
+  lateinit var remoteConfigModel: RemoteConfigModel
+
+  @Inject
+  lateinit var firebaseHelper: FirebaseHelper
 
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
@@ -263,14 +268,14 @@ class CommonActivity : BaseActivity(),
   }
 
   private fun startWorkManager() {
-    val periodicDataSyncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(
-      32,
-      MINUTES
-    ).setConstraints(networkConstraints())
-      .build()
+    val periodicDataSyncWork =
+      PeriodicWorkRequestBuilder<DataSyncWorker>(
+        32,
+        MINUTES
+      ).setConstraints(networkConstraints()).build()
 
     val periodicLocationWork = PeriodicWorkRequestBuilder<LocationWorker>(
-      15,
+      16,
       MINUTES
     ).build()
 
@@ -396,7 +401,7 @@ class CommonActivity : BaseActivity(),
 
     locationWorkManager.cancelWorkById(compressionLocationWorkId)
     dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
-
+    firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
     startActivity(login)
@@ -532,6 +537,13 @@ class CommonActivity : BaseActivity(),
   override fun gotoEkycPage(ekycModule: EkycModule) {
     Timber.d("ekyc module %s", ekycModule.toString())
     activityNavHelper.convertEkycApi(this, ekycModule)
+  }
+
+  override fun renderDiyLink(
+    leadId: String,
+    callBack: DiyLinkClickListner?
+  ) {
+    activityNavHelper.getDiyLink(this, leadId, callBack)
   }
 
   override fun onDestroy() {

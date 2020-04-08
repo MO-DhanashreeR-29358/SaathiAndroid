@@ -2,14 +2,15 @@ package com.mosl.mobile.user.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.mosl.annotations.FcmToken;
 import com.mosl.annotations.FcmTokenRequest;
 import com.mosl.app.core.prefs.StringPreference;
-import com.mosl.mobile.user.RemoteConfigData;
 import com.mosl.mobile.user.UserPreference;
+import com.mosl.mobile.user.annotation.LastLocationAPITime;
+import com.mosl.mobile.user.annotation.LastLocationTime;
+import com.mosl.mobile.user.annotation.RemoteConfigData;
 import com.mosl.mobile.user.helper.AppUserHelperKt;
 import com.mosl.mobile.user.helper.PrefStoreProvider;
 import com.mosl.mobile.user.helper.UserPrefStore;
@@ -21,12 +22,10 @@ import com.mosl.mobile.user.login.UserCache;
 import com.mosl.mobile.user.login.UserCacheImpl;
 import com.mosl.mobile.user.login.UserManager;
 import com.mosl.mobile.user.login.UserManagerImpl;
-
-import javax.inject.Singleton;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Singleton;
 
 /**
  * Created by lalkishore on 14/01/18.
@@ -38,6 +37,8 @@ public abstract class UserModule {
     private static final String GCM_TOKEN = "gcmToken";
     private static final String SAVED_TOKEN_REQUEST = "saved_token_request";
     private static final String REMOTE_CONFIG_DATA_KEY = "RemoteConfigData";
+  private static final String LAST_LOCATION_TIME_KEY = "LastLocationTime";
+  private static final String LAST_LOCATION_API_TIME_KEY = "LastLocationAPITime";
 
     @Provides
     @UserPreference
@@ -85,6 +86,20 @@ public abstract class UserModule {
     static StringPreference provideRemoteConfigDataPref(SharedPreferences prefs) {
         return new StringPreference(prefs, REMOTE_CONFIG_DATA_KEY, "");
     }
+
+  @LastLocationTime
+  @Singleton
+  @Provides
+  static StringPreference provideLastLocationTimePref(SharedPreferences prefs) {
+    return new StringPreference(prefs, LAST_LOCATION_TIME_KEY, "");
+  }
+
+  @LastLocationAPITime
+  @Singleton
+  @Provides
+  static StringPreference provideLastLocationAPITimePref(SharedPreferences prefs) {
+    return new StringPreference(prefs, LAST_LOCATION_API_TIME_KEY, "");
+  }
 
     @Binds
     abstract UserManager provideUserManager(UserManagerImpl userManager);

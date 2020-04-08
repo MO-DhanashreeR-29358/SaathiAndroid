@@ -12,5 +12,6 @@ interface LoginView : BaseView {
   fun getEmpCode(): String
   fun getPassword(): String
   fun renderLogin(uiModel: UiModel<User>)
+  fun setUserProperty(user: User?)
   fun renderReportsData(uiModel: UiModel<List<ReportType>>)
 }

@@ -1,6 +1,8 @@
 package com.mosl.tabapp.leadViewDetail;
 
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,7 +16,9 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+
 import com.google.android.material.tabs.TabLayout;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -39,10 +43,15 @@ import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.jetbrains.annotations.NotNull;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -141,6 +150,66 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         pagerAction();
     }
 
+  private void pagerAction() {
+    if (leadId != null && !leadId.equalsIgnoreCase("0")) {
+      CRMAppUtil.setImage(new byte[0], ivLead, requireContext());
+    }
+    String[] headingClient = new String[5];
+    LeadViewDetailFragment leadViewDetailFragment;
+    LeadViewActivitiesFragment leadViewActivitieFragment;
+    LeadViewHistoryFragment leadViewHistoryFragment;
+    LeadViewInteractionFragment leadViewInteractionFragment;
+    pageListLeadView = new ArrayList<>();
+    if (leadId != null && leadId.equalsIgnoreCase("0")) {
+      headingClient[0] = DETAILS;
+      headingClient[1] = ACTIVITIES;
+      headingClient[2] = MAPPING_HISTORY;
+      headingClient[3] = MAPPING_INTERACTION;
+      leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
+          this.getArguments().getString(LEAD_ID), mUCID);
+      leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
+          this.getArguments().getString(LEAD_ID), mUCID);
+      leadViewHistoryFragment = LeadViewHistoryFragment.newInstance(2, MAPPING_HISTORY,
+          this.getArguments().getString(LEAD_ID), mUCID);
+      leadViewInteractionFragment =
+          LeadViewInteractionFragment.newInstance(3, MAPPING_INTERACTION,
+              this.getArguments().getString(LEAD_ID), mUCID);
+      leadViewDetailFragment.setViewPager(vpLeadView);
+      leadViewActivitieFragment.setViewPager(vpLeadView);
+      leadViewHistoryFragment.setViewPager(vpLeadView);
+      leadViewInteractionFragment.setViewPager(vpLeadView);
+      pageListLeadView.add(leadViewDetailFragment);
+      pageListLeadView.add(leadViewActivitieFragment);
+      pageListLeadView.add(leadViewHistoryFragment);
+      pageListLeadView.add(leadViewInteractionFragment);
+      indicatorLeadView.setTabMode(TabLayout.MODE_FIXED);
+    } else {
+      headingClient[0] = DETAILS;
+      headingClient[1] = ACTIVITIES;
+      headingClient[2] = PROFILING;
+      headingClient[3] = MAPPING_HISTORY;
+      headingClient[4] = MAPPING_INTERACTION;
+      leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS, leadId, mUCID);
+      leadViewActivitieFragment =
+          LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
+      LeadProfilingFragment leadViewProfilingFragment =
+          LeadProfilingFragment.newInstance(2, PROFILING, leadId);
+      leadViewHistoryFragment =
+          LeadViewHistoryFragment.newInstance(3, MAPPING_HISTORY, leadId, mUCID);
+      leadViewInteractionFragment =
+          LeadViewInteractionFragment.newInstance(4, MAPPING_INTERACTION, leadId, mUCID);
+      leadViewDetailFragment.setViewPager(vpLeadView);
+      leadViewActivitieFragment.setViewPager(vpLeadView);
+      leadViewProfilingFragment.setViewPager(vpLeadView);
+      leadViewHistoryFragment.setViewPager(vpLeadView);
+      leadViewInteractionFragment.setViewPager(vpLeadView);
+      pageListLeadView.add(leadViewDetailFragment);
+      pageListLeadView.add(leadViewActivitieFragment);
+      pageListLeadView.add(leadViewProfilingFragment);
+      pageListLeadView.add(leadViewHistoryFragment);
+      pageListLeadView.add(leadViewInteractionFragment);
+      indicatorLeadView.setTabMode(TabLayout.MODE_SCROLLABLE);
+    }
     private void pagerAction() {
         if (leadId != null && !leadId.equalsIgnoreCase("0")) {
             CRMAppUtil.setImage(new byte[0], ivLead, requireContext());

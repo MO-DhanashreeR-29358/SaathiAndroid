@@ -16,17 +16,24 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
-import com.mosl.mobile.user.model.*
+import com.mosl.mobile.user.model.LoginInfo
+import com.mosl.mobile.user.model.ReportType
+import com.mosl.mobile.user.model.User
+import com.mosl.mobile.user.model.VersionInfo
+import com.mosl.mobile.user.model.VersionResponse
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.Utility
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivitySplashBinding
+import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -39,6 +46,9 @@ class SplashActivity : LeanBaseActivity() {
     lateinit var userManager: UserManager
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
+
+    @Inject
+    lateinit var firebaseHelper: FirebaseHelper
     private val handler = Handler()
     private var count = 0
 
@@ -50,7 +60,7 @@ class SplashActivity : LeanBaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
         disposables = CompositeDisposable()
-        Timber.d("password %s", userManager.getUser()?.password)
+        setupView()
         handler.postDelayed({
             checkNetwork()
         }, 2000)
@@ -58,6 +68,14 @@ class SplashActivity : LeanBaseActivity() {
 
     override fun clearWindowBackground(): Boolean {
         return false
+    }
+
+    fun setupView() {
+        binding.txtAppInfo.text = java.lang.String.format(
+            Locale.ENGLISH, "App Version : %s(%d)", BuildConfig.VERSION_NAME,
+            BuildConfig.VERSION_CODE
+        )
+
     }
 
     private fun checkNetwork() {
@@ -248,6 +266,7 @@ class SplashActivity : LeanBaseActivity() {
     fun renderLoginData(uimodel: UiModel<User>) {
 
         uimodel.onSuccess {
+            firebaseHelper.setUserProperty(it.employeeCode)
             setUserPreferenceData(it)
         }
 

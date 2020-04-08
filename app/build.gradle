@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 androidExtensions {
   experimental = true
@@ -161,6 +162,7 @@ dependencies {
   implementation deps.firebase.messaging
   implementation deps.firebase.core
   implementation deps.firebase.remoteConfig
+  implementation deps.firebase.preformance
   implementation deps.constraintLayout
   testImplementation deps.testing.junit
   androidTestImplementation(deps.testing.espresso.core)

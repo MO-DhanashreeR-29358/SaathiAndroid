@@ -2,7 +2,6 @@ package com.mosl.saathi.api
 
 import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
-import com.mosl.saathi.api.model.SearchResponse
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
@@ -49,6 +48,16 @@ import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProduct
 import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadRequest
+import com.mosl.saathi.api.model.dashboard.ausfbLead.AusfbLeadResponse
+import com.mosl.saathi.api.model.dashboard.autarget.AuTargetRequest
+import com.mosl.saathi.api.model.dashboard.bank.BankCodeResponse
+import com.mosl.saathi.api.model.dashboard.bank.BranchCodeRequest
+import com.mosl.saathi.api.model.dashboard.bank.BranchCodeResponse
+import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeRequest
+import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeResponse
+import com.mosl.saathi.api.model.dashboard.client.ClientItem
+import com.mosl.saathi.api.model.dashboard.client.ClientRequest
 import com.mosl.saathi.api.model.dashboard.bank.BankCodeResponse
 import com.mosl.saathi.api.model.dashboard.bank.BranchCodeRequest
 import com.mosl.saathi.api.model.dashboard.bank.BranchCodeResponse
@@ -74,6 +83,12 @@ import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
 import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
 import com.mosl.saathi.api.model.dashboard.targetnew.TargetRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
+import com.mosl.saathi.api.model.documents.DocumentsRequest
+import com.mosl.saathi.api.model.documents.LeadDocumentsItem
+import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
+import com.mosl.saathi.api.model.documents.UploadDocumentItem
+import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetResponse
 import com.mosl.saathi.api.model.dashboard.trends.TrendsRequest
@@ -153,6 +168,9 @@ import com.mosl.saathi.api.model.query.QueryRequest
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.search.DiyLinkResponse
+import com.mosl.saathi.api.model.search.DiyRequest
+import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
@@ -593,6 +611,9 @@ interface SaathiApi {
 
   @POST("Prospect/SMT_RegisterProspectOnline")
   fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
+
+  @POST("Lead/Create_DIY_LeadDetail")
+  fun createDiy(@Body request: DiyRequest): Observable<SaathiCommonResponse<DiyLinkResponse>>
 
   @POST("Common/GetAppVersion")
   @ExtraDataWrapper

@@ -28,6 +28,7 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.common.FusedLocation.LatLongDispatcher
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
+import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.permission.PermissionCheckHelper
 import dagger.android.AndroidInjection
@@ -36,168 +37,178 @@ import javax.inject.Inject
 
 class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
-    lateinit var binding: ActivityLoginNewBinding
-    @Inject
-    lateinit var presenter: LoginPresenter
-    @Inject
-    lateinit var userManager: UserManager
-    @Inject
-    lateinit var shortcutHelper: ShortcutHelper
+  lateinit var binding: ActivityLoginNewBinding
 
-    @Inject
-    lateinit var permissionCheckHelper: PermissionCheckHelper
+  @Inject
+  lateinit var presenter: LoginPresenter
 
-    @Inject
-    lateinit var fusedLocation: FusedLocation
+  @Inject
+  lateinit var userManager: UserManager
 
-    override fun getLayout(): Int {
-        return R.layout.activity_login_new
+  @Inject
+  lateinit var shortcutHelper: ShortcutHelper
+
+  @Inject
+  lateinit var permissionCheckHelper: PermissionCheckHelper
+
+  @Inject
+  lateinit var fusedLocation: FusedLocation
+
+  @Inject
+  lateinit var firebaseHelper: FirebaseHelper
+  override fun getLayout(): Int {
+    return R.layout.activity_login_new
+  }
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    AndroidInjection.inject(this)
+    if (VERSION.SDK_INT >= VERSION_CODES.M) {
+      permissionCheckHelper.requestAllPermissions()
     }
+    fusedLocation.initDispatcher(this)
+    binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
+    presenter.start()
+  }
 
+  override fun onLoginClicked(): Observable<Unit> {
+    return binding.btnLogin.clicks()
+  }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AndroidInjection.inject(this)
-        if (VERSION.SDK_INT >= VERSION_CODES.M) {
-            permissionCheckHelper.requestAllPermissions()
-        }
-        fusedLocation.initDispatcher(this)
-        binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
-        presenter.start()
-    }
+  override fun onDoneClicked(): Observable<Int> {
+    return binding.edPassword.editorActions { event -> event == EditorInfo.IME_ACTION_DONE }
+  }
 
-    override fun onLoginClicked(): Observable<Unit> {
-        return binding.btnLogin.clicks()
-    }
+  override fun getEmpCode(): String {
+    return binding.edEmpCode.text?.trim()
+      .toString()
+  }
 
-    override fun onDoneClicked(): Observable<Int> {
-        return binding.edPassword.editorActions { event -> event == EditorInfo.IME_ACTION_DONE }
-    }
+  override fun getPassword(): String {
+    return binding.edPassword.text.toString()
+  }
 
-    override fun getEmpCode(): String {
-        return binding.edEmpCode.text?.trim()
-            .toString()
-    }
-
-    override fun getPassword(): String {
-        return binding.edPassword.text.toString()
-    }
-
-    override fun renderLogin(uiModel: UiModel<User>) {
-        toggleProgressBar(uiModel.inProgress)
+  override fun renderLogin(uiModel: UiModel<User>) {
+    toggleProgressBar(uiModel.inProgress)
 //    Timber.d("User cache %s", userManager.user)
 
-        uiModel.onFailure { error ->
-            error.showOnFailurePopup()
-        }
+    uiModel.onFailure { error ->
+      error.showOnFailurePopup()
     }
+  }
 
-    override fun renderReportsData(uiModel: UiModel<List<ReportType>>) {
+  override fun setUserProperty(user: User?) {
 
-        uiModel.onSuccess {
-            if (it.size > 0) {
-                for (reportTypeResponse in it) {
-                    if (reportTypeResponse.isPreDefinedReports()) {
-                        val childMenuList = reportTypeResponse.childMenuList
-                        for (childMenu in childMenuList) {
-                            if (childMenu.isBasicReports()) {
-                                userManager.setReportMenuList(childMenu.ChildMenuList)
+    user?.apply {
+      firebaseHelper.setUserProperty(user.employeeCode)
+    }
+  }
+
+  override fun renderReportsData(uiModel: UiModel<List<ReportType>>) {
+    uiModel.onSuccess {
+      if (it.size > 0) {
+        for (reportTypeResponse in it) {
+          if (reportTypeResponse.isPreDefinedReports()) {
+            val childMenuList = reportTypeResponse.childMenuList
+            for (childMenu in childMenuList) {
+              if (childMenu.isBasicReports()) {
+                userManager.setReportMenuList(childMenu.ChildMenuList)
 //                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
-                                openCommonActivity()
-                            }
-                        }
-                    }
-                }
+                openCommonActivity()
+              }
             }
+          }
         }
-        uiModel.onFailure {
-            openCommonActivity()
-        }
+      }
     }
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+  }
 
-    private fun openCommonActivity() {
-        shortcutHelper.setLoggedInUserShortcuts()
-        val intent = Intent(this, CommonActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
+  private fun openCommonActivity() {
+    shortcutHelper.setLoggedInUserShortcuts()
+    val intent = Intent(this, CommonActivity::class.java)
+    startActivity(intent)
+    finish()
+  }
 
-    fun Throwable.showOnFailurePopup() {
-        val errorOnFailure = this.getErrorOnFailure()
-        alert(message = errorOnFailure.getResolvedMessage(applicationContext))
-    }
+  fun Throwable.showOnFailurePopup() {
+    val errorOnFailure = this.getErrorOnFailure()
+    alert(message = errorOnFailure.getResolvedMessage(applicationContext))
+  }
 
-    fun toggleProgressBar(inProgress: Boolean) {
-        if (inProgress) {
-            showProgress()
-        } else {
-            hideProgress()
-        }
+  fun toggleProgressBar(inProgress: Boolean) {
+    if (inProgress) {
+      showProgress()
+    } else {
+      hideProgress()
     }
+  }
 
-    override fun isDataEmpty(): Boolean {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun isDataEmpty(): Boolean {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun onDataAction(): Observable<DataAction> {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun onDataAction(): Observable<DataAction> {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun clearTitles() {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun clearTitles() {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun getContainerViewId(): Int {
-        return 0
-    }
+  override fun getContainerViewId(): Int {
+    return 0
+  }
 
-    override fun getFragment(pageId: Int): Fragment? {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun getFragment(pageId: Int): Fragment? {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun hideAppTitle() {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun hideAppTitle() {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun hideProgress() {
-        binding.progressBar.visibility = View.GONE
-    }
+  override fun hideProgress() {
+    binding.progressBar.visibility = View.GONE
+  }
 
-    override fun setAppTitle(
-        page: String,
-        appTitle: AppTitle?
-    ) {
-        TODO(
-            "not implemented"
-        ) //To change body of created functions use File | Settings | File Templates.
-    }
+  override fun setAppTitle(
+    page: String,
+    appTitle: AppTitle?
+  ) {
+    TODO(
+      "not implemented"
+    ) //To change body of created functions use File | Settings | File Templates.
+  }
 
-    override fun showProgress() {
-        binding.progressBar.visibility = View.VISIBLE
-    }
+  override fun showProgress() {
+    binding.progressBar.visibility = View.VISIBLE
+  }
 
-    override fun onLatLongChanged(location: Location?) {
-    }
+  override fun onLatLongChanged(location: Location?) {
+  }
 }
