@@ -25,10 +25,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.mosl.app.core.prefs.StringPreference;
+import com.mosl.mobile.user.annotation.LastLocationAPITime;
 import com.mosl.mobile.user.annotation.LastLocationTime;
 import com.mosl.mobile.user.login.UserManager;
 import com.mosl.saathi.api.SaathiApi;
 import com.mosl.shared.Encryptor.AESEncryptor;
+import com.mosl.shared.util.AppDateFormats;
+import com.mosl.shared.util.Utility;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMAppUtil;
@@ -52,6 +55,7 @@ import timber.log.Timber;
 
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
 import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
+import static com.mosl.shared.util.Utility.isTimeInterval;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
@@ -69,6 +73,10 @@ public class ForegroundService extends Service {
   @Inject AESEncryptor encryptor;
   @LastLocationTime
   @Inject StringPreference lastLocationTime;
+
+  @LastLocationAPITime
+  @Inject StringPreference lastLocationAPITime;
+
   private LocationRequest mLocationRequest;
   private Runnable runnableCode = new Runnable() {
     @Override public void run() {
@@ -81,18 +89,20 @@ public class ForegroundService extends Service {
 
   private Runnable runnableCodeAPI = new Runnable() {
     @Override public void run() {
-      DataThread();
+      saveLocation();
       refreshHandlerAPI.postDelayed(runnableCodeAPI, 32 * 60 * 1000);
     }
   };
 
-  public void DataThread() {
+  public void saveLocation() {
     AsyncTask.execute(() -> {
-      if (userManager.isLoggedIn() && !userManager.getUser().isAufsb()) {
-        if (MSFStatistics.isNetworkEnabled(getApplicationContext())) {
-          if (SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
-            SaveGeoLocation();
-          }
+      if (MSFStatistics.isNetworkEnabled(getApplicationContext())
+          && userManager.isLoggedIn()
+          && !userManager.getUser().isAufsb()) {
+        if ((lastLocationAPITime.get().isEmpty() ||
+            Utility.isTimeInterval(lastLocationAPITime.get(), 25))
+            && SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
+          renderLocation();
         }
       }
     });
@@ -121,7 +131,7 @@ public class ForegroundService extends Service {
       mNotificationManager.notify(NOTIFICATION_ID, getNotification());
     }
     refreshHandler.postDelayed(runnableCode, 1000);
-    refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 60);
+    refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10);
 
     return START_STICKY;
   }
@@ -171,7 +181,9 @@ public class ForegroundService extends Service {
           userManager.getUser().employeeCode,
           CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
           geoPincode);
-      if (!isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+      if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 10))
+          && !isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+        lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
         SaathiAppNew.get().getDB().daoAccess()
             .insertLocationList(locationData);
         Timber.tag("Location Data entered").d(locationData.toString());
@@ -246,7 +258,7 @@ public class ForegroundService extends Service {
     mainHandler.post(myRunnable);
   }
 
-  private void SaveGeoLocation() {
+  private void renderLocation() {
     OkHttpClient client = new OkHttpClient();
     List<LocationData> locationDataList =
         SaathiAppNew.get().getDB().daoAccess().getLocationList();
@@ -301,6 +313,8 @@ public class ForegroundService extends Service {
             encryptor.decrypt(res)));
         String status = jsonObject.getString(STATUS);
         if (status.equalsIgnoreCase("true")) {
+          lastLocationAPITime.set(
+              AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
           SaathiAppNew.get().getDB().daoAccess().deleteAll();
         }
       } catch (JSONException e) {
