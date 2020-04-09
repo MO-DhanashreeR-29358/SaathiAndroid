@@ -18,7 +18,7 @@ class ActionableInsightItem(val data: WidgetModel?) : BindableItem<ItemActionabl
     viewBinding.txtActionableInsight.setText(data!!.name)
     viewBinding.txtCount.setText(data.actionableCount)
     Picasso.with(viewBinding.root.context)
-        .load(data.iconUrl2)
+        .load(data.iconUrl2.replace(" ", "%20"))
         .placeholder(R.drawable.ic_create_meeting)
         .into(viewBinding.imgActionableInsights)
   }
