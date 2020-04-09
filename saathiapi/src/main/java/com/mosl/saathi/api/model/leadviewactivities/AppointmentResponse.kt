@@ -6,29 +6,29 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("MOBNO") val mOBNO: String?,
 
-  @JvmField @SerializedName("Product") val product: String,
+  @JvmField @SerializedName("Product") val product: String?,
 
   @JvmField @SerializedName("EMAIL") val eMAIL: String?,
 
-  @JvmField @SerializedName("Name") val name: String,
+  @JvmField @SerializedName("Name") val name: String?,
 
-  @JvmField @SerializedName("AttendeeEmp") val attendeeEmp: String,
+  @JvmField @SerializedName("AttendeeEmp") val attendeeEmp: String?,
 
-  @JvmField @SerializedName("MeetingID") val meetingID: String,
+  @JvmField @SerializedName("MeetingID") val meetingID: String?,
 
-  @JvmField @SerializedName("Stage") val stage: Any,
+  @JvmField @SerializedName("Stage") val stage: Any?,
 
-  @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean,
+  @JvmField @SerializedName("IsAdminMode") val isAdminMode: Boolean?,
 
-  @JvmField @SerializedName("DATE_DISPLAY") val dATEDISPLAY: String,
+  @JvmField @SerializedName("DATE_DISPLAY") val dATEDISPLAY: String?,
 
-  @JvmField @SerializedName("Status") val status: String,
+  @JvmField @SerializedName("Status") val status: String?,
 
-  @JvmField @SerializedName("CreatedBy") val createdBy: String,
+  @JvmField @SerializedName("CreatedBy") val createdBy: String?,
 
-  @JvmField @SerializedName("ActivityType") val activityType: String,
+  @JvmField @SerializedName("ActivityType") val activityType: String?,
 
-  @JvmField @SerializedName("TIME") val tIME: String,
+  @JvmField @SerializedName("TIME") val tIME: String?,
 
   @JvmField @SerializedName("StatusName") val statusName: String?,
 
@@ -48,11 +48,11 @@ data class AppointmentResponse(
 
   @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any?,
 
-  @JvmField @SerializedName("LeadID") val leadID: String,
+  @JvmField @SerializedName("LeadID") val leadID: String?,
 
-  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String = "",
+  @JvmField @SerializedName("repeatOnCode") val repeatOnCode: String?,
 
-  @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean,
+  @JvmField @SerializedName("ShowAppointmentUpdate") val showAppointmentUpdate: Boolean?,
 
   @JvmField @SerializedName("UCID") val ucid: String?
 )

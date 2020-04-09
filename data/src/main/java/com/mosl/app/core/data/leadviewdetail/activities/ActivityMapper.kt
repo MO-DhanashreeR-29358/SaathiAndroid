@@ -10,6 +10,7 @@ import com.mosl.saathi.api.model.leadviewactivities.Filter
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
 import com.mosl.saathi.api.model.leadviewactivities.Request
+import com.mosl.shared.util.formatMonth
 
 private const val REPORT_PAGE_SIZE = "50"
 private const val APPOINTMENT_PAGE = "1"
@@ -63,49 +64,49 @@ fun List<MeetingResponse>.mapToListOfMeeting(): List<Meeting> {
 private fun AppointmentResponse.mapToAppointment(): Appointment {
   return Appointment(
       mobileNumber = mOBNO ?: "",
-      product = product,
+      product = product ?: "",
       email = eMAIL ?: "",
-      name = name,
-      attendeeEmployee = attendeeEmp,
-      meetingId = meetingID,
-      status = status,
-      createdBy = createdBy,
-      activityType = activityType,
-      time = tIME,
+      name = name ?: "",
+      attendeeEmployee = attendeeEmp ?: "",
+      meetingId = meetingID ?: "",
+      status = status ?: "",
+      createdBy = createdBy ?: "",
+      activityType = activityType ?: "",
+      time = tIME ?: "",
       statusName = statusName ?: "",
-      date = dATE,
-      leadId = leadID,
-      repeatOnCode = repeatOnCode,
+      date = formatMonth(dATE),
+      leadId = leadID ?: "",
+      repeatOnCode = repeatOnCode ?: "",
       ucid = ucid ?: ""
   )
 }
 
 private fun MeetingResponse.mapToMeeting(): Meeting {
   return Meeting(
-      mobileNumber = mOBNO,
+      mobileNumber = mOBNO ?: "",
       category = category ?: "",
       actionable = actionable ?: "",
-      product = product,
-      email = eMAIL,
+      product = product ?: "",
+      email = eMAIL ?: "",
       name = name ?: "",
-      attendeeEmployee = attendeeEmp,
+      attendeeEmployee = attendeeEmp ?: "",
       travellingMode = travellingMode ?: "",
       meetingAddress = meetingAddress,
-      meetingId = meetingID,
-      stage = stage,
+      meetingId = meetingID ?: "",
+      stage = stage ?: "",
       meetingAddressType = meetingAddressType ?: "",
       customerServiceRemark = customerServiceRemark ?: "",
-      meetingReason = meetingReason,
-      status = status,
-      queryDescription = queryDesc,
-      comment = comments,
-      amount = amount,
-      activityType = activityType,
-      time = tIME,
-      statusName = statusName,
-      date = dATE,
-      leadId = leadID,
-      meetingDuration = meetingDuration,
+      meetingReason = meetingReason ?: "",
+      status = status ?: "",
+      queryDescription = queryDesc ?: "",
+      comment = comments ?: "",
+      amount = amount ?: "",
+      activityType = activityType ?: "",
+      time = tIME ?: "",
+      statusName = statusName ?: "",
+      date = formatMonth(dATE),
+      leadId = leadID ?: "",
+      meetingDuration = meetingDuration ?: "",
       pincode = pincode ?: "",
       location = location ?: ""
   )

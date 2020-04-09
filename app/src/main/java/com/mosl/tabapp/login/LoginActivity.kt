@@ -113,7 +113,6 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
             for (childMenu in childMenuList) {
               if (childMenu.isBasicReports()) {
                 userManager.setReportMenuList(childMenu.ChildMenuList)
-//                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
                 openCommonActivity()
               }
             }

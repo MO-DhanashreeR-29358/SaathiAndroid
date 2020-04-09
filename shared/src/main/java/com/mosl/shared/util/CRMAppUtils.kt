@@ -8,6 +8,7 @@ import android.os.Build
 import android.provider.Settings
 import java.net.Inet4Address
 import java.net.NetworkInterface
+import java.text.DateFormat
 
 fun getLocalIpAddress(): String {
   try {
@@ -34,7 +35,7 @@ fun getDeviceID(contentResolver: ContentResolver): String {
 
 fun hasGPSDevice(context: Context): Boolean {
   val mgr = context
-      .getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    .getSystemService(Context.LOCATION_SERVICE) as LocationManager
   val providers = mgr.allProviders ?: return false
   return providers.contains(LocationManager.GPS_PROVIDER)
 }
@@ -52,8 +53,15 @@ fun isLocationFromMockProvider(
   return isMock
 }
 
+fun formatMonth(month: String): String {
+  val inputFormat: DateFormat = AppDateFormats.df_date10
+  val outputFormat: DateFormat = AppDateFormats.df_Date1
+  val date = inputFormat.parse(month)
+  return outputFormat.format(date)
+}
+
 @Suppress("DEPRECATION") fun isMockSettingsON(context: Context): Boolean {
   return Settings.Secure.getString(
-      context.contentResolver, Settings.Secure.ALLOW_MOCK_LOCATION
+    context.contentResolver, Settings.Secure.ALLOW_MOCK_LOCATION
   ) != "0"
 }

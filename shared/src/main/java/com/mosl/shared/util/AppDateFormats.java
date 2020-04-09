@@ -67,4 +67,7 @@ public class AppDateFormats {
 
 	private static final String JSON_DATE9 = "yyyy-MM-dd' 'kk:mm:ss";
 	public static final DateFormat DF_JSON_DATE9 = new SimpleDateFormat(JSON_DATE9, Locale.ENGLISH);
+
+  private static final String date10 = "MM/dd/yyyy";
+  public static final DateFormat df_date10 = new SimpleDateFormat(date10, Locale.ENGLISH);
 }

@@ -325,6 +325,8 @@
     <string name="txt_branch_select_branch">Select Branch</string>
     <string name="txt_lable_from_date">From Date</string>
     <string name="txt_lable_to_date">To Date</string>
+    <string name="txt_lable_no_available">No Available</string>
+    <string name="txt_lable_appointment">Appointment</string>
 
 
 </resources>

@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/padding_small"
-            android:text="No Available"
+            android:text="@string/txt_lable_no_available"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
