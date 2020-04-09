@@ -2,9 +2,13 @@ package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.IBinder
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
@@ -51,6 +55,8 @@ import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.service.ForegroundService
+import com.mosl.tabapp.service.ForegroundService.LocalBinder
 import com.mosl.tabapp.service.location.DataSyncWorker
 import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
@@ -125,8 +131,24 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
 
+  private var mBound = false
+  var mService: ForegroundService? = null
+
   override fun getLayout(): Int {
     return R.layout.activity_commonbase
+  }
+
+  private val mServiceConnection: ServiceConnection = object : ServiceConnection {
+    override fun onServiceConnected(name: ComponentName, service: IBinder) {
+      val binder = service as LocalBinder
+      mService = binder.service
+      mBound = true
+    }
+
+    override fun onServiceDisconnected(name: ComponentName) {
+      mService = null
+      mBound = false
+    }
   }
 
   override fun onCreate(
@@ -156,15 +178,69 @@ class CommonActivity : BaseActivity(),
     locationWorkManager = WorkManager.getInstance(this)
     dataSyncWorkManager = WorkManager.getInstance(this)
 
-
     userManager.getUser()?.apply {
       if (!this.isAufsb()) {
-        startWorkManager()
+        val intent = Intent()
+        val manufacturer = android.os.Build.MANUFACTURER
+        when (manufacturer) {
+          "xiaomi" ->
+            intent.component =
+              ComponentName(
+                "com.miui.securitycenter",
+                "com.miui.permcenter.autostart.AutoStartManagementActivity"
+              )
+          "oppo" ->
+            intent.component =
+              ComponentName(
+                "com.coloros.safecenter",
+                "com.coloros.safecenter.permission.startup.StartupAppListActivity"
+              )
+          "vivo" ->
+            intent.component =
+              ComponentName(
+                "com.vivo.permissionmanager",
+                "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"
+              )
+          "asus" ->
+            intent.component =
+              ComponentName(
+                "com.asus.mobilemanager",
+                "com.asus.mobilemanager.MainActivity"
+              )
+          "samsung" ->
+            intent.component =
+              ComponentName(
+                "com.samsung.android.lool",
+                "com.samsung.android.sm.ui.battery.BatteryActivity"
+              )
+
+        }
+        val list =
+          getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        if (list.size > 0) {
+          startActivity(intent)
+        }
+        startService(Intent(this@CommonActivity, ForegroundService::class.java))
+        // startWorkManager()
       }
     }
     setupObservables()
     setBanner()
 
+  }
+
+  override fun onStart() {
+    super.onStart()
+    bindService(
+      Intent(this, ForegroundService::class.java), mServiceConnection,
+      Context.BIND_AUTO_CREATE
+    )
+  }
+
+  override fun onStop() {
+    super.onStop()
+    unbindService(mServiceConnection)
+    mBound = false
   }
 
   private fun setBanner() {
@@ -399,8 +475,8 @@ class CommonActivity : BaseActivity(),
   fun openLogin() {
     //open image slider instead of splash
 
-    locationWorkManager.cancelWorkById(compressionLocationWorkId)
-    dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
+//  locationWorkManager.cancelWorkById(compressionLocationWorkId)
+//  dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
     firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
