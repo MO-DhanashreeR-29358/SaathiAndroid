@@ -100,7 +100,7 @@ public class ForegroundService extends Service {
           && userManager.isLoggedIn()
           && !userManager.getUser().isAufsb()) {
         if ((lastLocationAPITime.get().isEmpty() ||
-            Utility.isTimeInterval(lastLocationAPITime.get(), 25))
+            Utility.isTimeInterval(lastLocationAPITime.get(), 27))
             && SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
           renderLocation();
         }
@@ -181,7 +181,7 @@ public class ForegroundService extends Service {
           userManager.getUser().employeeCode,
           CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
           geoPincode);
-      if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 10))
+      if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 13))
           && !isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
         lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
         SaathiAppNew.get().getDB().daoAccess()
