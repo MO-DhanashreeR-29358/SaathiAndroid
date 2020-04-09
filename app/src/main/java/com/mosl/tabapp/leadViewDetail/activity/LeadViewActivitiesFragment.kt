@@ -229,7 +229,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
       setContentView(viewBinding.root)
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
-    val date = CRMAppUtil.getDate("${appointment.date} ${appointment.time}", "MM/dd/yyyy hh:mma")
+    val date = CRMAppUtil.getDate("${appointment.date} ${appointment.time}", "dd MMM yyyy hh:mma")
     viewBinding.ivUpdateMeeting.visibility = when {
       CRMAppUtil.isBeforeDate(date) -> View.VISIBLE
       else -> View.GONE
