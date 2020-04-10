@@ -74,6 +74,7 @@ public class Utility {
 
   public static Boolean isTimeInterval(String lastTime, int timeInterval) {
     try {
+      if (lastTime.isEmpty()) return false;
       Date lastTimeDate = AppDateFormats.DF_JSON_DATE9.parse(lastTime);
       Calendar lastTimeCalendar = Calendar.getInstance();
       lastTimeCalendar.setTime(lastTimeDate);
