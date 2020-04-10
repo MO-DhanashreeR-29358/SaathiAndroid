@@ -28,7 +28,6 @@ import com.mosl.app.core.prefs.StringPreference;
 import com.mosl.mobile.user.annotation.LastLocationAPITime;
 import com.mosl.mobile.user.annotation.LastLocationTime;
 import com.mosl.mobile.user.login.UserManager;
-import com.mosl.saathi.api.SaathiApi;
 import com.mosl.shared.Encryptor.AESEncryptor;
 import com.mosl.shared.util.AppDateFormats;
 import com.mosl.shared.util.Utility;
@@ -69,7 +68,6 @@ public class ForegroundService extends Service {
   Handler refreshHandlerAPI = new Handler();
   int NOTIFICATION_ID = 12345;
   @Inject UserManager userManager;
-  @Inject SaathiApi saathiApi;
   @Inject AESEncryptor encryptor;
   @LastLocationTime
   @Inject StringPreference lastLocationTime;
@@ -97,8 +95,7 @@ public class ForegroundService extends Service {
   public void saveLocation() {
     AsyncTask.execute(() -> {
       if (MSFStatistics.isNetworkEnabled(getApplicationContext())
-          && userManager.isLoggedIn()
-          && !userManager.getUser().isAufsb()) {
+          && userManager.isLoggedIn()) {
         if ((lastLocationAPITime.get().isEmpty() ||
             Utility.isTimeInterval(lastLocationAPITime.get(), 27))
             && SaathiAppNew.get().getDB().daoAccess().getLocationList().size() != 0) {
@@ -175,18 +172,21 @@ public class ForegroundService extends Service {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      locationData = new LocationData(mCurrentLocation.getLatitude() + "",
-          mCurrentLocation.getLongitude() + "",
-          getDeviceID(getApplicationContext().getContentResolver()),
-          userManager.getUser().employeeCode,
-          CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
-          geoPincode);
-      if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 13))
-          && !isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
-        lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
-        SaathiAppNew.get().getDB().daoAccess()
-            .insertLocationList(locationData);
-        Timber.tag("Location Data entered").d(locationData.toString());
+      if (userManager.getUser() != null) {
+        locationData = new LocationData(mCurrentLocation.getLatitude() + "",
+            mCurrentLocation.getLongitude() + "",
+            getDeviceID(getApplicationContext().getContentResolver()),
+            userManager.getUser().employeeCode,
+            CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
+            geoPincode);
+        if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 13))
+            && !isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
+          lastLocationTime.set(
+              AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
+          SaathiAppNew.get().getDB().daoAccess()
+              .insertLocationList(locationData);
+          Timber.tag("Location Data entered").d(locationData.toString());
+        }
       }
     }).start();
   }
