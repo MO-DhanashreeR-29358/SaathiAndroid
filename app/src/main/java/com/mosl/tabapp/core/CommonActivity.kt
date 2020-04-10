@@ -179,8 +179,8 @@ class CommonActivity : BaseActivity(),
       if (!this.isAufsb()) {
         initBackgroundState()
         startService(Intent(this@CommonActivity, ForegroundService::class.java))
+        // startWorkManager()
       }
-      // startWorkManager()
     }
     setupObservables()
     setBanner()
