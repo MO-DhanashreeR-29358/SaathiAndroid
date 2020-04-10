@@ -233,19 +233,21 @@ class CommonActivity : BaseActivity(),
   override fun onStart() {
     super.onStart()
     userManager.getUser()?.apply {
-      if (!this.isAufsb())
+      if (!this.isAufsb()) {
         bindService(
           Intent(this@CommonActivity, ForegroundService::class.java), mServiceConnection,
           Context.BIND_AUTO_CREATE
         )
+      }
     }
   }
 
   override fun onStop() {
     super.onStop()
     userManager.getUser()?.apply {
-      if (!this.isAufsb())
+      if (!this.isAufsb()) {
         unbindService(mServiceConnection)
+      }
     }
   }
 
