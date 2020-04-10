@@ -176,9 +176,10 @@ class CommonActivity : BaseActivity(),
     dataSyncWorkManager = WorkManager.getInstance(this)
 
     userManager.getUser()?.apply {
-      if (!this.isAufsb())
+      if (!this.isAufsb()) {
         initBackgroundState()
-      startService(Intent(this@CommonActivity, ForegroundService::class.java))
+        startService(Intent(this@CommonActivity, ForegroundService::class.java))
+      }
       // startWorkManager()
     }
     setupObservables()
