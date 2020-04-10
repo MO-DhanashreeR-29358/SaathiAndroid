@@ -6,7 +6,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
 import android.view.View
@@ -131,7 +130,6 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
 
-  private var mBound = false
   var mService: ForegroundService? = null
 
   override fun getLayout(): Int {
@@ -142,12 +140,10 @@ class CommonActivity : BaseActivity(),
     override fun onServiceConnected(name: ComponentName, service: IBinder) {
       val binder = service as LocalBinder
       mService = binder.service
-      mBound = true
     }
 
     override fun onServiceDisconnected(name: ComponentName) {
       mService = null
-      mBound = false
     }
   }
 
@@ -179,50 +175,9 @@ class CommonActivity : BaseActivity(),
     dataSyncWorkManager = WorkManager.getInstance(this)
 
     userManager.getUser()?.apply {
-      if (!this.isAufsb()) {
-        val intent = Intent()
-        val manufacturer = android.os.Build.MANUFACTURER
-        when (manufacturer) {
-          "xiaomi" ->
-            intent.component =
-              ComponentName(
-                "com.miui.securitycenter",
-                "com.miui.permcenter.autostart.AutoStartManagementActivity"
-              )
-          "oppo" ->
-            intent.component =
-              ComponentName(
-                "com.coloros.safecenter",
-                "com.coloros.safecenter.permission.startup.StartupAppListActivity"
-              )
-          "vivo" ->
-            intent.component =
-              ComponentName(
-                "com.vivo.permissionmanager",
-                "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"
-              )
-          "asus" ->
-            intent.component =
-              ComponentName(
-                "com.asus.mobilemanager",
-                "com.asus.mobilemanager.MainActivity"
-              )
-          "samsung" ->
-            intent.component =
-              ComponentName(
-                "com.samsung.android.lool",
-                "com.samsung.android.sm.ui.battery.BatteryActivity"
-              )
-
-        }
-        val list =
-          getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        if (list.size > 0) {
-          startActivity(intent)
-        }
+      if (!this.isAufsb())
         startService(Intent(this@CommonActivity, ForegroundService::class.java))
-        // startWorkManager()
-      }
+      // startWorkManager()
     }
     setupObservables()
     setBanner()
@@ -231,16 +186,21 @@ class CommonActivity : BaseActivity(),
 
   override fun onStart() {
     super.onStart()
-    bindService(
-      Intent(this, ForegroundService::class.java), mServiceConnection,
-      Context.BIND_AUTO_CREATE
-    )
+    userManager.getUser()?.apply {
+      if (!this.isAufsb())
+        bindService(
+          Intent(this@CommonActivity, ForegroundService::class.java), mServiceConnection,
+          Context.BIND_AUTO_CREATE
+        )
+    }
   }
 
   override fun onStop() {
     super.onStop()
-    unbindService(mServiceConnection)
-    mBound = false
+    userManager.getUser()?.apply {
+      if (!this.isAufsb())
+        unbindService(mServiceConnection)
+    }
   }
 
   private fun setBanner() {
