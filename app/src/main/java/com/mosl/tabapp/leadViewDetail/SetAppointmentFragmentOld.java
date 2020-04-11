@@ -29,7 +29,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse;
@@ -61,18 +60,15 @@ import com.mosl.tabapp.model.MeetingApptModel;
 import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -109,10 +105,10 @@ import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VI
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
-public class SetAppointmentFragment extends CommonFragment
+public class SetAppointmentFragmentOld extends CommonFragment
         implements View.OnClickListener, TextView.OnEditorActionListener {
 
-    public static final String TAG = SetAppointmentFragment.class.getSimpleName();
+    public static final String TAG = SetAppointmentFragmentOld.class.getSimpleName();
     private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
     private final ArrayList<RowData> arrSelectWeek = new ArrayList<>();
     private final ArrayList<RowData> arrSelectWeekDay = new ArrayList<>();

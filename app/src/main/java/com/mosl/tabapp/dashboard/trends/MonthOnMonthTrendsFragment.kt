@@ -97,7 +97,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     }
 
     widgetModelList.mapIndexed { position: Int, model: DashboardGroupModel ->
-      itemList.add(HorinzatalTrendsWidgetItem(model, widgetUiEvent, requireContext()))
+      itemList.add(HorinzatalTrendsWidgetItem(model, widgetUiEvent))
     }
     groupAdapter.addAll(itemList)
 

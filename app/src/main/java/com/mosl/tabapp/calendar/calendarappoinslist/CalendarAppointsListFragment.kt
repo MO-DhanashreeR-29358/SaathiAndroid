@@ -20,7 +20,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.mobile.domain.calendar.CalenderItemResponse
 import com.mosl.tabapp.R
-import com.mosl.tabapp.calendar.CalendarFragmentNew
+import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarUiEvent
 import com.mosl.tabapp.calendar.CalendarUiEvent.CallAPi
 import com.mosl.tabapp.calendar.calendarappoinslist.item.ItemCalendarAppointList
@@ -42,8 +42,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-@Suppress("UNCHECKED_CAST")
-class CalendarAppointsListFragmentNew : CommonFragment(), CalendarAppointsListView {
+class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView {
   lateinit var binding: FragmentCalendarAppointsListBinding
   @Inject lateinit var presenter: CalendarAppointsListPresenter
   private val subject = PublishSubject.create<CalendarUiEvent>()
@@ -79,7 +78,7 @@ class CalendarAppointsListFragmentNew : CommonFragment(), CalendarAppointsListVi
     }
 
     val itemList: List<CalenderItemResponse> =
-      arguments?.getSerializable(CalendarFragmentNew.DATA_LIST) as List<CalenderItemResponse>
+      arguments?.getSerializable(CalendarFragment.DATA_LIST) as List<CalenderItemResponse>
 
     if (itemList.isNotEmpty()) {
       section.clearContent()

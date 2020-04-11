@@ -7,12 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.calender.CalenderItem;
 import com.mosl.saathi.api.model.calender.CalenderRequest;
@@ -24,17 +22,14 @@ import com.mosl.tabapp.model.LeadActivitiesAppointModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE;
@@ -43,7 +38,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.NAME;
 import static com.mosl.tabapp.constants.MOSLConstants.TIME;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CALENDER_LIST;
 
-public class CalendarFragment extends CommonFragment implements OnDateSelectedListener {
+public class CalendarFragmentOld extends CommonFragment implements OnDateSelectedListener {
 	@SuppressLint("SimpleDateFormat") private static final DateFormat FORMATTER =
 		new SimpleDateFormat("yyyy-MM-dd");
 	private final OneDayDecorator oneDayDecorator = new OneDayDecorator();

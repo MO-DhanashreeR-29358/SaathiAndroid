@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -19,17 +18,14 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -43,7 +39,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.STRING_TITLE;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 
-public class SecondLevelReportFragment extends CommonFragment implements View.OnClickListener {
+public class SecondLevelReportFragmentOld extends CommonFragment implements View.OnClickListener {
 	private TableFixHeaders table;
 	private TextView tvNochart;
 	private String widgetSystemName = "";
@@ -207,18 +203,18 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 	///SDTable
 	private class CommonHeader {
 		private final String name;
-		private final List<SecondLevelReportFragment.Item> list;
+    private final List<SecondLevelReportFragmentOld.Item> list;
 
 		CommonHeader(String name) {
 			this.name = name;
-			list = new ArrayList<SecondLevelReportFragment.Item>();
+      list = new ArrayList<SecondLevelReportFragmentOld.Item>();
 		}
 
 		public int size() {
 			return list.size();
 		}
 
-		public SecondLevelReportFragment.Item get(int i) {
+    public SecondLevelReportFragmentOld.Item get(int i) {
 			return list.get(i);
 		}
 	}
@@ -232,15 +228,15 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 	}
 
 	public class SecondClickTableAdapter extends BaseTableAdapter {
-		private final SecondLevelReportFragment.CommonHeader[] commonHeaders;
+    private final SecondLevelReportFragmentOld.CommonHeader[] commonHeaders;
 		ArrayList<HashMap<String, String>> hashArray;
 		private String[] headers = {};
 		private LayoutInflater inflater = null;
 
 		private SecondClickTableAdapter(
 			ArrayList<HashMap<String, String>> hashArray) {
-			commonHeaders = new SecondLevelReportFragment.CommonHeader[] {
-				new SecondLevelReportFragment.CommonHeader("asd")
+      commonHeaders = new SecondLevelReportFragmentOld.CommonHeader[] {
+          new SecondLevelReportFragmentOld.CommonHeader("asd")
 			};
 			this.hashArray = hashArray;
 		}
@@ -268,7 +264,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 				ctr++;
 			}
 
-			commonHeaders[0].list.add(new SecondLevelReportFragment.Item(rowData));
+      commonHeaders[0].list.add(new SecondLevelReportFragmentOld.Item(rowData));
 		}
 
 		@Override public int getColumnCount() {
@@ -483,7 +479,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 			return row == 0;
 		}
 
-		private SecondLevelReportFragment.CommonHeader getFamily(int row) {
+    private SecondLevelReportFragmentOld.CommonHeader getFamily(int row) {
 			int family = 0;
 			while (row >= 0) {
 				row -= commonHeaders[family].size();
@@ -491,7 +487,7 @@ public class SecondLevelReportFragment extends CommonFragment implements View.On
 			return commonHeaders[family];
 		}
 
-		private SecondLevelReportFragment.Item getDevice(int row) {
+    private SecondLevelReportFragmentOld.Item getDevice(int row) {
 			int family = 0;
 			while (row >= 0) {
 				row -= commonHeaders[family].size();

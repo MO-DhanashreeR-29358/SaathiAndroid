@@ -13,10 +13,8 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.calender.CalenderItem;
 import com.mosl.saathi.api.model.calender.CalenderRequest;
@@ -25,15 +23,12 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.CalenderModel;
 import com.mosl.tabapp.model.LeadActivitiesAppointModel;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -43,9 +38,9 @@ import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING;
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING_SEND;
 
-public class CalendarAppointsListFragment extends CommonFragment
+public class CalendarAppointsListFragmentOld extends CommonFragment
         implements View.OnClickListener {
-    private final static String TAG = CalendarAppointsListFragment.class.getSimpleName();
+  private final static String TAG = CalendarAppointsListFragmentOld.class.getSimpleName();
     private TextView tvStartDate, tvNochart;
     private String fromPostingDate;
     private Date fromDat;

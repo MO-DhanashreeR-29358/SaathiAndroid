@@ -27,7 +27,7 @@ import io.reactivex.subjects.PublishSubject
 import java.util.Locale
 import javax.inject.Inject
 
-class ClientsFragmentNew : CommonFragment(), ClientsView {
+class ClientsFragment : CommonFragment(), ClientsView {
 
   private lateinit var binding: FragmentClientsNewBinding
   @Inject

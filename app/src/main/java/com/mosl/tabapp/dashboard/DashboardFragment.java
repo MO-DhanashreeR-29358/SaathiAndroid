@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
@@ -19,14 +16,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -34,11 +27,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import androidx.core.content.FileProvider;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.github.mikephil.charting.charts.BarChart;
@@ -75,7 +63,7 @@ import com.mosl.tabapp.common.FilterRowData;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment;
-import com.mosl.tabapp.dashboard.clients.ClientsFragmentNew;
+import com.mosl.tabapp.dashboard.clients.ClientsFragment;
 import com.mosl.tabapp.dashboard.leads.LeadsFragment;
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment;
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment;
@@ -98,7 +86,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -121,7 +108,6 @@ import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_CREATION;
-import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 import static java.util.Objects.requireNonNull;
 
@@ -147,7 +133,7 @@ public class DashboardFragment extends CommonFragment
   //Subb button
   private Button btnClient, btnLeads, btnBusinessSnapshot, btnClientTraded, btnProductivity,
       btnBusinessSnapshotAdvisor;
-  private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
+  // private AdvisoryActionableInsightAdapter advisoryActionableInsightAdapter;
   private FloatingActionsMenu floatingActionsMenu;
   private RelativeLayout llMain;
   private Dialog dialog;
@@ -780,7 +766,7 @@ public class DashboardFragment extends CommonFragment
 
   private void loadClients() {
     setTabActivre(btnClient);
-    ClientsFragmentNew clientsFragment = new ClientsFragmentNew();
+    ClientsFragment clientsFragment = new ClientsFragment();
     args.putSerializable(DASHBOARD_MODEL, currentDashboard);
     clientsFragment.setArguments(args);
     requireActivity().getSupportFragmentManager()
@@ -855,28 +841,28 @@ public class DashboardFragment extends CommonFragment
         .commit();
   }
 
-  private void actionableInsightDialog() {
-    if (currentDashboard == null) return;
-
-    dialog = new Dialog(requireContext());
-    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    dialog.setCanceledOnTouchOutside(false);
-    dialog.setContentView(R.layout.dialog_actionable_insights);
-    dialog.getWindow()
-        .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    dialog.setCanceledOnTouchOutside(false);
-
-    ImageView ivClose = dialog.findViewById(R.id.ivClose);
-    ListView lvActionableInsights = dialog.findViewById(R.id.lvActionableInsights);
-    ivClose.setOnClickListener(view -> {
-      dialog.dismiss();
-    });
-
-    lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
-
-    dialog.show();
-  }
+  //private void actionableInsightDialog() {
+  //  if (currentDashboard == null) return;
+  //
+  //  dialog = new Dialog(requireContext());
+  //  dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+  //  requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+  //  dialog.setCanceledOnTouchOutside(false);
+  //  dialog.setContentView(R.layout.dialog_actionable_insights);
+  //  dialog.getWindow()
+  //      .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+  //  dialog.setCanceledOnTouchOutside(false);
+  //
+  //  ImageView ivClose = dialog.findViewById(R.id.ivClose);
+  //  ListView lvActionableInsights = dialog.findViewById(R.id.lvActionableInsights);
+  //  ivClose.setOnClickListener(view -> {
+  //    dialog.dismiss();
+  //  });
+  //
+  //  lvActionableInsights.setAdapter(advisoryActionableInsightAdapter);
+  //
+  //  dialog.show();
+  //}
 
   @Override
   public void onResume() {
@@ -998,8 +984,8 @@ public class DashboardFragment extends CommonFragment
         currentDashboard.setActionableCount(systemName, count,
             typeList);
 
-        advisoryActionableInsightAdapter.showCount(
-            systemName);
+        //advisoryActionableInsightAdapter.showCount(
+        //        //    systemName);
       } catch (Exception e) {
         currentDashboard.setActionableCount(systemName, "",
             new ArrayList<>());
@@ -1280,10 +1266,10 @@ public class DashboardFragment extends CommonFragment
     if (currentDashboard.isGroupExists(ACTIONABLE)) {
       ivActionableInsights.setVisibility(View.VISIBLE);
 
-      List<WidgetModel> widgetModelList =
-          currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
-      advisoryActionableInsightAdapter =
-          new AdvisoryActionableInsightAdapter(requireActivity(), widgetModelList);
+      //List<WidgetModel> widgetModelList =
+      //    currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+      //advisoryActionableInsightAdapter =
+      //    new AdvisoryActionableInsightAdapter(requireActivity(), widgetModelList);
     }
     if (currentDashboard.isGroupExists(MyClient_MyLead)) {
       llClient.setVisibility(View.VISIBLE);
@@ -2084,16 +2070,16 @@ public class DashboardFragment extends CommonFragment
           floatingActionsMenu.collapse();
           currentDashboard = dashboardModel;
 
-          List<WidgetModel> widgetModelList =
-              currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
-          if (advisoryActionableInsightAdapter == null) {
-            advisoryActionableInsightAdapter =
-                new AdvisoryActionableInsightAdapter(requireActivity(),
-                    widgetModelList);
-          } else {
-            advisoryActionableInsightAdapter.addItems(widgetModelList);
-          }
-          advisoryActionableInsightAdapter.notifyDataSetChanged();
+          //List<WidgetModel> widgetModelList =
+          //    currentDashboard.getGroupModel(ACTIONABLE).getWidgetList();
+          //if (advisoryActionableInsightAdapter == null) {
+          //  advisoryActionableInsightAdapter =
+          //      new AdvisoryActionableInsightAdapter(requireActivity(),
+          //          widgetModelList);
+          //} else {
+          //  advisoryActionableInsightAdapter.addItems(widgetModelList);
+          //}
+          //advisoryActionableInsightAdapter.notifyDataSetChanged();
 
           renderDashboard();
         });
@@ -2232,142 +2218,142 @@ public class DashboardFragment extends CommonFragment
     }
   }
 
-  public class AdvisoryActionableInsightAdapter extends BaseAdapter {
-
-    private final LayoutInflater inflater;
-    Context mContext;
-    List<WidgetModel> advisoryActionableInsightModelList;
-
-    private AdvisoryActionableInsightAdapter(Context c,
-        List<WidgetModel> advisoryActionableInsightModelList) {
-      inflater = LayoutInflater.from(c);
-      this.mContext = c;
-      this.advisoryActionableInsightModelList = advisoryActionableInsightModelList;
-    }
-
-    private void showCount(String systemName) {
-      for (WidgetModel model : advisoryActionableInsightModelList) {
-        if (model.getSystemName().equals(systemName)) {
-          model.setShowActionableCount(true);
-          break;
-        }
-      }
-      notifyDataSetChanged();
-    }
-
-    public void clear() {
-      advisoryActionableInsightModelList.clear();
-      notifyDataSetChanged();
-    }
-
-    @Override
-    public int getCount() {
-      return advisoryActionableInsightModelList.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-      return advisoryActionableInsightModelList.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-      return 0;
-    }
-
-    @SuppressLint("ViewHolder")
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-      final Holder holder = new Holder();
-      view = inflater.inflate(R.layout.item_list_actionable_insights, viewGroup, false);
-
-      final WidgetModel advisoryActionableInsightModel =
-          advisoryActionableInsightModelList.get(i);
-      holder.ivActionableInsights = view.findViewById(R.id.ivActionableInsights);
-      holder.pbLoadingIndicator = view.findViewById(R.id.pbLoadingIndicator);
-      holder.tvActionableInsights = view.findViewById(R.id.tvActionableInsights);
-      holder.tvActionableCount = view.findViewById(R.id.tvActionableCount);
-      holder.rlActionable = view.findViewById(R.id.rlActionable);
-
-      final Map<String, String> addtionalParameterMap = new HashMap<>();
-      addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
-      Glide.with(mContext)
-          .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
-          //remove Chache
-          .asBitmap()
-          .placeholder(R.drawable.ic_create_meeting)
-          .centerCrop()
-          .diskCacheStrategy(DiskCacheStrategy.NONE)
-          .skipMemoryCache(true)
-          .into(new BitmapImageViewTarget(holder.ivActionableInsights) {
-            @Override
-            protected void setResource(Bitmap resource) {
-              RoundedBitmapDrawable circularBitmapDrawable =
-                  RoundedBitmapDrawableFactory.create(mContext.getResources(),
-                      resource);
-              holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
-            }
-          });
-      holder.tvActionableInsights.setText(advisoryActionableInsightModel.getName());
-      holder.tvActionableCount.setText(advisoryActionableInsightModel.getActionableCount());
-      final DashboardGroupModel groupModel = currentDashboard.getGroupModel(ACTIONABLE);
-
-      holder.rlActionable.setOnClickListener(view1 -> {
-        Bundle args = new Bundle();
-        args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
-        args.putString(LABEL, ACTIONABLE);
-        args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
-        args.putSerializable(MAP, (Serializable) addtionalParameterMap);
-        List<WidgetModel> widgetList = groupModel.getWidgetList();
-        if (widgetList != null && widgetList.size() > 0) {
-          for (WidgetModel model1 : widgetList) {
-            if (advisoryActionableInsightModel.getSystemName()
-                .equalsIgnoreCase(model1.getSystemName())) {
-              ArrayList<WidgetFilterModel> filterList =
-                  (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
-              ArrayList<TypeActionableFilterModel> spinnerFilter =
-                  model1.getSpinnerFilterList();
-              if (!filterList.isEmpty()) {
-                args.putParcelableArrayList(FILTER_LIST, filterList);
-              }
-              if (!spinnerFilter.isEmpty()) {
-                args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
-              }
-            }
-          }
-        }
-        if (!advisoryActionableInsightModel.getActionableCount()
-            .equalsIgnoreCase("0")) {
-          //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
-          navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
-          dialog.dismiss();
-        }
-      });
-
-      if (advisoryActionableInsightModel.isShowActionableCount()) {
-        holder.tvActionableCount.setVisibility(View.VISIBLE);
-        holder.pbLoadingIndicator.setVisibility(View.GONE);
-      } else {
-        holder.rlActionable.setOnClickListener(null);
-        holder.tvActionableCount.setVisibility(View.GONE);
-        holder.pbLoadingIndicator.setVisibility(View.VISIBLE);
-      }
-
-      return view;
-    }
-
-    private void addItems(List<WidgetModel> widgetModelList) {
-      advisoryActionableInsightModelList = widgetModelList;
-      notifyDataSetChanged();
-    }
-
-    class Holder {
-      ImageView ivActionableInsights;
-      TextView tvActionableInsights, tvActionableCount;
-      RelativeLayout rlActionable;
-      ProgressBar pbLoadingIndicator;
-    }
-  }
+  //public class AdvisoryActionableInsightAdapter extends BaseAdapter {
+  //
+  //  private final LayoutInflater inflater;
+  //  Context mContext;
+  //  List<WidgetModel> advisoryActionableInsightModelList;
+  //
+  //  private AdvisoryActionableInsightAdapter(Context c,
+  //      List<WidgetModel> advisoryActionableInsightModelList) {
+  //    inflater = LayoutInflater.from(c);
+  //    this.mContext = c;
+  //    this.advisoryActionableInsightModelList = advisoryActionableInsightModelList;
+  //  }
+  //
+  //  private void showCount(String systemName) {
+  //    for (WidgetModel model : advisoryActionableInsightModelList) {
+  //      if (model.getSystemName().equals(systemName)) {
+  //        model.setShowActionableCount(true);
+  //        break;
+  //      }
+  //    }
+  //    notifyDataSetChanged();
+  //  }
+  //
+  //  public void clear() {
+  //    advisoryActionableInsightModelList.clear();
+  //    notifyDataSetChanged();
+  //  }
+  //
+  //  @Override
+  //  public int getCount() {
+  //    return advisoryActionableInsightModelList.size();
+  //  }
+  //
+  //  @Override
+  //  public Object getItem(int i) {
+  //    return advisoryActionableInsightModelList.get(i);
+  //  }
+  //
+  //  @Override
+  //  public long getItemId(int i) {
+  //    return 0;
+  //  }
+  //
+  //  @SuppressLint("ViewHolder")
+  //  @Override
+  //  public View getView(int i, View view, ViewGroup viewGroup) {
+  //    final Holder holder = new Holder();
+  //    view = inflater.inflate(R.layout.item_list_actionable_insights, viewGroup, false);
+  //
+  //    final WidgetModel advisoryActionableInsightModel =
+  //        advisoryActionableInsightModelList.get(i);
+  //    holder.ivActionableInsights = view.findViewById(R.id.ivActionableInsights);
+  //    holder.pbLoadingIndicator = view.findViewById(R.id.pbLoadingIndicator);
+  //    holder.tvActionableInsights = view.findViewById(R.id.tvActionableInsights);
+  //    holder.tvActionableCount = view.findViewById(R.id.tvActionableCount);
+  //    holder.rlActionable = view.findViewById(R.id.rlActionable);
+  //
+  //    final Map<String, String> addtionalParameterMap = new HashMap<>();
+  //    addtionalParameterMap.put(SELF_KEY, currentDashboard.getDashboardFor());
+  //    Glide.with(mContext)
+  //        .load(advisoryActionableInsightModel.getIconUrl2().replaceAll(" ", "%20"))
+  //        //remove Chache
+  //        .asBitmap()
+  //        .placeholder(R.drawable.ic_create_meeting)
+  //        .centerCrop()
+  //        .diskCacheStrategy(DiskCacheStrategy.NONE)
+  //        .skipMemoryCache(true)
+  //        .into(new BitmapImageViewTarget(holder.ivActionableInsights) {
+  //          @Override
+  //          protected void setResource(Bitmap resource) {
+  //            RoundedBitmapDrawable circularBitmapDrawable =
+  //                RoundedBitmapDrawableFactory.create(mContext.getResources(),
+  //                    resource);
+  //            holder.ivActionableInsights.setImageDrawable(circularBitmapDrawable);
+  //          }
+  //        });
+  //    holder.tvActionableInsights.setText(advisoryActionableInsightModel.getName());
+  //    holder.tvActionableCount.setText(advisoryActionableInsightModel.getActionableCount());
+  //    final DashboardGroupModel groupModel = currentDashboard.getGroupModel(ACTIONABLE);
+  //
+  //    holder.rlActionable.setOnClickListener(view1 -> {
+  //      Bundle args = new Bundle();
+  //      args.putString(SYSTEM_NAME, advisoryActionableInsightModel.getSystemName());
+  //      args.putString(LABEL, ACTIONABLE);
+  //      args.putString(WIDGETNAME, advisoryActionableInsightModel.getName());
+  //      args.putSerializable(MAP, (Serializable) addtionalParameterMap);
+  //      List<WidgetModel> widgetList = groupModel.getWidgetList();
+  //      if (widgetList != null && widgetList.size() > 0) {
+  //        for (WidgetModel model1 : widgetList) {
+  //          if (advisoryActionableInsightModel.getSystemName()
+  //              .equalsIgnoreCase(model1.getSystemName())) {
+  //            ArrayList<WidgetFilterModel> filterList =
+  //                (ArrayList<WidgetFilterModel>) model1.getWidgetFilterList();
+  //            ArrayList<TypeActionableFilterModel> spinnerFilter =
+  //                model1.getSpinnerFilterList();
+  //            if (!filterList.isEmpty()) {
+  //              args.putParcelableArrayList(FILTER_LIST, filterList);
+  //            }
+  //            if (!spinnerFilter.isEmpty()) {
+  //              args.putParcelableArrayList(SPINNER_LIST, spinnerFilter);
+  //            }
+  //          }
+  //        }
+  //      }
+  //      if (!advisoryActionableInsightModel.getActionableCount()
+  //          .equalsIgnoreCase("0")) {
+  //        //navigateTo(SECOND_CLICK_DASHBORD, args, getFragmentManager(), true);
+  //        navigator.openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true, false);
+  //        dialog.dismiss();
+  //      }
+  //    });
+  //
+  //    if (advisoryActionableInsightModel.isShowActionableCount()) {
+  //      holder.tvActionableCount.setVisibility(View.VISIBLE);
+  //      holder.pbLoadingIndicator.setVisibility(View.GONE);
+  //    } else {
+  //      holder.rlActionable.setOnClickListener(null);
+  //      holder.tvActionableCount.setVisibility(View.GONE);
+  //      holder.pbLoadingIndicator.setVisibility(View.VISIBLE);
+  //    }
+  //
+  //    return view;
+  //  }
+  //
+  //  private void addItems(List<WidgetModel> widgetModelList) {
+  //    advisoryActionableInsightModelList = widgetModelList;
+  //    notifyDataSetChanged();
+  //  }
+  //
+  //  class Holder {
+  //    ImageView ivActionableInsights;
+  //    TextView tvActionableInsights, tvActionableCount;
+  //    RelativeLayout rlActionable;
+  //    ProgressBar pbLoadingIndicator;
+  //  }
+  //}
 
   /**
    * Background Async Task to download file

@@ -147,7 +147,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.TRAVELLINGMODEID;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.VERIFY_OTP_LABLE;
 import static com.mosl.tabapp.constants.MOSLConstants.YES;
-import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
+import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragmentOld.listHasAttende;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static java.lang.String.format;
 

@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -162,7 +161,7 @@ class TargetFragment : CommonFragment(), TargetView {
 
     widgetModelList.mapIndexed { position: Int, model: WidgetModel ->
 
-      itemList.add(HorinzatalTargetWidgetItem(model, widgetUiEvent, requireContext()))
+      itemList.add(HorinzatalTargetWidgetItem(model, widgetUiEvent))
     }
 
     groupAdapter.addAll(itemList)

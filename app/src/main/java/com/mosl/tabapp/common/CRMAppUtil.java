@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.mosl.tabapp.R;
 import java.net.InetAddress;
@@ -629,6 +630,23 @@ public class CRMAppUtil {
             }
         });
     }
+
+    public static void setImageUrl(String imageUrl, final ImageView imageView,
+        final Context context) {
+        Glide.with(context).load(imageUrl).asBitmap().placeholder(R.drawable.ic_white).
+            centerCrop()
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(new BitmapImageViewTarget(imageView) {
+                @Override
+                protected void setResource(Bitmap resource) {
+                    RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                    imageView.setImageDrawable(circularBitmapDrawable);
+                }
+            });
+    }
+
 
     public static String getRefreshColumnName(String columnName) {
         columnName = columnName.replace("__KENDOGRP__", " ");

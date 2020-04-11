@@ -100,13 +100,13 @@ import static com.mosl.tabapp.constants.MOSLConstants.SUBCATEGORY;
 import static com.mosl.tabapp.constants.MOSLConstants.TIME;
 import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.UPDATED_MEETING;
-import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragment.listHasAttende;
+import static com.mosl.tabapp.leadViewDetail.SetAppointmentFragmentOld.listHasAttende;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class UpdateMeetingFragment extends CommonFragment
+public class UpdateMeetingFragmentOld extends CommonFragment
     implements View.OnClickListener, TextView.OnEditorActionListener {
-    private final static String TAG = UpdateMeetingFragment.class.getSimpleName();
+    private final static String TAG = UpdateMeetingFragmentOld.class.getSimpleName();
     private View createMeetingView;
     private TextView tvSplAttendeeCount, tvAttendeeCount, tvStartDate;
     private View llSubcategory;

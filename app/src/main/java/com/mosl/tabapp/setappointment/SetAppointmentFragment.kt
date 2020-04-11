@@ -76,7 +76,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentSetAppiontmentBinding
 import com.mosl.tabapp.databinding.ItemListAddedAttendeeBinding
 import com.mosl.tabapp.databinding.ItemListAddedSplAttendeeBinding
-import com.mosl.tabapp.leadViewDetail.SetAppointmentFragment
+import com.mosl.tabapp.leadViewDetail.SetAppointmentFragmentOld
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.EmployeeModel
@@ -1576,7 +1576,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   }
 
   companion object {
-    val TAG = SetAppointmentFragment::class.java.simpleName
+    val TAG = SetAppointmentFragmentOld::class.java.simpleName
 
     internal fun listHasAttende(
       addedAttendeeModelList: List<AddedAttendeeModel>?,

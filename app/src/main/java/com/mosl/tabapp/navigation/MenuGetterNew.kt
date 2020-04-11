@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
-import com.mosl.tabapp.calendar.CalendarFragmentNew
-import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragmentNew
+import com.mosl.tabapp.calendar.CalendarFragment
+import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.DashboardFragment
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
@@ -37,7 +37,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
-      NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragmentNew()
+      NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
@@ -64,7 +64,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
       NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
-      NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragmentNew()
+      NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null

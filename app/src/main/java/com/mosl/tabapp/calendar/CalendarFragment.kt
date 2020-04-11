@@ -36,7 +36,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelectedListener {
+class CalendarFragment : CommonFragment(), CalendarFragmentView, OnDateSelectedListener {
   lateinit var binding: FragmentCalendarNewBinding
   @Inject lateinit var presenter: CalendarFragmentPresenter
   private lateinit var section: DataManagerSection
@@ -59,7 +59,7 @@ class CalendarFragmentNew : CommonFragment(), CalendarFragmentView, OnDateSelect
 
   private fun setUpView() {
     binding.apply {
-      materialCalendarView.setOnDateChangedListener(this@CalendarFragmentNew)
+      materialCalendarView.setOnDateChangedListener(this@CalendarFragment)
       materialCalendarView.showOtherDates = MaterialCalendarView.SHOW_ALL
 
       val instance = Calendar.getInstance()
