@@ -304,23 +304,24 @@ public class ForegroundService extends Service {
     try {
       Response response = client.newCall(request).execute();
       String res = response.body() != null ? response.body().string() : null;
-      Timber.tag("Responce w/o decrypt").d(res);
-      Timber.tag("Responce with decrypt").d(new String(
-          encryptor.decrypt(res)));
-      try {
-        JSONObject jsonObject;
-        jsonObject = new JSONObject(new String(
+      if (res != null) {
+        Timber.tag("Responce w/o decrypt").d(res);
+        Timber.tag("Responce with decrypt").d(new String(
             encryptor.decrypt(res)));
-        String status = jsonObject.getString(STATUS);
-        if (status.equalsIgnoreCase("true")) {
-          lastLocationAPITime.set(
-              AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
-          SaathiAppNew.get().getDB().daoAccess().deleteAll();
+        try {
+          JSONObject jsonObject;
+          jsonObject = new JSONObject(new String(
+              encryptor.decrypt(res)));
+          String status = jsonObject.getString(STATUS);
+          if (status.equalsIgnoreCase("true")) {
+            lastLocationAPITime.set(
+                AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()));
+            SaathiAppNew.get().getDB().daoAccess().deleteAll();
+          }
+        } catch (JSONException e) {
+          e.printStackTrace();
         }
-      } catch (JSONException e) {
-        e.printStackTrace();
       }
-
       // Do something with the response.
     } catch (IOException e) {
       e.printStackTrace();
