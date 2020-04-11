@@ -11,10 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -28,9 +26,8 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,9 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -54,7 +49,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.UCID;
 import static com.mosl.tabapp.constants.MOSLConstants.mFormat;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class LeadViewHistoryFragment extends CommonFragment
+public class LeadViewHistoryFragmentOld extends CommonFragment
         implements AdapterView.OnItemSelectedListener {
     private View leadViewHistoryView;
     private ViewPager viewPager;
@@ -69,9 +64,9 @@ public class LeadViewHistoryFragment extends CommonFragment
     private boolean isTabClick;
     private String leadId;
 
-    public static LeadViewHistoryFragment newInstance(int position, String type, String leadID,
+  public static LeadViewHistoryFragmentOld newInstance(int position, String type, String leadID,
                                                       String mUcid) {
-        LeadViewHistoryFragment fragment = new LeadViewHistoryFragment();
+    LeadViewHistoryFragmentOld fragment = new LeadViewHistoryFragmentOld();
         Bundle args = new Bundle();
         args.putInt("Position", position);
         args.putString("Type", type);
@@ -184,7 +179,7 @@ public class LeadViewHistoryFragment extends CommonFragment
                 ArrayAdapter<String> arrAdapEventType = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                 spHistory.setAdapter(arrAdapEventType);
                 AdapterUtils.setSpinnerData(arrAdapEventType, spHistory, arrEventType);
-                spHistory.setOnItemSelectedListener(LeadViewHistoryFragment.this);
+              spHistory.setOnItemSelectedListener(LeadViewHistoryFragmentOld.this);
                 if (!leadId.equalsIgnoreCase("0")) {
                     serviceUrl = "Lead/GetLeadHistoryByLeadId";
                     getHistoryMapping(serviceUrl, leadId);

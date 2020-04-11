@@ -371,7 +371,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
       viewBinding.etSearchAttendee.setLoadingIndicator(
           viewBinding.pbLoadingIndicator
       )
-      viewBinding.etSearchAttendee.setOnItemClickListener { parent, view, position, id ->
+      viewBinding.etSearchAttendee.setOnItemClickListener { _, view, position, id ->
 
         val splAdapter = splAttendeeAdapter
 

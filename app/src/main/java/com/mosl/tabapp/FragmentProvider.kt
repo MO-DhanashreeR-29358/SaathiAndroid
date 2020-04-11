@@ -39,10 +39,8 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
-import com.mosl.tabapp.leadViewDetail.LeadViewHistoryFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
@@ -146,12 +144,6 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [HierarchyReportModule::class])
   fun provideHierarchyReportFragmentFactory(): HierarchyReportFragment
-
-  @ContributesAndroidInjector
-  fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
-
-  @ContributesAndroidInjector
-  fun provideLeadViewHistoryFactory(): LeadViewHistoryFragment
 
   @ContributesAndroidInjector
   fun provodeLeadViewIntreactionFactory(): LeadViewInteractionFragment

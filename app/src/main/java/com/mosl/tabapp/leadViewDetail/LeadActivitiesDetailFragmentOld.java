@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
-
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.tabapp.constants.MOSLConstants.EMAIL;
@@ -21,7 +19,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.TIME;
  * Created by raju on 3/14/2017.
  */
 
-public class LeadActivitiesDetailFragment extends CommonFragment {
+public class LeadActivitiesDetailFragmentOld extends CommonFragment {
 	@Override protected int getLayout() {
 		return R.layout.frag_lead_act_detail;
 	}
