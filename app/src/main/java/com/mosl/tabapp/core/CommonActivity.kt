@@ -47,7 +47,6 @@ import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
-import com.mosl.tabapp.SaathiAppNew.Companion.get
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
@@ -74,6 +73,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
+import kotlin.collections.set
 
 class CommonActivity : BaseActivity(),
   Navigator,
@@ -486,9 +486,6 @@ class CommonActivity : BaseActivity(),
 
 //  locationWorkManager.cancelWorkById(compressionLocationWorkId)
 //  dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
-    get().getDB()?.apply {
-      daoAccess().deleteAll()
-    }
     firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
