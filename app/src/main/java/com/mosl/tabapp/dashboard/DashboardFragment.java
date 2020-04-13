@@ -424,7 +424,7 @@ public class DashboardFragment extends CommonFragment
       }
     });
 
-    if (userManager.getUser().isAufsb()) {
+    if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
       rlClientLeads.setVisibility(View.GONE);
       btnLeads.setText(DASHBOARD);
     }
@@ -905,7 +905,7 @@ public class DashboardFragment extends CommonFragment
         }
         dashboardBtnList.clear();
         dashboardList.clear();
-        if (requireNonNull(userManager.getUser()).isAufsb()) {
+        if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
           lldashboardAufsb.setVisibility(View.VISIBLE);
           ivActionableInsights.setVisibility(View.GONE);
           tvMain.setVisibility(View.GONE);

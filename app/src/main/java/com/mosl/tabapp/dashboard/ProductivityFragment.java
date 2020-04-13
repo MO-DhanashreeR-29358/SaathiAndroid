@@ -80,8 +80,12 @@ public class ProductivityFragment extends CommonFragment implements View.OnClick
           dashboardModel.getGroupModel(DashboardSystemModel.getProductivitySystemName());
       WidgetModel model = null;
       List<WidgetModel> widgetList = groupModel.getWidgetList();
-      if (widgetList.size() >= 2) {
+      if (widgetList.size() == 3) {
         model = widgetList.get(2);
+        widgetSystemName = model.getSystemName();
+        webServiceCall();
+      } else if (widgetList.size() == 2) {
+        model = widgetList.get(1);
         widgetSystemName = model.getSystemName();
         webServiceCall();
       }
