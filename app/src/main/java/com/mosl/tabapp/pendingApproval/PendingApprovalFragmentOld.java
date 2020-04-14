@@ -6,10 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem;
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem;
@@ -18,13 +16,10 @@ import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.PendingApprovalModel;
 import com.mosl.tabapp.ui.MSFDialog;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.R.id;
@@ -36,7 +31,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.ENTITY_FIELD;
 import static com.mosl.tabapp.constants.MOSLConstants.SOME_SERVER_ERROR_OCCURRED;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL;
 
-public class PendingApprovalFragment extends CommonFragment {
+public class PendingApprovalFragmentOld extends CommonFragment {
 	private View pendingApprovalView;
 	private TextView tvApprovedValue;
 	private TextView tvPendingApprovalValue;
@@ -65,7 +60,7 @@ public class PendingApprovalFragment extends CommonFragment {
 			pendingApprovalView.findViewById(id.tvPendingApproval);
         tvPendingApprovalValue =
 			pendingApprovalView.findViewById(id.tvPendingApprovalValue);
-		RvPendApproval = pendingApprovalView.findViewById(id.RvPendApproval);
+      RvPendApproval = pendingApprovalView.findViewById(id.recyclerView);
 		tvApproved.setText(getString(txt_label_approved));
 		tvPendingApproval.setText(getString(txt_label_pending_approvals));
     }
