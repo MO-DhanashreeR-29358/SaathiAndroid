@@ -56,8 +56,10 @@ class ProductivityFragment : CommonFragment(), productivityView {
       DashboardSystemModel.getProductivitySystemName()
     )
     val widgetList = groupModel.widgetList
-    if (widgetList.size >= 2) {
+    if (widgetList.size == 3) {
       model = widgetList[2]
+    } else if (widgetList.size == 2) {
+      model = widgetList[1]
     }
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = ProductivityTableMapper.header(requireContext()) as DynamicHeaderRow

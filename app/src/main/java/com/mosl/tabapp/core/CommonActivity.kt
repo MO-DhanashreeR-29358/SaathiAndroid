@@ -73,6 +73,7 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
+import kotlin.collections.set
 
 class CommonActivity : BaseActivity(),
   Navigator,

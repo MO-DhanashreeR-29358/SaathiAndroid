@@ -329,4 +329,9 @@
     <string name="txt_lable_appointment">Appointment</string>
 
 
+    <string name="txt_label_mapped_ba_snapshot">Mapped BA Snapshot</string>
+    <string name="txt_label_my_business_snapshot">My Business Snapshot</string>
+    <string name="txt_label_details_of_incentive_slab">*Details of incentive slab</string>
+    <string name="txt_label_requirements_for_advancing_to_next_slab">Requirements For Advancing To Next Slab</string>
+    <string name="txt_label_current_quarter_status">Current Quarter Status</string>
 </resources>

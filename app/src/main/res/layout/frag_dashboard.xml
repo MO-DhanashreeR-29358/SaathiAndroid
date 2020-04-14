@@ -4,22 +4,25 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dashboard_background">
+    android:background="@color/dashboard_background"
+    >
 
     <ScrollView
         android:id="@id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/_20sdp">
+        android:paddingBottom="@dimen/_20sdp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
-          <include layout="@layout/frag_dashboard_aufsb"/>
+            <include layout="@layout/frag_dashboard_aufsb" />
 
-          <TextView
+            <TextView
                 android:id="@+id/tvMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -28,8 +31,8 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:textColor="@color/error_red"
-                android:textSize="0dp"
-              />
+                android:textSize="0sp"
+                />
 
 
             <LinearLayout
@@ -38,31 +41,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtMappedBASnapshot"
-                        app:srcCompat="@drawable/ic_new_clients_leads" />
+                        android:layout_toStartOf="@+id/txtMappedBASnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
 
                     <TextView
                         android:id="@+id/txtMappedBASnapshot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="Mapped BA Snapshot"
+                        android:text="@string/txt_label_mapped_ba_snapshot"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -74,31 +81,35 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtBusinessSnapshot"
-                        app:srcCompat="@drawable/ic_new_clients_leads" />
+                        android:layout_toStartOf="@+id/txtBusinessSnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
 
                     <TextView
                         android:id="@+id/txtBusinessSnapshot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="My Business Snapshot"
+                        android:text="@string/txt_label_my_business_snapshot"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -111,40 +122,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlBusinessSnapshotHead"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/tvSnapshot"
-                        app:srcCompat="@drawable/ic_new_clients_leads" />
+                        android:layout_toStartOf="@+id/tvSnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
 
                     <TextView
                         android:id="@+id/tvSnapshot"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivBusinessSnapshotHead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
                 </RelativeLayout>
 
 
@@ -152,7 +167,8 @@
                     android:id="@+id/llBusinessSnapshotHead"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical"
+                    />
 
 
             </LinearLayout>
@@ -165,40 +181,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlMonthOnMonth"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtMonthTrends"
-                        app:srcCompat="@drawable/ic_target_achievement" />
+                        android:layout_toStartOf="@+id/txtMonthTrends"
+                        app:srcCompat="@drawable/ic_target_achievement"
+                        />
 
                     <TextView
                         android:id="@+id/txtMonthTrends"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivMonthOnMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
                 </RelativeLayout>
 
 
@@ -206,7 +226,8 @@
                     android:id="@+id/llMonthvsTrends"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
 
                 </LinearLayout>
@@ -220,40 +241,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlClientLeads"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtClients"
-                        app:srcCompat="@drawable/ic_new_clients_leads" />
+                        android:layout_toStartOf="@+id/txtClients"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
 
                     <TextView
                         android:id="@+id/txtClients"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivClientLeads"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
 
                 </RelativeLayout>
 
@@ -261,12 +286,14 @@
                     android:id="@+id/llClientsLeads"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        >
 
                         <Button
                             android:id="@+id/btnClient"
@@ -276,7 +303,9 @@
                             android:background="@drawable/orange"
                             android:text="@string/CLIENTS"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
+
                         <Button
                             android:id="@+id/btnBusinessSnapshot"
                             android:layout_width="0dp"
@@ -285,7 +314,8 @@
                             android:background="@drawable/orange"
                             android:text="@string/SNAPSHOT"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <Button
                             android:id="@+id/btnBusinessSnapshotAdvisor"
@@ -295,7 +325,8 @@
                             android:background="@drawable/orange"
                             android:text="@string/SNAPSHOT"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <Button
                             android:id="@+id/btnProductivity"
@@ -305,7 +336,8 @@
                             android:background="@drawable/orange"
                             android:text="@string/PRODUCTIVITY"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <Button
                             android:id="@+id/btnLeads"
@@ -315,7 +347,8 @@
                             android:background="@drawable/white"
                             android:text="@string/LEADS"
                             android:textColor="@color/Button_text_color"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <Button
                             android:id="@+id/btnClientTraded"
@@ -325,14 +358,16 @@
                             android:background="@drawable/white"
                             android:text="@string/CLIENTS_TRADED"
                             android:textColor="@color/Button_text_color"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llReplaceClientFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" />
+                        android:orientation="horizontal"
+                        />
                 </LinearLayout>
             </LinearLayout>
 
@@ -343,40 +378,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlTargetAchievementADV"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtTarget"
-                        app:srcCompat="@drawable/ic_target_achievement" />
+                        android:layout_toStartOf="@+id/txtTarget"
+                        app:srcCompat="@drawable/ic_target_achievement"
+                        />
 
                     <TextView
                         android:id="@+id/txtTarget"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivTargetAchievementADV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
 
                 </RelativeLayout>
 
@@ -385,7 +424,8 @@
                     android:id="@+id/llTargetAchievementADV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                 </LinearLayout>
 
@@ -398,40 +438,44 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlTeamTargetAchievement"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/txtTeamTarget"
-                        app:srcCompat="@drawable/ic_target_achievement" />
+                        android:layout_toStartOf="@+id/txtTeamTarget"
+                        app:srcCompat="@drawable/ic_target_achievement"
+                        />
 
                     <TextView
                         android:id="@+id/txtTeamTarget"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivTeamTargetAchievement"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
 
                 </RelativeLayout>
 
@@ -440,7 +484,8 @@
                     android:id="@+id/llTeamTargetAchievement"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
 
                 </LinearLayout>
@@ -453,47 +498,52 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <RelativeLayout
                     android:id="@+id/rlPerformanceAndIncentivesHeader"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@color/titleBarBackground">
+                    android:background="@color/titleBarBackground"
+                    >
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/tvPerformanceAndIncentivesHeader"
-                        app:srcCompat="@drawable/ic_incentive_performance" />
+                        android:layout_toStartOf="@+id/tvPerformanceAndIncentivesHeader"
+                        app:srcCompat="@drawable/ic_incentive_performance"
+                        />
 
                     <TextView
                         android:id="@+id/tvPerformanceAndIncentivesHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        />
 
-                  <androidx.appcompat.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/ivPerformanceAndIncentivesHeader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/_3sdp" />
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        />
                 </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/llPerformanceAndIncentivesHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    >
 
                     <include layout="@layout/frag_insentives" />
 
@@ -501,14 +551,16 @@
 
                     <include
                         layout="@layout/frag_performane_team"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <LinearLayout
                         android:id="@+id/llCurrentQuarterStatusAdviosory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        >
 
 
                         <TextView
@@ -517,10 +569,11 @@
                             android:layout_height="wrap_content"
                             android:background="#FAFAFA"
                             android:padding="10dp"
-                            android:text="Current Quarter status"
+                            android:text="@string/txt_label_current_quarter_status"
                             android:textAlignment="center"
                             android:textColor="@color/flush_orange"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <include layout="@layout/frag_current_quarter_status_table_first" />
 
@@ -538,24 +591,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="#FAFAFA"
                             android:padding="10dp"
-                            android:text="Current Quarter Status"
+                            android:text="@string/txt_label_current_quarter_status"
                             android:textAlignment="center"
                             android:textColor="@color/flush_orange"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            />
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_8sdp"
                             android:background="@color/cape_honey"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            >
 
                             <TextView
                                 android:id="@+id/tvTeamSnapshot"
@@ -563,15 +619,17 @@
                                 android:layout_height="wrap_content"
                                 android:background="@color/white"
                                 android:padding="@dimen/_8sdp"
-                                android:text="Team Snapshot"
+                                android:text="@string/txt_label_team_snapshot"
                                 android:textAlignment="center"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                />
 
                             <TableLayout
                                 android:id="@+id/tableCurrentQuaterStatus"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                />
 
                         </LinearLayout>
 
@@ -581,7 +639,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_8sdp"
                             android:background="@color/neon_pink"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            >
 
                             <TextView
                                 android:id="@+id/tvRequirements"
@@ -589,15 +648,17 @@
                                 android:layout_height="wrap_content"
                                 android:background="@color/white"
                                 android:padding="@dimen/_8sdp"
-                                android:text="Requirements For Advancing To Next Slab"
+                                android:text="@string/txt_label_requirements_for_advancing_to_next_slab"
                                 android:textAlignment="center"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                />
 
                             <TableLayout
                                 android:id="@+id/tableCurrentQuaterStatusReq"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
+                                android:layout_height="wrap_content"
+                                />
 
 
                         </LinearLayout>
@@ -608,18 +669,20 @@
                     <include
                         android:id="@+id/includeHeadPerformance"
                         layout="@layout/frag_performane_hierarchy"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/tvDetailIncentive"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:layout_marginRight="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
-                        android:text="*Details of incentive slab"
+                        android:text="@string/txt_label_details_of_incentive_slab"
                         android:textColor="#3172bf"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        />
 
                 </LinearLayout>
 
@@ -633,37 +696,32 @@
     <RelativeLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></RelativeLayout>
+        android:layout_height="match_parent"
+        />
 
-    <LinearLayout
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivActionableInsights"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="right"
-        android:orientation="vertical">
+        android:layout_marginStart="@dimen/_12sdp"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_actionable"
+        />
 
-      <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivActionableInsights"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/_12sdp"
-            android:layout_toLeftOf="@+id/multiple_actions"
-            android:visibility="visible"
-            app:srcCompat="@drawable/ic_actionable" />
-    </LinearLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/floatingActionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         fab:fab_addButtonColorNormal="#f54d41"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/white"
-        fab:fab_labelStyle="@style/menu_labels_style">
+        fab:fab_labelStyle="@style/menu_labels_style"
+        >
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/leadcreation"
@@ -673,7 +731,8 @@
             fab:fab_colorNormal="#ffffff"
             fab:fab_colorPressed="#ffffff"
             fab:fab_size="mini"
-            fab:fab_title="Create Lead" />
+            fab:fab_title="Create Lead"
+            />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 

@@ -60,7 +60,7 @@ class LocationWorker(
     return try {
       if (userManager.isLoggedIn()) {
         if (hasGPSDevice(context)) {
-          // startLocationUpdates()
+          startLocationUpdates()
         }
       }
       Result.success()
