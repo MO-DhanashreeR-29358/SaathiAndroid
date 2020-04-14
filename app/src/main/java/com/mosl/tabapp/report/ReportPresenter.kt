@@ -11,7 +11,9 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 import javax.inject.Inject
 
 class ReportPresenter @Inject constructor(
@@ -22,24 +24,27 @@ class ReportPresenter @Inject constructor(
 ) : BasePresenter<ReportView>(view) {
   override fun start() {
     onFetchCalled().switchMap {
-        repository.getBranch()
-          .compose(applyUiModel())
-      }
+      repository.getBranch()
+        .compose(applyUiModel())
+    }
       .subscribe(view::renderBranchFilter)
       .addTo(disposable)
 
-    view.onBranchChange()
+    val branchChangedObs = view.onBranchChange()
       .filter(InvalidSelectionPredicate)
-      .switchMap {
-        repository.getDashboardData(getWidgetRequest())
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderData)
-      .addTo(disposable)
+      .doOnNext { position -> Timber.d("Branch changed %s", position) }
+      .share()
 
-    Observable.merge(view.onDatePickerEvent(), onRetryCalled())
+    val dateChangedObs: Observable<Int> = view.onDatePickerEvent()
+      .doOnNext { position -> Timber.d("Date changed %s", position) }
+      .share()
+
+    val combine: Observable<Int> =
+      Observable.combineLatest(branchChangedObs, dateChangedObs,
+        BiFunction { _, _ -> REPORTNO })
+    combine.map { ignored -> getWidgetRequest() }
       .switchMap {
-        repository.getDashboardData(getWidgetRequest())
+        repository.getDashboardData(it)
           .compose(applyUiModel())
       }
       .subscribe(view::renderData)
@@ -113,5 +118,6 @@ class ReportPresenter @Inject constructor(
     const val PageSize = "PageSize"
     const val Period_To = "Period_To"
     const val BranchCode = "BranchCode"
+    const val REPORTNO = 1
   }
 }

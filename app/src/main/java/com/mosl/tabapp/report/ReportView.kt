@@ -10,7 +10,7 @@ import io.reactivex.Observable
 interface ReportView : BaseView {
 
   fun onNavigateEvent(): Observable<CellEvent>
-  fun onDatePickerEvent(): Observable<Unit>
+  fun onDatePickerEvent(): Observable<Int>
 
   fun renderData(uiModel: UiModel<HierarchyReportCombo>)
   fun renderBranchFilter(uiModel: UiModel<List<AssignedLeadReportModel>>)

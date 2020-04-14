@@ -55,7 +55,7 @@ class ReportFragment : CommonFragment(),
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<HierarchyReportTableRow>
   private val navigateEvent = PublishSubject.create<CellEvent>()
-  private val datePickerEvent = PublishSubject.create<Unit>()
+  private val datePickerEvent = PublishSubject.create<Int>()
   private lateinit var branchAdapter: ArrayAdapter<AssignedLeadReportModel>
 
   lateinit var mainFromDate: String
@@ -74,6 +74,8 @@ class ReportFragment : CommonFragment(),
     setUpDate()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
+    datePickerEvent.onNext(0)
+
   }
 
   private fun setUpView() {
@@ -133,6 +135,7 @@ class ReportFragment : CommonFragment(),
     binding.rlStartDate.setOnClickListener {
       selectDate()
     }
+
   }
 
   private fun selectDate() {
@@ -196,7 +199,7 @@ class ReportFragment : CommonFragment(),
           toDate = CRMAppUtil.getDate(this, "yyyy-MM-dd")
           binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
         }
-        datePickerEvent.onNext(Unit)
+        datePickerEvent.onNext(0)
         dialog.dismiss()
       }
 
@@ -291,7 +294,7 @@ class ReportFragment : CommonFragment(),
     return navigateEvent.ofType()
   }
 
-  override fun onDatePickerEvent(): Observable<Unit> {
+  override fun onDatePickerEvent(): Observable<Int> {
     return datePickerEvent.ofType()
   }
 
@@ -300,6 +303,8 @@ class ReportFragment : CommonFragment(),
     binding.txtLables.text = args.getString(MOSLConstants.NAME)
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
+    datePickerEvent.onNext(0)
+
   }
 
 }
