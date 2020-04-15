@@ -59,10 +59,10 @@ import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 
-public class ForegroundService extends Service {
+public class ForegroundServiceOld extends Service {
 
   private static final String CHANNEL_ID = "saathi";
-  private static final String TAG = ForegroundService.class.getSimpleName();
+  private static final String TAG = ForegroundServiceOld.class.getSimpleName();
   private final IBinder mBinder = new LocalBinder();
   Handler refreshHandler = new Handler();
   Handler refreshHandlerAPI = new Handler();
@@ -135,7 +135,7 @@ public class ForegroundService extends Service {
 
   private Notification getNotification() {
 
-    Intent notificationIntent = new Intent(this, ForegroundService.class);
+    Intent notificationIntent = new Intent(this, ForegroundServiceOld.class);
     notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
     PendingIntent pendingIntent =
@@ -351,8 +351,8 @@ public class ForegroundService extends Service {
   }
 
   public class LocalBinder extends Binder {
-    public ForegroundService getService() {
-      return ForegroundService.this;
+    public ForegroundServiceOld getService() {
+      return ForegroundServiceOld.this;
     }
   }
 }

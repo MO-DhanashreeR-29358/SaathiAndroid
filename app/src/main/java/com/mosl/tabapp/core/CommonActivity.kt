@@ -141,7 +141,7 @@ class CommonActivity : BaseActivity(),
   private val mServiceConnection: ServiceConnection = object : ServiceConnection {
     override fun onServiceConnected(name: ComponentName, service: IBinder) {
       val binder = service as LocalBinder
-      mService = binder.service
+      mService = binder.getService()
     }
 
     override fun onServiceDisconnected(name: ComponentName) {
