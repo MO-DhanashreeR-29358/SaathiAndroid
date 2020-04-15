@@ -49,7 +49,6 @@ import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
-import com.mosl.tabapp.pendingApproval.PendingApprovalFragmentOld
 import com.mosl.tabapp.pendingApproval.PendingApprovalModule
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
@@ -88,9 +87,6 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [PendingApprovalModule::class])
   fun providePendingApprovalFactory(): PendingApprovalFragment
-
-  @ContributesAndroidInjector
-  fun providePendingApprovalFragmentFactory(): PendingApprovalFragmentOld
 
   @ContributesAndroidInjector(modules = [CalendarModule::class])
   fun provideCalendarAppointsListFragmentNewFactory(): CalendarAppointsListFragment

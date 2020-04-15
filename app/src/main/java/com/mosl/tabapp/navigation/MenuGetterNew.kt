@@ -19,7 +19,7 @@ import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
-import com.mosl.tabapp.pendingApproval.PendingApprovalFragmentOld
+import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.report.ReportFragment
@@ -38,7 +38,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
       NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
-      NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragmentOld()
+      NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
       NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebViewFragment().apply {

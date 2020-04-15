@@ -3,15 +3,17 @@ package com.mosl.tabapp.pendingApproval
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.groupiex.section.DataManagerSection
-import com.mosl.mobile.domain.notification.NotificationResponseData
+import com.mosl.mobile.domain.pendingapproval.PendingApprovalData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragPendingApprovalsBinding
-import com.mosl.tabapp.notification.NotificationItem
 import com.mosl.tabapp.pendingApproval.PendingApprovalUiEvent.ItemClick
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -64,8 +66,8 @@ class PendingApprovalFragment : CommonFragment(), PendingApprovalView {
     }
 
     groupAdapter.setOnItemClickListener { item, _ ->
-      if (item is NotificationItem) {
-        subject.onNext(ItemClick(item.getAdditionalData()))
+      if (item is PendingApprovalItem) {
+        subject.onNext(ItemClick(item.getEntityField()))
       }
     }
   }
@@ -74,8 +76,20 @@ class PendingApprovalFragment : CommonFragment(), PendingApprovalView {
     return subject.ofType()
   }
 
-  override fun render(uiModel: UiModel<List<NotificationResponseData>>) {
-    TODO("Not yet implemented")
+  override fun render(uiModel: UiModel<PendingApprovalData>) {
+    section.toggleProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      section.showError(it)
+    }
+    uiModel.onSuccess {
+      section.clearContent()
+      if (it.listOfApprovals.isNotEmpty()) {
+        section.setContent(it.listOfApprovals.safeMap { PendingApprovalItem(it) })
+      }
+
+      binding.tvApprovedValue.text = stringOrZero((it.summaryCount.approvedCount).toString())
+      binding.tvPendingApprovalValue.text = stringOrZero(it.summaryCount.pendingCount.toString())
+    }
   }
 
 }

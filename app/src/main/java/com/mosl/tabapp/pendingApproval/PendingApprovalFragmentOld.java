@@ -170,7 +170,7 @@ public class PendingApprovalFragmentOld extends CommonFragment {
         public PendingApprovalAdapter.MyViewHolder1 onCreateViewHolder(ViewGroup parent,
             int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-				.inflate(layout.list_pending_approvals, parent, false);
+                .inflate(layout.pending_approvals_list, parent, false);
 
             return new PendingApprovalAdapter.MyViewHolder1(itemView);
         }
