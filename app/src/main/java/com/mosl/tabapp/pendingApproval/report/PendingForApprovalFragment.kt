@@ -18,6 +18,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxbinding3.widget.itemSelections
+import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
@@ -37,6 +38,7 @@ import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragPendingForApprovalBinding
@@ -84,7 +86,6 @@ class PendingForApprovalFragment : CommonFragment(),
   lateinit var fromDat: Date
   private var toDate: Date? = null
   private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
-  private lateinit var profileAdapter: ArrayAdapter<ProfileModel>
 
   @Inject
   lateinit var presenter: PendingForApprovalPresenter
@@ -118,10 +119,6 @@ class PendingForApprovalFragment : CommonFragment(),
     binding.btnReject.setOnClickListener(this)
     employeeAdapter = getDefaultAdapter(requireContext())
     binding.spSelectEmployee.adapter = employeeAdapter
-
-    profileAdapter = getDefaultAdapter(requireContext())
-    binding.spProfileChange.adapter = profileAdapter
-
   }
 
   override fun onClick(v: View) {
@@ -923,7 +920,6 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
-
   companion object {
     private val TAG = PendingForApprovalFragment::class.java.simpleName
   }
@@ -934,7 +930,25 @@ class PendingForApprovalFragment : CommonFragment(),
     }
     uiModel.onSuccess {
       employeeAdapter.setSpinnerData(binding.spSelectEmployee, it.listOfEmployee)
-      profileAdapter.setSpinnerData(binding.spProfileChange, it.listOfProfile)
+      val arrRepeatMode = ArrayList<RowData>()
+      it.listOfProfile.safeMap { item ->
+        arrRepeatMode.add(
+          RowData(+1, item.entityField, item.referenceName)
+        )
+      }
+      val profileAdapter = getDefaultAdapter<RowData>(requireContext())
+      binding.spProfileChange.adapter = profileAdapter
+      profileAdapter.setSpinnerData(binding.spProfileChange, arrRepeatMode)
+
+      profileAdapter.notifyDataSetChanged()
+      val productData =
+        RowData.getSpinnerRowDataById(
+          arguments?.getString(MOSLConstants.ENTITY_FIELD),
+          profileAdapter
+        )
+      if (productData != null) {
+        binding.spProfileChange.setSelection(productData.position)
+      }
     }
   }
 
