@@ -127,8 +127,8 @@ import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineResponse
-import com.mosl.saathi.api.model.location.LocationDataRequest
 import com.mosl.saathi.api.model.location.LocationDataResponse
+import com.mosl.saathi.api.model.location.LocationRequest
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.LoginResponse
 import com.mosl.saathi.api.model.logout.LogoutRequest
@@ -717,7 +717,7 @@ interface SaathiApi {
   @ExcludeWrapper
   @POST("GeoLocation/SaveGeoLocation")
   fun saveGeoLocation(
-    @Body request: List<LocationDataRequest>
+    @Body request: LocationRequest
   ): Observable<LocationDataResponse>
 
   /*==================================================*/

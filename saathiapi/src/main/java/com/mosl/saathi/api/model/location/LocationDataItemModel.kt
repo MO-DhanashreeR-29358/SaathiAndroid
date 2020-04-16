@@ -2,7 +2,7 @@ package com.mosl.saathi.api.model.location
 
 import com.google.gson.annotations.SerializedName
 
-data class LocationDataRequest(
+data class LocationDataItemModel(
   @JvmField @SerializedName("EmployeeCode") val employeeCode: String,
   @JvmField @SerializedName("GeoArea") val geoArea: String,
   @JvmField @SerializedName("GeoLongitude") val geoLongitude: String,

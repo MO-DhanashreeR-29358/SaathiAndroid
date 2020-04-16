@@ -42,7 +42,7 @@ class DataSyncWorker(
     return try {
       if (userManager.isLoggedIn()) {
         if (SaathiAppNew.get().getDB()?.daoAccess()?.locationList?.size != 0) {
-          LocationUpdate()
+          // LocationUpdate()
         }
       }
       Result.success()
