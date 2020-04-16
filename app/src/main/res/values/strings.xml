@@ -143,7 +143,6 @@
     <string name="hint_label_enter_otp">Enter OTP*</string>
     <string name="txt_label_resend_otp">Resend OTP</string>
     <string name="btn_label_submit_otp">Submit OTP</string>
-    <string name="error_lable_no_records_found">No records found</string>
     <string name="txt_lable_families_mapped">Families Mapped</string>
     <string name="validate_client_mobile_no">Enter Client Mobile Number</string>
     <string name="validate_invalid_mobile_number">Invalid Mobile Number.</string>
@@ -334,4 +333,7 @@
     <string name="txt_label_details_of_incentive_slab">*Details of incentive slab</string>
     <string name="txt_label_requirements_for_advancing_to_next_slab">Requirements For Advancing To Next Slab</string>
     <string name="txt_label_current_quarter_status">Current Quarter Status</string>
+    <string name="error_lable_no_records_found">No records found</string>
+    <string name="txt_lable_approve">Approve</string>
+    <string name="txt_lable_reject">Reject</string>
 </resources>
