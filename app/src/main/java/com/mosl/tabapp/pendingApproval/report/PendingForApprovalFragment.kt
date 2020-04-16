@@ -31,6 +31,7 @@ import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.mobile.domain.pendingapproval.ProfileModel
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
 import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
+import com.mosl.shared.util.AppDateFormats
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
@@ -54,11 +55,11 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.subjects.PublishSubject
 import org.json.JSONArray
 import org.json.JSONException
 import timber.log.Timber
 import java.util.ArrayList
-import java.util.Calendar
 import java.util.Collections
 import java.util.Date
 import java.util.HashMap
@@ -79,13 +80,13 @@ class PendingForApprovalFragment : CommonFragment(),
     ArrayList<String>()
   private val selectedRowMap: MutableMap<Int, Boolean> =
     HashMap()
-  private var mainFromDate: String? = null
-  private var mainToDate: String? = null
-  private var toPostingDate: String? = null
-  private var fromPostingDate: String? = null
+  lateinit var mainFromDate: String
+  lateinit var mainToDate: String
+
   lateinit var fromDat: Date
-  private var toDate: Date? = null
+  lateinit var toDate: Date
   private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
+  private val datePickerEvent = PublishSubject.create<PendingForApprovalUIEvent.DatePickerEvent>()
 
   @Inject
   lateinit var presenter: PendingForApprovalPresenter
@@ -95,6 +96,7 @@ class PendingForApprovalFragment : CommonFragment(),
     binding = FragPendingForApprovalBinding.bind(view)
     setAppTitle("Pending For Approvals")
     setUpView()
+    setUpDate()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
   }
@@ -104,21 +106,106 @@ class PendingForApprovalFragment : CommonFragment(),
   }
 
   private fun setUpView() {
-    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd")
-    fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-    fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy")
-    mainToDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
-    toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
-    toPostingDate = CRMAppUtil.getDateStr(toDate, "dd-MM-yyyy")
-    binding.tvStartDate.text =
-      CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-    binding.llStartDate.setOnClickListener(this)
-    binding.tvEndDate.text = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-    binding.llEndDate.setOnClickListener(this)
+
     binding.btnApprove.setOnClickListener(this)
     binding.btnReject.setOnClickListener(this)
     employeeAdapter = getDefaultAdapter(requireContext())
     binding.spSelectEmployee.adapter = employeeAdapter
+  }
+
+  private fun setUpDate() {
+    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(date6)
+    fromDat = CRMAppUtil.getDate(mainFromDate, date6)
+    mainToDate = CRMAppUtil.getDate(Date(), date6)
+    toDate = CRMAppUtil.getDate(mainToDate, date6)
+
+    binding.tvStartDate.setText(
+      AppDateFormats.DF_JSON_DATE6.format(fromDat)
+    )
+    binding.llEndDate.setOnClickListener {
+      selectDate()
+    }
+    binding.tvEndDate.setText(
+      AppDateFormats.DF_JSON_DATE6.format(toDate)
+    )
+    binding.llStartDate.setOnClickListener {
+      selectDate()
+    }
+
+  }
+
+  private fun selectDate() {
+    val dialog = Dialog(requireContext())
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.setContentView(layout.date_picker_from_to)
+    dialog.getWindow()
+      ?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+    val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
+    val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
+    dpToDate.maxDate = System.currentTimeMillis() - 1000
+    dpFromDate.maxDate = System.currentTimeMillis() - 1000
+    val close: ImageView =
+      dialog.findViewById(R.id.ibtnClose)
+    val btnSubmit: Button =
+      dialog.findViewById(R.id.btnSubmit)
+
+    try {
+      val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
+      dpFromDate.init(
+        dateSplit[0].toInt(),
+        dateSplit[1].toInt() - 1,
+        dateSplit[2].toInt()
+      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        mainFromDate =
+          year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+      }
+    } catch (e: Exception) {
+      Timber.d(e)
+    }
+
+    try {
+      val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
+      dpToDate.init(
+        dateSplit[0].toInt(),
+        dateSplit[1].toInt() - 1,
+        dateSplit[2].toInt()
+      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+      }
+    } catch (e: Exception) {
+      Timber.d(e)
+    }
+
+    close.setOnClickListener { v: View? -> dialog.dismiss() }
+    btnSubmit.setOnClickListener { v: View? ->
+      fromDat = CRMAppUtil.getDate(mainFromDate, date6)
+      toDate = CRMAppUtil.getDate(mainToDate, date6)
+      if (fromDat.after(toDate)) {
+        MSFDialog.alertDialog(
+          requireContext(), 0, "Motilal Oswal", MOSLConstants.INVALID_DATE_RANGE,
+          "OK", true, null
+        )
+      } else {
+        mainFromDate.apply {
+          fromDat = CRMAppUtil.getDate(this, date6)
+          binding.tvStartDate.setText(AppDateFormats.DF_JSON_DATE6.format(fromDat))
+        }
+        mainToDate.apply {
+          toDate = CRMAppUtil.getDate(this, date6)
+          binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
+        }
+        datePickerEvent.onNext(
+          PendingForApprovalUIEvent.DatePickerEvent(
+            AppDateFormats.DF_JSON_DATE6.format(fromDat) + " 00:00:00",
+            AppDateFormats.DF_JSON_DATE6.format(toDate) + "00:00:00"
+          )
+        )
+        dialog.dismiss()
+      }
+
+    }
+    dialog.show()
   }
 
   override fun onClick(v: View) {
@@ -160,97 +247,6 @@ class PendingForApprovalFragment : CommonFragment(),
       R.id.llStartDate -> selectDate()
       R.id.llEndDate -> selectDate()
     }
-  }
-
-  private fun selectDate() {
-    val today = Calendar.getInstance()
-    val dialog = Dialog(requireContext())
-    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-    dialog.setContentView(layout.date_picker_from_to)
-    dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-    val dpFromDate =
-      dialog.findViewById<DatePicker>(R.id.datePickerFromDate)
-    val dpToDate =
-      dialog.findViewById<DatePicker>(R.id.datePickerToDate)
-    val close =
-      dialog.findViewById<ImageView>(R.id.ibtnClose)
-    val btnSubmit =
-      dialog.findViewById<Button>(R.id.btnSubmit)
-    dpToDate.maxDate = System.currentTimeMillis() - 1000
-    dpFromDate.maxDate = System.currentTimeMillis() - 1000
-    try {
-      if (mainFromDate != null) {
-        val dateSplit = mainFromDate!!.split("-").toTypedArray()
-        dpFromDate.init(
-          dateSplit[0].toInt(),
-          dateSplit[1].toInt() - 1,
-          dateSplit[2].toInt()
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          mainFromDate =
-            year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      } else {
-        dpFromDate.init(
-          today.get(Calendar.YEAR),
-          today.get(Calendar.MONTH),
-          today.getFirstDayOfWeek()
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          mainFromDate =
-            year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      }
-      if (mainFromDate != null) {
-        val dateSplit = mainToDate!!.split("-").toTypedArray()
-        dpToDate.init(
-          dateSplit[0].toInt(),
-          dateSplit[1].toInt() - 1,
-          dateSplit[2].toInt()
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      } else {
-        dpToDate.init(
-          today.get(Calendar.YEAR),
-          today.get(Calendar.MONTH),
-          today.get(Calendar.DAY_OF_MONTH)
-        ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-          today.set(year, monthOfYear, dayOfMonth)
-          mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        }
-      }
-    } catch (e: Exception) {
-      Timber.d(e, TAG)
-    }
-    close.setOnClickListener { v: View? -> dialog.dismiss() }
-    btnSubmit.setOnClickListener { v: View? ->
-      fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-      toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
-      if (fromDat.after(toDate)) {
-        MSFDialog.alertDialog(
-          requireContext(),
-          0,
-          resources.getString(string.motilal_oswal),
-          MOSLConstants.INVALID_DATE_RANGE,
-          "OK",
-          true,
-          null
-        )
-      } else {
-        if (mainFromDate != null) {
-          fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-          fromPostingDate = CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          binding.tvStartDate.text = fromPostingDate
-        }
-        if (mainToDate != null) {
-          toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
-          toPostingDate = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          binding.tvEndDate.text = toPostingDate
-        }
-        dialog.dismiss()
-      }
-    }
-    dialog.show()
   }
 
   fun prefix(input: Int): String {
@@ -920,9 +916,6 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
-  companion object {
-    private val TAG = PendingForApprovalFragment::class.java.simpleName
-  }
 
   override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
     uiModel.onFailure {
@@ -966,5 +959,17 @@ class PendingForApprovalFragment : CommonFragment(),
 
   override fun getProfile(): ProfileModel? {
     return binding.spProfileChange.selectedItem as? ProfileModel
+  }
+
+  override fun fromDate(): String {
+    return binding.tvStartDate.getText().toString() + " 00:00:00"
+  }
+
+  override fun toDate(): String {
+    return binding.tvEndDate.getText().toString() + " 00:00:00"
+  }
+
+  companion object {
+    const val date6 = "yyyy-MM-dd"
   }
 }

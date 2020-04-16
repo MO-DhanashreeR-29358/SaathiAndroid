@@ -13,4 +13,6 @@ interface PendingForApprovalView : BaseView {
   fun onProfileChange(): Observable<Int>
   fun getEmployee(): EmployeeModel?
   fun getProfile(): ProfileModel?
+  fun fromDate(): String
+  fun toDate(): String
 }
