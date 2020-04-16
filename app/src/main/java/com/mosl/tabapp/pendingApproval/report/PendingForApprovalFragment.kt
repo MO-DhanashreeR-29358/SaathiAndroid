@@ -10,6 +10,7 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
@@ -17,15 +18,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxbinding3.widget.itemSelections
+import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
-import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.pendingapproval.EmployeeModel
+import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
+import com.mosl.mobile.domain.pendingapproval.ProfileModel
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
-import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
 import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
@@ -34,7 +37,6 @@ import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragPendingForApprovalBinding
@@ -48,6 +50,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import org.json.JSONArray
 import org.json.JSONException
@@ -58,10 +61,11 @@ import java.util.Collections
 import java.util.Date
 import java.util.HashMap
 import java.util.LinkedHashMap
+import javax.inject.Inject
 import org.json.JSONObject as JSONObject1
 
 class PendingForApprovalFragment : CommonFragment(),
-  OnClickListener, MOSLConstants {
+  OnClickListener, MOSLConstants, PendingForApprovalView {
   lateinit var binding: FragPendingForApprovalBinding
   lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
   private var clickedOn = ""
@@ -73,20 +77,25 @@ class PendingForApprovalFragment : CommonFragment(),
     ArrayList<String>()
   private val selectedRowMap: MutableMap<Int, Boolean> =
     HashMap()
-  private var employeeCodeStr: String? = null
-  private var profileCodeStr: String? = null
   private var mainFromDate: String? = null
   private var mainToDate: String? = null
   private var toPostingDate: String? = null
   private var fromPostingDate: String? = null
   lateinit var fromDat: Date
   private var toDate: Date? = null
+  private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
+  private lateinit var profileAdapter: ArrayAdapter<ProfileModel>
+
+  @Inject
+  lateinit var presenter: PendingForApprovalPresenter
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragPendingForApprovalBinding.bind(view)
     setAppTitle("Pending For Approvals")
     setUpView()
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
   }
 
   override fun getLayout(): Int {
@@ -107,34 +116,13 @@ class PendingForApprovalFragment : CommonFragment(),
     binding.llEndDate.setOnClickListener(this)
     binding.btnApprove.setOnClickListener(this)
     binding.btnReject.setOnClickListener(this)
-    approvelReqestUserList
+    employeeAdapter = getDefaultAdapter(requireContext())
+    binding.spSelectEmployee.adapter = employeeAdapter
+
+    profileAdapter = getDefaultAdapter(requireContext())
+    binding.spProfileChange.adapter = profileAdapter
+
   }
-
-  private val spinnerSelection: Unit
-    get() {
-      disposable.add(
-        binding.spSelectEmployee.itemSelections()
-          .filter(InvalidSelectionPredicate)
-          .subscribe { xyz: Int? ->
-            employeeCodeStr = employee.key
-            isDataPresent
-          }
-      )
-      disposable.add(
-        binding.spProfileChange.itemSelections()
-          .filter(InvalidSelectionPredicate)
-          .subscribe { xyz: Int? ->
-            profileCodeStr = profile.key
-            isDataPresent
-          }
-      )
-    }
-
-  private val employee: RowData
-    get() = binding.spSelectEmployee.selectedItem as RowData
-
-  private val profile: RowData
-    get() = binding.spProfileChange.selectedItem as RowData
 
   override fun onClick(v: View) {
     when (v.id) {
@@ -262,7 +250,6 @@ class PendingForApprovalFragment : CommonFragment(),
           toPostingDate = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
           binding.tvEndDate.text = toPostingDate
         }
-        webServiceCall(employee.key, profile.key)
         dialog.dismiss()
       }
     }
@@ -274,96 +261,6 @@ class PendingForApprovalFragment : CommonFragment(),
       "0$input"
     } else input.toString() + ""
   }
-
-  private fun renderApprovalField(uiModel: UiModel<List<ApprovalFieldItem>>) {
-    toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
-    error?.let { showOnFailurePopup(it) }
-    val dataList = uiModel.data
-    if (dataList != null) {
-      val arrProfile =
-        ArrayList<RowData>()
-      for (i in dataList.indices) {
-        val (entityField, referenceName) = dataList[i]
-        val lookUpId = stringOrEmpty(entityField)
-        val lookUpName = stringOrEmpty(referenceName)
-        arrProfile.add(RowData(i, lookUpId, lookUpName))
-      }
-      val arrAdapProfile =
-        getDefaultAdapter<RowData>(requireContext())
-      binding.spProfileChange.adapter = arrAdapProfile
-      arrAdapProfile.setSpinnerData(
-        binding.spProfileChange,
-        arrProfile
-      )
-      arrAdapProfile.notifyDataSetChanged()
-      val entityField = this.arguments!!.getString(MOSLConstants.ENTITY_FIELD)
-      val entityFieldID =
-        RowData.getSpinnerRowDataById(entityField, arrAdapProfile)
-      if (entityFieldID != null) {
-        binding.spProfileChange.setSelection(entityFieldID.position)
-      }
-    }
-    spinnerSelection
-  }
-
-  private val approvelReqestFieldList: Unit
-    get() {
-      if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-        val request = ApprovelRequest(userManager.getUser()!!.employeeCode)
-        val subscribe: Disposable = saathiApi.getApprovalFieldList(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel: UiModel<List<ApprovalFieldItem>> ->
-            renderApprovalField(
-              uiModel
-            )
-          }
-      } else {
-        noInternetConnectionDialog()
-      }
-    }
-
-  private fun renderApprovalUser(uiModel: UiModel<List<ApprovalUserItem>>) {
-    toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
-    error?.let { showOnFailurePopup(it) }
-    val dataList = uiModel.data
-    if (dataList != null) {
-      val arrEmployee =
-        ArrayList<RowData>()
-      for (i in dataList.indices) {
-        val (updatedBy, name) = dataList[i]
-        val lookUpId = stringOrEmpty(updatedBy)
-        val lookUpName = stringOrEmpty(name)
-        arrEmployee.add(RowData(i, lookUpId, lookUpName))
-      }
-      val arrAdapEmployee =
-        getDefaultAdapter<RowData>(requireContext())
-      binding.spSelectEmployee.adapter = arrAdapEmployee
-      arrAdapEmployee.setSpinnerData(
-        binding.spSelectEmployee,
-        arrEmployee
-      )
-      arrAdapEmployee.notifyDataSetChanged()
-    }
-    approvelReqestFieldList
-  }
-
-  private val approvelReqestUserList: Unit
-    get() {
-      if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-        val request = ApprovelRequest(userManager.getUser()!!.employeeCode)
-        val subscribe: Disposable = saathiApi.getApprovalUserList(request)
-          .compose(applyUiModel())
-          .subscribe { uiModel: UiModel<List<ApprovalUserItem>> ->
-            renderApprovalUser(
-              uiModel
-            )
-          }
-      } else {
-        noInternetConnectionDialog()
-      }
-    }
 
   private fun renderApprovalRequest(uiModel: UiModel<JSONArray>) {
     toggleProgress(uiModel.inProgress)
@@ -563,10 +460,7 @@ class PendingForApprovalFragment : CommonFragment(),
         true
       ) { action: Action, data1: Array<Any?>? ->
         if (action == OK) {
-          webServiceCall(
-            employeeCodeStr,
-            profileCodeStr
-          )
+          // webServiceCall(employeeCodeStr, profileCodeStr)
         }
       }
     }
@@ -1029,14 +923,34 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
-  private val isDataPresent: Unit
-    get() {
-      if (employeeCodeStr != null && profileCodeStr != null) {
-        webServiceCall(employeeCodeStr, profileCodeStr)
-      }
-    }
 
   companion object {
     private val TAG = PendingForApprovalFragment::class.java.simpleName
+  }
+
+  override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      employeeAdapter.setSpinnerData(binding.spSelectEmployee, it.listOfEmployee)
+      profileAdapter.setSpinnerData(binding.spProfileChange, it.listOfProfile)
+    }
+  }
+
+  override fun onEmployeeChange(): Observable<Int> {
+    return binding.spSelectEmployee.itemSelections()
+  }
+
+  override fun onProfileChange(): Observable<Int> {
+    return binding.spProfileChange.itemSelections()
+  }
+
+  override fun getEmployee(): EmployeeModel? {
+    return binding.spSelectEmployee.selectedItem as? EmployeeModel
+  }
+
+  override fun getProfile(): ProfileModel? {
+    return binding.spProfileChange.selectedItem as? ProfileModel
   }
 }

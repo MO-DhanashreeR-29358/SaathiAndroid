@@ -51,6 +51,7 @@ import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalModule
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
+import com.mosl.tabapp.pendingApproval.report.PendingForApprovalModule
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.report.ReportFragment
@@ -137,7 +138,7 @@ interface FragmentProvider {
   @ContributesAndroidInjector(modules = [NotificationModule::class])
   fun provideNotificationFragmentKttFactory(): NotificationFragment
 
-  @ContributesAndroidInjector
+  @ContributesAndroidInjector(modules = [PendingForApprovalModule::class])
   fun providePendingForApprovalFragmentFactory(): PendingForApprovalFragment
 
   @ContributesAndroidInjector(modules = [ReportModule::class])

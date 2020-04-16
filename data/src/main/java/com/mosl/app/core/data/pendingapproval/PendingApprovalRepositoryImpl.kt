@@ -11,7 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
-class pendingApprovalRepositoryImpl @Inject constructor(
+class PendingApprovalRepositoryImpl @Inject constructor(
   private val saathiApi: SaathiApi,
   val userManager: UserManager
 ) : PendingApprovalRepository {
