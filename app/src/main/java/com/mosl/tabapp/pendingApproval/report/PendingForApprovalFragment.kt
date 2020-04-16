@@ -14,8 +14,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxbinding3.widget.itemSelections
@@ -39,12 +37,12 @@ import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.FragPendingForApprovalBinding
 import com.mosl.tabapp.databinding.ItemTableBinding
 import com.mosl.tabapp.databinding.ItemTableFamilyBinding
 import com.mosl.tabapp.databinding.ItemTableFirstPendingBinding
 import com.mosl.tabapp.databinding.ItemTableHeaderBinding
 import com.mosl.tabapp.databinding.ItemTableHeaderFirstPendingBinding
-import com.mosl.tabapp.tablefixheader.TableFixHeaders
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
@@ -64,13 +62,8 @@ import org.json.JSONObject as JSONObject1
 
 class PendingForApprovalFragment : CommonFragment(),
   OnClickListener, MOSLConstants {
-  lateinit var spProfileChange: Spinner
-  lateinit var spSelectEmployee: Spinner
-  private var table: TableFixHeaders? = null
+  lateinit var binding: FragPendingForApprovalBinding
   lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
-  private var tvNochart: TextView? = null
-  private var tvStartDate: TextView? = null
-  private var tvEndDate: TextView? = null
   private var clickedOn = ""
   private var click = 1
   private var isAllChecked = false
@@ -88,61 +81,39 @@ class PendingForApprovalFragment : CommonFragment(),
   private var fromPostingDate: String? = null
   lateinit var fromDat: Date
   private var toDate: Date? = null
-  lateinit var dialog: Dialog
-  lateinit var today: Calendar
-  private var llButton: LinearLayout? = null
-  override fun onCreateView(
-    inflater: LayoutInflater, container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    val pendingForApprovalView =
-      super.onCreateView(inflater, container, savedInstanceState)
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding = FragPendingForApprovalBinding.bind(view)
     setAppTitle("Pending For Approvals")
-    setUpView(pendingForApprovalView)
-    return pendingForApprovalView
+    setUpView()
   }
 
   override fun getLayout(): Int {
     return layout.frag_pending_for_approval
   }
 
-  private fun setUpView(pendingForApprovalView: View?) {
-    spProfileChange =
-      pendingForApprovalView!!.findViewById(R.id.spProfileChange)
-    spSelectEmployee =
-      pendingForApprovalView.findViewById(R.id.spSelectEmployee)
-    val btnApprove =
-      pendingForApprovalView.findViewById<Button>(R.id.btnApprove)
-    val btnReject =
-      pendingForApprovalView.findViewById<Button>(R.id.btnReject)
-    table = pendingForApprovalView.findViewById(R.id.table)
-    tvStartDate = pendingForApprovalView.findViewById(R.id.tvStartDate)
-    tvEndDate = pendingForApprovalView.findViewById(R.id.tvEndDate)
-    val llStartDate =
-      pendingForApprovalView.findViewById<LinearLayout>(R.id.llStartDate)
-    val llEndDate =
-      pendingForApprovalView.findViewById<LinearLayout>(R.id.llEndDate)
+  private fun setUpView() {
     mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd")
     fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
     fromPostingDate = CRMAppUtil.getDateStr(fromDat, "dd-MM-yyyy")
     mainToDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
     toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
     toPostingDate = CRMAppUtil.getDateStr(toDate, "dd-MM-yyyy")
-    tvStartDate?.text = CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-    llStartDate.setOnClickListener(this)
-    tvEndDate?.text = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-    llEndDate.setOnClickListener(this)
-    btnApprove.setOnClickListener(this)
-    btnReject.setOnClickListener(this)
-    tvNochart = pendingForApprovalView.findViewById(R.id.tvNochart)
-    llButton = pendingForApprovalView.findViewById(R.id.llButton)
+    binding.tvStartDate.text =
+      CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
+    binding.llStartDate.setOnClickListener(this)
+    binding.tvEndDate.text = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
+    binding.llEndDate.setOnClickListener(this)
+    binding.btnApprove.setOnClickListener(this)
+    binding.btnReject.setOnClickListener(this)
     approvelReqestUserList
   }
 
   private val spinnerSelection: Unit
     get() {
       disposable.add(
-        spSelectEmployee!!.itemSelections()
+        binding.spSelectEmployee.itemSelections()
           .filter(InvalidSelectionPredicate)
           .subscribe { xyz: Int? ->
             employeeCodeStr = employee.key
@@ -150,7 +121,7 @@ class PendingForApprovalFragment : CommonFragment(),
           }
       )
       disposable.add(
-        spProfileChange!!.itemSelections()
+        binding.spProfileChange.itemSelections()
           .filter(InvalidSelectionPredicate)
           .subscribe { xyz: Int? ->
             profileCodeStr = profile.key
@@ -160,14 +131,14 @@ class PendingForApprovalFragment : CommonFragment(),
     }
 
   private val employee: RowData
-    get() = spSelectEmployee!!.selectedItem as RowData
+    get() = binding.spSelectEmployee.selectedItem as RowData
 
   private val profile: RowData
-    get() = spProfileChange!!.selectedItem as RowData
+    get() = binding.spProfileChange.selectedItem as RowData
 
   override fun onClick(v: View) {
     when (v.id) {
-      R.id.btnApprove -> if (selectedRowCount > 0 || cbClientName!!.isChecked) {
+      R.id.btnApprove -> if (selectedRowCount > 0 || cbClientName.isChecked) {
         MSFDialog.alertDialog(
           requireContext(), 0,
           resources.getString(string.motilal_oswal),
@@ -184,7 +155,7 @@ class PendingForApprovalFragment : CommonFragment(),
           "Please select at least one record", "OK", true, null
         )
       }
-      R.id.btnReject -> if (selectedRowCount > 0 || cbClientName!!.isChecked) {
+      R.id.btnReject -> if (selectedRowCount > 0 || cbClientName.isChecked) {
         MSFDialog.alertDialog(
           requireContext(), 0,
           resources.getString(string.motilal_oswal),
@@ -207,8 +178,8 @@ class PendingForApprovalFragment : CommonFragment(),
   }
 
   private fun selectDate() {
-    today = Calendar.getInstance()
-    dialog = Dialog(requireContext())
+    val today = Calendar.getInstance()
+    val dialog = Dialog(requireContext())
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
     dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialog.setContentView(layout.date_picker_from_to)
@@ -266,7 +237,7 @@ class PendingForApprovalFragment : CommonFragment(),
     } catch (e: Exception) {
       Timber.d(e, TAG)
     }
-    close.setOnClickListener { v: View? -> dialog!!.dismiss() }
+    close.setOnClickListener { v: View? -> dialog.dismiss() }
     btnSubmit.setOnClickListener { v: View? ->
       fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
       toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
@@ -284,18 +255,18 @@ class PendingForApprovalFragment : CommonFragment(),
         if (mainFromDate != null) {
           fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
           fromPostingDate = CRMAppUtil.getDateStr(fromDat, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          tvStartDate!!.text = fromPostingDate
+          binding.tvStartDate.text = fromPostingDate
         }
         if (mainToDate != null) {
           toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
           toPostingDate = CRMAppUtil.getDateStr(toDate, MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY)
-          tvEndDate!!.text = toPostingDate
+          binding.tvEndDate.text = toPostingDate
         }
         webServiceCall(employee.key, profile.key)
-        dialog!!.dismiss()
+        dialog.dismiss()
       }
     }
-    dialog!!.show()
+    dialog.show()
   }
 
   fun prefix(input: Int): String {
@@ -320,9 +291,9 @@ class PendingForApprovalFragment : CommonFragment(),
       }
       val arrAdapProfile =
         getDefaultAdapter<RowData>(requireContext())
-      spProfileChange!!.adapter = arrAdapProfile
+      binding.spProfileChange.adapter = arrAdapProfile
       arrAdapProfile.setSpinnerData(
-        spProfileChange,
+        binding.spProfileChange,
         arrProfile
       )
       arrAdapProfile.notifyDataSetChanged()
@@ -330,7 +301,7 @@ class PendingForApprovalFragment : CommonFragment(),
       val entityFieldID =
         RowData.getSpinnerRowDataById(entityField, arrAdapProfile)
       if (entityFieldID != null) {
-        spProfileChange!!.setSelection(entityFieldID.position)
+        binding.spProfileChange.setSelection(entityFieldID.position)
       }
     }
     spinnerSelection
@@ -342,11 +313,11 @@ class PendingForApprovalFragment : CommonFragment(),
         val request = ApprovelRequest(userManager.getUser()!!.employeeCode)
         val subscribe: Disposable = saathiApi.getApprovalFieldList(request)
           .compose(applyUiModel())
-          .subscribe({ uiModel: UiModel<List<ApprovalFieldItem>> ->
+          .subscribe { uiModel: UiModel<List<ApprovalFieldItem>> ->
             renderApprovalField(
               uiModel
             )
-          })
+          }
       } else {
         noInternetConnectionDialog()
       }
@@ -368,9 +339,9 @@ class PendingForApprovalFragment : CommonFragment(),
       }
       val arrAdapEmployee =
         getDefaultAdapter<RowData>(requireContext())
-      spSelectEmployee.adapter = arrAdapEmployee
+      binding.spSelectEmployee.adapter = arrAdapEmployee
       arrAdapEmployee.setSpinnerData(
-        spSelectEmployee,
+        binding.spSelectEmployee,
         arrEmployee
       )
       arrAdapEmployee.notifyDataSetChanged()
@@ -384,11 +355,11 @@ class PendingForApprovalFragment : CommonFragment(),
         val request = ApprovelRequest(userManager.getUser()!!.employeeCode)
         val subscribe: Disposable = saathiApi.getApprovalUserList(request)
           .compose(applyUiModel())
-          .subscribe({ uiModel: UiModel<List<ApprovalUserItem>> ->
+          .subscribe { uiModel: UiModel<List<ApprovalUserItem>> ->
             renderApprovalUser(
               uiModel
             )
-          })
+          }
       } else {
         noInternetConnectionDialog()
       }
@@ -398,9 +369,9 @@ class PendingForApprovalFragment : CommonFragment(),
     toggleProgress(uiModel.inProgress)
     val error = uiModel.error
     if (error != null) {
-      table!!.visibility = View.GONE
-      tvNochart!!.visibility = View.VISIBLE
-      llButton!!.visibility = View.GONE
+      binding.table.visibility = View.GONE
+      binding.tvNochart.visibility = View.VISIBLE
+      binding.llButton.visibility = View.GONE
       showOnFailurePopup(error)
     }
     val data = uiModel.data
@@ -422,7 +393,7 @@ class PendingForApprovalFragment : CommonFragment(),
       PendingApprovalTableAdapter(
         ArrayList()
       )
-    table!!.adapter = pendingApprovalTableAdapter
+    binding.table.adapter = pendingApprovalTableAdapter
     selectedRowList.clear()
     selectedRowMap.clear()
     isAllChecked = false
@@ -512,23 +483,23 @@ class PendingForApprovalFragment : CommonFragment(),
         hm[MOSLConstants.REQUEST_DATE] = requestDate
         hm[MOSLConstants.APPROVED_DATE] = approvedDate
         hm[MOSLConstants.APPROVAL_REQUEST_ID] = approvalRequestId
-        pendingApprovalTableAdapter!!.add(hm)
+        pendingApprovalTableAdapter.add(hm)
       }
-      pendingApprovalTableAdapter!!.notifyDataSetChanged()
-      table!!.visibility = View.VISIBLE
-      tvNochart!!.visibility = View.GONE
-      llButton!!.visibility = View.VISIBLE
+      pendingApprovalTableAdapter.notifyDataSetChanged()
+      binding.table.visibility = View.VISIBLE
+      binding.tvNochart.visibility = View.GONE
+      binding.llButton.visibility = View.VISIBLE
     } else {
-      table!!.visibility = View.GONE
-      llButton!!.visibility = View.GONE
-      tvNochart!!.visibility = View.VISIBLE
+      binding.table.visibility = View.GONE
+      binding.llButton.visibility = View.GONE
+      binding.tvNochart.visibility = View.VISIBLE
     }
   }
 
   private fun webServiceCall(emoloyeeStr: String?, profileStr: String?) =
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val updatedStartDate = tvStartDate!!.text.toString() + " 00:00:00"
-      val updatedEndDate = tvEndDate!!.text.toString() + " 00:00:00"
+      val updatedStartDate = binding.tvStartDate.text.toString() + " 00:00:00"
+      val updatedEndDate = binding.tvEndDate.text.toString() + " 00:00:00"
       val request = ApprovalListRequest(
         emoloyeeStr!!, "1", MOSLConstants.REPORT_PAGE_SIZE,
         userManager.getUser()!!.employeeCode, "0",
@@ -658,7 +629,7 @@ class PendingForApprovalFragment : CommonFragment(),
   }
 
   private val selectedRowCount: Int
-    private get() = selectedRowList.size
+    get() = selectedRowList.size
 
   inner class PendingApprovalTableAdapter(hashArray: ArrayList<HashMap<String, String>>) :
     BaseTableAdapter() {
@@ -811,12 +782,12 @@ class PendingForApprovalFragment : CommonFragment(),
             tempHashArray[j] as LinkedHashMap<String, String>
           val sortColVal = sortLinkedMap[sortCol] as String?
           if (sortColVal == sortedValue) {
-            pendingApprovalTableAdapter!!.add(sortLinkedMap)
+            pendingApprovalTableAdapter.add(sortLinkedMap)
             tempHashArray.remove(sortLinkedMap)
           }
         }
       }
-      pendingApprovalTableAdapter!!.notifyDataSetChanged()
+      pendingApprovalTableAdapter.notifyDataSetChanged()
     }
 
     //click on header other than symbol
@@ -845,11 +816,11 @@ class PendingForApprovalFragment : CommonFragment(),
           for (j in hashArray.indices) {
             val linkedHashMap =
               hashArray[j] as LinkedHashMap<*, *>
-            val `val` = linkedHashMap[sortCol] as String?
+            val sortedData = linkedHashMap[sortCol] as String?
             if (isNumber) {
-              outDbl.add(java.lang.Double.valueOf(`val`))
+              outDbl.add(java.lang.Double.valueOf(sortedData))
             } else {
-              outStr.add(`val`)
+              outStr.add(sortedData)
             }
           }
           if (isNumber) {
@@ -879,7 +850,7 @@ class PendingForApprovalFragment : CommonFragment(),
                   sortColVal!!.toDouble()
                 val retval = java.lang.Double.compare(sortedValue!!, sortColValue)
                 if (retval == 0) {
-                  pendingApprovalTableAdapter!!.add(sortLinkedMap)
+                  pendingApprovalTableAdapter.add(sortLinkedMap)
                   tempHashArray.remove(sortLinkedMap)
                 }
               }
@@ -908,13 +879,13 @@ class PendingForApprovalFragment : CommonFragment(),
                   tempHashArray[j] as LinkedHashMap<String, String>
                 val sortColVal = sortLinkedMap[sortCol] as String?
                 if (sortedValue == sortColVal) {
-                  pendingApprovalTableAdapter!!.add(sortLinkedMap)
+                  pendingApprovalTableAdapter.add(sortLinkedMap)
                   tempHashArray.remove(sortLinkedMap)
                 }
               }
             }
           }
-          pendingApprovalTableAdapter!!.notifyDataSetChanged()
+          pendingApprovalTableAdapter.notifyDataSetChanged()
         }
       }
       return binding.root
@@ -1028,21 +999,21 @@ class PendingForApprovalFragment : CommonFragment(),
     }
 
     private fun getFamily(row: Int): CommonHeader {
-      var row = row
+      var familyRow = row
       val family = 0
       while (row >= 0) {
-        row -= commonHeaders[family].size()
+        familyRow -= commonHeaders[family].size()
       }
       return commonHeaders[family]
     }
 
     private fun getDevice(row: Int): Item {
-      var row = row
+      var rowCount = row
       val family = 0
-      while (row >= 0) {
-        row -= commonHeaders[family].size()
+      while (rowCount >= 0) {
+        rowCount -= commonHeaders[family].size()
       }
-      return commonHeaders[family][row + commonHeaders[family].size()]
+      return commonHeaders[family][rowCount + commonHeaders[family].size()]
     }
 
     override fun getViewTypeCount(): Int {
@@ -1059,7 +1030,7 @@ class PendingForApprovalFragment : CommonFragment(),
   }
 
   private val isDataPresent: Unit
-    private get() {
+    get() {
       if (employeeCodeStr != null && profileCodeStr != null) {
         webServiceCall(employeeCodeStr, profileCodeStr)
       }
