@@ -15,49 +15,35 @@
             android:id="@+id/view1"
             android:layout_width="5dp"
             android:layout_height="fill_parent"
-            android:background="@color/yellow_header"></View>
+            android:background="@color/yellow_header"
+            />
 
         <CheckBox
             android:id="@+id/cbClientNameBody"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/_3sdp"
             android:button="@drawable/checkbox"
             android:checked="false" />
 
         <TextView
             android:id="@+id/tv_table_first"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="2"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:textColor="@color/black"
             android:textSize="@dimen/txt_size" />
 
-
-        <!--<TextView
-            android:id="@+id/tv_table_first_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="left|center"
-            android:maxLines="2"
-            android:paddingLeft="5dip"
-            android:text="Vol: 1121"
-            android:textColor="@color/market_grey_text"
-            android:textSize="12sp" />-->
 
         <View
             android:id="@+id/view"
             android:layout_width="0.5dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:background="@color/shadow_start" />
     </LinearLayout>
 

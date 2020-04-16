@@ -1,4 +1,4 @@
-package com.mosl.tabapp.pendingApproval;
+package com.mosl.tabapp.pendingApproval.report;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.mosl.app.core.exception.ServiceFailureException;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
@@ -34,12 +33,7 @@ import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -48,8 +42,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -58,7 +54,7 @@ import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class PendingForApprovalFragment extends CommonFragment
+public class PendingForApprovalFragmentOld extends CommonFragment
         implements View.OnClickListener, MOSLConstants {
 
     private Spinner spProfileChange, spSelectEmployee;
@@ -78,7 +74,7 @@ public class PendingForApprovalFragment extends CommonFragment
     private Dialog dialog;
     private Calendar today;
     private LinearLayout llButton;
-    private final static String TAG = PendingForApprovalFragment.class.getSimpleName();
+    private final static String TAG = PendingForApprovalFragmentOld.class.getSimpleName();
 
     @Override
     public View onCreateView(@NotNull final LayoutInflater inflater, ViewGroup container,

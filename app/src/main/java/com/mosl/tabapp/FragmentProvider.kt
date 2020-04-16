@@ -50,7 +50,7 @@ import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalModule
-import com.mosl.tabapp.pendingApproval.PendingForApprovalFragment
+import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.report.ReportFragment
