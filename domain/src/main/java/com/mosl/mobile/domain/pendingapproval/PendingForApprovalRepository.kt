@@ -5,6 +5,7 @@ import io.reactivex.Observable
 interface PendingForApprovalRepository {
 
   fun getPendingApproval(): Observable<PendingForApprovalDropdownData>
-  fun getPendingApprovalList(request: PendingForApprovalListRequest): Observable<List<PendingForApprovalItem>>
+  fun getPendingApprovalList(pendingForApprovalListRequest: PendingForApprovalListRequest): Observable<List<PendingForApprovalItem>>
+  fun getMultiUpdateApproval(multiUpdateApprovalModel: MultiUpdateApprovalModel): Observable<MultiUpdateApprovalResponse>
 
 }

@@ -448,10 +448,14 @@ interface SaathiApi {
   ): Observable<List<ApprovalListItem>>
 
   @POST("ApprovalRequest/MultiUpdateApprovalRequest")
-  fun postMultiUpdateApproval(
+  fun postMultiUpdateApprovalOld(
     @Body request: MultiUpdateApprovalRequest
   ): Observable<String>
 
+  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+  fun postMultiUpdateApproval(
+    @Body request: MultiUpdateApprovalRequest
+  ): Observable<SaathiCommonResponse<String>>
   //====================== Dashboard =====================
 
   @POST("UserApi/GetBankCode")

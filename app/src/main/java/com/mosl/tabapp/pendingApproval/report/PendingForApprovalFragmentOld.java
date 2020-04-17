@@ -601,7 +601,7 @@ public class PendingForApprovalFragmentOld extends CommonFragment
 
             MultiUpdateApprovalRequest request =
                     new MultiUpdateApprovalRequest(status, approvalRequestId.toString());
-            Disposable subscribe = getSaathiApi().postMultiUpdateApproval(request)
+            Disposable subscribe = getSaathiApi().postMultiUpdateApprovalOld(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderMultiUpdate);
         } else {

@@ -15,15 +15,14 @@ import android.widget.ImageView
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
+import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalResponse
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalItem
-import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE10
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE4
@@ -41,29 +40,25 @@ import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import org.json.JSONException
 import timber.log.Timber
 import java.util.Date
 import java.util.LinkedHashMap
 import javax.inject.Inject
-import org.json.JSONObject as JSONObject1
 
 class PendingForApprovalFragment : CommonFragment(),
   OnClickListener, MOSLConstants, PendingForApprovalView {
   lateinit var binding: FragPendingForApprovalBinding
-  lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
-  lateinit var mainFromDate: String
-  lateinit var mainToDate: String
-  lateinit var fromDat: Date
-  lateinit var toDate: Date
+  private lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
+  private lateinit var mainFromDate: String
+  private lateinit var mainToDate: String
+  private lateinit var fromDat: Date
+  private lateinit var toDate: Date
   private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
   private lateinit var profileAdapter: ArrayAdapter<RowData>
   private val datePickerEvent = PublishSubject.create<Int>()
   private val subject = PublishSubject.create<PendingForApprovalUIEvent>()
-  private var checkBoxStatus = false
   private var selectedApprovalList = mutableListOf<String>()
 
   @Inject
@@ -102,15 +97,15 @@ class PendingForApprovalFragment : CommonFragment(),
     mainToDate = CRMAppUtil.getDate(Date(), date6)
     toDate = CRMAppUtil.getDate(mainToDate, date6)
 
-    binding.tvStartDate.setText(
+    binding.tvStartDate.text =
       AppDateFormats.DF_JSON_DATE6.format(fromDat)
-    )
+
     binding.llEndDate.setOnClickListener {
       selectDate()
     }
-    binding.tvEndDate.setText(
+    binding.tvEndDate.text =
       AppDateFormats.DF_JSON_DATE6.format(toDate)
-    )
+
     binding.llStartDate.setOnClickListener {
       selectDate()
     }
@@ -120,10 +115,9 @@ class PendingForApprovalFragment : CommonFragment(),
   private fun selectDate() {
     val dialog = Dialog(requireContext())
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialog.setContentView(layout.date_picker_from_to)
-    dialog.getWindow()
-      ?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+    dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
     val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
     dpToDate.maxDate = System.currentTimeMillis() - 1000
@@ -139,7 +133,7 @@ class PendingForApprovalFragment : CommonFragment(),
         dateSplit[0].toInt(),
         dateSplit[1].toInt() - 1,
         dateSplit[2].toInt()
-      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+      ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         mainFromDate =
           year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
@@ -153,15 +147,15 @@ class PendingForApprovalFragment : CommonFragment(),
         dateSplit[0].toInt(),
         dateSplit[1].toInt() - 1,
         dateSplit[2].toInt()
-      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+      ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
     } catch (e: Exception) {
       Timber.d(e)
     }
 
-    close.setOnClickListener { v: View? -> dialog.dismiss() }
-    btnSubmit.setOnClickListener { v: View? ->
+    close.setOnClickListener { dialog.dismiss() }
+    btnSubmit.setOnClickListener {
       fromDat = CRMAppUtil.getDate(mainFromDate, date6)
       toDate = CRMAppUtil.getDate(mainToDate, date6)
       if (fromDat.after(toDate)) {
@@ -172,11 +166,11 @@ class PendingForApprovalFragment : CommonFragment(),
       } else {
         mainFromDate.apply {
           fromDat = CRMAppUtil.getDate(this, date6)
-          binding.tvStartDate.setText(AppDateFormats.DF_JSON_DATE6.format(fromDat))
+          binding.tvStartDate.text = AppDateFormats.DF_JSON_DATE6.format(fromDat)
         }
         mainToDate.apply {
           toDate = CRMAppUtil.getDate(this, date6)
-          binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
+          binding.tvEndDate.text = AppDateFormats.DF_JSON_DATE6.format(toDate)
         }
         datePickerEvent.onNext(0)
         dialog.dismiss()
@@ -194,14 +188,14 @@ class PendingForApprovalFragment : CommonFragment(),
 
   override fun onClick(v: View) {
     when (v.id) {
-      R.id.btnApprove -> if (selectedApprovalList.size > 0) {
+      R.id.btnApprove -> if (getSelectedAppovalList().size > 0) {
         MSFDialog.alertDialog(
           requireContext(), 0,
           resources.getString(string.motilal_oswal),
           "Are you sure, you want to approve selected request?", "Yes", "No", true
-        ) { action: Action, data: Array<Any?>? ->
+        ) { action: Action, _ ->
           if (action == OK) {
-            sendUpdateAppoovalWebService("2")
+            subject.onNext(PendingForApprovalUIEvent.BtnEvent("2"))
           }
         }
       } else {
@@ -211,14 +205,14 @@ class PendingForApprovalFragment : CommonFragment(),
           "Please select at least one record", "OK", true, null
         )
       }
-      R.id.btnReject -> if (selectedApprovalList.size > 0) {
+      R.id.btnReject -> if (getSelectedAppovalList().size > 0) {
         MSFDialog.alertDialog(
           requireContext(), 0,
           resources.getString(string.motilal_oswal),
           "Are you sure, you want to reject selected request?", "Yes", "No", true
-        ) { action: Action, data: Array<Any?>? ->
+        ) { action: Action, _ ->
           if (action == OK) {
-            sendUpdateAppoovalWebService("3")
+            subject.onNext(PendingForApprovalUIEvent.BtnEvent("3"))
           }
         }
       } else {
@@ -230,54 +224,6 @@ class PendingForApprovalFragment : CommonFragment(),
       }
       R.id.llStartDate -> selectDate()
       R.id.llEndDate -> selectDate()
-    }
-  }
-
-  private fun renderMultiUpdate(uiModel: UiModel<String>) {
-    toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
-    error?.let { showOnFailurePopup(it) }
-    val data = uiModel.data
-    if (data != null) {
-      var message = ""
-      try {
-        val response = JSONObject1(data)
-        message = response[MOSLConstants.MESSAGE].toString()
-      } catch (e: JSONException) {
-        e.printStackTrace()
-      }
-      MSFDialog.alertDialog(
-        requireContext(),
-        0,
-        resources.getString(string.motilal_oswal),
-        message,
-        "OK",
-        true
-      ) { action: Action, data1: Array<Any?>? ->
-        if (action == OK) {
-          // webServiceCall(employeeCodeStr, profileCodeStr)
-        }
-      }
-    }
-  }
-
-  private fun sendUpdateAppoovalWebService(status: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      var approvalRequestId = StringBuilder()
-      for (approvalId in selectedApprovalList) {
-        if (approvalRequestId.toString() == "") {
-          approvalRequestId = StringBuilder(approvalId)
-        } else {
-          approvalRequestId.append(",").append(approvalId)
-        }
-      }
-      val request =
-        MultiUpdateApprovalRequest(status, approvalRequestId.toString())
-      val subscribe: Disposable = saathiApi.postMultiUpdateApproval(request)
-        .compose(applyUiModel())
-        .subscribe({ uiModel: UiModel<String> -> renderMultiUpdate(uiModel) })
-    } else {
-      noInternetConnectionDialog()
     }
   }
 
@@ -315,7 +261,7 @@ class PendingForApprovalFragment : CommonFragment(),
     }
 
     uiModel.onSuccess {
-      if (it.size > 0) {
+      if (it.isNotEmpty()) {
         it.map {
           val requestDate = getFormatedDate(it.updationDate, DF_JSON_DATE10, DF_JSON_DATE4)
           val approvedDate = if (it.approver2StatusUpdateDate.isNotEmpty()) {
@@ -371,15 +317,19 @@ class PendingForApprovalFragment : CommonFragment(),
   }
 
   override fun fromDate(): String {
-    return binding.tvStartDate.getText().toString() + " 00:00:00"
+    return binding.tvStartDate.text.toString() + " 00:00:00"
   }
 
   override fun toDate(): String {
-    return binding.tvEndDate.getText().toString() + " 00:00:00"
+    return binding.tvEndDate.text.toString() + " 00:00:00"
   }
 
   override fun onDatePickerEvent(): Observable<Int> {
     return datePickerEvent.ofType()
+  }
+
+  override fun onBtnEvent(): Observable<PendingForApprovalUIEvent.BtnEvent> {
+    return subject.ofType()
   }
 
   override fun onSelectedApprovalList(): Observable<PendingForApprovalUIEvent.CheckBoxSelectedArrayList> {
@@ -388,6 +338,37 @@ class PendingForApprovalFragment : CommonFragment(),
 
   override fun selectedApprovalList(arrayList: java.util.ArrayList<String>) {
     selectedApprovalList = arrayList
+  }
+
+  override fun multiUpdateApproval(uiModel: UiModel<MultiUpdateApprovalResponse>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      showOnFailurePopup(error)
+    }
+
+    uiModel.onSuccess { data ->
+      if (data.response != null) {
+        MSFDialog.alertDialog(
+          requireContext(),
+          0,
+          resources.getString(string.motilal_oswal),
+          data.message,
+          "OK",
+          true
+        ) { action: Action, _ ->
+          if (action == OK) {
+            datePickerEvent.onNext(0)
+          }
+        }
+
+      }
+    }
+
+  }
+
+  override fun getSelectedAppovalList(): MutableList<String> {
+    return selectedApprovalList
   }
 
   companion object {

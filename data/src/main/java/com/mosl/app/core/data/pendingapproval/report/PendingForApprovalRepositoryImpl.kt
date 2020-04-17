@@ -1,6 +1,8 @@
 package com.mosl.app.core.data.pendingapproval.report
 
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
+import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalModel
+import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalResponse
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalItem
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
@@ -41,6 +43,17 @@ class PendingForApprovalRepositoryImpl @Inject constructor(
     return saathiApi.getApprovalRequestList(request)
       .map {
         it.mapToApprovalList()
+      }
+  }
+
+  override fun getMultiUpdateApproval(multiUpdateApprovalModel: MultiUpdateApprovalModel):
+      Observable<MultiUpdateApprovalResponse> {
+
+    val request = multiUpdateApprovalModel.mapToMultiApprovalrRquest()
+
+    return saathiApi.postMultiUpdateApproval(request)
+      .map {
+        mapToMultiUpdateApprovalresponse(it.response, it.message)
       }
   }
 

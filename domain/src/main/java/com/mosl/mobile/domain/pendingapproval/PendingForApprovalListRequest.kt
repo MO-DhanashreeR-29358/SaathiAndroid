@@ -17,3 +17,8 @@ data class PendingForApprovalListRequest(
 
   @JvmField val entityField: String
 )
+
+data class MultiUpdateApprovalModel(
+  @JvmField val status: String,
+  @JvmField val approvalRequestId: String
+)

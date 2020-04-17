@@ -2,6 +2,7 @@ package com.mosl.tabapp.pendingApproval.report
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalModel
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
 import com.mosl.mobile.user.login.UserManagerImpl
@@ -56,11 +57,30 @@ class PendingForApprovalPresenter @Inject constructor(
       .subscribe(view::renderApprovalList)
       .addTo(disposable)
 
+    view.onBtnEvent().map {
+      getMultiUpdateRequest(it.status)
+    }.switchMap {
+      repository.getMultiUpdateApproval(it)
+        .compose(applyUiModel())
+    }.subscribe(view::multiUpdateApproval).addTo(disposable)
+
 
     view.onSelectedApprovalList().subscribe {
       view.selectedApprovalList(it.selectedArrayList)
     }.addTo(disposable)
 
+  }
+
+  private fun getMultiUpdateRequest(status: String): MultiUpdateApprovalModel {
+    var approvalRequestId = StringBuilder()
+    for (approvalId in view.getSelectedAppovalList()) {
+      if (approvalRequestId.toString() == "") {
+        approvalRequestId = StringBuilder(approvalId)
+      } else {
+        approvalRequestId.append(",").append(approvalId)
+      }
+    }
+    return MultiUpdateApprovalModel(status, approvalRequestId.toString())
   }
 
   private fun getWidgetRequest(): PendingForApprovalListRequest {
