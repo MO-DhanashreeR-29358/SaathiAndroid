@@ -2,6 +2,7 @@ package com.mosl.app.core.data.pendingapproval.report
 
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
+import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
 import com.mosl.mobile.domain.pendingapproval.ProfileModel
 import com.mosl.mobile.user.login.UserManager
@@ -29,6 +30,14 @@ class PendingForApprovalRepositoryImpl @Inject constructor(
 
       }
     )
+  }
+
+  override fun getPendingApprovalList(pendingForApprovalListRequest: PendingForApprovalListRequest):
+      Observable<String> {
+
+    val request = pendingForApprovalListRequest.mapToListRequest()
+
+    return saathiApi.getApprovalRequestList(request)
   }
 
   private fun getEmployeeList(): Observable<List<EmployeeModel>> {

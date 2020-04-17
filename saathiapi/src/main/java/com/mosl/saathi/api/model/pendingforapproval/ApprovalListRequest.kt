@@ -1,9 +1,7 @@
 package com.mosl.saathi.api.model.pendingforapproval
 
 import com.google.gson.annotations.SerializedName
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
 data class ApprovalListRequest(
 
   @JvmField @SerializedName("UpdatedBy")

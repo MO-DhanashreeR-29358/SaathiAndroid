@@ -28,7 +28,6 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
-import com.mosl.mobile.domain.pendingapproval.ProfileModel
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
 import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.shared.util.AppDateFormats
@@ -55,6 +54,7 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import org.json.JSONArray
 import org.json.JSONException
@@ -82,12 +82,11 @@ class PendingForApprovalFragment : CommonFragment(),
     HashMap()
   lateinit var mainFromDate: String
   lateinit var mainToDate: String
-
   lateinit var fromDat: Date
   lateinit var toDate: Date
   private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
   private lateinit var profileAdapter: ArrayAdapter<RowData>
-  private val datePickerEvent = PublishSubject.create<PendingForApprovalUIEvent.DatePickerEvent>()
+  private val datePickerEvent = PublishSubject.create<Int>()
 
   @Inject
   lateinit var presenter: PendingForApprovalPresenter
@@ -100,6 +99,7 @@ class PendingForApprovalFragment : CommonFragment(),
     setUpDate()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
+    datePickerEvent.onNext(0)
   }
 
   override fun getLayout(): Int {
@@ -198,12 +198,7 @@ class PendingForApprovalFragment : CommonFragment(),
           toDate = CRMAppUtil.getDate(this, date6)
           binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
         }
-        datePickerEvent.onNext(
-          PendingForApprovalUIEvent.DatePickerEvent(
-            AppDateFormats.DF_JSON_DATE6.format(fromDat) + " 00:00:00",
-            AppDateFormats.DF_JSON_DATE6.format(toDate) + "00:00:00"
-          )
-        )
+        datePickerEvent.onNext(0)
         dialog.dismiss()
       }
 
@@ -418,21 +413,8 @@ class PendingForApprovalFragment : CommonFragment(),
       noInternetConnectionDialog()
     }
 
-  private inner class CommonHeader internal constructor(val name: String) {
-    val list: MutableList<Item>
-    fun size(): Int {
-      return list.size
-    }
-
-    operator fun get(i: Int): Item {
-      return list[i]
-    }
-
-    init {
-      list =
-        ArrayList()
-    }
-  }
+  private val selectedRowCount: Int
+    get() = selectedRowList.size
 
   private fun renderMultiUpdate(uiModel: UiModel<String>) {
     toggleProgress(uiModel.inProgress)
@@ -482,6 +464,22 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
+  private inner class CommonHeader internal constructor(val name: String) {
+    val list: MutableList<Item>
+    fun size(): Int {
+      return list.size
+    }
+
+    operator fun get(i: Int): Item {
+      return list[i]
+    }
+
+    init {
+      list =
+        ArrayList()
+    }
+  }
+
   private inner class Item(
     employeeCode: String,
     empName: String,
@@ -517,9 +515,6 @@ class PendingForApprovalFragment : CommonFragment(),
       )
     }
   }
-
-  private val selectedRowCount: Int
-    get() = selectedRowList.size
 
   inner class PendingApprovalTableAdapter(hashArray: ArrayList<HashMap<String, String>>) :
     BaseTableAdapter() {
@@ -951,12 +946,12 @@ class PendingForApprovalFragment : CommonFragment(),
     return binding.spProfileChange.itemSelections()
   }
 
-  override fun getEmployee(): EmployeeModel? {
-    return binding.spSelectEmployee.selectedItem as? EmployeeModel
+  override fun getEmployee(): EmployeeModel {
+    return binding.spSelectEmployee.selectedItem as EmployeeModel
   }
 
-  override fun getProfile(): ProfileModel? {
-    return binding.spProfileChange.selectedItem as? ProfileModel
+  override fun getProfile(): RowData {
+    return binding.spProfileChange.selectedItem as RowData
   }
 
   override fun fromDate(): String {
@@ -965,6 +960,10 @@ class PendingForApprovalFragment : CommonFragment(),
 
   override fun toDate(): String {
     return binding.tvEndDate.getText().toString() + " 00:00:00"
+  }
+
+  override fun onDatePickerEvent(): Observable<Int> {
+    return datePickerEvent.ofType()
   }
 
   companion object {

@@ -2,8 +2,10 @@ package com.mosl.app.core.data.pendingapproval.report
 
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
+import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
 import com.mosl.mobile.domain.pendingapproval.ProfileModel
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
 
 fun List<ApprovalUserItem>.mapToListOfEmployee(): List<EmployeeModel> {
@@ -16,6 +18,22 @@ private fun ApprovalUserItem.mapToEmployee(): EmployeeModel {
     updatedBy = updatedBy ?: "",
     name = name ?: ""
   )
+}
+
+fun PendingForApprovalListRequest.mapToListRequest(): ApprovalListRequest {
+
+  return ApprovalListRequest(
+    updatedBy = updatedBy,
+    totalCount = totalCount,
+    pageSize = pageSize,
+    employeeCode = employeeCode ?: "",
+    calculatedPage = calculatedPage,
+    updatedStartDate = updatedStartDate,
+    updatedEndDate = updatedEndDate,
+    entityField = entityField
+
+  )
+
 }
 
 fun List<ApprovalFieldItem>.mapToListOfProfile(): List<ProfileModel> {
