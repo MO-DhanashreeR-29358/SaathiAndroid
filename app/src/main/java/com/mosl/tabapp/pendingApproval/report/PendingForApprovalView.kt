@@ -18,4 +18,6 @@ interface PendingForApprovalView : BaseView {
   fun fromDate(): String
   fun toDate(): String
   fun onDatePickerEvent(): Observable<Int>
+  fun onSelectedApprovalList(): Observable<PendingForApprovalUIEvent.CheckBoxSelectedArrayList>
+  fun selectedApprovalList(arrayList: ArrayList<String>)
 }

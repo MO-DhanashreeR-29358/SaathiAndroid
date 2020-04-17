@@ -46,7 +46,7 @@ class PendingForApprovalPresenter @Inject constructor(
       Observable.combineLatest(empChangedObs, dateChangedObs, profileChangedObs,
         Function3 { _, _, _ ->
           view.getEmployee().updatedBy.isNotEmpty() &&
-              view.getProfile().key.isNotEmpty() && true
+              view.getProfile().key.isNotEmpty()
         })
     combine.map { ignored -> getWidgetRequest() }
       .switchMap {
@@ -55,6 +55,11 @@ class PendingForApprovalPresenter @Inject constructor(
       }
       .subscribe(view::renderApprovalList)
       .addTo(disposable)
+
+
+    view.onSelectedApprovalList().subscribe {
+      view.selectedApprovalList(it.selectedArrayList)
+    }.addTo(disposable)
 
   }
 
