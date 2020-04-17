@@ -86,6 +86,7 @@ class PendingForApprovalFragment : CommonFragment(),
   lateinit var fromDat: Date
   lateinit var toDate: Date
   private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
+  private lateinit var profileAdapter: ArrayAdapter<RowData>
   private val datePickerEvent = PublishSubject.create<PendingForApprovalUIEvent.DatePickerEvent>()
 
   @Inject
@@ -111,6 +112,8 @@ class PendingForApprovalFragment : CommonFragment(),
     binding.btnReject.setOnClickListener(this)
     employeeAdapter = getDefaultAdapter(requireContext())
     binding.spSelectEmployee.adapter = employeeAdapter
+    profileAdapter = getDefaultAdapter(requireContext())
+    binding.spProfileChange.adapter = profileAdapter
   }
 
   private fun setUpDate() {
@@ -916,7 +919,6 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
-
   override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
     uiModel.onFailure {
       showOnFailurePopup(it)
@@ -929,11 +931,7 @@ class PendingForApprovalFragment : CommonFragment(),
           RowData(+1, item.entityField, item.referenceName)
         )
       }
-      val profileAdapter = getDefaultAdapter<RowData>(requireContext())
-      binding.spProfileChange.adapter = profileAdapter
       profileAdapter.setSpinnerData(binding.spProfileChange, arrRepeatMode)
-
-      profileAdapter.notifyDataSetChanged()
       val productData =
         RowData.getSpinnerRowDataById(
           arguments?.getString(MOSLConstants.ENTITY_FIELD),
