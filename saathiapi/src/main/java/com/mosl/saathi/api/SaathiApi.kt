@@ -138,6 +138,7 @@ import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
+import com.mosl.saathi.api.model.pendingforapproval.ApprovalListItem
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
 import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
 import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
@@ -435,11 +436,16 @@ interface SaathiApi {
     @Body request: ApprovelRequest
   ): Observable<List<ApprovalUserItem>>
 
-  @ExcludeWrapper
+  @POST("ApprovalRequest/ApprovalRequestList")
+  fun getApprovalRequestListOld(
+    @Body request: ApprovalListRequest
+  ): Observable<String>
+
+  @ExtraDataWrapper
   @POST("ApprovalRequest/ApprovalRequestList")
   fun getApprovalRequestList(
     @Body request: ApprovalListRequest
-  ): Observable<String>
+  ): Observable<List<ApprovalListItem>>
 
   @POST("ApprovalRequest/MultiUpdateApprovalRequest")
   fun postMultiUpdateApproval(

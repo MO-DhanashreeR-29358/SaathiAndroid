@@ -1,20 +1,19 @@
 package com.mosl.mobile.domain.pendingapproval
 
 data class PendingForApprovalListRequest(
+  @JvmField val updatedBy: String,
 
-  val updatedBy: String,
+  @JvmField val totalCount: String,
 
-  val totalCount: String,
+  @JvmField val pageSize: String,
 
-  val pageSize: String,
+  @JvmField val employeeCode: String?,
 
-  val employeeCode: String?,
+  @JvmField val calculatedPage: String,
 
-  val calculatedPage: String,
+  @JvmField val updatedStartDate: String,
 
-  val updatedStartDate: String,
+  @JvmField val updatedEndDate: String,
 
-  val updatedEndDate: String,
-
-  val entityField: String
+  @JvmField val entityField: String
 )

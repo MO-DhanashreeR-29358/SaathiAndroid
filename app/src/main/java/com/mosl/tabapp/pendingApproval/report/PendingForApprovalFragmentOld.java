@@ -522,7 +522,7 @@ public class PendingForApprovalFragmentOld extends CommonFragment
                             userManager.getUser().employeeCode, "0",
                             updatedStartDate, updatedEndDate,
                             profileStr);
-            Disposable subscribe = getSaathiApi().getApprovalRequestList(request)
+            Disposable subscribe = getSaathiApi().getApprovalRequestListOld(request)
                     .map(responseS -> {
                         JSONObject response = new JSONObject(responseS);
                         boolean status = response.getBoolean(STATUS);

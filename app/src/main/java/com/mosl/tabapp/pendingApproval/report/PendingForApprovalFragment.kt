@@ -20,7 +20,6 @@ import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
-import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -28,9 +27,12 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
+import com.mosl.mobile.domain.pendingapproval.PendingForApprovalItem
 import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
 import com.mosl.shared.util.AppDateFormats
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE10
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE4
+import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
@@ -56,7 +58,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import org.json.JSONArray
 import org.json.JSONException
 import timber.log.Timber
 import java.util.ArrayList
@@ -114,6 +115,8 @@ class PendingForApprovalFragment : CommonFragment(),
     binding.spSelectEmployee.adapter = employeeAdapter
     profileAdapter = getDefaultAdapter(requireContext())
     binding.spProfileChange.adapter = profileAdapter
+    pendingApprovalTableAdapter = PendingApprovalTableAdapter()
+    binding.table.adapter = pendingApprovalTableAdapter
   }
 
   private fun setUpDate() {
@@ -206,6 +209,12 @@ class PendingForApprovalFragment : CommonFragment(),
     dialog.show()
   }
 
+  fun prefix(input: Int): String {
+    return if (Integer.toString(input).length == 1) {
+      "0$input"
+    } else input.toString() + ""
+  }
+
   override fun onClick(v: View) {
     when (v.id) {
       R.id.btnApprove -> if (selectedRowCount > 0 || cbClientName.isChecked) {
@@ -246,172 +255,6 @@ class PendingForApprovalFragment : CommonFragment(),
       R.id.llEndDate -> selectDate()
     }
   }
-
-  fun prefix(input: Int): String {
-    return if (Integer.toString(input).length == 1) {
-      "0$input"
-    } else input.toString() + ""
-  }
-
-  private fun renderApprovalRequest(uiModel: UiModel<JSONArray>) {
-    toggleProgress(uiModel.inProgress)
-    val error = uiModel.error
-    if (error != null) {
-      binding.table.visibility = View.GONE
-      binding.tvNochart.visibility = View.VISIBLE
-      binding.llButton.visibility = View.GONE
-      showOnFailurePopup(error)
-    }
-    val data = uiModel.data
-    if (data != null) {
-      try {
-        renderTable(data)
-      } catch (e: Exception) {
-        MSFDialog.alertDialog(
-          requireContext(), 0, resources.getString(string.motilal_oswal),
-          MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null
-        )
-      }
-    }
-  }
-
-  @Throws(JSONException::class)
-  private fun renderTable(arrayDetail: JSONArray) {
-    pendingApprovalTableAdapter =
-      PendingApprovalTableAdapter(
-        ArrayList()
-      )
-    binding.table.adapter = pendingApprovalTableAdapter
-    selectedRowList.clear()
-    selectedRowMap.clear()
-    isAllChecked = false
-    isSingleAllChecked = false
-    var Status = ""
-    if (arrayDetail.length() != 0) {
-      for (y in 0 until arrayDetail.length()) {
-        val objDetail = arrayDetail[y] as JSONObject1
-        val approvalRequestId = if (objDetail.isNull("ApprovalRequestId")
-          || (objDetail.getString("ApprovalRequestId")
-              == "")
-        ) "0" else objDetail.getString("ApprovalRequestId")
-        val employeeCode = if (objDetail.isNull("UpdatedBy")
-          || objDetail.getString("UpdatedBy") == ""
-        ) "0" else objDetail.getString("UpdatedBy")
-        val leadId = if (objDetail.isNull("LeadID")
-          || objDetail.getString("LeadID") == ""
-        ) "0" else objDetail.getString("LeadID")
-        val FieldName =
-          if (objDetail.isNull("ReferenceName") || (objDetail.getString("ReferenceName")
-                == "")
-          ) "" else objDetail.getString("ReferenceName")
-        val empName =
-          if (objDetail.isNull("EmployeeName") || (objDetail.getString("EmployeeName")
-                == "")
-          ) "" else objDetail.getString("EmployeeName")
-        val subOption = if (objDetail.isNull("ApprovalFieldValue")
-          || (objDetail.getString("ApprovalFieldValue")
-              == "")
-        ) "" else objDetail.getString("ApprovalFieldValue")
-        val ucid = if (objDetail.isNull("UCID")
-          || objDetail.getString("UCID") == ""
-        ) "0" else objDetail.getString("UCID")
-        val clientName = if (objDetail.isNull("ClientName")
-          || objDetail.getString("ClientName") == ""
-        ) "" else objDetail.getString("ClientName")
-        val clientCode = if (objDetail.isNull("ClientCode")
-          || objDetail.getString("ClientCode") == ""
-        ) "0" else objDetail.getString("ClientCode")
-        val moduleName = if (objDetail.isNull("Entity")
-          || objDetail.getString("Entity") == ""
-        ) "0" else objDetail.getString("Entity")
-        val FinalStatus = if (objDetail.isNull("FinalStatus")
-          || (objDetail.getString("FinalStatus")
-              == "")
-        ) "0" else objDetail.getString("FinalStatus")
-        var requestDate = if (objDetail.isNull("UpdationDate")
-          || (objDetail.getString("UpdationDate")
-              == "")
-        ) "" else objDetail.getString("UpdationDate")
-        var approvedDate = if (objDetail.isNull("Approver2StatusUpdateDate")
-          || objDetail.getString(
-            "Approver2StatusUpdateDate"
-          ) == ""
-        ) "" else objDetail.getString(
-          "Approver2StatusUpdateDate"
-        )
-        if (FinalStatus.equals("1", ignoreCase = true)) {
-          Status = "Pending"
-        } else if (FinalStatus.equals("2", ignoreCase = true)) {
-          Status = "Approve"
-        } else if (FinalStatus.equals("3", ignoreCase = true)) {
-          Status = "Reject"
-        }
-        requestDate = CRMAppUtil.getDateFromString(
-          requestDate,
-          MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING,
-          MOSLConstants.CAL_DATE_FORMAT
-        )
-        approvedDate = CRMAppUtil.getDateFromString(
-          approvedDate,
-          MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING,
-          MOSLConstants.CAL_DATE_FORMAT
-        )
-        val hm =
-          LinkedHashMap<String, String>()
-        hm[MOSLConstants.EMPLOYEE_CODE_APP] = employeeCode
-        hm[MOSLConstants.EMP_NAME] = empName
-        hm[MOSLConstants.LEAD_ID_APP] = leadId
-        hm[MOSLConstants.CLIENT_CODE] = clientCode
-        hm[MOSLConstants.UCID] = ucid
-        hm[MOSLConstants.NEW_CLIENT_NAME] = clientName
-        hm[MOSLConstants.MODULE_NAME] = moduleName
-        hm[MOSLConstants.FIELD_NAME] = FieldName
-        hm[MOSLConstants.SUB_OPTION] = subOption
-        hm[MOSLConstants.STATUS] = Status
-        hm[MOSLConstants.REQUEST_DATE] = requestDate
-        hm[MOSLConstants.APPROVED_DATE] = approvedDate
-        hm[MOSLConstants.APPROVAL_REQUEST_ID] = approvalRequestId
-        pendingApprovalTableAdapter.add(hm)
-      }
-      pendingApprovalTableAdapter.notifyDataSetChanged()
-      binding.table.visibility = View.VISIBLE
-      binding.tvNochart.visibility = View.GONE
-      binding.llButton.visibility = View.VISIBLE
-    } else {
-      binding.table.visibility = View.GONE
-      binding.llButton.visibility = View.GONE
-      binding.tvNochart.visibility = View.VISIBLE
-    }
-  }
-
-  private fun webServiceCall(emoloyeeStr: String?, profileStr: String?) =
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val updatedStartDate = binding.tvStartDate.text.toString() + " 00:00:00"
-      val updatedEndDate = binding.tvEndDate.text.toString() + " 00:00:00"
-      val request = ApprovalListRequest(
-        emoloyeeStr!!, "1", MOSLConstants.REPORT_PAGE_SIZE,
-        userManager.getUser()!!.employeeCode, "0",
-        updatedStartDate, updatedEndDate,
-        profileStr!!
-      )
-      val subscribe = saathiApi.getApprovalRequestList(request)
-        .map { responseS: String? ->
-          val response: org.json.JSONObject = org.json.JSONObject(responseS)
-          val status = response.getBoolean(MOSLConstants.STATUS)
-          val jsonArray =
-            response.getJSONObject(MOSLConstants.RESPONSE).getJSONArray(MOSLConstants.DATA)
-          if (status) {
-            return@map jsonArray
-          } else {
-            val message = response[MOSLConstants.MESSAGE].toString()
-            throw ServiceFailureException(message, message)
-          }
-        }
-        .compose(applyUiModel())
-        .subscribe { uiModel: UiModel<JSONArray> -> this.renderApprovalRequest(uiModel) }
-    } else {
-      noInternetConnectionDialog()
-    }
 
   private val selectedRowCount: Int
     get() = selectedRowList.size
@@ -516,8 +359,7 @@ class PendingForApprovalFragment : CommonFragment(),
     }
   }
 
-  inner class PendingApprovalTableAdapter(hashArray: ArrayList<HashMap<String, String>>) :
-    BaseTableAdapter() {
+  inner class PendingApprovalTableAdapter() : BaseTableAdapter() {
     private val commonHeaders: Array<CommonHeader>
     private val headers = arrayOf(
       MOSLConstants.EMPLOYEE_CODE_APP,
@@ -534,7 +376,7 @@ class PendingForApprovalFragment : CommonFragment(),
       MOSLConstants.APPROVED_DATE,
       MOSLConstants.APPROVAL_REQUEST_ID
     )
-    var hashArray: ArrayList<HashMap<String, String>>
+    var hashArray = ArrayList<HashMap<String, String>>()
     private var inflater: LayoutInflater? = null
     override fun getRowCount(): Int {
       return commonHeaders[0].list.size
@@ -906,11 +748,11 @@ class PendingForApprovalFragment : CommonFragment(),
     }
 
     init {
+      hashArray = ArrayList()
       commonHeaders =
         arrayOf(
           CommonHeader("asd")
         )
-      this.hashArray = hashArray
     }
   }
 
@@ -936,6 +778,59 @@ class PendingForApprovalFragment : CommonFragment(),
         binding.spProfileChange.setSelection(productData.position)
       }
     }
+  }
+
+  override fun renderApprovalList(uiModel: UiModel<List<PendingForApprovalItem>>) {
+    toggleProgress(uiModel.inProgress)
+    selectedRowList.clear()
+    selectedRowMap.clear()
+    isAllChecked = false
+    isSingleAllChecked = false
+    uiModel.onFailure {
+      binding.table.visibility = View.GONE
+      binding.tvNochart.visibility = View.VISIBLE
+      binding.llButton.visibility = View.GONE
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      if (it.size > 0) {
+        it.map {
+          val requestDate = getFormatedDate(it.updationDate, DF_JSON_DATE10, DF_JSON_DATE4)
+          val approvedDate = if (it.approver2StatusUpdateDate.isNotEmpty()) {
+            getFormatedDate(it.approver2StatusUpdateDate, DF_JSON_DATE10, DF_JSON_DATE4)
+          } else {
+            it.approver2StatusUpdateDate
+          }
+          val hm =
+            LinkedHashMap<String, String>()
+          hm[MOSLConstants.EMPLOYEE_CODE_APP] = it.updatedBy
+          hm[MOSLConstants.EMP_NAME] = it.employeeName
+          hm[MOSLConstants.LEAD_ID_APP] = it.leadID
+          hm[MOSLConstants.CLIENT_CODE] = it.clientCode
+          hm[MOSLConstants.UCID] = it.ucid
+          hm[MOSLConstants.NEW_CLIENT_NAME] = it.clientName
+          hm[MOSLConstants.MODULE_NAME] = it.entity
+          hm[MOSLConstants.FIELD_NAME] = it.referenceName
+          hm[MOSLConstants.SUB_OPTION] = it.approvalFieldValue
+          hm[MOSLConstants.STATUS] = it.getStatus()
+          hm[MOSLConstants.REQUEST_DATE] = requestDate
+          hm[MOSLConstants.APPROVED_DATE] = approvedDate
+          hm[MOSLConstants.APPROVAL_REQUEST_ID] = it.approvalRequestId
+          pendingApprovalTableAdapter.add(hm)
+        }
+        binding.table.visibility = View.VISIBLE
+        binding.tvNochart.visibility = View.GONE
+        binding.llButton.visibility = View.VISIBLE
+        pendingApprovalTableAdapter.notifyDataSetChanged()
+      } else {
+        binding.table.visibility = View.GONE
+        binding.tvNochart.visibility = View.VISIBLE
+        binding.llButton.visibility = View.GONE
+      }
+
+    }
+
   }
 
   override fun onEmployeeChange(): Observable<Int> {

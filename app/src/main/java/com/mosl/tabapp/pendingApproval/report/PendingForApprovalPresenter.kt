@@ -53,7 +53,7 @@ class PendingForApprovalPresenter @Inject constructor(
         repository.getPendingApprovalList(it)
           .compose(applyUiModel())
       }
-      .subscribe()
+      .subscribe(view::renderApprovalList)
       .addTo(disposable)
 
   }

@@ -65,3 +65,12 @@ fun formatMonth(month: String): String {
     context.contentResolver, Settings.Secure.ALLOW_MOCK_LOCATION
   ) != "0"
 }
+
+fun getFormatedDate(
+  date: String,
+  inputFormatedDate: DateFormat,
+  outputFormatedDate: DateFormat
+): String {
+  val time = inputFormatedDate.parse(date) ?: "0000-00-00'T'00:00:00"
+  return outputFormatedDate.format(time)
+}
