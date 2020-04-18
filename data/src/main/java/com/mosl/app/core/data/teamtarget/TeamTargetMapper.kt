@@ -45,7 +45,7 @@ fun List<TeamTable3Item>.itemTransform(): List<TeamTableItem3Model> {
     TeamTableItem3Model(
       ord = it.ord,
       displayText = it.displayText,
-      value = it.value
+      value = it.value ?: "0"
 
     )
   }

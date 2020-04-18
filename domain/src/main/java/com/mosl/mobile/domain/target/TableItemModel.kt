@@ -5,5 +5,5 @@ data class TableItemModel(
 
     @JvmField val ord: Int?,
     @JvmField val displayText: String?,
-    @JvmField val value: String?
+    @JvmField val value: String
 )

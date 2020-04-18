@@ -33,8 +33,8 @@ class TeamTargetSummaryCountItem(
       }
 
       linearLayout.setOnClickListener {
-        if (!itemModel.displayText.equals(TARGET) &&
-          itemModel.value!!.toDouble() != 0.0
+        if (!itemModel.displayText.equals(TARGET) && !itemModel.value.contains("%") &&
+          itemModel.value.toDouble() != 0.0
         ) {
           publishSubject.onNext(TeamWidgetUiEvent.SummaryCountItemClick(itemModel))
         }

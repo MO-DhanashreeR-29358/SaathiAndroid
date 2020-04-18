@@ -1,6 +1,10 @@
 package com.mosl.app.core.data.autarget
 
-import com.mosl.mobile.domain.target.*
+import com.mosl.mobile.domain.target.AditionalParametersTarget
+import com.mosl.mobile.domain.target.Table1ItemModel
+import com.mosl.mobile.domain.target.TableItemModel
+import com.mosl.mobile.domain.target.TargetInput
+import com.mosl.mobile.domain.target.TargetItemModel
 import com.mosl.saathi.api.model.dashboard.target.TableItem
 import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
 import com.mosl.saathi.api.model.dashboard.target.TargetTable1Item
@@ -41,7 +45,7 @@ fun List<TableItem>.itemTransform(): List<TableItemModel> {
         TableItemModel(
             ord = it.ord,
             displayText = it.displayText,
-            value = it.value
+            value = it.value ?: "0"
 
 
         )
