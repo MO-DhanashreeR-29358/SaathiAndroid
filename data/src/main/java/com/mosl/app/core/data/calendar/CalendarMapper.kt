@@ -17,7 +17,7 @@ fun CalenderRequestInput.mapCalendarRequest(): CalenderRequest {
 fun List<CalenderItem>.calendarItemResponseTransform(): List<CalenderItemResponse> {
   return safeMap {
     CalenderItemResponse(
-      name = it.attendeeName,
+      name = it.name ?:"",
       meetingDate = it.meetingDate ?: "",
       leadId = it.leadId ?: "",
       dateDisplay = it.dateDisplay ?: ""

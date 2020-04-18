@@ -266,7 +266,6 @@
     <string name="text_label_mobile_number">Mobile Number</string>
     <string name="text_label_branch_code">Branch Code</string>
     <string name="btn_reset">Reset</string>
-    <string name="btn_submit">Submit</string>
     <string name="text_label_contact_us">Contact Us</string>
     <string name="text_label_support_queries">Support Related Queries</string>
     <string name="text_label_tele_phone_1">91&#8211;22&#8211;39982515 /</string>
@@ -336,4 +335,6 @@
     <string name="error_lable_no_records_found">No records found</string>
     <string name="txt_lable_approve">Approve</string>
     <string name="txt_lable_reject">Reject</string>
+    <string name="txt_lable_time">Time</string>
+    <string name="btn_submit">Submit</string>
 </resources>

@@ -149,7 +149,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
       val dialogBinding =
         DatePickerNewBinding.bind(
           layoutInflater.inflate(
-            R.layout.date_picker_new,
+            R.layout.date_picker,
             null
           )
         )
