@@ -31,6 +31,7 @@ import com.mosl.tabapp.databinding.ActivityLoginNewBinding
 import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.permission.PermissionCheckHelper
+import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -93,7 +94,11 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 //    Timber.d("User cache %s", userManager.user)
 
     uiModel.onFailure { error ->
-      error.showOnFailurePopup()
+      if (error is ValidationException) {
+        error.error.let { alert(getString(it.error!!)) }
+      } else {
+        error.showOnFailurePopup()
+      }
     }
   }
 

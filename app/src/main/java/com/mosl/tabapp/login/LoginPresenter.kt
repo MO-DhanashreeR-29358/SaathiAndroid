@@ -22,10 +22,9 @@ class LoginPresenter @Inject constructor(
         }
         .switchMap { input ->
           LoginValidator.validate(input)
-              .switchMap {
+            .flatMap {
                 loginRepository.login(it)
-                    .compose(applyUiModel())
-              }
+            }.compose(applyUiModel())
         }.subscribe {
           view.renderLogin(it)
 
@@ -37,16 +36,7 @@ class LoginPresenter @Inject constructor(
                 }
             )
           }
-//          it.onSuccess {
-//            navigator.openDashboard()
-//          }
-
-          /*it.onFailure { error ->
-            if (error is LoginException) {
-              ekycNavigator.openNewEkycApp(true)
-            }
-          }*/
-        }
+      }
     )
   }
 
