@@ -5,38 +5,287 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dashboard_background"
-    android:orientation="vertical">
+    >
 
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <include layout="@layout/lms_top_section_update" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/txt_lable_activity_type"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp"
+            />
+
+        <Spinner
+            android:id="@+id/spActivityType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tvActivityTypeError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
+
+
+        <Button
+            android:id="@+id/btnSendOtp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_margin="@dimen/margin_small"
+            android:text="@string/btn_label_send_otp"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            />
+
+        <RelativeLayout
+            android:id="@+id/rlDate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/list_bacground"
+            >
+
+            <TextView
+                android:id="@+id/tvMeetingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:text="@string/txt_lable_meeting_date"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_toEndOf="@+id/tvMeetingDate"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivDatePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:srcCompat="@drawable/ic_calendar"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/txt_lable_product"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp"
+            />
+
+        <Spinner
+            android:id="@+id/spProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:id="@+id/tvProductError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvProductList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/txt_lable_meeting_duration"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp"
+            />
+
+        <Spinner
+            android:id="@+id/spMeetingDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+        <TextView
+            android:id="@+id/tvMeetingDurationError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/txt_lable_meeting_objective"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp"
+            />
+
+        <Spinner
+            android:id="@+id/spMeetingObjective"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            />
+
+        <TextView
+            android:id="@+id/tvMeetingObjectiveError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="@string/txt_lable_meeting_reason"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp"
+            />
+
+        <Spinner
+            android:id="@+id/spMeetingReason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:entries="@array/Select_Meeting_Reason"
+            />
+
+        <TextView
+            android:id="@+id/tvMeetingReasonError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:hintTextAppearance="@style/InputLayout"
+            >
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etMeetingDescription"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_80sdp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                android:hint="@string/hint_lable_enter_meeting_description"
+                android:inputType="textMultiLine"
+                android:maxLength="500"
+                android:textCursorDrawable="@null"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvMeetingDescriptionError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="@color/error_red"
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"
+            />
 
 
         <LinearLayout
+            android:id="@+id/linaerLayoutNew"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:orientation="vertical">
-
-            <include layout="@layout/lms_top_section_update" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
+                android:layout_marginStart="@dimen/_2sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="Activity Type*"
+                android:text="@string/txt_lable_ba_client_meeting"
                 android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11sdp"
+                />
 
             <Spinner
-                android:id="@+id/spActivityType"
+                android:id="@+id/spBAClient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="wrap_content"
+                />
 
             <TextView
-                android:id="@+id/tvActivityTypeError"
+                android:id="@+id/tvBAClientError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -45,74 +294,254 @@
                 android:focusableInTouchMode="true"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
 
-
-            <Button
-                android:id="@+id/btnSendOtp"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_margin="@dimen/margin_small"
-                android:text="@string/btn_label_send_otp"
-                android:textColor="@color/black"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/txt_lable_out_station_meeting"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                />
+
+            <Spinner
+                android:id="@+id/spOutStaition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/tvOutStaitionError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilClientCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout"
+                >
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etClientCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txt_lable_client_code_mandate"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvClientCodeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilClientName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout"
+                >
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etClientName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txt_lable_client_name"
+                    android:imeOptions="actionNext"
+                    android:maxLines="1"
+                    android:singleLine="true"
+
+                    android:textCursorDrawable="@null"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvClientNameError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/list_bacground"
+            android:orientation="vertical"
+            >
 
             <RelativeLayout
-                android:id="@+id/rlDate"
+                android:id="@+id/llAttendee"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/list_bacground">
+                android:layout_height="wrap_content"
+                >
 
                 <TextView
-                    android:id="@+id/tvMeetingDate"
+                    android:id="@+id/tvAttendee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="Meeting Date"
+                    android:layout_alignParentStart="true"
+                    android:paddingStart="@dimen/_3sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:text="@string/txt_lable_attendee"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    />
 
                 <TextView
-                    android:id="@+id/tvDate"
+                    android:id="@+id/tvAttendeeCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_toRightOf="@+id/tvMeetingDate"
+                    android:layout_toEndOf="@+id/tvAttendee"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:textSize="@dimen/_12sdp"
+                    />
 
-                <ImageView
-                    android:id="@+id/ivDatePicker"
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ibAttendee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/_10sdp"
-                    app:srcCompat="@drawable/ic_calendar"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_plus"
                     />
 
             </RelativeLayout>
 
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/calendar_gray"
+                />
+
+            <RelativeLayout
+                android:id="@+id/llSplAttendee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Product*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
+                >
 
-            <Spinner
-                android:id="@+id/spProduct"
+                <TextView
+                    android:id="@+id/tvSplAttendee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:paddingStart="@dimen/_3sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:text="@string/txt_lable_spl_attendee"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvSplAttendeeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/tvSplAttendee"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp"
+                    />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ibSplAttendee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_plus"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:hintTextAppearance="@style/InputLayout"
+            >
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etCustomerComment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></Spinner>
+                android:layout_height="@dimen/_80sdp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                android:hint="@string/hint_lable_enter_customer_comment"
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@null"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/llLocationGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
             <TextView
-                android:id="@+id/tvProductError"
+                android:id="@+id/tvMeetingLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Meeting Location*"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                />
+
+
+            <Spinner
+                android:id="@+id/spMeetingLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:entries="@array/Select"
+                />
+
+            <TextView
+                android:id="@+id/tvMeetingLocationError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -121,31 +550,71 @@
                 android:focusableInTouchMode="true"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/tvTravellingMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_lable_travelling_mode"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                />
+
+
+            <Spinner
+                android:id="@+id/spTravellingMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:entries="@array/Select"
+                />
+
+            <TextView
+                android:id="@+id/tvTravellingModeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvProductList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-            <TextView
+                android:id="@+id/rvTravellingList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Meeting Duration*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
+                />
 
-            <Spinner
-                android:id="@+id/spMeetingDuration"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilAmount"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout"
+                >
 
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/txt_lable_enter_amount"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tvMeetingDurationError"
+                android:id="@+id/tvAmountError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -154,83 +623,30 @@
                 android:focusableInTouchMode="true"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Meeting Objective*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
-
-            <Spinner
-                android:id="@+id/spMeetingObjective"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp" />
-
-            <TextView
-                android:id="@+id/tvMeetingObjectiveError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_2sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:text="Meeting Reason*"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
-
-            <Spinner
-                android:id="@+id/spMeetingReason"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:entries="@array/Select_Meeting_Reason"></Spinner>
-
-            <TextView
-                android:id="@+id/tvMeetingReasonError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout">
+                app:hintTextAppearance="@style/InputLayout"
+                >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/etMeetingDescription"
+                    android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                    android:hint="Enter Meeting Description*"
+                    android:hint="@string/txt_lable_meeting_address"
                     android:inputType="textMultiLine"
                     android:maxLength="500"
-                    android:textCursorDrawable="@null" />
+                    android:textCursorDrawable="@null"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/tvMeetingDescriptionError"
+                android:id="@+id/tvLocationError"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
@@ -239,446 +655,189 @@
                 android:focusableInTouchMode="true"
                 android:textColor="@color/error_red"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                />
 
-
-            <LinearLayout
-                android:id="@+id/linaerLayoutNew"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ilPinCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:layout_marginTop="@dimen/_3sdp"
+                app:hintTextAppearance="@style/InputLayout"
+                >
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/etPinCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_2sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="BA Client Meeting*"
-                    android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
+                    android:hint="@string/txt_lable_enter_pincode"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textCursorDrawable="@null"
 
-                <Spinner
-                    android:id="@+id/spBAClient"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/tvBAClientError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
+            <TextView
+                android:id="@+id/tvPinCodeError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_2sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Out Station Meeting*"
-                    android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
-
-                <Spinner
-                    android:id="@+id/spOutStaition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/tvOutStaitionError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilClientCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etClientCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Client Code*"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textCursorDrawable="@null" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvClientCodeError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilClientName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etClientName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Client Name*"
-                        android:imeOptions="actionNext"
-                        android:maxLines="1"
-                        android:singleLine="true"
-
-                        android:textCursorDrawable="@null" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvClientNameError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
+        <TextView
+            android:id="@+id/tvActionables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:background="@color/white"
+            android:ellipsize="end"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:text="@string/txt_lable_actionables"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/_14sdp"
+            android:visibility="gone"
+            />
 
 
-            </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llActionables"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/list_bacground"
-                android:orientation="vertical">
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/txt_lable_actionables"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                />
 
-                <RelativeLayout
-                    android:id="@+id/llAttendee"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spActionables"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
-                    <TextView
-                        android:id="@+id/tvAttendee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingLeft="@dimen/_3sdp"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:text="Attendee"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
+            <TextView
+                android:id="@+id/tvActionablesError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
 
-                    <TextView
-                        android:id="@+id/tvAttendeeCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/tvAttendee"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="@string/txt_lable_category"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                />
 
-                    <ImageButton
-                        android:id="@+id/ibAttendee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@color/white"
-                        android:src="@drawable/ic_plus" />
+            <Spinner
+                android:id="@+id/spCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                />
 
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/calendar_gray" />
-
-                <RelativeLayout
-                    android:id="@+id/llSplAttendee"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/tvSplAttendee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:paddingLeft="@dimen/_3sdp"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:text="Spl Attendee"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <TextView
-                        android:id="@+id/tvSplAttendeeCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/tvSplAttendee"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_10sdp"
-                        android:paddingBottom="@dimen/_10sdp"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <ImageButton
-                        android:id="@+id/ibSplAttendee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
-                        android:background="@color/white"
-                        android:src="@drawable/ic_plus" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvCategoryError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout">
+                app:hintTextAppearance="@style/InputLayout"
+                >
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/etCustomerComment"
+                    android:id="@+id/etCategory"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                    android:hint="Enter Customer Comment"
+                    android:hint="@string/hint_lable_enter_category_description"
                     android:inputType="textMultiLine"
-                    android:textCursorDrawable="@null" />
+                    android:maxLength="500"
+                    android:overScrollMode="always"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:textCursorDrawable="@null"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/llLocationGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvMeetingLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Meeting Location*"
-                    android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
-
-
-                <Spinner
-                    android:id="@+id/spMeetingLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:entries="@array/Select" />
-
-                <TextView
-                    android:id="@+id/tvMeetingLocationError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/tvTravellingMode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Travelling Mode*"
-                    android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
-
-
-                <Spinner
-                    android:id="@+id/spTravellingMode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:entries="@array/Select" />
-
-                <TextView
-                    android:id="@+id/tvTravellingModeError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvTravellingList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/ilAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etAmount"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Enter Amount"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textCursorDrawable="@null"
-
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvAmountError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_80sdp"
-                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                        android:hint="Meeting Address*"
-                        android:inputType="textMultiLine"
-                        android:maxLength="500"
-                        android:textCursorDrawable="@null" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvLocationError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/ilPinCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etPinCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Enter PinCode*"
-                        android:inputType="number"
-                        android:maxLength="6"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textCursorDrawable="@null"
-
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/tvPinCodeError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-            </LinearLayout>
-
             <TextView
-                android:id="@+id/tvActionables"
-                android:layout_width="match_parent"
+                android:id="@+id/tvCategoryCommentsError"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:background="@color/white"
-                android:ellipsize="end"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:text="Actionables"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="@dimen/_14sdp"
-                android:visibility="gone" />
-
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                />
 
             <LinearLayout
-                android:id="@+id/llActionables"
+                android:id="@+id/llSubcategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="vertical"
-                android:visibility="gone">
+                >
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginStart="@dimen/_2sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Actionables*"
+                    android:text="@string/txt_lable_sub_category"
                     android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
+                    android:textSize="@dimen/_11sdp"
+                    />
 
                 <Spinner
-                    android:id="@+id/spActionables"
+                    android:id="@+id/spSubCategory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
 
                 <TextView
-                    android:id="@+id/tvActionablesError"
+                    android:id="@+id/tvSubCategoryError"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -687,57 +846,34 @@
                     android:focusableInTouchMode="true"
                     android:textColor="@color/error_red"
                     android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_2sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:text="Category*"
-                    android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp" />
-
-                <Spinner
-                    android:id="@+id/spCategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"></Spinner>
-
-                <TextView
-                    android:id="@+id/tvCategoryError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    app:hintTextAppearance="@style/InputLayout">
+                    app:hintTextAppearance="@style/InputLayout"
+                    >
 
                     <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/etCategory"
+                        android:id="@+id/etSubCategory"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_80sdp"
                         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                        android:hint="Enter Category Description*"
+                        android:hint="@string/enter_txt_lable_sub_category_description"
                         android:inputType="textMultiLine"
                         android:maxLength="500"
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textCursorDrawable="@null" />
+                        android:textCursorDrawable="@null"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:id="@+id/tvCategoryCommentsError"
+                    android:id="@+id/tvSubCategoryCommentsError"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -746,101 +882,38 @@
                     android:focusableInTouchMode="true"
                     android:textColor="@color/error_red"
                     android:textSize="@dimen/_10sdp"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:id="@+id/llSubcategory"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:text="Sub Category*"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp" />
-
-                    <Spinner
-                        android:id="@+id/spSubCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <TextView
-                        android:id="@+id/tvSubCategoryError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/etSubCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_80sdp"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                            android:hint="Enter Sub Category Description*"
-                            android:inputType="textMultiLine"
-                            android:maxLength="500"
-                            android:overScrollMode="always"
-                            android:scrollbarStyle="insideInset"
-                            android:scrollbars="vertical"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvSubCategoryCommentsError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-                </LinearLayout>
+                    android:visibility="gone"
+                    />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:gravity="center_horizontal">
-
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:text="Save"
-                    android:textColor="@color/black" />
-
-                <Button
-                    android:id="@+id/btnReset"
-                    android:layout_width="@dimen/_60sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:background="@color/calendar_gray2"
-                    android:text="Reset"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:gravity="center_horizontal"
+            >
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:text="@string/btn_lable_save"
+                android:textColor="@color/black"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnReset"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@color/calendar_gray2"
+                android:text="@string/btn_lable_reset"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </ScrollView>

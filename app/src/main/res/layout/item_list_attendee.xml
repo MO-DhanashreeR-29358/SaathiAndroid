@@ -16,16 +16,4 @@
         tools:text="my name"
        />
 
-  
-   <!--
-
-     android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-   <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_1sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="@color/dashbord_background">
-
-    </View>-->
 </LinearLayout>

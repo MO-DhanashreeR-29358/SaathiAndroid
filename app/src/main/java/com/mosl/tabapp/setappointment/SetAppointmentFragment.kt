@@ -145,7 +145,6 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   private var weekCodeStr: String? = null
   private var weekDayCodeStr: String? = null
   private var today: Calendar? = null
-  private var dialogDateTime: Dialog? = null
   private var hour: Int = 0
   private var minute: Int = 0
   private var mainFromDate: String? = null
@@ -919,19 +918,17 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
         if (createMode) SET_APPOINTMENTS else UPDATE_APPOINTMENTS,
         "OK", true
       ) { action, _ ->
-        when (action) {
-          MSFDialog.Action.OK -> {
-            val bundle = Bundle()
-            bundle.putString(
-              LEAD_ID,
-              arguments!!.getString(LEAD_ID)
-            )
-            bundle.putString(
-              UCID,
-              arguments!!.getString(UCID)
-            )
-            navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
-          }
+        if (action == MSFDialog.Action.OK) {
+          val bundle = Bundle()
+          bundle.putString(
+            LEAD_ID,
+            arguments!!.getString(LEAD_ID)
+          )
+          bundle.putString(
+            UCID,
+            arguments!!.getString(UCID)
+          )
+          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
         }
 
       }
@@ -1044,18 +1041,18 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   @SuppressLint("DefaultLocale")
   private fun selectDateAppointmentStartTime() {
     today = Calendar.getInstance()
-    dialogDateTime = Dialog(requireContext()).apply {
+    val dialogDateTime = Dialog(requireContext()).apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(R.layout.date_picker)
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    val dpFromDateStartTime = dialogDateTime?.findViewById<DatePicker>(R.id.datePickerFromDate)
+    val dpFromDateStartTime = dialogDateTime.findViewById<DatePicker>(R.id.datePickerFromDate)
 
     dpFromDateStartTime?.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-    close = dialogDateTime?.findViewById(R.id.ibtnClose)
-    btnSubmit = dialogDateTime?.findViewById(R.id.btnSubmit)
+    close = dialogDateTime.findViewById(R.id.ibtnClose)
+    btnSubmit = dialogDateTime.findViewById(R.id.btnSubmit)
 
     dpFromDateStartTime?.minDate = System.currentTimeMillis() - 1000
     if (mainFromDateStartDate != null) {
@@ -1090,7 +1087,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       }
     }
 
-    val timePicker = dialogDateTime!!.findViewById<TimePicker>(R.id.timePicker)
+    val timePicker = dialogDateTime.findViewById<TimePicker>(R.id.timePicker)
       .apply {
         when {
           Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
@@ -1111,7 +1108,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       minuteStartDate = arg2
     }
 
-    close?.setOnClickListener { _ -> dialogDateTime!!.dismiss() }
+    close?.setOnClickListener { _ -> dialogDateTime.dismiss() }
 
     btnSubmit?.setOnClickListener { _ ->
       when {
@@ -1161,9 +1158,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
             activity, START_TIME_ERROR, Toast.LENGTH_SHORT
           ).show()
           else -> {
-            dialogDateTime!!.dismiss()
+            dialogDateTime.dismiss()
             binding.tvStartDateError.visibility = View.GONE
-            dialogDateTime!!.dismiss()
+            dialogDateTime.dismiss()
           }
         }
       } catch (e: Exception) {
@@ -1171,23 +1168,23 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       }
     }
 
-    dialogDateTime!!.show()
+    dialogDateTime.show()
   }
 
   private fun selectDateAppointmentEndTime() {
     today = Calendar.getInstance()
-    dialogDateTime = Dialog(requireContext()).apply {
+    val dialogDateTime = Dialog(requireContext()).apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(R.layout.date_picker)
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    val dpFromDateEndTime = dialogDateTime!!.findViewById<DatePicker>(R.id.datePickerFromDate)
+    val dpFromDateEndTime = dialogDateTime.findViewById<DatePicker>(R.id.datePickerFromDate)
 
     dpFromDateEndTime.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-    close = dialogDateTime!!.findViewById(R.id.ibtnClose)
-    btnSubmit = dialogDateTime!!.findViewById(R.id.btnSubmit)
+    close = dialogDateTime.findViewById(R.id.ibtnClose)
+    btnSubmit = dialogDateTime.findViewById(R.id.btnSubmit)
 
     dpFromDateEndTime.minDate = System.currentTimeMillis() - 1000
 
@@ -1224,7 +1221,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       }
     }
 
-    val timePicker = dialogDateTime!!.findViewById<TimePicker>(R.id.timePicker)
+    val timePicker = dialogDateTime.findViewById<TimePicker>(R.id.timePicker)
       .apply {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           hour = hourEndDate
@@ -1241,7 +1238,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       minuteEndDate = arg2
     }
 
-    close?.setOnClickListener { _ -> dialogDateTime?.dismiss() }
+    close?.setOnClickListener { _ -> dialogDateTime.dismiss() }
 
     btnSubmit?.setOnClickListener { v ->
       if (mainFromDateEndDate != null) {
@@ -1285,7 +1282,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
           startDate.after(endDate) -> Toast.makeText(activity, END_TIME_ERROR, Toast.LENGTH_SHORT)
             .show()
           else -> {
-            dialogDateTime?.dismiss()
+            dialogDateTime.dismiss()
             tvEndDateError.visibility = View.GONE
           }
         }
@@ -1298,7 +1295,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
     }
 
-    dialogDateTime?.show()
+    dialogDateTime.show()
   }
 
   fun prefix(input: Int): String {
@@ -1397,14 +1394,14 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
             )
           )
           addedSplAttendeeCount++
-          binding.tvSplAttendeeCount.text = "($addedSplAttendeeCount)"
+          binding.tvSplAttendeeCount.text = String.format("(%s)", addedAttendeeCount)
           dialogSplAttendeeList.dismiss()
         }
         else -> {
           Toast.makeText(
-              requireContext(), SPL_ATTENDEE_ALREADY_ADDED,
-              Toast.LENGTH_SHORT
-            )
+            requireContext(), SPL_ATTENDEE_ALREADY_ADDED,
+            Toast.LENGTH_SHORT
+          )
             .show()
           etSearchAttendee.setText("")
         }
@@ -1451,19 +1448,19 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   @SuppressLint("DefaultLocale")
   private fun selectDateAppointment() {
     today = Calendar.getInstance()
-    dialogDateTime = Dialog(requireContext()).apply {
+    val dialogDateTime = Dialog(requireContext()).apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(R.layout.date_picker)
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    val dpFromDate = dialogDateTime!!.findViewById<DatePicker>(R.id.datePickerFromDate)
+    val dpFromDate = dialogDateTime.findViewById<DatePicker>(R.id.datePickerFromDate)
 
     dpFromDate.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
 
-    close = dialogDateTime!!.findViewById<ImageView>(R.id.ibtnClose)
-    btnSubmit = dialogDateTime!!.findViewById<Button>(R.id.btnSubmit)
+    close = dialogDateTime.findViewById<ImageView>(R.id.ibtnClose)
+    btnSubmit = dialogDateTime.findViewById<Button>(R.id.btnSubmit)
     dpFromDate.minDate = System.currentTimeMillis() - 1000
 
     mainFromDate?.let {
@@ -1499,7 +1496,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       }
     }
 
-    val timePicker = dialogDateTime!!.findViewById<TimePicker>(R.id.timePicker)
+    val timePicker = dialogDateTime.findViewById<TimePicker>(R.id.timePicker)
     //    timePic
 
     timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
@@ -1515,7 +1512,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       minute = arg2
     }
 
-    close?.setOnClickListener { _ -> dialogDateTime!!.dismiss() }
+    close?.setOnClickListener { _ -> dialogDateTime.dismiss() }
 
     btnSubmit?.setOnClickListener { _ ->
 
@@ -1547,11 +1544,11 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       }
 
 
-      dialogDateTime?.dismiss()
+      dialogDateTime.dismiss()
       tvStartDateError.setVisibility(View.GONE)
     }
 
-    dialogDateTime?.show()
+    dialogDateTime.show()
   }
 
   private fun stringArray(date: String): String {
@@ -1635,9 +1632,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       view1: View?,
       parent: ViewGroup
     ): View {
-      var view = view1
       val holder = Holder()
-      view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false)
+      val view = inflater.inflate(R.layout.item_list_added_spl_attendee, parent, false)
       val viewBinding = ItemListAddedSplAttendeeBinding.bind(view)
       val attendeeModel = attendeeModelList[position]
 
@@ -1668,7 +1664,6 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     internal var mContext: Context,
     internal var attendeeModelList: MutableList<AddedAttendeeModel>
   ) : BaseAdapter() {
-    private val inflater: LayoutInflater = LayoutInflater.from(mContext)
 
     override fun getCount(): Int {
       return attendeeModelList.size
@@ -1682,16 +1677,14 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       return position.toLong()
     }
 
-    @SuppressLint("ViewHolder")
     override fun getView(
       position: Int,
       view1: View?,
       parent: ViewGroup
     ): View {
-      var view = view1
       val holder = Holder()
-      view = inflater.inflate(R.layout.item_list_added_attendee, parent, false)
-
+      val inflater = LayoutInflater.from(mContext)
+      val view = inflater.inflate(R.layout.item_list_added_attendee, parent, false)
       val viewBinding = ItemListAddedAttendeeBinding.bind(view)
 
       val attendeeModel = attendeeModelList[position]
@@ -1722,12 +1715,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   inner class SplAttendeeAdapter internal constructor(internal var mContext: Context) :
     BaseAdapter(),
     Filterable {
-    private var inflater: LayoutInflater? = null
     private var attendeeModelList: List<SplAttendeeModel> = ArrayList()
-
-    init {
-      inflater = LayoutInflater.from(mContext)
-    }
 
     override fun getCount(): Int {
       return attendeeModelList.size
@@ -1746,17 +1734,11 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       convertView1: View,
       parent: ViewGroup
     ): View {
-      var convertView = convertView1
-      var holderView: HolderView? = null
+      val holderView: HolderView
       val clientModel = attendeeModelList[position]
-
-      inflater = requireContext().getSystemService(
-        Context.LAYOUT_INFLATER_SERVICE
-      ) as LayoutInflater
-      convertView = inflater!!.inflate(R.layout.item_list_attendee, parent, false)
+      val inflater = LayoutInflater.from(mContext)
+      val convertView = inflater.inflate(R.layout.item_list_attendee, parent, false)
       holderView = HolderView(convertView)
-
-      // viewColor(position, convertView);
 
       viewColor(position, convertView)
       if (clientModel.isNoData) {
