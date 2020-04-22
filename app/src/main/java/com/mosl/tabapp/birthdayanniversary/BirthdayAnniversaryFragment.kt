@@ -154,6 +154,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
       filterType = FILTER_TYPE_TWO
       dayType = TODAY_FLAG
       CRMAppUtil.expand(binding.ivEmailAll)
+      setSpanCount(1)
     }
   }
 
@@ -162,6 +163,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
       filterType = FILTER_TYPE_ONE
       dayType = BELATED_FLAG
       CRMAppUtil.collapse(binding.ivEmailAll)
+      setSpanCount(1)
     }
   }
 
@@ -170,7 +172,13 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
       filterType = FILTER_TYPE_THREE
       dayType = UPCOMING_FLAG
       CRMAppUtil.collapse(binding.ivEmailAll)
+      setSpanCount(1)
     }
+  }
+
+  fun setSpanCount(count: Int) {
+    (binding.rvBirthdayAnniversary.getLayoutManager() as GridLayoutManager).spanCount = count
+    section.clearContent()
   }
 
   override fun sendEmailAll(): Observable<SendEmailAll> {
@@ -237,6 +245,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
 
   override fun renderBirthdayAnniversary(uiModel: UiModel<BirthdayAnniversaryItemResponse>) {
     section.toggleProgress(uiModel.inProgress)
+    setSpanCount(1)
     uiModel.onFailure {
       section.showError(it)
       dataFoundFlag = false
@@ -244,7 +253,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
     uiModel.onSuccess {
       section.clearContent()
       if (it.data.isNotEmpty()) {
-        (binding.rvBirthdayAnniversary.getLayoutManager() as GridLayoutManager).spanCount = 3
+        setSpanCount(3)
         section.setContent(it.data.map { data ->
           ItemBirthdayAnniversary(
             data,

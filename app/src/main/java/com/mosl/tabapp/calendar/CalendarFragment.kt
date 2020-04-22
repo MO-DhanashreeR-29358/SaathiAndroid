@@ -122,6 +122,7 @@ class CalendarFragment : CommonFragment(), CalendarFragmentView, OnDateSelectedL
   override fun onDateSelected(widget: MaterialCalendarView, date: CalendarDay, selected: Boolean) {
     dataActionSubject.onNext(DataAction.Fetch)
     oneDayDecorator.setDate(date.date)
+    binding.tvDay.text = CRMAppUtil.getDBDate(date.date, "E MMMM d")
     binding.materialCalendarView.invalidateDecorators()
   }
 
