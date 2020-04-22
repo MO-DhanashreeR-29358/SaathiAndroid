@@ -29,7 +29,6 @@ import android.widget.TextView.OnEditorActionListener
 import android.widget.TimePicker
 import android.widget.Toast
 import com.jakewharton.rxbinding3.widget.itemSelections
-import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -410,19 +409,18 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     uiModel.onSuccess {
       arrSelectProduct.clear()
       arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
-      it.safeMap { item ->
-        arrSelectProduct.add(RowData(+1, item.lookUpid.toString(), item.lookUpName))
+      for (item in it.indices) {
+        arrSelectProduct.add(RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName))
       }
       val arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spSelectProduct.adapter = arrAdapSelectProduct
       arrAdapSelectProduct.setSpinnerData(binding.spSelectProduct, arrSelectProduct)
 
       arrAdapSelectProduct.notifyDataSetChanged()
-      arrAdapSelectProduct.setNotifyOnChange(true)
 
       val productData = getSpinnerRowDataById(meetingApptModel?.product, arrAdapSelectProduct)
-      if (productData != null) {
-        binding.spSelectProduct.setSelection(productData.position)
+      when {
+        productData != null -> binding.spSelectProduct.setSelection(productData.position)
       }
       setProductListener()
 
@@ -450,9 +448,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     uiModel.onSuccess {
       arrSelectWeekDay.clear()
       arrSelectWeekDay.add(RowData(0, "-1", SELECT_WEEK_DAYS))
-      it.safeMap { item ->
+      for (item in it.indices) {
         arrSelectWeekDay.add(
-          RowData(+1, item.lookUpid.toString(), item.lookUpName)
+          RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName)
         )
       }
 
@@ -464,7 +462,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       val productData =
         getSpinnerRowDataById(meetingApptModel?.repeatEveryDayCode, arrAdapSelectWeekDay)
       when {
-        productData != null -> spSelectWeekDay.setSelection(productData.position)
+        productData != null -> binding.spSelectWeekDay.setSelection(productData.position)
       }
       setWeekDayListener()
     }
@@ -563,9 +561,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     uiModel.onSuccess {
       arrRepeatMode.clear()
       arrRepeatMode.add(RowData(0, "-1", "Repeat On"))
-      it.safeMap { item ->
+      for (item in it.indices) {
         arrRepeatMode.add(
-          RowData(+1, item.lookUpid.toString(), item.lookUpName)
+          RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName)
         )
       }
       val arrAdapRepeteMode = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -621,9 +619,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     uiModel.onSuccess {
       arrSelectWeek.clear()
       arrSelectWeek.add(RowData(0, "-1", SELECT_WEEK))
-      it.safeMap { item ->
+      for (item in it.indices) {
         arrSelectWeek.add(
-          RowData(+1, item.lookUpid.toString(), item.lookUpName)
+          RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName)
         )
       }
       val arrAdapSelectWeek = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
