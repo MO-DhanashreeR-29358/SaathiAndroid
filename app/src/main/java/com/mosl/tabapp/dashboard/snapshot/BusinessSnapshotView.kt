@@ -13,7 +13,7 @@ interface BusinessSnapshotView : BaseView {
   fun onNavigateEvent(): Observable<MutableMap<String, String>>
 
   fun getWidgetSystemsName(): String?
-  fun getAdditionalParameterMap(rowData: String, columnData: String): Map<String, String>
+  fun getAdditionalParameterMap(rowData: String?, columnData: String?): Map<String, String>
   fun getFilter1(): FilterRowData?
   fun getFilter2(): FilterRowData?
   fun getFilter3(): FilterRowData?

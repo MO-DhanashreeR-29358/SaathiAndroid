@@ -3,7 +3,6 @@ package com.mosl.tabapp.dashboard.snapshot
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.mobile.domain.clients.BusinessSnapAdditionalParametersInput
 import com.mosl.mobile.domain.snapshot.BusinessSnapInput
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.tabapp.constants.MOSLConstants
@@ -46,12 +45,7 @@ class BusinessSnapshotPresenter @Inject constructor(
       widgetSystemName = view.getWidgetSystemsName(),
       productId = dashboardModel.productId,
       employeeCode = dashboardModel.employeeCode,
-      additionalParameters = BusinessSnapAdditionalParametersInput(
-        fltPeriod = view.getFilter2()?.value,
-        fltHierarchy = dashboardModel.dashboardFor,
-        fltSelfBranch = view.getFilter1()?.value,
-        fltProspect = view.getFilter3()?.value//TODO confirm Key name from backend
-      )
+      additionalParameters = view.getAdditionalParameterMap(null, null)
     )
   }
 

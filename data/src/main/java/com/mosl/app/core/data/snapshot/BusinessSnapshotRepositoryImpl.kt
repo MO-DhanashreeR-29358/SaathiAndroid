@@ -26,9 +26,10 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
     val leadRequest = request.transformDashboardRequest()
     return api.getBusinessSnapshotAdv(leadRequest).map { response ->
       val jsonObject = JSONObject(response)
-      val jsonArray = if (jsonObject.has("Response")) {
-        jsonObject.getJSONObject("Response").getJSONArray("Table")
-      } else null
+      val jsonArray =
+        if (jsonObject.has("Response") && jsonObject.getJSONObject("Response").has("Table")) {
+          jsonObject.getJSONObject("Response").getJSONArray("Table")
+        } else null
       if (jsonArray != null && jsonArray.length() > 0) {
         val colHeaders: MutableList<ColHeader> = mutableListOf()
         val first = jsonArray.getJSONObject(0)

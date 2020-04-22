@@ -126,16 +126,18 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
   }
 
   override fun getAdditionalParameterMap(
-    rowData: String,
-    columnData: String
+    rowData: String?,
+    columnData: String?
   ): MutableMap<String, String> {
     val additionalParameterMap: MutableMap<String, String> = HashMap()
     getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
     getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }
-    additionalParameterMap[MOSLConstants.COL_FILTER] =
-      columnData
-    additionalParameterMap[MOSLConstants.ROW_FILTER] = rowData
+    columnData?.let {
+      additionalParameterMap[MOSLConstants.COL_FILTER] =
+        columnData
+    }
+    rowData?.let { additionalParameterMap[MOSLConstants.ROW_FILTER] = rowData }
     additionalParameterMap[SELF_KEY] = dashboardModel.dashboardFor
     return additionalParameterMap
   }

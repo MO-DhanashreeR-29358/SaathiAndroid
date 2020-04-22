@@ -12,7 +12,7 @@ import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotTableItem
 fun BusinessSnapInput.requestTransform(): BusinessSnapshotRequest {
   return BusinessSnapshotRequest(
     businessProfileId = businessProfileId,
-    addtionalParameters = additionalParameters.additionalParametersTransform(),
+    addtionalParameters = additionalParameters,
     employeeCode = employeeCode,
     productId = productId,
     widgetSystemName = widgetSystemName
@@ -22,7 +22,7 @@ fun BusinessSnapInput.requestTransform(): BusinessSnapshotRequest {
 fun BusinessSnapInput.transformDashboardRequest(): BusinessSnapshotRequest {
   return BusinessSnapshotRequest(
     businessProfileId = businessProfileId,
-    addtionalParameters = additionalParameters.additionalParametersTransform(),
+    addtionalParameters = additionalParameters,
     employeeCode = employeeCode,
     productId = productId,
     widgetSystemName = widgetSystemName
