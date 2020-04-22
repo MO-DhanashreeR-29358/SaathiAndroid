@@ -30,12 +30,10 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxTextView;
 import com.mosl.app.coreui.spinner.AdapterUtils;
@@ -116,12 +114,8 @@ import com.mosl.tabapp.model.leaddetail.LeadDetailModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
 import com.mosl.tabapp.ws.RefreeSyncWebServiceCall;
-
-import org.droidparts.widget.ClearableEditText;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -130,11 +124,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import org.droidparts.widget.ClearableEditText;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -2973,14 +2967,15 @@ public class LeadViewDetailFragment extends CommonFragment
                     new StageMobileRequest(userManager.getUser().currentBusinessProfile.businessUnitId, stageID);
             getCompositeDisposable().add(getSaathiApi().getStageMobileList(mobileRequest)
                     .compose(applyUiModel())
-                    .subscribe(uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout)));
+                .subscribe(
+                    uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout, stageID)));
         } else {
             noInternetConnectionDialog();
         }
     }
 
     private void renderStageMobile(UiModel<List<StageMobileItem>> uiModel,
-                                   final Spinner spStageDialog, final LinearLayout progressLayout) {
+        final Spinner spStageDialog, final LinearLayout progressLayout, String stageId) {
         if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
@@ -4105,14 +4100,15 @@ public class LeadViewDetailFragment extends CommonFragment
                 getCompositeDisposable().add(
                         getSaathiApi().getStatusList(new StatusRequest(productId, "1"))
                                 .compose(applyUiModel())
-                                .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout)));
+                            .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
+                                statusId)));
             } else {
                 noInternetConnectionDialog();
             }
         }
 
         private void renderNewStatus(UiModel<List<StatusItem>> uiModel,
-                                     Spinner spStatus, final LinearLayout progressLayout) {
+            Spinner spStatus, final LinearLayout progressLayout, String statusId) {
             if (uiModel.inProgress) {
                 progressLayout.setVisibility(View.VISIBLE);
             } else {
