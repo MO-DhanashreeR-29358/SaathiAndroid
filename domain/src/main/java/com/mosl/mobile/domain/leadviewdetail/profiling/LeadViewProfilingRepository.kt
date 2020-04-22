@@ -4,5 +4,5 @@ import io.reactivex.Observable
 
 interface LeadViewProfilingRepository {
   fun getProfileQuestionAnswer(leadId: String): Observable<List<LeadProfile>>
-  fun saveLeadProfileParameter(request: List<ProfileRequestData>): Observable<String>
+  fun saveLeadProfileParameter(request: List<ProfileRequestData>): Observable<ProfilingResponseModel>
 }

@@ -931,7 +931,7 @@ public class LeadProfilingFragmentOld extends CommonFragment
      */
     private void saveLeadProfileParameter(List<SaveLeadProfileRequest> request) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            Disposable subscribe = getSaathiApi().postLeadProfile(request)
+            Disposable subscribe = getSaathiApi().postLeadProfileOld(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderSubmitProfile);
         } else {

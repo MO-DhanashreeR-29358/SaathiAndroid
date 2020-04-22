@@ -23,6 +23,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.common.CRMAppUtil
@@ -51,6 +52,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
   private var viewPager: ViewPager? = null
   private var profileModel: ProfileModel? = null
   private var formElementList: MutableList<View> = emptyList<View>().toMutableList()
+
   //This list is added just to have reffrence of each question so if we can findthem in on click event of their siblings child
   private var questionMap: MutableMap<String, View> = emptyMap<String, View>().toMutableMap()
   private lateinit var binding: FragLeadProfilingBinding
@@ -80,16 +82,16 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       when (entry) {
         is EditText -> {
           val mTag = entry.getTag()
-              .toString()
-              .trim { it <= ' ' }
+            .toString()
+            .trim { it <= ' ' }
           try {
             val tagArray = mTag.split("_".toRegex())
-                .dropLastWhile { it.isEmpty() }
-                .toTypedArray()
+              .dropLastWhile { it.isEmpty() }
+              .toTypedArray()
             val textInEditText = entry.text.toString()
-                .trim { it <= ' ' }
+              .trim { it <= ' ' }
             profileRequestList += ProfileRequestData(
-                tagArray[0], tagArray[1], leadId, textInEditText
+              tagArray[0], tagArray[1], leadId, textInEditText
             )
           } catch (e: Exception) {
             Timber.d(e)
@@ -101,20 +103,20 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           if (profileOption != null && rbTemp.isChecked) {
             var valueString = ""
             if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
-                    "Y", ignoreCase = true
-                )
+                "Y", ignoreCase = true
+              )
             ) {
               valueString = getExtraView(
-                  profileOption
+                profileOption
               )
             }
 
             profileRequestList.add(
-                ProfileRequestData(
-                    profileOption.profileParameterID!!.toString(),
-                    profileOption.profileSubParameterID!!.toString(), leadId,
-                    valueString
-                )
+              ProfileRequestData(
+                profileOption.profileParameterID!!.toString(),
+                profileOption.profileSubParameterID!!.toString(), leadId,
+                valueString
+              )
             )
           }
         }
@@ -123,17 +125,17 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           if (entry.isChecked) {
             var valueString = ""
             if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
-                    "Y", ignoreCase = true
-                )
+                "Y", ignoreCase = true
+              )
             ) {
               valueString = getExtraView(profileOption)
             }
             profileRequestList.add(
-                ProfileRequestData(
-                    profileOption.profileParameterID!!.toString(),
-                    profileOption.profileSubParameterID!!.toString(), leadId,
-                    valueString
-                )
+              ProfileRequestData(
+                profileOption.profileParameterID!!.toString(),
+                profileOption.profileSubParameterID!!.toString(), leadId,
+                valueString
+              )
             )
           }
         }
@@ -142,18 +144,18 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           var valueString = ""
 
           if (!CRMAppUtil.isBlank(opTion.extraInfo) && opTion.extraInfo
-                  .equals("Y", ignoreCase = true)
+              .equals("Y", ignoreCase = true)
           ) {
             valueString = getExtraView(opTion)
           }
 
           profileRequestList.add(
-              ProfileRequestData(
-                  opTion.profileParameterID!!.toString(),
-                  opTion.profileSubParameterID!!.toString(),
-                  leadId,
-                  valueString
-              )
+            ProfileRequestData(
+              opTion.profileParameterID!!.toString(),
+              opTion.profileSubParameterID!!.toString(),
+              leadId,
+              valueString
+            )
           )
         }
       }
@@ -175,9 +177,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       request.isNotEmpty() -> subject.onNext(SubmitProfileEvent)
       else -> {
         alertDialog(
-            requireContext(), 0,
-            resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
-            resources.getString(android.R.string.ok), true, null
+          requireContext(), 0,
+          resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
+          resources.getString(android.R.string.ok), true, null
         )
       }
     }
@@ -286,8 +288,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       val rowCount = mOptions.extraInfoRowCount
       val fieldNameMix = mOptions.extraInfoFieldName
       val fieldNameArray = fieldNameMix.split("[$ANS_GROUP_SEPERATER]".toRegex())
-          .dropLastWhile { it.isEmpty() }
-          .toTypedArray()
+        .dropLastWhile { it.isEmpty() }
+        .toTypedArray()
       extraFieldLayout.visibility = View.VISIBLE
       // if (rowCount > 0) {
       extraViewList = ArrayList()
@@ -299,21 +301,21 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         llSegment.orientation = LinearLayout.VERTICAL
         llSegment.setBackgroundResource(R.color.dashboard_background)
         val params = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            DrawerLayout.LayoutParams.WRAP_CONTENT
+          LinearLayout.LayoutParams.MATCH_PARENT,
+          DrawerLayout.LayoutParams.WRAP_CONTENT
         )
         params.setMargins(
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt()
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt()
         )
         llSegment.layoutParams = params
         llSegment.setPadding(
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt(),
-            resources.getDimension(R.dimen._3sdp).toInt()
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt(),
+          resources.getDimension(R.dimen._3sdp).toInt()
         )
         extraFieldLayout.addView(llSegment)
         for (label1 in fieldNameArray) {
@@ -322,8 +324,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           extraTextView1.text = label1
           val extraEditText1 = EditText(activity)
           extraEditText1.layoutParams = LinearLayout.LayoutParams(
-              LinearLayout.LayoutParams.MATCH_PARENT,
-              LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
           )
           extraEditText1.setBackgroundResource(R.drawable.textview_border)
           extraEditText1.filters = arrayOf(CRMAppUtil.filterOnlyAlphabetAndNumbers)
@@ -339,15 +341,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       mOptions.extraViewList = extraViewList
 
       val data = mOptions.value.split("[$ANS_GROUP_SEPERATER]".toRegex())
-          .dropLastWhile { it.isEmpty() }
-          .toTypedArray()
+        .dropLastWhile { it.isEmpty() }
+        .toTypedArray()
       if (data.size == extraViewList.size) {
         //if you have proper data
 
         for (i in extraViewList.indices) {// for for list of group
           val dataAns = data[i].split("[$ANS_SEPERATER]".toRegex())
-              .dropLastWhile { it.isEmpty() }
-              .toTypedArray()
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
           if (dataAns.size == extraViewList[i].size) {
             val mAnsEdit = extraViewList[i]
             for (j in dataAns.indices) {
@@ -377,22 +379,22 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         for (vList in extraViewList) {
           for (mView in vList) {
             val mData = (mView as EditText).text.toString()
-                .trim { it <= ' ' }
+              .trim { it <= ' ' }
             if (mData.trim { it <= ' ' }.isEmpty()) {
               valueString.append(" $ANS_SEPERATER")
             } else {
               valueString.append(mData)
-                  .append(ANS_SEPERATER)
+                .append(ANS_SEPERATER)
             }
           }
           valueString = StringBuilder(
-              valueString.substring(0, valueString.length - ANS_SEPERATER.length)
+            valueString.substring(0, valueString.length - ANS_SEPERATER.length)
           )
           valueString.append(ANS_GROUP_SEPERATER)
         }
         valueString.substring(
-            0,
-            valueString.length - ANS_GROUP_SEPERATER.length
+          0,
+          valueString.length - ANS_GROUP_SEPERATER.length
         )
       } catch (eie: StringIndexOutOfBoundsException) {
         ""
@@ -420,20 +422,20 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     for (group in profileModel!!.profileQuestionGroup) {
       val groupName = group.groupName
       @SuppressLint("InflateParams") val groupLayout = requireActivity()
-          .layoutInflater
-          .inflate(R.layout.include_section, null) as ViewGroup
+        .layoutInflater
+        .inflate(R.layout.include_section, null) as ViewGroup
 
       val tvGroupName = groupLayout.findViewById<View>(R.id.tvSectionName) as TextView
       tvGroupName.text = groupName
 
       //question section start
       val llBasicProfileQuestionLayoutInner = groupLayout.findViewById<View>(
-          R.id.llSectionContent
+        R.id.llSectionContent
       ) as LinearLayout
 
       tvGroupName.setOnClickListener {
         toggleSectionExpansion(
-            llBasicProfileQuestionLayoutInner, tvGroupName
+          llBasicProfileQuestionLayoutInner, tvGroupName
         )
       }
 
@@ -442,11 +444,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
       var questionNo = 1
       for (question in group.profileQuestionList) {
         val padding = resources.getDimension(R.dimen._15sdp)
-            .toInt()
+          .toInt()
         val tvQuestion = TextView(activity).apply {
           text = question.questionText
           layoutParams = LinearLayout.LayoutParams(
-              LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
           )
           setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
           setPadding(padding, padding, padding, padding)
@@ -463,7 +465,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           tvQuestion.visibility = View.GONE
         }
         if (!question.profileOptionList
-                .isEmpty()
+            .isEmpty()
         ) {// && question.getProfileOptionList().size()<1
           when (question.controlType) {
             0 -> {
@@ -472,7 +474,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
               val llBasicProfileQuestionLayoutGroup = LinearLayout(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 orientation = LinearLayout.VERTICAL
                 setPadding(padding, padding, padding, padding)
@@ -482,7 +484,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               for (mOptions in question.profileOptionList) {
                 val tvHead = TextView(activity).apply {
                   layoutParams = LinearLayout.LayoutParams(
-                      LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
                   )
                   setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
                   setPadding(padding, 4, padding, 4)
@@ -492,7 +494,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                 val mEditTextOption = EditText(activity).apply {
                   layoutParams = LinearLayout.LayoutParams(
-                      LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
                   )
                   setBackgroundResource(R.drawable.textview_border)
                   tag = (question.profileParameterID.toString()
@@ -511,10 +513,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 formElementList.add(mEditTextOption)
               }
               llBasicProfileQuestionLayoutGroup.setBackgroundResource(
-                  R.drawable.profiling_question_background_group
+                R.drawable.profiling_question_background_group
               )
               llBasicProfileQuestionLayoutInner.addView(
-                  llBasicProfileQuestionLayoutGroup
+                llBasicProfileQuestionLayoutGroup
               )
               questionMap[question.profileParameterID!!.toString()] =
                 llBasicProfileQuestionLayoutGroup
@@ -522,12 +524,12 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             RADIO_BUTTON -> {
               val rbGroup = RadioGroup(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                  LinearLayout.LayoutParams.MATCH_PARENT,
+                  LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 setPadding(padding, padding, padding, padding)
                 setBackgroundResource(
-                    R.drawable.profiling_question_background_group
+                  R.drawable.profiling_question_background_group
                 )
                 orientation = RadioGroup.VERTICAL
               }
@@ -538,7 +540,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               var previousAction = ProfileOption()
               val extraFieldLayout = LinearLayout(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 orientation = LinearLayout.VERTICAL
                 setPadding(padding, padding, padding, padding)
@@ -550,11 +552,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               for (mOptions in question.profileOptionList) {
                 val rbOption = RadioButton(activity).apply {
                   layoutParams = LinearLayout.LayoutParams(
-                      LinearLayout.LayoutParams.MATCH_PARENT,
-                      LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                   )
                   val mPadding = resources.getDimension(R.dimen._8sdp)
-                      .toInt()
+                    .toInt()
                   setPadding(padding, mPadding, padding, mPadding)
                   textSize = resources.getDimension(R.dimen.txt_size_profile)
                   text = mOptions.questionSubText
@@ -567,7 +569,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                   when {
                     !CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo.equals(
-                        "Y", ignoreCase = true
+                      "Y", ignoreCase = true
                     ) -> setExtraView(mOptions, extraFieldLayout)
                     else -> {
                       extraFieldLayout.removeAllViews()
@@ -577,8 +579,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                   if (!CRMAppUtil.isBlank(mOptions.hideDepedentQuestion)
                   ) {
                     if (questionMap.containsKey(
-                            mOptions.hideDepedentQuestion
-                        )
+                        mOptions.hideDepedentQuestion
+                      )
                     ) {
                       //questionMap
                       val hideView = questionMap[mOptions.hideDepedentQuestion]
@@ -587,7 +589,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         hideView?.visibility = View.VISIBLE
                         hideViewHead?.visibility = View.VISIBLE
                       } else if (mOptions.isHide
-                              .equals("Y", ignoreCase = true)
+                          .equals("Y", ignoreCase = true)
                       ) {
                         if (hideView is RadioGroup) {
                           val grp = hideView as RadioGroup?
@@ -632,12 +634,12 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               for (mOptions in question.profileOptionList) {
                 val cbOption = CheckBox(activity).apply {
                   layoutParams = LinearLayout.LayoutParams(
-                      LinearLayout.LayoutParams.MATCH_PARENT,
-                      LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                   )
 
                   val mPadding = resources.getDimension(R.dimen._8sdp)
-                      .toInt()
+                    .toInt()
                   setPadding(mPadding, mPadding, mPadding, mPadding)
                   text = mOptions.questionSubText
                   textSize = resources.getDimension(R.dimen.txt_size_profile)
@@ -648,8 +650,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 formElementList.add(cbOption)
                 val extraFieldLayout = LinearLayout(activity).apply {
                   layoutParams = LinearLayout.LayoutParams(
-                      LinearLayout.LayoutParams.MATCH_PARENT,
-                      LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
                   )
                   orientation = LinearLayout.VERTICAL
                   setPadding(padding, padding, padding, padding)
@@ -665,7 +667,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                         when {
                           !CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo.equals(
-                              "Y", ignoreCase = true
+                            "Y", ignoreCase = true
                           ) -> setExtraView(mOptions, extraFieldLayout)
                           else -> {
                             extraFieldLayout.removeAllViews()
@@ -690,15 +692,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             }
             DROP_DOWN -> {
               val childValue = activity!!.layoutInflater
-                  .inflate(R.layout.include_spiner, null) as ViewGroup
+                .inflate(R.layout.include_spiner, null) as ViewGroup
               val tvHead = childValue.findViewById<View>(R.id.tvHead) as TextView
               val spSection = childValue.findViewById<View>(R.id.spSection) as Spinner
               tvHead.visibility = View.GONE
 
               spSection.tag = question.profileParameterID.toString() + "_" + "+" + "_SP"
               val arrAdap = ArrayAdapter(
-                  requireContext(), layout.simple_spinner_item,
-                  question.profileOptionList
+                requireContext(), layout.simple_spinner_item,
+                question.profileOptionList
               )
               arrAdap.setDropDownViewResource(R.layout.mdropdown)
 
@@ -709,8 +711,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
               val extraFieldLayout = LinearLayout(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                  LinearLayout.LayoutParams.MATCH_PARENT,
+                  LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 orientation = LinearLayout.VERTICAL
                 setPadding(padding, padding, padding, padding)
@@ -731,8 +733,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                   extraFieldLayout.removeAllViewsInLayout()
 
                   if (!CRMAppUtil.isBlank(poP.extraInfo) && poP.extraInfo.equals(
-                          "Y", ignoreCase = true
-                      )
+                      "Y", ignoreCase = true
+                    )
                   ) {
                     setExtraView(poP, extraFieldLayout)
                   } else {
@@ -793,17 +795,16 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     }
   }
 
-  override fun renderSubmitProfile(uiModel: UiModel<String>) {
+  override fun renderSubmitProfile(uiModel: UiModel<ProfilingResponseModel>) {
     toggleProgressBar(uiModel.inProgress)
-
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
 
     uiModel.onSuccess {
-      activity?.let { it1 ->
+      if (it.status) {
         alertDialog(
-            it1, 0,
+          requireContext(), 0,
           resources.getString(R.string.motilal_oswal),
           MOSLConstants.SET_USER_PROFILE, "OK", true
         ) { action, data1 ->
@@ -813,6 +814,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             )
           }
         }
+
       }
     }
   }
@@ -837,8 +839,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
           renderForm()
         } catch (e: Exception) {
           alertDialog(
-              requireContext(), 0, resources.getString(R.string.motilal_oswal),
-              SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null
+            requireContext(), 0, resources.getString(R.string.motilal_oswal),
+            SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null
           )
         }
       }

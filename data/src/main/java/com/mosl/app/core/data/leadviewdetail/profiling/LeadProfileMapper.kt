@@ -5,6 +5,8 @@ import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileSubParameter
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem
 import com.mosl.saathi.api.model.leadprofile.ProfileSubParameterListItem
@@ -16,18 +18,28 @@ fun List<LeadProfileItem>.transform(): List<LeadProfile> {
   }
 }
 
+fun SaathiCommonResponse<String>.responseTransform(): ProfilingResponseModel {
+  val profilingResponseModel = ProfilingResponseModel(
+    response = response,
+    message = message,
+    status = status
+  )
+
+  return profilingResponseModel
+}
+
 private fun LeadProfileItem.mapToLeadProfile(): LeadProfile {
 
   val profileParameterList = profileParameterList?.mapToProfileParameterList() ?: emptyList()
 
   return LeadProfile(
-      groupName = groupName,
-      inApproval = inApproval,
-      profileParameterGroupID = profileParameterGroupID,
-      businessUnitId = businessUnitId,
-      isAdminMode = isAdminMode,
-      profileParameterList = profileParameterList,
-      profileParameterId = profileParameterId
+    groupName = groupName,
+    inApproval = inApproval,
+    profileParameterGroupID = profileParameterGroupID,
+    businessUnitId = businessUnitId,
+    isAdminMode = isAdminMode,
+    profileParameterList = profileParameterList,
+    profileParameterId = profileParameterId
   )
 }
 
@@ -42,16 +54,16 @@ private fun ProfileParameterListItem.mapToProfileParameter(): ProfileParameter {
     profileSubParameterList?.mapToProfileSubParameterList() ?: emptyList()
 
   return ProfileParameter(
-      questionType = questionType,
-      selectedProfileSubParameterID = selectedProfileSubParameterID,
-      inApproval = inApproval,
-      profileSubParameterList = profileSubParameterList,
-      isDefaultHidden = isDefaultHidden,
-      profileParameterGroupID = profileParameterGroupID,
-      isAdminMode = isAdminMode,
-      controlType = controlType,
-      questionText = questionText,
-      profileParameterID = profileParameterID
+    questionType = questionType,
+    selectedProfileSubParameterID = selectedProfileSubParameterID,
+    inApproval = inApproval,
+    profileSubParameterList = profileSubParameterList,
+    isDefaultHidden = isDefaultHidden,
+    profileParameterGroupID = profileParameterGroupID,
+    isAdminMode = isAdminMode,
+    controlType = controlType,
+    questionText = questionText,
+    profileParameterID = profileParameterID
   )
 }
 
@@ -63,17 +75,17 @@ private fun List<ProfileSubParameterListItem>.mapToProfileSubParameterList(): Li
 
 private fun ProfileSubParameterListItem.mapToProfileSubParameter(): ProfileSubParameter {
   return ProfileSubParameter(
-      isHide = isHide,
-      questionSubText = questionSubText,
-      isSelected = isSelected,
-      extraInfo = extraInfo,
-      extraInfoFieldName = extraInfoFieldName,
-      extraInfoRowCount = extraInfoRowCount,
-      inApproval = inApproval,
-      profileSubParameterID = profileSubParameterID,
-      value = value,
-      hideDependentQuestion = hideDepedentQuestion,
-      isAdminMode = isAdminMode
+    isHide = isHide,
+    questionSubText = questionSubText,
+    isSelected = isSelected,
+    extraInfo = extraInfo,
+    extraInfoFieldName = extraInfoFieldName,
+    extraInfoRowCount = extraInfoRowCount,
+    inApproval = inApproval,
+    profileSubParameterID = profileSubParameterID,
+    value = value,
+    hideDependentQuestion = hideDepedentQuestion,
+    isAdminMode = isAdminMode
   )
 }
 
@@ -85,9 +97,9 @@ fun List<ProfileRequestData>.mapToSaveLeadProfileRequestList(): List<SaveLeadPro
 
 private fun ProfileRequestData.mapToSaveLeadProfileRequest(): SaveLeadProfileRequest {
   return SaveLeadProfileRequest(
-      profileParameterID = profileParameterID,
-      profileSubParameterID = profileSubParameterID,
-      leadID = leadID,
-      value = value
+    profileParameterID = profileParameterID,
+    profileSubParameterID = profileSubParameterID,
+    leadID = leadID,
+    value = value
   )
 }

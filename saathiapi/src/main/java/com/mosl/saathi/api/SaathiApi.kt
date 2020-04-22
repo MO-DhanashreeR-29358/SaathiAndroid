@@ -420,9 +420,14 @@ interface SaathiApi {
   fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
 
   @POST("Lead/SaveLeadProfileParameter")
-  fun postLeadProfile(
+  fun postLeadProfileOld(
     @Body request: List<SaveLeadProfileRequest>
   ): Observable<String>
+
+  @POST("Lead/SaveLeadProfileParameter")
+  fun postLeadProfile(
+    @Body request: List<SaveLeadProfileRequest>
+  ): Observable<SaathiCommonResponse<String>>
 
   //================= Pending For Approval ====================
 

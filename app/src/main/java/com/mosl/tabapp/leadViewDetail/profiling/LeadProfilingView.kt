@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfileUiEvent.SubmitProfileEvent
 import io.reactivex.Observable
 
@@ -19,5 +20,5 @@ interface LeadProfilingView : BaseView {
   fun renderCancelButtonClicked()
   fun getProfileRequestDataList(): List<ProfileRequestData>
   fun onSubmitProfileEventFired(): Observable<SubmitProfileEvent>
-  fun renderSubmitProfile(uiModel: UiModel<String>)
+  fun renderSubmitProfile(uiModel: UiModel<ProfilingResponseModel>)
 }
