@@ -67,7 +67,11 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
     val list: ArrayList<String> = ArrayList()
     list.add(values[0])
     for (i in 1 until values.size) {
-      if (values[i] != "null" && values[i] != "")
+      if (values[i] != "null" && values[i] != "" && !values[i].equals(
+          "UnMapped",
+          ignoreCase = true
+        )
+      )
         list.add(values[i].toConvertDecimals())
       else if (values[i] == "null")
         list.add(values[i].replace("null", ""))

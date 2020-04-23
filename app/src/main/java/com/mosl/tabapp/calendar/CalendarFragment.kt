@@ -137,13 +137,7 @@ class CalendarFragment : CommonFragment(), CalendarFragmentView, OnDateSelectedL
       if (it.isNotEmpty()) {
         Timber.d("Success")
         binding.tvNochart.visibility = View.GONE
-        for (item in it) {
-          section.setContent(
-            ItemCalendarFragment(
-              item
-            )
-          )
-        }
+        section.setContent(it.map { item -> ItemCalendarFragment(item) })
 
       } else {
         binding.tvNochart.visibility = View.VISIBLE
@@ -152,7 +146,8 @@ class CalendarFragment : CommonFragment(), CalendarFragmentView, OnDateSelectedL
   }
 
   companion object {
-    @SuppressLint("ConstantLocale") val FORMATTER = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    @SuppressLint("ConstantLocale") val FORMATTER =
+      SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     const val DATA_LIST = "dataList"
   }
 }
