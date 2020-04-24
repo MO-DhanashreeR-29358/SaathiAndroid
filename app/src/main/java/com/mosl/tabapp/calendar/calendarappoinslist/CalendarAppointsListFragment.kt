@@ -23,11 +23,11 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarUiEvent
 import com.mosl.tabapp.calendar.CalendarUiEvent.CallAPi
-import com.mosl.tabapp.calendar.calendarappoinslist.item.ItemCalendarAppointList
+import com.mosl.tabapp.calendar.item.ItemCalendarFragment
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.DatePickerNewBinding
+import com.mosl.tabapp.databinding.DatePickerBinding
 import com.mosl.tabapp.databinding.FragmentCalendarAppointsListBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -82,9 +82,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
 
     if (itemList.isNotEmpty()) {
       section.clearContent()
-      itemList.safeMap {
-        section.setContent(ItemCalendarAppointList(it))
-      }
+      section.setContent(itemList.safeMap { item -> ItemCalendarFragment(item) })
     } else {
       binding.tvNoChart.visibility = View.VISIBLE
     }
@@ -124,14 +122,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
       if (it.isNotEmpty()) {
         Timber.d("Success")
         binding.tvNoChart.visibility = View.GONE
-        for (item in it) {
-          section.setContent(
-            ItemCalendarAppointList(
-              item
-            )
-          )
-        }
-
+        section.setContent(it.map { item -> ItemCalendarFragment(item) })
       } else {
         binding.tvNoChart.visibility = View.VISIBLE
       }
@@ -147,7 +138,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
       val dialogBinding =
-        DatePickerNewBinding.bind(
+        DatePickerBinding.bind(
           layoutInflater.inflate(
             R.layout.date_picker,
             null
