@@ -23,7 +23,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.CalendarUiEvent
 import com.mosl.tabapp.calendar.CalendarUiEvent.CallAPi
-import com.mosl.tabapp.calendar.item.ItemCalendarFragment
+import com.mosl.tabapp.calendar.calendarappoinslist.item.ItemCalendarAppointList
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
@@ -82,7 +82,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
 
     if (itemList.isNotEmpty()) {
       section.clearContent()
-      section.setContent(itemList.safeMap { item -> ItemCalendarFragment(item) })
+      section.setContent(itemList.safeMap { item -> ItemCalendarAppointList(item) })
     } else {
       binding.tvNoChart.visibility = View.VISIBLE
     }
@@ -122,7 +122,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
       if (it.isNotEmpty()) {
         Timber.d("Success")
         binding.tvNoChart.visibility = View.GONE
-        section.setContent(it.map { item -> ItemCalendarFragment(item) })
+        section.setContent(it.map { item -> ItemCalendarAppointList(item) })
       } else {
         binding.tvNoChart.visibility = View.VISIBLE
       }
