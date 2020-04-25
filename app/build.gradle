@@ -98,7 +98,6 @@ android {
 
   buildTypes {
     release {
-      debuggable true
       minifyEnabled true
       shrinkResources true
       multiDexEnabled true
