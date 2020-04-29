@@ -68,10 +68,14 @@ class DashboardHierarchyReportFragment : CommonFragment(),
               "Client UCID", "CLIENT UCID",
               "Client ucid", hasMap = reportData.hasMap
             )
+            val empCode = getValue("flg_empcode", hasMap = reportData.hasMap)
+            val systemsName = getValue("WidgetSystemName", hasMap = reportData.hasMap)
+            val rmName = getValue("flt_Hierarchy_empCode", hasMap = reportData.hasMap)
+            val level = getValue("flg_Hierarchy", hasMap = reportData.hasMap)
+
             navigateEvent.onNext(
               CellEvent(
-                leadId
-                , UCID
+                leadId, UCID, empCode, level, systemsName, rmName
               )
             )
           }
@@ -115,10 +119,17 @@ class DashboardHierarchyReportFragment : CommonFragment(),
     return navigateEvent.ofType()
   }
 
+  override fun onFragmentReopened(args: Bundle) {
+    super.onFragmentReopened(args)
+    binding.txtLables.text = args.getString(LABEL)
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+
+  }
+
   companion object {
     const val LABEL = "Label"
     const val HIERARCHY_MAP = "HierarchyMap"
-    const val ADDITIONAL_MAP = "AdditionalMap"
   }
 
 }

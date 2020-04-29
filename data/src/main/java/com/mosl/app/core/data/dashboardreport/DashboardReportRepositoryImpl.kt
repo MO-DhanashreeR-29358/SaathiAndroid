@@ -64,17 +64,24 @@ class DashboardReportRepositoryImpl @Inject constructor(
         .map { it.label }
 
       val data: ArrayList<DashboardReportData> = ArrayList()
+      val headerData = mutableListOf<String>()
       for (i in 0 until jsonArray.length()) {
+        headerData.clear()
         val json = jsonArray.getJSONObject(i)
         val values: ArrayList<String> = ArrayList()
         val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
         headers.forEach { header ->
-          values.add(json.get(header).toString())
+          if (!header.equals("WidgetSystemName", ignoreCase = true) &&
+            !header.equals("flg_empcode", ignoreCase = true)
+          ) {
+            headerData.add(header)
+            values.add(json.get(header).toString())
+          }
           hasMap[header] = json.get(header).toString()
         }
-        data.add(DashboardReportData(setData(values), headers, hasMap))
+        data.add(DashboardReportData(setData(values), headerData, hasMap))
       }
-      return DashboardReportCombo(headers, data = data)
+      return DashboardReportCombo(headerData, data = data)
     } else {
       return DashboardReportCombo(emptyList(), data = emptyList())
     }

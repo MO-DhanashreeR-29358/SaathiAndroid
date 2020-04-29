@@ -14,17 +14,14 @@ class DashboardHierarchyReportModule {
   @Provides
   internal fun provideDashboardHierarchyReport(fragment: DashboardHierarchyReportFragment): DashboardHierarchyReportData {
     val hierarchyMap: Serializable?
-    val additionalParameterMap: Serializable?
     fragment.arguments?.apply {
       hierarchyMap = this.getSerializable(DashboardHierarchyReportFragment.HIERARCHY_MAP)
-      additionalParameterMap = this.getSerializable(DashboardHierarchyReportFragment.ADDITIONAL_MAP)
       return DashboardHierarchyReportData(
         hierarchyMap as Map<String, String>,
-        additionalParameterMap as Map<String, String>,
         this.getString(DashboardHierarchyReportFragment.LABEL)
       )
     }
-    return DashboardHierarchyReportData(emptyMap<String, String>(), emptyMap<String, String>(), "")
+    return DashboardHierarchyReportData(emptyMap<String, String>(), "")
   }
 
 }

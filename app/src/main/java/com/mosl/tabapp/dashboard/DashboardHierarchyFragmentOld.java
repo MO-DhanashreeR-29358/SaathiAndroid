@@ -133,7 +133,7 @@ public class DashboardHierarchyFragmentOld extends CommonFragment {
 					for (Object columnName : objDetail.keySet()) {
 						columns.add(columnName.toString());
 						if (columnName.toString().equalsIgnoreCase("WidgetSystemName") ||
-							columnName.toString().equalsIgnoreCase("flg_empcode")) {
+								columnName.toString().equalsIgnoreCase("flg_empcode")) {
 						} else {
 							columnsHeader.add(getRefreshColumnName(columnName.toString()));
 						}
