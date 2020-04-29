@@ -14,7 +14,7 @@ import com.mosl.tabapp.calendar.CalendarModule
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
+import com.mosl.tabapp.dashboard.DashboardHierarchyFragmentOld
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightModule
@@ -26,6 +26,8 @@ import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment
 import com.mosl.tabapp.dashboard.leads.report.LeadsReportModule
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityModule
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
@@ -123,7 +125,10 @@ interface FragmentProvider {
   fun provideMappingHistoryFragment(): MappingHistoryFragment
 
   @ContributesAndroidInjector
-  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
+  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragmentOld
+
+  @ContributesAndroidInjector(modules = [DashboardHierarchyReportModule::class])
+  fun provideDashboardHierarchyReportFragmnet(): DashboardHierarchyReportFragment
 
   @ContributesAndroidInjector
   fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
