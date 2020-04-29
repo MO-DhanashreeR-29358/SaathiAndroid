@@ -18,6 +18,8 @@ import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightModule
+import com.mosl.tabapp.dashboard.base.DashboardFragmentNew
+import com.mosl.tabapp.dashboard.base.DashboardModule
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.clients.ClientsModule
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
@@ -179,4 +181,7 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [ActionableInsightModule::class])
   fun provideActionableInsightsFragmentfactory(): ActionableInsightDialogFragment
+
+  @ContributesAndroidInjector(modules = [DashboardModule::class])
+  fun provideNewDashboardFragmentFactory(): DashboardFragmentNew
 }
