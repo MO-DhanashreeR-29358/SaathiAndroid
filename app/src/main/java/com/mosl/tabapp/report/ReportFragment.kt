@@ -26,6 +26,17 @@ import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
+import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_ucid
+import com.mosl.tabapp.constants.MoslConstant.EMPLOYEE_CODE
+import com.mosl.tabapp.constants.MoslConstant.Employee_Code
+import com.mosl.tabapp.constants.MoslConstant.LEADID_CLIENTCODE
+import com.mosl.tabapp.constants.MoslConstant.LEAD_ID
+import com.mosl.tabapp.constants.MoslConstant.LeadId
+import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
+import com.mosl.tabapp.constants.MoslConstant.Lead_Id
+import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragReportBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -95,15 +106,18 @@ class ReportFragment : CommonFragment(),
           viewProvider.rowClickListener = { row, view ->
             val reportData = tableRowAdapter.getItem(row).data
             val leadId = getValue(
-              "LEAD ID", "LeadId", "Lead_Id",
-              "LeadId ClientCode", "LEADID/CLIENTCODE", hasMap = reportData.hasMap
+              LEAD_ID,
+              LeadId,
+              Lead_Id,
+              LeadId_ClientCode,
+              LEADID_CLIENTCODE,
+              hasMap = reportData.hasMap
             )
             val UCID = getValue(
-              "Client UCID", "CLIENT UCID",
-              "Client ucid", hasMap = reportData.hasMap
+              Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
             )
             val employeeCode = getValue(
-              "EMPLOYEE CODE", "EMPLOYEE_CODE",
+              Employee_Code, EMPLOYEE_CODE,
               hasMap = reportData.hasMap
             )
             navigateEvent.onNext(
@@ -122,10 +136,10 @@ class ReportFragment : CommonFragment(),
   }
 
   private fun setUpDate() {
-    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth("yyyy-MM-dd")
-    fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-    mainToDate = CRMAppUtil.getDate(Date(), "yyyy-MM-dd")
-    toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
+    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(yyyy_MM_dd)
+    fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
+    mainToDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
+    toDate = CRMAppUtil.getDate(mainToDate, yyyy_MM_dd)
 
     binding.tvStartDate.setText(
       AppDateFormats.DF_JSON_DATE6.format(fromDat)
@@ -187,8 +201,8 @@ class ReportFragment : CommonFragment(),
 
     close.setOnClickListener { v: View? -> dialog.dismiss() }
     btnSubmit.setOnClickListener { v: View? ->
-      fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
-      toDate = CRMAppUtil.getDate(mainToDate, "yyyy-MM-dd")
+      fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
+      toDate = CRMAppUtil.getDate(mainToDate, yyyy_MM_dd)
       if (fromDat.after(toDate)) {
         MSFDialog.alertDialog(
           requireContext(), 0, "Motilal Oswal", MOSLConstants.INVALID_DATE_RANGE,
@@ -196,11 +210,11 @@ class ReportFragment : CommonFragment(),
         )
       } else {
         mainFromDate.apply {
-          fromDat = CRMAppUtil.getDate(this, "yyyy-MM-dd")
+          fromDat = CRMAppUtil.getDate(this, yyyy_MM_dd)
           binding.tvStartDate.setText(AppDateFormats.DF_JSON_DATE6.format(fromDat))
         }
         mainToDate.apply {
-          toDate = CRMAppUtil.getDate(this, "yyyy-MM-dd")
+          toDate = CRMAppUtil.getDate(this, yyyy_MM_dd)
           binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
         }
         datePickerEvent.onNext(0)
@@ -260,7 +274,7 @@ class ReportFragment : CommonFragment(),
     return CRMAppUtil.getDateFromString(
       binding.tvStartDate.text.toString(),
       "dd-MMM-yyyy",
-      "yyyy-MM-dd"
+      yyyy_MM_dd
     )
   }
 
@@ -268,7 +282,7 @@ class ReportFragment : CommonFragment(),
     return CRMAppUtil.getDateFromString(
       binding.tvEndDate.text.toString(),
       "dd-MMM-yyyy",
-      "yyyy-MM-dd"
+      yyyy_MM_dd
     )
   }
 

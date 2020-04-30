@@ -10,9 +10,21 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_ucid
+import com.mosl.tabapp.constants.MoslConstant.LEADID_CLIENTCODE
+import com.mosl.tabapp.constants.MoslConstant.LEAD_ID
+import com.mosl.tabapp.constants.MoslConstant.LeadId
+import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
+import com.mosl.tabapp.constants.MoslConstant.Lead_Id
+import com.mosl.tabapp.constants.MoslConstant.UCID
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FlgEmpcode
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.Flg_Hierarchy
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
 import com.mosl.tabapp.dashboard.report.DashboardReportTableMapper
 import com.mosl.tabapp.dashboard.report.DashboardReportTableRow
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent
@@ -64,28 +76,27 @@ class DashboardHierarchyReportFragment : CommonFragment(),
           viewProvider.rowClickListener = { row, view ->
             val reportData = tableRowAdapter.getItem(row).data
             val leadId = getValue(
-              "LEAD ID", "LeadId", "Lead_Id",
-              "LeadId ClientCode", "LEADID/CLIENTCODE", hasMap = reportData.hasMap
+              LEAD_ID, LeadId, Lead_Id, LeadId_ClientCode, LEADID_CLIENTCODE,
+              hasMap = reportData.hasMap
             )
-            val UCID = getValue(
-              "Client UCID", "CLIENT UCID",
-              "Client ucid", hasMap = reportData.hasMap
+            val ucid = getValue(
+              UCID, Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
             )
-            val empCode = getValue("flg_empcode", hasMap = reportData.hasMap)
-            val systemsName = getValue("WidgetSystemName", hasMap = reportData.hasMap)
-            val rmName = getValue("flt_Hierarchy_empCode", hasMap = reportData.hasMap)
-            val level = getValue("flg_Hierarchy", hasMap = reportData.hasMap)
+            val empCode = getValue(FlgEmpcode, hasMap = reportData.hasMap)
+            val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
+            val rmName = reportData.hasMap.get(FltHierarchyEmpCode) ?: ""
+            val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
 
             navigateEvent.onNext(
               CellEvent(
-                leadId, UCID, empCode, level, systemsName, rmName
+                leadId, ucid, empCode, level, systemsName, rmName
               )
             )
           }
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
-    systemsName = arguments?.getString("WidgetSystemName") ?: ""
+    systemsName = arguments?.getString(WidgetSystemName) ?: ""
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
@@ -129,7 +140,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
 
   override fun onFragmentReopened(args: Bundle) {
     super.onFragmentReopened(args)
-    systemsName = args.getString(WIDGETSYSTEMNAME) ?: ""
+    systemsName = args.getString(WidgetSystemName) ?: ""
     binding.txtLables.text = args.getString(LABEL)
     dataActionSubject.onNext(DataAction.Fetch)
   }

@@ -35,7 +35,7 @@ class DashboardReportPresenter @Inject constructor(
     }.addTo(disposable)
 
     view.onNavigateEvent().subscribe {
-      navigationFlow(it.leadId, it.UCID, it.employeeCode, it.level, it.rmName, it.systemsName)
+      navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
     }.addTo(disposable)
   }
 
@@ -53,13 +53,20 @@ class DashboardReportPresenter @Inject constructor(
     leadID: String, ucid: String, empCode: String,
     level: String, rmName: String, systemsName: String
   ) {
-    val args = Bundle()
-    val navigationConstants: Int
-    if (rmName.equals("0")) {
-      navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+    if (!leadID.equals("0") || !ucid.equals("0")) {
+      val args = Bundle()
+      val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, ucid)
-    } else {
+      navigator.openPage(
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
+      )
+    } else if (rmName.isNotEmpty()) {
+      val args = Bundle()
+      val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
       val additionalMap = data.additionalMap as HashMap<String, String>
       additionalMap[FltLevel] = level
       additionalMap[FltHierarchyEmpCode] = empCode
@@ -68,24 +75,26 @@ class DashboardReportPresenter @Inject constructor(
         additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
-      args.putString(WIDGETSYSTEMNAME, systemsName)
-      navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
+      args.putString(WidgetSystemName, systemsName)
+      navigator.openPage(
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
+      )
     }
-    navigator.openPage(
-      navigationConstants,
-      args,
-      addToStack = true,
-      forceReload = false
-    )
+
   }
 
   companion object {
     const val LABEL = "Label"
-    const val WIDGETSYSTEMNAME = "WidgetSystemName"
+    const val WidgetSystemName = "WidgetSystemName"
     const val ADDITIONALPARAMETERS = "AdditionalParameters"
     const val PageSize = "PageSize"
     const val Page = "Page"
     const val FltLevel = "flt_level"
+    const val Flg_Hierarchy = "flg_Hierarchy"
+    const val FlgEmpcode = "flg_empcode"
     const val FltHierarchyEmpCode = "flt_Hierarchy_empCode"
     const val DASHBOARD_REPORT_PAGE_SIZE = "100"
     const val PAGE = "1"

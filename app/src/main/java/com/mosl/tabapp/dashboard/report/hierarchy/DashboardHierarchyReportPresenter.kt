@@ -11,7 +11,7 @@ import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHi
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltLevel
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
@@ -37,7 +37,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
       .addTo(disposable)
 
     view.onNavigateEvent().subscribe {
-      navigationFlow(it.leadId, it.UCID, it.employeeCode, it.level, it.rmName, it.systemsName)
+      navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
     }.addTo(disposable)
   }
 
@@ -52,16 +52,23 @@ class DashboardHierarchyReportPresenter @Inject constructor(
   }
 
   private fun navigationFlow(
-    leadID: String, UCID: String, empCode: String,
+    leadID: String, ucid: String, empCode: String,
     level: String, rmName: String, systemsName: String
   ) {
-    val args = Bundle()
-    var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-    if (rmName.equals("0")) {
-      navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+    if (!leadID.equals("0") || !ucid.equals("0")) {
+      val navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+      val args = Bundle()
       args.putString(MOSLConstants.LEAD_ID, leadID)
-      args.putString(MOSLConstants.UCID, UCID)
-    } else {
+      args.putString(MOSLConstants.UCID, ucid)
+      navigator.openPage(
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
+      )
+    } else if (rmName.isNotEmpty()) {
+      val navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
+      val args = Bundle()
       val additionalMap = data.additionalParametersMap as HashMap<String, String>
       additionalMap[FltLevel] = level
       additionalMap[FltHierarchyEmpCode] = empCode
@@ -70,15 +77,14 @@ class DashboardHierarchyReportPresenter @Inject constructor(
         additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
-      args.putString(WIDGETSYSTEMNAME, systemsName)
-      navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
+      args.putString(WidgetSystemName, systemsName)
+      navigator.openPage(
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
+      )
     }
-    navigator.openPage(
-      navigationConstants,
-      args,
-      addToStack = true,
-      forceReload = false
-    )
   }
 
 }

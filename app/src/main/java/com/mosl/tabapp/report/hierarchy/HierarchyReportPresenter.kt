@@ -18,16 +18,16 @@ class HierarchyReportPresenter @Inject constructor(
 ) : BasePresenter<HierarchyReportView>(view) {
   override fun start() {
     Observable.merge(
-        onFetchCalled(), onRetryCalled()
-      ).switchMap {
-        repository.getDashboardData(getWidgetRequest())
-          .compose(applyUiModel())
-      }
+      onFetchCalled(), onRetryCalled()
+    ).switchMap {
+      repository.getDashboardData(getWidgetRequest())
+        .compose(applyUiModel())
+    }
       .subscribe(view::renderData)
       .addTo(disposable)
 
     view.onNavigateEvent().subscribe {
-      navigationFlow(it.leadId, it.UCID)
+      navigationFlow(it.leadId, it.UCID, it.employeeCode)
     }.addTo(disposable)
   }
 
@@ -49,12 +49,22 @@ class HierarchyReportPresenter @Inject constructor(
     )
   }
 
-  private fun navigationFlow(leadID: String, UCID: String) {
+  private fun navigationFlow(leadID: String, UCID: String, employeeCode: String) {
     val args = Bundle()
-    args.putString(MOSLConstants.LEAD_ID, leadID)
-    args.putString(MOSLConstants.UCID, UCID)
+    var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+    if (employeeCode.equals("0")) {
+      navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+      args.putString(MOSLConstants.LEAD_ID, leadID)
+      args.putString(MOSLConstants.UCID, UCID)
+    } else {
+      val additionalMap = view.getAdditionalParameterMap()
+      additionalMap[EmployeeCode] = employeeCode
+      args.putString(MOSLConstants.STRING_TITLE, view.titleName())
+      args.putSerializable(MOSLConstants.STRING_MAP, additionalMap)
+      navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT
+    }
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER,
+      navigationConstants,
       args,
       addToStack = true,
       forceReload = false

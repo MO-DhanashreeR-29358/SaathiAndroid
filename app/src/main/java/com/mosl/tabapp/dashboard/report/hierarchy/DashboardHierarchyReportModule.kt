@@ -1,6 +1,7 @@
 package com.mosl.tabapp.dashboard.report.hierarchy
 
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
 import dagger.Module
 import dagger.Provides
 import java.io.Serializable
@@ -20,7 +21,7 @@ class DashboardHierarchyReportModule {
       return DashboardHierarchyReportData(
         additionalParametersMap as Map<String, String>,
         this.getString(DashboardReportPresenter.LABEL),
-        this.getString("WidgetSystemName")
+        this.getString(WidgetSystemName)
       )
     }
     return DashboardHierarchyReportData(emptyMap<String, String>(), "", "")
