@@ -301,7 +301,6 @@ class ReportFragment : CommonFragment(),
   override fun onFragmentReopened(args: Bundle) {
     super.onFragmentReopened(args)
     binding.txtLables.text = args.getString(MOSLConstants.NAME)
-    presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
     datePickerEvent.onNext(0)
 

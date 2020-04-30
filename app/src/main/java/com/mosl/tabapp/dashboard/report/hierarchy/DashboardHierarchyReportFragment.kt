@@ -13,6 +13,7 @@ import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportTableMapper
 import com.mosl.tabapp.dashboard.report.DashboardReportTableRow
+import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
 import com.mosl.tabapp.databinding.FragHierarchyReportBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -35,8 +36,8 @@ class DashboardHierarchyReportFragment : CommonFragment(),
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<DashboardReportTableRow>
-  private val navigateEvent = PublishSubject.create<CellEvent>()
-
+  private val navigateEvent = PublishSubject.create<DashboardReportUIEvent>()
+  private lateinit var systemsName: String
   override fun getLayout(): Int {
     return R.layout.frag_hierarchy_report
   }
@@ -82,6 +83,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
+    systemsName = arguments?.getString("WidgetSystemName") ?: ""
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
@@ -119,12 +121,15 @@ class DashboardHierarchyReportFragment : CommonFragment(),
     return navigateEvent.ofType()
   }
 
+  override fun getWidgetSystemsName(): String {
+    return systemsName
+  }
+
   override fun onFragmentReopened(args: Bundle) {
     super.onFragmentReopened(args)
+    systemsName = args.getString("WidgetSystemName") ?: ""
     binding.txtLables.text = args.getString(LABEL)
-    presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
-
   }
 
   companion object {

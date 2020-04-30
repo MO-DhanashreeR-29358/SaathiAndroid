@@ -11,7 +11,6 @@ import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHi
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltLevel
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
@@ -28,7 +27,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
   override fun start() {
     Observable.merge(
       onFetchCalled(), onRetryCalled()
-    ).map { getWidgetRequest() }
+    ).map { getWidgetRequest(view.getWidgetSystemsName()) }
       .switchMap {
         repository.getDashboardData(it)
           .compose(applyUiModel())
@@ -41,11 +40,11 @@ class DashboardHierarchyReportPresenter @Inject constructor(
     }.addTo(disposable)
   }
 
-  private fun getWidgetRequest(): DashboardReportRequest {
+  private fun getWidgetRequest(systemsName: String): DashboardReportRequest {
     return DashboardReportRequest(
       page = PAGE,
       pageSize = DASHBOARD_REPORT_PAGE_SIZE,
-      widgetSystemName = data.systemsName,
+      widgetSystemName = systemsName,
       addtionalParameters = data.additionalParametersMap
 
     )
@@ -70,7 +69,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
         additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
-      args.putString(WIDGETSYSTEMNAME, systemsName)
+      args.putString("WidgetSystemName", systemsName)
       navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
     }
     navigator.openPage(

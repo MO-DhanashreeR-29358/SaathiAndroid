@@ -10,5 +10,6 @@ interface DashboardHierarchyReportView : BaseView {
 
   fun onNavigateEvent(): Observable<CellEvent>
 
+  fun getWidgetSystemsName(): String
   fun renderData(uiModel: UiModel<DashboardReportCombo>)
 }

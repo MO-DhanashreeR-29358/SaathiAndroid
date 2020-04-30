@@ -20,7 +20,7 @@ class DashboardHierarchyReportModule {
       return DashboardHierarchyReportData(
         additionalParametersMap as Map<String, String>,
         this.getString(DashboardReportPresenter.LABEL),
-        this.getString(DashboardReportPresenter.WIDGETSYSTEMNAME)
+        this.getString("WidgetSystemName")
       )
     }
     return DashboardHierarchyReportData(emptyMap<String, String>(), "", "")
