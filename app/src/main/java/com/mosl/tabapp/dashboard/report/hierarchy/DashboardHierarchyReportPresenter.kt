@@ -11,6 +11,7 @@ import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHi
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltLevel
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
@@ -69,7 +70,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
         additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
-      args.putString("WidgetSystemName", systemsName)
+      args.putString(WIDGETSYSTEMNAME, systemsName)
       navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
     }
     navigator.openPage(

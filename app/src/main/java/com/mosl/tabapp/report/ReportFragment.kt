@@ -63,6 +63,8 @@ class ReportFragment : CommonFragment(),
 
   lateinit var fromDat: Date
   lateinit var toDate: Date
+  lateinit var systemsName: String
+  lateinit var title: String
   override fun getLayout(): Int {
     return layout.frag_report
   }
@@ -114,6 +116,8 @@ class ReportFragment : CommonFragment(),
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
+    systemsName = arguments?.getString(SYSTEM_NAME) ?: ""
+    title = arguments?.getString(NAME) ?: ""
 
   }
 
@@ -245,11 +249,11 @@ class ReportFragment : CommonFragment(),
   }
 
   override fun widgetSystemsName(): String? {
-    return arguments?.getString(SYSTEM_NAME)
+    return systemsName
   }
 
   override fun titleName(): String? {
-    return arguments?.getString(NAME)
+    return title
   }
 
   override fun fromDate(): String {
@@ -277,11 +281,8 @@ class ReportFragment : CommonFragment(),
   }
 
   override fun renderBranchFilter(uiModel: UiModel<List<AssignedLeadReportModel>>) {
-    toggleProgress(uiModel.inProgress)
-
     uiModel.onFailure { error ->
       showOnFailurePopup(error)
-
     }
 
     uiModel.onSuccess {
@@ -300,6 +301,8 @@ class ReportFragment : CommonFragment(),
 
   override fun onFragmentReopened(args: Bundle) {
     super.onFragmentReopened(args)
+    title = args.getString(NAME) ?: ""
+    systemsName = args.getString(SYSTEM_NAME) ?: ""
     binding.txtLables.text = args.getString(MOSLConstants.NAME)
     dataActionSubject.onNext(DataAction.Fetch)
     datePickerEvent.onNext(0)

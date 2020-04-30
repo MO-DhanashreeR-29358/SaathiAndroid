@@ -11,6 +11,8 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
 import com.mosl.tabapp.dashboard.report.DashboardReportTableMapper
 import com.mosl.tabapp.dashboard.report.DashboardReportTableRow
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent
@@ -127,13 +129,9 @@ class DashboardHierarchyReportFragment : CommonFragment(),
 
   override fun onFragmentReopened(args: Bundle) {
     super.onFragmentReopened(args)
-    systemsName = args.getString("WidgetSystemName") ?: ""
+    systemsName = args.getString(WIDGETSYSTEMNAME) ?: ""
     binding.txtLables.text = args.getString(LABEL)
     dataActionSubject.onNext(DataAction.Fetch)
-  }
-
-  companion object {
-    const val LABEL = "Label"
   }
 
 }
