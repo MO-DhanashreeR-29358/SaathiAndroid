@@ -1,9 +1,9 @@
 package com.mosl.tabapp.dashboard.report
 
-import com.mosl.tabapp.dashboard.report.DashboardReportFragment.Companion.LABEL
-import com.mosl.tabapp.dashboard.report.DashboardReportFragment.Companion.MAP
-import com.mosl.tabapp.dashboard.report.DashboardReportFragment.Companion.SYSTEM_NAME
-import com.mosl.tabapp.dashboard.report.DashboardReportFragment.Companion.WIDGETNAME
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.MAP
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.SYSTEM_NAME
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETNAME
 import dagger.Module
 import dagger.Provides
 import java.io.Serializable

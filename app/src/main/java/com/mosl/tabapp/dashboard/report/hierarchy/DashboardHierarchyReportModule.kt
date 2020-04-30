@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard.report.hierarchy
 
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
 import dagger.Module
 import dagger.Provides
 import java.io.Serializable
@@ -13,15 +14,16 @@ class DashboardHierarchyReportModule {
 
   @Provides
   internal fun provideDashboardHierarchyReport(fragment: DashboardHierarchyReportFragment): DashboardHierarchyReportData {
-    val hierarchyMap: Serializable?
+    val additionalParametersMap: Serializable?
     fragment.arguments?.apply {
-      hierarchyMap = this.getSerializable(DashboardHierarchyReportFragment.HIERARCHY_MAP)
+      additionalParametersMap = this.getSerializable(DashboardReportPresenter.ADDITIONALPARAMETERS)
       return DashboardHierarchyReportData(
-        hierarchyMap as Map<String, String>,
-        this.getString(DashboardHierarchyReportFragment.LABEL)
+        additionalParametersMap as Map<String, String>,
+        this.getString(DashboardReportPresenter.LABEL),
+        this.getString(DashboardReportPresenter.WIDGETSYSTEMNAME)
       )
     }
-    return DashboardHierarchyReportData(emptyMap<String, String>(), "")
+    return DashboardHierarchyReportData(emptyMap<String, String>(), "", "")
   }
 
 }

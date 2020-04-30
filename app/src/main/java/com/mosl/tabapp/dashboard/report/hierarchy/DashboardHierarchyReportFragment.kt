@@ -129,7 +129,6 @@ class DashboardHierarchyReportFragment : CommonFragment(),
 
   companion object {
     const val LABEL = "Label"
-    const val HIERARCHY_MAP = "HierarchyMap"
   }
 
 }

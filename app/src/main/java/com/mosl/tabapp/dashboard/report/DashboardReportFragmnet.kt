@@ -130,12 +130,5 @@ class DashboardReportFragment : CommonFragment(),
 
   }
 
-  companion object {
-    const val LABEL = "Label"
-    const val HIERARCHY_MAP = "HierarchyMap"
-    const val WIDGETNAME = "Widget name"
-    const val SYSTEM_NAME = "system_name"
-    const val MAP = "map"
-  }
 
 }

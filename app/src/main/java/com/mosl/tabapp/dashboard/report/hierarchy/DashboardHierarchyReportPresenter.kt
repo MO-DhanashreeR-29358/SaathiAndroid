@@ -5,8 +5,13 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.ADDITIONALPARAMETERS
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.DASHBOARD_REPORT_PAGE_SIZE
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltLevel
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.LABEL
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WIDGETSYSTEMNAME
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
@@ -40,8 +45,8 @@ class DashboardHierarchyReportPresenter @Inject constructor(
     return DashboardReportRequest(
       page = PAGE,
       pageSize = DASHBOARD_REPORT_PAGE_SIZE,
-      widgetSystemName = data.hierarchyMap.get(WidgetSystemName),
-      addtionalParameters = data.hierarchyMap.get(AddtionalParameters) as Map<String, String>
+      widgetSystemName = data.systemsName,
+      addtionalParameters = data.additionalParametersMap
 
     )
   }
@@ -57,17 +62,15 @@ class DashboardHierarchyReportPresenter @Inject constructor(
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, UCID)
     } else {
-      val hierarchyMap = data.hierarchyMap as HashMap<String, Any>
-      val additionalMap = data.hierarchyMap.get(AddtionalParameters) as HashMap<String, String>
+      val additionalMap = data.additionalParametersMap as HashMap<String, String>
       additionalMap[FltLevel] = level
       additionalMap[FltHierarchyEmpCode] = empCode
-      hierarchyMap[WidgetSystemName] = systemsName
-      hierarchyMap[AddtionalParameters] = additionalMap
       args.putSerializable(
-        MOSLConstants.HIERARCHY_MAP,
-        hierarchyMap as Serializable
+        ADDITIONALPARAMETERS,
+        additionalMap as Serializable
       )
-      args.putString(MOSLConstants.LABEL, data.lable)
+      args.putString(LABEL, data.label)
+      args.putString(WIDGETSYSTEMNAME, systemsName)
       navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
     }
     navigator.openPage(
@@ -78,13 +81,4 @@ class DashboardHierarchyReportPresenter @Inject constructor(
     )
   }
 
-  companion object {
-    const val WidgetSystemName = "WidgetSystemName"
-    const val AddtionalParameters = "AddtionalParameters"
-    const val PageSize = "PageSize"
-    const val Page = "Page"
-    const val FltLevel = "flt_level"
-    const val FltHierarchyEmpCode = "flt_Hierarchy_empCode"
-
-  }
 }
