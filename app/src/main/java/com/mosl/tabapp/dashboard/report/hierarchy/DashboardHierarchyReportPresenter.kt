@@ -5,6 +5,8 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.DASHBOARD_REPORT_PAGE_SIZE
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
@@ -21,10 +23,11 @@ class DashboardHierarchyReportPresenter @Inject constructor(
   override fun start() {
     Observable.merge(
       onFetchCalled(), onRetryCalled()
-    ).switchMap {
-      repository.getDashboardData(getWidgetRequest())
-        .compose(applyUiModel())
-    }
+    ).map { getWidgetRequest() }
+      .switchMap {
+        repository.getDashboardData(it)
+          .compose(applyUiModel())
+      }
       .subscribe(view::renderData)
       .addTo(disposable)
 
@@ -35,8 +38,8 @@ class DashboardHierarchyReportPresenter @Inject constructor(
 
   private fun getWidgetRequest(): DashboardReportRequest {
     return DashboardReportRequest(
-      page = data.hierarchyMap.get(Page),
-      pageSize = data.hierarchyMap.get(PageSize),
+      page = PAGE,
+      pageSize = DASHBOARD_REPORT_PAGE_SIZE,
       widgetSystemName = data.hierarchyMap.get(WidgetSystemName),
       addtionalParameters = data.hierarchyMap.get(AddtionalParameters) as Map<String, String>
 
