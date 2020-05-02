@@ -34,6 +34,18 @@ class DashboardReportPresenter @Inject constructor(
       view.renderLabel(it)
     }.addTo(disposable)
 
+    Observable.just(data.isDateFilter).subscribeOn(Schedulers.io()).subscribe {
+      view.renderDatePicker(it)
+    }.addTo(disposable)
+
+    Observable.just(data.periodFilter).subscribeOn(Schedulers.io()).subscribe {
+      view.renderPeriodFilter(it)
+    }.addTo(disposable)
+
+    Observable.just(data.typeFilter).subscribeOn(Schedulers.io()).subscribe {
+      view.renderTypeFilter(it)
+    }.addTo(disposable)
+
     view.onNavigateEvent().subscribe {
       navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
     }.addTo(disposable)
@@ -101,6 +113,9 @@ class DashboardReportPresenter @Inject constructor(
     const val WIDGETNAME = "Widget name"
     const val SYSTEM_NAME = "system_name"
     const val MAP = "map"
+    const val FILTER_LIST = "filter_list"
+    const val SPINNER_LIST = "spinner_list"
+    const val FLT_DATE = "flt_date"
 
   }
 }

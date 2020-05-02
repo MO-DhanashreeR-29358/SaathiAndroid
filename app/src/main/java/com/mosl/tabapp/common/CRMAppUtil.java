@@ -1,7 +1,6 @@
 package com.mosl.tabapp.common;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -13,12 +12,10 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.Formatter;
-import android.util.Base64;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -43,59 +40,7 @@ import static com.mosl.tabapp.constants.MOSLConstants.FILE_UPLOAD_SIZE_LIMT;
  * Created by Pramod on 20-01-2016.
  */
 public class CRMAppUtil {
-  /**
-   * input filter which will stop special character
-   */
-  public static final InputFilter filter = new InputFilter() {
-    @Override
-    public CharSequence filter(CharSequence source, int start, int end,
-        Spanned dest, int dstart, int dend) {
-      for (int i = start; i < end; i++) {
-        if (!Character.isLetterOrDigit(source.charAt(i)) || (source.charAt(i) == ' ')) {
-          return "";
-        }
-      }
-      return null;
-    }
-  };
-  /**
-   * input filter which will stop special character
-   */
-  public static final InputFilter filterOnlyAlphabet = new InputFilter() {
-    @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-        int dend) {
 
-      boolean keepOriginal = true;
-      StringBuilder sb = new StringBuilder(end - start);
-      for (int i = start; i < end; i++) {
-        char c = source.charAt(i);
-        if (isCharAllowed(c)) // put your condition here
-        {
-          sb.append(c);
-        } else {
-          keepOriginal = false;
-        }
-      }
-      if (keepOriginal) {
-        return null;
-      } else {
-        if (source instanceof Spanned) {
-          SpannableString sp = new SpannableString(sb);
-          TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, sp, 0);
-          return sp;
-        } else {
-          return sb;
-        }
-      }
-    }
-
-    private boolean isCharAllowed(char c) {
-      Pattern ps = Pattern.compile("^[a-zA-Z ]+$");
-      Matcher ms = ps.matcher(String.valueOf(c));
-      return ms.matches();
-    }
-  };
   public static final InputFilter filterOnlyAlphabetAndNumbers = new InputFilter() {
     @Override
     public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
@@ -131,45 +76,6 @@ public class CRMAppUtil {
       return ms.matches();
     }
   };
-  public static final InputFilter filterOnlyAlphabetAndNumbersAnsAllowedChar = new InputFilter() {
-    @Override
-    public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
-        int dend) {
-
-      boolean keepOriginal = true;
-      StringBuilder sb = new StringBuilder(end - start);
-      for (int i = start; i < end; i++) {
-        char c = source.charAt(i);
-        if (isCharAllowed(c)) // put your condition here
-        {
-          sb.append(c);
-        } else {
-          keepOriginal = false;
-        }
-      }
-      if (keepOriginal) {
-        return null;
-      } else {
-        if (source instanceof Spanned) {
-          SpannableString sp = new SpannableString(sb);
-          TextUtils.copySpansFrom((Spanned) source, start, sb.length(), null, sp, 0);
-          return sp;
-        } else {
-          return sb;
-        }
-      }
-    }
-
-    private boolean isCharAllowed(char c) {
-      Pattern ps = Pattern.compile("^[a-zA-Z0-9 ,@!#&()_\\n]");
-      Matcher ms = ps.matcher(String.valueOf(c));
-      return ms.matches();
-    }
-  };
-
-  public static SharedPreferences getPrefs(Context ctx) {
-    return ctx.getSharedPreferences(ctx.getPackageName(), Context.MODE_PRIVATE);
-  }
 
   public static String getDateStrT(String date, String inputFormat, String outputFormat) {
     try {
@@ -185,13 +91,13 @@ public class CRMAppUtil {
   }
 
   public static String getDateStr(Date date, String format) {
-    SimpleDateFormat df = new SimpleDateFormat(format);
+    SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
     return df.format(date);
   }
 
   public static Date getDate(String date, String format) {
     try {
-      SimpleDateFormat df = new SimpleDateFormat(format, Locale.US);
+      SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
       return df.parse(date);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -201,7 +107,7 @@ public class CRMAppUtil {
 
   public static String getDate(Date date, String format) {
     try {
-      SimpleDateFormat df = new SimpleDateFormat(format);
+      SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
       return df.format(date);
     } catch (Exception ex) {
       ex.printStackTrace();
@@ -210,7 +116,7 @@ public class CRMAppUtil {
   }
 
   public static String getDateStr(Date date) {
-    SimpleDateFormat df = new SimpleDateFormat("dd, MMM yyyy");
+    SimpleDateFormat df = new SimpleDateFormat("dd, MMM yyyy", Locale.ENGLISH);
     return df.format(date);
   }
 
@@ -230,33 +136,6 @@ public class CRMAppUtil {
     }
   }
 
-  public static String getMonthYearStr(Date date) {
-    SimpleDateFormat df = new SimpleDateFormat("MMM yyyy");
-    return df.format(date);
-  }
-
-  public static String getWeekDateStr(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-
-    Calendar first = (Calendar) cal.clone();
-    first.add(Calendar.DAY_OF_WEEK,
-        first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
-
-    Calendar last = (Calendar) first.clone();
-    last.add(Calendar.DAY_OF_YEAR, 6);
-
-    SimpleDateFormat dayFormat = new SimpleDateFormat("dd");
-    SimpleDateFormat df = new SimpleDateFormat("dd, MMM yyyy");
-
-    return (dayFormat.format(first.getTime()) + " - " + df.format(last.getTime()));
-  }
-
-  public static String getYearStr(Date date) {
-    SimpleDateFormat df = new SimpleDateFormat("yyyy");
-    return df.format(date);
-  }
-
   public static String getDayOfMonthSuffix(final int n) {
     if (n >= 11 && n <= 13) {
       return "th";
@@ -273,66 +152,11 @@ public class CRMAppUtil {
     }
   }
 
-  public static String decodeBase64(String data) {
-    try {
-      byte[] dataByte = Base64.decode(data, Base64.DEFAULT);
-      return new String(dataByte, "UTF-8");
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    return "";
-  }
-
-  public static Date createDate(int day, int month, int year) {
-    final Calendar calendar = Calendar.getInstance();
-    calendar.set(Calendar.YEAR, year);
-    calendar.set(Calendar.MONTH, month);
-    calendar.set(Calendar.DAY_OF_MONTH, day);
-    return calendar.getTime();
-  }
-
   public static String getFirstDateOfCurrentMonth(String format) {
     Calendar cal = Calendar.getInstance();
     cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMinimum(Calendar.DAY_OF_MONTH));
-    SimpleDateFormat df = new SimpleDateFormat(format);
+    SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
     return df.format(cal.getTime());
-  }
-
-  public static String getLastDateOfCurrentMonth(String format) {
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
-    SimpleDateFormat df = new SimpleDateFormat(format);
-    return df.format(cal.getTime());
-  }
-
-  public static String getStartDtFinancialYear(String format) {
-    Calendar calendar = Calendar.getInstance();
-    int year = calendar.get(Calendar.YEAR);
-    int month = calendar.get(Calendar.MONTH);
-    if (month >= 3) {
-      calendar.set(Calendar.YEAR, year);
-    } else {
-      calendar.set(Calendar.YEAR, year - 1);
-    }
-    calendar.set(Calendar.MONTH, 3);
-    calendar.set(Calendar.DAY_OF_MONTH, 1);
-    SimpleDateFormat df = new SimpleDateFormat(format);
-    return df.format(calendar.getTime());
-  }
-
-  public static String getStartDtFinancialYearGivenReactivation(String format) {
-    Calendar calendar = Calendar.getInstance();
-    int year = calendar.get(Calendar.YEAR);
-    int month = calendar.get(Calendar.MONTH);
-    if (month >= 3) {
-      calendar.set(Calendar.YEAR, year);
-    } else {
-      calendar.set(Calendar.YEAR, year - 1);
-    }
-    calendar.set(Calendar.MONTH, 3);
-    calendar.set(Calendar.DAY_OF_MONTH, 1);
-    SimpleDateFormat df = new SimpleDateFormat(format);
-    return df.format(calendar.getTime());
   }
 
   public static boolean isBlank(String input) {
@@ -361,9 +185,8 @@ public class CRMAppUtil {
             enumIpAddr.hasMoreElements(); ) {
           InetAddress inetAddress = enumIpAddr.nextElement();
           if (!inetAddress.isLoopbackAddress()) {
-            String ip = Formatter.formatIpAddress(inetAddress.hashCode());
             //Log.i("IP", "***** IP=" + ip);
-            return ip;
+            return Formatter.formatIpAddress(inetAddress.hashCode());
           }
         }
       }
@@ -387,7 +210,7 @@ public class CRMAppUtil {
 
     Date date = calendar.getTime();
     // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ssZZZ");
-    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_TO_SERVER);
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_TO_SERVER, Locale.ENGLISH);
     return sdf.format(date);
   }
 
@@ -410,7 +233,7 @@ public class CRMAppUtil {
 
   public static String getDBDate(Date date, String format) {
 
-    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
     return sdf.format(date);
   }
 
@@ -431,7 +254,7 @@ public class CRMAppUtil {
   public static Date getDBDateFrom(String Date, String format) throws java.text.ParseException {
 
     //  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
-    SimpleDateFormat sdf = new SimpleDateFormat(format);
+    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.ENGLISH);
     return sdf.parse(Date);
 
     //return sdf.format(date);
@@ -441,7 +264,7 @@ public class CRMAppUtil {
   public static Date getDBDateFrom(String Date) {
 
     try {
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss");
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'kk:mm:ss", Locale.ENGLISH);
       return sdf.parse(Date);
     } catch (java.text.ParseException pe) {
 
@@ -452,8 +275,7 @@ public class CRMAppUtil {
       calendar.get(Calendar.HOUR_OF_DAY);
       calendar.get(Calendar.MINUTE);
 
-      Date date = calendar.getTime();
-      return date;
+      return calendar.getTime();
     }
     //return sdf.format(date);
   }
@@ -467,33 +289,7 @@ public class CRMAppUtil {
     calendar.get(Calendar.MINUTE);
 
     Date date = calendar.getTime();
-    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_TO_SERVER);
-    return sdf.format(date);
-  }
-
-  public static String getCurrentDBDate() {
-    Calendar calendar = Calendar.getInstance();
-    calendar.get(Calendar.YEAR);
-    calendar.get(Calendar.MONTH);
-    calendar.get(Calendar.DAY_OF_MONTH);
-    calendar.get(Calendar.HOUR_OF_DAY);
-    calendar.get(Calendar.MINUTE);
-
-    Date date = calendar.getTime();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'kk:mm:ss");
-    return sdf.format(date);
-  }
-
-  public static String getCurrentDate() {
-    Calendar calendar = Calendar.getInstance();
-    calendar.get(Calendar.YEAR);
-    calendar.get(Calendar.MONTH);
-    calendar.get(Calendar.DAY_OF_MONTH);
-    calendar.get(Calendar.HOUR_OF_DAY);
-    calendar.get(Calendar.MINUTE);
-
-    Date date = calendar.getTime();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_TO_SERVER, Locale.ENGLISH);
     return sdf.format(date);
   }
 
@@ -506,33 +302,8 @@ public class CRMAppUtil {
     calendar.get(Calendar.MINUTE);
 
     Date date = calendar.getTime();
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'kk:mm:ss");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'kk:mm:ss", Locale.ENGLISH);
     return sdf.format(date);
-  }
-
-  public static String getDayMonthYearDate(String date) {
-    String format = null;
-    try {
-      String dateArray[] = date.split("-");
-      Calendar cal = Calendar.getInstance();
-      cal.set(Calendar.YEAR, Integer.parseInt(dateArray[0]));
-      cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dateArray[2]));
-      cal.set(Calendar.MONTH, Integer.parseInt(dateArray[1]) - 1);
-      format = new SimpleDateFormat("E MMM yy").format(cal.getTime());
-    } catch (NumberFormatException e) {
-      e.printStackTrace();
-    }
-
-    return format;
-  }
-
-  public static String getMimeType(String url) {
-    String type = null;
-    String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-    if (extension != null) {
-      type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-    }
-    return type;
   }
 
   public static String getFileNameFromPath(String filePath) {
@@ -578,11 +349,7 @@ public class CRMAppUtil {
     // long fileSizeInBytes = f.length();
     long fileSizeInKB = fileSizeInBytes / 1024;
     long fileSizeInMB = fileSizeInKB / 1024;
-    if (fileSizeInMB >= FILE_UPLOAD_SIZE_LIMT) {
-      return true;
-    } else {
-      return false;
-    }
+    return fileSizeInMB >= FILE_UPLOAD_SIZE_LIMT;
   }
 
   public static String getFilenameWithoutExtension(String fileName) {
@@ -707,14 +474,10 @@ public class CRMAppUtil {
     v.startAnimation(a);
   }
 
-  public static boolean isMockSettingsON(Context context) {
+  private static boolean isMockSettingsON(Context context) {
     // returns true if mock location enabled, false if not enabled.
-    if (Settings.Secure.getString(context.getContentResolver(),
-        Settings.Secure.ALLOW_MOCK_LOCATION).equals("0")) {
-      return false;
-    } else {
-      return true;
-    }
+    return !Settings.Secure.getString(context.getContentResolver(),
+        Settings.Secure.ALLOW_MOCK_LOCATION).equals("0");
   }
 
   public static boolean isLocationFromMockProvider(Context context, Location location) {
@@ -736,14 +499,5 @@ public class CRMAppUtil {
     Pattern pattern = Pattern.compile(CODE_PATTERN);
     Matcher matcher = pattern.matcher(input);
     return matcher.matches();
-  }
-
-  public boolean isNumber(String value) {
-    try {
-      Double.parseDouble(value);
-    } catch (Exception ex) {
-      return false;
-    }
-    return true;
   }
 }

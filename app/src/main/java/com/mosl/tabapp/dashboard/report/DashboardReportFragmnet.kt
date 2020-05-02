@@ -2,14 +2,17 @@ package com.mosl.tabapp.dashboard.report
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
 import com.mosl.tabapp.constants.MoslConstant.Client_UCID
 import com.mosl.tabapp.constants.MoslConstant.Client_ucid
@@ -25,11 +28,13 @@ import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.Flg_H
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
-import com.mosl.tabapp.databinding.FragHierarchyReportBinding
+import com.mosl.tabapp.databinding.FragDashboardReportBinding
+import com.mosl.tabapp.model.TypeActionableFilterModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.report.HierarchyReportTableMapper
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tableview.rowadapter.TableRowAdapter
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
@@ -38,23 +43,24 @@ import javax.inject.Inject
 
 class DashboardReportFragment : CommonFragment(),
   DashboardReportView {
-  private lateinit var binding: FragHierarchyReportBinding
+  private lateinit var binding: FragDashboardReportBinding
 
   @Inject
   lateinit var presenter: DashboardReportPresenter
-
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<DashboardReportTableRow>
   private val navigateEvent = PublishSubject.create<CellEvent>()
+  private lateinit var typeAdapter: ArrayAdapter<TypeActionableFilterModel>
+  private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
 
   override fun getLayout(): Int {
-    return R.layout.frag_hierarchy_report
+    return R.layout.frag_dashboard_report
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragHierarchyReportBinding.bind(view)
+    binding = FragDashboardReportBinding.bind(view)
     setUpView()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
@@ -91,6 +97,12 @@ class DashboardReportFragment : CommonFragment(),
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
+
+    typeAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spType.adapter = typeAdapter
+
+    periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spPeriod.adapter = periodAdapter
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
@@ -129,6 +141,29 @@ class DashboardReportFragment : CommonFragment(),
       binding.txtLables.text = it
     }
 
+  }
+
+  override fun renderDatePicker(isDateFilter: Boolean) {
+    if (isDateFilter) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.ivDatePicker.visibility = View.VISIBLE
+    }
+  }
+
+  override fun renderPeriodFilter(periodFilter: List<FilterRowData>) {
+    if (periodFilter.isNotEmpty()) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.spPeriod.visibility = View.VISIBLE
+      periodAdapter.setSpinnerData(binding.spPeriod, periodFilter)
+    }
+  }
+
+  override fun renderTypeFilter(typeFilter: List<TypeActionableFilterModel>) {
+    if (typeFilter.isNotEmpty()) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.spType.visibility = View.VISIBLE
+      typeAdapter.setSpinnerData(binding.spType, typeFilter)
+    }
   }
 
   override fun onNavigateEvent(): Observable<CellEvent> {
