@@ -146,7 +146,7 @@ class DashboardReportFragment : CommonFragment(),
   override fun renderDatePicker(isDateFilter: Boolean) {
     if (isDateFilter) {
       binding.linearLayout.visibility = View.VISIBLE
-      binding.ivDatePicker.visibility = View.VISIBLE
+      binding.rlDate.visibility = View.VISIBLE
     }
   }
 
