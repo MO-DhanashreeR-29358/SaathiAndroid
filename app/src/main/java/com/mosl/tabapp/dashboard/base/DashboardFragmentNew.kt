@@ -5,16 +5,23 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboard.DashboardData
+import com.mosl.mobile.domain.dashboard.Incentive
+import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.tabapp.R
+import com.mosl.tabapp.R.color
+import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
@@ -33,14 +40,16 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.frag_dashboard.ivActionableInsights
-import kotlinx.android.synthetic.main.frag_dashboard.ivTargetAchievementADV
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
+import java.util.HashMap
 import javax.inject.Inject
 
 class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
   @Inject
   lateinit var presenter: DashboardPresenter
+  val subject: PublishSubject<DashboardUiEvent> = PublishSubject.create()
 
   override fun getLayout() = R.layout.frag_dashboard
 
@@ -84,10 +93,29 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         fillAvailableWidgetModel(dashboardData)
         if (dashboardList.size > 0) {
           currentDashboard = dashboardList.get(0)
+          createFloatingActionButtons()
           renderDashboard(dashboardData)
         }
       }
     }
+  }
+
+  private fun createFloatingActionButtons() {
+    for (dashboardModel in dashboardList) {
+      val button = FloatingActionButton(context)
+      button.title = dashboardModel.name
+      button.size = FloatingActionButton.SIZE_MINI
+      button.colorNormal = resources.getColor(color.white)
+      button.setIconDrawable(resources.getDrawable(drawable.ic_create_lead))
+      binding.floatingActionsMenu.addButton(button)
+      button.setOnClickListener { v: View? ->
+        hideKeyboard(v)
+        binding.tvMain.requestFocus()
+        binding.floatingActionsMenu.collapse()
+        currentDashboard = dashboardModel
+      }
+    }
+
   }
 
   private fun renderDashboard(dashboardData: DashboardData) {
@@ -96,7 +124,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       lateinit var icon: ImageView
       val systemName = group.systemName
       if (systemName.equals(ACTIONABLE)) {
-        ivActionableInsights.visibility = View.VISIBLE
+        binding.ivActionableInsights.visibility = View.VISIBLE
       } else if (systemName.equals(MyClient_MyLead)) {
         binding.llClient.visibility = View.VISIBLE
         setClientLayoutVisibililty(systemName)
@@ -189,7 +217,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         binding.txtTarget.setText(currentDashboard.getGroupModel(systemName).getDisplayName());
         binding.llTarget.visibility = View.VISIBLE
         linearLayout = binding.llTargetAchievementADV
-        icon = ivTargetAchievementADV
+        icon = binding.ivTargetAchievementADV
         loadTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
       } else if (systemName.equals(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT)) {
@@ -206,6 +234,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadMonthTrendsFragment()
         DashboardSystemModel.setMonthTrends(systemName)
       } else if (systemName.equals(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
+        setIncentiveVisibility(systemName)
+//        subject.onNext(OnIncentive(systemName,getAddtionalParameterMap()))
         binding.tvPerformanceAndIncentivesHeader.setText(
             currentDashboard.getGroupModel(
                 PERFORMANCE_INCENTIVE_ACHIEVEMNET
@@ -286,6 +316,10 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  override fun onIncentive(): Observable<OnIncentive> {
+    return subject.ofType()
+  }
+
   fun toggleSection(
     parent: View,
     icon: ImageView
@@ -299,6 +333,16 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  private fun getAddtionalParameterMap(): Map<String, String> {
+    val addtionalParameterMap: MutableMap<String, String> = HashMap()
+    try {
+      addtionalParameterMap[SELF_KEY] = currentDashboard.dashboardFor
+    } catch (ex: Exception) {
+      ex.printStackTrace()
+    }
+    return addtionalParameterMap
+  }
+
   fun setIcon(
     parent: View,
     icon: ImageView
@@ -310,6 +354,79 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  override fun renderIncentiveData(uiModel: UiModel<Incentive>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      incentiveData(it.tableData)
+    }
+  }
+
+  private fun incentiveData(tableData: List<IncentiveTableData>) {
+    arrayListIncentive.clear()
+    for (i in tableData.indices) {
+      val data = tableData.get(i)
+      val fieldData = HashMap<String, String>()
+      fieldData[PARAMETERS] = data.parameters
+      fieldData[Q1] = data.q1.toString()
+      fieldData[Q2] = data.q2.toString()
+      fieldData[Q3] = data.q3.toString()
+      fieldData[Q4] = data.q4.toString()
+      fieldData[YTD] = data.ytd.toString()
+      arrayListIncentive.add(fieldData)
+    }
+//    incentiveView("Q1")
+  }
+
+  /*fun incentiveView(value : String){
+    //clear data from table
+    //clear data from table
+    tableMData.removeAllViews()
+    //Adding head
+    //Adding head
+    val inFla = Objects.requireNonNull(requireActivity())
+        .layoutInflater
+    @SuppressLint("InflateParams") val tableRowH =
+      inFla.inflate(layout.item_table_row, null)
+    val tvMTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvMTDCOUNT)
+    val tvYTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvYTDCOUNT)
+    val tvParameters = tableRowH.findViewById<TextView>(R.id.tvParameters)
+    tvParameters.text = resources.getString(string.txt_label_parameters)
+    tvMTDCOUNT.text = value
+    tvYTDCOUNT.text = MOSLConstants.YTD
+    tableMData.addView(tableRowH)
+    //adding head end
+
+    //adding head end
+    if (arrayListIncentive.size > 0) {
+      for (i in arrayListIncentive.indices) {
+        val filterData: String = arrayListIncentive.get(i)
+            .get(value)?:""
+        val parameter: String = arrayListIncentive.get(i)
+            .get(PARAMETERS)?:""
+        val ytd: String = arrayListIncentive.get(i)
+            .get(YTD)?:""
+        @SuppressLint("InflateParams") val tableRow =
+          inFla.inflate(layout.item_table_row, null)
+        val linearLayout = tableRow.findViewById<LinearLayout>(R.id.linearLayout)
+        val tvMTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvMTDCOUNT)
+        val tvYTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvYTDCOUNT)
+        val tvParametersData = tableRow.findViewById<TextView>(R.id.tvParameters)
+        tvParametersData.text = parameter
+        tvMTDCOUNTData.text = filterData
+        tvYTDCOUNTData.text = ytd
+        linearLayout.setBackgroundResource(if (i % 2 == 0) color.white else color.white)
+        tableMData.addView(tableRow)
+      }
+    }
+    llIncentive.setVisibility(View.VISIBLE)
+    tvIncentives.setText(resources.getString(string.txt_label_incentive))
+  }*/
+
   fun setIncentiveVisibility(systemName: String) {
     if (currentDashboard != null) {
       val groupModel = currentDashboard.getGroupModel(systemName)
@@ -318,7 +435,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         val widgetTypes = widgetList[i]
             .widgetTypeList[0]
             .widgetTypes
-        if (widgetTypes.equals(MOSLConstants.PERFORMANCE_INCENTIVE, ignoreCase = true)) {
+        if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
+          subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
 //          incentiveWebServiceCall(widgetList[i].systemName)
         } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
 //          currentQuarterStatusWebServiceCall(widgetList[i].systemName)
@@ -329,6 +447,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   val dashboardList: ArrayList<DashboardModel> = ArrayList()
+  val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
   lateinit var currentDashboard: DashboardModel
   private fun fillAvailableWidgetModel(data: DashboardData) {
     val dashboardId = data.ID.toString()
@@ -526,6 +645,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES =
       "OaoSalesOneup_TeamPerformanceAndIncentives"
     const val DASHBOARD_MODEL = "dashboardModel"
+    const val SELF_KEY = "flt_hierarchy"
+    const val PARAMETERS = "Parameters"
+    const val Q1 = "Q1"
+    const val Q2 = "Q2"
+    const val Q3 = "Q3"
+    const val Q4 = "Q4"
+    const val YTD = "YTD"
   }
 
   override fun onClick(v: View?) {

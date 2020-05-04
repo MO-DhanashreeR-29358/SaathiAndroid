@@ -5,6 +5,9 @@ import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.DashboardGroupsData
 import com.mosl.mobile.domain.dashboard.Filter
 import com.mosl.mobile.domain.dashboard.FilterData
+import com.mosl.mobile.domain.dashboard.Incentive
+import com.mosl.mobile.domain.dashboard.IncentiveTableData
+import com.mosl.mobile.domain.dashboard.IncentiveTableData1
 import com.mosl.mobile.domain.dashboard.TableData
 import com.mosl.mobile.domain.dashboard.WidgetData
 import com.mosl.mobile.domain.dashboard.WidgetType
@@ -13,6 +16,9 @@ import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsIte
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.GroupsItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.WidgetTypeItem
+import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
+import com.mosl.saathi.api.model.dashboard.incentive.Table1Item
+import com.mosl.saathi.api.model.dashboard.incentive.TableItem
 import java.util.Collections
 
 object DashboardMapper {
@@ -87,6 +93,40 @@ object DashboardMapper {
       WidgetType(
           widgetType = it.widgetTypes ?: "",
           title = it.title ?: ""
+      )
+    }
+  }
+
+  fun tranformIncentiveData(incentiveItem: IncentiveItem): Incentive {
+    return Incentive(
+        tableData = transformTableData(incentiveItem.table),
+        tableData1 = transformTableData1(incentiveItem.table1)
+    )
+  }
+
+  fun transformTableData(lst: List<TableItem>?): List<IncentiveTableData> {
+    return lst!!.safeMap {
+      IncentiveTableData(
+          q1 = it.q1 ?: 0.0F,
+          q2 = it.q2 ?: 0.0F,
+          q3 = it.q3 ?: 0.0F,
+          q4 = it.q4 ?: 0.0F,
+          parameters = it.parameters ?: "",
+          ytd = it.yTD ?: 0.0F
+      )
+    }
+  }
+
+  fun transformTableData1(lst: List<Table1Item>?): List<IncentiveTableData1> {
+    return lst!!.safeMap {
+      IncentiveTableData1(
+          q1 = it.q1 ?: "0",
+          q2 = it.q2 ?: "0",
+          q3 = it.q3 ?: "0",
+          q4 = it.q4 ?: "0",
+          name = it.name ?: "",
+          ytd = it.yTD ?: "0",
+          widgetType = it.widgetType ?: ""
       )
     }
   }

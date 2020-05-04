@@ -3,7 +3,9 @@ package com.mosl.app.core.data.dashboard
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
+import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -21,4 +23,17 @@ class DashboardRepositoryImpl @Inject constructor(
         .map { DashboardMapper.transform(it) }
   }
 
+  override fun getIncentive(
+    systemName: String,
+    data: DashboardRequestData,
+    map: Map<String, String>
+  ): Observable<Incentive> {
+    return saathiApi.getIncentive(
+        CommonRequest(
+            businessProfileId = data.profileId, employeeCode = data.empCode,
+            productId = data.productId, widgetSystemName = systemName, addtionalParameters = map
+        )
+    )
+        .map { DashboardMapper.tranformIncentiveData(it) }
+  }
 }

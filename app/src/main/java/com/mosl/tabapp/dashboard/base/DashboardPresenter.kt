@@ -3,6 +3,7 @@ package com.mosl.tabapp.dashboard.base
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -57,6 +58,14 @@ class DashboardPresenter @Inject constructor(
         }
         .addTo(disposable)
 
+    view.onIncentive()
+        .switchMap { t: OnIncentive ->
+          repository.getIncentive(t.systemName, dashboardRequestData, t.additionalParameterMap)
+              .compose(applyUiModel())
+        }
+        .subscribe { view.renderIncentiveData(it) }
+        .addTo(disposable)
+
 //    view.onFreshRegistrationClicked().subscribe {
 //      ekycNavigator.openNewEkycApp(false,"")
 //    }
@@ -69,4 +78,11 @@ class DashboardPresenter @Inject constructor(
 //    view.onTelephone2Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
 //    view.onEmailClicked().subscribe { view.showEmailDialog() }.addTo(disposable)
   }
+}
+
+sealed class DashboardUiEvent {
+  class OnIncentive(
+    val systemName: String,
+    val additionalParameterMap: Map<String, String>
+  ) : DashboardUiEvent()
 }
