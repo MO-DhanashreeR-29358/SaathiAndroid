@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadcreation;
+package com.mosl.tabapp.leadcreationold;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -138,7 +138,7 @@ import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_CR
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
-public class LeadCreationFragment extends CommonFragment
+public class LeadCreationOldFragment extends CommonFragment
         implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private final ArrayList<RowData> arrCategory = new ArrayList<>();

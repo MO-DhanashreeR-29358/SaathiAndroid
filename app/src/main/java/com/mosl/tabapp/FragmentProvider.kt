@@ -46,6 +46,8 @@ import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
+import com.mosl.tabapp.leadcreation.LeadCreationModule
+import com.mosl.tabapp.leadcreationold.LeadCreationOldFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -69,6 +71,9 @@ import dagger.android.ContributesAndroidInjector
 interface FragmentProvider {
 
   @ContributesAndroidInjector
+  fun provideOldLeadCreationFactory(): LeadCreationOldFragment
+
+  @ContributesAndroidInjector(modules = [LeadCreationModule::class])
   fun provideLeadCreationFactory(): LeadCreationFragment
 
   @ContributesAndroidInjector
