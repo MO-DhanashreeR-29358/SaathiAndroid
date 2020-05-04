@@ -3,6 +3,7 @@ package com.mosl.tabapp.dashboard.report
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -13,6 +14,7 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.FilterRowData
+import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
 import com.mosl.tabapp.constants.MoslConstant.Client_UCID
 import com.mosl.tabapp.constants.MoslConstant.Client_ucid
@@ -39,6 +41,7 @@ import com.mosl.tableview.rowadapter.TableRowAdapter
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
+import java.util.Date
 import javax.inject.Inject
 
 class DashboardReportFragment : CommonFragment(),
@@ -53,6 +56,7 @@ class DashboardReportFragment : CommonFragment(),
   private val navigateEvent = PublishSubject.create<CellEvent>()
   private lateinit var typeAdapter: ArrayAdapter<TypeActionableFilterModel>
   private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
+  private val datePickerEvent = PublishSubject.create<Int>()
 
   override fun getLayout(): Int {
     return R.layout.frag_dashboard_report
@@ -147,6 +151,9 @@ class DashboardReportFragment : CommonFragment(),
     if (isDateFilter) {
       binding.linearLayout.visibility = View.VISIBLE
       binding.rlDate.visibility = View.VISIBLE
+      binding.tvDate.setText(
+        CRMAppUtil.getDateStr(Date(), MoslConstant.dd_MMM_yyyy)
+      )
     }
   }
 
@@ -164,6 +171,30 @@ class DashboardReportFragment : CommonFragment(),
       binding.spType.visibility = View.VISIBLE
       typeAdapter.setSpinnerData(binding.spType, typeFilter)
     }
+  }
+
+  override fun onDatePickerEvent(): Observable<Int> {
+    return datePickerEvent.ofType()
+  }
+
+  override fun fromDate(): String {
+    return binding.tvDate.text.toString()
+  }
+
+  override fun onPeriodChange(): Observable<Int> {
+    return binding.spPeriod.itemSelections()
+  }
+
+  override fun onTypeFilterChange(): Observable<Int> {
+    return binding.spType.itemSelections()
+  }
+
+  override fun getPeriod(): FilterRowData? {
+    return binding.spPeriod.selectedItem as? FilterRowData
+  }
+
+  override fun getTypeFilter(): TypeActionableFilterModel? {
+    return binding.spType.selectedItem as? TypeActionableFilterModel
   }
 
   override fun onNavigateEvent(): Observable<CellEvent> {

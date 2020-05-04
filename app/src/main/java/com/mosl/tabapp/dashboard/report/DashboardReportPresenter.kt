@@ -2,6 +2,7 @@ package com.mosl.tabapp.dashboard.report
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
 import com.mosl.tabapp.constants.MOSLConstants
@@ -20,8 +21,25 @@ class DashboardReportPresenter @Inject constructor(
   val navigator: ScreenNavigatorImpl
 ) : BasePresenter<DashboardReportView>(view) {
   override fun start() {
+
+    val periodChangedObs = view.onPeriodChange()
+      .filter(InvalidSelectionPredicate)
+      .share()
+
+    val typeFilterChangedObs = view.onTypeFilterChange()
+      .filter(InvalidSelectionPredicate)
+      .share()
+
+    val filterChange = Observable.merge(
+      view.onDatePickerEvent(),
+      periodChangedObs,
+      typeFilterChangedObs
+    )
+
     Observable.merge(
-      onFetchCalled(), onRetryCalled()
+      onFetchCalled(),
+      onRetryCalled(),
+      filterChange
     ).map { getWidgetRequest() }
       .switchMap {
         repository.getDashboardData(it)
@@ -52,11 +70,27 @@ class DashboardReportPresenter @Inject constructor(
   }
 
   private fun getWidgetRequest(): DashboardReportRequest {
+    val additionalMap = data.additionalMap as HashMap<String, String>
+    view.getPeriod()?.apply {
+      if (this.value.isNotEmpty()) {
+        additionalMap[COL_FILTER] = this.value
+      }
+    }
+    view.getTypeFilter()?.apply {
+      if (this.toString().isNotEmpty()) {
+        additionalMap[ROW_FILTER] = this.toString().replace("_", " ")
+      }
+      if (data.label!!.contains(ACTIONABLE)) {
+        additionalMap[WIDGETTYPE] = this.toString().replace("_", " ")
+      }
+    }
+
+
     return DashboardReportRequest(
       page = PAGE,
       pageSize = DASHBOARD_REPORT_PAGE_SIZE,
       widgetSystemName = data.systemsName,
-      addtionalParameters = data.additionalMap
+      addtionalParameters = additionalMap
 
     )
   }
@@ -65,7 +99,7 @@ class DashboardReportPresenter @Inject constructor(
     leadID: String, ucid: String, empCode: String,
     level: String, rmName: String, systemsName: String
   ) {
-    if (!leadID.equals("0") || !ucid.equals("0")) {
+    if (leadID != "0" || ucid != "0") {
       val args = Bundle()
       val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       args.putString(MOSLConstants.LEAD_ID, leadID)
@@ -116,6 +150,10 @@ class DashboardReportPresenter @Inject constructor(
     const val FILTER_LIST = "filter_list"
     const val SPINNER_LIST = "spinner_list"
     const val FLT_DATE = "flt_date"
+    const val COL_FILTER = "colfilter"
+    const val ROW_FILTER = "rowfilter"
+    const val ACTIONABLE = "Actionable"
+    const val WIDGETTYPE = "WidgetType"
 
   }
 }
