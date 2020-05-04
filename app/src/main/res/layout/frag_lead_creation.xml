@@ -34,7 +34,7 @@
                     android:ellipsize="end"
                     android:padding="8dp"
                     android:singleLine="true"
-                    android:text="Personal Information"
+                    android:text="@string/lbl_lead_creation_personal_info"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/header1" />
 
@@ -56,7 +56,7 @@
                         android:id="@+id/tvCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Category*"
+                        android:text="@string/lbl_lead_creation_category"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -93,7 +93,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
-                            android:hint="Name*"
+                            android:hint="@string/hint_lead_creation_name"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
@@ -124,7 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
-                            android:hint="Contact Person*"
+                            android:hint="@string/hint_lead_creation_contact_person"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
@@ -148,7 +148,7 @@
                         android:id="@+id/tvProfession"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Profession"
+                        android:text="@string/lbl_lead_creation_profession"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -164,7 +164,7 @@
                         android:id="@+id/tvInterestIn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Interested In*"
+                        android:text="@string/lbl_lead_creation_interested_in"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -192,7 +192,7 @@
                         android:id="@+id/tvProductType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Product Type"
+                        android:text="@string/lbl_lead_creation_product_type"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -227,7 +227,7 @@
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Email Id"
+                            android:hint="@string/hint_lead_creation_email_id"
                             android:inputType="textEmailAddress"
                             android:maxLength="100"
                             android:maxLines="1"
@@ -258,7 +258,7 @@
                             android:id="@+id/etAlternateEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Alternate Email Id"
+                            android:hint="@string/hint_lead_creation_alternate_email_id"
                             android:inputType="textEmailAddress"
                             android:maxLength="100"
                             android:maxLines="1"
@@ -289,7 +289,7 @@
                             android:id="@+id/etMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Mobile*"
+                            android:hint="@string/hint_lead_creation_mobile"
                             android:inputType="number"
                             android:maxLength="10"
                             android:maxLines="1"
@@ -320,7 +320,7 @@
                             android:id="@+id/etAlternateMobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Alternate Mobile No"
+                            android:hint="@string/hint_lead_creation_alternate_mobile"
                             android:inputType="number"
                             android:maxLength="10"
                             android:maxLines="1"
@@ -351,7 +351,7 @@
                             android:id="@+id/etLandLine"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Land Line"
+                            android:hint="@string/hint_lead_creation_land_line"
                             android:inputType="number"
                             android:maxLength="11"
                             android:maxLines="1"
@@ -382,7 +382,7 @@
                             android:id="@+id/etEkycMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Ekyc Mobile No"
+                            android:hint="@string/hint_lead_creation_ekyc_mobile"
                             android:inputType="number"
                             android:maxLength="10"
                             android:maxLines="1"
@@ -413,7 +413,7 @@
                             android:id="@+id/etPanNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Pan Number"
+                            android:hint="@string/hint_lead_creation_pan"
                             android:inputType="text"
                             android:maxLength="10"
                             android:maxLines="1"
@@ -444,7 +444,7 @@
                             android:id="@+id/etAadharNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Aadhar Number"
+                            android:hint="@string/hint_lead_creation_aadhar_number"
                             android:inputType="number"
                             android:maxLength="12"
                             android:maxLines="1"
@@ -469,7 +469,7 @@
                         android:id="@+id/tvSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Source*"
+                        android:text="@string/text_lead_creation_source"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -496,7 +496,7 @@
                         android:id="@+id/tvProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Prospect Source*"
+                        android:text="@string/text_lead_creation_prospect_source"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -530,7 +530,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                            android:hint="Prospect Source Details"
+                            android:hint="@string/hint_lead_creation_prospect_source_detail"
                             android:inputType="textNoSuggestions"
                             android:maxLines="1"
                             android:singleLine="true"
@@ -541,7 +541,7 @@
                         android:id="@+id/tvStage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Stage*"
+                        android:text="@string/text_lead_creation_stage"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -568,7 +568,7 @@
                         android:id="@+id/tvStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Status*"
+                        android:text="@string/text_lead_creation_status"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
@@ -625,7 +625,7 @@
                                 android:clickable="false"
                                 android:drawableRight="@drawable/ic_close_text"
                                 android:focusable="false"
-                                android:hint="Assign to"
+                                android:hint="@string/hint_lead_creation_assign_to"
                                 android:inputType="none"
                                 android:paddingLeft="5dp"
                                 android:textSize="@dimen/_13sdp" />
@@ -661,7 +661,7 @@
                     android:ellipsize="end"
                     android:padding="8dp"
                     android:singleLine="true"
-                    android:text="Additional Information"
+                    android:text="@string/text_lead_creation_additional_info"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/header1" />
 
@@ -695,7 +695,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                                android:hint="Referee Code"
+                                android:hint="@string/hint_lead_creation_referee_code"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -742,7 +742,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                                android:hint="Referee Name"
+                                android:hint="@string/hint_lead_creation_referee_name"
                                 android:inputType="textNoSuggestions"
                                 android:maxLines="1"
                                 android:singleLine="true"
@@ -776,7 +776,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:hint="Referee Email"
+                            android:hint="@string/hint_lead_creation_referee_email"
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:singleLine="true"
@@ -810,7 +810,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:enabled="false"
-                            android:hint="Referee Mobile"
+                            android:hint="@string/hint_lead_creation_referee_mobile"
                             android:inputType="number"
                             android:maxLength="10"
                             android:maxLines="1"
@@ -940,7 +940,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:text="Residence Address"
+                            android:text="@string/text_lead_creation_residence_address"
                             android:textColor="@color/light_black"
                             android:textSize="@dimen/_12sdp" />
 
@@ -949,7 +949,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text=" Primary Address"
+                            android:text="@string/text_lead_creation_primary_address"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
@@ -973,7 +973,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 1"
+                                android:hint="@string/hint_lead_creation_address_one"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -1003,7 +1003,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 2"
+                                android:hint="@string/hint_lead_creation_address_two"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -1034,7 +1034,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 3"
+                                android:hint="@string/hint_lead_creation_address_three"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -1044,7 +1044,7 @@
                             android:id="@+id/tvCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Country"
+                            android:text="@string/lbl_lead_creation_country"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1072,7 +1072,7 @@
                             android:id="@+id/tvState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="State"
+                            android:text="@string/lbl_lead_creation_state"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1100,7 +1100,7 @@
                             android:id="@+id/tvCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="City"
+                            android:text="@string/lbl_lead_creation_city"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1136,7 +1136,7 @@
                                 android:id="@+id/etPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Pincode"
+                                android:hint="@string/hint_lead_creation_pincode"
                                 android:inputType="number"
                                 android:maxLength="6"
 
@@ -1175,7 +1175,7 @@
                             android:layout_weight="1"
                             android:gravity="center_vertical"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:text="Office Address"
+                            android:text="@string/lbl_lead_creation_office_address"
                             android:textColor="@color/light_black"
                             android:textSize="@dimen/_12sdp" />
 
@@ -1184,7 +1184,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text=" Same as Above"
+                            android:text="@string/lbl_lead_creation_same_address"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp"
                             android:visibility="gone" />
@@ -1194,7 +1194,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text=" Primary Address"
+                            android:text="@string/lbl_lead_creation_primary_address"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
@@ -1217,7 +1217,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 1"
+                                android:hint="@string/hint_lead_creation_address_one"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null"
@@ -1237,7 +1237,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 2"
+                                android:hint="@string/hint_lead_creation_address_two"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -1255,7 +1255,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                                android:hint="Address 3"
+                                android:hint="@string/hint_lead_creation_address_three"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
@@ -1265,7 +1265,7 @@
                             android:id="@+id/tvOffCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Country"
+                            android:text="@string/lbl_lead_creation_country"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1293,7 +1293,7 @@
                             android:id="@+id/tvOffState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="State"
+                            android:text="@string/lbl_lead_creation_state"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1320,7 +1320,7 @@
                             android:id="@+id/tvOffCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="City"
+                            android:text="@string/lbl_lead_creation_city"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
 
@@ -1356,7 +1356,7 @@
                                 android:id="@+id/etOffPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Pincode"
+                                android:hint="@string/hint_lead_creation_pincode"
                                 android:inputType="number"
                                 android:maxLength="6"
                                 android:maxLines="1"
@@ -1390,7 +1390,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                            android:hint="Enter Comments"
+                            android:hint="@string/hint_lead_creation_comments"
                             android:inputType="textMultiLine"
                             android:lines="4"
                             android:maxLines="4"
@@ -1412,7 +1412,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_highlight"
-                    android:text="Create" />
+                    android:text="@string/lbl_lead_creation_create" />
 
                 <Button
                     android:id="@+id/btnCancel"
@@ -1421,7 +1421,7 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_weight="1"
                     android:background="@drawable/button_highlight"
-                    android:text="Cancel" />
+                    android:text="@string/button_lbl_lead_creation_cancel" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
