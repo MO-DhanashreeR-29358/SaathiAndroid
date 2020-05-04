@@ -14,8 +14,8 @@ import com.mosl.tabapp.calendar.CalendarModule
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
 import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
+import com.mosl.tabapp.dashboard.DashboardHierarchyFragmentOld
+import com.mosl.tabapp.dashboard.DashboardSecondLevelFragmentOld
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightModule
 import com.mosl.tabapp.dashboard.base.DashboardFragmentNew
@@ -28,6 +28,10 @@ import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment
 import com.mosl.tabapp.dashboard.leads.report.LeadsReportModule
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityModule
+import com.mosl.tabapp.dashboard.report.DashboardReportFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportModule
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
@@ -125,14 +129,19 @@ interface FragmentProvider {
   fun provideMappingHistoryFragment(): MappingHistoryFragment
 
   @ContributesAndroidInjector
-  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragment
+  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragmentOld
+
+  @ContributesAndroidInjector(modules = [DashboardHierarchyReportModule::class])
+  fun provideDashboardHierarchyReportFragment(): DashboardHierarchyReportFragment
+
+  @ContributesAndroidInjector(modules = [DashboardReportModule::class])
+  fun provideDashboardReportFragment(): DashboardReportFragment
 
   @ContributesAndroidInjector
-  fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragment
+  fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragmentOld
 
   @ContributesAndroidInjector(modules = [LeadsReportModule::class])
   fun provideClientLeadFragmentFactory(): LeadsReportFragment
-
 
   @ContributesAndroidInjector(modules = [ProductivityModule::class])
   fun provideProductivityFragmentFactory(): ProductivityFragment

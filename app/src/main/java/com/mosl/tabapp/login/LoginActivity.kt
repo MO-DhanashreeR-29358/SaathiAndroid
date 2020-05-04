@@ -111,7 +111,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   override fun renderReportsData(uiModel: UiModel<List<ReportType>>) {
     uiModel.onSuccess {
-      if (it.size > 0) {
+      if (it.isNotEmpty()) {
         for (reportTypeResponse in it) {
           if (reportTypeResponse.isPreDefinedReports()) {
             val childMenuList = reportTypeResponse.childMenuList

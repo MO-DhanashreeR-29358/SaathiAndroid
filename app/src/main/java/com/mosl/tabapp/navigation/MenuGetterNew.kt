@@ -8,9 +8,9 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
-import com.mosl.tabapp.dashboard.base.DashboardFragmentNew
+import com.mosl.tabapp.dashboard.DashboardFragmentNew
+import com.mosl.tabapp.dashboard.report.DashboardReportFragment
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
@@ -49,8 +49,8 @@ object MenuGetterNew {
         args.putString(URL_PATH, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
         arguments = args
       }
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
-      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()

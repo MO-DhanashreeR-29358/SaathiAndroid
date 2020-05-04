@@ -1,0 +1,298 @@
+package com.mosl.tabapp.dashboard.report
+
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup.LayoutParams
+import android.view.Window
+import android.widget.ArrayAdapter
+import android.widget.DatePicker
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.itemSelections
+import com.mosl.app.core.error.ErrorModel
+import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
+import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
+import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMAppUtil.getDateStr
+import com.mosl.tabapp.common.FilterRowData
+import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_ucid
+import com.mosl.tabapp.constants.MoslConstant.LEADID_CLIENTCODE
+import com.mosl.tabapp.constants.MoslConstant.LEAD_ID
+import com.mosl.tabapp.constants.MoslConstant.LeadId
+import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
+import com.mosl.tabapp.constants.MoslConstant.Lead_Id
+import com.mosl.tabapp.constants.MoslConstant.UCID
+import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy
+import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
+import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FlgEmpcode
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.Flg_Hierarchy
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
+import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
+import com.mosl.tabapp.databinding.DatePickerBinding
+import com.mosl.tabapp.databinding.FragDashboardReportBinding
+import com.mosl.tabapp.model.TypeActionableFilterModel
+import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.report.HierarchyReportTableMapper
+import com.mosl.tabapp.table.DynamicHeaderRow
+import com.mosl.tabapp.table.createRowAdapter
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tableview.rowadapter.TableRowAdapter
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
+import java.util.Calendar
+import java.util.Date
+import javax.inject.Inject
+
+class DashboardReportFragment : CommonFragment(),
+  DashboardReportView {
+  private lateinit var binding: FragDashboardReportBinding
+
+  @Inject
+  lateinit var presenter: DashboardReportPresenter
+  private lateinit var model: WidgetModel
+  private lateinit var dynamicHeaderRow: DynamicHeaderRow
+  private lateinit var tableRowAdapter: TableRowAdapter<DashboardReportTableRow>
+  private val navigateEvent = PublishSubject.create<CellEvent>()
+  private lateinit var typeAdapter: ArrayAdapter<TypeActionableFilterModel>
+  private lateinit var periodAdapter: ArrayAdapter<FilterRowData>
+  private val datePickerEvent = PublishSubject.create<Int>()
+  lateinit var mainFromDate: String
+
+  lateinit var fromDat: Date
+  override fun getLayout(): Int {
+    return R.layout.frag_dashboard_report
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    binding = FragDashboardReportBinding.bind(view)
+    setUpView()
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+  }
+
+  private fun setUpView() {
+    binding.tableWrapper.setRetryListener(onRetryClick)
+    dynamicHeaderRow = HierarchyReportTableMapper.header(
+      requireContext()
+    ) as DynamicHeaderRow
+    val mfAdapter =
+      requireContext().createRowAdapter<DashboardReportTableRow>(dynamicHeaderRow)
+        .apply {
+          viewProvider.rowClickListener = { row, _ ->
+            val reportData = tableRowAdapter.getItem(row).data
+            val leadId = getValue(
+              LEAD_ID, LeadId, Lead_Id, LeadId_ClientCode,
+              LEADID_CLIENTCODE, hasMap = reportData.hasMap
+            )
+            val ucid = getValue(
+              UCID, Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
+            )
+            val empCode = getValue(FlgEmpcode, hasMap = reportData.hasMap)
+            val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
+            val rmName = reportData.hasMap[FltHierarchyEmpCode] ?: ""
+            val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
+
+            navigateEvent.onNext(
+              CellEvent(
+                leadId, ucid, empCode, level, systemsName, rmName
+              )
+            )
+          }
+        }
+    tableRowAdapter = mfAdapter
+    binding.tableWrapper.setAdapter(tableRowAdapter)
+
+    typeAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spType.adapter = typeAdapter
+
+    periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spPeriod.adapter = periodAdapter
+  }
+
+  private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
+    for (key in keys) {
+      val value: String? = hasMap[key]
+      if (value != null) {
+        return value
+      }
+    }
+    return "0"
+  }
+
+  override fun renderData(uiModel: UiModel<DashboardReportCombo>) {
+    binding.tableWrapper.toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      binding.tableWrapper.showError(error)
+    }
+
+    uiModel.onSuccess { data ->
+      val headerData = mutableListOf<String>()
+      data.headers.map {
+        headerData.add(CRMAppUtil.getRefreshColumnName(it))
+      }
+      dynamicHeaderRow.setHeader(headerData)
+      val hierarchyReport: List<DashboardReportTableRow> =
+        DashboardReportTableMapper.map(data.data)
+      binding.tableWrapper.setData(
+        hierarchyReport, ErrorModel.noData(getString(R.string.error_message_no_data_available))
+      )
+    }
+  }
+
+  override fun renderLabel(labelName: String?) {
+    labelName.let {
+      binding.txtLables.text = it
+    }
+
+  }
+
+  override fun renderDatePicker(isDateFilter: Boolean) {
+    if (isDateFilter) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.rlDate.visibility = View.VISIBLE
+      binding.tvDate.text =
+        getDateStr(Date(), dd_MMM_yyyy)
+      mainFromDate = getDateStr(Date(), yyyy_MM_dd)
+    }
+  }
+
+  override fun renderPeriodFilter(periodFilter: List<FilterRowData>) {
+    if (periodFilter.isNotEmpty()) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.spPeriod.visibility = View.VISIBLE
+      periodAdapter.setSpinnerData(binding.spPeriod, periodFilter)
+    }
+  }
+
+  override fun renderTypeFilter(typeFilter: List<TypeActionableFilterModel>) {
+    if (typeFilter.isNotEmpty()) {
+      binding.linearLayout.visibility = View.VISIBLE
+      binding.spType.visibility = View.VISIBLE
+      typeAdapter.setSpinnerData(binding.spType, typeFilter)
+    }
+  }
+
+  private fun selectDate() {
+    val today = Calendar.getInstance()
+    val dialog = Dialog(requireContext())
+    dialog.apply {
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+      val inflater = LayoutInflater.from(requireContext())
+      val dialogBinding = DatePickerBinding.inflate(inflater)
+      setContentView(dialogBinding.root)
+      window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+      dialogBinding.also {
+        it.linearLayoutOfToDate.visibility = View.GONE
+        it.datePickerFromDate.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
+
+        if (mainFromDate.isNotEmpty()) {
+          try {
+            val dateSplit = mainFromDate.split("-").toTypedArray()
+            it.datePickerFromDate.init(
+              dateSplit[0].toInt(),
+              dateSplit[1].toInt() - 1,
+              dateSplit[2].toInt()
+            ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+              mainFromDate =
+                year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+            }
+          } catch (e: Exception) {
+          }
+        } else {
+          it.datePickerFromDate.init(
+            today[Calendar.YEAR], today[Calendar.MONTH],
+            today[Calendar.DATE]
+          ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+            mainFromDate =
+              year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+          }
+        }
+
+        it.ibtnClose.setOnClickListener {
+          dismiss()
+        }
+
+        it.btnSubmit.setOnClickListener {
+          fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
+          if (mainFromDate.isNotEmpty()) {
+            fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
+            mainFromDate = getDateStr(fromDat, yyyy_MM_dd)
+            binding.tvDate.text =
+              getDateStr(fromDat, dd_MMM_yyyy)
+
+            datePickerEvent.onNext(0)
+          }
+          dialog.dismiss()
+        }
+      }
+    }.show()
+
+  }
+
+  fun prefix(input: Int): String? {
+    return if (input.toString().length == 1) {
+      "0$input"
+    } else input.toString() + ""
+  }
+
+  override fun onDatePickerEvent(): Observable<Int> {
+    return datePickerEvent.ofType()
+  }
+
+  override fun fromDate(): String {
+    return binding.tvDate.text.toString()
+  }
+
+  override fun onPeriodChange(): Observable<Int> {
+    return binding.spPeriod.itemSelections()
+  }
+
+  override fun onDatePickerChange(): Observable<Unit> {
+    return binding.rlDate.clicks()
+  }
+
+  override fun getDatePicker() {
+    selectDate()
+  }
+
+  override fun onTypeFilterChange(): Observable<Int> {
+    return binding.spType.itemSelections()
+  }
+
+  override fun getPeriod(): FilterRowData? {
+    return binding.spPeriod.selectedItem as? FilterRowData
+  }
+
+  override fun getTypeFilter(): TypeActionableFilterModel? {
+    return binding.spType.selectedItem as? TypeActionableFilterModel
+  }
+
+  override fun onNavigateEvent(): Observable<CellEvent> {
+    return navigateEvent.ofType()
+  }
+
+  override fun onFragmentReopened(args: Bundle) {
+    super.onFragmentReopened(args)
+    presenter.start()
+    dataActionSubject.onNext(DataAction.Fetch)
+
+  }
+
+}
