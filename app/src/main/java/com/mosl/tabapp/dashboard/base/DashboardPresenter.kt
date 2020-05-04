@@ -57,16 +57,16 @@ class DashboardPresenter @Inject constructor(
         }
         .addTo(disposable)
 
-//    view.onFreshRegistrationClicked().subscribe {
-//      ekycNavigator.openNewEkycApp(false,"")
-//    }
-//
-//    view.onExistingRegistrationClicked().subscribe {
-//      ekycNavigator.openNewEkycApp(true,"")
-//    }
+    view.onFreshRegistrationClicked().subscribe {
+      ekycNavigator.openNewEkycApp(false, "")
+    }.addTo(disposable)
 
-//    view.onTelephone1Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
-//    view.onTelephone2Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
-//    view.onEmailClicked().subscribe { view.showEmailDialog() }.addTo(disposable)
+    view.onExistingRegistrationClicked().subscribe {
+      ekycNavigator.openNewEkycApp(true, "")
+    }.addTo(disposable)
+
+    view.onTelephone1Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
+    view.onTelephone2Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
+    view.onEmailClicked().subscribe { view.showEmailDialog() }.addTo(disposable)
   }
 }

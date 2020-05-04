@@ -14,11 +14,11 @@ interface DashboardView : BaseView {
   fun onClientTradedClicked(): Observable<Unit>
   fun onBusinessSnapshotAdvisorClicked(): Observable<Unit>
   fun onLeadCreationClicked(): Observable<Unit>
-//  fun onFreshRegistrationClicked(): Observable<Unit>
-//  fun onExistingRegistrationClicked(): Observable<Unit>
-//  fun onTelephone1Clicked(): Observable<Unit>
-//  fun onTelephone2Clicked(): Observable<Unit>
-//  fun onEmailClicked(): Observable<Unit>
+  fun onFreshRegistrationClicked(): Observable<Unit>
+  fun onExistingRegistrationClicked(): Observable<Unit>
+  fun onTelephone1Clicked(): Observable<Unit>
+  fun onTelephone2Clicked(): Observable<Unit>
+  fun onEmailClicked(): Observable<Unit>
 
   fun loadClientsFragment()
   fun loadClientsTradedFragment()

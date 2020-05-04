@@ -39,6 +39,7 @@ import javax.inject.Inject
 
 class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
+
   @Inject
   lateinit var presenter: DashboardPresenter
 
@@ -64,11 +65,11 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     binding.rlTeamTargetAchievement.setOnClickListener(this)
     binding.rlPerformanceAndIncentivesHeader.setOnClickListener(this)
     if (userManager.getUser()!!.isAufsb()) {
-//      binding.layoutAufsb.lldashboardAufsb.visibility = View.VISIBLE
+      binding.layoutAufsb.lldashboardAufsb.visibility = View.VISIBLE
       binding.ivActionableInsights.visibility = View.GONE
       binding.tvMain.visibility = View.GONE
     } else {
-//      binding.layoutAufsb.lldashboardAufsb.visibility = View.GONE
+      binding.layoutAufsb.lldashboardAufsb.visibility = View.GONE
     }
   }
 
@@ -207,15 +208,15 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         DashboardSystemModel.setMonthTrends(systemName)
       } else if (systemName.equals(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
         binding.tvPerformanceAndIncentivesHeader.setText(
-            currentDashboard.getGroupModel(
-                PERFORMANCE_INCENTIVE_ACHIEVEMNET
-            ).displayName
+          currentDashboard.getGroupModel(
+            PERFORMANCE_INCENTIVE_ACHIEVEMNET
+          ).displayName
         )
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
         linearLayout = binding.llPerformanceAndIncentivesHeader
         icon = binding.ivPerformanceAndIncentivesHeader
       } else if (systemName.equals(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)
-          || systemName.equals(MY_PERFORMANCE_INCENTIVE)
+        || systemName.equals(MY_PERFORMANCE_INCENTIVE)
       ) {
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
       }
@@ -316,8 +317,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       val widgetList = groupModel.widgetList
       for (i in widgetList.indices) {
         val widgetTypes = widgetList[i]
-            .widgetTypeList[0]
-            .widgetTypes
+          .widgetTypeList[0]
+          .widgetTypes
         if (widgetTypes.equals(MOSLConstants.PERFORMANCE_INCENTIVE, ignoreCase = true)) {
 //          incentiveWebServiceCall(widgetList[i].systemName)
         } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
@@ -346,9 +347,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     val mainGroupList: List<DashboardGroupModel> =
       getGroupModelFromJsonArray(groupsItems)
     dashboardModel.groupList
-        .clear()
+      .clear()
     dashboardModel.groupList
-        .addAll(mainGroupList)
+      .addAll(mainGroupList)
   }
 
   private fun loadMonthTrendsFragment() {
@@ -356,9 +357,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     monthOnMonthTrendsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
+      .commit()
 
   }
 
@@ -367,9 +368,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     targetFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llTargetAchievementADV, targetFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llTargetAchievementADV, targetFragment)
+      .commit()
   }
 
   override fun loadLeadBusinessSnapshotFragment() {
@@ -378,9 +379,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     leadsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, leadsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, leadsFragment)
+      .commit()
   }
 
   override fun loadProductivityFragment() {
@@ -389,9 +390,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     productivityFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, productivityFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, productivityFragment)
+      .commit()
   }
 
   override fun loadLeadsFragment() {
@@ -400,9 +401,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     leadsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, leadsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, leadsFragment)
+      .commit()
 
   }
 
@@ -413,9 +414,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     clientsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, clientsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, clientsFragment)
+      .commit()
   }
 
   override fun loadClientsTradedFragment() {
@@ -424,9 +425,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     clientsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, clientsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, clientsFragment)
+      .commit()
   }
 
   override fun loadBusinessSnapshotAdvisorFragment() {
@@ -435,9 +436,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     businessSnapshotAdvFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, businessSnapshotAdvFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, businessSnapshotAdvFragment)
+      .commit()
   }
 
   fun setTabActive(button: Button) {
@@ -473,22 +474,35 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     return binding.leadcreation.clicks()
   }
 
-//  override fun onFreshRegistrationClicked(): Observable<Unit>{return binding.layoutAufsb.rlFreshRegistration.clicks()}
-//  override fun onExistingRegistrationClicked(): Observable<Unit>{return binding.layoutAufsb.rlExisting.clicks()}
+  override fun onFreshRegistrationClicked(): Observable<Unit> {
+    return binding.layoutAufsb.rlFreshRegistration.clicks()
+  }
+
+  override fun onExistingRegistrationClicked(): Observable<Unit> {
+    return binding.layoutAufsb.rlExisting.clicks()
+  }
 
   override fun collapseActionsMenu() {
     binding.floatingActionsMenu.collapse()
   }
 
-//  override fun onTelephone1Clicked(): Observable<Unit>{ return binding.layoutAufsb.txtTelephoneNo1.clicks()}
-//  override fun onTelephone2Clicked(): Observable<Unit>{ return binding.layoutAufsb.txtTelephoneNo2.clicks()}
-//  override fun onEmailClicked(): Observable<Unit>{ return binding.layoutAufsb.llEmail.clicks()}
+  override fun onTelephone1Clicked(): Observable<Unit> {
+    return binding.layoutAufsb.txtTelephoneNo1.clicks()
+  }
+
+  override fun onTelephone2Clicked(): Observable<Unit> {
+    return binding.layoutAufsb.txtTelephoneNo2.clicks()
+  }
+
+  override fun onEmailClicked(): Observable<Unit> {
+    return binding.layoutAufsb.llEmail.clicks()
+  }
 
   override fun showCallPopup() {
     MSFDialog.alertDialog(
-        requireActivity(), 0,
-        resources.getString(string.motilal_oswal), "Do you want to call?", "Yes",
-        "No", true
+      requireActivity(), 0,
+      resources.getString(string.motilal_oswal), "Do you want to call?", "Yes",
+      "No", true
     ) { action: Action, data: Array<Any?>? ->
       if (action == OK) {
         requireContext().initiateCall("02239982515")
@@ -532,17 +546,17 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     when (v?.id) {
       R.id.rlClientLeads -> toggleSection(binding.llClientsLeads, binding.ivClientLeads)
       R.id.rlTargetAchievementADV -> toggleSection(
-          binding.llTargetAchievementADV, binding.ivTargetAchievementADV
+        binding.llTargetAchievementADV, binding.ivTargetAchievementADV
       )
       R.id.rlMonthOnMonth -> toggleSection(binding.llMonthvsTrends, binding.ivMonthOnMonth)
       R.id.rlBusinessSnapshotHead -> toggleSection(
-          binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead
+        binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead
       )
       R.id.rlTeamTargetAchievement -> toggleSection(
-          binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement
+        binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement
       )
       R.id.rlPerformanceAndIncentivesHeader -> toggleSection(
-          binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader
+        binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader
       )
     }
   }
