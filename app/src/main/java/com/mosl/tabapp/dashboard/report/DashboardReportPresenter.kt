@@ -67,6 +67,11 @@ class DashboardReportPresenter @Inject constructor(
     view.onNavigateEvent().subscribe {
       navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
     }.addTo(disposable)
+
+    view.onDatePickerChange()
+      .subscribe {
+        view.getDatePicker()
+      }.addTo(disposable)
   }
 
   private fun getWidgetRequest(): DashboardReportRequest {
@@ -84,7 +89,9 @@ class DashboardReportPresenter @Inject constructor(
         additionalMap[WIDGETTYPE] = this.toString().replace("_", " ")
       }
     }
-
+    if (data.isDateFilter) {
+      additionalMap[FLT_DATE] = view.fromDate()
+    }
 
     return DashboardReportRequest(
       page = PAGE,

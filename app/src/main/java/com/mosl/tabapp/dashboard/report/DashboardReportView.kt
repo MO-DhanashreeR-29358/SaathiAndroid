@@ -21,6 +21,8 @@ interface DashboardReportView : BaseView {
   fun onDatePickerEvent(): Observable<Int>
   fun fromDate(): String
   fun onPeriodChange(): Observable<Int>
+  fun onDatePickerChange(): Observable<Unit>
+  fun getDatePicker()
   fun onTypeFilterChange(): Observable<Int>
   fun getPeriod(): FilterRowData?
   fun getTypeFilter(): TypeActionableFilterModel?
