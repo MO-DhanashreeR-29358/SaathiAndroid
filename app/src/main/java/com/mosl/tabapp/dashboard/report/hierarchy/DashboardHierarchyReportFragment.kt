@@ -73,7 +73,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
     val mfAdapter =
       requireContext().createRowAdapter<DashboardReportTableRow>(dynamicHeaderRow)
         .apply {
-          viewProvider.rowClickListener = { row, view ->
+          viewProvider.rowClickListener = { row, _ ->
             val reportData = tableRowAdapter.getItem(row).data
             val leadId = getValue(
               LEAD_ID, LeadId, Lead_Id, LeadId_ClientCode, LEADID_CLIENTCODE,
@@ -84,7 +84,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
             )
             val empCode = getValue(FlgEmpcode, hasMap = reportData.hasMap)
             val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
-            val rmName = reportData.hasMap.get(FltHierarchyEmpCode) ?: ""
+            val rmName = reportData.hasMap[FltHierarchyEmpCode] ?: ""
             val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
 
             navigateEvent.onNext(
@@ -101,7 +101,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
     for (key in keys) {
-      val value: String? = hasMap.get(key)
+      val value: String? = hasMap[key]
       if (value != null) {
         return value
       }
