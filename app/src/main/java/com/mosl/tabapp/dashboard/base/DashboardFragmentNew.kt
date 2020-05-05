@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
@@ -16,6 +17,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.Incentive
+import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
@@ -40,7 +42,9 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
+import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.downloadImage
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
@@ -363,6 +367,27 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  override fun renderIncentivePolicy(uiModel: UiModel<IncentivePolicy>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      if (it.filePath.isEmpty()) {
+        alertDialog(
+            requireContext(), 0, resources.getString(R.string.motilal_oswal),
+            MISSING_FILE, "OK", true, null
+        )
+      } else {
+        requireContext().downloadImage(it.filePath)
+        Toast.makeText(requireContext(), "Downloading ${it.filePath}...", Toast.LENGTH_SHORT)
+            .show()
+      }
+    }
+  }
+
   override fun renderIncentiveData(uiModel: UiModel<Incentive>) {
     toggleProgress(uiModel.inProgress)
 
@@ -630,6 +655,14 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     return binding.layoutAufsb.llEmail.clicks()
   }
 
+  override fun onDetailIncentiveClicked(): Observable<Unit> {
+    return binding.layoutIncentives.tvIncentives.clicks()
+  }
+
+  override fun getDashboardID(): String {
+    return currentDashboard.id
+  }
+
   override fun showCallPopup() {
     MSFDialog.alertDialog(
         requireActivity(), 0,
@@ -679,6 +712,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val Q3 = "Q3"
     const val Q4 = "Q4"
     const val YTD = "YTD"
+    const val MISSING_FILE = "File Not Found"
   }
 
   override fun onClick(v: View?) {

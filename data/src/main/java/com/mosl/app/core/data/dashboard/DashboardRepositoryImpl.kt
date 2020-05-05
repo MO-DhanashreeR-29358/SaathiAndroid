@@ -4,9 +4,11 @@ import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
 import com.mosl.mobile.domain.dashboard.Incentive
+import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -35,5 +37,19 @@ class DashboardRepositoryImpl @Inject constructor(
         )
     )
         .map { DashboardMapper.tranformIncentiveData(it) }
+  }
+
+  override fun getIncentivePolicy(
+    dashboardId: String,
+    data: DashboardRequestData
+  ): Observable<IncentivePolicy> {
+    return saathiApi.getIncentivePolicy(
+        IncentivePolicyRequest(
+            employeeCode = data.empCode,
+            businessProfileId = data.profileId,
+            dashboardId = dashboardId
+        )
+    )
+        .map { DashboardMapper.transformIncentivePolicyData(it) }
   }
 }

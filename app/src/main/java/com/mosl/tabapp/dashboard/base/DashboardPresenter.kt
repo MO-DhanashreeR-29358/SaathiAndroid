@@ -74,6 +74,16 @@ class DashboardPresenter @Inject constructor(
         }
         .addTo(disposable)
 
+    view.onDetailIncentiveClicked()
+        .switchMap {
+          repository.getIncentivePolicy(view.getDashboardID(), dashboardRequestData)
+              .compose(applyUiModel())
+        }
+        .subscribe {
+          view.renderIncentivePolicy(it)
+        }
+        .addTo(disposable)
+
     view.onFreshRegistrationClicked()
         .subscribe {
           ekycNavigator.openNewEkycApp(false, "")
