@@ -56,9 +56,9 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
+import org.json.JSONObject
 import java.util.HashMap
 import javax.inject.Inject
-import org.json.JSONObject
 
 class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
@@ -144,6 +144,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       }
 
   }
+
   private fun renderDashboard(currentDashboard: DashboardModel) {
     binding.apply {
       llClient.visibility = View.GONE
@@ -543,47 +544,34 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         .widgetTypeList[0]
         .widgetTypes
       if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
-        subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
+        subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
       } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
-        binding.llCurrentQuarterStatusAdviosory.visibility = View.VISIBLE
-  fun setIncentiveVisibility(systemName: String) {
-    if (currentDashboard != null) {
-      val groupModel = currentDashboard.getGroupModel(systemName)
-      val widgetList = groupModel.widgetList
-      for (i in widgetList.indices) {
-        val widgetTypes = widgetList[i]
-            .widgetTypeList[0]
-            .widgetTypes
-        if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
-          subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
-        } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
-          subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAddtionalParameterMap()))
-          binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
-        }
+        subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAddtionalParameterMap()))
+        binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
       }
     }
 
   }
 
-        override fun renderStatus(uiModel: UiModel<String>) {
-          toggleProgress(uiModel.inProgress)
+  override fun renderStatus(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
 
-          uiModel.onSuccess {
-            val response = JSONObject(uiModel.data)
-            val status = response.get(STATUS)
-              .toString()
-            if (status.equals("true")) {
-              val jsonObject = response.getJSONObject(RESPONSE)
-              renderCurrentQuarterStatus(jsonObject)
-            } else {
-              throw ServiceFailureException(response.get(MESSAGE).toString())
-            }
-          }
-        }
+    uiModel.onSuccess {
+      val response = JSONObject(uiModel.data)
+      val status = response.get(STATUS)
+        .toString()
+      if (status == "true") {
+        val jsonObject = response.getJSONObject(RESPONSE)
+        renderCurrentQuarterStatus(jsonObject)
+      } else {
+        throw ServiceFailureException(response.get(MESSAGE).toString())
+      }
+    }
+  }
 
-        private fun renderCurrentQuarterStatus(jsonObject: JSONObject) {
-          binding.currentQuarter.loadData(jsonObject)
-        }
+  private fun renderCurrentQuarterStatus(jsonObject: JSONObject) {
+    binding.currentQuarter.loadData(jsonObject)
+  }
 
   private val dashboardList: ArrayList<DashboardModel> = ArrayList()
   private val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
@@ -826,7 +814,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   override fun onDetailIncentiveClicked(): Observable<Unit> {
-    return binding.layoutIncentives.tvIncentives.clicks()
+    return binding.tvDetailIncentive.clicks()
   }
 
   override fun getDashboardID(): String {
