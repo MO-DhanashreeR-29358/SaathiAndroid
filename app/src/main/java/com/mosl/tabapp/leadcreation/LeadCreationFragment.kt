@@ -9,6 +9,7 @@ import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
 import android.widget.TextView
+import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.tabapp.R
@@ -496,16 +497,21 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     }
   }
 
-  override fun onPrimaryInfoClicked(): Observable<Unit> {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+  override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
+  override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
+
+  override fun renderPrimaryInfoClick() {
+    toggleSectionExpansion(
+        binding.llPersonalInformation,
+        binding.tvPersonalInfo
+    )
   }
 
-  override fun onAdditionalInfoClicked(): Observable<Unit> {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+  override fun renderAdditionalInfoClick() {
+    toggleSectionExpansion(
+        binding.llAdditionInfo,
+        binding.tvAdditionInfo
+    )
   }
 
   override fun onCreateButtonClicked(): Observable<Unit> {

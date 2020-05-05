@@ -13,6 +13,8 @@ interface LeadCreationView : BaseView {
 
   fun onPrimaryInfoClicked(): Observable<Unit>
   fun onAdditionalInfoClicked(): Observable<Unit>
+  fun renderPrimaryInfoClick()
+  fun renderAdditionalInfoClick()
   fun onCreateButtonClicked(): Observable<Unit>
   fun onCancelButtonClicked(): Observable<Unit>
   fun onSameAsCheckboxClicked(): Observable<Unit>

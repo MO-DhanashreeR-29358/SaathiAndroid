@@ -22,5 +22,13 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderOnOfficePrimaryCheckboxChanges)
         .addTo(disposable)
 
+    view.onPrimaryInfoClicked()
+        .subscribe { view.renderPrimaryInfoClick() }
+        .addTo(disposable)
+
+    view.onAdditionalInfoClicked()
+        .subscribe { view.renderAdditionalInfoClick() }
+        .addTo(disposable)
+
   }
 }
