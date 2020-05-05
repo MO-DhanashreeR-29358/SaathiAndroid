@@ -1,6 +1,7 @@
 package com.mosl.tabapp.dashboard.base
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
@@ -66,17 +67,34 @@ class DashboardPresenter @Inject constructor(
         .subscribe { view.renderIncentiveData(it) }
         .addTo(disposable)
 
-//    view.onFreshRegistrationClicked().subscribe {
-//      ekycNavigator.openNewEkycApp(false,"")
-//    }
-//
-//    view.onExistingRegistrationClicked().subscribe {
-//      ekycNavigator.openNewEkycApp(true,"")
-//    }
+    view.onQuarterChanged()
+        .filter(InvalidSelectionPredicate)
+        .subscribe {
+          view.loadIncentiveView(view.getSelectedQuarter())
+        }
+        .addTo(disposable)
 
-//    view.onTelephone1Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
-//    view.onTelephone2Clicked().subscribe { view.showCallPopup() }.addTo(disposable)
-//    view.onEmailClicked().subscribe { view.showEmailDialog() }.addTo(disposable)
+    view.onFreshRegistrationClicked()
+        .subscribe {
+          ekycNavigator.openNewEkycApp(false, "")
+        }
+        .addTo(disposable)
+
+    view.onExistingRegistrationClicked()
+        .subscribe {
+          ekycNavigator.openNewEkycApp(true, "")
+        }
+        .addTo(disposable)
+
+    view.onTelephone1Clicked()
+        .subscribe { view.showCallPopup() }
+        .addTo(disposable)
+    view.onTelephone2Clicked()
+        .subscribe { view.showCallPopup() }
+        .addTo(disposable)
+    view.onEmailClicked()
+        .subscribe { view.showEmailDialog() }
+        .addTo(disposable)
   }
 }
 

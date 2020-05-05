@@ -5,9 +5,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -37,6 +40,7 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
@@ -73,12 +77,18 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     binding.rlTeamTargetAchievement.setOnClickListener(this)
     binding.rlPerformanceAndIncentivesHeader.setOnClickListener(this)
     if (userManager.getUser()!!.isAufsb()) {
-//      binding.layoutAufsb.lldashboardAufsb.visibility = View.VISIBLE
+      binding.layoutAufsb.lldashboardAufsb.visibility = View.VISIBLE
       binding.ivActionableInsights.visibility = View.GONE
       binding.tvMain.visibility = View.GONE
     } else {
-//      binding.layoutAufsb.lldashboardAufsb.visibility = View.GONE
+      binding.layoutAufsb.lldashboardAufsb.visibility = View.GONE
     }
+    val periodAdapter = SpinnerAdapterFactory.getDefaultAdapter<String>(requireContext())
+    binding.layoutIncentives.spQuarter.adapter = periodAdapter
+    val eventTypeArray =
+      resources.getStringArray(R.array.SelectQuarter)
+    val arrEventType = listOf(*eventTypeArray)
+    periodAdapter.setSpinnerData(binding.layoutIncentives.spQuarter, arrEventType)
   }
 
   override fun render(uiModel: UiModel<List<DashboardData>>) {
@@ -235,7 +245,6 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         DashboardSystemModel.setMonthTrends(systemName)
       } else if (systemName.equals(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
         setIncentiveVisibility(systemName)
-//        subject.onNext(OnIncentive(systemName,getAddtionalParameterMap()))
         binding.tvPerformanceAndIncentivesHeader.setText(
             currentDashboard.getGroupModel(
                 PERFORMANCE_INCENTIVE_ACHIEVEMNET
@@ -379,26 +388,24 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       fieldData[YTD] = data.ytd.toString()
       arrayListIncentive.add(fieldData)
     }
-//    incentiveView("Q1")
+    loadIncentiveView("Q1")
   }
 
-  /*fun incentiveView(value : String){
+  override fun loadIncentiveView(value: String) {
     //clear data from table
     //clear data from table
-    tableMData.removeAllViews()
+    binding.layoutIncentives.tableMData.removeAllViews()
     //Adding head
     //Adding head
-    val inFla = Objects.requireNonNull(requireActivity())
-        .layoutInflater
-    @SuppressLint("InflateParams") val tableRowH =
-      inFla.inflate(layout.item_table_row, null)
+    val inFla = requireActivity().layoutInflater
+    val tableRowH = inFla.inflate(R.layout.item_table_row, null)
     val tvMTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvMTDCOUNT)
     val tvYTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvYTDCOUNT)
     val tvParameters = tableRowH.findViewById<TextView>(R.id.tvParameters)
     tvParameters.text = resources.getString(string.txt_label_parameters)
     tvMTDCOUNT.text = value
     tvYTDCOUNT.text = MOSLConstants.YTD
-    tableMData.addView(tableRowH)
+    binding.layoutIncentives.tableMData.addView(tableRowH)
     //adding head end
 
     //adding head end
@@ -410,8 +417,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
             .get(PARAMETERS)?:""
         val ytd: String = arrayListIncentive.get(i)
             .get(YTD)?:""
-        @SuppressLint("InflateParams") val tableRow =
-          inFla.inflate(layout.item_table_row, null)
+        val tableRow =
+          inFla.inflate(R.layout.item_table_row, null)
         val linearLayout = tableRow.findViewById<LinearLayout>(R.id.linearLayout)
         val tvMTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvMTDCOUNT)
         val tvYTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvYTDCOUNT)
@@ -420,12 +427,12 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         tvMTDCOUNTData.text = filterData
         tvYTDCOUNTData.text = ytd
         linearLayout.setBackgroundResource(if (i % 2 == 0) color.white else color.white)
-        tableMData.addView(tableRow)
+        binding.layoutIncentives.tableMData.addView(tableRow)
       }
     }
-    llIncentive.setVisibility(View.VISIBLE)
-    tvIncentives.setText(resources.getString(string.txt_label_incentive))
-  }*/
+    binding.layoutIncentives.llIncentive.setVisibility(View.VISIBLE)
+    binding.layoutIncentives.tvIncentives.setText(resources.getString(string.txt_label_incentive))
+  }
 
   fun setIncentiveVisibility(systemName: String) {
     if (currentDashboard != null) {
@@ -437,7 +444,6 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
             .widgetTypes
         if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
           subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
-//          incentiveWebServiceCall(widgetList[i].systemName)
         } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
 //          currentQuarterStatusWebServiceCall(widgetList[i].systemName)
           binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
@@ -592,16 +598,37 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     return binding.leadcreation.clicks()
   }
 
-//  override fun onFreshRegistrationClicked(): Observable<Unit>{return binding.layoutAufsb.rlFreshRegistration.clicks()}
-//  override fun onExistingRegistrationClicked(): Observable<Unit>{return binding.layoutAufsb.rlExisting.clicks()}
+  override fun onQuarterChanged(): Observable<Int> {
+    return binding.layoutIncentives.spQuarter.itemSelections()
+  }
+
+  override fun getSelectedQuarter(): String {
+    return binding.layoutIncentives.spQuarter.selectedItem.toString()
+  }
+
+  override fun onFreshRegistrationClicked(): Observable<Unit> {
+    return binding.layoutAufsb.rlFreshRegistration.clicks()
+  }
+
+  override fun onExistingRegistrationClicked(): Observable<Unit> {
+    return binding.layoutAufsb.rlExisting.clicks()
+  }
 
   override fun collapseActionsMenu() {
     binding.floatingActionsMenu.collapse()
   }
 
-//  override fun onTelephone1Clicked(): Observable<Unit>{ return binding.layoutAufsb.txtTelephoneNo1.clicks()}
-//  override fun onTelephone2Clicked(): Observable<Unit>{ return binding.layoutAufsb.txtTelephoneNo2.clicks()}
-//  override fun onEmailClicked(): Observable<Unit>{ return binding.layoutAufsb.llEmail.clicks()}
+  override fun onTelephone1Clicked(): Observable<Unit> {
+    return binding.layoutAufsb.txtTelephoneNo1.clicks()
+  }
+
+  override fun onTelephone2Clicked(): Observable<Unit> {
+    return binding.layoutAufsb.txtTelephoneNo2.clicks()
+  }
+
+  override fun onEmailClicked(): Observable<Unit> {
+    return binding.layoutAufsb.llEmail.clicks()
+  }
 
   override fun showCallPopup() {
     MSFDialog.alertDialog(

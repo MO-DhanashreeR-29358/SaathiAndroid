@@ -20,9 +20,9 @@
             android:orientation="vertical"
             >
 
-            <!--   <include
+            <include
                  android:id="@+id/layoutAufsb"
-                 layout="@layout/frag_dashboard_aufsb" />-->
+              layout="@layout/frag_dashboard_aufsb" />
 
             <TextView
                 android:id="@+id/tvMain"
@@ -547,7 +547,9 @@
                     android:orientation="vertical"
                     >
 
-                    <include layout="@layout/frag_insentives" />
+                    <include
+                      android:id="@+id/layout_incentives"
+                      layout="@layout/frag_insentives" />
 
                     <include layout="@layout/frag_performane" />
 

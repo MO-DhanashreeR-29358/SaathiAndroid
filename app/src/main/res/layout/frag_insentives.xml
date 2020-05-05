@@ -1,64 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llIncentive"
+  android:id="@+id/llIncentive"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_margin="@dimen/_8sdp"
+  android:background="@color/white"
+  android:orientation="vertical"
+  android:visibility="gone">
+
+  <TextView
+    android:id="@+id/tvIncentives"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:textColor="@color/flush_orange"
+    android:textSize="@dimen/_14sdp"
+    android:textStyle="bold" />
+
+
+  <LinearLayout
+    android:id="@+id/linearLayout41"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/_8sdp"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:visibility="gone">
-
-    <TextView
-        android:id="@+id/tvIncentives"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:textColor="@color/flush_orange"
-        android:textSize="@dimen/_14sdp"
-        android:textStyle="bold" />
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_3sdp"
+    android:layout_marginLeft="@dimen/_8sdp"
+    android:layout_marginRight="@dimen/_8sdp"
+    android:layout_marginBottom="@dimen/_2sdp"
+    android:orientation="horizontal">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout41"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_3sdp"
-        android:layout_marginLeft="@dimen/_8sdp"
-        android:layout_marginRight="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_2sdp"
-        android:orientation="horizontal">
+    <RelativeLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.3">
+
+    </RelativeLayout>
 
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3">
-
-        </RelativeLayout>
-
-
-        <Spinner
-            android:id="@+id/spQuarter"
-            style="@style/DashbordSpinnerSelector"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/_5sdp"
-            android:layout_weight="1" />
+    <Spinner
+      android:id="@+id/spQuarter"
+      style="@style/DashbordSpinnerSelector"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="@dimen/_5sdp"
+      android:layout_weight="1" />
 
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"></RelativeLayout>
+    <RelativeLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="0.3"></RelativeLayout>
 
-    </LinearLayout>
+  </LinearLayout>
 
 
-    <TableLayout
-        android:id="@+id/tableMData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp" />
+  <TableLayout
+    android:id="@+id/tableMData"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp" />
 
 </LinearLayout>
+</layout>
