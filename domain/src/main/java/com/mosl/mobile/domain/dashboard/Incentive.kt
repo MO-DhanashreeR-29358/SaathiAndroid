@@ -23,3 +23,7 @@ data class IncentiveTableData1(
   @JvmField val widgetType: String,
   @JvmField val ytd: String
 )
+
+data class IncentivePolicy(
+  @JvmField val filePath: String
+)

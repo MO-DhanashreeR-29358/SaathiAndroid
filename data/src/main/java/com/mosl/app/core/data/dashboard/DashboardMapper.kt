@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.dashboard.DashboardGroupsData
 import com.mosl.mobile.domain.dashboard.Filter
 import com.mosl.mobile.domain.dashboard.FilterData
 import com.mosl.mobile.domain.dashboard.Incentive
+import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.mobile.domain.dashboard.IncentiveTableData1
 import com.mosl.mobile.domain.dashboard.TableData
@@ -19,6 +20,7 @@ import com.mosl.saathi.api.model.dashboard.dashboardmetadata.WidgetTypeItem
 import com.mosl.saathi.api.model.dashboard.incentive.IncentiveItem
 import com.mosl.saathi.api.model.dashboard.incentive.Table1Item
 import com.mosl.saathi.api.model.dashboard.incentive.TableItem
+import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyItem
 import java.util.Collections
 
 object DashboardMapper {
@@ -95,6 +97,10 @@ object DashboardMapper {
           title = it.title ?: ""
       )
     }
+  }
+
+  fun transformIncentivePolicyData(incentivePolicyItem: IncentivePolicyItem): IncentivePolicy {
+    return IncentivePolicy(filePath = incentivePolicyItem.filePath ?: "")
   }
 
   fun tranformIncentiveData(incentiveItem: IncentiveItem): Incentive {
