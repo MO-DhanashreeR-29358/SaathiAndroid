@@ -23,6 +23,7 @@ import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
@@ -32,6 +33,7 @@ import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
 import com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment
 import com.mosl.tabapp.dashboard.target.TargetFragment
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.databinding.FragDashboardBinding
@@ -211,16 +213,18 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
         DashboardSystemModel.setLeadSystemName(systemName)
       } else if (systemName == SYS_BUSINESS_SNAPSHOT) {
+        binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
         binding.llSnapshot.visibility = View.VISIBLE
         linearLayout = binding.llBusinessSnapshotHead
         icon = binding.ivBusinessSnapshotHead
-        loadLeadBusinessSnapshotFragment()
+        loadBusinessSnapShot()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
       } else if (systemName == SYS_RH_BUSINESS_SNAPSHOT) {
+        binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
         binding.llSnapshot.visibility = View.VISIBLE
         linearLayout = binding.llBusinessSnapshotHead
         icon = binding.ivBusinessSnapshotHead
-        loadLeadBusinessSnapshotFragment()
+        loadBusinessSnapShot()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
       } else if (systemName == SELF_TARGET_ACHIEVEMNET) {
         binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
@@ -237,13 +241,21 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
       } else if (systemName == TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT) {
-        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
-        binding.llTarget.visibility = View.VISIBLE
+        binding.txtTeamTarget.text = currentDashboard.getGroupModel(systemName).displayName
+        binding.llTeamTarget.visibility = View.VISIBLE
         linearLayout = binding.llTeamTargetAchievement
         icon = binding.ivTeamTargetAchievement
-        loadTargetAchievementFragment()
+        loadTeamTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
       } else if (systemName == MONTH_ON_MONTH) {
+        binding.txtMonthTrends.text = TRENDS_TITLE
+        binding.llMonthTrend.visibility = View.VISIBLE
+        linearLayout = binding.llMonthvsTrends
+        icon = binding.ivMonthOnMonth
+        loadMonthTrendsFragment()
+        DashboardSystemModel.setMonthTrends(systemName)
+      } else if (systemName == MONTH_ON_MONTH_ACCOUNT_REVENUE) {
+        binding.txtMonthTrends.text = TRENDS_TITLE
         binding.llMonthTrend.visibility = View.VISIBLE
         linearLayout = binding.llMonthvsTrends
         icon = binding.ivMonthOnMonth
@@ -259,10 +271,26 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
         linearLayout = binding.llPerformanceAndIncentivesHeader
         icon = binding.ivPerformanceAndIncentivesHeader
-      } else if (systemName == OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
-        || systemName == MY_PERFORMANCE_INCENTIVE
-      ) {
+      } else if (systemName == OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES) {
+        setIncentiveVisibility(systemName)
+        binding.tvPerformanceAndIncentivesHeader.text =
+          currentDashboard.getGroupModel(
+            OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
+          ).displayName
+
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+        linearLayout = binding.llPerformanceAndIncentivesHeader
+        icon = binding.ivPerformanceAndIncentivesHeader
+      } else if (systemName == MY_PERFORMANCE_INCENTIVE) {
+        setIncentiveVisibility(systemName)
+        binding.tvPerformanceAndIncentivesHeader.text =
+          currentDashboard.getGroupModel(
+            MY_PERFORMANCE_INCENTIVE
+          ).displayName
+
+        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+        linearLayout = binding.llPerformanceAndIncentivesHeader
+        icon = binding.ivPerformanceAndIncentivesHeader
       }
       if (systemName != ACTIONABLE) {
         setIcon(linearLayout, icon)
@@ -484,6 +512,17 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       .commit()
   }
 
+  private fun loadTeamTargetAchievementFragment() {
+    val args = Bundle()
+    val leadsFragment = TeamTargetFragment()
+    args.putSerializable(DASHBOARD_MODEL, currentDashboard)
+    leadsFragment.arguments = args
+    requireActivity().supportFragmentManager
+      .beginTransaction()
+      .replace(R.id.llTeamTargetAchievement, leadsFragment)
+      .commit()
+  }
+
   override fun loadLeadBusinessSnapshotFragment() {
     val leadsFragment = BusinessSnapshotFragment()
     setTabActive(binding.btnBusinessSnapshot)
@@ -492,6 +531,16 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     requireActivity().supportFragmentManager
       .beginTransaction()
       .replace(R.id.llReplaceClientFragment, leadsFragment)
+      .commit()
+  }
+
+  private fun loadBusinessSnapShot() {
+    val fragment = BusinessSnapshotFragment()
+    args.putSerializable(DASHBOARD_MODEL, currentDashboard)
+    fragment.arguments = args
+    requireActivity().supportFragmentManager
+      .beginTransaction()
+      .replace(R.id.llBusinessSnapshotHead, fragment)
       .commit()
   }
 
@@ -672,6 +721,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val Q3 = "Q3"
     const val Q4 = "Q4"
     const val YTD = "YTD"
+    const val BUSINESS_SNAPSHOT_TITLE = "Business Snapshot"
+    const val TRENDS_TITLE = "Month on Month Trend"
   }
 
   override fun onClick(v: View?) {
