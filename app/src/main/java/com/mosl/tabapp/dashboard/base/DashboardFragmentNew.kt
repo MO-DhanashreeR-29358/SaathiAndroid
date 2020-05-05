@@ -11,6 +11,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -26,7 +27,8 @@ import com.mosl.tabapp.R.string
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
@@ -50,6 +52,7 @@ import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
+import org.json.JSONObject
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -329,7 +332,11 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
-  override fun onIncentive(): Observable<OnIncentive> {
+  override fun onIncentive(): Observable<PerformanceIncentive> {
+    return subject.ofType()
+  }
+
+  override fun CurrentQuarterStatus(): Observable<CurrentQuarterStatus> {
     return subject.ofType()
   }
 
@@ -468,13 +475,33 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
             .widgetTypeList[0]
             .widgetTypes
         if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
-          subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
+          subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
         } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
-//          currentQuarterStatusWebServiceCall(widgetList[i].systemName)
+          subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAddtionalParameterMap()))
           binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
         }
       }
     }
+  }
+
+  override fun renderStatus(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onSuccess {
+      val response = JSONObject(uiModel.data)
+      val status = response.get(STATUS)
+          .toString()
+      if (status.equals("true")) {
+        val jsonObject = response.getJSONObject(RESPONSE)
+        renderCurrentQuarterStatus(jsonObject)
+      } else {
+        throw ServiceFailureException(response.get(MESSAGE).toString())
+      }
+    }
+  }
+
+  private fun renderCurrentQuarterStatus(jsonObject: JSONObject) {
+    binding.currentQuarter.loadData(jsonObject)
   }
 
   val dashboardList: ArrayList<DashboardModel> = ArrayList()
@@ -713,6 +740,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val Q4 = "Q4"
     const val YTD = "YTD"
     const val MISSING_FILE = "File Not Found"
+    const val STATUS = "Status"
+    const val MESSAGE = "Message"
+    const val RESPONSE = "Response"
   }
 
   override fun onClick(v: View?) {

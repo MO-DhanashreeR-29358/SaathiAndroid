@@ -5,13 +5,15 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import io.reactivex.Observable
 
 interface DashboardView : BaseView {
   fun render(uiModel: UiModel<List<DashboardData>>)
   fun renderIncentiveData(uiModel: UiModel<Incentive>)
   fun renderIncentivePolicy(uiModel: UiModel<IncentivePolicy>)
+  fun renderStatus(uiModel: UiModel<String>)
   fun onClientClicked(): Observable<Unit>
   fun onBusinessSnapshotClicked(): Observable<Unit>
   fun onLeadClicked(): Observable<Unit>
@@ -39,7 +41,8 @@ interface DashboardView : BaseView {
   fun showCallPopup()
   fun showEmailDialog()
 
-  fun onIncentive(): Observable<OnIncentive>
+  fun onIncentive(): Observable<PerformanceIncentive>
+  fun CurrentQuarterStatus(): Observable<CurrentQuarterStatus>
   fun getSelectedQuarter(): String
   fun getDashboardID(): String
 }

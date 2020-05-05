@@ -17,5 +17,11 @@ interface DashboardRepository {
     map: Map<String, String>
   ): Observable<Incentive>
 
+  fun getCurrentQuarterStatusData(
+    systemName: String,
+    data: DashboardRequestData,
+    map: Map<String, String>
+  ): Observable<String>
+
 //  fun getActionableCount(systemName : String)
 }
