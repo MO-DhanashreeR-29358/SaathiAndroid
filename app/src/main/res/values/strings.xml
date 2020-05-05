@@ -403,4 +403,5 @@
     <string name="button_lbl_lead_creation_cancel">Cancel</string>
     <string name="lbl_lead_creation_same_address"> Same as Above</string>
     <string name="lbl_lead_creation_primary_address"> Primary Address</string>
+    <string name="page_title_lead_creation">Lead Creation</string>
 </resources>
