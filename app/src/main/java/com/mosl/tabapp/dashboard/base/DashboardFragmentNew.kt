@@ -105,39 +105,56 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
 
     uiModel.onSuccess {
+      dashboardList.clear()
       for (dashboardData in it) {
         fillAvailableWidgetModel(dashboardData)
-        if (dashboardList.size > 0) {
-          currentDashboard = dashboardList[0]
-          createFloatingActionButtons()
-          renderDashboard(dashboardData)
-        }
+      }
+      if (dashboardList.size > 0) {
+        currentDashboard = dashboardList[0]
+        createFloatingActionButtons()
+        renderDashboard(currentDashboard)
       }
     }
   }
 
   private fun createFloatingActionButtons() {
-    for (dashboardModel in dashboardList) {
-      val button = FloatingActionButton(context)
-      button.title = dashboardModel.name
-      button.size = FloatingActionButton.SIZE_MINI
-      button.colorNormal = ContextCompat.getColor(requireContext(), color.white)
-      ContextCompat.getDrawable(requireContext(), drawable.ic_create_lead)?.let {
-        button.setIconDrawable(it)
+    if (dashboardList.size > 1)
+      for (dashboardModel in dashboardList) {
+        val button = FloatingActionButton(context)
+        button.title = dashboardModel.name
+        button.size = FloatingActionButton.SIZE_MINI
+        button.colorNormal = ContextCompat.getColor(requireContext(), color.white)
+        ContextCompat.getDrawable(requireContext(), drawable.ic_create_lead)?.let {
+          button.setIconDrawable(it)
+        }
+        binding.floatingActionsMenu.addButton(button)
+        button.setOnClickListener { v: View? ->
+          hideKeyboard(v)
+          binding.tvMain.requestFocus()
+          binding.floatingActionsMenu.collapse()
+          currentDashboard = dashboardModel
+          renderDashboard(currentDashboard)
+        }
       }
-      binding.floatingActionsMenu.addButton(button)
-      button.setOnClickListener { v: View? ->
-        hideKeyboard(v)
-        binding.tvMain.requestFocus()
-        binding.floatingActionsMenu.collapse()
-        currentDashboard = dashboardModel
-      }
-    }
 
   }
 
-  private fun renderDashboard(dashboardData: DashboardData) {
-    for (group in dashboardData.groups) {
+  private fun renderDashboard(currentDashboard: DashboardModel) {
+    binding.apply {
+      llClient.visibility = View.GONE
+      ivActionableInsights.visibility = View.GONE
+      llTarget.visibility = View.GONE
+      llTeamTarget.visibility = View.GONE
+      llPerformanceAndIncentives.visibility = View.GONE
+      layoutIncentives.llIncentive.visibility = View.GONE
+      llCurrentQuarterStatusAdviosory.visibility = View.GONE
+      layoutPerformance.llAdvPerformance.visibility = View.GONE
+      layoutTeamPerformance.llTeamPerformance.visibility = View.GONE
+      llCurrentQuarterStatusOneUp.visibility = View.GONE
+      llMonthTrend.visibility = View.GONE
+      llSnapshot.visibility = View.GONE
+    }
+    for (group in currentDashboard.groupList) {
       lateinit var linearLayout: LinearLayout
       lateinit var icon: ImageView
       val systemName = group.systemName
@@ -271,6 +288,16 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
         linearLayout = binding.llPerformanceAndIncentivesHeader
         icon = binding.ivPerformanceAndIncentivesHeader
+      } else if (systemName == PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE) {
+        setIncentiveVisibility(systemName)
+        binding.tvPerformanceAndIncentivesHeader.text =
+          currentDashboard.getGroupModel(
+            PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE
+          ).displayName
+
+        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+        linearLayout = binding.llPerformanceAndIncentivesHeader
+        icon = binding.ivPerformanceAndIncentivesHeader
       } else if (systemName == OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES) {
         setIncentiveVisibility(systemName)
         binding.tvPerformanceAndIncentivesHeader.text =
@@ -323,6 +350,11 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         binding.btnBusinessSnapshotAdvisor.visibility = View.GONE
         binding.btnClientTraded.visibility = View.GONE
         binding.btnProductivity.visibility = View.GONE
+      }
+      MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY -> {
+        binding.btnBusinessSnapshot.visibility = View.GONE
+        binding.btnLeads.visibility = View.GONE
+        binding.btnClientTraded.visibility = View.GONE
       }
       SYS_LEAD_SNAPSHOT -> {
         binding.btnClient.visibility = View.GONE
@@ -602,6 +634,41 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   private fun setTabActive(button: Button) {
+    binding.apply {
+      btnBusinessSnapshot.background = ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnBusinessSnapshot.setTextColor(
+        ContextCompat.getColor(
+          requireContext(),
+          color.Button_text_color
+        )
+      )
+      btnBusinessSnapshotAdvisor.background =
+        ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnBusinessSnapshotAdvisor.setTextColor(
+        ContextCompat.getColor(
+          requireContext(),
+          color.Button_text_color
+        )
+      )
+      btnClient.background = ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnClient.setTextColor(ContextCompat.getColor(requireContext(), color.Button_text_color))
+      btnProductivity.background = ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnProductivity.setTextColor(
+        ContextCompat.getColor(
+          requireContext(),
+          color.Button_text_color
+        )
+      )
+      btnLeads.background = ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnLeads.setTextColor(ContextCompat.getColor(requireContext(), color.Button_text_color))
+      btnClientTraded.background = ContextCompat.getDrawable(requireContext(), drawable.white)
+      btnClientTraded.setTextColor(
+        ContextCompat.getColor(
+          requireContext(),
+          color.Button_text_color
+        )
+      )
+    }
     button.background = ContextCompat.getDrawable(requireContext(), drawable.orange)
     button.setTextColor(ContextCompat.getColor(requireContext(), color.white))
   }
@@ -711,6 +778,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val MONTH_ON_MONTH = "MonthOnMonth"
     const val MY_PERFORMANCE_INCENTIVE = "My_Performance_Incentive"
     const val PERFORMANCE_INCENTIVE_ACHIEVEMNET = "Performance_Incentive_Achievemnet"
+    const val PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE = "Performance_Incentive_Achievemnet1"
     const val OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES =
       "OaoSalesOneup_TeamPerformanceAndIncentives"
     const val DASHBOARD_MODEL = "dashboardModel"

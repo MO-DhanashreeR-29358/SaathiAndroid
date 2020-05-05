@@ -21,8 +21,9 @@
             >
 
             <include
-                 android:id="@+id/layoutAufsb"
-              layout="@layout/frag_dashboard_aufsb" />
+                android:id="@+id/layoutAufsb"
+                layout="@layout/frag_dashboard_aufsb"
+                />
 
             <TextView
                 android:id="@+id/tvMain"
@@ -548,13 +549,18 @@
                     >
 
                     <include
-                      android:id="@+id/layout_incentives"
-                      layout="@layout/frag_insentives" />
-
-                    <include layout="@layout/frag_performane" />
+                        android:id="@+id/layout_incentives"
+                        layout="@layout/frag_insentives"
+                        />
 
                     <include
-                        layout="@layout/frag_performane_team"
+                        android:id="@+id/layout_performance"
+                        layout="@layout/frag_performance"
+                        />
+
+                    <include
+                        android:id="@+id/layout_team_performance"
+                        layout="@layout/frag_performance_team"
                         android:visibility="gone"
                         />
 
