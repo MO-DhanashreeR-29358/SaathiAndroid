@@ -25,9 +25,6 @@ interface DashboardView : BaseView {
   fun onTelephone1Clicked(): Observable<String>
   fun onTelephone2Clicked(): Observable<String>
   fun onEmailClicked(): Observable<String>
-  fun onTelephone1Clicked(): Observable<Unit>
-  fun onTelephone2Clicked(): Observable<Unit>
-  fun onEmailClicked(): Observable<Unit>
   fun onDetailIncentiveClicked(): Observable<Unit>
 
   fun loadClientsFragment()

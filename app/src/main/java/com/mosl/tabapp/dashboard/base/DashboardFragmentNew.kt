@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.getbase.floatingactionbutton.FloatingActionButton
@@ -44,7 +43,6 @@ import com.mosl.tabapp.databinding.ItemTableRowBinding
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
-import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
@@ -163,166 +161,188 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       lateinit var linearLayout: LinearLayout
       lateinit var icon: ImageView
       val systemName = group.systemName
-      if (systemName == ACTIONABLE) {
-        binding.ivActionableInsights.visibility = View.VISIBLE
-      } else if (systemName == MyClient_MyLead) {
-        binding.llClient.visibility = View.VISIBLE
-        setClientLayoutVisibililty(systemName)
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        loadClientsFragment()
-        DashboardSystemModel.setLeadSystemName(systemName)
-        DashboardSystemModel.setClientSystemName(systemName)
-      } else if (systemName == MY_LEAD) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadsFragment()
-        DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName == MY_LEAD_AU_SUPPORT) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadsFragment()
-        DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName == MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadClientsFragment()
-        DashboardSystemModel.setBusSnapshotAdvisorSystemName(systemName)
-        DashboardSystemModel.setClientSystemName(systemName)
-        DashboardSystemModel.setProductivitySystemName(systemName)
-      } else if (systemName == SYS_LEAD_SNAPSHOT) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadBusinessSnapshotFragment()
-        DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-        DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName == TEAM_LEAD) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadsFragment()
-        DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName == SYS_MY_CLIENTS_SNAPSHOOT) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadClientsFragment()
-        DashboardSystemModel.setClientSystemName(systemName)
-        DashboardSystemModel.setClientTradedSystemName(systemName)
-      } else if (systemName == SYS_TEAM_SNAPSHOT) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadBusinessSnapshotFragment()
-        DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName == SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT) {
-        binding.llClient.visibility = View.VISIBLE
-        linearLayout = binding.llClientsLeads
-        icon = binding.ivClientLeads
-        setClientLayoutVisibililty(systemName)
-        loadLeadBusinessSnapshotFragment()
-        DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-        DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName == SYS_BUSINESS_SNAPSHOT) {
-        binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
-        binding.llSnapshot.visibility = View.VISIBLE
-        linearLayout = binding.llBusinessSnapshotHead
-        icon = binding.ivBusinessSnapshotHead
-        loadBusinessSnapShot()
-        DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName == SYS_RH_BUSINESS_SNAPSHOT) {
-        binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
-        binding.llSnapshot.visibility = View.VISIBLE
-        linearLayout = binding.llBusinessSnapshotHead
-        icon = binding.ivBusinessSnapshotHead
-        loadBusinessSnapShot()
-        DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName == SELF_TARGET_ACHIEVEMNET) {
-        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
-        binding.llTarget.visibility = View.VISIBLE
-        linearLayout = binding.llTargetAchievementADV
-        icon = binding.ivTargetAchievementADV
-        loadTargetAchievementFragment()
-        DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName == AUSFB_TARGET_ACHIEVEMNET) {
-        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
-        binding.llTarget.visibility = View.VISIBLE
-        linearLayout = binding.llTargetAchievementADV
-        icon = binding.ivTargetAchievementADV
-        loadTargetAchievementFragment()
-        DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName == TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT) {
-        binding.txtTeamTarget.text = currentDashboard.getGroupModel(systemName).displayName
-        binding.llTeamTarget.visibility = View.VISIBLE
-        linearLayout = binding.llTeamTargetAchievement
-        icon = binding.ivTeamTargetAchievement
-        loadTeamTargetAchievementFragment()
-        DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName == MONTH_ON_MONTH) {
-        binding.txtMonthTrends.text = TRENDS_TITLE
-        binding.llMonthTrend.visibility = View.VISIBLE
-        linearLayout = binding.llMonthvsTrends
-        icon = binding.ivMonthOnMonth
-        loadMonthTrendsFragment()
-        DashboardSystemModel.setMonthTrends(systemName)
-      } else if (systemName == MONTH_ON_MONTH_ACCOUNT_REVENUE) {
-        binding.txtMonthTrends.text = TRENDS_TITLE
-        binding.llMonthTrend.visibility = View.VISIBLE
-        linearLayout = binding.llMonthvsTrends
-        icon = binding.ivMonthOnMonth
-        loadMonthTrendsFragment()
-        DashboardSystemModel.setMonthTrends(systemName)
-      } else if (systemName == PERFORMANCE_INCENTIVE_ACHIEVEMNET) {
-        setIncentiveVisibility(systemName)
-        binding.tvPerformanceAndIncentivesHeader.text =
-          currentDashboard.getGroupModel(
-            PERFORMANCE_INCENTIVE_ACHIEVEMNET
-          ).displayName
+      when (systemName) {
+        ACTIONABLE -> {
+          binding.ivActionableInsights.visibility = View.VISIBLE
+        }
+        MyClient_MyLead -> {
+          binding.llClient.visibility = View.VISIBLE
+          setClientLayoutVisibililty(systemName)
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          loadClientsFragment()
+          DashboardSystemModel.setLeadSystemName(systemName)
+          DashboardSystemModel.setClientSystemName(systemName)
+        }
+        MY_LEAD -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadsFragment()
+          DashboardSystemModel.setLeadSystemName(systemName)
+        }
+        MY_LEAD_AU_SUPPORT -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadsFragment()
+          DashboardSystemModel.setLeadSystemName(systemName)
+        }
+        MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadClientsFragment()
+          DashboardSystemModel.setBusSnapshotAdvisorSystemName(systemName)
+          DashboardSystemModel.setClientSystemName(systemName)
+          DashboardSystemModel.setProductivitySystemName(systemName)
+        }
+        SYS_LEAD_SNAPSHOT -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadBusinessSnapshotFragment()
+          DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
+          DashboardSystemModel.setLeadSystemName(systemName)
+        }
+        TEAM_LEAD -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadsFragment()
+          DashboardSystemModel.setLeadSystemName(systemName)
+        }
+        SYS_MY_CLIENTS_SNAPSHOOT -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadClientsFragment()
+          DashboardSystemModel.setClientSystemName(systemName)
+          DashboardSystemModel.setClientTradedSystemName(systemName)
+        }
+        SYS_TEAM_SNAPSHOT -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadBusinessSnapshotFragment()
+          DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
+        }
+        SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT -> {
+          binding.llClient.visibility = View.VISIBLE
+          linearLayout = binding.llClientsLeads
+          icon = binding.ivClientLeads
+          setClientLayoutVisibililty(systemName)
+          loadLeadBusinessSnapshotFragment()
+          DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
+          DashboardSystemModel.setLeadSystemName(systemName)
+        }
+        SYS_BUSINESS_SNAPSHOT -> {
+          binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
+          binding.llSnapshot.visibility = View.VISIBLE
+          linearLayout = binding.llBusinessSnapshotHead
+          icon = binding.ivBusinessSnapshotHead
+          loadBusinessSnapShot()
+          DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
+        }
+        SYS_RH_BUSINESS_SNAPSHOT -> {
+          binding.tvSnapshot.text = BUSINESS_SNAPSHOT_TITLE
+          binding.llSnapshot.visibility = View.VISIBLE
+          linearLayout = binding.llBusinessSnapshotHead
+          icon = binding.ivBusinessSnapshotHead
+          loadBusinessSnapShot()
+          DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
+        }
+        SELF_TARGET_ACHIEVEMNET -> {
+          binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
+          binding.llTarget.visibility = View.VISIBLE
+          linearLayout = binding.llTargetAchievementADV
+          icon = binding.ivTargetAchievementADV
+          loadTargetAchievementFragment()
+          DashboardSystemModel.setTargetAchivementSystemName(systemName)
+        }
+        AUSFB_TARGET_ACHIEVEMNET -> {
+          binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
+          binding.llTarget.visibility = View.VISIBLE
+          linearLayout = binding.llTargetAchievementADV
+          icon = binding.ivTargetAchievementADV
+          loadTargetAchievementFragment()
+          DashboardSystemModel.setTargetAchivementSystemName(systemName)
+        }
+        TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT -> {
+          binding.txtTeamTarget.text = currentDashboard.getGroupModel(systemName).displayName
+          binding.llTeamTarget.visibility = View.VISIBLE
+          linearLayout = binding.llTeamTargetAchievement
+          icon = binding.ivTeamTargetAchievement
+          loadTeamTargetAchievementFragment()
+          DashboardSystemModel.setTargetAchivementSystemName(systemName)
+        }
+        MONTH_ON_MONTH -> {
+          binding.txtMonthTrends.text = TRENDS_TITLE
+          binding.llMonthTrend.visibility = View.VISIBLE
+          linearLayout = binding.llMonthvsTrends
+          icon = binding.ivMonthOnMonth
+          loadMonthTrendsFragment()
+          DashboardSystemModel.setMonthTrends(systemName)
+        }
+        MONTH_ON_MONTH_ACCOUNT_REVENUE -> {
+          binding.txtMonthTrends.text = TRENDS_TITLE
+          binding.llMonthTrend.visibility = View.VISIBLE
+          linearLayout = binding.llMonthvsTrends
+          icon = binding.ivMonthOnMonth
+          loadMonthTrendsFragment()
+          DashboardSystemModel.setMonthTrends(systemName)
+        }
+        PERFORMANCE_INCENTIVE_ACHIEVEMNET -> {
+          setIncentiveVisibility(systemName)
+          binding.tvPerformanceAndIncentivesHeader.text =
+            currentDashboard.getGroupModel(
+              PERFORMANCE_INCENTIVE_ACHIEVEMNET
+            ).displayName
 
-        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
-        linearLayout = binding.llPerformanceAndIncentivesHeader
-        icon = binding.ivPerformanceAndIncentivesHeader
-      } else if (systemName == PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE) {
-        setIncentiveVisibility(systemName)
-        binding.tvPerformanceAndIncentivesHeader.text =
-          currentDashboard.getGroupModel(
-            PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE
-          ).displayName
+          binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+          linearLayout = binding.llPerformanceAndIncentivesHeader
+          icon = binding.ivPerformanceAndIncentivesHeader
+        }
+        PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE -> {
+          setIncentiveVisibility(systemName)
+          binding.tvPerformanceAndIncentivesHeader.text =
+            currentDashboard.getGroupModel(
+              PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE
+            ).displayName
 
-        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
-        linearLayout = binding.llPerformanceAndIncentivesHeader
-        icon = binding.ivPerformanceAndIncentivesHeader
-      } else if (systemName == OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES) {
-        setIncentiveVisibility(systemName)
-        binding.tvPerformanceAndIncentivesHeader.text =
-          currentDashboard.getGroupModel(
-            OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
-          ).displayName
+          binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+          linearLayout = binding.llPerformanceAndIncentivesHeader
+          icon = binding.ivPerformanceAndIncentivesHeader
+        }
+        OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES -> {
+          setIncentiveVisibility(systemName)
+          binding.tvPerformanceAndIncentivesHeader.text =
+            currentDashboard.getGroupModel(
+              OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
+            ).displayName
 
-        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
-        linearLayout = binding.llPerformanceAndIncentivesHeader
-        icon = binding.ivPerformanceAndIncentivesHeader
-      } else if (systemName == MY_PERFORMANCE_INCENTIVE) {
-        setIncentiveVisibility(systemName)
-        binding.tvPerformanceAndIncentivesHeader.text =
-          currentDashboard.getGroupModel(
-            MY_PERFORMANCE_INCENTIVE
-          ).displayName
+          binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+          linearLayout = binding.llPerformanceAndIncentivesHeader
+          icon = binding.ivPerformanceAndIncentivesHeader
+        }
+        MY_PERFORMANCE_INCENTIVE -> {
+          setIncentiveVisibility(systemName)
+          binding.tvPerformanceAndIncentivesHeader.text =
+            currentDashboard.getGroupModel(
+              MY_PERFORMANCE_INCENTIVE
+            ).displayName
 
-        binding.llPerformanceAndIncentives.visibility = View.VISIBLE
-        linearLayout = binding.llPerformanceAndIncentivesHeader
-        icon = binding.ivPerformanceAndIncentivesHeader
+          binding.llPerformanceAndIncentives.visibility = View.VISIBLE
+          linearLayout = binding.llPerformanceAndIncentivesHeader
+          icon = binding.ivPerformanceAndIncentivesHeader
+        }
       }
       if (systemName != ACTIONABLE) {
         setIcon(linearLayout, icon)
@@ -444,13 +464,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     uiModel.onSuccess {
       if (it.filePath.isEmpty()) {
         alertDialog(
-            requireContext(), 0, resources.getString(R.string.motilal_oswal),
-            MISSING_FILE, "OK", true, null
+          requireContext(), 0, resources.getString(string.motilal_oswal),
+          MISSING_FILE, "OK", true, null
         )
       } else {
         requireContext().downloadImage(it.filePath)
         Toast.makeText(requireContext(), "Downloading ${it.filePath}...", Toast.LENGTH_SHORT)
-            .show()
+          .show()
       }
     }
   }
@@ -774,7 +794,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   override fun showCallPopup(number: String) {
-    MSFDialog.alertDialog(
+    alertDialog(
       requireActivity(), 0,
       resources.getString(string.motilal_oswal), "Do you want to call?", "Yes",
       "No", true
