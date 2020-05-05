@@ -87,13 +87,13 @@ class DashboardPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onTelephone1Clicked()
-        .subscribe { view.showCallPopup() }
+      .subscribe { view.showCallPopup(it) }
         .addTo(disposable)
     view.onTelephone2Clicked()
-        .subscribe { view.showCallPopup() }
+      .subscribe { view.showCallPopup(it) }
         .addTo(disposable)
     view.onEmailClicked()
-        .subscribe { view.showEmailDialog() }
+      .subscribe { view.showEmailDialog(it) }
         .addTo(disposable)
   }
 }

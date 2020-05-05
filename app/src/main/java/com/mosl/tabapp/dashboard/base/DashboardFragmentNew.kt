@@ -1,11 +1,12 @@
 package com.mosl.tabapp.dashboard.base
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
@@ -34,6 +35,7 @@ import com.mosl.tabapp.dashboard.target.TargetFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.databinding.FragDashboardBinding
+import com.mosl.tabapp.databinding.ItemTableRowBinding
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
@@ -46,11 +48,13 @@ import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import java.util.HashMap
 import javax.inject.Inject
 
 class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
+
   @Inject
   lateinit var presenter: DashboardPresenter
   val subject: PublishSubject<DashboardUiEvent> = PublishSubject.create()
@@ -102,7 +106,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       for (dashboardData in it) {
         fillAvailableWidgetModel(dashboardData)
         if (dashboardList.size > 0) {
-          currentDashboard = dashboardList.get(0)
+          currentDashboard = dashboardList[0]
           createFloatingActionButtons()
           renderDashboard(dashboardData)
         }
@@ -115,8 +119,10 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       val button = FloatingActionButton(context)
       button.title = dashboardModel.name
       button.size = FloatingActionButton.SIZE_MINI
-      button.colorNormal = resources.getColor(color.white)
-      button.setIconDrawable(resources.getDrawable(drawable.ic_create_lead))
+      button.colorNormal = ContextCompat.getColor(requireContext(), color.white)
+      ContextCompat.getDrawable(requireContext(), drawable.ic_create_lead)?.let {
+        button.setIconDrawable(it)
+      }
       binding.floatingActionsMenu.addButton(button)
       button.setOnClickListener { v: View? ->
         hideKeyboard(v)
@@ -133,9 +139,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       lateinit var linearLayout: LinearLayout
       lateinit var icon: ImageView
       val systemName = group.systemName
-      if (systemName.equals(ACTIONABLE)) {
+      if (systemName == ACTIONABLE) {
         binding.ivActionableInsights.visibility = View.VISIBLE
-      } else if (systemName.equals(MyClient_MyLead)) {
+      } else if (systemName == MyClient_MyLead) {
         binding.llClient.visibility = View.VISIBLE
         setClientLayoutVisibililty(systemName)
         linearLayout = binding.llClientsLeads
@@ -143,21 +149,21 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadClientsFragment()
         DashboardSystemModel.setLeadSystemName(systemName)
         DashboardSystemModel.setClientSystemName(systemName)
-      } else if (systemName.equals(MY_LEAD)) {
+      } else if (systemName == MY_LEAD) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
         setClientLayoutVisibililty(systemName)
         loadLeadsFragment()
         DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName.equals(MY_LEAD_AU_SUPPORT)) {
+      } else if (systemName == MY_LEAD_AU_SUPPORT) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
         setClientLayoutVisibililty(systemName)
         loadLeadsFragment()
         DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName.equals(MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY)) {
+      } else if (systemName == MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
@@ -166,7 +172,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         DashboardSystemModel.setBusSnapshotAdvisorSystemName(systemName)
         DashboardSystemModel.setClientSystemName(systemName)
         DashboardSystemModel.setProductivitySystemName(systemName)
-      } else if (systemName.equals(SYS_LEAD_SNAPSHOT)) {
+      } else if (systemName == SYS_LEAD_SNAPSHOT) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
@@ -174,14 +180,14 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadLeadBusinessSnapshotFragment()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
         DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName.equals(TEAM_LEAD)) {
+      } else if (systemName == TEAM_LEAD) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
         setClientLayoutVisibililty(systemName)
         loadLeadsFragment()
         DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName.equals(SYS_MY_CLIENTS_SNAPSHOOT)) {
+      } else if (systemName == SYS_MY_CLIENTS_SNAPSHOOT) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
@@ -189,14 +195,14 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadClientsFragment()
         DashboardSystemModel.setClientSystemName(systemName)
         DashboardSystemModel.setClientTradedSystemName(systemName)
-      } else if (systemName.equals(SYS_TEAM_SNAPSHOT)) {
+      } else if (systemName == SYS_TEAM_SNAPSHOT) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
         setClientLayoutVisibililty(systemName)
         loadLeadBusinessSnapshotFragment()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName.equals(SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT)) {
+      } else if (systemName == SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT) {
         binding.llClient.visibility = View.VISIBLE
         linearLayout = binding.llClientsLeads
         icon = binding.ivClientLeads
@@ -204,61 +210,61 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         loadLeadBusinessSnapshotFragment()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
         DashboardSystemModel.setLeadSystemName(systemName)
-      } else if (systemName.equals(SYS_BUSINESS_SNAPSHOT)) {
+      } else if (systemName == SYS_BUSINESS_SNAPSHOT) {
         binding.llSnapshot.visibility = View.VISIBLE
         linearLayout = binding.llBusinessSnapshotHead
         icon = binding.ivBusinessSnapshotHead
         loadLeadBusinessSnapshotFragment()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName.equals(SYS_RH_BUSINESS_SNAPSHOT)) {
+      } else if (systemName == SYS_RH_BUSINESS_SNAPSHOT) {
         binding.llSnapshot.visibility = View.VISIBLE
         linearLayout = binding.llBusinessSnapshotHead
         icon = binding.ivBusinessSnapshotHead
         loadLeadBusinessSnapshotFragment()
         DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
-      } else if (systemName.equals(SELF_TARGET_ACHIEVEMNET)) {
-        binding.txtTarget.setText(currentDashboard.getGroupModel(systemName).displayName)
+      } else if (systemName == SELF_TARGET_ACHIEVEMNET) {
+        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
         binding.llTarget.visibility = View.VISIBLE
         linearLayout = binding.llTargetAchievementADV
         icon = binding.ivTargetAchievementADV
         loadTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName.equals(AUSFB_TARGET_ACHIEVEMNET)) {
-        binding.txtTarget.setText(currentDashboard.getGroupModel(systemName).getDisplayName());
+      } else if (systemName == AUSFB_TARGET_ACHIEVEMNET) {
+        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
         binding.llTarget.visibility = View.VISIBLE
         linearLayout = binding.llTargetAchievementADV
         icon = binding.ivTargetAchievementADV
         loadTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName.equals(TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT)) {
-        binding.txtTarget.setText(currentDashboard.getGroupModel(systemName).getDisplayName());
+      } else if (systemName == TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT) {
+        binding.txtTarget.text = currentDashboard.getGroupModel(systemName).displayName
         binding.llTarget.visibility = View.VISIBLE
         linearLayout = binding.llTeamTargetAchievement
         icon = binding.ivTeamTargetAchievement
         loadTargetAchievementFragment()
         DashboardSystemModel.setTargetAchivementSystemName(systemName)
-      } else if (systemName.equals(MONTH_ON_MONTH)) {
+      } else if (systemName == MONTH_ON_MONTH) {
         binding.llMonthTrend.visibility = View.VISIBLE
         linearLayout = binding.llMonthvsTrends
         icon = binding.ivMonthOnMonth
         loadMonthTrendsFragment()
         DashboardSystemModel.setMonthTrends(systemName)
-      } else if (systemName.equals(PERFORMANCE_INCENTIVE_ACHIEVEMNET)) {
+      } else if (systemName == PERFORMANCE_INCENTIVE_ACHIEVEMNET) {
         setIncentiveVisibility(systemName)
-        binding.tvPerformanceAndIncentivesHeader.setText(
-            currentDashboard.getGroupModel(
-                PERFORMANCE_INCENTIVE_ACHIEVEMNET
-            ).displayName
-        )
+        binding.tvPerformanceAndIncentivesHeader.text =
+          currentDashboard.getGroupModel(
+            PERFORMANCE_INCENTIVE_ACHIEVEMNET
+          ).displayName
+
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
         linearLayout = binding.llPerformanceAndIncentivesHeader
         icon = binding.ivPerformanceAndIncentivesHeader
-      } else if (systemName.equals(OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES)
-          || systemName.equals(MY_PERFORMANCE_INCENTIVE)
+      } else if (systemName == OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
+        || systemName == MY_PERFORMANCE_INCENTIVE
       ) {
         binding.llPerformanceAndIncentives.visibility = View.VISIBLE
       }
-      if (!systemName.equals(ACTIONABLE)) {
+      if (systemName != ACTIONABLE) {
         setIcon(linearLayout, icon)
         if (linearLayout.visibility != View.VISIBLE) {
           toggleSection(linearLayout, icon)
@@ -267,8 +273,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
-  fun setClientLayoutVisibililty(systemName: String) {
-    binding.txtClients.setText(currentDashboard.getGroupModel(systemName).displayName)
+  private fun setClientLayoutVisibililty(systemName: String) {
+    binding.txtClients.text = currentDashboard.getGroupModel(systemName).displayName
     when (systemName) {
       MyClient_MyLead -> {
         binding.btnBusinessSnapshot.visibility = View.GONE
@@ -329,16 +335,16 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     return subject.ofType()
   }
 
-  fun toggleSection(
+  private fun toggleSection(
     parent: View,
     icon: ImageView
   ) {
     if (parent.visibility == View.VISIBLE) {
       parent.visibility = View.GONE
-      icon.setImageResource(R.drawable.plus)
+      icon.setImageResource(drawable.plus)
     } else {
       parent.visibility = View.VISIBLE
-      icon.setImageResource(R.drawable.minus)
+      icon.setImageResource(drawable.minus)
     }
   }
 
@@ -357,9 +363,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     icon: ImageView
   ) {
     if (parent.visibility == View.VISIBLE) {
-      icon.setImageResource(R.drawable.minus)
+      icon.setImageResource(drawable.minus)
     } else {
-      icon.setImageResource(R.drawable.plus)
+      icon.setImageResource(drawable.plus)
     }
   }
 
@@ -378,7 +384,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   private fun incentiveData(tableData: List<IncentiveTableData>) {
     arrayListIncentive.clear()
     for (i in tableData.indices) {
-      val data = tableData.get(i)
+      val data = tableData[i]
       val fieldData = HashMap<String, String>()
       fieldData[PARAMETERS] = data.parameters
       fieldData[Q1] = data.q1.toString()
@@ -392,69 +398,50 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   override fun loadIncentiveView(value: String) {
-    //clear data from table
-    //clear data from table
     binding.layoutIncentives.tableMData.removeAllViews()
-    //Adding head
-    //Adding head
-    val inFla = requireActivity().layoutInflater
-    val tableRowH = inFla.inflate(R.layout.item_table_row, null)
-    val tvMTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvMTDCOUNT)
-    val tvYTDCOUNT = tableRowH.findViewById<TextView>(R.id.tvYTDCOUNT)
-    val tvParameters = tableRowH.findViewById<TextView>(R.id.tvParameters)
-    tvParameters.text = resources.getString(string.txt_label_parameters)
-    tvMTDCOUNT.text = value
-    tvYTDCOUNT.text = MOSLConstants.YTD
-    binding.layoutIncentives.tableMData.addView(tableRowH)
-    //adding head end
-
+    val inflater = LayoutInflater.from(requireContext())
+    val headerBinding = ItemTableRowBinding.inflate(inflater)
+    headerBinding.tvParameters.text = resources.getString(string.txt_label_parameters)
+    headerBinding.tvMTDCOUNT.text = value
+    headerBinding.tvYTDCOUNT.text = MOSLConstants.YTD
+    binding.layoutIncentives.tableMData.addView(headerBinding.root)
     //adding head end
     if (arrayListIncentive.size > 0) {
       for (i in arrayListIncentive.indices) {
-        val filterData: String = arrayListIncentive.get(i)
-            .get(value)?:""
-        val parameter: String = arrayListIncentive.get(i)
-            .get(PARAMETERS)?:""
-        val ytd: String = arrayListIncentive.get(i)
-            .get(YTD)?:""
-        val tableRow =
-          inFla.inflate(R.layout.item_table_row, null)
-        val linearLayout = tableRow.findViewById<LinearLayout>(R.id.linearLayout)
-        val tvMTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvMTDCOUNT)
-        val tvYTDCOUNTData = tableRow.findViewById<TextView>(R.id.tvYTDCOUNT)
-        val tvParametersData = tableRow.findViewById<TextView>(R.id.tvParameters)
-        tvParametersData.text = parameter
-        tvMTDCOUNTData.text = filterData
-        tvYTDCOUNTData.text = ytd
-        linearLayout.setBackgroundResource(if (i % 2 == 0) color.white else color.white)
-        binding.layoutIncentives.tableMData.addView(tableRow)
+        val filterData: String = arrayListIncentive[i][value] ?: ""
+        val parameter: String = arrayListIncentive[i][PARAMETERS] ?: ""
+        val ytd: String = arrayListIncentive[i][YTD] ?: ""
+        val childBinding = ItemTableRowBinding.inflate(inflater)
+        childBinding.tvParameters.text = parameter
+        childBinding.tvMTDCOUNT.text = filterData
+        childBinding.tvYTDCOUNT.text = ytd
+        childBinding.linearLayout.setBackgroundResource(if (i % 2 == 0) color.white else color.white)
+        binding.layoutIncentives.tableMData.addView(childBinding.root)
       }
     }
-    binding.layoutIncentives.llIncentive.setVisibility(View.VISIBLE)
-    binding.layoutIncentives.tvIncentives.setText(resources.getString(string.txt_label_incentive))
+    binding.layoutIncentives.llIncentive.visibility = View.VISIBLE
+    binding.layoutIncentives.tvIncentives.text = resources.getString(string.txt_label_incentive)
   }
 
-  fun setIncentiveVisibility(systemName: String) {
-    if (currentDashboard != null) {
-      val groupModel = currentDashboard.getGroupModel(systemName)
-      val widgetList = groupModel.widgetList
-      for (i in widgetList.indices) {
-        val widgetTypes = widgetList[i]
-            .widgetTypeList[0]
-            .widgetTypes
-        if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
-          subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
-        } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
-//          currentQuarterStatusWebServiceCall(widgetList[i].systemName)
-          binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
-        }
+  private fun setIncentiveVisibility(systemName: String) {
+    val groupModel = currentDashboard.getGroupModel(systemName)
+    val widgetList = groupModel.widgetList
+    for (i in widgetList.indices) {
+      val widgetTypes = widgetList[i]
+        .widgetTypeList[0]
+        .widgetTypes
+      if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
+        subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
+      } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
+        binding.llCurrentQuarterStatusAdviosory.visibility = View.VISIBLE
       }
     }
+
   }
 
-  val dashboardList: ArrayList<DashboardModel> = ArrayList()
-  val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
-  lateinit var currentDashboard: DashboardModel
+  private val dashboardList: ArrayList<DashboardModel> = ArrayList()
+  private val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
+  private lateinit var currentDashboard: DashboardModel
   private fun fillAvailableWidgetModel(data: DashboardData) {
     val dashboardId = data.ID.toString()
     val dashboardName = data.name
@@ -471,9 +458,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     val mainGroupList: List<DashboardGroupModel> =
       getGroupModelFromJsonArray(groupsItems)
     dashboardModel.groupList
-        .clear()
+      .clear()
     dashboardModel.groupList
-        .addAll(mainGroupList)
+      .addAll(mainGroupList)
   }
 
   private fun loadMonthTrendsFragment() {
@@ -481,9 +468,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     monthOnMonthTrendsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llMonthvsTrends, monthOnMonthTrendsFragment)
+      .commit()
 
   }
 
@@ -492,9 +479,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     targetFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llTargetAchievementADV, targetFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llTargetAchievementADV, targetFragment)
+      .commit()
   }
 
   override fun loadLeadBusinessSnapshotFragment() {
@@ -503,9 +490,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     leadsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, leadsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, leadsFragment)
+      .commit()
   }
 
   override fun loadProductivityFragment() {
@@ -514,9 +501,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     productivityFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, productivityFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, productivityFragment)
+      .commit()
   }
 
   override fun loadLeadsFragment() {
@@ -525,9 +512,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     leadsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, leadsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, leadsFragment)
+      .commit()
 
   }
 
@@ -538,9 +525,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     clientsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, clientsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, clientsFragment)
+      .commit()
   }
 
   override fun loadClientsTradedFragment() {
@@ -549,9 +536,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     clientsFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, clientsFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, clientsFragment)
+      .commit()
   }
 
   override fun loadBusinessSnapshotAdvisorFragment() {
@@ -560,14 +547,14 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     args.putSerializable(DASHBOARD_MODEL, currentDashboard)
     businessSnapshotAdvFragment.arguments = args
     requireActivity().supportFragmentManager
-        .beginTransaction()
-        .replace(R.id.llReplaceClientFragment, businessSnapshotAdvFragment)
-        .commit()
+      .beginTransaction()
+      .replace(R.id.llReplaceClientFragment, businessSnapshotAdvFragment)
+      .commit()
   }
 
-  fun setTabActive(button: Button) {
-    button.setBackground(resources.getDrawable(R.drawable.orange))
-    button.setTextColor(resources.getColor(R.color.white))
+  private fun setTabActive(button: Button) {
+    button.background = ContextCompat.getDrawable(requireContext(), drawable.orange)
+    button.setTextColor(ContextCompat.getColor(requireContext(), color.white))
   }
 
   override fun onClientClicked(): Observable<Unit> {
@@ -618,32 +605,38 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     binding.floatingActionsMenu.collapse()
   }
 
-  override fun onTelephone1Clicked(): Observable<Unit> {
-    return binding.layoutAufsb.txtTelephoneNo1.clicks()
+  override fun onTelephone1Clicked(): Observable<String> {
+    return binding.layoutAufsb.txtTelephoneNo1.clicks().map {
+      binding.layoutAufsb.txtTelephoneNo1.text.toString()
+    }
   }
 
-  override fun onTelephone2Clicked(): Observable<Unit> {
-    return binding.layoutAufsb.txtTelephoneNo2.clicks()
+  override fun onTelephone2Clicked(): Observable<String> {
+    return binding.layoutAufsb.txtTelephoneNo2.clicks().map {
+      binding.layoutAufsb.txtTelephoneNo2.text.toString()
+    }
   }
 
-  override fun onEmailClicked(): Observable<Unit> {
-    return binding.layoutAufsb.llEmail.clicks()
+  override fun onEmailClicked(): Observable<String> {
+    return binding.layoutAufsb.llEmail.clicks().map {
+      binding.layoutAufsb.llEmail.tv_email.text.toString()
+    }
   }
 
-  override fun showCallPopup() {
+  override fun showCallPopup(number: String) {
     MSFDialog.alertDialog(
-        requireActivity(), 0,
-        resources.getString(string.motilal_oswal), "Do you want to call?", "Yes",
-        "No", true
-    ) { action: Action, data: Array<Any?>? ->
+      requireActivity(), 0,
+      resources.getString(string.motilal_oswal), "Do you want to call?", "Yes",
+      "No", true
+    ) { action: Action, _: Array<Any?>? ->
       if (action == OK) {
-        requireContext().initiateCall("02239982515")
+        requireContext().initiateCall(number)
       }
     }
   }
 
-  override fun showEmailDialog() {
-    requireContext().initialEmail("rggupta72@gmail.com")
+  override fun showEmailDialog(email: String) {
+    requireContext().initialEmail(email)
   }
 
   companion object {
@@ -685,17 +678,17 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     when (v?.id) {
       R.id.rlClientLeads -> toggleSection(binding.llClientsLeads, binding.ivClientLeads)
       R.id.rlTargetAchievementADV -> toggleSection(
-          binding.llTargetAchievementADV, binding.ivTargetAchievementADV
+        binding.llTargetAchievementADV, binding.ivTargetAchievementADV
       )
       R.id.rlMonthOnMonth -> toggleSection(binding.llMonthvsTrends, binding.ivMonthOnMonth)
       R.id.rlBusinessSnapshotHead -> toggleSection(
-          binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead
+        binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead
       )
       R.id.rlTeamTargetAchievement -> toggleSection(
-          binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement
+        binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement
       )
       R.id.rlPerformanceAndIncentivesHeader -> toggleSection(
-          binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader
+        binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader
       )
     }
   }
