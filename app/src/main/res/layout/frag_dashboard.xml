@@ -585,13 +585,18 @@
                             android:textSize="@dimen/_14sdp"
                             />
 
-                        <include layout="@layout/frag_current_quarter_status_table_first" />
+                        <com.mosl.tabapp.dashboard.base.CurrentQuarterLayout
+                          android:id="@+id/currentQuarter"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content" />
+
+                        <!--<include layout="@layout/frag_current_quarter_status_table_first" />
 
                         <include layout="@layout/frag_current_quarter_status_table_second" />
 
                         <include layout="@layout/frag_current_quarter_status_table_three" />
 
-                        <include layout="@layout/frag_current_quarter_status_table_four" />
+                        <include layout="@layout/frag_current_quarter_status_table_four" />-->
 
 
                     </LinearLayout>

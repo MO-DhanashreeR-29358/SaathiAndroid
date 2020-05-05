@@ -52,4 +52,17 @@ class DashboardRepositoryImpl @Inject constructor(
     )
         .map { DashboardMapper.transformIncentivePolicyData(it) }
   }
+
+  override fun getCurrentQuarterStatusData(
+    systemName: String,
+    data: DashboardRequestData,
+    map: Map<String, String>
+  ): Observable<String> {
+    return saathiApi.getDashboardData(
+        CommonRequest(
+            businessProfileId = data.profileId, employeeCode = data.empCode,
+            productId = data.productId, widgetSystemName = systemName, addtionalParameters = map
+        )
+    )
+  }
 }

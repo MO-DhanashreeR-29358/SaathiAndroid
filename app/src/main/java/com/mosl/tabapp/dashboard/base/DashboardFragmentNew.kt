@@ -12,6 +12,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -28,7 +29,8 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.OnIncentive
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
@@ -56,6 +58,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import java.util.HashMap
 import javax.inject.Inject
+import org.json.JSONObject
 
 class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
@@ -141,7 +144,6 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       }
 
   }
-
   private fun renderDashboard(currentDashboard: DashboardModel) {
     binding.apply {
       llClient.visibility = View.GONE
@@ -416,7 +418,11 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
-  override fun onIncentive(): Observable<OnIncentive> {
+  override fun onIncentive(): Observable<PerformanceIncentive> {
+    return subject.ofType()
+  }
+
+  override fun CurrentQuarterStatus(): Observable<CurrentQuarterStatus> {
     return subject.ofType()
   }
 
@@ -540,10 +546,44 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         subject.onNext(OnIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
       } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
         binding.llCurrentQuarterStatusAdviosory.visibility = View.VISIBLE
+  fun setIncentiveVisibility(systemName: String) {
+    if (currentDashboard != null) {
+      val groupModel = currentDashboard.getGroupModel(systemName)
+      val widgetList = groupModel.widgetList
+      for (i in widgetList.indices) {
+        val widgetTypes = widgetList[i]
+            .widgetTypeList[0]
+            .widgetTypes
+        if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
+          subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
+        } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
+          subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAddtionalParameterMap()))
+          binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
+        }
       }
     }
 
   }
+
+        override fun renderStatus(uiModel: UiModel<String>) {
+          toggleProgress(uiModel.inProgress)
+
+          uiModel.onSuccess {
+            val response = JSONObject(uiModel.data)
+            val status = response.get(STATUS)
+              .toString()
+            if (status.equals("true")) {
+              val jsonObject = response.getJSONObject(RESPONSE)
+              renderCurrentQuarterStatus(jsonObject)
+            } else {
+              throw ServiceFailureException(response.get(MESSAGE).toString())
+            }
+          }
+        }
+
+        private fun renderCurrentQuarterStatus(jsonObject: JSONObject) {
+          binding.currentQuarter.loadData(jsonObject)
+        }
 
   private val dashboardList: ArrayList<DashboardModel> = ArrayList()
   private val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
@@ -846,6 +886,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     const val BUSINESS_SNAPSHOT_TITLE = "Business Snapshot"
     const val TRENDS_TITLE = "Month on Month Trend"
     const val MISSING_FILE = "File Not Found"
+    const val STATUS = "Status"
+    const val MESSAGE = "Message"
+    const val RESPONSE = "Response"
   }
 
   override fun onClick(v: View?) {
