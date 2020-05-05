@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -20,9 +19,7 @@ import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -30,8 +27,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -49,7 +45,7 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 /**
  * Created by Raju on 24-07-2018.
  */
-public class DashboardHierarchyFragment extends CommonFragment {
+public class DashboardHierarchyFragmentOld extends CommonFragment {
 	static Context mContext;
 	ArrayList<HashMap<String, String>> hierarchyMapList;
 	private View secondClickView;
@@ -137,7 +133,7 @@ public class DashboardHierarchyFragment extends CommonFragment {
 					for (Object columnName : objDetail.keySet()) {
 						columns.add(columnName.toString());
 						if (columnName.toString().equalsIgnoreCase("WidgetSystemName") ||
-							columnName.toString().equalsIgnoreCase("flg_empcode")) {
+                            columnName.toString().equalsIgnoreCase("flg_empcode")) {
 						} else {
 							columnsHeader.add(getRefreshColumnName(columnName.toString()));
 						}

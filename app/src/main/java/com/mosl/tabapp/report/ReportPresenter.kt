@@ -67,8 +67,7 @@ class ReportPresenter @Inject constructor(
       reportTypeSystemName = view.widgetSystemsName(),
       businessChannel = "-1",
       pageSize = MOSLConstants.REPORT_PAGE_SIZE,
-      periodTo =
-      view.toDate(),
+        periodTo = view.toDate(),
       branchCode = getBranch(view.getBranch())
     )
   }
