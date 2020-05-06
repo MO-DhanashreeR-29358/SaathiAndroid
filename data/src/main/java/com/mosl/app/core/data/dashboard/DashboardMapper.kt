@@ -131,7 +131,7 @@ object DashboardMapper {
           q3 = it.q3 ?: "0",
           q4 = it.q4 ?: "0",
           name = it.name ?: "",
-          ytd = it.yTD ?: "0",
+        ytd = it.yTD,
           widgetType = it.widgetType ?: ""
       )
     }

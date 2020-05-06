@@ -21,6 +21,7 @@ import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
+import com.mosl.mobile.domain.dashboard.IncentiveTableData1
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
@@ -152,10 +153,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       llTarget.visibility = View.GONE
       llTeamTarget.visibility = View.GONE
       llPerformanceAndIncentives.visibility = View.GONE
-      layoutIncentives.llIncentive.visibility = View.GONE
       llCurrentQuarterStatusAdviosory.visibility = View.GONE
-      layoutPerformance.llAdvPerformance.visibility = View.GONE
-      layoutTeamPerformance.llTeamPerformance.visibility = View.GONE
       llCurrentQuarterStatusOneUp.visibility = View.GONE
       llMonthTrend.visibility = View.GONE
       llSnapshot.visibility = View.GONE
@@ -491,7 +489,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
 
     uiModel.onSuccess {
       incentiveData(it.tableData)
+      if (it.tableData1.isNotEmpty())
+        renderPerformance(it.tableData1)
     }
+  }
+
+  private fun renderPerformance(tableData: List<IncentiveTableData1>) {
+    binding.performance.loadChart(tableData)
   }
 
   private fun incentiveData(tableData: List<IncentiveTableData>) {

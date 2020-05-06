@@ -21,7 +21,7 @@ data class IncentiveTableData1(
   @JvmField val q4: String,
   @JvmField val name: String,
   @JvmField val widgetType: String,
-  @JvmField val ytd: String
+  @JvmField val ytd: String?
 )
 
 data class IncentivePolicy(

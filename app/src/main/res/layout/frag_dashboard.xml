@@ -553,16 +553,13 @@
                         layout="@layout/frag_insentives"
                         />
 
-                    <include
-                        android:id="@+id/layout_performance"
-                        layout="@layout/frag_performance"
+                    <com.mosl.tabapp.dashboard.base.PerformanceLayout
+                        android:id="@+id/performance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_medium"
                         />
 
-                    <include
-                        android:id="@+id/layout_team_performance"
-                        layout="@layout/frag_performance_team"
-                        android:visibility="gone"
-                        />
 
                     <LinearLayout
                         android:id="@+id/llCurrentQuarterStatusAdviosory"
