@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.ekyc.EkycNavigator
@@ -60,7 +61,7 @@ class DashboardPresenter @Inject constructor(
         }
         .addTo(disposable)
 
-    view.onIncentive()
+    view.Incentive()
         .switchMap { t: PerformanceIncentive ->
           repository.getIncentive(t.systemName, dashboardRequestData, t.additionalParameterMap)
               .compose(applyUiModel())
@@ -76,6 +77,20 @@ class DashboardPresenter @Inject constructor(
               .compose(applyUiModel())
         }
         .subscribe { view.renderStatus(it) }
+        .addTo(disposable)
+
+    view.ActionableCount()
+        .switchMap { t: ActionableCount ->
+          repository.getActionableCount(t.systemName, t.additionalParameterMap)
+              .compose(applyUiModel())
+        }
+        .subscribe { view.renderActionableCount(it) }
+        .addTo(disposable)
+
+    view.onActionableInsightsClicked()
+        .subscribe {
+          view.showInsightsDialog()
+        }
         .addTo(disposable)
 
     view.onQuarterChanged()
@@ -126,6 +141,11 @@ sealed class DashboardUiEvent {
   ) : DashboardUiEvent()
 
   class CurrentQuarterStatus(
+    val systemName: String,
+    val additionalParameterMap: Map<String, String>
+  ) : DashboardUiEvent()
+
+  class ActionableCount(
     val systemName: String,
     val additionalParameterMap: Map<String, String>
   ) : DashboardUiEvent()

@@ -30,6 +30,8 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
@@ -43,9 +45,12 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.databinding.FragDashboardBinding
 import com.mosl.tabapp.databinding.ItemTableRowBinding
+import com.mosl.tabapp.model.TypeActionableFilterModel
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
+import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
@@ -58,6 +63,7 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import org.json.JSONObject
+import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -165,6 +171,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       when (systemName) {
         ACTIONABLE -> {
           binding.ivActionableInsights.visibility = View.VISIBLE
+          updateCount(systemName)
         }
         MyClient_MyLead -> {
           binding.llClient.visibility = View.VISIBLE
@@ -354,6 +361,10 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  private fun updateCount(systemName: String) {
+    subject.onNext(ActionableCount(systemName, getAddtionalParameterMap()))
+  }
+
   private fun setClientLayoutVisibililty(systemName: String) {
     binding.txtClients.text = currentDashboard.getGroupModel(systemName).displayName
     when (systemName) {
@@ -417,11 +428,15 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
-  override fun onIncentive(): Observable<PerformanceIncentive> {
+  override fun Incentive(): Observable<PerformanceIncentive> {
     return subject.ofType()
   }
 
   override fun CurrentQuarterStatus(): Observable<CurrentQuarterStatus> {
+    return subject.ofType()
+  }
+
+  override fun ActionableCount(): Observable<ActionableCount> {
     return subject.ofType()
   }
 
@@ -477,6 +492,31 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         Toast.makeText(requireContext(), "Downloading ${it.filePath}...", Toast.LENGTH_SHORT)
           .show()
       }
+    }
+  }
+
+  override fun renderActionableCount(uiModel: UiModel<Pair<com.mosl.mobile.domain.dashboard.ActionableCount, String>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onSuccess {
+      val typeList = ArrayList<TypeActionableFilterModel>()
+
+      val tables = it.first.table
+      val tables1 = it.first.table1
+      Timber.d("Table data %s", tables)
+      Timber.d("Table1 data %s", tables1)
+      if (tables.isNotEmpty()) {
+        for (table in tables) {
+          val type = TypeActionableFilterModel(table.type)
+          typeList.add(type)
+        }
+      }
+      var count = ""
+      if (tables1.isNotEmpty()) {
+        count = tables1.get(0)
+            .count.toString()
+      }
+      currentDashboard.setActionableCount(it.second, count, typeList)
     }
   }
 
@@ -751,6 +791,10 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     button.setTextColor(ContextCompat.getColor(requireContext(), color.white))
   }
 
+  override fun onActionableInsightsClicked(): Observable<Unit> {
+    return binding.ivActionableInsights.clicks()
+  }
+
   override fun onClientClicked(): Observable<Unit> {
     return binding.btnClient.clicks()
   }
@@ -839,6 +883,22 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
 
   override fun showEmailDialog(email: String) {
     requireContext().initialEmail(email)
+  }
+
+  override fun showInsightsDialog() {
+    hideKeyboard(binding.ivActionableInsights)
+    val dialogFragment = ActionableInsightDialogFragment()
+    val widgetList = currentDashboard.getGroupModel(
+        ACTIONABLE
+    ).widgetList as ArrayList<WidgetModel>
+    val bundle = Bundle()
+    bundle.putSerializable(ActionableInsightDialogFragment.ARG_LIST_DATA, widgetList)
+    bundle.putString(
+        ActionableInsightDialogFragment.ARG_DASHBOARD_FOR,
+        currentDashboard.dashboardFor
+    )
+    dialogFragment.arguments = bundle
+    dialogFragment.show(requireFragmentManager(), "Actionable Dialog")
   }
 
   companion object {

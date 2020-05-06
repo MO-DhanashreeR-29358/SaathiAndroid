@@ -23,5 +23,8 @@ interface DashboardRepository {
     map: Map<String, String>
   ): Observable<String>
 
-//  fun getActionableCount(systemName : String)
+  fun getActionableCount(
+    systemName: String,
+    map: Map<String, String>
+  ): Observable<Pair<ActionableCount, String>>
 }

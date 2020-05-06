@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.dashboard
 
+import com.mosl.mobile.domain.dashboard.ActionableCount
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
@@ -7,6 +8,7 @@ import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.dashboard.CommonRequest
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
 import io.reactivex.Observable
@@ -64,5 +66,19 @@ class DashboardRepositoryImpl @Inject constructor(
             productId = data.productId, widgetSystemName = systemName, addtionalParameters = map
         )
     )
+  }
+
+  override fun getActionableCount(
+    systemName: String,
+    map: Map<String, String>
+  ): Observable<Pair<ActionableCount, String>> {
+    return saathiApi.getActionableCount(
+        ActionableCountRequest(
+            widgetSystemName = systemName,
+            addtionalParameters = map
+        )
+    )
+        .map { DashboardMapper.transformActionableData(it) }
+        .map { Pair(it, systemName) }
   }
 }

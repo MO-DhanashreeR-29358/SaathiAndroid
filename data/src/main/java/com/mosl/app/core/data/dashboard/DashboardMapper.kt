@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.dashboard
 
 import com.mosl.app.core.data.util.safeMap
+import com.mosl.mobile.domain.dashboard.ActionableCount
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.DashboardGroupsData
 import com.mosl.mobile.domain.dashboard.Filter
@@ -9,9 +10,12 @@ import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.mobile.domain.dashboard.IncentiveTableData1
+import com.mosl.mobile.domain.dashboard.Table
+import com.mosl.mobile.domain.dashboard.Table1
 import com.mosl.mobile.domain.dashboard.TableData
 import com.mosl.mobile.domain.dashboard.WidgetData
 import com.mosl.mobile.domain.dashboard.WidgetType
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableFilterItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.AvailableWidgetsItem
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataItem
@@ -124,7 +128,7 @@ object DashboardMapper {
   }
 
   fun transformTableData1(lst: List<Table1Item>?): List<IncentiveTableData1> {
-    return lst!!.safeMap {
+    return lst?.safeMap {
       IncentiveTableData1(
           q1 = it.q1 ?: "0",
           q2 = it.q2 ?: "0",
@@ -134,6 +138,29 @@ object DashboardMapper {
         ytd = it.yTD,
           widgetType = it.widgetType ?: ""
       )
-    }
+    } ?: Collections.emptyList()
+  }
+
+  fun transformActionableData(actionableCountItem: ActionableCountItem): ActionableCount {
+    return ActionableCount(
+        table = transformActionableTable(actionableCountItem.table),
+        table1 = transformActionableTable1(actionableCountItem.table1)
+    )
+  }
+
+  fun transformActionableTable(list: List<com.mosl.saathi.api.model.dashboard.actionablecount.TableItem>?): List<Table> {
+    return list?.map {
+      Table(
+          type = it.types ?: ""
+      )
+    } ?: Collections.emptyList()
+  }
+
+  fun transformActionableTable1(list: List<com.mosl.saathi.api.model.dashboard.actionablecount.Table1Item>?): List<Table1> {
+    return list?.map {
+      Table1(
+          count = it.count ?: 0
+      )
+    } ?: Collections.emptyList()
   }
 }
