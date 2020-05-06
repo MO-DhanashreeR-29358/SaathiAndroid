@@ -131,7 +131,8 @@ class PerformanceLayout @JvmOverloads constructor(
         + binding.chart.barData.getGroupWidth(groupSpace, barSpace) * groupCount)
     binding.chart.groupBars(startYear.toFloat(), groupSpace, barSpace)
     binding.chart.invalidate()
-    binding.viewPerformance.visibility = View.VISIBLE
+    binding.chart.visibility = View.VISIBLE
+    binding.tablePerformance.visibility = View.VISIBLE
     binding.tvPerformance.text = resources.getString(string.txt_label_performance)
   }
 

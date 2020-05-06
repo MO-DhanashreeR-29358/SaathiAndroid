@@ -534,6 +534,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   private fun renderPerformance(tableData: List<IncentiveTableData1>) {
+    binding.performance.visibility = View.VISIBLE
     binding.performance.loadChart(tableData)
   }
 
