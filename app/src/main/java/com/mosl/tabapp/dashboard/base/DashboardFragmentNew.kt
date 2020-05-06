@@ -50,7 +50,6 @@ import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
-import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
@@ -514,7 +513,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       var count = ""
       if (tables1.isNotEmpty()) {
         count = tables1.get(0)
-            .count.toString()
+          .count.toString()
       }
       currentDashboard.setActionableCount(it.second, count, typeList)
     }
@@ -889,13 +888,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     hideKeyboard(binding.ivActionableInsights)
     val dialogFragment = ActionableInsightDialogFragment()
     val widgetList = currentDashboard.getGroupModel(
-        ACTIONABLE
+      ACTIONABLE
     ).widgetList as ArrayList<WidgetModel>
     val bundle = Bundle()
     bundle.putSerializable(ActionableInsightDialogFragment.ARG_LIST_DATA, widgetList)
     bundle.putString(
-        ActionableInsightDialogFragment.ARG_DASHBOARD_FOR,
-        currentDashboard.dashboardFor
+      ActionableInsightDialogFragment.ARG_DASHBOARD_FOR,
+      currentDashboard.dashboardFor
     )
     dialogFragment.arguments = bundle
     dialogFragment.show(requireFragmentManager(), "Actionable Dialog")
