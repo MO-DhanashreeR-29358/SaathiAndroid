@@ -70,7 +70,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     if (itemList.size > 0) {
       widgetUiEvent.onNext(
         TrendsWidgetUiEvent.ItemClick(
-          itemList.get(0).dashboardGroupModel,
+          itemList[0].dashboardGroupModel,
           0
         )
       )
@@ -96,7 +96,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
       widgetModelList.add(DashboardGroupModel())
     }
 
-    widgetModelList.mapIndexed { position: Int, model: DashboardGroupModel ->
+    widgetModelList.mapIndexed { _: Int, model: DashboardGroupModel ->
       itemList.add(HorinzatalTrendsWidgetItem(model, widgetUiEvent))
     }
     groupAdapter.addAll(itemList)
@@ -109,8 +109,8 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
 
   override fun renderWidgetData(dashboardGroupModel: DashboardGroupModel, currentPosition: Int) {
     if (currentPosition != previousPosition) {
-      itemList.get(currentPosition).updateItem(true)
-      itemList.get(previousPosition).updateItem(false)
+      itemList[currentPosition].updateItem(true)
+      itemList[previousPosition].updateItem(false)
       previousPosition = currentPosition
     }
     this.dashboardGroupModel = dashboardGroupModel
@@ -127,7 +127,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
       binding.includeChart.chart.clear()
     }
     uiModel.onSuccess {
-      if (it.size > 0) {
+      if (it.isNotEmpty()) {
         setChartData(it)
       } else {
         binding.includeChart.chart.clear()
@@ -141,9 +141,9 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     makeLegend()
     val mChart = makeChart()
     rightAxis = mChart.axisRight
-    rightAxis.setValueFormatter(LargeValueFormatter())
+    rightAxis.valueFormatter = LargeValueFormatter()
     rightAxis.setDrawGridLines(false)
-    rightAxis.setAxisMinimum(0f)
+    rightAxis.axisMinimum = 0f
     val leftAxis = mChart.axisLeft
     leftAxis.setDrawGridLines(false)
     leftAxis.valueFormatter = LargeValueFormatter()
@@ -210,7 +210,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
       axisMinimum = 0f
       granularity = 1f
       setDrawAxisLine(true)
-      setValueFormatter(IndexAxisValueFormatter(mMonths))
+      valueFormatter = IndexAxisValueFormatter(mMonths)
     }
   }
 
@@ -228,11 +228,10 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
       generateAxisLabel(trendsChartModel)
       val itemcount = this.monthData.size
       val entries = ArrayList<Entry>()
-      var index: Int
       var lineDataSet: LineDataSet? = null
-      index = 0
+      var index: Int = 0
       while (index < itemcount) {
-        val yValue = this.monthData[mMonths.get(index)] ?: 0.0f
+        val yValue = this.monthData[mMonths[index]] ?: 0.0f
         entries.add(Entry(index + 0.05f, yValue))
         lineDataSet = LineDataSet(entries, this.legendText)
         lineDataSet.apply {
@@ -249,15 +248,15 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
           axisDependency = YAxis.AxisDependency.RIGHT
         }
         if (yValue < 1.00) {
-          rightAxis.setValueFormatter(CRMIAxisValueFormatter())
+          rightAxis.valueFormatter = CRMIAxisValueFormatter()
           // if last value below 1
           dataFoundFlag = true
         } else {
           if (dataFoundFlag) {
-            rightAxis.setValueFormatter(CRMIAxisValueFormatter())
+            rightAxis.valueFormatter = CRMIAxisValueFormatter()
             dataFoundFlag = false
           } else {
-            rightAxis.setValueFormatter(LargeValueFormatter())
+            rightAxis.valueFormatter = LargeValueFormatter()
           }
         }
         index++
@@ -297,7 +296,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
         val model = barDataList[x]
         val entries = entryList[x]
         for (y in mMonths.indices) {
-          val yValue = model.monthData[mMonths.get(y)] ?: 0.0f
+          val yValue = model.monthData[mMonths[y]] ?: 0.0f
           if (barDataList.size == 1) {
             entries.add(BarEntry(y + 0.2f, yValue))
           } else {
@@ -309,10 +308,10 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
             valueTextColor = getBarColor(x)
             valueTextSize = 10f
             axisDependency = YAxis.AxisDependency.LEFT
-            if (yValue % 1 == 0f) {
-              valueFormatter = CRMValueFormatter()
+            valueFormatter = if (yValue % 1 == 0f) {
+              CRMValueFormatter()
             } else {
-              valueFormatter = CRMDecimalValueFormater()
+              CRMDecimalValueFormater()
             }
           }
 
