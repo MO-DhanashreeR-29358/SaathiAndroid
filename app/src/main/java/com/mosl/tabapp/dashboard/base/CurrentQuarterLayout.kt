@@ -88,7 +88,10 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     val yAxisList = ArrayList<HashMap<String, String>>()
     for (keySet in keyList) {
       val keyValue = HashMap<String, String>()
-      if (!keySet.equals(HEADING, ignoreCase = true) || !keySet.equals(TABLE, ignoreCase = true)) {
+      if ((!keySet.equals(HEADING, ignoreCase = true)) && (!keySet.equals(
+              TABLE, ignoreCase = true
+          ))
+      ) {
         val columnData = jsonObj.getString(keySet)
         keyValue.put(keySet, columnData)
         yAxisList.add(keyValue)
