@@ -6,7 +6,8 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class LeadCreationPresenter @Inject constructor(
-  view: LeadCreationView
+  view: LeadCreationView,
+  val navigator: LeadCreationNavigator
 ) : BasePresenter<LeadCreationView>(view) {
 
   override fun start() {
@@ -28,6 +29,10 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onAdditionalInfoClicked()
         .subscribe { view.renderAdditionalInfoClick() }
+        .addTo(disposable)
+
+    view.onCancelButtonClicked()
+        .subscribe { navigator.navigateToHome() }
         .addTo(disposable)
 
   }

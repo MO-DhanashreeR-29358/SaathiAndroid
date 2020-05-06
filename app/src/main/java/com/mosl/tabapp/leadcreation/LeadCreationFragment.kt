@@ -514,23 +514,9 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     )
   }
 
-  override fun onCreateButtonClicked(): Observable<Unit> {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun onCancelButtonClicked(): Observable<Unit> {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
-
-  override fun onSameAsCheckboxClicked(): Observable<Unit> {
-    TODO(
-        "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
-  }
+  override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
+  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
+  override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
 
   override fun onDestroyView() {
     presenter.stop()
