@@ -12,6 +12,9 @@ import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
@@ -19,10 +22,14 @@ import com.mosl.tabapp.common.CRMMOSLCommon.disableField
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
 import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
@@ -422,6 +429,7 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     })
 
   }
+
   private fun setupScrollView() {
     binding.scrollView.apply {
       descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
@@ -433,6 +441,7 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
       }
     }
   }
+
   private fun TextView.toggleIcon(parent: View) {
     setCompoundDrawablesWithIntrinsicBounds(
         0, 0,
@@ -499,6 +508,9 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
 
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
   override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
+  override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
+  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
+  override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
 
   override fun renderPrimaryInfoClick() {
     toggleSectionExpansion(
@@ -514,9 +526,49 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     )
   }
 
-  override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
-  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
-  override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
+  override fun renderOnCreateButtonClick(uiModule: UiModel<String>) {
+    toggleProgressBar(uiModule.inProgress)
+    uiModule.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModule.onSuccess {
+      MSFDialog.alertDialog(
+          requireContext(), 0,
+          resources.getString(string.motilal_oswal), MOSLConstants.CONFIRM_LEAD, "YES",
+          "NO", true
+      ) { action: Action, data: Array<Any?>? ->
+        if (action == OK) {
+          //createLead()
+        }
+      }
+    }
+
+  }
+
+  override fun getLeadCreationUserInput(): LeadCreationUserInput {
+    return LeadCreationUserInput(
+        selectedCategory = binding.spCategory.selectedItem as RowData,
+        etCategoryName = binding.etName.text.toString(),
+        etContactPerson = binding.etContactPerson.text.toString(),
+        selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
+        selectedProductType = binding.spProductType.selectedItem as RowData,
+        emailId = binding.etEmailId.text.toString(),
+        alternateEmailId = binding.etAlternateEmailId.text.toString(),
+        mobileNo = binding.etMobile.text.toString(),
+        alternateMobileNo = binding.etAlternateMobno.text.toString(),
+        landlineNo = binding.etLandLine.text.toString(),
+        ekycMobileNo = binding.etEkycMobile.text.toString(),
+        panNo = binding.etPanNum.text.toString(),
+        aadharNo = binding.etAadharNum.text.toString(),
+        sourceName = binding.spProspectSource.selectedItem.toString(),
+        refereeEmail = binding.etRefereeEmail.text.toString(),
+        refereeName = binding.etRefereeName.text.toString(),
+        refereeMobile = binding.etRefereeMobile.text.toString(),
+        pinCOde = binding.etPincode.text.toString(),
+        officePinCOde = binding.etOffPincode.text.toString()
+    )
+  }
 
   override fun onDestroyView() {
     presenter.stop()

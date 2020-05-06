@@ -9,6 +9,7 @@ class LeadCreationPresenter @Inject constructor(
   view: LeadCreationView,
   val navigator: LeadCreationNavigator
 ) : BasePresenter<LeadCreationView>(view) {
+  private val validator = LeadCreationValidator()
 
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
@@ -29,6 +30,15 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onAdditionalInfoClicked()
         .subscribe { view.renderAdditionalInfoClick() }
+        .addTo(disposable)
+
+    view.onCreateButtonClicked()
+        .map { view.getLeadCreationUserInput() }
+        .switchMap {
+          validator.validate(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnCreateButtonClick)
         .addTo(disposable)
 
     view.onCancelButtonClicked()

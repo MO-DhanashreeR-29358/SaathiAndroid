@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadcreation
 
 import com.mosl.app.core.base.BaseView
+import com.mosl.commons.data.UiModel
 import io.reactivex.Observable
 
 interface LeadCreationView : BaseView {
@@ -16,6 +17,8 @@ interface LeadCreationView : BaseView {
   fun renderPrimaryInfoClick()
   fun renderAdditionalInfoClick()
   fun onCreateButtonClicked(): Observable<Unit>
+  fun renderOnCreateButtonClick(uiModule: UiModel<String>)
+  fun getLeadCreationUserInput(): LeadCreationUserInput
   fun onCancelButtonClicked(): Observable<Unit>
   fun onSameAsCheckboxClicked(): Observable<Unit>
 }

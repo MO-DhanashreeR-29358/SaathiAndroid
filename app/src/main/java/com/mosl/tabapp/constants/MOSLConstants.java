@@ -389,6 +389,9 @@ public interface MOSLConstants extends LabelConfig {
     // Prospect Reffer changes
     String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
     String INVALID_MOBILE_NO = "Invalid mobile number.";
+    String INVALID_LAND_LINE = "Invalid Tel number.";
+    String INVALID_PAN = "Invalid PAN number.";
+    String INVALID_AADHAR = "Invalid Aadhar number.";
     String INVALID_EMAIL_ID = "Invalid email id.";
     String ENTER_EMAIL_ID = "Enter email id.";
     String ENTER_MOBILE_NUMBER = "Enter mobile number";
