@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -52,42 +53,76 @@ class CurrentQuarterLayout @JvmOverloads constructor(
   }
 
   private fun renderTable1Data(jsonObject: JSONObject) {
+    val jsonArray = jsonObject.getJSONArray(TABLE1)
+    val jsonObj = jsonArray.getJSONObject(0)
+    if (jsonObj.has(TABLE)) {
+      val table = jsonObj.getString(TABLE)
+      if (table.equals("4")) {
+        convertToTableData(
+            jsonObj, binding.tableCurrentQuaterStatusFourth
+            , binding.tvCurrentQuarterStatusFourthHeading
+        )
+      } else if (table.equals("2")) {
+        val headingName = jsonObj.getString(HEADING) ?: ""
+        loadCurrentStatusAlternateTable(
+            headingName, jsonArray, binding.tableCurrentQuaterStatusSecond,
+            binding.tvCurrentQuarterStatusSecondHeading
+        )
+      }
+    }
+  }
 
+  fun convertToTableData(
+    jsonObj: JSONObject,
+    table: TableLayout,
+    tvHeading: TextView
+  ) {
+    val keyList = ArrayList<String>()
+    val headingName = jsonObj.getString(HEADING) ?: ""
+    val iter = jsonObj.keys()
+    while (iter.hasNext()) {
+      val columnName: String = iter.next()
+          .toString()
+      keyList.add(columnName)
+    }
+    val yAxisList = ArrayList<HashMap<String, String>>()
+    for (keySet in keyList) {
+      val keyValue = HashMap<String, String>()
+      if (!keySet.equals(HEADING, ignoreCase = true) || !keySet.equals(TABLE, ignoreCase = true)) {
+        val columnData = jsonObj.getString(keySet)
+        keyValue.put(keySet, columnData)
+        yAxisList.add(keyValue)
+      }
+    }
+    loadCurrentStatusTable(headingName, yAxisList, table, tvHeading)
   }
 
   private fun renderTableData(jsonObject: JSONObject) {
     val jsonArray = jsonObject.getJSONArray(TABLE)
     val jsonObj = jsonArray
         .getJSONObject(0)
-    val table = jsonObj.getString(TABLE) ?: ""
-    if (table.equals("3")) {
-      val keyList = ArrayList<String>()
-      val headingName = jsonObj.getString(HEADING) ?: ""
-      val iter = jsonObj.keys()
-      while (iter.hasNext()) {
-        val columnName: String = iter.next()
-            .toString()
-        keyList.add(columnName)
+    if (jsonObj.has(TABLE)) {
+      val table = jsonObj.getString(TABLE) ?: ""
+      if (table.equals("3")) {
+        convertToTableData(
+            jsonObj, binding.tableCurrentQuaterStatusThird,
+            binding.tvCurrentQuarterStatusThirdHeading
+        )
+      } else if (table.equals("1")) {
+        val headingName = jsonObj.getString(HEADING) ?: ""
+        loadCurrentStatusAlternateTable(
+            headingName, jsonArray, binding.tableCurrentQuaterStatusFirst,
+            binding.tvCurrentQuarterStatusFirstHeading
+        )
       }
-      val yAxisList = ArrayList<HashMap<String, String>>()
-      for (keySet in keyList) {
-        val keyValue = HashMap<String, String>()
-        if (!keySet.equals(HEADING) || keySet.equals(TABLE)) {
-          val columnData = jsonObj.getString(keySet)
-          keyValue.put(keySet, columnData)
-          yAxisList.add(keyValue)
-        }
-      }
-      loadCurrentStatusThirdTable(headingName, yAxisList)
-    } else if (table.equals("1")) {
-      val headingName = jsonObj.getString(HEADING) ?: ""
-      loadCurrentStatusFirstTable(headingName, jsonArray)
     }
   }
 
-  private fun loadCurrentStatusFirstTable(
+  private fun loadCurrentStatusAlternateTable(
     headingName: String,
-    jsonArray: JSONArray?
+    jsonArray: JSONArray?,
+    table: TableLayout,
+    tvHeading: TextView
   ) {
     if (jsonArray == null) return
 
@@ -124,7 +159,7 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     //header
     //header
     val headingRow = TableRow(context)
-    binding.tableCurrentQuaterStatusFirst.addView(headingRow)
+    table.addView(headingRow)
     headingRow.layoutParams = TableRow.LayoutParams(
         TableRow.LayoutParams.MATCH_PARENT,
         TableRow.LayoutParams.WRAP_CONTENT
@@ -163,7 +198,7 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     //row data
     for (column1Heading in rowHeadingSet) {
       val tableRow = TableRow(context)
-      binding.tableCurrentQuaterStatusFirst.addView(tableRow)
+      table.addView(tableRow)
       tableRow.layoutParams = TableRow.LayoutParams(
           TableRow.LayoutParams.MATCH_PARENT,
           TableRow.LayoutParams.WRAP_CONTENT
@@ -189,13 +224,16 @@ class CurrentQuarterLayout @JvmOverloads constructor(
         textView.text = value
       }
     }
-    binding.tvCurrentQuarterStatusFirstHeading.setText(headingName)
-    binding.viewCurrentQuarterStatusFirst.visibility = View.VISIBLE
+    tvHeading.setText(headingName)
+    tvHeading.visibility = View.VISIBLE
+    table.visibility = View.VISIBLE
   }
 
-  private fun loadCurrentStatusThirdTable(
+  private fun loadCurrentStatusTable(
     headingName: String,
-    arrayList: ArrayList<HashMap<String, String>>
+    arrayList: ArrayList<HashMap<String, String>>,
+    table: TableLayout,
+    tvHeading: TextView
   ) {
     val inFla: LayoutInflater = LayoutInflater.from(context)
     if (arrayList.size > 0) {
@@ -211,11 +249,12 @@ class CurrentQuarterLayout @JvmOverloads constructor(
         val tvValue = tableRow.findViewById<TextView>(R.id.tvValue)
         tvKey.setText(keyName(keySet).replace("_", " "))
         tvValue.text = value
-        binding.tableCurrentQuaterStatusThird.addView(tableRow)
+        table.addView(tableRow)
       }
     }
-    binding.tvCurrentQuarterStatusThirdHeading.setText(headingName)
-    binding.viewCurrentQuarterStatusThird.setVisibility(View.VISIBLE)
+    tvHeading.setText(headingName)
+    tvHeading.setVisibility(View.VISIBLE)
+    table.visibility = View.VISIBLE
   }
 
   private fun keyName(keySet: Set<String>?): String {
@@ -230,4 +269,5 @@ class CurrentQuarterLayout @JvmOverloads constructor(
 }
 
 const val TABLE = "Table"
+const val TABLE1 = "Table1"
 const val HEADING = "Heading"

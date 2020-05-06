@@ -124,7 +124,7 @@ object DashboardMapper {
   }
 
   fun transformTableData1(lst: List<Table1Item>?): List<IncentiveTableData1> {
-    return lst!!.safeMap {
+    return lst?.safeMap {
       IncentiveTableData1(
           q1 = it.q1 ?: "0",
           q2 = it.q2 ?: "0",
@@ -134,6 +134,6 @@ object DashboardMapper {
           ytd = it.yTD ?: "0",
           widgetType = it.widgetType ?: ""
       )
-    }
+    } ?: Collections.emptyList()
   }
 }

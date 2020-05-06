@@ -4,28 +4,23 @@
   <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <View
-      android:id="@+id/viewCurrentQuarterStatusFirst"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@id/tableCurrentQuaterStatusFirst"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="wrap_content">
 
     <TextView
       android:id="@+id/tvCurrentQuarterStatusFirstHeading"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/_5sdp"
       android:textColor="@color/blue"
+      android:layout_marginStart="@dimen/_5sdp"
+      android:layout_marginEnd="@dimen/_5sdp"
+      android:background="@color/white"
+      android:padding="@dimen/margin_medium"
       android:textSize="@dimen/_14sdp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
+      android:visibility="gone"
       app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
@@ -34,26 +29,22 @@
       android:layout_height="wrap_content"
       android:layout_marginStart="@dimen/_5sdp"
       android:layout_marginBottom="@dimen/_10sdp"
+      android:visibility="gone"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/tvCurrentQuarterStatusFirstHeading" />
 
-    <View
-      android:id="@+id/viewCurrentQuarterStatusSecond"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@id/tableCurrentQuaterStatusSecond"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/tvCurrentQuarterStatusSecondHeading" />
-
     <TextView
       android:id="@+id/tvCurrentQuarterStatusSecondHeading"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/_5sdp"
+      android:layout_marginStart="@dimen/_5sdp"
       android:textColor="@color/blue"
+      android:layout_marginEnd="@dimen/_5sdp"
+      android:background="@color/white"
+      android:padding="@dimen/margin_medium"
+      android:visibility="gone"
       android:textSize="@dimen/_14sdp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
@@ -64,28 +55,24 @@
       android:id="@+id/tableCurrentQuaterStatusSecond"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:visibility="gone"
       android:layout_marginStart="@dimen/_5sdp"
       android:layout_marginBottom="@dimen/_10sdp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/tvCurrentQuarterStatusSecondHeading" />
 
-    <View
-      android:id="@+id/viewCurrentQuarterStatusThird"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@id/tableCurrentQuaterStatusThird"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/tvCurrentQuarterStatusThirdHeading" />
-
     <TextView
       android:id="@+id/tvCurrentQuarterStatusThirdHeading"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/_5sdp"
+      android:layout_marginStart="@dimen/_5sdp"
       android:textColor="@color/blue"
+      android:layout_marginEnd="@dimen/_5sdp"
+      android:background="@color/white"
+      android:padding="@dimen/margin_medium"
+      android:visibility="gone"
       android:textSize="@dimen/_14sdp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
@@ -96,28 +83,24 @@
       android:id="@+id/tableCurrentQuaterStatusThird"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:visibility="gone"
       android:layout_marginStart="@dimen/_5sdp"
       android:layout_marginBottom="@dimen/_10sdp"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/tvCurrentQuarterStatusThirdHeading" />
 
-    <View
-      android:id="@+id/viewCurrentQuarterStatusFourth"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:visibility="gone"
-      app:layout_constraintBottom_toBottomOf="@id/tableCurrentQuaterStatusFourth"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="@id/tvCurrentQuarterStatusFourthHeading" />
-
     <TextView
       android:id="@+id/tvCurrentQuarterStatusFourthHeading"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/_5sdp"
+      android:layout_marginStart="@dimen/_5sdp"
       android:textColor="@color/blue"
+      android:layout_marginEnd="@dimen/_5sdp"
+      android:background="@color/white"
+      android:padding="@dimen/margin_medium"
+      android:visibility="gone"
       android:textSize="@dimen/_14sdp"
       android:textStyle="bold"
       app:layout_constraintEnd_toEndOf="parent"
@@ -128,6 +111,7 @@
       android:id="@+id/tableCurrentQuaterStatusFourth"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:visibility="gone"
       android:layout_marginStart="@dimen/_5sdp"
       android:layout_marginBottom="@dimen/_10sdp"
       app:layout_constraintEnd_toEndOf="parent"
