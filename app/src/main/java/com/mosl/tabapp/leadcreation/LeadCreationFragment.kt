@@ -562,11 +562,12 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
         panNo = binding.etPanNum.text.toString(),
         aadharNo = binding.etAadharNum.text.toString(),
         sourceName = binding.spProspectSource.selectedItem.toString(),
+        refereeCode = binding.etRefereeCode.text.toString(),
         refereeEmail = binding.etRefereeEmail.text.toString(),
         refereeName = binding.etRefereeName.text.toString(),
         refereeMobile = binding.etRefereeMobile.text.toString(),
-        pinCOde = binding.etPincode.text.toString(),
-        officePinCOde = binding.etOffPincode.text.toString()
+        pinCode = binding.etPincode.text.toString(),
+        officePinCode = binding.etOffPincode.text.toString()
     )
   }
 

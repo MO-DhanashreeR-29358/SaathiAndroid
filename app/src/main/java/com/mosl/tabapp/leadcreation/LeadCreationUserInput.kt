@@ -17,9 +17,10 @@ data class LeadCreationUserInput(
   @JvmField val panNo: String,
   @JvmField val aadharNo: String,
   @JvmField val sourceName: String,
+  @JvmField val refereeCode: String,
   @JvmField val refereeEmail: String,
   @JvmField val refereeName: String,
   @JvmField val refereeMobile: String,
-  @JvmField val pinCOde: String,
-  @JvmField val officePinCOde: String
+  @JvmField val pinCode: String,
+  @JvmField val officePinCode: String
 )
