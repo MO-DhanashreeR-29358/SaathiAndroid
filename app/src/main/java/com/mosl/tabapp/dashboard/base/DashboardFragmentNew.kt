@@ -62,7 +62,6 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import org.json.JSONObject
-import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -361,7 +360,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   private fun updateCount(systemName: String) {
-    subject.onNext(ActionableCount(systemName, getAddtionalParameterMap()))
+    val actionableWidgetList =
+      currentDashboard.getGroupModel(systemName).widgetList
+    if (actionableWidgetList.isNotEmpty()) {
+      for (model in actionableWidgetList) {
+        subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
+      }
+    }
   }
 
   private fun setClientLayoutVisibililty(systemName: String) {
@@ -497,13 +502,13 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   override fun renderActionableCount(uiModel: UiModel<Pair<com.mosl.mobile.domain.dashboard.ActionableCount, String>>) {
     toggleProgress(uiModel.inProgress)
 
+    uiModel.onFailure {
+    }
     uiModel.onSuccess {
       val typeList = ArrayList<TypeActionableFilterModel>()
 
       val tables = it.first.table
       val tables1 = it.first.table1
-      Timber.d("Table data %s", tables)
-      Timber.d("Table1 data %s", tables1)
       if (tables.isNotEmpty()) {
         for (table in tables) {
           val type = TypeActionableFilterModel(table.type)

@@ -8,12 +8,13 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.databinding.TableCurrentQuarterStatusThreeBinding
 import com.mosl.tabapp.databinding.ViewCurrentQuarterBinding
 import org.json.JSONArray
 import org.json.JSONObject
@@ -30,7 +31,7 @@ class CurrentQuarterLayout @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
   internal var binding: ViewCurrentQuarterBinding = DataBindingUtil.inflate(
-      LayoutInflater.from(context), R.layout.view_current_quarter, this, true
+    LayoutInflater.from(context), layout.view_current_quarter, this, true
   )
 
   override fun onFinishInflate() {
@@ -57,22 +58,22 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     val jsonObj = jsonArray.getJSONObject(0)
     if (jsonObj.has(TABLE)) {
       val table = jsonObj.getString(TABLE)
-      if (table.equals("4")) {
+      if (table == "4") {
         convertToTableData(
-            jsonObj, binding.tableCurrentQuaterStatusFourth
-            , binding.tvCurrentQuarterStatusFourthHeading
+          jsonObj, binding.tableCurrentQuaterStatusFourth
+          , binding.tvCurrentQuarterStatusFourthHeading
         )
-      } else if (table.equals("2")) {
+      } else if (table == "2") {
         val headingName = jsonObj.getString(HEADING) ?: ""
         loadCurrentStatusAlternateTable(
-            headingName, jsonArray, binding.tableCurrentQuaterStatusSecond,
-            binding.tvCurrentQuarterStatusSecondHeading
+          headingName, jsonArray, binding.tableCurrentQuaterStatusSecond,
+          binding.tvCurrentQuarterStatusSecondHeading
         )
       }
     }
   }
 
-  fun convertToTableData(
+  private fun convertToTableData(
     jsonObj: JSONObject,
     table: TableLayout,
     tvHeading: TextView
@@ -82,18 +83,18 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     val iter = jsonObj.keys()
     while (iter.hasNext()) {
       val columnName: String = iter.next()
-          .toString()
+        .toString()
       keyList.add(columnName)
     }
     val yAxisList = ArrayList<HashMap<String, String>>()
     for (keySet in keyList) {
       val keyValue = HashMap<String, String>()
       if ((!keySet.equals(HEADING, ignoreCase = true)) && (!keySet.equals(
-              TABLE, ignoreCase = true
-          ))
+          TABLE, ignoreCase = true
+        ))
       ) {
         val columnData = jsonObj.getString(keySet)
-        keyValue.put(keySet, columnData)
+        keyValue[keySet] = columnData
         yAxisList.add(keyValue)
       }
     }
@@ -103,19 +104,19 @@ class CurrentQuarterLayout @JvmOverloads constructor(
   private fun renderTableData(jsonObject: JSONObject) {
     val jsonArray = jsonObject.getJSONArray(TABLE)
     val jsonObj = jsonArray
-        .getJSONObject(0)
+      .getJSONObject(0)
     if (jsonObj.has(TABLE)) {
       val table = jsonObj.getString(TABLE) ?: ""
-      if (table.equals("3")) {
+      if (table == "3") {
         convertToTableData(
-            jsonObj, binding.tableCurrentQuaterStatusThird,
-            binding.tvCurrentQuarterStatusThirdHeading
+          jsonObj, binding.tableCurrentQuaterStatusThird,
+          binding.tvCurrentQuarterStatusThirdHeading
         )
-      } else if (table.equals("1")) {
+      } else if (table == "1") {
         val headingName = jsonObj.getString(HEADING) ?: ""
         loadCurrentStatusAlternateTable(
-            headingName, jsonArray, binding.tableCurrentQuaterStatusFirst,
-            binding.tvCurrentQuarterStatusFirstHeading
+          headingName, jsonArray, binding.tableCurrentQuaterStatusFirst,
+          binding.tvCurrentQuarterStatusFirstHeading
         )
       }
     }
@@ -143,8 +144,8 @@ class CurrentQuarterLayout @JvmOverloads constructor(
         val paramName = paramNameJsonArray.getString(y)
         val paramValue = jsonRowObject.getString(paramName) ?: ""
         if (!paramName.equals("Heading", ignoreCase = true) && !paramName.equals(
-                "Table", ignoreCase = true
-            )
+            "Table", ignoreCase = true
+          )
         ) {
           val map = HashMap<String, String>()
           map[paramName] = paramValue
@@ -164,33 +165,32 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     val headingRow = TableRow(context)
     table.addView(headingRow)
     headingRow.layoutParams = TableRow.LayoutParams(
-        TableRow.LayoutParams.MATCH_PARENT,
-        TableRow.LayoutParams.WRAP_CONTENT
+      TableRow.LayoutParams.MATCH_PARENT,
+      TableRow.LayoutParams.WRAP_CONTENT
     )
-    headingRow.setBackgroundColor(resources.getColor(color.mosl_web_color))
+    headingRow.setBackgroundColor(ContextCompat.getColor(context, color.mosl_web_color))
 
     val headingIterator: Iterator<*> = tableMap.keys.iterator()
 
     if (headingIterator.hasNext()) {
       val rowHead = headingIterator.next()
-          .toString()
+        .toString()
       val mm = tableMap[rowHead]
       for (cellmap in Objects.requireNonNull(
-          mm
+        mm
       )!!) {
         var headingText = cellmap.keys.iterator()
-            .next()
-            .toString()
+          .next()
         headingText = headingText.replace("_".toRegex(), " ")
         val headingCell = TextView(context)
         headingRow.addView(headingCell)
         headingCell.layoutParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.WRAP_CONTENT
+          TableRow.LayoutParams.MATCH_PARENT,
+          TableRow.LayoutParams.WRAP_CONTENT
         )
         headingCell.setBackgroundResource(drawable.cell_shape)
         val padding = resources.getDimension(dimen._5sdp)
-            .toInt()
+          .toInt()
         headingCell.setPadding(padding, padding, padding, padding)
         //column.setTextAppearance(context, android.R.attr.textAppearanceMedium);
         headingCell.text = headingText
@@ -203,31 +203,30 @@ class CurrentQuarterLayout @JvmOverloads constructor(
       val tableRow = TableRow(context)
       table.addView(tableRow)
       tableRow.layoutParams = TableRow.LayoutParams(
-          TableRow.LayoutParams.MATCH_PARENT,
-          TableRow.LayoutParams.WRAP_CONTENT
+        TableRow.LayoutParams.MATCH_PARENT,
+        TableRow.LayoutParams.WRAP_CONTENT
       )
       val rowList =
         tableMap[column1Heading]
       for (map in Objects.requireNonNull(
-          rowList
+        rowList
       )!!) {
         val value = map.values.iterator()
-            .next()
-            .toString()
+          .next()
         val textView = TextView(context)
         tableRow.addView(textView)
         textView.layoutParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.MATCH_PARENT,
-            TableRow.LayoutParams.WRAP_CONTENT
+          TableRow.LayoutParams.MATCH_PARENT,
+          TableRow.LayoutParams.WRAP_CONTENT
         )
         textView.setBackgroundResource(drawable.cell_shape)
         val padding = resources.getDimension(dimen._5sdp)
-            .toInt()
+          .toInt()
         textView.setPadding(padding, padding, padding, padding)
         textView.text = value
       }
     }
-    tvHeading.setText(headingName)
+    tvHeading.text = headingName
     tvHeading.visibility = View.VISIBLE
     table.visibility = View.VISIBLE
   }
@@ -238,25 +237,21 @@ class CurrentQuarterLayout @JvmOverloads constructor(
     table: TableLayout,
     tvHeading: TextView
   ) {
-    val inFla: LayoutInflater = LayoutInflater.from(context)
+    val inflater: LayoutInflater = LayoutInflater.from(context)
     if (arrayList.size > 0) {
       for (i in arrayList.indices) {
-        val filterData: Map<String, String> = arrayList.get(i)
+        val filterData: Map<String, String> = arrayList[i]
         val keySet = filterData.keys
-
-        val value: String = arrayList.get(i)
-            .get(keyName(keySet)) ?: ""
-        val tableRow =
-          inFla.inflate(layout.table_current_quarter_status_three, null)
-        val tvKey = tableRow.findViewById<TextView>(R.id.tvKey)
-        val tvValue = tableRow.findViewById<TextView>(R.id.tvValue)
-        tvKey.setText(keyName(keySet).replace("_", " "))
-        tvValue.text = value
-        table.addView(tableRow)
+        val value: String = arrayList[i][keyName(keySet)] ?: ""
+        val binding =
+          TableCurrentQuarterStatusThreeBinding.inflate(inflater)
+        binding.tvKey.text = keyName(keySet).replace("_", " ")
+        binding.tvValue.text = value
+        table.addView(binding.root)
       }
     }
-    tvHeading.setText(headingName)
-    tvHeading.setVisibility(View.VISIBLE)
+    tvHeading.text = headingName
+    tvHeading.visibility = View.VISIBLE
     table.visibility = View.VISIBLE
   }
 
