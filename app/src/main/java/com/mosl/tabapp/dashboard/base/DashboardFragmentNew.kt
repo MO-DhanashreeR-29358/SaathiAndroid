@@ -9,8 +9,11 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.getbase.floatingactionbutton.FloatingActionButton
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -20,10 +23,13 @@ import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.mobile.domain.dashboard.IncentiveTableData1
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
+import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.string
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
@@ -58,6 +64,7 @@ import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import org.json.JSONObject
 import java.util.HashMap
 import javax.inject.Inject
@@ -361,8 +368,28 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       currentDashboard.getGroupModel(systemName).widgetList
     if (actionableWidgetList.isNotEmpty()) {
       for (model in actionableWidgetList) {
-        subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
+        // subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
+        loadActionableCount(model.systemName)
       }
+    }
+  }
+
+  private fun loadActionableCount(systemName: String) {
+    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+      val request = ActionableCountRequest(
+        getAddtionalParameterMap(),
+        systemName
+      )
+      val subscribe = saathiApi.getActionableCount(request)
+        .compose(applyUiModel())
+        .subscribe { uiModel: UiModel<ActionableCountItem> ->
+          renderActionableCount1(
+            uiModel,
+            systemName
+          )
+        }
+    } else {
+      noInternetConnectionDialog()
     }
   }
 
@@ -493,6 +520,33 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
         Toast.makeText(requireContext(), "Downloading ${it.filePath}...", Toast.LENGTH_SHORT)
           .show()
       }
+    }
+  }
+
+  private fun renderActionableCount1(uiModel: UiModel<ActionableCountItem>, systemName: String) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onSuccess {
+      val typeList = ArrayList<TypeActionableFilterModel>()
+
+      val tables = it.table
+      val tables1 = it.table1
+      tables?.apply {
+        if (tables.isNotEmpty()) {
+          for (table in tables) {
+            val type = TypeActionableFilterModel(table.types)
+            typeList.add(type)
+          }
+        }
+      }
+      var count = ""
+      tables1?.apply {
+        if (tables1.isNotEmpty()) {
+          count = tables1.get(0)
+            .count.toString()
+        }
+      }
+      currentDashboard.setActionableCount(systemName, count, typeList)
     }
   }
 
