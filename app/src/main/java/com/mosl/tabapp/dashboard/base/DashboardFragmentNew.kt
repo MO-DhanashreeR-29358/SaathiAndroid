@@ -19,6 +19,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboard.DashboardData
+import com.mosl.mobile.domain.dashboard.DashboardRequestData
 import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
@@ -37,6 +38,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.Dashboard
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
@@ -75,7 +77,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   @Inject
   lateinit var presenter: DashboardPresenter
   val subject: PublishSubject<DashboardUiEvent> = PublishSubject.create()
-
+  private var businessProfileIdForDashboard = ""
+  private var productId = ""
+  private var employeeCode = ""
   override fun getLayout() = R.layout.frag_dashboard
 
   override fun onViewCreated(
@@ -126,6 +130,15 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       }
       if (dashboardList.size > 0) {
         currentDashboard = dashboardList[0]
+        if (businessProfileIdForDashboard.isNotEmpty()) {
+          currentDashboard.businessProfileIdForDashboard = businessProfileIdForDashboard
+        }
+        if (productId.isNotEmpty()) {
+          currentDashboard.productId = productId
+        }
+        if (employeeCode.isNotEmpty()) {
+          currentDashboard.employeeCode = employeeCode
+        }
         createFloatingActionButtons()
         renderDashboard(currentDashboard)
       }
@@ -143,6 +156,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
           button.setIconDrawable(it)
         }
         binding.floatingActionsMenu.addButton(button)
+        dashboardBtnList.add(button)
         button.setOnClickListener { v: View? ->
           hideKeyboard(v)
           binding.tvMain.requestFocus()
@@ -363,6 +377,26 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
+  override fun onFragmentReopened(args: Bundle) {
+    super.onFragmentReopened(args)
+    for (floatingActionButton in dashboardBtnList) {
+      binding.floatingActionsMenu.removeButton(floatingActionButton)
+    }
+    dashboardBtnList.clear()
+    dashboardList.clear()
+    productId = args.getString(ARG_PRODUCT_ID) ?: ""
+    employeeCode = args.getString(ARG_EMPCODE) ?: ""
+    businessProfileIdForDashboard = args.getString(ARG_PROFILE_ID) ?: ""
+    subject.onNext(
+      Dashboard(
+        DashboardRequestData(
+          profileId = args.getString(ARG_PROFILE_ID),
+          productId = args.getString(ARG_PRODUCT_ID), empCode = args.getString(ARG_EMPCODE)
+        )
+      )
+    )
+  }
+
   private fun updateCount(systemName: String) {
     val actionableWidgetList =
       currentDashboard.getGroupModel(systemName).widgetList
@@ -465,6 +499,10 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   override fun ActionableCount(): Observable<ActionableCount> {
+    return subject.ofType()
+  }
+
+  override fun LoadDashboardData(): Observable<Dashboard> {
     return subject.ofType()
   }
 
@@ -593,19 +631,21 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   private fun incentiveData(tableData: List<IncentiveTableData>) {
-    arrayListIncentive.clear()
-    for (i in tableData.indices) {
-      val data = tableData[i]
-      val fieldData = HashMap<String, String>()
-      fieldData[PARAMETERS] = data.parameters
-      fieldData[Q1] = data.q1.toString()
-      fieldData[Q2] = data.q2.toString()
-      fieldData[Q3] = data.q3.toString()
-      fieldData[Q4] = data.q4.toString()
-      fieldData[YTD] = data.ytd.toString()
-      arrayListIncentive.add(fieldData)
+    if (tableData.size > 0) {
+      arrayListIncentive.clear()
+      for (i in tableData.indices) {
+        val data = tableData[i]
+        val fieldData = HashMap<String, String>()
+        fieldData[PARAMETERS] = data.parameters
+        fieldData[Q1] = data.q1.toString()
+        fieldData[Q2] = data.q2.toString()
+        fieldData[Q3] = data.q3.toString()
+        fieldData[Q4] = data.q4.toString()
+        fieldData[YTD] = data.ytd.toString()
+        arrayListIncentive.add(fieldData)
+      }
+      loadIncentiveView("Q1")
     }
-    loadIncentiveView("Q1")
   }
 
   override fun loadIncentiveView(value: String) {
@@ -672,6 +712,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   }
 
   private val dashboardList: ArrayList<DashboardModel> = ArrayList()
+  private val dashboardBtnList: ArrayList<FloatingActionButton> = ArrayList()
   private val arrayListIncentive: ArrayList<HashMap<String, String>> = ArrayList()
   private lateinit var currentDashboard: DashboardModel
   private fun fillAvailableWidgetModel(data: DashboardData) {
@@ -921,6 +962,18 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
 
   override fun getDashboardID(): String {
     return currentDashboard.id
+  }
+
+  override fun getBusinessProfileID(): String {
+    return businessProfileIdForDashboard
+  }
+
+  override fun getProductID(): String {
+    return productId
+  }
+
+  override fun getEmpCode(): String {
+    return employeeCode
   }
 
   override fun showCallPopup(number: String) {
