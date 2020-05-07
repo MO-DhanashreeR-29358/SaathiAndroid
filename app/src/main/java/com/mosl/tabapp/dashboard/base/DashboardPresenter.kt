@@ -30,6 +30,14 @@ class DashboardPresenter @Inject constructor(
         .subscribe(view::render)
         .addTo(disposable)
 
+    view.LoadDashboardData()
+        .switchMap {
+          repository.getDashboardMetaData(it.dashboardRequestData)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::render)
+        .addTo(disposable)
+
     view.onClientClicked()
         .subscribe { view.loadClientsFragment() }
         .addTo(disposable)
@@ -148,5 +156,9 @@ sealed class DashboardUiEvent {
   class ActionableCount(
     val systemName: String,
     val additionalParameterMap: Map<String, String>
+  ) : DashboardUiEvent()
+
+  class Dashboard(
+    val dashboardRequestData: DashboardRequestData
   ) : DashboardUiEvent()
 }
