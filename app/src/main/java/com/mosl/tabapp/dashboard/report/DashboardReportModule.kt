@@ -40,13 +40,15 @@ class DashboardReportModule {
       }
       if (this.containsKey(FILTER_LIST)) {
         val filterList = this.getParcelableArrayList<WidgetFilterModel>(FILTER_LIST)
-            ?: emptyList<WidgetFilterModel>()
+          ?: emptyList<WidgetFilterModel>()
         if (filterList.isNotEmpty()) {
           if (filterList[0].keyValue.equals(FLT_DATE, ignoreCase = true)) {
             isDateFilter = true
             additionalMap[FLT_DATE] = CRMAppUtil.getDateStr(Date(), dd_MMM_yyyy)
           }
-          periodFilter = filterList[0].filterData
+          if (filterList[0].filterData.isNotEmpty()) {
+            periodFilter = filterList[0].filterData
+          }
         }
       }
 
@@ -56,17 +58,17 @@ class DashboardReportModule {
       }
 
       return DashboardReportData(
-          additionalMap as Map<String, String>,
-          label, this.getString(SYSTEM_NAME), periodFilter, typeFilter, isDateFilter
+        additionalMap as Map<String, String>,
+        label, this.getString(SYSTEM_NAME), periodFilter, typeFilter, isDateFilter
       )
     }
     return DashboardReportData(
-        emptyMap<String, String>(),
-        "",
-        "",
-        emptyList<FilterRowData>(),
-        emptyList<TypeActionableFilterModel>(),
-        false
+      emptyMap<String, String>(),
+      "",
+      "",
+      emptyList<FilterRowData>(),
+      emptyList<TypeActionableFilterModel>(),
+      false
     )
   }
 

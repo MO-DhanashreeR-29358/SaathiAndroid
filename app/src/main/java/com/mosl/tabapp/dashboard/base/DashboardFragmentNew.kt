@@ -9,8 +9,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.getbase.floatingactionbutton.FloatingActionButton
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -60,7 +58,6 @@ import com.mosl.tabapp.util.initiateCall
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import org.json.JSONObject
 import java.util.HashMap
 import javax.inject.Inject
@@ -502,8 +499,6 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   override fun renderActionableCount(uiModel: UiModel<Pair<com.mosl.mobile.domain.dashboard.ActionableCount, String>>) {
     toggleProgress(uiModel.inProgress)
 
-    uiModel.onFailure {
-    }
     uiModel.onSuccess {
       val typeList = ArrayList<TypeActionableFilterModel>()
 
