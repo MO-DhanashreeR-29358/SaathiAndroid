@@ -74,7 +74,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
   @Inject
   lateinit var presenter: DashboardPresenter
   val subject: PublishSubject<DashboardUiEvent> = PublishSubject.create()
-
+  private var businessProfileIdForDashboard = ""
+  private var productId = ""
+  private var employeeCode = ""
   override fun getLayout() = R.layout.frag_dashboard
 
   override fun onViewCreated(
@@ -125,6 +127,15 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       }
       if (dashboardList.size > 0) {
         currentDashboard = dashboardList[0]
+        if (businessProfileIdForDashboard.isNotEmpty()) {
+          currentDashboard.businessProfileIdForDashboard = businessProfileIdForDashboard
+        }
+        if (productId.isNotEmpty()) {
+          currentDashboard.productId = productId
+        }
+        if (employeeCode.isNotEmpty()) {
+          currentDashboard.employeeCode = employeeCode
+        }
         createFloatingActionButtons()
         renderDashboard(currentDashboard)
       }
@@ -370,13 +381,16 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
     dashboardBtnList.clear()
     dashboardList.clear()
+    productId = args.getString(ARG_PRODUCT_ID) ?: ""
+    employeeCode = args.getString(ARG_EMPCODE) ?: ""
+    businessProfileIdForDashboard = args.getString(ARG_PROFILE_ID) ?: ""
     subject.onNext(
-        Dashboard(
-            DashboardRequestData(
-                profileId = args.getString(ARG_PROFILE_ID),
-                productId = args.getString(ARG_PRODUCT_ID), empCode = args.getString(ARG_EMPCODE)
-            )
+      Dashboard(
+        DashboardRequestData(
+          profileId = args.getString(ARG_PROFILE_ID),
+          productId = args.getString(ARG_PRODUCT_ID), empCode = args.getString(ARG_EMPCODE)
         )
+      )
     )
   }
 
@@ -894,6 +908,18 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
 
   override fun getDashboardID(): String {
     return currentDashboard.id
+  }
+
+  override fun getBusinessProfileID(): String {
+    return businessProfileIdForDashboard
+  }
+
+  override fun getProductID(): String {
+    return productId
+  }
+
+  override fun getEmpCode(): String {
+    return employeeCode
   }
 
   override fun showCallPopup(number: String) {

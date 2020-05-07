@@ -18,127 +18,136 @@ class DashboardPresenter @Inject constructor(
   view: DashboardView,
   val repository: DashboardRepository,
   val navigator: ScreenNavigatorImpl,
-  val ekycNavigator: EkycNavigator,
-  val dashboardRequestData: DashboardRequestData
+  val ekycNavigator: EkycNavigator
 ) : BasePresenter<DashboardView>(view) {
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
-        .switchMap {
-          repository.getDashboardMetaData(dashboardRequestData)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::render)
-        .addTo(disposable)
+      .map { getDashboardRequest() }
+      .switchMap {
+        repository.getDashboardMetaData(it)
+          .compose(applyUiModel())
+      }
+      .subscribe(view::render)
+      .addTo(disposable)
 
     view.LoadDashboardData()
-        .switchMap {
-          repository.getDashboardMetaData(it.dashboardRequestData)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::render)
-        .addTo(disposable)
+      .switchMap {
+        repository.getDashboardMetaData(it.dashboardRequestData)
+          .compose(applyUiModel())
+      }
+      .subscribe(view::render)
+      .addTo(disposable)
 
     view.onClientClicked()
-        .subscribe { view.loadClientsFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadClientsFragment() }
+      .addTo(disposable)
 
     view.onBusinessSnapshotClicked()
-        .subscribe { view.loadLeadBusinessSnapshotFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadLeadBusinessSnapshotFragment() }
+      .addTo(disposable)
 
     view.onLeadClicked()
-        .subscribe { view.loadLeadsFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadLeadsFragment() }
+      .addTo(disposable)
 
     view.onProductivityClicked()
-        .subscribe { view.loadProductivityFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadProductivityFragment() }
+      .addTo(disposable)
 
     view.onBusinessSnapshotAdvisorClicked()
-        .subscribe { view.loadBusinessSnapshotAdvisorFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadBusinessSnapshotAdvisorFragment() }
+      .addTo(disposable)
 
     view.onClientTradedClicked()
-        .subscribe { view.loadClientsTradedFragment() }
-        .addTo(disposable)
+      .subscribe { view.loadClientsTradedFragment() }
+      .addTo(disposable)
 
     view.onLeadCreationClicked()
-        .subscribe {
-          view.collapseActionsMenu()
-          navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_CREATION, true)
-        }
-        .addTo(disposable)
+      .subscribe {
+        view.collapseActionsMenu()
+        navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_CREATION, true)
+      }
+      .addTo(disposable)
 
     view.Incentive()
-        .switchMap { t: PerformanceIncentive ->
-          repository.getIncentive(t.systemName, dashboardRequestData, t.additionalParameterMap)
-              .compose(applyUiModel())
-        }
-        .subscribe { view.renderIncentiveData(it) }
-        .addTo(disposable)
+      .switchMap { t: PerformanceIncentive ->
+        repository.getIncentive(t.systemName, getDashboardRequest(), t.additionalParameterMap)
+          .compose(applyUiModel())
+      }
+      .subscribe { view.renderIncentiveData(it) }
+      .addTo(disposable)
 
     view.CurrentQuarterStatus()
-        .switchMap { t: CurrentQuarterStatus ->
-          repository.getCurrentQuarterStatusData(
-              t.systemName, dashboardRequestData, t.additionalParameterMap
-          )
-              .compose(applyUiModel())
-        }
-        .subscribe { view.renderStatus(it) }
-        .addTo(disposable)
+      .switchMap { t: CurrentQuarterStatus ->
+        repository.getCurrentQuarterStatusData(
+          t.systemName, getDashboardRequest(), t.additionalParameterMap
+        )
+          .compose(applyUiModel())
+      }
+      .subscribe { view.renderStatus(it) }
+      .addTo(disposable)
 
     view.ActionableCount()
-        .switchMap { t: ActionableCount ->
-          repository.getActionableCount(t.systemName, t.additionalParameterMap)
-              .compose(applyUiModel())
-        }
-        .subscribe { view.renderActionableCount(it) }
-        .addTo(disposable)
+      .switchMap { t: ActionableCount ->
+        repository.getActionableCount(t.systemName, t.additionalParameterMap)
+          .compose(applyUiModel())
+      }
+      .subscribe { view.renderActionableCount(it) }
+      .addTo(disposable)
 
     view.onActionableInsightsClicked()
-        .subscribe {
-          view.showInsightsDialog()
-        }
-        .addTo(disposable)
+      .subscribe {
+        view.showInsightsDialog()
+      }
+      .addTo(disposable)
 
     view.onQuarterChanged()
-        .filter(InvalidSelectionPredicate)
-        .subscribe {
-          view.loadIncentiveView(view.getSelectedQuarter())
-        }
-        .addTo(disposable)
+      .filter(InvalidSelectionPredicate)
+      .subscribe {
+        view.loadIncentiveView(view.getSelectedQuarter())
+      }
+      .addTo(disposable)
 
     view.onDetailIncentiveClicked()
-        .switchMap {
-          repository.getIncentivePolicy(view.getDashboardID(), dashboardRequestData)
-              .compose(applyUiModel())
-        }
-        .subscribe {
-          view.renderIncentivePolicy(it)
-        }
-        .addTo(disposable)
+      .map { getDashboardRequest() }
+      .switchMap {
+        repository.getIncentivePolicy(view.getDashboardID(), it)
+          .compose(applyUiModel())
+      }
+      .subscribe {
+        view.renderIncentivePolicy(it)
+      }
+      .addTo(disposable)
 
     view.onFreshRegistrationClicked()
-        .subscribe {
-          ekycNavigator.openNewEkycApp(false, "")
-        }
-        .addTo(disposable)
+      .subscribe {
+        ekycNavigator.openNewEkycApp(false, "")
+      }
+      .addTo(disposable)
 
     view.onExistingRegistrationClicked()
-        .subscribe {
-          ekycNavigator.openNewEkycApp(true, "")
-        }
-        .addTo(disposable)
+      .subscribe {
+        ekycNavigator.openNewEkycApp(true, "")
+      }
+      .addTo(disposable)
 
     view.onTelephone1Clicked()
       .subscribe { view.showCallPopup(it) }
-        .addTo(disposable)
+      .addTo(disposable)
     view.onTelephone2Clicked()
       .subscribe { view.showCallPopup(it) }
-        .addTo(disposable)
+      .addTo(disposable)
     view.onEmailClicked()
       .subscribe { view.showEmailDialog(it) }
-        .addTo(disposable)
+      .addTo(disposable)
+  }
+
+  private fun getDashboardRequest(): DashboardRequestData {
+
+    return DashboardRequestData(
+      profileId = view.getBusinessProfileID(), productId = view.getProductID(),
+      empCode = view.getEmpCode()
+    )
   }
 }
 

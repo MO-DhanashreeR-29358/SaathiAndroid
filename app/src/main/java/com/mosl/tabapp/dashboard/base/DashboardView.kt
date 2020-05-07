@@ -50,5 +50,9 @@ interface DashboardView : BaseView {
   fun ActionableCount(): Observable<ActionableCount>
   fun LoadDashboardData(): Observable<Dashboard>
   fun getSelectedQuarter(): String
+
   fun getDashboardID(): String
+  fun getBusinessProfileID(): String
+  fun getProductID(): String
+  fun getEmpCode(): String
 }
