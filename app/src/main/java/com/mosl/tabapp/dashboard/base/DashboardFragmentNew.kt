@@ -181,8 +181,8 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       llSnapshot.visibility = View.GONE
     }
     for (group in currentDashboard.groupList) {
-      lateinit var linearLayout: LinearLayout
-      lateinit var icon: ImageView
+      var linearLayout: LinearLayout = binding.llClientsLeads
+      var icon: ImageView = binding.ivClientLeads
       val systemName = group.systemName
       when (systemName) {
         ACTIONABLE -> {
