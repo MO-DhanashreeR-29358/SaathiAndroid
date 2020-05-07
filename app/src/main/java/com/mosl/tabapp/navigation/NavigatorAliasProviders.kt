@@ -2,8 +2,8 @@ package com.mosl.tabapp.navigation
 
 import com.mosl.navigator.BaseNavigator
 import com.mosl.tabapp.ekyc.EkycNavigator
-import com.mosl.tabapp.leadcreation.LeadCreationNavigator
-import com.mosl.tabapp.leadcreation.LeadCreationNavigatorImpl
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigator
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigatorImpl
 import dagger.Binds
 import dagger.Module
 

@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import dagger.Binds
 import dagger.Module

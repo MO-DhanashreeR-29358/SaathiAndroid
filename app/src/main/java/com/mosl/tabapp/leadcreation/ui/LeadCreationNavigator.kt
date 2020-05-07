@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import javax.inject.Inject

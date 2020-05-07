@@ -1,12 +1,14 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
+import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import io.reactivex.Observable
 import javax.inject.Inject
 
 class LeadCreationPresenter @Inject constructor(
   view: LeadCreationView,
+  val repository: LeadCreationRepository,
   val navigator: LeadCreationNavigator
 ) : BasePresenter<LeadCreationView>(view) {
   private val validator = LeadCreationValidator()
@@ -43,6 +45,15 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onCancelButtonClicked()
         .subscribe { navigator.navigateToHome() }
+        .addTo(disposable)
+
+    view.onCreateLeadEventFired()
+        .map { view.getLeadCreationUserInput() }
+        .switchMap { input ->
+          repository.createLead(input)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderCreateLead)
         .addTo(disposable)
 
   }

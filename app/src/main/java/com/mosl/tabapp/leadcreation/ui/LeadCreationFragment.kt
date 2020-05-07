@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import android.os.Bundle
 import android.os.Parcelable
@@ -15,6 +15,10 @@ import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.DedupeModelResponse
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
@@ -26,6 +30,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
@@ -33,13 +38,16 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_lead_creation.etAdd1
 import javax.inject.Inject
 
-class LeadCreationFragment : CommonFragment(), LeadCreationView {
+class LeadCreationFragment : CommonFragment(),
+    LeadCreationView {
 
   @Inject internal lateinit var presenter: LeadCreationPresenter
   private lateinit var binding: FragLeadCreationBinding
+  private val subject = PublishSubject.create<LeadCreationUiEvent>()
 
   override fun getLayout(): Int = R.layout.frag_lead_creation
 
@@ -495,9 +503,14 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     disableField(binding.llOffAdd)
   }
 
-  override fun onOfficePrimaryCheckboxChanged(): Observable<Boolean> {
-    return binding.cbOffPrimaryAddress.checkedChanges()
-  }
+  override fun onOfficePrimaryCheckboxChanged(): Observable<Boolean> =
+    binding.cbOffPrimaryAddress.checkedChanges()
+  override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
+  override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
+  override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
+  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
+  override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
+  override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
 
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {
     when {
@@ -505,12 +518,6 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
       else -> disableField()
     }
   }
-
-  override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
-  override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
-  override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
-  override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
-  override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
 
   override fun renderPrimaryInfoClick() {
     toggleSectionExpansion(
@@ -530,6 +537,7 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
     toggleProgressBar(uiModule.inProgress)
     uiModule.onFailure {
       showOnFailurePopup(it)
+      openSectionExpansion(binding.llPersonalInformation, binding.tvPersonalInfo)
     }
 
     uiModule.onSuccess {
@@ -539,10 +547,53 @@ class LeadCreationFragment : CommonFragment(), LeadCreationView {
           "NO", true
       ) { action: Action, data: Array<Any?>? ->
         if (action == OK) {
-          //createLead()
+          subject.onNext(CreateLeadEvent)
         }
       }
     }
+
+  }
+
+  override fun renderCreateLead(uiModel: UiModel<SaathiCommonResponse<CreateLeadResponse>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess { data ->
+      val context = requireContext()
+      val response = data.response
+      if (data.status && response != null) {
+        MSFDialog.alertDialog(
+            context, 0,
+            getString(string.motilal_oswal),
+            "Lead Created Successfully with lead Id " + response.leadID,
+            "OK", true
+        ) { action: Action, _: Array<Any?>? ->
+          if (action == OK) { //dashbordFragment();
+            navigator.openHome()
+          }
+        }
+      } else if (response != null) {
+        val dedupeModel =
+          response.dedupeModel
+        if (dedupeModel != null && data.errors != null) {
+          dedupeDialog(dedupeModel)
+        } else if (data.errors != null) {
+          val errorMsg = data.errors!![0]
+              .message
+          MSFDialog.alertDialog(
+              context, 0,
+              getString(string.motilal_oswal),
+              errorMsg, "OK", true, null
+          )
+        }
+      }
+    }
+  }
+
+  private fun dedupeDialog(dedupeModel: DedupeModelResponse) {
 
   }
 

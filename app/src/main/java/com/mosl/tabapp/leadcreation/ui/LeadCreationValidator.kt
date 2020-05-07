@@ -1,4 +1,4 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
@@ -59,16 +59,29 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
       input.officePinCode.isNotBlank() &&
           input.officePinCode.length < 6 -> ERROR_PINCODE
 
-
       else -> null
     }
 
-    return if (errorMessage != null) {
-      withMessage(errorMessage)
-    } else {
-      withData("Input is correct")
-    }
+    return returnValidationResult(
+        errorMessage,
+        actionOnError = {
+          withMessage(it)
+        },
+        actionOnSuccess = { withData("Input is correct") }
+    )
 
+
+  }
+
+  private inline fun returnValidationResult(
+    errorMessage: String?,
+    actionOnError: (String) -> ValidationResult<String>,
+    actionOnSuccess: () -> ValidationResult<String>
+  ): ValidationResult<String> {
+    return if (errorMessage != null)
+      actionOnError(errorMessage)
+    else
+      actionOnSuccess()
   }
 
   private fun String.invalidAlphaNumbric(): Boolean {

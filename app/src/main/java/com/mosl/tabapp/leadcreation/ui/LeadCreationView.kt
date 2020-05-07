@@ -1,7 +1,10 @@
-package com.mosl.tabapp.leadcreation
+package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import io.reactivex.Observable
 
 interface LeadCreationView : BaseView {
@@ -13,12 +16,19 @@ interface LeadCreationView : BaseView {
   fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean)
 
   fun onPrimaryInfoClicked(): Observable<Unit>
-  fun onAdditionalInfoClicked(): Observable<Unit>
   fun renderPrimaryInfoClick()
+
+  fun onAdditionalInfoClicked(): Observable<Unit>
   fun renderAdditionalInfoClick()
+
   fun onCreateButtonClicked(): Observable<Unit>
-  fun renderOnCreateButtonClick(uiModule: UiModel<String>)
   fun getLeadCreationUserInput(): LeadCreationUserInput
+  fun renderOnCreateButtonClick(uiModule: UiModel<String>)
+
+  fun onCreateLeadEventFired(): Observable<CreateLeadEvent>
+  fun renderCreateLead(uiModel: UiModel<SaathiCommonResponse<CreateLeadResponse>>)
+
   fun onCancelButtonClicked(): Observable<Unit>
+
   fun onSameAsCheckboxClicked(): Observable<Unit>
 }

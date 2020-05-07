@@ -45,8 +45,8 @@ import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
-import com.mosl.tabapp.leadcreation.LeadCreationFragment
-import com.mosl.tabapp.leadcreation.LeadCreationModule
+import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
 import com.mosl.tabapp.leadcreationold.LeadCreationOldFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
