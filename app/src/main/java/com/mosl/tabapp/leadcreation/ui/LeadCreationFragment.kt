@@ -22,15 +22,19 @@ import com.mosl.saathi.api.model.createlead.DedupeModelResponse
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.CRMMOSLCommon.disableField
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
+import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
+import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
@@ -505,6 +509,7 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onOfficePrimaryCheckboxChanged(): Observable<Boolean> =
     binding.cbOffPrimaryAddress.checkedChanges()
+
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
   override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
   override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
@@ -598,6 +603,33 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   override fun getLeadCreationUserInput(): LeadCreationUserInput {
+
+    val resAdd = AddressDetailModel(
+        RESIDENCEADDRESS,
+        binding.etAdd1.text.toString(),
+        binding.etAdd2.text.toString(),
+        binding.etAdd3.text.toString(),
+        (binding.spCountry.selectedItem as RowData).key,
+        (binding.spState.selectedItem as RowData).key,
+        (binding.spCity.selectedItem as RowData).key,
+        binding.etPincode.text.toString(),
+        binding.cbPrimaryAddress.isChecked(),
+        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+    )
+
+    val offAdd = AddressDetailModel(
+        OFFICEADDRESS,
+        binding.etOffAdd1.text.toString(),
+        binding.etOffAdd2.text.toString(),
+        binding.etOffAdd3.text.toString(),
+        (binding.spOffCountry.selectedItem as RowData).key,
+        (binding.spOffState.selectedItem as RowData).key,
+        (binding.spOffCity.selectedItem as RowData).key,
+        binding.etOffPincode.text.toString(),
+        binding.cbOffPrimaryAddress.isChecked(),
+        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+    )
+
     return LeadCreationUserInput(
         selectedCategory = binding.spCategory.selectedItem as RowData,
         etCategoryName = binding.etName.text.toString(),
@@ -613,12 +645,28 @@ class LeadCreationFragment : CommonFragment(),
         panNo = binding.etPanNum.text.toString(),
         aadharNo = binding.etAadharNum.text.toString(),
         sourceName = binding.spProspectSource.selectedItem.toString(),
-        refereeCode = binding.etRefereeCode.text.toString(),
-        refereeEmail = binding.etRefereeEmail.text.toString(),
-        refereeName = binding.etRefereeName.text.toString(),
-        refereeMobile = binding.etRefereeMobile.text.toString(),
+        referCode = binding.etRefereeCode.text.toString(),
+        referEmail = binding.etRefereeEmail.text.toString(),
+        referName = binding.etRefereeName.text.toString(),
+        referMobile = binding.etRefereeMobile.text.toString(),
         pinCode = binding.etPincode.text.toString(),
-        officePinCode = binding.etOffPincode.text.toString()
+        officePinCode = binding.etOffPincode.text.toString(),
+        name = binding.etName.text.toString(),
+        isSameAsChecked = binding.cbSameAs.isChecked,
+        selectedSource = binding.spSource.selectedItem as RowData,
+        selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
+        prospectSourceDetail = binding.etProspectSourceDetails.text.toString(),
+        proReferName = binding.etProspectRefereeName.text.toString(),
+        proReferEmail = binding.etProspectRefereerEmail.text.toString(),
+        proReferMob = binding.etProspectRefereerMobile.text.toString(),
+        comment = getJsonSafeString(binding.etComments.text.toString()),
+        professionalId = binding.spProfession.selectedItem as RowData,
+        productId = binding.spProductType.selectedItem as RowData,
+        primRM = null,// todo attendeeCode,
+        stageId = binding.spStage.selectedItem as RowData,
+        statusId = binding.spStatus.selectedItem as RowData,
+        residenceAdd = resAdd,
+        officeAdd = offAdd
     )
   }
 

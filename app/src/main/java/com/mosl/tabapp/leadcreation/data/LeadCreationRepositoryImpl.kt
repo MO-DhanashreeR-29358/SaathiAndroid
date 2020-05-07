@@ -1,5 +1,6 @@
 package com.mosl.tabapp.leadcreation.data
 
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
@@ -9,10 +10,11 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class LeadCreationRepositoryImpl @Inject constructor(
-  val saathiApi: SaathiApi
+  val saathiApi: SaathiApi,
+  val userManager: UserManager
 ) : LeadCreationRepository {
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
-    val createLeadRequest = input.mapToCreateLeadRequest()
+    val createLeadRequest = input.mapToCreateLeadRequest(userManager.getUser())
     return saathiApi.addUpdateLead(
         request = createLeadRequest
     )

@@ -17,7 +17,7 @@ import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
-import com.mosl.tabapp.leadcreationold.LeadCreationOldFragment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
@@ -51,7 +51,7 @@ object MenuGetterNew {
       }
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
-      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationOldFragment()
+      NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
       NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()

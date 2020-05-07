@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.model.AddressDetailModel
 
 data class LeadCreationUserInput(
   @JvmField val selectedCategory: RowData,
@@ -17,10 +18,28 @@ data class LeadCreationUserInput(
   @JvmField val panNo: String,
   @JvmField val aadharNo: String,
   @JvmField val sourceName: String,
-  @JvmField val refereeCode: String,
-  @JvmField val refereeEmail: String,
-  @JvmField val refereeName: String,
-  @JvmField val refereeMobile: String,
+  @JvmField val referCode: String,
+  @JvmField val referEmail: String,
+  @JvmField val referName: String,
+  @JvmField val referMobile: String,
+  @JvmField val isRefereeCode: Boolean = true, //todo later
   @JvmField val pinCode: String,
-  @JvmField val officePinCode: String
+  @JvmField val officePinCode: String,
+  @JvmField val isSameAsChecked: Boolean,
+  @JvmField val selectedSource: RowData,
+  @JvmField val selectedProspectSource: RowData,
+  @JvmField val name: String,
+  @JvmField val prospectSourceDetail: String,
+  @JvmField val proReferName: String,
+  @JvmField val proReferMob: String,
+  @JvmField val proReferEmail: String,
+  @JvmField val comment: String,
+  @JvmField val professionalId: RowData,
+  @JvmField val productId: RowData,
+  @JvmField val primRM: String?,
+  @JvmField val stageId: RowData,
+  @JvmField val statusId: RowData,
+  @JvmField val clientCode: String? = null,
+  @JvmField val residenceAdd: AddressDetailModel,
+  @JvmField val officeAdd: AddressDetailModel
 )

@@ -40,20 +40,20 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
       input.aadharNo.isNotBlank() &&
           input.aadharNo.invalidAadhar() -> MOSLConstants.INVALID_AADHAR
       input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
-          input.refereeCode.length < 4 -> ERROR_REFEREE_CODE
-      input.refereeName.isNotBlank() &&
-          input.refereeName.invalidAlphaNumbric() -> ERROR_ALPHABETS
+          input.referCode.length < 4 -> ERROR_REFEREE_CODE
+      input.referName.isNotBlank() &&
+          input.referName.invalidAlphaNumbric() -> ERROR_ALPHABETS
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.refereeName.isBlank() -> MOSLConstants.ENTER_PROSPECT_REFEREE_NAME
+          input.referName.isBlank() -> MOSLConstants.ENTER_PROSPECT_REFEREE_NAME
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.refereeMobile.isBlank() -> MOSLConstants.ENTER_MOBILE_NUMBER
-      input.refereeMobile.isNotBlank() &&
-          input.refereeMobile.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
+          input.referMobile.isBlank() -> MOSLConstants.ENTER_MOBILE_NUMBER
+      input.referMobile.isNotBlank() &&
+          input.referMobile.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
 
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.refereeEmail.isBlank() -> MOSLConstants.ENTER_EMAIL_ID
-      input.refereeEmail.isNotBlank() &&
-          input.refereeEmail.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
+          input.referEmail.isBlank() -> MOSLConstants.ENTER_EMAIL_ID
+      input.referEmail.isNotBlank() &&
+          input.referEmail.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
       input.pinCode.isNotBlank() &&
           input.pinCode.length < 6 -> ERROR_PINCODE
       input.officePinCode.isNotBlank() &&
