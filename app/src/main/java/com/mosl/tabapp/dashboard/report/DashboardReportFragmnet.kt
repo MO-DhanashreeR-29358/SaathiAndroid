@@ -162,7 +162,7 @@ class DashboardReportFragment : CommonFragment(),
   }
 
   override fun renderLabel(labelName: String?) {
-    labelName.let {
+    labelName?.let {
       binding.txtLables.text = it
     }
 

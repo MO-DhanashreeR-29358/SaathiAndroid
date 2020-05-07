@@ -572,8 +572,9 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       tables?.apply {
         if (tables.isNotEmpty()) {
           for (table in tables) {
-            val type = TypeActionableFilterModel(table.types)
-            typeList.add(type)
+            table.types?.apply {
+              typeList.add(TypeActionableFilterModel(this))
+            }
           }
         }
       }
@@ -598,9 +599,11 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       val tables1 = it.first.table1
       if (tables.isNotEmpty()) {
         for (table in tables) {
-          val type = TypeActionableFilterModel(table.type)
-          typeList.add(type)
+          table.type?.apply {
+            typeList.add(TypeActionableFilterModel(this))
+          }
         }
+
       }
       var count = ""
       if (tables1.isNotEmpty()) {

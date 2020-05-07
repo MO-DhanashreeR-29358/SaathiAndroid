@@ -6,7 +6,7 @@ data class ActionableCount(
 )
 
 data class Table(
-  @JvmField val type: String
+  @JvmField val type: String?
 )
 
 data class Table1(

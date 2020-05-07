@@ -151,7 +151,7 @@ object DashboardMapper {
   fun transformActionableTable(list: List<com.mosl.saathi.api.model.dashboard.actionablecount.TableItem>?): List<Table> {
     return list?.map {
       Table(
-          type = it.types ?: ""
+        type = it.types
       )
     } ?: Collections.emptyList()
   }
