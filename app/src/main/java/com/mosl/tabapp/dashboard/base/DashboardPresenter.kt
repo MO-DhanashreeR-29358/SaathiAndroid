@@ -88,11 +88,13 @@ class DashboardPresenter @Inject constructor(
       .addTo(disposable)
 
     view.ActionableCount()
-      .switchMap { t: ActionableCount ->
+        .concatMap { t: ActionableCount ->
         repository.getActionableCount(t.systemName, t.additionalParameterMap)
           .compose(applyUiModel())
       }
-      .subscribe { view.renderActionableCount(it) }
+        .subscribe {
+          view.renderActionableCount(it)
+        }
       .addTo(disposable)
 
     view.onActionableInsightsClicked()
