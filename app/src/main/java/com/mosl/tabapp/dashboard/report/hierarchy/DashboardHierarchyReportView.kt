@@ -9,7 +9,7 @@ import io.reactivex.Observable
 interface DashboardHierarchyReportView : BaseView {
 
   fun onNavigateEvent(): Observable<CellEvent>
-
+  fun onViewChange(): Observable<Unit>
   fun getWidgetSystemsName(): String
   fun renderData(uiModel: UiModel<DashboardReportCombo>)
 }

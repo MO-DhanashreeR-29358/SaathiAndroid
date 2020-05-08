@@ -297,11 +297,4 @@ class DashboardReportFragment : CommonFragment(),
     return navigateEvent.ofType()
   }
 
-  override fun onFragmentReopened(args: Bundle) {
-    super.onFragmentReopened(args)
-    presenter.start()
-    dataActionSubject.onNext(DataAction.Fetch)
-
-  }
-
 }

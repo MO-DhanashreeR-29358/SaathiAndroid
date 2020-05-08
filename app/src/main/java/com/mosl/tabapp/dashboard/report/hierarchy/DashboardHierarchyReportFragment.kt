@@ -41,11 +41,12 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class DashboardHierarchyReportFragment : CommonFragment(),
-    DashboardHierarchyReportView {
+  DashboardHierarchyReportView {
   private lateinit var binding: FragHierarchyReportBinding
 
   @Inject
   lateinit var presenter: DashboardHierarchyReportPresenter
+  private val onRetryEvent = PublishSubject.create<Unit>()
 
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
@@ -71,33 +72,33 @@ class DashboardHierarchyReportFragment : CommonFragment(),
     binding.txtLables.text = arguments?.getString(LABEL)
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = HierarchyReportTableMapper.header(
-        requireContext()
+      requireContext()
     ) as DynamicHeaderRow
     val mfAdapter =
       requireContext().createRowAdapter<DashboardReportTableRow>(dynamicHeaderRow)
-          .apply {
-            viewProvider.rowClickListener = { row, _ ->
-              val reportData = tableRowAdapter.getItem(row)
-                  .data
-              val leadId = getValue(
-                  LEAD_ID, LeadId, Lead_Id, LeadId_ClientCode, LEADID_CLIENTCODE,
-                  hasMap = reportData.hasMap
-              )
-              val ucid = getValue(
-                  UCID, Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
-              )
-              val empCode = getValue(FlgEmpcode, hasMap = reportData.hasMap)
-              val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
-              val rmName = reportData.hasMap[FltHierarchyEmpCode] ?: ""
-              val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
+        .apply {
+          viewProvider.rowClickListener = { row, _ ->
+            val reportData = tableRowAdapter.getItem(row)
+              .data
+            val leadId = getValue(
+              LEAD_ID, LeadId, Lead_Id, LeadId_ClientCode, LEADID_CLIENTCODE,
+              hasMap = reportData.hasMap
+            )
+            val ucid = getValue(
+              UCID, Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
+            )
+            val empCode = getValue(FlgEmpcode, hasMap = reportData.hasMap)
+            val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
+            val rmName = reportData.hasMap[FltHierarchyEmpCode] ?: ""
+            val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
 
-              navigateEvent.onNext(
-                  CellEvent(
-                      leadId, ucid, empCode, level, systemsName, rmName
-                  )
+            navigateEvent.onNext(
+              CellEvent(
+                leadId, ucid, empCode, level, systemsName, rmName
               )
-            }
+            )
           }
+        }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
     systemsName = arguments?.getString(WidgetSystemName) ?: ""
@@ -132,13 +133,17 @@ class DashboardHierarchyReportFragment : CommonFragment(),
       val hierarchyReport: List<DashboardReportTableRow> =
         DashboardReportTableMapper.map(data.data)
       binding.tableWrapper.setData(
-          hierarchyReport, ErrorModel.noData(getString(R.string.error_message_no_data_available))
+        hierarchyReport, ErrorModel.noData(getString(R.string.error_message_no_data_available))
       )
     }
   }
 
   override fun onNavigateEvent(): Observable<CellEvent> {
     return navigateEvent.ofType()
+  }
+
+  override fun onViewChange(): Observable<Unit> {
+    return onRetryEvent.ofType()
   }
 
   override fun getWidgetSystemsName(): String {
@@ -149,7 +154,7 @@ class DashboardHierarchyReportFragment : CommonFragment(),
     super.onFragmentReopened(args)
     systemsName = args.getString(WidgetSystemName) ?: ""
     binding.txtLables.text = args.getString(LABEL)
-    dataActionSubject.onNext(DataAction.Fetch)
+    onRetryEvent.onNext(Unit)
   }
 
 }

@@ -27,7 +27,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
 ) : BasePresenter<DashboardHierarchyReportView>(view) {
   override fun start() {
     Observable.merge(
-        onFetchCalled(), onRetryCalled()
+      onFetchCalled(), onRetryCalled(), view.onViewChange()
     )
         .map { getWidgetRequest(view.getWidgetSystemsName()) }
         .switchMap {
