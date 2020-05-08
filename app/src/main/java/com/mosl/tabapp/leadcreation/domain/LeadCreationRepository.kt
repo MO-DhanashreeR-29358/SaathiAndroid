@@ -6,5 +6,7 @@ import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import io.reactivex.Observable
 
 interface LeadCreationRepository {
+  fun getLeadCreationPageData(): Observable<LeadCreationPageData>
+
   fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
 }

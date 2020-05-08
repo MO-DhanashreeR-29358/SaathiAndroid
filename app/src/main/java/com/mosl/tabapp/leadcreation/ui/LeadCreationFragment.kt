@@ -8,6 +8,7 @@ import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
@@ -33,12 +34,14 @@ import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
 import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
+import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
@@ -52,6 +55,30 @@ class LeadCreationFragment : CommonFragment(),
   @Inject internal lateinit var presenter: LeadCreationPresenter
   private lateinit var binding: FragLeadCreationBinding
   private val subject = PublishSubject.create<LeadCreationUiEvent>()
+  private val categoryAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val professionAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val interestInAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val productTypeAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val sourceAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val prospectSourceAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val stageAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
+  private val statusAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+  }
 
   override fun getLayout(): Int = R.layout.frag_lead_creation
 
@@ -517,6 +544,14 @@ class LeadCreationFragment : CommonFragment(),
   override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
 
+  override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+
+    }
+  }
+
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {
     when {
       isChecked -> enableField()
@@ -661,7 +696,6 @@ class LeadCreationFragment : CommonFragment(),
         proReferMob = binding.etProspectRefereerMobile.text.toString(),
         comment = getJsonSafeString(binding.etComments.text.toString()),
         professionalId = binding.spProfession.selectedItem as RowData,
-        productId = binding.spProductType.selectedItem as RowData,
         primRM = null,// todo attendeeCode,
         stageId = binding.spStage.selectedItem as RowData,
         statusId = binding.spStatus.selectedItem as RowData,

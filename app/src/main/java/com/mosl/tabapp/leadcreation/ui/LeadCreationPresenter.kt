@@ -15,7 +15,11 @@ class LeadCreationPresenter @Inject constructor(
 
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
-        .subscribe()
+        .switchMap {
+          repository.getLeadCreationPageData()
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderLeadCreationPageData)
         .addTo(disposable)
 
     view.onPrimaryCheckboxChanged()

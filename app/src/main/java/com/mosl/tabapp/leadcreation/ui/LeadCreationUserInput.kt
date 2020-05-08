@@ -35,7 +35,6 @@ data class LeadCreationUserInput(
   @JvmField val proReferEmail: String,
   @JvmField val comment: String,
   @JvmField val professionalId: RowData,
-  @JvmField val productId: RowData,
   @JvmField val primRM: String?,
   @JvmField val stageId: RowData,
   @JvmField val statusId: RowData,

@@ -4,10 +4,12 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import io.reactivex.Observable
 
 interface LeadCreationView : BaseView {
+  fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>)
 
   fun onPrimaryCheckboxChanged(): Observable<Boolean>
   fun renderOnPrimaryCheckboxChanges(isChecked: Boolean)

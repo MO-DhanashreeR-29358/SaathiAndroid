@@ -113,7 +113,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
     creationDate = CRMAppUtil.getDBDate()
     setInterestedIn(selectedInterestIn.key)
     professionid = professionalId.key
-    setProductID(productId.key)
+    setProductID(selectedProductType.key)
     setPrimaryRM(primRM ?: user?.employeeCode)
     setClientCode(null)
     setAssignedBy(user?.employeeCode)
