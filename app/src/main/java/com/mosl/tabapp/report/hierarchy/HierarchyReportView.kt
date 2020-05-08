@@ -12,6 +12,6 @@ interface HierarchyReportView : BaseView {
   fun titleName(): String
 
   fun getAdditionalParameterMap(): HashMap<String, String>
-
+  fun onViewChange(): Observable<Unit>
   fun renderData(uiModel: UiModel<HierarchyReportCombo>)
 }

@@ -18,12 +18,12 @@ class HierarchyReportPresenter @Inject constructor(
 ) : BasePresenter<HierarchyReportView>(view) {
   override fun start() {
     Observable.merge(
-        onFetchCalled(), onRetryCalled()
+      onFetchCalled(), onRetryCalled(), view.onViewChange()
     )
-        .switchMap {
-          repository.getDashboardData(getWidgetRequest())
-              .compose(applyUiModel())
-        }
+      .switchMap {
+        repository.getDashboardData(getWidgetRequest())
+          .compose(applyUiModel())
+      }
       .subscribe(view::renderData)
       .addTo(disposable)
 
@@ -36,17 +36,17 @@ class HierarchyReportPresenter @Inject constructor(
     val mMap = view.getAdditionalParameterMap()
     return HierarchyReportInput(
       totalCount = 0,
-      periodFrom = mMap.get(Period_From),
+      periodFrom = mMap[Period_From],
       isExportToExcel = false,
-      employeeCode = mMap.get(EmployeeCode),
+      employeeCode = mMap[EmployeeCode],
       calculatedPage = 0,
       inputTotalCount = 0,
       page = 0,
-      reportTypeSystemName = mMap.get(ReportTypeSystemName),
+      reportTypeSystemName = mMap[ReportTypeSystemName],
       businessChannel = "-1",
       pageSize = MOSLConstants.REPORT_PAGE_SIZE,
-      periodTo = mMap.get(Period_To),
-      branchCode = mMap.get(BranchCode)
+      periodTo = mMap[Period_To],
+      branchCode = mMap[BranchCode]
     )
   }
 
@@ -57,7 +57,7 @@ class HierarchyReportPresenter @Inject constructor(
   ) {
     val args = Bundle()
     var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-    if (employeeCode.equals("0")) {
+    if (employeeCode == "0") {
       navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, UCID)
@@ -69,7 +69,7 @@ class HierarchyReportPresenter @Inject constructor(
       navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT
     }
     navigator.openPage(
-        navigationConstants,
+      navigationConstants,
       args,
       addToStack = true,
       forceReload = false

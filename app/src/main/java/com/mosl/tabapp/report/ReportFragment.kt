@@ -57,20 +57,19 @@ import javax.inject.Inject
 class ReportFragment : CommonFragment(),
   ReportView {
   private lateinit var binding: FragReportBinding
-  val TAG = ReportFragment::class.java.simpleName
-
+  val TAG: String = ReportFragment::class.java.simpleName
   @Inject
   lateinit var presenter: ReportPresenter
-
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<HierarchyReportTableRow>
   private val navigateEvent = PublishSubject.create<CellEvent>()
   private val datePickerEvent = PublishSubject.create<Int>()
+  private val onRetryEvent = PublishSubject.create<Unit>()
   private lateinit var branchAdapter: ArrayAdapter<AssignedLeadReportModel>
 
   lateinit var mainFromDate: String
-  lateinit var mainToDate: String
+  private lateinit var mainToDate: String
 
   lateinit var fromDat: Date
   lateinit var toDate: Date
@@ -103,27 +102,27 @@ class ReportFragment : CommonFragment(),
     val mfAdapter =
       requireContext().createRowAdapter<HierarchyReportTableRow>(dynamicHeaderRow)
         .apply {
-          viewProvider.rowClickListener = { row, view ->
+          viewProvider.rowClickListener = { row, _ ->
             val reportData = tableRowAdapter.getItem(row).data
             val leadId = getValue(
-                LEAD_ID,
-                LeadId,
-                Lead_Id,
-                LeadId_ClientCode,
-                LEADID_CLIENTCODE,
-                hasMap = reportData.hasMap
+              LEAD_ID,
+              LeadId,
+              Lead_Id,
+              LeadId_ClientCode,
+              LEADID_CLIENTCODE,
+              hasMap = reportData.hasMap
             )
-            val UCID = getValue(
-                Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
+            val ucid = getValue(
+              Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
             )
             val employeeCode = getValue(
-                Employee_Code, EMPLOYEE_CODE,
+              Employee_Code, EMPLOYEE_CODE,
               hasMap = reportData.hasMap
             )
             navigateEvent.onNext(
               CellEvent(
                 leadId
-                , UCID, employeeCode
+                , ucid, employeeCode
               )
             )
           }
@@ -141,15 +140,15 @@ class ReportFragment : CommonFragment(),
     mainToDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
     toDate = CRMAppUtil.getDate(mainToDate, yyyy_MM_dd)
 
-    binding.tvStartDate.setText(
+    binding.tvStartDate.text =
       AppDateFormats.DF_JSON_DATE6.format(fromDat)
-    )
+
     binding.rlEndDate.setOnClickListener {
       selectDate()
     }
-    binding.tvEndDate.setText(
+    binding.tvEndDate.text =
       AppDateFormats.DF_JSON_DATE6.format(toDate)
-    )
+
     binding.rlStartDate.setOnClickListener {
       selectDate()
     }
@@ -159,9 +158,9 @@ class ReportFragment : CommonFragment(),
   private fun selectDate() {
     val dialog = Dialog(requireContext())
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     dialog.setContentView(layout.date_picker_from_to)
-    dialog.getWindow()
+    dialog.window
       ?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
     val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
@@ -178,7 +177,7 @@ class ReportFragment : CommonFragment(),
         dateSplit[0].toInt(),
         dateSplit[1].toInt() - 1,
         dateSplit[2].toInt()
-      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+      ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         mainFromDate =
           year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
@@ -192,15 +191,15 @@ class ReportFragment : CommonFragment(),
         dateSplit[0].toInt(),
         dateSplit[1].toInt() - 1,
         dateSplit[2].toInt()
-      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+      ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
       }
     } catch (e: Exception) {
       Timber.d(e)
     }
 
-    close.setOnClickListener { v: View? -> dialog.dismiss() }
-    btnSubmit.setOnClickListener { v: View? ->
+    close.setOnClickListener { dialog.dismiss() }
+    btnSubmit.setOnClickListener {
       fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
       toDate = CRMAppUtil.getDate(mainToDate, yyyy_MM_dd)
       if (fromDat.after(toDate)) {
@@ -211,11 +210,11 @@ class ReportFragment : CommonFragment(),
       } else {
         mainFromDate.apply {
           fromDat = CRMAppUtil.getDate(this, yyyy_MM_dd)
-          binding.tvStartDate.setText(AppDateFormats.DF_JSON_DATE6.format(fromDat))
+          binding.tvStartDate.text = AppDateFormats.DF_JSON_DATE6.format(fromDat)
         }
         mainToDate.apply {
           toDate = CRMAppUtil.getDate(this, yyyy_MM_dd)
-          binding.tvEndDate.setText(AppDateFormats.DF_JSON_DATE6.format(toDate))
+          binding.tvEndDate.text = AppDateFormats.DF_JSON_DATE6.format(toDate)
         }
         datePickerEvent.onNext(0)
         dialog.dismiss()
@@ -226,14 +225,14 @@ class ReportFragment : CommonFragment(),
   }
 
   fun prefix(input: Int): String? {
-    return if (Integer.toString(input).length == 1) {
+    return if (input.toString().length == 1) {
       "0$input"
     } else input.toString() + ""
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
     for (key in keys) {
-      val value: String? = hasMap.get(key)
+      val value: String? = hasMap[key]
       if (value != null) {
         return value
       }
@@ -274,7 +273,7 @@ class ReportFragment : CommonFragment(),
     return CRMAppUtil.getDateFromString(
       binding.tvStartDate.text.toString(),
       "dd-MMM-yyyy",
-        yyyy_MM_dd
+      yyyy_MM_dd
     )
   }
 
@@ -282,12 +281,16 @@ class ReportFragment : CommonFragment(),
     return CRMAppUtil.getDateFromString(
       binding.tvEndDate.text.toString(),
       "dd-MMM-yyyy",
-        yyyy_MM_dd
+      yyyy_MM_dd
     )
   }
 
   override fun onBranchChange(): Observable<Int> {
     return binding.spBranch.itemSelections()
+  }
+
+  override fun onViewChange(): Observable<Unit> {
+    return onRetryEvent.ofType()
   }
 
   override fun getBranch(): AssignedLeadReportModel? {
@@ -318,9 +321,8 @@ class ReportFragment : CommonFragment(),
     title = args.getString(NAME) ?: ""
     systemsName = args.getString(SYSTEM_NAME) ?: ""
     binding.txtLables.text = args.getString(MOSLConstants.NAME)
-    dataActionSubject.onNext(DataAction.Fetch)
+    onRetryEvent.onNext(Unit)
     datePickerEvent.onNext(0)
-
   }
 
 }
