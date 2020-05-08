@@ -139,7 +139,6 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         }
         createFloatingActionButtons()
         renderDashboard(currentDashboard)
-        updateCount()
       }
     }
   }
@@ -186,6 +185,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
       when (systemName) {
         ACTIONABLE -> {
           binding.ivActionableInsights.visibility = View.VISIBLE
+          updateCount()
         }
         MyClient_MyLead -> {
           binding.llClient.visibility = View.VISIBLE
@@ -407,24 +407,6 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     }
   }
 
-  private fun loadActionableCount(systemName: String) {
-    if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = ActionableCountRequest(
-        getAddtionalParameterMap(),
-        systemName
-      )
-      val subscribe = saathiApi.getActionableCount(request)
-        .compose(applyUiModel())
-        .subscribe { uiModel: UiModel<ActionableCountItem> ->
-          renderActionableCountNew(
-            uiModel,
-            systemName
-          )
-        }
-    } else {
-      noInternetConnectionDialog()
-    }
-  }
 
   private fun setClientLayoutVisibililty(systemName: String) {
     binding.txtClients.text = currentDashboard.getGroupModel(systemName).displayName
@@ -557,34 +539,6 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         Toast.makeText(requireContext(), "Downloading ${it.filePath}...", Toast.LENGTH_SHORT)
           .show()
       }
-    }
-  }
-
-  private fun renderActionableCountNew(uiModel: UiModel<ActionableCountItem>, systemName: String) {
-    toggleProgress(uiModel.inProgress)
-
-    uiModel.onSuccess {
-      val typeList = ArrayList<TypeActionableFilterModel>()
-
-      val tables = it.table
-      val tables1 = it.table1
-      tables?.apply {
-        if (tables.isNotEmpty()) {
-          for (table in tables) {
-            table.types?.apply {
-              typeList.add(TypeActionableFilterModel(this))
-            }
-          }
-        }
-      }
-      var count = ""
-      tables1?.apply {
-        if (tables1.isNotEmpty()) {
-          count = tables1.get(0)
-            .count.toString()
-        }
-      }
-      currentDashboard.setActionableCount(systemName, count, typeList)
     }
   }
 
