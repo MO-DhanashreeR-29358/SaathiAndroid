@@ -62,7 +62,7 @@ class DashboardHierarchyReportPresenter @Inject constructor(
     rmName: String,
     systemsName: String
   ) {
-    if (!leadID.equals("0") || !ucid.equals("0")) {
+    if (leadID != "0" || ucid != "0") {
       val navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       val args = Bundle()
       args.putString(MOSLConstants.LEAD_ID, leadID)

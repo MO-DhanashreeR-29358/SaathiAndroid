@@ -107,12 +107,10 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
   private void getUserID(Bundle args) {
     try {
       if (args.containsKey(LEAD_ID)) {
-        leadId = args.getString(LEAD_ID, "0").equals("") ? "0"
-            : args.getString(LEAD_ID, "0");
+        leadId = stringOrZero(args.getString(LEAD_ID, "0"));
       }
       if (args.containsKey(UCID)) {
-        mUCID = args.getString(UCID, "0").equals("") ? "0"
-            : args.getString(UCID, "0");
+        mUCID = stringOrZero(args.getString(UCID, "0"));
       }
       if (!mUCID.equalsIgnoreCase("0")) {
         getClientDetail(mUCID);
