@@ -13,7 +13,6 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -24,13 +23,10 @@ import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.mobile.domain.dashboard.IncentiveTableData
 import com.mosl.mobile.domain.dashboard.IncentiveTableData1
-import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
-import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.R.string
-import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
@@ -68,6 +64,7 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
 import org.json.JSONObject
+import timber.log.Timber
 import java.util.HashMap
 import javax.inject.Inject
 
@@ -81,6 +78,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
   private var productId = ""
   private var employeeCode = ""
   override fun getLayout() = R.layout.frag_dashboard
+
 
   override fun onViewCreated(
     view: View,
@@ -141,6 +139,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         }
         createFloatingActionButtons()
         renderDashboard(currentDashboard)
+        updateCount()
       }
     }
   }
@@ -187,7 +186,6 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
       when (systemName) {
         ACTIONABLE -> {
           binding.ivActionableInsights.visibility = View.VISIBLE
-          updateCount(systemName)
         }
         MyClient_MyLead -> {
           binding.llClient.visibility = View.VISIBLE
@@ -397,13 +395,14 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     )
   }
 
-  private fun updateCount(systemName: String) {
+  private fun updateCount() {
     val actionableWidgetList =
-      currentDashboard.getGroupModel(systemName).widgetList
+      currentDashboard.getGroupModel(ACTIONABLE)
+          .widgetList
+    Timber.d("actionable widget list %s", actionableWidgetList.size)
     if (actionableWidgetList.isNotEmpty()) {
       for (model in actionableWidgetList) {
-        // subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
-        loadActionableCount(model.systemName)
+        subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
       }
     }
   }
