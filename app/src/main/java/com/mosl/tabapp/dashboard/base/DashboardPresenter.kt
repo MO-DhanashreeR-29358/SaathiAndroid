@@ -88,7 +88,7 @@ class DashboardPresenter @Inject constructor(
       .addTo(disposable)
 
     view.ActionableCount()
-        .concatMap { t: ActionableCount ->
+        .flatMap { t: ActionableCount ->
         repository.getActionableCount(t.systemName, t.additionalParameterMap)
           .compose(applyUiModel())
       }
