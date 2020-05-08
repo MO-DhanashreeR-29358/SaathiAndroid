@@ -6,7 +6,9 @@ import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails
 import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
+import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.ContactDetailModel
@@ -140,4 +142,17 @@ private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduc
           statusID
       )
   )
+}
+
+internal fun List<LookupItem>.mapToRowDatas(): List<RowData> {
+  return mapIndexed { index: Int, lookupItem: LookupItem ->
+    val data = RowData(
+        index + 1,
+        "${lookupItem.lookUpid}",
+        lookupItem.lookUpName ?: "",
+        lookupItem.sysName ?: ""
+    )
+    data
+  }
+
 }

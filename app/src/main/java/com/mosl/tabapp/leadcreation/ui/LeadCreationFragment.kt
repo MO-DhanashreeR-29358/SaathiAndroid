@@ -9,10 +9,12 @@ import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -56,28 +58,28 @@ class LeadCreationFragment : CommonFragment(),
   private lateinit var binding: FragLeadCreationBinding
   private val subject = PublishSubject.create<LeadCreationUiEvent>()
   private val categoryAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val professionAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val interestInAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val productTypeAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val sourceAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val prospectSourceAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val stageAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
   private val statusAdapter: ArrayAdapter<RowData> by lazy {
-    SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
   override fun getLayout(): Int = R.layout.frag_lead_creation
@@ -547,9 +549,18 @@ class LeadCreationFragment : CommonFragment(),
   override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
-    uiModel.onSuccess {
-
+    uiModel.onSuccess { data ->
+      binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
+      binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
     }
+  }
+
+  private fun Spinner.setSpinnerData(
+    arrayAdapter: ArrayAdapter<RowData>,
+    rowDatas: List<RowData>
+  ) {
+    adapter = arrayAdapter
+    arrayAdapter.setSpinnerData(this, rowDatas)
   }
 
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {
