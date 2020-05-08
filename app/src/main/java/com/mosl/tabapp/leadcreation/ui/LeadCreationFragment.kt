@@ -704,6 +704,8 @@ class LeadCreationFragment : CommonFragment(),
     )
   }
 
+  override fun isDataEmpty(): Boolean = true
+
   override fun onDestroyView() {
     presenter.stop()
     super.onDestroyView()
