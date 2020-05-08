@@ -79,7 +79,6 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
   private var employeeCode = ""
   override fun getLayout() = R.layout.frag_dashboard
 
-
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
@@ -398,15 +397,14 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
   private fun updateCount() {
     val actionableWidgetList =
       currentDashboard.getGroupModel(ACTIONABLE)
-          .widgetList
+        .widgetList
     Timber.d("actionable widget list %s", actionableWidgetList.size)
     if (actionableWidgetList.isNotEmpty()) {
       for (model in actionableWidgetList) {
-        subject.onNext(ActionableCount(model.systemName, getAddtionalParameterMap()))
+        subject.onNext(ActionableCount(model.systemName, getAdditionalParameterMap()))
       }
     }
   }
-
 
   private fun setClientLayoutVisibililty(systemName: String) {
     binding.txtClients.text = currentDashboard.getGroupModel(systemName).displayName
@@ -500,14 +498,14 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     }
   }
 
-  private fun getAddtionalParameterMap(): Map<String, String> {
-    val addtionalParameterMap: MutableMap<String, String> = HashMap()
+  private fun getAdditionalParameterMap(): Map<String, String> {
+    val additionalParameterMap: MutableMap<String, String> = HashMap()
     try {
-      addtionalParameterMap[SELF_KEY] = currentDashboard.dashboardFor
+      additionalParameterMap[SELF_KEY] = currentDashboard.dashboardFor
     } catch (ex: Exception) {
       ex.printStackTrace()
     }
-    return addtionalParameterMap
+    return additionalParameterMap
   }
 
   fun setIcon(
@@ -638,9 +636,9 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         .widgetTypeList[0]
         .widgetTypes
       if (widgetTypes.equals(PERFORMANCE_INCENTIVE, ignoreCase = true)) {
-        subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAddtionalParameterMap()))
+        subject.onNext(PerformanceIncentive(widgetList[i].systemName, getAdditionalParameterMap()))
       } else if (widgetTypes.equals(MOSLConstants.CURRENT_QUARTER_STATUS, ignoreCase = true)) {
-        subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAddtionalParameterMap()))
+        subject.onNext(CurrentQuarterStatus(widgetList[i].systemName, getAdditionalParameterMap()))
         binding.llCurrentQuarterStatusAdviosory.setVisibility(View.VISIBLE)
       }
     }
