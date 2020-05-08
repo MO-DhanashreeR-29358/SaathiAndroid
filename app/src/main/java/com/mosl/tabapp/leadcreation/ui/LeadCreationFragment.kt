@@ -552,6 +552,8 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onSuccess { data ->
       binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
       binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+      binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
+      binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
     }
   }
 

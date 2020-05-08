@@ -6,6 +6,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails
 import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
+import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
@@ -145,14 +146,30 @@ private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduc
 }
 
 internal fun List<LookupItem>.mapToRowDatas(): List<RowData> {
-  return mapIndexed { index: Int, lookupItem: LookupItem ->
-    val data = RowData(
-        index + 1,
-        "${lookupItem.lookUpid}",
-        lookupItem.lookUpName ?: "",
-        lookupItem.sysName ?: ""
-    )
-    data
+  return mapIndexedNotNull { index: Int, lookupItem: LookupItem ->
+    try {
+      RowData(
+          index + 1,
+          "${lookupItem.lookUpid}",
+          lookupItem.lookUpName ?: "",
+          lookupItem.sysName ?: ""
+      )
+    } catch (_: Exception) {
+      null
+    }
   }
+}
 
+internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
+  return mapIndexedNotNull { index: Int, sourceItem: SourceListItem ->
+    try {
+      RowData(
+          index + 1,
+          "${sourceItem.sourceID}",
+          sourceItem.sourceName ?: ""
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
 }

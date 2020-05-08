@@ -4,6 +4,7 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -11,7 +12,7 @@ import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function4
 import javax.inject.Inject
 
 class LeadCreationRepositoryImpl @Inject constructor(
@@ -23,10 +24,14 @@ class LeadCreationRepositoryImpl @Inject constructor(
     return Observable.zip(
         getCategoryRowDatas(),
         getProfessionRowDatas(),
-        BiFunction { listOfCategory, listOfProfession ->
+        getInterestInRowDatas(),
+        getSourceRowDatas(),
+        Function4 { listOfCategory, listOfProfession, listOfInterestIn, listOfSource ->
           LeadCreationPageData(
               categoryRowDatas = listOfCategory,
-              professionRowDatas = listOfProfession
+              professionRowDatas = listOfProfession,
+              interestInRowDatas = listOfInterestIn,
+              sourceRowDatas = listOfSource
           )
         }
     )
@@ -52,9 +57,29 @@ class LeadCreationRepositoryImpl @Inject constructor(
     return getRowDatas(professionRequest)
   }
 
+  private fun getInterestInRowDatas(): Observable<List<RowData>> {
+    val interestInRequest = LookupRequest(
+        businessUnitId = requireNotNull(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+            { "businessUnitId in UserManager is not be null" }),
+        lookupTypeId = MOSLConstants.INTERESTEDIN
+    )
+    return getRowDatas(interestInRequest)
+  }
+
   private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
     return saathiApi.getAllLookup(request)
         .map { it.mapToRowDatas() }
+  }
+
+  private fun getSourceRowDatas(): Observable<List<RowData>> {
+    val sourceRequest = SourceListRequest(
+        id = requireNotNull(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+            { "businessUnitId in UserManager is not be null" })
+    )
+    return saathiApi.getSourceList(sourceRequest)
+        .map { it.mapToRowDataList() }
   }
 
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
